@@ -33,15 +33,17 @@ V1 and V2 use the same outer CE64 catalog. Desktop listing, removable-card inspe
 
 NP2 updates are APP-only. Factory / USB service replacement still uses separate firmware tooling. NP1 HEX / ROM DFU operations require STM32CubeProgrammer CLI and the reviewed firmware layout described in [the inherited firmware manager contract](Neuropixels/FIRMWARE_FLASH.md).
 
+The three checked four-shank NP2/type2013 examples are in [ProbeConfig](ProbeConfig). Load them using **NP2 IMRO / channel maps… → Load IMRO / JSON…**, and choose the physical connector explicitly; IMRO filenames do not specify a connector. Current V2 imports remain host-only, not hardware-applied configurations.
+
 The source build also includes resident V2 USB self-test and manual rail-hold actions under **Advanced → Firmware Update**. These require compatible resident firmware in idle USB-stream mode and attest the selected MCU UID. Rails stay held until explicit Release or MCU reset; the report shows requested GPIO levels, not measured voltages. Release is followed by an explicit normal-mode reboot before acquisition. The retained firmware reports contain failed and skipped checks, and live GUI USB invocation is unqualified. See [self-test integration evidence](docs/v2-usb-selftest-integration.md).
 
 ## Install and run
 
-Use [the current engineering installer](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.0.exe). It installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
+Use [the current engineering installer](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.1.exe). It installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 
 [Release manifest](LATEST_INSTALLERS/release-manifest.json) records the installer, all 13 extracted payload checksums, compatible V2 firmware identities and outstanding hardware qualification. The older pre-integration installer remains under `LATEST_INSTALLERS/legacy`.
 
-The installer now includes V2 clock initialization/checks, BLE preview, catalog maintenance and corrected USB self-test reports. See [release checks and limits](Note/RELEASE_20261010.md). The paired engineering logger is APP `ED881256`, resident USB `DFB8F25E`, loader `97C3716A`. Self-test actions separately require newer resident firmware such as `C3C76C43`; this installer does not automatically update firmware. Offline compatibility is not live end-to-end recording/update qualification.
+The installer includes V2 clock initialization/checks, BLE preview, catalog maintenance and corrected USB self-test reports. Version 1.0.0.1 adds **NP2 IMRO / channel maps…** in USB Recording settings and BLE Mode, with **Load IMRO / JSON…** and **Edit NP2 channel map…**. Requests are separate per connector and host only: current V2 firmware cannot apply these channel maps. USB recording can retain requested/unverified IMRO metadata; BLE imports do not alter onboard SD recording. Save the map in the configurator to reuse it between BLE and USB. Standard NP2 types 21/2003 and 24/2013 are supported; UHD/type 1110 is not NP1/NP2. See [IMRO release checks](Note/NP2_IMRO_RELEASE_20261010.md) and [previous release checks and limits](Note/RELEASE_20261010.md). The paired engineering logger remains APP `ED881256`, resident USB `DFB8F25E`, loader `97C3716A`. Self-test actions separately require newer resident firmware such as `C3C76C43`; this installer does not automatically update firmware. Offline compatibility is not live end-to-end recording/update qualification.
 
 Requirements:
 

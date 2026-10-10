@@ -33,6 +33,7 @@ namespace USB512_interface
         readonly BluetoothLEAdvertisementWatcher watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
         readonly Dictionary<ulong, Peer> peers = new Dictionary<ulong, Peer>();
         readonly Dictionary<byte,NpConfigRequest> configurations = new Dictionary<byte,NpConfigRequest>();
+        readonly Dictionary<ulong,Dictionary<int,string>> np2HostConfigurations = new Dictionary<ulong,Dictionary<int,string>>();
         readonly ComboBox devices = new ComboBox { Width = 400, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly ComboBox profiles = new ComboBox { Width = 390, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly TextBox address = new TextBox { Width = 160 };
@@ -147,7 +148,9 @@ namespace USB512_interface
             stopScan.Enabled=!busy && watcher.Status==BluetoothLEAdvertisementWatcherStatus.Started;
             disconnect.Enabled=!busy && linked;
             profiles.Enabled=seconds.Enabled=unqualified.Enabled=poll.Enabled=actions.Enabled=ready;
-            channelConfiguration.Visible=usbDownload.Visible=unqualified.Visible=recorderVersion==1;
+            channelConfiguration.Visible=recorderVersion!=0;
+            channelConfiguration.Text=V2?"NP2 IMRO / channel maps…":"Channel configuration";
+            usbDownload.Visible=unqualified.Visible=recorderVersion==1;
             previewButton.Visible=V2;previewButton.Enabled=ready && current!=null && (current.Flags&128)!=0;
             startRecording.Enabled=ready && (!V2 || clock.Synchronized);
         }
@@ -274,7 +277,14 @@ namespace USB512_interface
         }
         async Task ConfigureChannels()
         {
-            if (V2) throw new IOException("NP2 channel configuration is available in USB Recording settings.");
+            if (V2) {
+                ulong peer=UInt64.Parse(address.Text.Trim(),System.Globalization.NumberStyles.HexNumber);
+                Dictionary<int,string> requests;
+                if(!np2HostConfigurations.TryGetValue(peer,out requests)){requests=new Dictionary<int,string>();np2HostConfigurations.Add(peer,requests);}
+                using(var dialog=new NpConfigurationDialog(null,np2:true,retainedRequests:requests))dialog.ShowDialog(DialogOwner);
+                Append("NP2 IMRO files are host requests only; no BLE upload or change to SD recording was performed. Save the map in the editor to reuse it in USB Recording settings.");
+                return;
+            }
             var s = await ReadStatus(); if (!NpV1BleProtocol.CanConfigure(s)) throw new IOException("Stop the NP1 recorder before channel configuration.");
             var client = new NpConfigClient(new ConfigTransport(connection));
             using (var dialog = new NpDeviceConfigForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "NPConfigurator", "NPConfigurator.exe"), client.StageAsync, client.StatusAsync,connectedMask:(int)s.Mask,retainedRequests:configurations)) {

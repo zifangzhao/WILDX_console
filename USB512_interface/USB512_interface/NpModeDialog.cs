@@ -18,6 +18,13 @@ namespace USB512_interface {
   private volatile int npActiveProbeCount=1;
   private int npPreviewMask=1;
   private readonly Dictionary<string,Dictionary<byte,NpConfigRequest>> npPortConfigurations=new Dictionary<string,Dictionary<byte,NpConfigRequest>>(StringComparer.OrdinalIgnoreCase);
+  private readonly Dictionary<string,Dictionary<int,string>> npV2HostConfigurations=new Dictionary<string,Dictionary<int,string>>(StringComparer.OrdinalIgnoreCase);
+  private Dictionary<int,string> NpV2RequestsForDevice(string path){
+   string key=NpV2FirmwareForm.Uid(path)??path;
+   Dictionary<int,string> requests;
+   if(!npV2HostConfigurations.TryGetValue(key,out requests)){requests=new Dictionary<int,string>();npV2HostConfigurations.Add(key,requests);}
+   return requests;
+  }
   private Dictionary<byte,NpConfigRequest> NpRequestsForDevice(string path,bool create=false){
    if(String.IsNullOrEmpty(path))return null;
    string key=NpV1Management.UidFromPath(path)??path;

@@ -1,14 +1,14 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.0",
+  "version": "1.0.0.1",
   "releaseDate": "2026-10-10",
-  "status": "engineering release; installer payload and offline V2 compatibility verified",
+  "status": "engineering release; NP2 IMRO UI/examples and installer payload verified",
   "hardwareQualified": false,
   "installerExecuted": false,
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.0.exe",
-    "bytes": 2200926,
-    "sha256": "CB9E7EB5C8A54CB61573B9854A0F81907B5E0E00975549EC169005416F73D4DE"
+    "file": "WILDX_console-Setup-1.0.0.1.exe",
+    "bytes": 2227110,
+    "sha256": "8F73BC875A1BE81BF2EB817FA6E58F83645AF74F24246130F1B2D744F6F6ECE0"
   },
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
@@ -23,24 +23,30 @@
     "selfTestRequiresSeparateResidentCrc32": "C3C76C43"
   },
   "releaseValidation": {
-    "rebuiltApplication": false,
-    "installerCompilation": "passed; existing NSIS script, one packaging pass",
+    "rebuiltApplication": true,
+    "incrementalApplicationBuilds": 1,
+    "bundledHelpers": "exact 1.0.0.0 runtime payloads reused; all 12 non-application payloads unchanged",
+    "targetedSoftwareRegressionChecks": 98,
+    "np2ExamplesPassed": 17,
+    "np1ExamplesPassed": 2,
+    "projectExamples": [
+      {"path": "ProbeConfig/probe_1 (1).imro", "sha256": "EA6E4FFF88C87F6B435BF9DE77149133ECC49B4C6530DD3E3D905806BEA69497"},
+      {"path": "ProbeConfig/probe_2 (1).imro", "sha256": "99F3102AFF912C1A3061790CD8B9D434FB2829F33C7B3ED9B5F4528727D3AEFB"},
+      {"path": "ProbeConfig/probe_3.imro", "sha256": "A5BC43F93C835762EE539CECF889EF382ABCB8D448C6E731D731494FF3BB1BF1"}
+    ],
+    "nonNp1Np2ExamplesUnsupported": 4,
+    "unsupportedFamily": "UHD type 1110",
+    "installerCompilation": "one successful existing-NSIS packaging pass; prior empty staging preflight corrected before installer creation",
     "independentlyExtractedMatchingPayloads": 13,
-    "v2RecordedControlReplies": {
-      "run20": 83,
-      "run30": 718
-    },
-    "v2SdMetadata": "Complete footer/UTC accepted; resealed FAILED footer rejected; no payload/DAT comparison",
-    "bundledUpdaterPackageLoader": "exact ED881256 APP accepted offline under PowerShell 7",
-    "actualExecutableSelfTestReportChecks": 47,
+    "previousEvidence": "1.0.0.0 archived manifest and Note/RELEASE_20261010.md; not rerun for this GUI-only change",
     "hardwareAccessThisRelease": false,
     "fullEndToEndPairQualified": false
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "bytes": 1022976,
-      "sha256": "F429191FD6635CD76E03C637CB1EF757EAED16881BFE2B00F1B739E969FFAD64"
+      "bytes": 1143296,
+      "sha256": "0C3879C82CAAACE3622B284A977CE54A2C73D89907C75C826C2DAD4E35530D0A"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -104,6 +110,9 @@
     }
   ],
   "limitations": [
+    "NP2 IMRO imports are host-only requested/unverified maps; current V2 firmware does not apply channel maps.",
+    "BLE host maps do not modify or accompany onboard SD recording; save/import the file separately for USB recording metadata.",
+    "UHD type 1110 is not standard NP1/NP2 and remains unsupported.",
     "No fresh GUI USB/BLE capture, SD payload/DAT comparison, firmware update or clean installer install/uninstall.",
     "Retained paired APP dual20 evidence covers 31.50336s; dual30 failed at 815.6128s with retention overflow.",
     "Paired resident USB enables logical probes 1 and 2 only; SPI2/D8 and logical probe3 are disabled.",

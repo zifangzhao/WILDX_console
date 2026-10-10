@@ -2421,7 +2421,7 @@ namespace USB512_interface
 
         private void NpV2ShowModeSettings()
         {
-            using (var dialog = new Form { Text = "NP USB capture setup", ClientSize = new Size(560, 482), FormBorderStyle = FormBorderStyle.FixedDialog, StartPosition = FormStartPosition.CenterParent, MinimizeBox = false, MaximizeBox = false })
+            using (var dialog = new Form { Text = "NP USB capture setup", ClientSize = new Size(560, 528), FormBorderStyle = FormBorderStyle.FixedDialog, StartPosition = FormStartPosition.CenterParent, MinimizeBox = false, MaximizeBox = false })
             {
                 var port1 = new CheckBox { Text = "Connector 1", Location = new Point(16, 39), AutoSize = true };
                 var port2 = new CheckBox { Text = "Connector 2", Location = new Point(190, 39), AutoSize = true };
@@ -2431,10 +2431,14 @@ namespace USB512_interface
                 var statusBox = new TextBox { Location = new Point(16, 132), Size = new Size(528, 180), Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Font = new Font(FontFamily.GenericMonospace, 9.0F) };
                 var hubWarning = new Label { Location = new Point(16, 318), Size = new Size(528, 37), ForeColor = Color.DarkOrange };
                 var note = new Label { Location = new Point(16, 361), Size = new Size(528, 55), Text = "Start automatically switches this board to its USB-stream personality, applies this profile, and records continuously. Stop ends on a complete 4-block boundary and drains queued USB data before the recording is marked complete." };
-                var refresh = new Button { Text = "Read device status", Location = new Point(16, 430), Size = new Size(140, 30) };
-                var ok = new Button { Text = "Use profile", Location = new Point(318, 430), Width = 115, Enabled = false };
-                var cancel = new Button { Text = "Cancel", Location = new Point(443, 430), DialogResult = DialogResult.Cancel };
+                var configuration = new Button { Text = "NP2 IMRO / channel maps…", Location = new Point(16, 430), Size = new Size(225, 30) };
+                var refresh = new Button { Text = "Read device status", Location = new Point(16, 478), Size = new Size(140, 30) };
+                var ok = new Button { Text = "Use profile", Location = new Point(318, 478), Width = 115, Enabled = false };
+                var cancel = new Button { Text = "Cancel", Location = new Point(443, 478), DialogResult = DialogResult.Cancel };
                 NpV2ProfileCapabilities accepted = null;
+                configuration.Click += delegate {
+                    using(var editor=new NpConfigurationDialog(null,np2:true,availableMask:accepted==null?7:(int)accepted.AvailableProbeMask,retainedRequests:NpV2RequestsForDevice(devicePath)))editor.ShowDialog(dialog);
+                };
                 var rateValues = new List<uint>();
                 Action read = delegate
                 {
@@ -2483,7 +2487,7 @@ namespace USB512_interface
                     new Label { Text = "NP2 connectors", Location = new Point(16, 12), AutoSize = true }, port1, port2, port3,
                     new Label { Text = "Supported sampling rate", Location = new Point(16, 70), AutoSize = true }, rate,
                     new Label { Text = "Recording mode", Location = new Point(290, 70), AutoSize = true }, mode,
-                    statusBox, hubWarning, note, refresh, ok, cancel });
+                    statusBox, hubWarning, note, configuration, refresh, ok, cancel });
                 WildXTheme.Apply(dialog); WildXTheme.Button(ok,true); note.ForeColor=WildXTheme.Muted;
                 dialog.AcceptButton = ok; dialog.CancelButton = cancel; read(); dialog.ShowDialog(this); UpdateStartEnabled();
             }
@@ -2559,8 +2563,8 @@ namespace USB512_interface
                         settings.PlannedLayout((int)selected,false,(selected&(selected-1))!=0);
                         settings.Context("planned_ap_sample_rate_hz",capabilities.SampleHz);
                         settings.Streams(false,false,false);
-                        if(npConfigurationDevicePath==devicePath && !String.IsNullOrWhiteSpace(npRequestedConfiguration))
-                            for(int p=1;p<=3;p++)if((capabilities.SelectedProbeMask&(1U<<(p-1)))!=0)settings.Request(p,npRequestedConfiguration);
+                        foreach(var request in NpV2RequestsForDevice(devicePath))
+                            if((capabilities.SelectedProbeMask&(1U<<(request.Key-1)))!=0)settings.Request(request.Key,request.Value);
                         settings.Write();
                     }
                     if (IsHandleCreated) Invoke((Action)delegate
