@@ -1,0 +1,101 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.0",
+  "status": "hardware validation pending",
+  "createdUtc": "2026-10-09T15:59:01.7314983Z",
+  "workspaces": [
+    "USB Mode",
+    "BLE Mode",
+    "Data Download",
+    "Advanced"
+  ],
+  "automaticFirmwareUpdateChecks": "deferred",
+  "hardwareQualified": false,
+  "originalWildNeuropixelsEntryPoints": "retained until hardware qualification",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.0-candidate.exe",
+    "bytes": 2205627,
+    "sha256": "A8268AE4E336708D22029AFB46BDBF32D59821D6067885DF128A0ABE12F315AD"
+  },
+  "softwareValidation": {
+    "build": "passed",
+    "installerCompilation": "passed",
+    "standaloneChecks": 249,
+    "np1ResidentUpdateMockChecks": 5854,
+    "np1ManagementFormChecks": 632,
+    "np1StartupDecoderChecks": 6125428,
+    "np2SdDatExportChecks": 705740,
+    "np2ExactUidSelector": "passed",
+    "hardwareScansAndMutations": false,
+    "installerExecuted": false
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "bytes": 1098240,
+      "sha256": "FFF136446E1CEE936C51E804040BCE4D62C4122683627A3DDF10DF88DF38206F"
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "bytes": 532,
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    },
+    {
+      "path": "OpenTK.dll",
+      "bytes": 5757952,
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "bytes": 24576,
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "bytes": 145920,
+      "sha256": "E8BC982D74A286D1FCA60689829A31396A8278D8524465F38BC16D351B63D082"
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.exe",
+      "bytes": 151552,
+      "sha256": "88ED71E7193552A050D5E2BCB0E5EFE1E25E409C44949695DCB0041DB1F4FD65"
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.dll",
+      "bytes": 361984,
+      "sha256": "48BEFBFC8EC00783839CEC3C8B62B176BB5C068A76BDCD7737814F5754D139A3"
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.deps.json",
+      "bytes": 434,
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.runtimeconfig.json",
+      "bytes": 458,
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.exe",
+      "bytes": 151552,
+      "sha256": "136FECC12320D3D91AC5588BCA89267A4848754129107F59707E70DD4650F079"
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.dll",
+      "bytes": 53760,
+      "sha256": "43AA4D5B6274490459ADA0AAF5B24143F9721308A2CD9AB605E86FE26BAA1B59"
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.deps.json",
+      "bytes": 449,
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.runtimeconfig.json",
+      "bytes": 340,
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    }
+  ],
+  "theme": "Shared neutral surfaces, teal accent, consistent primary/secondary/destructive and disabled states",
+  "bleVersionDetection": "Read-only device handshake and fresh status confirmation; no manual selection"
+}

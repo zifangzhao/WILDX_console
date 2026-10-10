@@ -1,0 +1,208 @@
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace USB512_interface
+{
+    public partial class Form1
+    {
+        Button btnBleRecovery;
+        TabControl workspaceTabs;
+        TabPage usbPage,blePage,downloadPage,advancedPage;
+        CE32_console.NpDownloadForm downloadWorkspace;
+        NpBleForm bleWorkspace;
+        Label workspaceStatus;
+        Label advancedTarget,advancedStorageSource;
+        bool DownloadBusy { get { return downloadWorkspace!=null && downloadWorkspace.IsBusy; } }
+        bool BleInUse { get { return bleWorkspace!=null && bleWorkspace.SessionOwned; } }
+        void InitializeWildX()
+        {
+            Text = "WILD-X Neuropixels Console v" + GetPackageVersion();
+            label1.Text = "USB device";
+            btnStreams.Text = "Recording settings";
+            btnDfu.Text = "Firmware Update";
+            btnScope.Text = "NP Preview";
+            btnImpedance.Visible = false;
+            BuildWildXWorkspace();
+        }
+        void OpenBleRecovery()
+        {
+            if(running || systemInfoActive!=0 || firmwareManagementActive || DownloadBusy || BleInUse || deviceRefreshActive!=0 || !npRecoveryCancelled)return;
+            // Modal ownership prevents simultaneous USB acquisition/mode changes.
+            using(var dialog=new NpBleForm(true))dialog.ShowDialog(this);
+            RefreshDeviceList();
+        }
+
+        static FlowLayoutPanel ActionRow(params Control[] controls)
+        {
+            var row=new FlowLayoutPanel { Dock=DockStyle.Fill,WrapContents=true,Margin=Padding.Empty,BackColor=WildXTheme.Surface };
+            foreach(var control in controls){control.Dock=DockStyle.None;control.Anchor=AnchorStyles.Top|AnchorStyles.Left;control.Margin=new Padding(0,0,8,8);
+                if(control is Button){control.AutoSize=true;((Button)control).AutoSizeMode=AutoSizeMode.GrowAndShrink;control.MinimumSize=new Size(0,36);control.Height=36;}
+                row.Controls.Add(control);
+            }
+            return row;
+        }
+        static TableLayoutPanel Stack(params int[] heights)
+        {
+            var stack=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=1,RowCount=heights.Length,Margin=Padding.Empty,BackColor=WildXTheme.Surface };
+            stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+            foreach(int height in heights)stack.RowStyles.Add(height==0?new RowStyle(SizeType.Percent,100):new RowStyle(SizeType.Absolute,height));
+            return stack;
+        }
+        static WildXCard Card(string title,string description,Control content)
+        {
+            var card=new WildXCard { Dock=DockStyle.Fill };
+            var layout=description==null?Stack(28,0):Stack(28,32,0);
+            layout.Controls.Add(WildXTheme.Label(title,true),0,0);
+            if(description!=null)layout.Controls.Add(new Label { Text=description,Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted },0,1);
+            content.Dock=DockStyle.Fill;layout.Controls.Add(content,0,description==null?1:2);card.Controls.Add(layout);return card;
+        }
+        void BuildWildXWorkspace()
+        {
+            SuspendLayout();
+            AutoScaleMode=AutoScaleMode.None;
+            WildXTheme.Apply(this);
+            var oldInfo=systemInfoSummary.Parent;
+            var infoDetails=oldInfo.Controls.OfType<Button>().First(b=>b!=btnSystemInfoRefresh);
+            var oldTime=Controls.OfType<GroupBox>().First(g=>g.Text.StartsWith("Secondary network time"));
+            var timeStatus=oldTime.Controls.OfType<Label>().Single();
+            var timeSettings=oldTime.Controls.OfType<Button>().Single();
+            Controls.Clear();
+            Text="WILD-X Neuropixels Console v"+GetPackageVersion();
+            BackColor=WildXTheme.Canvas;Font=WildXTheme.Body;ClientSize=new Size(1180,920);
+            MinimumSize=new Size(1060,780);StartPosition=FormStartPosition.CenterScreen;MaximizeBox=true;
+
+            var shell=Stack(76,0,28);shell.BackColor=WildXTheme.Canvas;shell.Padding=new Padding(24,0,24,0);Controls.Add(shell);
+            var brand=new Panel { Dock=DockStyle.Fill,BackColor=WildXTheme.Canvas };
+            brand.Controls.Add(new Label { Text="WILD-X",AutoSize=true,Font=WildXTheme.Title,ForeColor=WildXTheme.Ink,Location=new Point(0,16) });
+            shell.Controls.Add(brand,0,0);
+
+            workspaceTabs=new TabControl { Name="workspaceTabs",Dock=DockStyle.Fill,DrawMode=TabDrawMode.OwnerDrawFixed,SizeMode=TabSizeMode.Fixed,
+                ItemSize=new Size(180,44),Padding=new Point(18,8),Margin=Padding.Empty };
+            usbPage=new TabPage("USB Mode") { Name="usbPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
+            blePage=new TabPage("BLE Mode") { Name="blePage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
+            downloadPage=new TabPage("Data Download") { Name="downloadPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
+            advancedPage=new TabPage("Advanced") { Name="advancedPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
+            workspaceTabs.TabPages.AddRange(new[]{usbPage,blePage,downloadPage,advancedPage});workspaceTabs.DrawItem+=DrawWorkspaceTab;
+            workspaceTabs.Selecting+=delegate(object sender,TabControlCancelEventArgs e){
+                if(BleInUse){e.Cancel=true;workspaceStatus.Text="Finish the BLE command, stop scanning, and disconnect before changing workspace.";return;}
+                if(running || ztestRunning || !npRecoveryCancelled || systemInfoActive!=0 || deviceRefreshActive!=0 || firmwareManagementActive || DownloadBusy){
+                    e.Cancel=true;workspaceStatus.Text="Wait for the active operation to finish before changing workspace.";
+                }
+            };
+            workspaceTabs.SelectedIndexChanged+=delegate { if(downloadWorkspace!=null)downloadWorkspace.SetUsbSelection(devicePath);workspaceStatus.Text=workspaceTabs.SelectedTab==usbPage?
+                "USB MODE  /  Live acquisition, previews and device health":workspaceTabs.SelectedTab==blePage?
+                "BLE MODE  /  Wireless connection and onboard SD recording":workspaceTabs.SelectedTab==downloadPage?
+                "DATA DOWNLOAD  /  Saved recordings, downloads and media export":"ADVANCED  /  Manual firmware, USB modes and storage maintenance";UpdateWildXControls(); };
+            shell.Controls.Add(workspaceTabs,0,1);
+            workspaceStatus=WildXTheme.Label("USB MODE  /  Live acquisition, previews and device health");workspaceStatus.Dock=DockStyle.Fill;shell.Controls.Add(workspaceStatus,0,2);
+
+            var online=new TableLayoutPanel { Dock=DockStyle.Top,Height=706,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
+            online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));
+            online.RowStyles.Add(new RowStyle(SizeType.Absolute,268));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));usbPage.Controls.Add(online);
+            usbPage.AutoScroll=true;
+            usbPage.Resize+=delegate { online.Height=Math.Max(706,usbPage.ClientSize.Height-usbPage.Padding.Vertical); };
+
+            var capture=Stack(20,38,20,36,48,30);
+            label1.AutoSize=true;label1.Text="USB DEVICE";label1.ForeColor=WildXTheme.Muted;capture.Controls.Add(label1,0,0);
+            var deviceRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty };
+            deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,102));
+            comboDrives.Dock=DockStyle.Fill;comboDrives.Margin=new Padding(0,0,10,0);btnRefresh.Dock=DockStyle.Fill;btnRefresh.Margin=Padding.Empty;
+            deviceRow.Controls.Add(comboDrives,0,0);deviceRow.Controls.Add(btnRefresh,1,0);capture.Controls.Add(deviceRow,0,1);
+            label2.Text="OUTPUT FOLDER";label2.ForeColor=WildXTheme.Muted;label2.AutoSize=true;capture.Controls.Add(label2,0,2);
+            var folderRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty };
+            folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,132));
+            llblSaveFolder.AutoSize=false;llblSaveFolder.Dock=DockStyle.Fill;llblSaveFolder.TextAlign=ContentAlignment.MiddleLeft;llblSaveFolder.AutoEllipsis=true;
+            llblSaveFolder.LinkColor=WildXTheme.Accent;btnSaveFolder.Dock=DockStyle.Fill;btnSaveFolder.Margin=Padding.Empty;
+            llblSaveFolder.Text="Choose a destination folder";
+            folderRow.Controls.Add(llblSaveFolder,0,0);folderRow.Controls.Add(btnSaveFolder,1,0);capture.Controls.Add(folderRow,0,3);
+            btnStart.Text="Start recording";btnStop.Text="Stop recording";btnStreams.Text="Recording settings";
+            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams),0,4);
+            npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,5);
+            online.Controls.Add(Card("USB acquisition",null,capture),0,0);
+
+            var monitor=Stack(44,0);
+            monitor.Controls.Add(ActionRow(btnScope,btnPreview,btnNpLogger),0,0);
+            imuTelemetry.Dock=DockStyle.Fill;imuTelemetry.Margin=Padding.Empty;imuTelemetry.BackColor=WildXTheme.Dark;monitor.Controls.Add(imuTelemetry,0,1);
+            online.Controls.Add(Card("Live monitor","Open a neural or camera preview during USB recording.",monitor),0,1);
+            var health=Stack(44,0);health.Controls.Add(ActionRow(btnSystemInfoRefresh,infoDetails,btnSdInfo),0,0);
+            systemInfoSummary.Dock=DockStyle.Fill;systemInfoSummary.Margin=Padding.Empty;systemInfoSummary.BorderStyle=BorderStyle.None;health.Controls.Add(systemInfoSummary,0,1);
+            online.Controls.Add(Card("Device health",null,health),1,0);
+
+            var activity=Stack(22,0,22);
+            lblSpeed.AutoSize=false;lblSpeed.Dock=DockStyle.Fill;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";activity.Controls.Add(lblSpeed,0,0);
+            lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=true;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,1);
+            llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=true;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,2);
+            var activityCard=Card("Capture activity",null,activity);online.Controls.Add(activityCard,0,2);online.SetColumnSpan(activityCard,2);
+            var clock=Stack(82,44,0);timeStatus.Dock=DockStyle.Fill;timeStatus.AutoEllipsis=true;clock.Controls.Add(timeStatus,0,0);clock.Controls.Add(ActionRow(timeSettings),0,1);
+            clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="The network clock is an app-local UTC reference. Recordings retain their device timestamps.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
+            online.Controls.Add(Card("Network time / UTC",null,clock),1,1);
+
+            bleWorkspace=new NpBleForm {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
+            bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};
+            blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
+
+            downloadWorkspace=new CE32_console.NpDownloadForm(null,false) { TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill };
+            downloadWorkspace.BusyChanged+=UpdateStartEnabled;
+            downloadPage.Controls.Add(Card("Recordings & storage","Refresh sources, list sessions, then select recordings to download or decode.",downloadWorkspace));downloadWorkspace.Show();
+            BuildAdvancedWorkspace();
+            FormClosing+=delegate(object sender,FormClosingEventArgs e){
+                if(bleWorkspace.IsBusy){e.Cancel=true;workspaceStatus.Text="Waiting for the BLE command to finish before closing.";return;}
+                if(DownloadBusy){downloadWorkspace.RequestCancel();e.Cancel=true;workspaceStatus.Text="Waiting for the storage operation to finish before closing.";}
+            };
+            oldInfo.Dispose();oldTime.Dispose();
+            // Keep unused legacy status controls out of the workspace, while retaining ownership.
+            label4.Visible=lblStaleBanks.Visible=btnImpedance.Visible=false;Controls.Add(label4);Controls.Add(lblStaleBanks);Controls.Add(btnImpedance);
+            AutoScaleDimensions=new SizeF(96F,96F);AutoScaleMode=AutoScaleMode.Dpi;ResumeLayout(true);UpdateStartEnabled();
+        }
+        void BuildAdvancedWorkspace()
+        {
+            var tools=new TableLayoutPanel {Dock=DockStyle.Top,Height=320,ColumnCount=2,RowCount=1,Margin=Padding.Empty,BackColor=WildXTheme.Canvas};
+            tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
+            tools.RowStyles.Add(new RowStyle(SizeType.Percent,100));advancedPage.Controls.Add(tools);
+            var firmware=Stack(58,48,0);
+            advancedTarget=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};firmware.Controls.Add(advancedTarget,0,0);
+            btnBleRecovery=new Button {Text="BLE firmware / recovery"};WildXTheme.Button(btnBleRecovery);
+            btnBleRecovery.Click+=delegate {OpenBleRecovery();};
+            WildXTheme.Button(btnDfu,true);firmware.Controls.Add(ActionRow(btnDfu,btnBleRecovery),0,1);
+            firmware.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
+                Text="NP1: validated APP / HEX firmware.\r\nNP2: transactional .xenp APP updates.\r\n\r\nThe manager also provides USB mode changes and recovery. Choose the exact device and firmware file before updating."},0,2);
+            tools.Controls.Add(Card("Firmware & USB modes",null,firmware),0,0);
+            var storage=Stack(58,48,0);
+            advancedStorageSource=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};storage.Controls.Add(advancedStorageSource,0,0);
+            storage.Controls.Add(ActionRow(downloadWorkspace.FormatButton),0,1);
+            storage.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
+                Text="Choose an SD card in Data Download first. Quick Format resets that card's recording catalog.\r\n\r\nThe selected card is inspected and confirmed before any write. USB logger endpoints remain read-only."},0,2);
+            tools.Controls.Add(Card("Storage maintenance",null,storage),1,0);
+        }
+        void DrawWorkspaceTab(object sender,DrawItemEventArgs e)
+        {
+            bool selected=e.Index==workspaceTabs.SelectedIndex;var bounds=workspaceTabs.GetTabRect(e.Index);
+            using(var brush=new SolidBrush(selected?WildXTheme.AccentLight:WildXTheme.Canvas))e.Graphics.FillRectangle(brush,bounds);
+            TextRenderer.DrawText(e.Graphics,workspaceTabs.TabPages[e.Index].Text,WildXTheme.Strong,bounds,selected?WildXTheme.Accent:WildXTheme.Muted,
+                TextFormatFlags.HorizontalCenter|TextFormatFlags.VerticalCenter);
+            if(selected)using(var pen=new Pen(WildXTheme.Accent,3))e.Graphics.DrawLine(pen,bounds.Left+18,bounds.Bottom-3,bounds.Right-18,bounds.Bottom-3);
+            if(selected && workspaceTabs.Focused)ControlPaint.DrawFocusRectangle(e.Graphics,Rectangle.Inflate(bounds,-6,-6));
+        }
+        void UpdateWildXControls()
+        {
+            if(downloadWorkspace!=null)downloadWorkspace.SetUsbSelection(devicePath);
+            if(advancedTarget!=null)advancedTarget.Text=String.IsNullOrWhiteSpace(devicePath)?
+                "Select a device in USB Mode, or choose an exact device in the firmware manager.":
+                SystemInfoDeviceName()+" / UID "+(NpV2FirmwareForm.Uid(devicePath)??NpV1Management.UidFromPath(devicePath)??"unverified — confirm in manager");
+            if(advancedStorageSource!=null)advancedStorageSource.Text=downloadWorkspace.SelectedSourceDescription??"No storage source selected. Choose a card in Data Download.";
+            if(DownloadBusy || BleInUse)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
+            if(btnBleRecovery!=null)btnBleRecovery.Enabled=!running && systemInfoActive==0 && !firmwareManagementActive && deviceRefreshActive==0 && npRecoveryCancelled && !DownloadBusy && !BleInUse;
+        }
+        void OpenV2Firmware()
+        {
+            if (running || systemInfoActive != 0 || firmwareManagementActive || !npRecoveryCancelled || DownloadBusy || BleInUse) return;
+            firmwareManagementActive = true;
+            UpdateStartEnabled();
+            try { using (var dialog = new NpV2FirmwareForm(devicePath)) dialog.ShowDialog(this); }
+            finally { firmwareManagementActive = false; UpdateStartEnabled(); }
+            RefreshDeviceList();
+        }
+    }
+}

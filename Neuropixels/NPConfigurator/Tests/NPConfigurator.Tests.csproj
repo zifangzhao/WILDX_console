@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Configuration.cs;../SelectedChannelExport.cs;../StandardFormats.cs" LinkBase="Shared" />
+    <Compile Include="../DeviceSelection.cs;../../V1Capture/Configuration/NpConfigClient.cs" LinkBase="Shared" />
+    <EmbeddedResource Include="../catalog.json" LogicalName="NPConfigurator.catalog.json" />
+  </ItemGroup>
+</Project>

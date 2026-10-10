@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E6E0B078-678D-4B87-A6AF-35035894B186}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>USB512_interface</RootNamespace>
+    <AssemblyName>WILDX_console</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <ApplicationIcon>Resources\Waveform.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <!-- Use the tested native 64-bit download/CRC path on 64-bit Windows. -->
+    <Prefer32Bit>false</Prefer32Bit>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.3.3\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CameraPreviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USB512WinUsb.cs" />
+    <Compile Include="Ce64MscProtocol.cs" />
+    <Compile Include="Ce64MscRawBlockDevice.cs" />
+    <Compile Include="Ce64MscCompressedDecoder.cs" />
+    <Compile Include="Ce64MscDiscovery.cs" />
+    <Compile Include="ImpedanceReportForm.cs" />
+    <Compile Include="EisSpectrumForm.cs" />
+    <Compile Include="XeNpWinUsb.cs" />
+    <Compile Include="..\..\Neuropixels\USBConsoleV2\NpV2UsbConsole.cs"><Link>NpV2UsbConsole.cs</Link></Compile>
+    <Compile Include="XeNpStreamDecoder.cs" />
+    <Compile Include="NpCaptureModes.cs" />
+    <Compile Include="NpModeDialog.cs" />
+    <Compile Include="NpRecovery.cs" />
+    <Compile Include="NpUsbSensors.cs" />
+    <Compile Include="NpConfigurationDialog.cs" />
+    <Compile Include="NpConfigurationUsb.cs" />
+    <Compile Include="NpProbeManifest.cs" />
+    <Compile Include="NpRecordingSettings.cs" />
+    <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpConfigClient.cs"><Link>NpConfigClient.cs</Link></Compile>
+    <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpDeviceConfigForm.cs"><Link>NpDeviceConfigForm.cs</Link></Compile>
+    <Compile Include="XeNpSdInfo.cs" />
+    <Compile Include="NpLogger\NpDownloadNative.cs" />
+    <Compile Include="NpLogger\NpDownloadStream.cs" />
+    <Compile Include="NpLogger\NpDownloadCatalog.cs" />
+    <Compile Include="NpLogger\NpCe64Decoder.cs" />
+    <Compile Include="NpLogger\NpCe64Export.cs" />
+    <Compile Include="NpLogger\NpSdGeometry.cs" />
+    <Compile Include="NpLogger\RawBurst.cs" />
+    <Compile Include="NpLogger\NpArchive.cs" />
+    <Compile Include="NpLogger\NpV1Management.cs" />
+    <Compile Include="NpLogger\NpFirmwareImage.cs" />
+    <Compile Include="NpLogger\NpFirmwareFlash.cs" />
+    <Compile Include="NpLogger\NpLoggerForm.cs" />
+    <Compile Include="NpLogger\NpFirmwareForm.cs" />
+    <Compile Include="NeuropixelsPreviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="mainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="mainForm.SystemInfo.cs" />
+    <Compile Include="mainForm.NetworkTime.cs" />
+    <Compile Include="NetworkTimeClock.cs" />
+    <Compile Include="NpSystemInfo.cs" />
+    <Compile Include="mainForm.Designer.cs">
+      <DependentUpon>mainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="mainForm.WildX.cs" />
+    <Compile Include="WildXTheme.cs" />
+    <Compile Include="Ble\NpSdControl.cs" />
+    <Compile Include="Ble\NpV1BleProtocol.cs" />
+    <Compile Include="Ble\NpV2SdControl.cs" />
+    <Compile Include="Ble\NpV2OnlineClock.cs" />
+    <Compile Include="Ble\NpBleWire.cs" />
+    <Compile Include="Ble\NpBleConnection.cs" />
+    <Compile Include="Ble\NpBleForm.cs" />
+    <Compile Include="Ble\NpBleClock.cs" />
+    <Compile Include="Ble\NpV2Preview.cs" />
+    <Compile Include="Ble\NpV2PreviewWire.cs" />
+    <Compile Include="Ble\NpBlePreviewForm.cs" />
+    <Compile Include="Ble\NpMediaExport.cs" />
+    <Compile Include="Ble\WILD_VideoDecoder.cs" />
+    <Compile Include="NpLogger\NpDownloadForm.cs" />
+    <Compile Include="NpLogger\NpV2FirmwareForm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScopeForm_drawbank.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScopeForm_drawbank.Designer.cs">
+      <DependentUpon>ScopeForm_drawbank.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="mainForm.resx">
+      <DependentUpon>mainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Waveform.ico">
+      <LogicalName>USB512_interface.Waveform.ico</LogicalName>
+    </EmbeddedResource>
+    <None Include="Resources\Waveform.svg" />
+    <None Include="Resources\build-icon.ps1" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ScopeForm_drawbank.resx">
+      <DependentUpon>ScopeForm_drawbank.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.manifest" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+    <None Include="CE64_MSC_PROTOCOL.md" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Neuropixels\SD\NpV2SdDatExport.csproj">
+      <Project>{2C09A791-8FB3-492F-AD20-34FF63F311A8}</Project>
+     <Name>NpV2SdDatExport</Name>
+     <Private>True</Private>
+     <GlobalPropertiesToRemove>BaseIntermediateOutputPath;MSBuildProjectExtensionsPath;IntermediateOutputPath;GeneratedVersionInfoFile</GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- Override with /p:NsisExe=&quot;path\to\makensis.exe&quot; when NSIS is installed elsewhere. -->
+    <NsisExe Condition="'$(NsisExe)' == '' and Exists('$(ProgramFiles(x86))\NSIS\makensis.exe')">$(ProgramFiles(x86))\NSIS\makensis.exe</NsisExe>
+    <NsisExe Condition="'$(NsisExe)' == '' and Exists('$(ProgramFiles)\NSIS\makensis.exe')">$(ProgramFiles)\NSIS\makensis.exe</NsisExe>
+    <NsisScriptPath>$(MSBuildProjectDirectory)\..\WILDX_console.nsi</NsisScriptPath>
+  </PropertyGroup>
+  <!-- A Release installer build produces WILDX_console-Setup-<assembly-version>.exe next to the application. -->
+  <PropertyGroup>
+    <NpConfiguratorProject Condition="'$(NpConfiguratorProject)' == ''">$(MSBuildProjectDirectory)\..\..\Neuropixels\NPConfigurator\NPConfigurator.csproj</NpConfiguratorProject>
+    <NpConfiguratorOutput Condition="'$(NpConfiguratorOutput)' == '' and $([System.IO.Path]::IsPathRooted('$(OutputPath)'))">$(OutputPath)NPConfigurator</NpConfiguratorOutput>
+    <NpConfiguratorOutput Condition="'$(NpConfiguratorOutput)' == ''">$(MSBuildProjectDirectory)\$(OutputPath)NPConfigurator</NpConfiguratorOutput>
+  </PropertyGroup>
+  <Target Name="BuildNpConfigurator" AfterTargets="Build" BeforeTargets="BuildNsisInstaller">
+    <Error Condition="!Exists('$(NpConfiguratorProject)')" Text="Bundled NP configurator project missing; set NpConfiguratorProject to Neuropixels/NPConfigurator/NPConfigurator.csproj." />
+    <Exec Command="dotnet build &quot;$(NpConfiguratorProject)&quot; -c Release -o &quot;$(NpConfiguratorOutput)&quot; --nologo" />
+  </Target>
+  <Target Name="BuildNsisInstaller" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' and '$(GenerateNsisInstaller)' != 'false'">
+    <Error Condition="!Exists('$(NsisScriptPath)')" Text="NSIS installer script was not found: $(NsisScriptPath)" />
+    <Error Condition="!Exists('$(NsisExe)')" Text="NSIS makensis.exe was not found. Install NSIS or build with /p:NsisExe=&quot;path\to\makensis.exe&quot;." />
+    <Exec Command="&quot;$(NsisExe)&quot; /DAPP_PAYLOAD_DIR=&quot;$(TargetDir).&quot; &quot;$(NsisScriptPath)&quot;" />
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.26100.1742" />
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.6.0" />
+  </ItemGroup>
+  <Target Name="BuildFirmwareUpdater" AfterTargets="Build" BeforeTargets="BuildNsisInstaller">
+    <Exec Command="dotnet build &quot;$(MSBuildProjectDirectory)\..\..\Neuropixels\FirmwareUpdater\XeNpFirmwareUpdater.csproj&quot; -c Release -o &quot;$(TargetDir)FirmwareUpdater&quot; --nologo" />
+  </Target>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
+

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Configuration.cs;ConfigurationForm.cs;ProbeView.cs;Program.cs;DeviceSelection.cs;StandardFormats.cs" />
+    <EmbeddedResource Include="catalog.json" LogicalName="NPConfigurator.catalog.json" />
+  </ItemGroup>
+</Project>

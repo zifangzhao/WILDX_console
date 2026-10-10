@@ -1,0 +1,27 @@
+[
+  {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\USB512_interface\\USB512_interface",
+    "commit": "fa4dc21df288ed2fbc30b1c6c80dce35ecda02a1",
+    "note": "Working source snapshot, including local modifications; source repositories were not changed."
+  },
+  {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\Neuropixels",
+    "commit": "fa4dc21df288ed2fbc30b1c6c80dce35ecda02a1",
+    "note": "Working source snapshot, including local modifications; source repositories were not changed."
+  },
+  {
+    "source": "C:\\Frank\\Code\\CE32_console\\CE32_console\\CE32_console",
+    "commit": "d927430bc6107e2547b89a851f95733780e5cbaa",
+    "note": "Working source snapshot, including local modifications; source repositories were not changed."
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Tools\\XeNpFirmwareUpdater",
+    "commit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+    "note": "Working source snapshot, including local modifications; source repositories were not changed."
+  },
+  {
+    "source": "D:\\Code\\CE64\\_worktrees\\wild_delayed_np_role_20261007\\CE32_console\\CE32_console\\Neuropixels\\V2SdLogger",
+    "commit": "f696c7d9e20a35ff31d9d4c0025148854842bd70",
+    "note": "Working source snapshot. NpV2Preview.cs and NpV2PreviewWire.cs copied unchanged for native preview decoding; the preview consumer and clock lifecycle were adapted for the standalone BLE connection. Source repository was not changed."
+  }
+]

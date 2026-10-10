@@ -1,0 +1,18 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28701.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WILDX_console", "USB512_interface\USB512_interface\WILDX_console.csproj", "{E6E0B078-678D-4B87-A6AF-35035894B186}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6E0B078-678D-4B87-A6AF-35035894B186}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{E6E0B078-678D-4B87-A6AF-35035894B186}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{E6E0B078-678D-4B87-A6AF-35035894B186}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{E6E0B078-678D-4B87-A6AF-35035894B186}.Release|Any CPU.Build.0 = Release|AnyCPU
+	EndGlobalSection
+EndGlobal

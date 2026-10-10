@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <ProjectGuid>{2C09A791-8FB3-492F-AD20-34FF63F311A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>NpV2SdDatExport</AssemblyName>
+    <RootNamespace>USB512_interface</RootNamespace>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Deterministic>true</Deterministic>
+    <DefineConstants>TRACE;NP2_CONSOLE_STANDALONE</DefineConstants>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Compile Include="NpV2SdDatExport.cs" />
+    <Compile Include="NpNeuroscopeXml.cs" />
+    <!-- Reuse the maintained USB console wire/sample decoder. All sources
+         belong to this console repository, not a firmware checkout. -->
+    <Compile Include="..\USBConsoleV2\NpV2UsbConsole.cs"><Link>NpV2UsbConsole.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\USB512WinUsb.cs"><Link>USB512WinUsb.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\NeuropixelsPreviewForm.cs"><Link>NeuropixelsPreviewForm.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\XeNpStreamDecoder.cs"><Link>XeNpStreamDecoder.cs</Link></Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,121 @@
+{
+  "upstream_repository": "https://github.com/zifangzhao/XE_NP",
+  "upstream_head": "e13c63cc627ad0beb5590de1e7dd02cad970631d",
+  "snapshot_date": "2026-09-29",
+  "files": [
+    {
+      "upstream_path": "Tools/USBConsoleV2/NpV2UsbConsole.cs",
+      "local_path": "Neuropixels/USBConsoleV2/NpV2UsbConsole.cs",
+      "sha256": "12ba8f64ef31bf8da6c9402e748a3fff19bb95b4b11c18b6e503cae4ec46b2e0",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/V1Capture/Configuration/NpConfigClient.cs",
+      "local_path": "Neuropixels/V1Capture/Configuration/NpConfigClient.cs",
+      "sha256": "a6da1df570e380dda41c97181d687352a0a55bbace6c2d69c0863bdd86f7f2bf",
+      "upstream_working_tree_change": false
+    },
+    {
+      "upstream_path": "Tools/V1Capture/Configuration/NpDeviceConfigForm.cs",
+      "local_path": "Neuropixels/V1Capture/Configuration/NpDeviceConfigForm.cs",
+      "sha256": "d911ca306d8e1caa3821386c4f82dd903a934146deb61d0cd59851f40fabe735",
+      "upstream_working_tree_change": false
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/NPConfigurator.csproj",
+      "local_path": "Neuropixels/NPConfigurator/NPConfigurator.csproj",
+      "sha256": "73b55881eb822bc1a655520ff749074a56a63171c8ebac5fd84b643567f264f9",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/Configuration.cs",
+      "local_path": "Neuropixels/NPConfigurator/Configuration.cs",
+      "sha256": "1bc1abd2e36fdbb7979a8017d1b324961c9f86dfde399adc15dc47187a5c9bc6",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/ConfigurationForm.cs",
+      "local_path": "Neuropixels/NPConfigurator/ConfigurationForm.cs",
+      "sha256": "28916f0596410edd3c22d3efeb7a4ac2b8a79a044b1bf3626777492322fc8180",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/DeviceSelection.cs",
+      "local_path": "Neuropixels/NPConfigurator/DeviceSelection.cs",
+      "sha256": "d391ddd018313c017e429d91cbb2b5311b5134209fcb5fc7c97f6d3376ed8e04",
+      "upstream_working_tree_change": false
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/ProbeView.cs",
+      "local_path": "Neuropixels/NPConfigurator/ProbeView.cs",
+      "sha256": "4443078fc54d84dd2b6b800c5367f2f83601284bbe4c2905186ca1ff98c1bfcc",
+      "upstream_working_tree_change": false
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/Program.cs",
+      "local_path": "Neuropixels/NPConfigurator/Program.cs",
+      "sha256": "8436882149496116893a1d4f1eaf679a9862abaeeee681cf4fb140d8ce9ba578",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/StandardFormats.cs",
+      "local_path": "Neuropixels/NPConfigurator/StandardFormats.cs",
+      "sha256": "0f4f569615dd649c6c6319905ce0a6d40706960011a58ac2715416f1057d7350",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/SelectedChannelExport.cs",
+      "local_path": "Neuropixels/NPConfigurator/SelectedChannelExport.cs",
+      "sha256": "ca08f8ee53e1c2495759274dc0e8285f32a0581a104c6af0aba5e6780699e0b5",
+      "upstream_working_tree_change": false
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/catalog.json",
+      "local_path": "Neuropixels/NPConfigurator/catalog.json",
+      "sha256": "c7a07f3a6a7382215805cf3a4f648de1d099dbb6c2bdaa17ea8fcf59bb709b95",
+      "upstream_working_tree_change": false
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/README.md",
+      "local_path": "Neuropixels/NPConfigurator/README.md",
+      "sha256": "c5b4c077bde893cf2bb05dc07f86d029d17c1f85dbd171f77001ec85f8c1ed0a",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/STANDARD_FORMATS.md",
+      "local_path": "Neuropixels/NPConfigurator/STANDARD_FORMATS.md",
+      "sha256": "e01a7f689fa37e63e5d501de21d7a76a4d558bda1378f9448619e0bef1c3a022",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/Tests/NPConfigurator.Tests.csproj",
+      "local_path": "Neuropixels/NPConfigurator/Tests/NPConfigurator.Tests.csproj",
+      "sha256": "094467a895798cc5c400438fa42e96854f47b92079dbad614b4838616e6ad677",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/Tests/Program.cs",
+      "local_path": "Neuropixels/NPConfigurator/Tests/Program.cs",
+      "sha256": "a7d6fbfb935ee1720aef75ea2896849db7daa14012aad7e2648763b3662db83a",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/NPConfigurator/Tests/StandardFormatTests.cs",
+      "local_path": "Neuropixels/NPConfigurator/Tests/StandardFormatTests.cs",
+      "sha256": "46fa151605c4fa69504c9bcef78a76bb241765c24fbfd37ceada0bda80016daa",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/tests/test_usb_console_v2.cs",
+      "local_path": "Neuropixels/Tests/test_usb_console_v2.cs",
+      "sha256": "c87b912a8c6d9d0aa35374d2e4a1a8825282dac09c521d39ca98a241b40f2118",
+      "upstream_working_tree_change": true
+    },
+    {
+      "upstream_path": "Tools/tests/test_np_v2_usb_console.cs",
+      "local_path": "Neuropixels/Tests/test_np_v2_usb_console.cs",
+      "sha256": "809f93a3848fcdd106e1f5e0e3b0ff8e9bef7eff055b6299f46ddce6774eaaa8",
+      "upstream_working_tree_change": true
+    }
+  ]
+}
