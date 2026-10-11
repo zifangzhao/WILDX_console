@@ -81,6 +81,9 @@
     <Compile Include="NpUsbSensors.cs" />
     <Compile Include="NpConfigurationDialog.cs" />
     <Compile Include="NpConfigurationUsb.cs" />
+    <Compile Include="Np2ConfigurationClient.cs" />
+    <Compile Include="Np2ConfigurationPreferences.cs" />
+    <Compile Include="Np2ConfigurationUsb.cs" />
     <Compile Include="NpProbeManifest.cs" />
     <Compile Include="NpRecordingSettings.cs" />
     <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpConfigClient.cs"><Link>NpConfigClient.cs</Link></Compile>

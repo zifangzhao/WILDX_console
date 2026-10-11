@@ -278,6 +278,10 @@ namespace USB512_interface
             bool layout = probeMask == 1U || probeMask == 2U || probeMask == 3U || probeMask == 7U;
             return layout && (probeMask & ~AvailableProbeMask) == 0U;
         }
+        internal static bool NeedsMultiProbe30KQualificationWarning(uint probeMask, uint sampleHz)
+        {
+            return sampleHz == 30000U && (probeMask == 3U || probeMask == 7U);
+        }
         internal uint[] SupportedRates
         {
             get
@@ -586,6 +590,34 @@ namespace USB512_interface
         internal NpV2CaptureStatus GetCaptureStatus() { return NpV2CaptureStatus.Parse(ReadControl(0x71, 128)); }
         internal NpV2SourceStatus GetSourceStatus() { return NpV2SourceStatus.Parse(ReadControl(0x73, 144)); }
         internal NpV2ProfileCapabilities GetProfileCapabilities() { return NpV2ProfileCapabilities.Parse(ReadControl(0x76, 32)); }
+        internal byte[] ExchangeConfiguration(byte[] request)
+        {
+            if (request == null || request.Length != Np2ConfigClient.FrameBytes)
+                throw new ArgumentException("NP2 configuration frame must be 64 bytes.");
+            WriteControl(0x7A, 0, 0, request);
+            uint transaction=NpV2ServiceStatus.U32(request,8); Stopwatch wait=Stopwatch.StartNew();
+            while(wait.ElapsedMilliseconds<5000L)
+            {
+                byte[] reply=ReadControl(0x7B,Np2ConfigClient.FrameBytes);
+                try {
+                    var receipt=Np2ConfigClient.Parse(reply,request[5],transaction);
+                    /* WRITE chunks intentionally share op+transaction. A valid
+                     * previous chunk's ACK is stale until its byte offset also
+                     * matches (the same rule used by BLE receipt matching). */
+                    if(!ConfigurationOffsetMatches(receipt,request)){
+                        Thread.Sleep(10);continue;
+                    }
+                    return reply;
+                }
+                catch(IOException) { Thread.Sleep(10); }
+            }
+            throw new TimeoutException("No fresh matching NP2 configuration receipt; configuration outcome is unknown and was not replayed.");
+        }
+        internal static bool ConfigurationOffsetMatches(Np2ConfigReply receipt,byte[] request)
+        {
+            return request[5]!=Np2ConfigClient.Write || receipt.Error!=0 ||
+                receipt.Received==NpV2ServiceStatus.U32(request,12)+NpV2ServiceStatus.U32(request,16);
+        }
         internal NpV2UsbSelfTestReport GetSelfTestReport(string expectedUid)
         {
             GetServiceStatus().RequireUid(expectedUid);
@@ -750,9 +782,15 @@ namespace USB512_interface
 
         private void VendorOut(byte request, ushort value, ushort index)
         {
+            WriteControl(request, value, index, null);
+        }
+
+        private void WriteControl(byte request, ushort value, ushort index, byte[] data)
+        {
             uint sent;
-            var setup = new USB512WinUsbNative.WINUSB_SETUP_PACKET { RequestType = 0x40, Request = request, Value = value, Index = index, Length = 0 };
-            if (!USB512WinUsbNative.WinUsbControlTransfer(usb, setup, new byte[0], 0, out sent, IntPtr.Zero) || sent != 0)
+            ushort length = checked((ushort)(data == null ? 0 : data.Length));
+            var setup = new USB512WinUsbNative.WINUSB_SETUP_PACKET { RequestType = 0x40, Request = request, Value = value, Index = index, Length = length };
+            if (!USB512WinUsbNative.WinUsbControlTransfer(usb, setup, data ?? new byte[0], length, out sent, IntPtr.Zero) || sent != length)
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "V2 control OUT 0x" + request.ToString("X2", CultureInfo.InvariantCulture) + " failed");
         }
 
@@ -1510,12 +1548,12 @@ namespace USB512_interface
         internal static NpV2RecordingResult Run(string devicePath, string outputRoot, uint targetBlocks, Func<bool> cancelled, Action<NpV2RecordingProgress> progress)
         {
             if (String.IsNullOrWhiteSpace(outputRoot)) throw new ArgumentNullException("outputRoot");
-            return RunCore(devicePath, Path.Combine(outputRoot, "NP2USB_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff", CultureInfo.InvariantCulture)), targetBlocks, cancelled, progress, null);
+            return RunCore(devicePath, Path.Combine(outputRoot, "NP2USB_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff", CultureInfo.InvariantCulture)), targetBlocks, cancelled, progress, null, null);
         }
 
         internal static NpV2RecordingResult RunInFolder(string devicePath, string folder, uint targetBlocks, Func<bool> cancelled, Action<NpV2RecordingProgress> progress)
         {
-            return RunCore(devicePath, folder, targetBlocks, cancelled, progress, null);
+            return RunCore(devicePath, folder, targetBlocks, cancelled, progress, null, null);
         }
 
         internal static NpV2RecordingResult RunContinuousInFolder(string devicePath, string folder, Func<bool> cancelled, Action<NpV2RecordingProgress> progress)
@@ -1526,11 +1564,17 @@ namespace USB512_interface
         internal static NpV2RecordingResult RunContinuousInFolder(string devicePath, string folder, Func<bool> cancelled,
             Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow)
         {
-            return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow);
+            return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow, null);
+        }
+
+        internal static NpV2RecordingResult RunContinuousInFolder(string devicePath, string folder, Func<bool> cancelled,
+            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration)
+        {
+            return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow, confirmConfiguration);
         }
 
         private static NpV2RecordingResult RunCore(string devicePath, string folder, uint targetBlocks, Func<bool> cancelled,
-            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow)
+            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration)
         {
             if (String.IsNullOrWhiteSpace(devicePath)) throw new ArgumentNullException("devicePath");
             if (String.IsNullOrWhiteSpace(folder)) throw new ArgumentNullException("folder");
@@ -1691,6 +1735,7 @@ namespace USB512_interface
                             }
                             Thread.Sleep(100);
                         }
+                        if (confirmConfiguration != null) confirmConfiguration(device);
                         /* Firmware holds capture in CONFIGURING after the source
                          * becomes ready. Prepare the idle endpoint, release its
                          * one-second read-arm grace interval, then immediately
@@ -2437,7 +2482,9 @@ namespace USB512_interface
                 var cancel = new Button { Text = "Cancel", Location = new Point(443, 478), DialogResult = DialogResult.Cancel };
                 NpV2ProfileCapabilities accepted = null;
                 configuration.Click += delegate {
-                    using(var editor=new NpConfigurationDialog(null,np2:true,availableMask:accepted==null?7:(int)accepted.AvailableProbeMask,retainedRequests:NpV2RequestsForDevice(devicePath)))editor.ShowDialog(dialog);
+                    using(var editor=new NpConfigurationDialog(null,np2:true,availableMask:accepted==null?7:(int)accepted.AvailableProbeMask,
+                        retainedRequests:NpV2RequestsForDevice(devicePath),applyConnectors:NpV2ApplyRequestsForDevice(devicePath,true)))
+                        if(editor.ShowDialog(dialog)==DialogResult.OK)NpV2SaveConfigurationState(devicePath);
                 };
                 var rateValues = new List<uint>();
                 Action read = delegate
@@ -2481,7 +2528,11 @@ namespace USB512_interface
                     uint mask = (port1.Checked ? 1U : 0U) | (port2.Checked ? 2U : 0U) | (port3.Checked ? 4U : 0U);
                     if (mask == 0U) { MessageBox.Show(dialog, "Select at least one available NP2 connector.", "NP USB capture setup", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                     if (!accepted.SupportsProbeMask(mask)) { MessageBox.Show(dialog, "This connector combination has no optimized USB codec. Select connector 1, connector 2, connectors 1+2, or all three connectors.", "NP USB capture setup", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-                    npV2RequestedProbeMask = mask; npV2RequestedSampleHz = rateValues[rate.SelectedIndex]; dialog.DialogResult = DialogResult.OK;
+                    uint requestedRate=rateValues[rate.SelectedIndex];
+                    if(NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(mask,requestedRate) && MessageBox.Show(dialog,
+                        "Multi-probe 30 kHz USB capture is experimental and has not passed sustained qualification. 20 kHz profiles have separate test evidence. Continue in best-effort mode?",
+                        "Experimental NP2 USB profile",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
+                    npV2RequestedProbeMask = mask; npV2RequestedSampleHz = requestedRate; dialog.DialogResult = DialogResult.OK;
                 };
                 dialog.Controls.AddRange(new Control[] {
                     new Label { Text = "NP2 connectors", Location = new Point(16, 12), AutoSize = true }, port1, port2, port3,
@@ -2552,19 +2603,41 @@ namespace USB512_interface
                     if (proceed != DialogResult.Yes) throw new OperationCanceledException("Recording cancelled to use a direct PC USB port.");
                 }
                 string streamPath = NpV2EnsureIdleStreamMode();
+                var stagedConfigurations=new List<Np2ConfigRequest>();
                 using (var device = NpV2UsbDevice.Open(streamPath))
                 {
                     NpV2ProfileCapabilities capabilities = device.GetProfileCapabilities();
                     uint mask = npV2RequestedProbeMask == 0U ? capabilities.SelectedProbeMask : npV2RequestedProbeMask;
                     capabilities = device.ConfigureProfile(mask, npV2RequestedSampleHz);
+                    HashSet<int> apply=NpV2ApplyRequestsForDevice(devicePath);
+                    Dictionary<int,string> requested=NpV2RequestsForDevice(devicePath);
+                    if(apply!=null)foreach(int connector in apply)
+                    {
+                        if((capabilities.SelectedProbeMask&(1U<<(connector-1)))==0U)continue;
+                        string json;
+                        if(!requested.TryGetValue(connector,out json))throw new IOException("NP2 apply was requested for connector "+connector+" without a retained configuration.");
+                        var request=NpConfigurationDialog.PrepareV2Request(json,connector);
+                        Np2ConfigurationUsb.StageForCapture(device,request);stagedConfigurations.Add(request);
+                    }
                     if(settings!=null) {
                         settings.DeviceEvidence("usb_path",streamPath);
                         uint selected=capabilities.SelectedProbeMask;
                         settings.PlannedLayout((int)selected,false,(selected&(selected-1))!=0);
                         settings.Context("planned_ap_sample_rate_hz",capabilities.SampleHz);
                         settings.Streams(false,false,false);
+                        var stagedPorts=new List<int>();
+                        var hostOnlyPorts=new List<int>();
+                        foreach(var request in stagedConfigurations)stagedPorts.Add(request.Port+1);
                         foreach(var request in NpV2RequestsForDevice(devicePath))
-                            if((capabilities.SelectedProbeMask&(1U<<(request.Key-1)))!=0)settings.Request(request.Key,request.Value);
+                            if((capabilities.SelectedProbeMask&(1U<<(request.Key-1)))!=0)
+                            {
+                                Np2ConfigRequest staged=null;
+                                foreach(var candidate in stagedConfigurations)if(candidate.Port+1==request.Key){staged=candidate;break;}
+                                settings.Request(request.Key,request.Value,staged==null?null:staged.Selection);
+                                if(staged==null)hostOnlyPorts.Add(request.Key);
+                            }
+                        settings.Context("np2_configuration_staged_ports",stagedPorts.ToArray());
+                        settings.Context("np2_configuration_retained_host_only_ports",hostOnlyPorts.ToArray());
                         settings.Write();
                     }
                     if (IsHandleCreated) Invoke((Action)delegate
@@ -2590,6 +2663,24 @@ namespace USB512_interface
                         Interlocked.Increment(ref neuropixelsApRows);
                         NeuropixelsPreviewForm preview = neuropixelsPreview;
                         if (preview != null) preview.PushSamples(probe, row, 1, Array.Empty<short>(), 0);
+                    },
+                    stagedConfigurations.Count==0?null:(Action<NpV2UsbDevice>)delegate(NpV2UsbDevice device)
+                    {
+                        var receipts=new List<string>();
+                        foreach(var request in stagedConfigurations)
+                        {
+                            Np2ConfigReply reply=Np2ConfigurationUsb.ConfirmApplied(device,request);
+                            receipts.Add("P"+(request.Port+1)+": applied; ID="+BitConverter.ToString(reply.ConfigurationId).Replace("-","")+"; CRC32="+reply.PayloadCrc.ToString("X8")+"; verification="+reply.Verification+"; transaction="+reply.Transaction);
+                        }
+                        if(settings!=null){
+                            const string receiptFile="requested-configuration-applied-receipts.txt";
+                            File.WriteAllLines(Path.Combine(runFolder,receiptFile),receipts);
+                            foreach(var request in stagedConfigurations)settings.ConfirmRequest(request.Port+1);
+                            settings.Context("np2_configuration_applied_receipt_file",receiptFile);
+                            settings.Context("np2_configuration_applied_receipts",receipts.ToArray());
+                            var appliedPorts=new List<int>();foreach(var request in stagedConfigurations)appliedPorts.Add(request.Port+1);
+                            settings.Context("np2_configuration_applied_ports",appliedPorts.ToArray());
+                        }
                     });
                 complete=result.Complete;metadataFailure=result.Error??result.Warning;
                 if(settings!=null) {

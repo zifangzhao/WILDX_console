@@ -40,6 +40,7 @@ $exe = Join-Path $OutputDirectory 'NpV2UsbConsoleTests.exe'
 $sources = @(
     "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",
     "$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs",
+    "$console\Np2ConfigurationClient.cs",
     "$console\USB512WinUsb.cs", "$console\NeuropixelsPreviewForm.cs",
     "$console\XeNpStreamDecoder.cs"
 )

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using USB512_interface;
 
 internal static class NpV2UsbConsoleTests
@@ -684,6 +685,51 @@ internal static class NpV2UsbConsoleTests
         Check(twoHubs.HubCount == 2 && twoHubs.Warning.Contains("behind 2 hubs"), "two-hub route misclassified");
         Check(unknown.HubCount == -1 && unknown.Warning.Contains("could not be verified"), "unknown route falsely called direct");
     }
+    static byte[] Np2Reply(byte operation,uint transaction,uint received,uint payloadCrc,byte port,byte portState,byte verification,byte[] id)
+    {
+        var bytes=new byte[64];System.Text.Encoding.ASCII.GetBytes("NPR2").CopyTo(bytes,0);bytes[4]=2;bytes[5]=operation;
+        Put32(bytes,8,transaction);Put32(bytes,12,received);Put32(bytes,16,Np2ConfigRequest.PayloadBytes);
+        bytes[20]=portState;bytes[21]=verification;bytes[22]=port;bytes[23]=4;Put32(bytes,24,payloadCrc);
+        if(id!=null)Buffer.BlockCopy(id,0,bytes,28,Math.Min(32,id.Length));Put32(bytes,60,Np2ConfigClient.Crc(bytes,60));return bytes;
+    }
+    static byte[] Np2Id(byte[] selection){var id=new byte[32];Buffer.BlockCopy(selection,8,id,0,id.Length);return id;}
+    sealed class Np2MemoryTransport:INp2ConfigTransport
+    {
+        readonly Np2ConfigRequest request;internal readonly System.Collections.Generic.List<byte[]> Frames=new System.Collections.Generic.List<byte[]>();
+        internal Np2MemoryTransport(Np2ConfigRequest request){this.request=request;}
+        public Task<byte[]> ExchangeAsync(byte[] frame,CancellationToken cancel)
+        {
+            cancel.ThrowIfCancellationRequested();Frames.Add((byte[])frame.Clone());byte op=frame[5],port=frame[6];uint tx=BitConverter.ToUInt32(frame,8),offset=BitConverter.ToUInt32(frame,12),length=BitConverter.ToUInt32(frame,16),crc=Np2ConfigClient.Crc(request.Selection,request.Selection.Length);
+            if(op==Np2ConfigClient.Caps){var caps=Np2Reply(op,tx,0,3,port,1,0,null);Put32(caps,28,4);Put32(caps,32,0x11111111U);Put32(caps,36,0x22222222U);Put32(caps,40,0x33333333U);Put32(caps,60,Np2ConfigClient.Crc(caps,60));return Task.FromResult(caps);}
+            uint received=op==Np2ConfigClient.Write?offset+length:0U;byte state=op==Np2ConfigClient.Commit?(byte)2:(byte)1;
+            return Task.FromResult(Np2Reply(op,tx,received,op==Np2ConfigClient.Commit?crc:0U,port,state,0,op==Np2ConfigClient.Commit?Np2Id(request.Selection):null));
+        }
+    }
+    static void Np2ConfigurationTests()
+    {
+        Check(NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(3U,30000U) && NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(7U,30000U),"Multi-probe 30 kHz qualification warning was removed");
+        foreach(uint mask in new uint[]{1U,2U,3U,7U})Check(!NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(mask,15000U) && !NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(mask,20000U),"15/20 kHz profile was incorrectly warned as unqualified");
+        Check(!NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(1U,30000U),"Single-probe 30 kHz was incorrectly warned as unqualified");
+        var selection=new byte[Np2ConfigRequest.PayloadBytes];System.Text.Encoding.ASCII.GetBytes("N2B1").CopyTo(selection,0);selection[4]=4;selection[5]=1;
+        for(int i=0;i<32;i++)selection[8+i]=(byte)(0x80+i);
+        var request=new Np2ConfigRequest("{}",selection);byte[] data=new byte[12];for(int i=0;i<data.Length;i++)data[i]=(byte)i;
+        byte[] write=Np2ConfigClient.Frame(Np2ConfigClient.Write,1,0x12345678U,32,12,0xCAFEBABEU,data);
+        Check(System.Text.Encoding.ASCII.GetString(write,0,4)=="NPC2" && write[4]==2 && write[6]==1 && write[7]==0 && write[56]==0 && Np2ConfigClient.Crc(write,60)==BitConverter.ToUInt32(write,60),"NPC2 frame layout/CRC changed");
+        var previousWrite=Np2ConfigClient.Parse(Np2Reply(Np2ConfigClient.Write,0x12345678U,32,0,1,1,0,null),Np2ConfigClient.Write,0x12345678U);
+        Check(!NpV2UsbDevice.ConfigurationOffsetMatches(previousWrite,write),"Previous WRITE ACK with same transaction/op must not match next chunk");
+        previousWrite.Received=44;
+        Check(NpV2UsbDevice.ConfigurationOffsetMatches(previousWrite,write),"Current WRITE ACK offset must match");
+        previousWrite.Received=32;previousWrite.Error=5;
+        Check(NpV2UsbDevice.ConfigurationOffsetMatches(previousWrite,write),"Explicit firmware rejection must not be hidden by WRITE offset polling");
+        bool stale=false;try{Np2ConfigClient.Parse(Np2Reply(Np2ConfigClient.Status,2,0,0,1,1,0,null),Np2ConfigClient.Status,1);}catch(IOException){stale=true;}Check(stale,"NPC2 stale transaction must be rejected");
+        var transport=new Np2MemoryTransport(request);var client=new Np2ConfigClient(transport);var caps=client.CapsAsync(1,CancellationToken.None).GetAwaiter().GetResult();
+        Check(caps.AvailableMask==3U && caps.SupportedModel==4U && caps.Uid2==0x33333333U,"NPC2 CAPS fields changed");
+        var staged=client.StageAsync(request,CancellationToken.None).GetAwaiter().GetResult();
+          Check(staged.PortState==2 && staged.PayloadCrc==Np2ConfigClient.Crc(selection,selection.Length) && transport.Frames.Count==33 && transport.Frames[0][5]==Np2ConfigClient.Caps && transport.Frames[1][5]==Np2ConfigClient.Caps,"NPC2 stage must validate CAPS, then use STATUS, BEGIN, 28 writes and COMMIT");
+        for(int i=0;i<transport.Frames.Count;i++)if(transport.Frames[i][5]==Np2ConfigClient.Write)Check(BitConverter.ToUInt32(transport.Frames[i],20)==staged.PayloadCrc,"NPC2 WRITE must retain whole-payload CRC");
+         var applied=Np2Reply(Np2ConfigClient.Status,7,0,staged.PayloadCrc,1,3,1,Np2Id(selection));Np2ConfigClient.RequireApplied(Np2ConfigClient.Parse(applied,Np2ConfigClient.Status,7),request);
+         bool missingVerification=false;try{Np2ConfigClient.RequireApplied(Np2ConfigClient.Parse(Np2Reply(Np2ConfigClient.Status,7,0,staged.PayloadCrc,1,3,0,Np2Id(selection)),Np2ConfigClient.Status,7),request);}catch(IOException){missingVerification=true;}Check(missingVerification,"NPC2 applied receipt must carry verification value bit 1");checks++;
+    }
     public static int Main(string[] args)
     {
         try { return Run(args); }
@@ -691,6 +737,9 @@ internal static class NpV2UsbConsoleTests
     }
     private static int Run(string[] args)
     {
+        if(args.Length==1 && args[0]=="--np2-config-only"){
+            Np2ConfigurationTests();Console.WriteLine("PASS: "+checks+" focused NPC2 codec/staging/applied-receipt checks (no hardware).");return 0;
+        }
         if((args.Length==1 || args.Length==2) && args[0]=="--self-test-report-only"){
             if(args.Length==2){
                 var actual=NpV2UsbSelfTestReport.Parse(File.ReadAllBytes(args[1]));
@@ -702,7 +751,7 @@ internal static class NpV2UsbConsoleTests
             }
             SelfTestReportTests();Console.WriteLine("PASS: "+checks+" focused V2 self-test report/admission checks (no hardware accessed).");return 0;
         }
-        WireTests(); DecoderTests(); DecodeEveryChannelTests(); LargeCounterTests(); DeferredRawD8DecoderTests(); BufferedWriterTests(); ConcurrentPreviewTests(); StatusTests(); SelfTestReportTests(); ReadWatchdogTests(); TopologyTests();
+        WireTests(); DecoderTests(); DecodeEveryChannelTests(); LargeCounterTests(); DeferredRawD8DecoderTests(); BufferedWriterTests(); ConcurrentPreviewTests(); StatusTests(); SelfTestReportTests(); ReadWatchdogTests(); TopologyTests(); Np2ConfigurationTests();
         if ((args.Length == 1 || args.Length == 2) && args[0] == "--hil-topology")
         {
             string path = args.Length == 2 ? args[1] : null;

@@ -1,52 +1,49 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.1",
+  "version": "1.0.0.3",
   "releaseDate": "2026-10-10",
-  "status": "engineering release; NP2 IMRO UI/examples and installer payload verified",
+  "status": "Engineering release: checked USB/IMRO logging binaries packaged without rebuild",
   "hardwareQualified": false,
   "installerExecuted": false,
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.1.exe",
-    "bytes": 2227110,
-    "sha256": "8F73BC875A1BE81BF2EB817FA6E58F83645AF74F24246130F1B2D744F6F6ECE0"
+    "file": "WILDX_console-Setup-1.0.0.3.exe",
+    "bytes": 2240976,
+    "sha256": "BD0DC44DCC43403CB8A770B71923A453BDCED72B1287C3247E1ACE01F887CFFF"
   },
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
     "branch": "V2",
     "directory": "LATEST_FIRMWARE/V2_NP2",
     "loaderCrc32": "97C3716A",
-    "usbCrc32": "DFB8F25E",
+    "usbCrc32": "1138F666",
     "appCrc32": "ED881256",
-    "fusedHexSha256": "62206BB8A059174E0F6030ACA9BD8AB4BCF3542B07CA5522727D57CB8A4CD2D6",
+    "fusedHexSha256": "5CB7FE3C436D90761A9435FA1ADA4FE4960D0865F0C8CF84F4EBB171D70D4CF4",
+    "usbOnlyHexSha256": "F4E9A80F6DC8EA588384F0684242C912D136EC73C63721CDE18B8CF919CD708B",
     "appOnlyHexSha256": "8A4BB9985FB8C5F2940C9A866AA79BF3C1DBDAA32BE1DAA92AFA01791279F21E",
-    "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132",
-    "selfTestRequiresSeparateResidentCrc32": "C3C76C43"
+    "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
   },
   "releaseValidation": {
-    "rebuiltApplication": true,
-    "incrementalApplicationBuilds": 1,
-    "bundledHelpers": "exact 1.0.0.0 runtime payloads reused; all 12 non-application payloads unchanged",
-    "targetedSoftwareRegressionChecks": 98,
-    "np2ExamplesPassed": 17,
-    "np1ExamplesPassed": 2,
-    "projectExamples": [
-      {"path": "ProbeConfig/probe_1 (1).imro", "sha256": "EA6E4FFF88C87F6B435BF9DE77149133ECC49B4C6530DD3E3D905806BEA69497"},
-      {"path": "ProbeConfig/probe_2 (1).imro", "sha256": "99F3102AFF912C1A3061790CD8B9D434FB2829F33C7B3ED9B5F4528727D3AEFB"},
-      {"path": "ProbeConfig/probe_3.imro", "sha256": "A5BC43F93C835762EE539CECF889EF382ABCB8D448C6E731D731494FF3BB1BF1"}
-    ],
-    "nonNp1Np2ExamplesUnsupported": 4,
-    "unsupportedFamily": "UHD type 1110",
-    "installerCompilation": "one successful existing-NSIS packaging pass; prior empty staging preflight corrected before installer creation",
+    "rebuiltApplicationForPackaging": false,
+    "firmwareRebuiltForPackaging": false,
+    "installerCompilationCount": 1,
     "independentlyExtractedMatchingPayloads": 13,
-    "previousEvidence": "1.0.0.0 archived manifest and Note/RELEASE_20261010.md; not rerun for this GUI-only change",
-    "hardwareAccessThisRelease": false,
-    "fullEndToEndPairQualified": false
+    "targetedNpc2ChecksPreviouslyPassed": 43,
+    "preferencesChecksPreviouslyPassed": 4,
+    "hardwareAccessForPackaging": false,
+    "fullEndToEndPairQualified": false,
+    "usbHardwareEvidence": "Note/Tools/V2Usb/NP2_CONFIGURATION_20261010.md in XE_NP V2;10 headless production capture cases with IMRO receipts, DAT and preview callbacks"
+  },
+  "firmwareUpdate": {
+    "gui": "Firmware Update > Recovery loader / Update NP2 APP",
+    "transport": "UID-pinned protected WinUSB APP updater",
+    "residentUsbUpdate": "USB-only addressed HEX over SWD; APP updater cannot replace resident USB",
+    "residentUsbRomDfu": false
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "bytes": 1143296,
-      "sha256": "0C3879C82CAAACE3622B284A977CE54A2C73D89907C75C826C2DAD4E35530D0A"
+      "bytes": 1163776,
+      "sha256": "3C70D2104979AA468E507CD6DF1CCCB1E84CE9FE20E5EC1C9FEAC261C2FC0BC1"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -65,18 +62,18 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 154624,
-      "sha256": "1840945FC7BAFA5490CC6A1F8FCEB96791C677E8CCF4683C1F917D6E1234E985"
+      "bytes": 165376,
+      "sha256": "179E3A6A2D55BAA2C3FF49FB98AE577D1F7A125D0405C82530AC3DF3A07C3B15"
     },
     {
       "path": "NPConfigurator/NPConfigurator.exe",
       "bytes": 151552,
-      "sha256": "88ED71E7193552A050D5E2BCB0E5EFE1E25E409C44949695DCB0041DB1F4FD65"
+      "sha256": "F115ABE51C4DE082DCE08E723E25652320EF09DC121DFD6E6621F7635B97A6EE"
     },
     {
       "path": "NPConfigurator/NPConfigurator.dll",
-      "bytes": 361984,
-      "sha256": "48BEFBFC8EC00783839CEC3C8B62B176BB5C068A76BDCD7737814F5754D139A3"
+      "bytes": 364544,
+      "sha256": "2A58ADCE74B1D40A32B026C64F2359F31C15F1C2734E5D47BE6B2A38D463F43B"
     },
     {
       "path": "NPConfigurator/NPConfigurator.deps.json",
@@ -90,13 +87,13 @@
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
-      "bytes": 151552,
-      "sha256": "136FECC12320D3D91AC5588BCA89267A4848754129107F59707E70DD4650F079"
+      "bytes": 152064,
+      "sha256": "FFE5F39B244227E514A7D82D09565625918CFF64512A7FF3E08B1D3F2556F545"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
-      "bytes": 53760,
-      "sha256": "43AA4D5B6274490459ADA0AAF5B24143F9721308A2CD9AB605E86FE26BAA1B59"
+      "bytes": 54272,
+      "sha256": "57AA98783F83056ADADABDE399B0528E41C03FD42AB0B91DDCC5728523A02A77"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -110,13 +107,11 @@
     }
   ],
   "limitations": [
-    "NP2 IMRO imports are host-only requested/unverified maps; current V2 firmware does not apply channel maps.",
-    "BLE host maps do not modify or accompany onboard SD recording; save/import the file separately for USB recording metadata.",
-    "UHD type 1110 is not standard NP1/NP2 and remains unsupported.",
-    "No fresh GUI USB/BLE capture, SD payload/DAT comparison, firmware update or clean installer install/uninstall.",
-    "Retained paired APP dual20 evidence covers 31.50336s; dual30 failed at 815.6128s with retention overflow.",
-    "Paired resident USB enables logical probes 1 and 2 only; SPI2/D8 and logical probe3 are disabled.",
-    "Self-test fixtures preserve failures/skips; live GUI diagnostic invocation is not qualified.",
-    "ROM DFU, analog quality and lossless endurance remain unqualified."
+    "ROM DFU is not available from the V2 USB GUI; protected recovery is not STM32 ROM DFU.",
+    "P1/P2 solo15/20/30k, dual15/20k and triple15/20k passed bounded headless USB tests; longest new run59.185s.",
+    "Multi-probe30k,7.5k and P3-alone/other-pair USB profiles are unqualified or unsupported.",
+    "Three selected NP2013 IMROs are applied and checked before USB capture; analog/electrode routing remains unqualified.",
+    "The SD/BLE APP ED881256 is unchanged; do not assume three-probe SD or BLE IMRO application from USB results.",
+    "GUI appearance/live interaction, clean install/uninstall, full fused boot and firmware-update cycles were not retested for this packaging pass."
   ]
 }

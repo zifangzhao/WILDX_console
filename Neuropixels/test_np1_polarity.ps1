@@ -16,7 +16,7 @@ $sources=@(
  "$PSScriptRoot\Tests\TestNp1Polarity.cs",
  "$console\XeNpStreamDecoder.cs","$console\NeuropixelsPreviewForm.cs","$console\NpCaptureModes.cs",
  "$console\NpLogger\NpCe64Decoder.cs","$console\NpLogger\NpCe64Export.cs","$console\NpLogger\NpSdGeometry.cs",
- "$PSScriptRoot\SD\NpV2SdDatExport.cs","$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs",
+ "$PSScriptRoot\SD\NpV2SdDatExport.cs","$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs","$console\Np2ConfigurationClient.cs",
  "$console\XeNpWinUsb.cs","$console\NpProbeManifest.cs","$console\USB512WinUsb.cs","$console\XeNpSdInfo.cs",
  "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\NpLogger\NpV1Management.cs",
  "$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\RawBurst.cs"

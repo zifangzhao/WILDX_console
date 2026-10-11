@@ -3,6 +3,7 @@
   <ItemGroup>
     <Compile Include="../Configuration.cs;../SelectedChannelExport.cs;../StandardFormats.cs" LinkBase="Shared" />
     <Compile Include="../DeviceSelection.cs;../../V1Capture/Configuration/NpConfigClient.cs" LinkBase="Shared" />
+    <Compile Include="../Np2DeviceSelection.cs" LinkBase="Shared" />
     <EmbeddedResource Include="../catalog.json" LogicalName="NPConfigurator.catalog.json" />
   </ItemGroup>
 </Project>

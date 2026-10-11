@@ -4,6 +4,9 @@ using NPConfigurator;
 if(args.Length>=3 && args[0]=="--imro-device") {
     await ImroDeviceTests.Run(args.Skip(1).ToArray());return;
 }
+if(args.Length>=1 && args[0]=="--v2-device") {
+    Np2DeviceSelectionTests.Run(args.Skip(1).ToArray());return;
+}
 
 int assertions = 0;
 void Check(bool condition, string message) { assertions++; if (!condition) throw new Exception(message); }

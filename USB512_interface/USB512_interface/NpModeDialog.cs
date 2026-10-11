@@ -19,11 +19,38 @@ namespace USB512_interface {
   private int npPreviewMask=1;
   private readonly Dictionary<string,Dictionary<byte,NpConfigRequest>> npPortConfigurations=new Dictionary<string,Dictionary<byte,NpConfigRequest>>(StringComparer.OrdinalIgnoreCase);
   private readonly Dictionary<string,Dictionary<int,string>> npV2HostConfigurations=new Dictionary<string,Dictionary<int,string>>(StringComparer.OrdinalIgnoreCase);
+  private readonly Dictionary<string,HashSet<int>> npV2ApplyConfigurations=new Dictionary<string,HashSet<int>>(StringComparer.OrdinalIgnoreCase);
+  private readonly Dictionary<string,Np2ConfigurationPreferences.Device> npV2PersistedConfigurations=LoadNpV2PersistedConfigurations();
+  private static Dictionary<string,Np2ConfigurationPreferences.Device> LoadNpV2PersistedConfigurations(){
+   try{return Np2ConfigurationPreferences.Load(Properties.Settings.Default.Np2ConfigurationIntents,NpConfigurationDialog.NormalizeNp2Request);}
+   catch(Exception){return new Dictionary<string,Np2ConfigurationPreferences.Device>(StringComparer.OrdinalIgnoreCase);}
+  }
+  private void NpV2EnsureConfigurationState(string path){
+   string key=NpV2FirmwareForm.Uid(path)??path;
+   if(npV2HostConfigurations.ContainsKey(key))return;
+   var requests=new Dictionary<int,string>();var apply=new HashSet<int>();Np2ConfigurationPreferences.Device saved;
+   if(npV2PersistedConfigurations.TryGetValue(key,out saved)){
+    foreach(var request in saved.Requests)requests.Add(request.Key,request.Value);
+    foreach(int port in saved.Apply)if(requests.ContainsKey(port))apply.Add(port);
+   }
+   npV2HostConfigurations.Add(key,requests);npV2ApplyConfigurations.Add(key,apply);
+  }
+  private void NpV2SaveConfigurationState(string path){
+   string key=NpV2FirmwareForm.Uid(path)??path;NpV2EnsureConfigurationState(path);
+   var saved=new Np2ConfigurationPreferences.Device();foreach(var request in npV2HostConfigurations[key])saved.Requests.Add(request.Key,request.Value);
+   foreach(int port in npV2ApplyConfigurations[key])if(saved.Requests.ContainsKey(port))saved.Apply.Add(port);
+   npV2PersistedConfigurations[key]=saved;
+   try{Properties.Settings.Default.Np2ConfigurationIntents=Np2ConfigurationPreferences.Save(npV2PersistedConfigurations);Properties.Settings.Default.Save();}
+   catch(Exception ex){MessageBox.Show(this,"The NP2 map is retained for this session only: "+ex.Message,"NP2 IMRO / channel map",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
+  }
   private Dictionary<int,string> NpV2RequestsForDevice(string path){
    string key=NpV2FirmwareForm.Uid(path)??path;
-   Dictionary<int,string> requests;
-   if(!npV2HostConfigurations.TryGetValue(key,out requests)){requests=new Dictionary<int,string>();npV2HostConfigurations.Add(key,requests);}
-   return requests;
+   NpV2EnsureConfigurationState(path);return npV2HostConfigurations[key];
+  }
+  private HashSet<int> NpV2ApplyRequestsForDevice(string path,bool create=false){
+   if(String.IsNullOrEmpty(path))return null;
+   string key=NpV2FirmwareForm.Uid(path)??path;
+   NpV2EnsureConfigurationState(path);return npV2ApplyConfigurations[key];
   }
   private Dictionary<byte,NpConfigRequest> NpRequestsForDevice(string path,bool create=false){
    if(String.IsNullOrEmpty(path))return null;

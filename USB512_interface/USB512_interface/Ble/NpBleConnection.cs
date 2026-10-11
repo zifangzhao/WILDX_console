@@ -98,8 +98,13 @@ namespace USB512_interface
             uint magic = BitConverter.ToUInt32(request, 0);
             if (command == 0xb8) {
                 try {
-                    var reply = NpConfigClient.Parse(response,request[5],BitConverter.ToUInt32(request,8));
-                    return request[5] != 2 || reply.Error != 0 || reply.Received == BitConverter.ToUInt32(request,12) + BitConverter.ToUInt32(request,16);
+                    uint transaction=BitConverter.ToUInt32(request,8);
+                    if (magic == 0x3243504eU) {
+                        var configReply=Np2ConfigClient.Parse(response,request[5],transaction);
+                        return request[5] != 2 || configReply.Error != 0 || configReply.Received == BitConverter.ToUInt32(request,12) + BitConverter.ToUInt32(request,16);
+                    }
+                    var legacyReply=NpConfigClient.Parse(response,request[5],transaction);
+                    return request[5] != 2 || legacyReply.Error != 0 || legacyReply.Received == BitConverter.ToUInt32(request,12) + BitConverter.ToUInt32(request,16);
                 } catch(IOException) { return false; }
             }
             uint expected = magic == 0x31444c4e ? 0x31524c4eU : magic == NpV2SdControl.RequestMagic ? NpV2SdControl.ReplyMagic :

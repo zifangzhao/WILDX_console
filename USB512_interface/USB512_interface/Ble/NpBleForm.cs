@@ -23,7 +23,7 @@ namespace USB512_interface
             internal uint Mask, Hz;
             public override string ToString() { return "Probe mask " + Mask + " | " + Hz.ToString("N0") + " samples/s"; }
         }
-        sealed class ConfigTransport : INpConfigTransport
+        sealed class ConfigTransport : INpConfigTransport, INp2ConfigTransport
         {
             readonly NpBleConnection connection;
             internal ConfigTransport(NpBleConnection connection) { this.connection = connection; }
@@ -34,6 +34,7 @@ namespace USB512_interface
         readonly Dictionary<ulong, Peer> peers = new Dictionary<ulong, Peer>();
         readonly Dictionary<byte,NpConfigRequest> configurations = new Dictionary<byte,NpConfigRequest>();
         readonly Dictionary<ulong,Dictionary<int,string>> np2HostConfigurations = new Dictionary<ulong,Dictionary<int,string>>();
+        readonly Dictionary<ulong,HashSet<int>> np2ApplyConfigurations = new Dictionary<ulong,HashSet<int>>();
         readonly ComboBox devices = new ComboBox { Width = 400, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly ComboBox profiles = new ComboBox { Width = 390, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly TextBox address = new TextBox { Width = 160 };
@@ -57,6 +58,12 @@ namespace USB512_interface
         IWin32Window DialogOwner{get{return TopLevelControl??this;}}
         uint sequence = unchecked((uint)Environment.TickCount);
         bool V2 { get { return recorderVersion == 2; } }
+        HashSet<int> Np2ApplyRequests(ulong peer,bool create=false)
+        {
+            HashSet<int> requests;
+            if(!np2ApplyConfigurations.TryGetValue(peer,out requests) && create){requests=new HashSet<int>();np2ApplyConfigurations.Add(peer,requests);}
+            return requests;
+        }
         internal NpBleForm():this(false){}
         internal NpBleForm(bool maintenance)
         {
@@ -226,7 +233,20 @@ namespace USB512_interface
             if (p == null || p.Mask != s.Mask || p.Hz != s.Hz) throw new IOException("Apply the selected profile before Start.");
             if(V2 && !clock.Synchronized)throw new IOException("Synchronize PC time while stopped before starting.");
             uint duration = (uint)seconds.Value;
-            if (V2) { uint blocks = NpV2SdControl.Blocks(s, p.Hz, duration); await Send(NpV2SdControl.Request(2, NpV2SdControl.NextId(s), p.Hz, blocks)); }
+            if (V2) {
+                ulong peer=UInt64.Parse(address.Text.Trim(),System.Globalization.NumberStyles.HexNumber);
+                HashSet<int> apply=Np2ApplyRequests(peer);
+                Dictionary<int,string> requests;
+                if(!np2HostConfigurations.TryGetValue(peer,out requests))requests=new Dictionary<int,string>();
+                if(apply!=null)foreach(int connector in apply){
+                    if((s.Mask&(1U<<(connector-1)))==0U)continue;
+                    string json;if(!requests.TryGetValue(connector,out json))throw new IOException("NP2 apply was requested for connector "+connector+" without a retained configuration.");
+                    var request=NpConfigurationDialog.PrepareV2Request(json,connector);
+                    var client=new Np2ConfigClient(new ConfigTransport(connection));
+                    await client.StageAsync(request,CancellationToken.None);
+                }
+                uint blocks = NpV2SdControl.Blocks(s, p.Hz, duration); await Send(NpV2SdControl.Request(2, NpV2SdControl.NextId(s), p.Hz, blocks));
+            }
             else {
                 if (!s.Qualified && !unqualified.Checked) throw new IOException("This NP1 card/profile is unqualified. The explicit bench option is required; firmware limits still apply.");
                 uint end = NpV1BleProtocol.EndLba(s, duration), session = unchecked((uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
@@ -281,8 +301,8 @@ namespace USB512_interface
                 ulong peer=UInt64.Parse(address.Text.Trim(),System.Globalization.NumberStyles.HexNumber);
                 Dictionary<int,string> requests;
                 if(!np2HostConfigurations.TryGetValue(peer,out requests)){requests=new Dictionary<int,string>();np2HostConfigurations.Add(peer,requests);}
-                using(var dialog=new NpConfigurationDialog(null,np2:true,retainedRequests:requests))dialog.ShowDialog(DialogOwner);
-                Append("NP2 IMRO files are host requests only; no BLE upload or change to SD recording was performed. Save the map in the editor to reuse it in USB Recording settings.");
+                using(var dialog=new NpConfigurationDialog(null,np2:true,retainedRequests:requests,applyConnectors:Np2ApplyRequests(peer,true)))dialog.ShowDialog(DialogOwner);
+                Append("NP2 IMRO request retained. Apply-on-capture stages only after the final profile and blocks START unless the firmware returns the matching staged receipt.");
                 return;
             }
             var s = await ReadStatus(); if (!NpV1BleProtocol.CanConfigure(s)) throw new IOException("Stop the NP1 recorder before channel configuration.");

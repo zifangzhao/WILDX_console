@@ -7,5 +7,6 @@
     <Setting Name="NetworkTimeEnabled" Type="System.Boolean" Scope="User"><Value Profile="(Default)">True</Value></Setting>
     <Setting Name="NetworkTimeServer" Type="System.String" Scope="User"><Value Profile="(Default)">time.cloudflare.com</Value></Setting>
     <Setting Name="NetworkTimeUpgradeRequired" Type="System.Boolean" Scope="User"><Value Profile="(Default)">True</Value></Setting>
+    <Setting Name="Np2ConfigurationIntents" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
   </Settings>
 </SettingsFile>

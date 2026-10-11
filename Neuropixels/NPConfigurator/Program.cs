@@ -21,6 +21,14 @@ internal static class Program
                 using var output=new FileStream(args[3],FileMode.CreateNew,FileAccess.Write);
                 output.Write(bytes);return 0;
             }
+            if(args.Length==5 && args[0]=="--prepare-v2") {
+                if (File.Exists(args[2]) || File.Exists(args[3])) throw new IOException("Prepared output already exists.");
+                var c=Np2DeviceSelection.LoadForPort(args[1],int.Parse(args[4],System.Globalization.CultureInfo.InvariantCulture));
+                var bytes=Np2DeviceSelection.Compile(c);
+                c.Save(args[2]);
+                using var output=new FileStream(args[3],FileMode.CreateNew,FileAccess.Write);
+                output.Write(bytes);return 0;
+            }
             if(args.Length==3 && args[0]=="--device-selection") {
                 var bytes=DeviceSelection.Compile(ProbeConfiguration.FromJson(File.ReadAllText(args[1])));
                 using var output=new FileStream(args[2],FileMode.CreateNew,FileAccess.Write);
@@ -72,7 +80,7 @@ internal static class Program
                 Console.WriteLine("UI checks/render completed for all four profiles.");
                 return 0;
             }
-            if (args.Length > 1) throw new ArgumentException("Usage: NPConfigurator [configuration.json|table.imro] | --validate file | --import-imro file.imro output.json | --export-imro input output.imro [type] | --export-probeinterface input output.json [--selected-channels] | --export file directory | --render directory");
+            if (args.Length > 1) throw new ArgumentException("Usage: NPConfigurator [configuration.json|table.imro] | --prepare-v2 input normalized.json selection.bin connector | --validate file | --import-imro file.imro output.json | --export-imro input output.imro [type] | --export-probeinterface input output.json [--selected-channels] | --export file directory | --render directory");
             Application.Run(new ConfigurationForm(args.Length == 1 ? StandardFormats.Load(args[0]) : null));
             return 0;
         }

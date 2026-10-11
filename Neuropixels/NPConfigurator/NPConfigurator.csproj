@@ -9,7 +9,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Configuration.cs;ConfigurationForm.cs;ProbeView.cs;Program.cs;DeviceSelection.cs;StandardFormats.cs" />
+    <Compile Include="Configuration.cs;ConfigurationForm.cs;ProbeView.cs;Program.cs;DeviceSelection.cs;Np2DeviceSelection.cs;StandardFormats.cs" />
     <EmbeddedResource Include="catalog.json" LogicalName="NPConfigurator.catalog.json" />
   </ItemGroup>
 </Project>
