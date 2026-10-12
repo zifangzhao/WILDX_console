@@ -103,8 +103,8 @@ internal static class NpV2SdDatExportTests
             Check(r.Rows[p] == (8 * 61440 - first) / 1600 && bytes.Length == r.Rows[p] * 768, "Exact rows across SD block boundaries");
             for (int row = 0; row < r.Rows[p]; row++) for (int frame = 0; frame < 16; frame++) for (int adc = 0; adc < 24; adc++) {
                 int ch = (adc / 2) * 32 + (adc & 1) + frame * 2;
-                ushort expected = Convert.ToUInt16(Word.Invoke(null, new object[] { first + row * 1600, frame, adc / 8, adc % 8, p }));
-                Check(BitConverter.ToUInt16(bytes, row * 768 + ch * 2) == expected, "Every exported channel/value/byte order must match independent serial reference");
+                short expected = (short)(2048 - Convert.ToUInt16(Word.Invoke(null, new object[] { first + row * 1600, frame, adc / 8, adc % 8, p })));
+                Check(BitConverter.ToInt16(bytes, row * 768 + ch * 2) == expected, "Every signed exported channel/value/byte order must match independent serial reference");
             }
         }
         string report = File.ReadAllText(Path.Combine(output, "np2_sd_export_status.txt"));

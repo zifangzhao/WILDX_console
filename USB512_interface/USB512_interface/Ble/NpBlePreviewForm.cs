@@ -131,11 +131,11 @@ namespace USB512_interface
             catch(Exception ex){if(!closed){DropStream();enabled.Checked=false;info.Text=ex.Message;}}
             finally{busy=false;}
         }
-        // Unsigned ADC codes retained. Display centering/scaling never changes recordings.
+        // BLE wire stays raw. Convert only the disposable PC display samples.
         sealed class Plot : Control
         {
             const int Capacity=2000;
-            readonly ushort[,] values=new ushort[Capacity,3];readonly ulong[] ticks=new ulong[Capacity];
+            readonly short[,] values=new short[Capacity,3];readonly ulong[] ticks=new ulong[Capacity];
             int count,write,baseChannel;ulong stride;
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;ForeColor=Color.LightGreen;}
             internal void Clear(int channel){count=write=0;baseChannel=channel;Invalidate();}
@@ -143,7 +143,7 @@ namespace USB512_interface
             {
                 stride=step;for(int i=0;i<data.GetLength(0);i++){
                     if((valid&(1U<<i))==0)continue;ticks[write]=first+(ulong)i*step;
-                    for(int lane=0;lane<3;lane++)values[write,lane]=data[i,lane];write=(write+1)%Capacity;if(count<Capacity)count++;
+                    for(int lane=0;lane<3;lane++)values[write,lane]=NpV2SampleDecoder.NominalCount(data[i,lane]);write=(write+1)%Capacity;if(count<Capacity)count++;
                 }Invalidate();
             }
             protected override void OnPaint(PaintEventArgs e)
@@ -152,7 +152,7 @@ namespace USB512_interface
                 int start=(write-count+Capacity)%Capacity;ulong latest=ticks[(write+Capacity-1)%Capacity];double window=(Capacity-1)*(double)stride;
                 Color[] colors={Color.LightGreen,Color.LightSkyBlue,Color.Orange};
                 for(int lane=0;lane<3;lane++){
-                    double sum=0;int min=4095,max=0;for(int i=0;i<count;i++){int v=values[(start+i)%Capacity,lane];sum+=v;min=Math.Min(min,v);max=Math.Max(max,v);}
+                    double sum=0;int min=short.MaxValue,max=short.MinValue;for(int i=0;i<count;i++){int v=values[(start+i)%Capacity,lane];sum+=v;min=Math.Min(min,v);max=Math.Max(max,v);}
                     double mean=sum/count,range=Math.Max(32,max-min);float top=lane*Height/3f,band=Height/3f;var segment=new List<PointF>();ulong prev=0;
                     using(var pen=new Pen(colors[lane])){
                         for(int i=0;i<count;i++){
@@ -162,7 +162,7 @@ namespace USB512_interface
                         }
                         if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());
                     }
-                    e.Graphics.DrawString("Ch "+(baseChannel+lane*128)+" · ADC codes "+min+"–"+max,Font,Brushes.LightGray,10,top+5);
+                    e.Graphics.DrawString("Ch "+(baseChannel+lane*128)+" · nominal counts "+min+"–"+max,Font,Brushes.LightGray,10,top+5);
                 }
             }
         }

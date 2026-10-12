@@ -98,7 +98,11 @@ namespace USB512_interface
                 var report = new StringBuilder("Export complete: True\nStored terminal state: Complete\n");
                 report.AppendFormat(CultureInfo.InvariantCulture,
                     "Session: {0}\nSample rate Hz: {1}\nCommitted blocks: {2}\nSource ticks: {3}\n", result.Session, result.SampleHz, result.CommittedBlocks, result.SourceTicks);
-                report.Append("Format: per-probe AP, 384 channels, sample-major int16 little-endian, raw 12-bit ADC codes\n");
+                report.Append("Format: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts\n");
+                report.Append("sample_encoding=" + NpV2SampleDecoder.SampleEncoding + "\n");
+                report.Append("sample_transform=" + NpV2SampleDecoder.SampleTransform + "\n");
+                report.Append("sample_range=-2047..2048\nsample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone\n");
+                report.Append("No gain/comparator calibration or microvolt conversion. Legacy DAT before WILDX 1.0.0.9 contains unsigned raw 12-bit codes; existing DAT files are not rewritten.\n");
                 report.Append("Checks: descriptor/footer CRC32, exact immutable headers/sequence/ticks, native SuperSync in every block, exact row/file lengths\n");
                 report.Append("No ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.\n");
                 report.Append("Boundary policy: trim incomplete leading/trailing AP rows; do not pad. Probe rows have independent source-tick origins; use the offsets below for alignment.\n");

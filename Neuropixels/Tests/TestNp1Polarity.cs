@@ -87,7 +87,7 @@ internal static class Np1PolarityTests
         // Constructor reference selection is checked without showing a window.
         foreach(int bits in new[]{10,12})using(var form=new NeuropixelsPreviewForm(15000,1,bits==12,bits)){
             float reference=(float)type.GetField("apAdcMidscale",BindingFlags.NonPublic|BindingFlags.Instance).GetValue(form);
-            Check(reference==(bits==10?0f:2048f),"NP1/NP2 preview reference selection");
+            Check(reference==0f,"NP1/NP2 signed preview reference selection");
             type.GetMethod("OnFormClosing",BindingFlags.NonPublic|BindingFlags.Instance).Invoke(form,new object[]{new FormClosingEventArgs(CloseReason.ApplicationExitCall,false)});
         }
     }

@@ -335,8 +335,8 @@ namespace USB512_interface
         private const int Channels = XeNpStreamDecoder.Channels;
         private const int ChannelsPerBank = 64;
         private const int HistorySeconds = 2;
-        // NP1 decoders emit signed nominal ADC counts after 512 - raw10.
-        // Keep the AP reference fixed at zero; NP2 keeps its 12-bit reference.
+        // NP1/NP2 decoders emit signed nominal counts with ASIC inversion undone.
+        // Keep the AP reference at zero; never transform recorded samples here.
         private const float NpAdcMidscale = 0f;
         private const float NpDisplayReferenceCounts = 64f;
         // LFP uses frozen per-channel display-only references in signed counts.
@@ -414,7 +414,7 @@ namespace USB512_interface
             this.apSampleRate = apSampleRate;
             this.apOnly=apOnly;this.adcBits=adcBits;
             lfpSampleRate = apOnly ? 0 : apSampleRate / 12.0;
-            apAdcMidscale=adcBits==10?NpAdcMidscale:(1<<(adcBits-1));
+            apAdcMidscale=NpAdcMidscale;
             apDisplayReferenceCounts=adcBits==10?NpDisplayReferenceCounts:256f;
             Text = apOnly ? "WILD-X NP2.0 Live Preview" : "WILDX Live Preview";
             Icon=NpPreviewTheme.ApplicationIcon;

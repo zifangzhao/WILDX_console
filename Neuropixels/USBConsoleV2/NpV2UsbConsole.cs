@@ -884,6 +884,11 @@ namespace USB512_interface
      * format and no synthetic LFP output is created. */
     internal sealed class NpV2SampleDecoder
     {
+        // Undo NP2's inverting amplifier once, after extracting raw ADC bits.
+        // Transport, framing and original captures remain byte-identical.
+        internal static short NominalCount(int raw12) { return (short)(2048 - raw12); }
+        internal const string SampleEncoding = "np2_signed_nominal_v1";
+        internal const string SampleTransform = "2048 - raw12";
         internal const int Channels = 384;
         private const int HeaderBytes = 512;
         private readonly Action<uint, uint> onFormat;
@@ -944,9 +949,9 @@ namespace USB512_interface
                     int b = QuadWords[ticks[at + 4] | ticks[at + 5] << 3 | ticks[at + 6] << 6 | ticks[at + 7] << 9];
                     int c = QuadWords[ticks[at + 8] | ticks[at + 9] << 3 | ticks[at + 10] << 6 | ticks[at + 11] << 9];
                     int channel = (slot / 2) * 32 + (slot & 1) + frame * 2;
-                    row[channel] = (short)(((a & 15) << 8) | ((b & 15) << 4) | (c & 15));
-                    row[channel + 128] = (short)(((a & 240) << 4) | (b & 240) | ((c >> 4) & 15));
-                    row[channel + 256] = (short)((a & 3840) | ((b >> 4) & 240) | (c >> 8));
+                    row[channel] = NominalCount(((a & 15) << 8) | ((b & 15) << 4) | (c & 15));
+                    row[channel + 128] = NominalCount(((a & 240) << 4) | (b & 240) | ((c >> 4) & 15));
+                    row[channel + 256] = NominalCount((a & 3840) | ((b >> 4) & 240) | (c >> 8));
                 }
                 if (++frame == 16) { onRow(Probe, row); frame = 0; }
             }
@@ -2010,7 +2015,12 @@ namespace USB512_interface
                 "raw_writer_error=" + (result.RawWriterError ?? "none"),
                 "decode_error=" + (result.DecodeError ?? "none"),
                 "decoded_ap_sample_hz=" + result.DecodedDatSampleHz,
-                "decoded_ap_codes=unsigned 12-bit ADC codes stored in little-endian int16; no calibration applied",
+                "decoded_ap_codes=signed nominal ADC counts stored in little-endian int16; no gain/comparator calibration or microvolt conversion",
+                "sample_encoding=" + NpV2SampleDecoder.SampleEncoding,
+                "sample_transform=" + NpV2SampleDecoder.SampleTransform,
+                "sample_range=-2047..2048",
+                "sample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone",
+                "legacy_dat_encoding=before WILDX 1.0.0.9: unsigned raw 12-bit ADC codes; existing DAT files are not rewritten",
                 "decoded_lfp_file=none (NP2 USB provides full-rate AP serial data only)",
                 "preview_error=" + (result.PreviewError ?? "none"),
                 "recording_mode=" + (continuous ? "continuous_until_stop" : "finite_blocks"),

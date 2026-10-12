@@ -1,0 +1,153 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.8",
+  "releaseDate": "2026-10-12",
+  "status": "Recovery-loader ROM DFU button and opcode checked in software; USB/APP unchanged; no hardware deployment",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.8.exe",
+    "bytes": 2248210,
+    "sha256": "9A079F6469EDA0594FFB4B1A6E6C36A79FCF858046D2FFEF287F64C301BE9E6E"
+  },
+  "compatibleFirmware": {
+    "repository": "https://github.com/zifangzhao/XE_NP",
+    "branch": "V2",
+    "directory": "LATEST_FIRMWARE/V2_NP2",
+    "loaderCrc32": "6408DBB8",
+    "usbCrc32": "A33B9912",
+    "appCrc32": "ED881256",
+    "fusedHexSha256": "7B5BBA0D39281914016B91D671979E197794AEC934785AD65740D33A4BEBD87E",
+    "usbOnlyHexSha256": "081C7A5F301DDC862E25E7934A325405150B77022EC9C679C2790B0E65ABA52A",
+    "appOnlyHexSha256": "8A4BB9985FB8C5F2940C9A866AA79BF3C1DBDAA32BE1DAA92AFA01791279F21E",
+    "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
+  },
+  "releaseValidation": {
+    "fullEndToEndPairQualified": false,
+    "testedPairModes": [
+      "two real NP2/30k/continuous 210-second Stop window/163544 blocks/209.33632 native seconds",
+      "three real NP2/20k/continuous 130-second Stop window/101040 blocks/129.3312 native seconds"
+    ],
+    "retainedTriple15Evidence": "GUI6/same USB: continuous 180-second Stop window/105012 blocks; full DAT replay with GUI7",
+    "backwardGuiCompatibility": "GUI5/new USB: dual30/32768 blocks, 41.944 seconds",
+    "usbFixture": "retained actual production consumer: rate admission, immutable slots, stop/backpressure/fault handling; firmware unchanged",
+    "retainedGuiAdmissionChecks": 29,
+    "completionPolicyChecks": 44,
+    "hostCreditChecks": 21,
+    "fullSavedDatReplayMatched": true,
+    "analogQualityQualified": false,
+    "customImroTestedThisCycle": true,
+    "perProbePreviewCallbackCountsMatchDat": true,
+    "interactivePreviewTestedThisCycle": false,
+    "longEnduranceQualified": false,
+    "sdBleAppRequalified": false,
+    "independentInstallerExtraction": false,
+    "stagedPayloadHashesChecked": 13,
+    "dependenciesAndUpdaterUnchanged": true,
+    "installerExecuted": false,
+    "recoveryDfuUpdate": {
+      "softwareChecks": 133,
+      "nativePolicyPassed": true,
+      "hardwareProgrammed": false,
+      "romEnumerationQualified": false,
+      "recordingEvidence": "Retained GUI7/A33 with previous loader; not a new fused pair qualification",
+      "loaderUpdateRequired": true,
+      "updaterDoesNotFlashAutomatically": true
+    }
+  },
+  "dfu": {
+    "route": "BLE opcode 5, destination 3; now visible in normal BLE Mode",
+    "historicalV2RomEntryConfirmed": "2026-09-28, ST-Link004B MCU001A0020434250062039314E, VTOR0x0BF90000 PC0x0BF924CC",
+    "historicalV2UsbEnumerationAndUploadValidated": false,
+    "directResidentUsbRomDfuCommand": false,
+    "recoveryLoaderUpdates": "APP-only .xenp, not fused HEX"
+  },
+  "buildProvenance": {
+    "baseGuiSourceCommit": "6fa0099008cac95f9ac927e7c930e00d7f167dd0",
+    "exeSha256": "5BAB056B94C0E1200E4A72FAB21095F4D693BF1EF0BD861415F3C854A5A6D18D",
+    "frozenBleConnectionSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
+    "privateBleAndSdDevelopmentExcluded": true,
+    "changedProductionFiles": [
+      "NpV2UsbConsole.cs: final integrity/persistence predicate, harmless-warning metadata policy, native read slots32 to64; prior admission/mapping retained",
+      "Properties/AssemblyInfo.cs: 1.0.0.7"
+    ],
+    "evidence": "XE_NP/V2: Note/Tools/V2Usb/CONTINUOUS_RECORDING_20261012.md",
+    "retainedRateEvidence": "Note/NP2_USB_RATE_FIX_20261012.md",
+    "retainedBaseEvidence": "Note/NP2_PREVIEW_MAPPING_20261012.md"
+  },
+  "np2Preview": {
+    "scope": "NP2013 USB preview, connectors P1/P2/P3",
+    "mappingSource": "normalized request from the unchanged shared NPConfigurator; selected sites checked against its compiled N2B1 payload",
+    "physicalOrder": "shank ascending, electrode row descending, columns left-to-right; labels include zero-based shank/electrode/hardware channel",
+    "geometry": "1280 sites per shank; aligned 32 um columns, 15 um rows, 250 um shank pitch",
+    "admission": "matching existing applied receipts for all staged configurations, before host arm; unconfirmed/default maps remain explicit hardware-channel fallback",
+    "recordingDatOrderChanged": false,
+    "firmwareAndBlePreviewChanged": false,
+    "source8StartupFailureResolved": false
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "bytes": 1182208,
+      "sha256": "F77FF30340C050C900B1A408D676F339F22BAE04B018D0C99E5D792B12F20957"
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "bytes": 532,
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    },
+    {
+      "path": "OpenTK.dll",
+      "bytes": 5757952,
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "bytes": 24576,
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "bytes": 165888,
+      "sha256": "71F0EA0CAE654A3F262E788C6E1CE2338E5D26AFFDA9A754A8E9FFC05F24324E"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "bytes": 151552,
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "bytes": 364544,
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "bytes": 434,
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "bytes": 458,
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "bytes": 152064,
+      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "bytes": 55808,
+      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "bytes": 449,
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "bytes": 340,
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    }
+  ]
+}

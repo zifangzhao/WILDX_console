@@ -307,7 +307,7 @@ internal static class NpV2UsbConsoleTests
         {
             int adc = line * 8 + slot;
             int channel = (adc / 2) * 32 + (adc & 1) + frame * 2;
-            Check((ushort)firstRow[channel] == V3DataWord(1152, frame, line, slot, 1), "NP2 DAT channel order or serial word bit order changed");
+            Check(firstRow[channel] == 2048 - V3DataWord(1152, frame, line, slot, 1), "NP2 DAT polarity, channel order or serial word bit order changed");
         }
         string folder = Path.Combine(Path.GetTempPath(), "NpV2DatTest_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(folder);
@@ -356,7 +356,7 @@ internal static class NpV2UsbConsoleTests
                 for (int frame = 0; frame < 16; frame++) for (int adc = 0; adc < 24; adc++)
                 {
                     int ch = (adc / 2) * 32 + (adc & 1) + frame * 2;
-                    Check((ushort)row[ch] == V3DataWord(firstTick, frame, adc / 8, adc % 8, p), "NP2 packed channel changed across a block/frame boundary");
+                    Check(row[ch] == 2048 - V3DataWord(firstTick, frame, adc / 8, adc % 8, p), "NP2 signed packed channel changed across a block/frame boundary");
                 }
                 rows[probe]++;
             });
@@ -390,7 +390,7 @@ internal static class NpV2UsbConsoleTests
                         int local = (start + frame * 100 + 4 + (adc % 8) * 12 + bit) % ticks;
                         word = (word << 1) | ((((local * 17 + 3) & 7) >> (adc / 8)) & 1);
                     }
-                    Check(row[(adc / 2) * 32 + (adc & 1) + frame * 2] == word, "NP2 legacy packed decoder mismatch");
+                    Check(row[(adc / 2) * 32 + (adc & 1) + frame * 2] == 2048 - word, "NP2 legacy packed polarity/decoder mismatch");
                 }
                 rows++;
             });
@@ -416,7 +416,7 @@ internal static class NpV2UsbConsoleTests
             for (int frame = 0; frame < 16; frame++) for (int adc = 0; adc < 24; adc++)
             {
                 int channel = (adc / 2) * 32 + (adc & 1) + frame * 2;
-                Check((ushort)row[channel] == V3DataWord(firstTick, frame, adc / 8, adc % 8, 2),
+                Check(row[channel] == 2048 - V3DataWord(firstTick, frame, adc / 8, adc % 8, 2),
                     "deferred raw-D8 alignment changed the decoded ADC row");
             }
             rows++;

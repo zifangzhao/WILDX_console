@@ -1,12 +1,12 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.8",
+  "version": "1.0.0.9",
   "releaseDate": "2026-10-12",
-  "status": "Recovery-loader ROM DFU button and opcode checked in software; USB/APP unchanged; no hardware deployment",
+  "status": "Software-checked NP2 nominal polarity correction; unchanged firmware/transport",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.8.exe",
-    "bytes": 2248210,
-    "sha256": "9A079F6469EDA0594FFB4B1A6E6C36A79FCF858046D2FFEF287F64C301BE9E6E"
+    "file": "WILDX_console-Setup-1.0.0.9.exe",
+    "bytes": 2250015,
+    "sha256": "54118FC3E7E8E989D71059B7CB40F7CF97994C597C0352C3F09D3A0BDCE8FCFD"
   },
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
@@ -21,73 +21,42 @@
     "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
   },
   "releaseValidation": {
+    "targetedActualAssemblyChecks": 1827449,
+    "negativeControlOldGuiFailed": true,
+    "all4096Codes": true,
+    "all384ChannelsAndThreePorts": true,
+    "rawTransportAndFilesUnmodified": true,
+    "usbDatAndPreview": true,
+    "sdExportAndMetadata": true,
+    "bleDisplayConversion": true,
+    "elevenOtherRuntimeFilesUnchanged": true,
+    "newHardwareAccess": false,
     "fullEndToEndPairQualified": false,
-    "testedPairModes": [
-      "two real NP2/30k/continuous 210-second Stop window/163544 blocks/209.33632 native seconds",
-      "three real NP2/20k/continuous 130-second Stop window/101040 blocks/129.3312 native seconds"
-    ],
-    "retainedTriple15Evidence": "GUI6/same USB: continuous 180-second Stop window/105012 blocks; full DAT replay with GUI7",
-    "backwardGuiCompatibility": "GUI5/new USB: dual30/32768 blocks, 41.944 seconds",
-    "usbFixture": "retained actual production consumer: rate admission, immutable slots, stop/backpressure/fault handling; firmware unchanged",
-    "retainedGuiAdmissionChecks": 29,
-    "completionPolicyChecks": 44,
-    "hostCreditChecks": 21,
-    "fullSavedDatReplayMatched": true,
-    "analogQualityQualified": false,
-    "customImroTestedThisCycle": true,
-    "perProbePreviewCallbackCountsMatchDat": true,
-    "interactivePreviewTestedThisCycle": false,
-    "longEnduranceQualified": false,
-    "sdBleAppRequalified": false,
-    "independentInstallerExtraction": false,
-    "stagedPayloadHashesChecked": 13,
-    "dependenciesAndUpdaterUnchanged": true,
+    "gainCalibrationOrMicrovoltConversion": false,
     "installerExecuted": false,
-    "recoveryDfuUpdate": {
-      "softwareChecks": 133,
-      "nativePolicyPassed": true,
-      "hardwareProgrammed": false,
-      "romEnumerationQualified": false,
-      "recordingEvidence": "Retained GUI7/A33 with previous loader; not a new fused pair qualification",
-      "loaderUpdateRequired": true,
-      "updaterDoesNotFlashAutomatically": true
-    }
+    "independentInstallerExtraction": false
   },
-  "dfu": {
-    "route": "BLE opcode 5, destination 3; now visible in normal BLE Mode",
-    "historicalV2RomEntryConfirmed": "2026-09-28, ST-Link004B MCU001A0020434250062039314E, VTOR0x0BF90000 PC0x0BF924CC",
-    "historicalV2UsbEnumerationAndUploadValidated": false,
-    "directResidentUsbRomDfuCommand": false,
-    "recoveryLoaderUpdates": "APP-only .xenp, not fused HEX"
+  "sampleEncoding": {
+    "name": "np2_signed_nominal_v1",
+    "transform": "2048 - raw12",
+    "range": "-2047..2048",
+    "format": "sample-major signed int16 little-endian, 384 hardware-order channels",
+    "legacy": "DAT before 1.0.0.9 is unsigned raw12; existing files are not rewritten"
   },
+  "retainedRecordingEvidence": "GUI7 USB A33: dual30 209.33632s, triple20 129.3312s, triple15 180s Stop window. Recording transport unchanged; not new hardware polarity qualification.",
+  "retainedDfuEvidence": "004B loader6408 hardware direct/combined ROM DFU enumeration and normal USB return PASS; updater unchanged",
   "buildProvenance": {
-    "baseGuiSourceCommit": "6fa0099008cac95f9ac927e7c930e00d7f167dd0",
-    "exeSha256": "5BAB056B94C0E1200E4A72FAB21095F4D693BF1EF0BD861415F3C854A5A6D18D",
-    "frozenBleConnectionSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
+    "sourceBase": "25a5f874daf5d975d00b6b656af21b22c8fc5369",
     "privateBleAndSdDevelopmentExcluded": true,
-    "changedProductionFiles": [
-      "NpV2UsbConsole.cs: final integrity/persistence predicate, harmless-warning metadata policy, native read slots32 to64; prior admission/mapping retained",
-      "Properties/AssemblyInfo.cs: 1.0.0.7"
-    ],
-    "evidence": "XE_NP/V2: Note/Tools/V2Usb/CONTINUOUS_RECORDING_20261012.md",
-    "retainedRateEvidence": "Note/NP2_USB_RATE_FIX_20261012.md",
-    "retainedBaseEvidence": "Note/NP2_PREVIEW_MAPPING_20261012.md"
-  },
-  "np2Preview": {
-    "scope": "NP2013 USB preview, connectors P1/P2/P3",
-    "mappingSource": "normalized request from the unchanged shared NPConfigurator; selected sites checked against its compiled N2B1 payload",
-    "physicalOrder": "shank ascending, electrode row descending, columns left-to-right; labels include zero-based shank/electrode/hardware channel",
-    "geometry": "1280 sites per shank; aligned 32 um columns, 15 um rows, 250 um shank pitch",
-    "admission": "matching existing applied receipts for all staged configurations, before host arm; unconfirmed/default maps remain explicit hardware-channel fallback",
-    "recordingDatOrderChanged": false,
-    "firmwareAndBlePreviewChanged": false,
-    "source8StartupFailureResolved": false
+    "guiBuild": "Existing frozen release inputs plus polarity-only changes",
+    "sdBuild": "Published SD exporter plus polarity metadata; shared checked decoder/preview",
+    "evidence": "Note/NP2_POLARITY_20261012.md"
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "bytes": 1182208,
-      "sha256": "F77FF30340C050C900B1A408D676F339F22BAE04B018D0C99E5D792B12F20957"
+      "bytes": 1183232,
+      "sha256": "EA3163288A8A6B49C36DE7B62AD043EAB36ECF2D682A68AC703A2DF375AD2355"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -106,8 +75,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 165888,
-      "sha256": "71F0EA0CAE654A3F262E788C6E1CE2338E5D26AFFDA9A754A8E9FFC05F24324E"
+      "bytes": 169984,
+      "sha256": "9864B4997DD241E9B90023D088558483F908D7DC2C4410BDBC09D3BAAD7134E5"
     },
     {
       "path": "NPConfigurator/NPConfigurator.exe",
