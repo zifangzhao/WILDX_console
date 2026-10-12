@@ -37,6 +37,7 @@ internal static class Program
         MscReadOnly = 8,
         MscWritable = 9,
         Download = 10,
+        RomDfu = 11,
     }
 
     private sealed record Package(byte[] Image, uint ImageCrc, byte[] BuildId);
@@ -112,6 +113,11 @@ internal static class Program
                     throw new NotSupportedException("MSC status cannot be UID-pinned; use the ABI-4 WinUSB status path instead.");
                 using var msc = MscControl.Open(); msc.PrintStatus(); return 0;
             }
+            if (args.Length == 1 && args[0] == "--dfu")
+            {
+                RequestRomDfu();
+                return 0;
+            }
             if (args.Length == 1 && (args[0] == "--usb" || args[0] == "--stream" || args[0] == "--download" || args[0] == "--sd" || args[0] == "--msc" || args[0] == "--msc-rw" || args[0] == "--recovery"))
             {
                 if (MscControl.ListPaths().Count != 0)
@@ -152,6 +158,7 @@ internal static class Program
                 Console.Error.WriteLine("       XeNpFirmwareUpdater --boot-info [--uid <24-digit MCU UID>] (read-only)");
                 Console.Error.WriteLine("       XeNpFirmwareUpdater --sensors | --mode-info | --sensor-self-test");
                 Console.Error.WriteLine("       XeNpFirmwareUpdater --usb | --stream | --download | --sd | --recovery [--uid <24-digit MCU UID>]");
+                Console.Error.WriteLine("       XeNpFirmwareUpdater --dfu --uid <24-digit MCU UID> (mode change only; confirm STM32 BOOTLOADER in STM32CubeProgrammer)");
                 return 2;
             }
             var stay = args.Length == 2 && args[1].Equals("--stay", StringComparison.OrdinalIgnoreCase);
@@ -278,6 +285,36 @@ internal static class Program
         };
         if (!Native.WinUsb_ControlTransfer(device.Interface, setup, [], 0, out _, IntPtr.Zero))
             throw new Win32Exception(Marshal.GetLastWin32Error(), "Bootloader control request failed");
+    }
+
+    private static void RequestRomDfu()
+    {
+        if (selectedUid is null)
+            throw new ArgumentException("ROM DFU requires --uid <24-digit MCU UID>; no target substitution is allowed.");
+        var bootPath = FindPath(BootHardwareId);
+        if (bootPath is null)
+        {
+            var service = FindPath(AppHardwareId) ??
+                throw new IOException("The selected MCU UID has no B386 USB service or B387 recovery interface.");
+            RequestUnifiedMode(service, UnifiedMode("--recovery"));
+            bootPath = WaitForPath(BootHardwareId, TimeSpan.FromSeconds(12)) ??
+                throw new TimeoutException("The selected MCU UID did not enumerate its B387 recovery loader. Outcome unknown; no retry or other target was used.");
+        }
+        using var recovery = WinUsbDevice.Open(bootPath);
+        recovery.SetTimeouts(3000);
+        var info = Transfer(recovery, Opcode.Info, 1, 0, 0, []);
+        EnsureOk(info, "INFO");
+        RequireDfuRecovery(info.Arg0);
+        EnsureOk(Transfer(recovery, Opcode.RomDfu, 2, 0, 0, []), "ROM DFU");
+        // Keep the acknowledged handle alive across the loader's deferred reset.
+        Thread.Sleep(150);
+        Console.WriteLine("ROM DFU mode request acknowledged for MCU UID " + selectedUid + ". Confirm STM32 BOOTLOADER in STM32CubeProgrammer; USB disconnect alone does not confirm ROM DFU. No firmware was written.");
+    }
+
+    private static void RequireDfuRecovery(uint info)
+    {
+        if ((info >> 16) != LoaderAbiVersion || (info & 2U) != 0 || (info & 8U) == 0)
+            throw new IOException("Idle ABI-4 recovery loader with ROM DFU capability required; active updates are not interrupted and no ROM DFU request was sent.");
     }
 
     private static void RequestUnifiedMode(string path, ushort mode)

@@ -5,10 +5,11 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace USB512_interface
 {
-    // Immutable display geometry, prepared from the cached NPB1 selection.
+    // Immutable display geometry, prepared before START from compiled requests.
     // NP1 uses the same zero-based site/channel and staggered contact geometry
     // as NPConfigurator Catalog.Channel and StandardFormats.ToProbeInterface.
     internal sealed class NpPreviewSite
@@ -16,11 +17,11 @@ namespace USB512_interface
         internal readonly int Channel, Site, Shank;
         internal readonly float XUm,YUm;
         internal readonly string Label;
-        internal NpPreviewSite(int channel,int site=-1,int shank=0)
+        internal NpPreviewSite(int channel,int site=-1,int shank=0,bool np2=false)
         {
             Channel=channel;Site=site;Shank=shank;
             int row=site/2;
-            XUm=shank*250+site%2*32+(row%2==0?16:0);YUm=row*20;
+            XUm=shank*250+site%2*32+(!np2 && row%2==0?16:0);YUm=row*(np2?15:20);
             Label=site<0?"C"+channel:"S"+shank+" E"+site+" / C"+channel;
         }
     }
@@ -45,10 +46,13 @@ namespace USB512_interface
         internal readonly NpPreviewPage[] Pages;
         internal readonly string ConfigurationId;
         internal readonly bool Physical;
+        internal readonly bool Np2;
         internal static readonly NpPreviewDefinition Hardware=CreateHardware();
         private NpPreviewDefinition(List<NpPreviewSite> sites,bool physical,string id)
+            : this(sites,physical,id,false) { }
+        private NpPreviewDefinition(List<NpPreviewSite> sites,bool physical,string id,bool np2)
         {
-            Physical=physical;ConfigurationId=id;
+            Physical=physical;ConfigurationId=id;Np2=np2;
             sites.Sort((a,b)=>{
                 int shank=a.Shank.CompareTo(b.Shank);
                 if(shank!=0)return shank;
@@ -81,6 +85,35 @@ namespace USB512_interface
                 sites.Add(new NpPreviewSite(ch,site));
             }
             return new NpPreviewDefinition(sites,true,BitConverter.ToString(selection,8,8).Replace("-",""));
+        }
+        internal static NpPreviewDefinition FromNp2Request(string normalizedJson,byte[] selection)
+        {
+            // The shared configurator already validated the vendor channel map.
+            // Use its normalized channel assignments, not site % 384 or a second
+            // routing catalog. N2B1 carries shift bits, not a channel/site table.
+            if(String.IsNullOrWhiteSpace(normalizedJson) || selection==null || selection.Length!=876 ||
+               selection[0]!=78 || selection[1]!=50 || selection[2]!=66 || selection[3]!=49 ||
+               selection[4]!=4 || selection[5]>2 || selection[6]!=0 || selection[7]!=0)return null;
+            var document=new JavaScriptSerializer {MaxJsonLength=1024*1024}.Deserialize<Dictionary<string,object>>(normalizedJson);
+            object profile,connector,channels;
+            if(document==null || !document.TryGetValue("Profile",out profile) || !Equals(profile,"Np2Multi") ||
+               !document.TryGetValue("Connector",out connector) || !Equals(connector,(int)selection[5]+1) ||
+               !document.TryGetValue("Channels",out channels) || !(channels is System.Collections.IEnumerable))return null;
+            var sites=new List<NpPreviewSite>();var assigned=new bool[384];var occupied=new HashSet<int>();
+            foreach(object item in (System.Collections.IEnumerable)channels) {
+                var channel=item as Dictionary<string,object>;object chValue,siteValue,shankValue,standby;
+                if(channel==null || !channel.TryGetValue("Channel",out chValue) || !(chValue is int) ||
+                   !channel.TryGetValue("Site",out siteValue) || !(siteValue is int) ||
+                   !channel.TryGetValue("Shank",out shankValue) || !(shankValue is int) ||
+                   !channel.TryGetValue("Standby",out standby) || !Equals(standby,false))return null;
+                int ch=(int)chValue,site=(int)siteValue,shank=(int)shankValue;
+                if(ch<0 || ch>=384 || assigned[ch] || site<0 || site>=1280 || shank<0 || shank>=4 ||
+                   !occupied.Add(shank*1280+site))return null;
+                int bit=(site&1)!=0?642-site/2:645+site/2;
+                if((selection[40+shank*161+bit/8]&(1<<(7-bit%8)))==0)return null;
+                assigned[ch]=true;sites.Add(new NpPreviewSite(ch,site,shank,true));
+            }
+            return sites.Count==384?new NpPreviewDefinition(sites,true,BitConverter.ToString(selection,8,8).Replace("-",""),true):null;
         }
     }
 
@@ -521,7 +554,7 @@ namespace USB512_interface
             NpPreviewPage page=view.Page;bool physical=view.Definition.Physical;
             string range=page.Count==0?"no enabled sites":page.Sites[0].Label+" .. "+page.Sites[page.Count-1].Label;
             report.Text = String.Format((physicalPortsKnown?"P"+probeBox.SelectedItem:"Legacy (port unreported)")+" | {0} | "+
-                (physical?"electrode order (applied NPB1)":"hardware-channel fallback; mapping unverified")+"\r\nPage {1}: {2}\r\n{4:N1} MiB | {5:N0} packets | AP {6:N0}"+(apOnly?" (12-bit)":" | LFP {7:N0} | relocks {8:N0}"),
+                (physical?"electrode order (applied "+(view.Definition.Np2?"NP2 IMRO":"NPB1")+")":"hardware-channel fallback; mapping unverified")+"\r\nPage {1}: {2}\r\n{4:N1} MiB | {5:N0} packets | AP {6:N0}"+(apOnly?" (12-bit)":" | LFP {7:N0} | relocks {8:N0}"),
                 showLfp ? "LFP" : "AP", bank, range, 0,
                 rawBytes / 1048576.0, packetCount, apRows, lfpRows, relocks);
             if(renderFailure!=null)report.Text="Preview stopped: "+renderFailure+" (recording continues)";
@@ -646,24 +679,27 @@ namespace USB512_interface
         {
             g.Clear(NpPreviewTheme.Canvas);
             using(Font font=new Font("Arial",8f))using(Font small=new Font("Arial",7f)) {
-                g.DrawString(definition.Physical?"NP1 electrode map":"Hardware channels",font,NpPreviewTheme.Text,7,7);
-                g.DrawString(definition.Physical?"S0 · sites (0-based)\nLayout schematic":"Electrode routing\nunverified",small,NpPreviewTheme.Secondary,7,26);
+                g.DrawString(definition.Physical?(definition.Np2?"NP2 electrode map":"NP1 electrode map"):"Hardware channels",font,NpPreviewTheme.Text,7,7);
+                g.DrawString(definition.Physical?(definition.Np2?"S0–S3 · 0-based\nLayout schematic":"S0 · sites (0-based)\nLayout schematic"):"Electrode routing\nunverified",small,NpPreviewTheme.Secondary,7,26);
                 if(definition.Physical) {
-                    float top=70,bottom=height-63,vertical=Math.Max(1,bottom-top)/9580f;
-                    g.DrawString("959",small,NpPreviewTheme.Secondary,5,top-9);
+                    int total=definition.Np2?1280:960,shanks=definition.Np2?4:1,pitch=definition.Np2?15:20;
+                    float top=70,bottom=height-63,vertical=Math.Max(1,bottom-top)/((total/2-1)*pitch);
+                    float left=definition.Np2?32:40,horizontal=definition.Np2?(width-48)/782f:1.1f;
+                    g.DrawString((total-1).ToString(),small,NpPreviewTheme.Secondary,3,top-9);
                     g.DrawString("0",small,NpPreviewTheme.Secondary,5,bottom-4);
                     // The contact layout is a schematic: expand X for readable
                     // contacts while retaining the configurator's stagger/rows.
-                    for(int site=0;site<960;site++) {
-                        int row=site/2;float x=40+(site%2*32+(row%2==0?16:0))*1.1f;
-                        float y=bottom-row*20*vertical;
+                    for(int shank=0;shank<shanks;shank++)for(int site=0;site<total;site++) {
+                        int row=site/2;float x=left+(shank*250+site%2*32+(!definition.Np2 && row%2==0?16:0))*horizontal;
+                        float y=bottom-row*pitch*vertical;
                         g.FillRectangle(NpPreviewTheme.Inactive,x-1,y-1,2,2);
                     }
                     for(int i=0;i<page.Count;i++) {
-                        NpPreviewSite site=page.Sites[i];float x=40+site.XUm*1.1f,y=bottom-site.YUm*vertical;
+                        NpPreviewSite site=page.Sites[i];float x=left+site.XUm*horizontal,y=bottom-site.YUm*vertical;
                         g.FillRectangle(palette.Brushes[i],x-2,y-1.5f,4,3);
                     }
-                    g.DrawString("Applied NPB1\n"+definition.ConfigurationId,small,NpPreviewTheme.Secondary,7,height-47);
+                    if(definition.Np2)for(int shank=0;shank<4;shank++)g.DrawString("S"+shank,small,NpPreviewTheme.Secondary,left+shank*250*horizontal-2,bottom+7);
+                    g.DrawString((definition.Np2?"Applied NP2 IMRO":"Applied NPB1")+"\n"+definition.ConfigurationId,small,NpPreviewTheme.Secondary,7,height-47);
                 } else {
                     float cellW=(width-16)/16f,cellH=Math.Max(4,(height-115)/24f);
                     for(int ch=0;ch<384;ch++) {

@@ -36,6 +36,7 @@ namespace USB512_interface
             Add("Update NP2 APP…", UpdateApp);
             Add("USB streaming", () => Mode("--stream")); Add("USB download", () => Mode("--download"));
             Add("SD / BLE", () => Mode("--sd")); Add("Recovery loader", () => Mode("--recovery"));
+            Add("ROM DFU…", () => Mode("--dfu"));
             Add("NP1 firmware manager…", () => { using (var form = new NpFirmwareForm(null)) form.ShowDialog(this); return Task.CompletedTask; });
             var notice = new Panel { Dock = DockStyle.Top, Height = 50, Padding = new Padding(8) }; notice.Controls.Add(status);
             Controls.Add(log); Controls.Add(notice); Controls.Add(actions); Controls.Add(devices);
@@ -78,7 +79,17 @@ namespace USB512_interface
                 finally { working = false; actions.Enabled = devices.Enabled = true; }
             };
         }
-        async Task Mode(string mode) { var target = Selected(); await Helper(target, mode); status.Text = "Mode request acknowledged for UID " + target.Uid + ". Refresh after USB re-enumeration."; }
+        async Task Mode(string mode)
+        {
+            var target = Selected();
+            if (mode == "--dfu" && MessageBox.Show(this,
+                "Reset MCU UID " + target.Uid + " into STM32 ROM DFU?\r\n\r\nThis disconnects USB and leaves normal logging unavailable until the device is restarted. No firmware will be written automatically.\r\n\r\nAfter the request is acknowledged, confirm STM32 BOOTLOADER in STM32CubeProgrammer before updating firmware.",
+                "Enter ROM DFU", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
+            await Helper(target, mode);
+            status.Text = mode == "--dfu" ?
+                "ROM DFU request acknowledged for UID " + target.Uid + ". Confirm STM32 BOOTLOADER in STM32CubeProgrammer; USB disconnect alone is not confirmation. No firmware was written." :
+                "Mode request acknowledged for UID " + target.Uid + ". Refresh after USB re-enumeration.";
+        }
         async Task ReadSelfTestReport()
         {
             var target = Selected();

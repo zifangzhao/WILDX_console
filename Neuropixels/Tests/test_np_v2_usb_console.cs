@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -531,6 +532,147 @@ internal static class NpV2UsbConsoleTests
               !triple.SupportsProbeMask(4U) && !triple.SupportsProbeMask(5U) && !triple.SupportsProbeMask(6U), "triple-build optimized mask set");
         Check(NpV2UsbDevice.IsV2Path("usb#VID_1209&PID_B386#x") && !NpV2UsbDevice.IsV2Path("usb#VID_1209&PID_B387#x"), "V2 discovery filter");
     }
+    static void ProfileAdmissionTests(string sourcePath)
+    {
+        StatusTests();
+        foreach (uint mask in new uint[] { 1U, 2U, 3U, 7U }) foreach (uint rate in new uint[] { 15000U, 20000U, 30000U })
+        {
+            if (mask == 7U && rate == 30000U)
+            {
+                try { NpV2ProfileCapabilities.RequireUsbBandwidth(mask, rate); throw new Exception("Three-probe 30 kHz admitted"); }
+                catch (IOException ex)
+                {
+                    Check(ex.Message.Contains("54 MB/s") && ex.Message.Contains("53.248 MB/s") &&
+                        ex.Message.Contains("20 kHz") && ex.Message.Contains("connectors 1+2") &&
+                        ex.Message.Contains("not been changed"), "USB rejection lacks an actionable, explicit-rate message");
+                }
+            }
+            else { NpV2ProfileCapabilities.RequireUsbBandwidth(mask, rate); checks++; }
+        }
+        var oldProfile = new byte[32]; Put32(oldProfile, 0, NpV2ProfileCapabilities.MagicValue); Put32(oldProfile, 4, 1);
+        Put32(oldProfile, 8, 7); Put32(oldProfile, 12, 7); Put32(oldProfile, 16, 7); Put32(oldProfile, 20, 7); Put32(oldProfile, 24, 7); Put32(oldProfile, 28, 30000);
+        var parsed = NpV2ProfileCapabilities.Parse(oldProfile);
+        Check(parsed.SelectedProbeMask == 7U && parsed.SampleHz == 30000U && parsed.SupportsRate(30000U), "Old firmware capability parsing changed instead of admission");
+        var packed = new NpV2WireVerifier(); packed.Feed(MakeV3Block(0, 0, 3, 3, 30000U, true), 0);
+        Check(packed.Codec == 4U && packed.StoredBits == 6 && packed.SampleHz == 30000U, "Packed dual 30 kHz decode compatibility lost");
+        var oldTriple = new NpV2WireVerifier(); oldTriple.Feed(MakeV3Block(0, 0, 7, 7, 30000U), 0);
+        Check(oldTriple.Codec == 6U && oldTriple.SampleHz == 30000U, "Existing triple 30 kHz files cannot be decoded for diagnosis");
+
+        string source = File.ReadAllText(sourcePath);
+        Action<string, string, string> before = delegate(string start, string guard, string mutation)
+        {
+            int at = source.IndexOf(start, StringComparison.Ordinal);
+            int check = at < 0 ? -1 : source.IndexOf(guard, at, StringComparison.Ordinal);
+            int write = at < 0 ? -1 : source.IndexOf(mutation, at, StringComparison.Ordinal);
+            Check(at >= 0 && check >= at && write > check, start + " does not reject before mutation");
+        };
+        before("internal NpV2ProfileCapabilities ConfigureProfile(", "RequireUsbBandwidth(probeMask, sampleHz)", "VendorOut(0x75");
+        before("internal void Start(uint blocks)", "RequireUsbBandwidth(source.ProbeMask, source.SampleHz)", "VendorOut(0x70");
+        before("if (!advertised.CurrentProfileSupported)", "RequireUsbBandwidth(advertised.ProbeMask, advertised.SampleHz)", "device.Start(targetBlocks)");
+        before("ok.Click += delegate", "RequireUsbBandwidth(mask, requestedRate)", "npV2RequestedProbeMask = mask; npV2RequestedSampleHz = requestedRate");
+        before("private void NpV2CaptureLoop()", "RequireUsbBandwidth(requestedMask, npV2RequestedSampleHz)", "NpV2EnsureIdleStreamMode()");
+    }
+    static void CompletionPolicyTests(string sourcePath)
+    {
+        string source = File.ReadAllText(sourcePath), marker = "result.Complete = ";
+        int start = source.IndexOf(marker, StringComparison.Ordinal);
+        Check(start >= 0, "Production completion assignment missing"); start += marker.Length;
+        string[] terms = source.Substring(start, source.IndexOf(';', start) - start).Split(new[] { "&&" }, StringSplitOptions.None);
+        Exception error = null, verificationWarning = null;
+        uint received = 1U, targetBlocks = 1U;
+        NpV2RecordingResult result = null;
+        NpV2CaptureStatus finalCapture = null;
+        NpV2SourceStatus finalSource = null;
+        byte[] validBlock = MakeV3Block(0, 0, 1U, 1U);
+        Action reset = delegate {
+            error = verificationWarning = null; received = targetBlocks = 1U;
+            result = new NpV2RecordingResult { Verifier = new NpV2WireVerifier() }; result.Verifier.Feed(validBlock, 0);
+            finalCapture = IdleCapture(); finalCapture.Words[2] = 4U;
+            for (int i = 4; i <= 7; i++) finalCapture.Words[i] = targetBlocks;
+            finalCapture.Words[22] = 11U;
+            finalSource = new NpV2SourceStatus { Words = new uint[32] }; finalSource.Words[2] = 11U;
+        };
+        // Evaluate the actual production conjunction, not a second copied
+        // predicate. Unknown/new syntax requires an explicit test update.
+        var guards = new Dictionary<string, Func<bool>> {
+            { "error == null", () => error == null },
+            { "verificationWarning == null", () => verificationWarning == null },
+            { "result.RawWriterError == null", () => result.RawWriterError == null },
+            { "result.DecodeError == null", () => result.DecodeError == null },
+            { "result.RawDroppedBlocks == 0", () => result.RawDroppedBlocks == 0 },
+            { "result.DecodedDroppedLaneBlocks == 0", () => result.DecodedDroppedLaneBlocks == 0 },
+            { "received == targetBlocks", () => received == targetBlocks },
+            { "result.Verifier.Blocks == targetBlocks", () => result.Verifier.Blocks == targetBlocks },
+            { "finalCapture != null", () => finalCapture != null },
+            { "finalCapture.CompleteFor(targetBlocks)", () => finalCapture.CompleteFor(targetBlocks) },
+            { "finalSource != null", () => finalSource != null },
+            { "finalSource.Error == 0U", () => finalSource.Error == 0U },
+            { "finalSource.State == 11U", () => finalSource.State == 11U }
+        };
+        foreach (string term in terms) Check(guards.ContainsKey(term.Trim()), "Unknown production completion guard: " + term);
+        Func<bool> complete = delegate { foreach (string term in terms) if (!guards[term.Trim()]()) return false; return true; };
+        reset(); Check(complete(), "Clean final counts/files did not complete");
+        foreach (string notice in new[] { "15-second startup wait", "8-second data pause", "whole-block short read" }) {
+            result.Warning = notice; Check(complete() && result.Warning == notice, "Benign notice marked clean data incomplete or was erased");
+        }
+        result.PreviewError = "renderer disposed"; Check(complete(), "Preview-only failure invalidated clean data");
+        Action<Action, string> reject = delegate(Action fault, string name) { reset(); result.Warning = "whole-block short read"; fault(); Check(!complete(), name + " certified complete despite benign notice"); };
+        reject(() => error = new IOException("USB completion failed"), "USB failure");
+        reject(() => error = new TimeoutException("unsafe final drain"), "Drain timeout");
+        reject(() => error = new IOException("verifier/logger worker failed"), "Worker failure");
+        reject(() => verificationWarning = new InvalidDataException("SuperSync/tick/sequence failure"), "Verifier failure");
+        reject(() => result.RawWriterError = "raw write/flush failed", "Raw disk failure");
+        reject(() => result.DecodeError = "DAT write/flush or decoder failed", "DAT disk/decode failure");
+        reject(() => result.RawDroppedBlocks = 1, "Raw drop");
+        reject(() => result.DecodedDroppedLaneBlocks = 1, "DAT drop");
+        reject(() => received = 0U, "Received count mismatch");
+        reject(() => result.Verifier = new NpV2WireVerifier(), "Verified count mismatch");
+        foreach (int field in new[] { 4, 5, 6, 7 }) { int index = field; reject(() => finalCapture.Words[index] = 0U, "Final count " + index); }
+        foreach (int field in new[] { 3, 12, 15, 23 }) { int index = field; reject(() => finalCapture.Words[index] = 1U, "Capture/producer/partial/source fault " + index); }
+        reject(() => finalCapture.Words[2] = 255U, "Failed capture state");
+        reject(() => finalCapture.Words[22] = 10U, "Unstopped capture source");
+        reject(() => finalSource.Words[3] = 8U, "Source fault");
+        reject(() => finalSource.Words[2] = 10U, "Unstopped source");
+        reject(() => finalCapture = null, "Missing capture receipt");
+        reject(() => finalSource = null, "Missing source receipt");
+        Check(source.Contains("metadataFailure=result.Error??(result.Complete?null:result.Warning);"), "Complete benign-warning recording retains a metadata failure");
+    }
+    static void HostCreditTests(string sourcePath)
+    {
+        const int maximumWaitObjects = 64;
+        var flags = BindingFlags.Static | BindingFlags.NonPublic;
+        int depth = (int)typeof(NpV2Recording).GetField("QueueDepth", flags).GetRawConstantValue();
+        int blocksPerRead = (int)typeof(NpV2Recording).GetField("BlocksPerRead", flags).GetRawConstantValue();
+        Check(depth == maximumWaitObjects && depth <= maximumWaitObjects, "Reader exceeds native wait set or lost bounded credit");
+        Check(blocksPerRead == 4, "Validated four-block RAW_IO/Stop alignment changed");
+        Check(Math.Abs(depth * blocksPerRead * 61440.0 / 48000000.0 * 1000.0 - 327.68) < 1e-9, "Packed dual30 read credit is not 327.68 ms");
+        Check(depth * blocksPerRead * 122880.0 / 24000000.0 < 5.0, "Slowest supported profile cannot drain within existing Stop deadline");
+        var minimum = new NpV2BufferPolicy(64);
+        Check(minimum.ReadBuffers == 90 && minimum.ReadBuffers > depth, "Minimum host budget cannot hold an outstanding native read batch");
+        foreach (int budget in new[] { 64, 128, 256, 512, 2048 }) {
+            var policy = new NpV2BufferPolicy(budget);
+            Check(policy.ReadBuffers >= depth && policy.SharedBlocks >= depth * blocksPerRead && policy.WriteBuffersPerProbe >= 2,
+                "Host pool is too small at " + budget + " MiB");
+            long pooledBytes = (long)policy.ReadBuffers * blocksPerRead * NpV2UsbDevice.BlockBytes +
+                (long)policy.SharedBlocks * NpV2UsbDevice.BlockBytes + 3L * policy.WriteBuffersPerProbe * NpV2BufferPolicy.WriteChunkBytes;
+            Check(pooledBytes <= budget * 1024L * 1024L, "Read/shared/DAT pools exceed their configured budget");
+        }
+        // The existing pool budget excludes pinned native URBs (and object/
+        // preview overhead); doubling credit adds only 5.6875 MiB here.
+        Check((long)depth * blocksPerRead * NpV2UsbDevice.BlockBytes == 11927552L, "Fixed native buffer overhead changed");
+        string source = File.ReadAllText(sourcePath);
+        int diagnosticAt = source.IndexOf("#if NP2_USB_HIL_ONE_BLOCK", StringComparison.Ordinal), releaseAt = source.IndexOf("#else", diagnosticAt, StringComparison.Ordinal);
+        string diagnostic = source.Substring(diagnosticAt, releaseAt - diagnosticAt);
+        string release = source.Substring(releaseAt, source.IndexOf("#endif", releaseAt, StringComparison.Ordinal) - releaseAt);
+        Check(diagnostic.Contains("QueueDepth = 32;") && diagnostic.Contains("BlocksPerRead = 1;"), "One-block diagnostic branch unexpectedly changed");
+        Check(release.Contains("QueueDepth = 64;") && release.Contains("BlocksPerRead = 4;"), "Release branch did not select bounded four-block64 credit");
+        Check(source.Contains("var handles = new IntPtr[QueueDepth];") && source.Contains("handles[i] = slots[i].Event; free.Add(i);") &&
+            source.Contains("WaitForMultipleObjects((uint)handles.Length, handles, false, 50U)"), "Native wait count includes an extra handle or differs from read slots");
+        Check(source.Contains("long issue = 0;") && source.Contains("var reorder = new SortedDictionary<long, Done>();") &&
+            source.Contains("completed.Issue = done.Issue;"), "Read issue-order ownership changed");
+        Check(source.Contains("if (stopRequested) return;") && source.Contains("stopRequested && !cancelSent && received == queued") &&
+            source.Contains("requested[index] = NpV2UsbDevice.BlockBytes;") && source.Contains("device.AbortAndRetire(slots);"), "Stop/finite tail/retirement ownership changed");
+    }
     static void HilStatus(string exactPath)
     {
         string path = exactPath;
@@ -800,6 +942,15 @@ internal static class NpV2UsbConsoleTests
     }
     private static int Run(string[] args)
     {
+        if(args.Length==2 && args[0]=="--host-credit-only"){
+            HostCreditTests(args[1]);Console.WriteLine("PASS: "+checks+" focused native wait/read-credit/minimum-pool/budget/Stop ownership checks (no hardware).");return 0;
+        }
+        if(args.Length==2 && args[0]=="--completion-policy-only"){
+            CompletionPolicyTests(args[1]);Console.WriteLine("PASS: "+checks+" focused production-extracted completion/integrity/persistence/metadata checks (no hardware).");return 0;
+        }
+        if(args.Length==2 && args[0]=="--profile-admission-only"){
+            ProfileAdmissionTests(args[1]);Console.WriteLine("PASS: "+checks+" focused USB rate admission/old-file compatibility/pre-mutation checks (no hardware).");return 0;
+        }
         if(args.Length==1 && args[0]=="--pre-arm-only"){
             PreArmTests();Console.WriteLine("PASS: "+checks+" focused pre-arm Stop/full-UID rebind checks (no hardware).");return 0;
         }

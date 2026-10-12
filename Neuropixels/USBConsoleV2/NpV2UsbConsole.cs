@@ -259,6 +259,7 @@ namespace USB512_interface
         internal const uint Rate20KMask = 2U;
         internal const uint Rate15KMask = 1U;
         internal const uint Rate30KMask = 4U;
+        internal const string Triple30UsbMessage = "Three NP2 probes at 30 kHz require 54 MB/s before headers, above USB 2.0 High-Speed bulk's 53.248 MB/s limit. Select 20 kHz or 15 kHz for three probes, or connectors 1+2 for 30 kHz. The selected rate has not been changed.";
         internal uint Magic, Abi, AvailableProbeMask, SelectedProbeMask;
         internal uint AvailableLiveProbeMask, SelectedLiveProbeMask, RateMask, SampleHz;
         internal bool Valid
@@ -287,6 +288,10 @@ namespace USB512_interface
         internal static bool NeedsMultiProbe30KQualificationWarning(uint probeMask, uint sampleHz)
         {
             return sampleHz == 30000U && (probeMask == 3U || probeMask == 7U);
+        }
+        internal static void RequireUsbBandwidth(uint probeMask, uint sampleHz)
+        {
+            if (probeMask == 7U && sampleHz == 30000U) throw new IOException(Triple30UsbMessage);
         }
         internal uint[] SupportedRates
         {
@@ -650,6 +655,7 @@ namespace USB512_interface
 
         internal NpV2ProfileCapabilities ConfigureProfile(uint probeMask, uint sampleHz)
         {
+            NpV2ProfileCapabilities.RequireUsbBandwidth(probeMask, sampleHz);
             NpV2ProfileCapabilities capabilities = GetProfileCapabilities();
             if (!capabilities.SupportsProbeMask(probeMask))
                 throw new IOException("The selected NP2 connector combination has no optimized firmware codec. Select connector 1, connector 2, connectors 1+2, or all three connectors.");
@@ -717,6 +723,7 @@ namespace USB512_interface
             NpV2CaptureStatus source = GetCaptureStatus();
             if (source.State != 0U || source.SourceState != 0U)
                 throw new IOException("NP2 source is one-shot per boot. Reset V2 into USB stream mode before another recording.");
+            if (source.Format == 3U) NpV2ProfileCapabilities.RequireUsbBandwidth(source.ProbeMask, source.SampleHz);
             VendorOut(0x70, (ushort)blocks, (ushort)(blocks >> 16));
         }
 
@@ -1550,7 +1557,9 @@ namespace USB512_interface
         private const int QueueDepth = 32;
         private const int BlocksPerRead = 1;
 #else
-        private const int QueueDepth = 32;
+        // Maximum native wait set; four-block transfers retain Stop alignment.
+        // Native slots are fixed overhead, separate from the host pool budget.
+        private const int QueueDepth = 64;
         private const int BlocksPerRead = 4;
 #endif
         private const uint WaitTimeout = 258U;
@@ -1689,6 +1698,7 @@ namespace USB512_interface
                         if (!advertised.CurrentProfileSupported)
                             throw new IOException("The V2 firmware reports an unsupported NP2 USB sampling profile (format=" + advertised.Format +
                                 ", sample=" + advertised.SampleHz + " Hz, PSSI=" + advertised.PssiHz + " Hz, mask=0x" + advertised.ProbeMask.ToString("X1") + ").");
+                        if (advertised.Format == 3U) NpV2ProfileCapabilities.RequireUsbBandwidth(advertised.ProbeMask, advertised.SampleHz);
                         Action queueFree = delegate()
                         {
                             if (stopRequested) return;
@@ -1970,8 +1980,14 @@ namespace USB512_interface
             result.Warning = JoinWarnings(warnings);
             result.CancelledBeforeCapture = IsCancelledBeforeCapture(error, received, armRequested, finalCapture) &&
                 workerError == null && result.Warning == null;
-            result.Complete = error == null && result.Warning == null && result.Verifier.Blocks == targetBlocks &&
-                finalCapture != null && finalCapture.CompleteFor(targetBlocks) && finalSource != null && finalSource.Error == 0U;
+            // Timing/whole-block short-read notices do not imply loss once all
+            // counts, framing and completed file writers certify the final drain.
+            result.Complete = error == null && verificationWarning == null &&
+                result.RawWriterError == null && result.DecodeError == null &&
+                result.RawDroppedBlocks == 0 && result.DecodedDroppedLaneBlocks == 0 &&
+                received == targetBlocks && result.Verifier.Blocks == targetBlocks &&
+                finalCapture != null && finalCapture.CompleteFor(targetBlocks) &&
+                finalSource != null && finalSource.Error == 0U && finalSource.State == 11U;
             result.ReceivedBlocks = received; result.VerifiedBlocks = result.Verifier.Blocks;
             result.PayloadBytes = checked((long)received * (NpV2UsbDevice.BlockBytes - 512)); result.Seconds = clock.Elapsed.TotalSeconds;
             result.DataSeconds = finalCapture == null || finalCapture.CaptureStartedMs == 0U ? 0.0 :
@@ -2548,6 +2564,8 @@ namespace USB512_interface
                     if (mask == 0U) { MessageBox.Show(dialog, "Select at least one available NP2 connector.", "NP USB capture setup", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                     if (!accepted.SupportsProbeMask(mask)) { MessageBox.Show(dialog, "This connector combination has no optimized USB codec. Select connector 1, connector 2, connectors 1+2, or all three connectors.", "NP USB capture setup", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                     uint requestedRate=rateValues[rate.SelectedIndex];
+                    try { NpV2ProfileCapabilities.RequireUsbBandwidth(mask, requestedRate); }
+                    catch (IOException ex) { MessageBox.Show(dialog, ex.Message, "NP USB bandwidth limit", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                     if(NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(mask,requestedRate) && MessageBox.Show(dialog,
                         "Multi-probe 30 kHz USB capture is experimental and has not passed sustained qualification. 20 kHz profiles have separate test evidence. Continue in best-effort mode?",
                         "Experimental NP2 USB profile",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
@@ -2612,6 +2630,10 @@ namespace USB512_interface
             bool complete=false;string metadataFailure=null;
             try
             {
+                uint requestedMask = npV2RequestedProbeMask;
+                if (requestedMask == 0U && npV2RequestedSampleHz == 30000U)
+                    using (var device = NpV2UsbDevice.Open(devicePath)) requestedMask = device.GetProfileCapabilities().SelectedProbeMask;
+                NpV2ProfileCapabilities.RequireUsbBandwidth(requestedMask, npV2RequestedSampleHz);
                 NpV2UsbRoute route = NpV2UsbTopology.Inspect(devicePath);
                 if (route.HubCount != 0 && IsHandleCreated)
                 {
@@ -2626,6 +2648,7 @@ namespace USB512_interface
                 }
                 string streamPath = NpV2EnsureIdleStreamMode();
                 var stagedConfigurations=new List<Np2ConfigRequest>();
+                var previewDefinitions=new NpPreviewDefinition[4];
                 using (var device = NpV2UsbDevice.Open(streamPath))
                 {
                     NpV2ProfileCapabilities capabilities = device.GetProfileCapabilities();
@@ -2639,6 +2662,7 @@ namespace USB512_interface
                         string json;
                         if(!requested.TryGetValue(connector,out json))throw new IOException("NP2 apply was requested for connector "+connector+" without a retained configuration.");
                         var request=NpConfigurationDialog.PrepareV2Request(json,connector);
+                        previewDefinitions[connector]=NpPreviewDefinition.FromNp2Request(request.Json,request.Selection);
                         Np2ConfigurationUsb.StageForCapture(device,request);stagedConfigurations.Add(request);
                     }
                     if(settings!=null) {
@@ -2666,6 +2690,7 @@ namespace USB512_interface
                     {
                         npPreviewMask = (int)capabilities.SelectedProbeMask;
                         PrepareNpPreviewForCapture((int)capabilities.SampleHz, npPreviewMask, true, 12);
+                        neuropixelsPreview.PrepareProbeDefinitions(previewDefinitions);
                         llblSavefile.Text = "neuropixels_ap.dat (+ neuropixels_np2usb.raw; one AP DAT per live probe)";
                     });
                 }
@@ -2703,8 +2728,13 @@ namespace USB512_interface
                             var appliedPorts=new List<int>();foreach(var request in stagedConfigurations)appliedPorts.Add(request.Port+1);
                             settings.Context("np2_configuration_applied_ports",appliedPorts.ToArray());
                         }
+                        // Publish only after every staged request has its matching
+                        // applied receipt, while capture is still held before arm.
+                        if(IsHandleCreated)Invoke((Action)delegate {
+                            if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed)neuropixelsPreview.ConfirmProbeDefinitions();
+                        });
                     });
-                complete=result.Complete;metadataFailure=result.Error??result.Warning;
+                complete=result.Complete;metadataFailure=result.Error??(result.Complete?null:result.Warning);
                 if(settings!=null) {
                     settings.Context("np2_cancelled_before_capture",result.CancelledBeforeCapture);
                     if(result.DecodedDatSampleHz!=0 && result.DecodedDatProbeMask!=0)
