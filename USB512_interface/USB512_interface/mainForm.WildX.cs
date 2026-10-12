@@ -139,7 +139,7 @@ namespace USB512_interface
             clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="The network clock is an app-local UTC reference. Recordings retain their device timestamps.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
             online.Controls.Add(Card("Network time / UTC",null,clock),1,1);
 
-            bleWorkspace=new NpBleForm {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
+            bleWorkspace=new NpBleForm(true) {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
             bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};
             blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
 

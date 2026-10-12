@@ -1,14 +1,13 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.3",
-  "releaseDate": "2026-10-11",
-  "status": "Engineering release: exact USB/UI-tested console, unchanged published firmware",
+  "version": "1.0.0.4",
+  "releaseDate": "2026-10-12",
+  "status": "GUI-only restoration of existing BLE ROM DFU visibility",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.3.exe",
-    "bytes": 2248179,
-    "sha256": "34CA66023882429E7E1C29CBEA60B66257EC504ED2DED40A85B564E8AF04D8F0"
+    "file": "WILDX_console-Setup-1.0.0.4.exe",
+    "bytes": 2245892,
+    "sha256": "DADB2995694C6CF5340FBD3ABA5FF6AAA755C0A4447DCAF3FCF4531E692B6CD2"
   },
-  "installerExecuted": false,
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
     "branch": "V2",
@@ -22,45 +21,38 @@
     "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
   },
   "releaseValidation": {
-    "rebuiltApplicationForPackaging": false,
-    "firmwareRebuiltForPackaging": false,
-    "hardwareAccessForPackaging": false,
-    "installerCompilationCount": 2,
-    "firstPackageRejected": "Identity check found newer bin/Release updater helpers; corrected to byte-identical helpers from the published 2026-10-10 installer.",
-    "independentlyExtractedMatchingPayloads": 13,
     "fullEndToEndPairQualified": false,
-    "softwareChecks": {
-      "preArmCancelAndUid": 25,
-      "uiLifecycle": 134
-    },
-    "actualGuiHardwareChecks": 5046,
-    "actualGuiHardwareModes": [
-      "P1/30 kHz: 11.517 s, complete, 4492 verified blocks, 344984 DAT rows",
-      "P1+P2+P3/20 kHz: 11.331 s, complete, 8836 verified blocks, 226201 DAT rows per probe",
-      "Same-form repeated Start and preparation cancellation: no host-arm, zero captured bytes, incomplete metadata"
-    ],
-    "posthocMatchedDatBytes": 786114816,
-    "evidence": "Note/USB_UI_RELEASE_20261011.md; XE_NP V2 Note/Tools/V2SdLogger/PROGRESS_PLAN.md section 309"
+    "applicationIncrementalBuilds": 1,
+    "targetedActualAssemblyChecks": 41,
+    "independentlyExtractedMatchingPayloads": 13,
+    "dependenciesAndUpdaterUnchanged": true,
+    "installerExecuted": false,
+    "firmwareChanged": false,
+    "hardwareAccess": false
+  },
+  "dfu": {
+    "route": "BLE opcode 5, destination 3; now visible in normal BLE Mode",
+    "historicalV2RomEntryConfirmed": "2026-09-28, ST-Link004B MCU001A0020434250062039314E, VTOR0x0BF90000 PC0x0BF924CC",
+    "historicalV2UsbEnumerationAndUploadValidated": false,
+    "directResidentUsbRomDfuCommand": false,
+    "recoveryLoaderUpdates": "APP-only .xenp, not fused HEX"
   },
   "buildProvenance": {
-    "packagedExeSha256": "986AF3369664B19A740EF34C5DC53AA673D9AC535F4235E7638FDE52496DF68F",
-    "build": "Previously checked isolated Release component build; dependencies/exporter reused, not rebuilt.",
-    "bleCompileInputSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
-    "privateBleCandidateExcluded": true,
-    "workingTreeDefaultBuildNotReleaseIdentity": "A private Compile-item override used the recorded F779-era BLE input; this package is pinned to the tested binary, not an assertion that the current dirty/default source tree reproduces it."
-  },
-  "firmwareUpdate": {
-    "gui": "Firmware Update > Recovery loader / Update NP2 APP",
-    "transport": "UID-pinned protected WinUSB APP updater",
-    "residentUsbUpdate": "USB-only addressed HEX over SWD; APP updater cannot replace resident USB",
-    "residentUsbRomDfu": false,
-    "updaterHelpers": "Unchanged byte-identical runtime from published 2026-10-10 package; no new update-cycle qualification."
+    "baseGuiSourceCommit": "6fa0099008cac95f9ac927e7c930e00d7f167dd0",
+    "exeSha256": "06C9C3E75378D34AD3152FF0108ED34B0EB0B729A60D27C58E08D1A07D170122",
+    "frozenBleConnectionSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
+    "privateBleAndSdDevelopmentExcluded": true,
+    "changedProductionFiles": [
+      "mainForm.WildX.cs: NpBleForm(true)",
+      "Properties/AssemblyInfo.cs: 1.0.0.4"
+    ],
+    "evidence": "Note/DFU_VISIBILITY_20261012.md"
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "bytes": 1184256,
-      "sha256": "986AF3369664B19A740EF34C5DC53AA673D9AC535F4235E7638FDE52496DF68F"
+      "bytes": 1178112,
+      "sha256": "06C9C3E75378D34AD3152FF0108ED34B0EB0B729A60D27C58E08D1A07D170122"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -122,15 +114,5 @@
       "bytes": 340,
       "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
     }
-  ],
-  "limitations": [
-    "Engineering USB/UI release, not hours-long endurance, clean-install, full fused boot/update or SD/BLE release-pair qualification.",
-    "P1/P2 solo 15/20/30 kHz, dual 15/20 kHz and triple 15/20 kHz reuse prior bounded headless USB evidence; longest retained triple20 run 59.185 s.",
-    "New actual GUI captures are P1/30 kHz and triple/20 kHz; both zero reported errors, warnings and raw/decoded/display drops, with every saved DAT byte matching actual-app RAW replay.",
-    "Multi-probe30 kHz remains warned/unqualified; USB7.5 kHz, P3-alone and other probe pairs are unsupported.",
-    "Analog/electrode mapping remains unqualified; RAW/DAT replay is not independent analog calibration.",
-    "Interruption remains incomplete; there is no gapless mid-stream USB auto-reconnect.",
-    "The published SD/BLE APP ED881256 is retained; hardware USB/UI tests used resident USB1138F666, not a new full-stack test of the published fused APP.",
-    "Protected recovery is not STM32 ROM DFU."
   ]
 }
