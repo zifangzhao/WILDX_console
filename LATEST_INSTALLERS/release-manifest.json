@@ -1,34 +1,44 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.4",
+  "version": "1.0.0.6",
   "releaseDate": "2026-10-12",
-  "status": "GUI-only restoration of existing BLE ROM DFU visibility",
+  "status": "USB dual30 uses lossless packed6; triple30 rejected before setup; retains confirmed IMRO preview and BLE DFU visibility",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.4.exe",
-    "bytes": 2245892,
-    "sha256": "DADB2995694C6CF5340FBD3ABA5FF6AAA755C0A4447DCAF3FCF4531E692B6CD2"
+    "file": "WILDX_console-Setup-1.0.0.6.exe",
+    "bytes": 2247502,
+    "sha256": "4383A0457A0D91AFA88C2700B1FE5965A64ECC3F13E58D2C985A49B9D6B3611E"
   },
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
     "branch": "V2",
     "directory": "LATEST_FIRMWARE/V2_NP2",
     "loaderCrc32": "97C3716A",
-    "usbCrc32": "1138F666",
+    "usbCrc32": "A33B9912",
     "appCrc32": "ED881256",
-    "fusedHexSha256": "5CB7FE3C436D90761A9435FA1ADA4FE4960D0865F0C8CF84F4EBB171D70D4CF4",
-    "usbOnlyHexSha256": "F4E9A80F6DC8EA588384F0684242C912D136EC73C63721CDE18B8CF919CD708B",
+    "fusedHexSha256": "47257A40FD57442409B7DA9422CE49395D08EE57013C8B5CD311C0DB4D5BAEB4",
+    "usbOnlyHexSha256": "081C7A5F301DDC862E25E7934A325405150B77022EC9C679C2790B0E65ABA52A",
     "appOnlyHexSha256": "8A4BB9985FB8C5F2940C9A866AA79BF3C1DBDAA32BE1DAA92AFA01791279F21E",
     "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
   },
   "releaseValidation": {
     "fullEndToEndPairQualified": false,
-    "applicationIncrementalBuilds": 1,
-    "targetedActualAssemblyChecks": 41,
-    "independentlyExtractedMatchingPayloads": 13,
+    "testedPairModes": [
+      "two real NP2/30k/8192 blocks",
+      "three real NP2/20k/8192 blocks"
+    ],
+    "backwardGuiCompatibility": "GUI5/new USB: dual30/32768 blocks, 41.944 seconds",
+    "usbFixture": "actual production consumer: rate admission, immutable slots, stop/backpressure/fault handling",
+    "targetedGuiAdmissionChecks": 29,
+    "fullSavedDatReplayMatched": true,
+    "analogQualityQualified": false,
+    "customImroTestedThisCycle": false,
+    "interactivePreviewTestedThisCycle": false,
+    "longEnduranceQualified": false,
+    "sdBleAppRequalified": false,
+    "independentInstallerExtraction": false,
+    "stagedPayloadHashesChecked": 13,
     "dependenciesAndUpdaterUnchanged": true,
-    "installerExecuted": false,
-    "firmwareChanged": false,
-    "hardwareAccess": false
+    "installerExecuted": false
   },
   "dfu": {
     "route": "BLE opcode 5, destination 3; now visible in normal BLE Mode",
@@ -39,20 +49,31 @@
   },
   "buildProvenance": {
     "baseGuiSourceCommit": "6fa0099008cac95f9ac927e7c930e00d7f167dd0",
-    "exeSha256": "06C9C3E75378D34AD3152FF0108ED34B0EB0B729A60D27C58E08D1A07D170122",
+    "exeSha256": "99EBA1A8835AC8B60A564FF2D180F6527123DF05EE44BFD231804976B3E28977",
     "frozenBleConnectionSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
     "privateBleAndSdDevelopmentExcluded": true,
     "changedProductionFiles": [
-      "mainForm.WildX.cs: NpBleForm(true)",
-      "Properties/AssemblyInfo.cs: 1.0.0.4"
+      "NpV2UsbConsole.cs: triple30 pre-mutation bandwidth admission; prior confirmed preview mapping retained",
+      "Properties/AssemblyInfo.cs: 1.0.0.6"
     ],
-    "evidence": "Note/DFU_VISIBILITY_20261012.md"
+    "evidence": "Note/NP2_USB_RATE_FIX_20261012.md",
+    "retainedBaseEvidence": "Note/NP2_PREVIEW_MAPPING_20261012.md"
+  },
+  "np2Preview": {
+    "scope": "NP2013 USB preview, connectors P1/P2/P3",
+    "mappingSource": "normalized request from the unchanged shared NPConfigurator; selected sites checked against its compiled N2B1 payload",
+    "physicalOrder": "shank ascending, electrode row descending, columns left-to-right; labels include zero-based shank/electrode/hardware channel",
+    "geometry": "1280 sites per shank; aligned 32 um columns, 15 um rows, 250 um shank pitch",
+    "admission": "matching existing applied receipts for all staged configurations, before host arm; unconfirmed/default maps remain explicit hardware-channel fallback",
+    "recordingDatOrderChanged": false,
+    "firmwareAndBlePreviewChanged": false,
+    "source8StartupFailureResolved": false
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "bytes": 1178112,
-      "sha256": "06C9C3E75378D34AD3152FF0108ED34B0EB0B729A60D27C58E08D1A07D170122"
+      "bytes": 1181184,
+      "sha256": "99EBA1A8835AC8B60A564FF2D180F6527123DF05EE44BFD231804976B3E28977"
     },
     {
       "path": "WILDX_console.exe.config",

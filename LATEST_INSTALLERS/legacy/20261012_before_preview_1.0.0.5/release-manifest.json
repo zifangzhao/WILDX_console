@@ -1,0 +1,118 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.4",
+  "releaseDate": "2026-10-12",
+  "status": "GUI-only restoration of existing BLE ROM DFU visibility",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.4.exe",
+    "bytes": 2245892,
+    "sha256": "DADB2995694C6CF5340FBD3ABA5FF6AAA755C0A4447DCAF3FCF4531E692B6CD2"
+  },
+  "compatibleFirmware": {
+    "repository": "https://github.com/zifangzhao/XE_NP",
+    "branch": "V2",
+    "directory": "LATEST_FIRMWARE/V2_NP2",
+    "loaderCrc32": "97C3716A",
+    "usbCrc32": "1138F666",
+    "appCrc32": "ED881256",
+    "fusedHexSha256": "5CB7FE3C436D90761A9435FA1ADA4FE4960D0865F0C8CF84F4EBB171D70D4CF4",
+    "usbOnlyHexSha256": "F4E9A80F6DC8EA588384F0684242C912D136EC73C63721CDE18B8CF919CD708B",
+    "appOnlyHexSha256": "8A4BB9985FB8C5F2940C9A866AA79BF3C1DBDAA32BE1DAA92AFA01791279F21E",
+    "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
+  },
+  "releaseValidation": {
+    "fullEndToEndPairQualified": false,
+    "applicationIncrementalBuilds": 1,
+    "targetedActualAssemblyChecks": 41,
+    "independentlyExtractedMatchingPayloads": 13,
+    "dependenciesAndUpdaterUnchanged": true,
+    "installerExecuted": false,
+    "firmwareChanged": false,
+    "hardwareAccess": false
+  },
+  "dfu": {
+    "route": "BLE opcode 5, destination 3; now visible in normal BLE Mode",
+    "historicalV2RomEntryConfirmed": "2026-09-28, ST-Link004B MCU001A0020434250062039314E, VTOR0x0BF90000 PC0x0BF924CC",
+    "historicalV2UsbEnumerationAndUploadValidated": false,
+    "directResidentUsbRomDfuCommand": false,
+    "recoveryLoaderUpdates": "APP-only .xenp, not fused HEX"
+  },
+  "buildProvenance": {
+    "baseGuiSourceCommit": "6fa0099008cac95f9ac927e7c930e00d7f167dd0",
+    "exeSha256": "06C9C3E75378D34AD3152FF0108ED34B0EB0B729A60D27C58E08D1A07D170122",
+    "frozenBleConnectionSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
+    "privateBleAndSdDevelopmentExcluded": true,
+    "changedProductionFiles": [
+      "mainForm.WildX.cs: NpBleForm(true)",
+      "Properties/AssemblyInfo.cs: 1.0.0.4"
+    ],
+    "evidence": "Note/DFU_VISIBILITY_20261012.md"
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "bytes": 1178112,
+      "sha256": "06C9C3E75378D34AD3152FF0108ED34B0EB0B729A60D27C58E08D1A07D170122"
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "bytes": 532,
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    },
+    {
+      "path": "OpenTK.dll",
+      "bytes": 5757952,
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "bytes": 24576,
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "bytes": 165888,
+      "sha256": "71F0EA0CAE654A3F262E788C6E1CE2338E5D26AFFDA9A754A8E9FFC05F24324E"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "bytes": 151552,
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "bytes": 364544,
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "bytes": 434,
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "bytes": 458,
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "bytes": 152064,
+      "sha256": "FFE5F39B244227E514A7D82D09565625918CFF64512A7FF3E08B1D3F2556F545"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "bytes": 54272,
+      "sha256": "57AA98783F83056ADADABDE399B0528E41C03FD42AB0B91DDCC5728523A02A77"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "bytes": 449,
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "bytes": 340,
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    }
+  ]
+}
