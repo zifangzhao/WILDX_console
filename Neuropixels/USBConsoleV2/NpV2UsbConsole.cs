@@ -38,6 +38,12 @@ namespace USB512_interface
                 !uint.TryParse(expectedUid.Substring(16,8),NumberStyles.HexNumber,CultureInfo.InvariantCulture,out third) || Uid0 != first || UidXor != (second ^ third))
                 throw new IOException("V2 service identity does not match the selected MCU UID.");
         }
+        internal void RequireDeviceUid(string expectedUid, string deviceUid)
+        {
+            RequireUid(expectedUid);
+            if (!String.Equals(expectedUid, deviceUid, StringComparison.OrdinalIgnoreCase))
+                throw new IOException("V2 USB path does not match the selected full MCU UID.");
+        }
         internal string ModeName
         {
             get
@@ -848,6 +854,7 @@ namespace USB512_interface
     internal sealed class NpV2RecordingResult
     {
         internal bool Complete;
+        internal bool CancelledBeforeCapture;
         internal string Error;
         internal string Warning;
         internal string Folder;
@@ -1523,6 +1530,17 @@ namespace USB512_interface
 
     internal static class NpV2Recording
     {
+        internal static bool ConfigurationReadyToArm(uint sourceState, Func<bool> cancelled)
+        {
+            if (cancelled()) throw new OperationCanceledException("Recording stopped during NP2013 configuration before data began.");
+            return sourceState == 10U;
+        }
+        internal static bool IsCancelledBeforeCapture(Exception error, uint received, bool armRequested, NpV2CaptureStatus capture)
+        {
+            return error is OperationCanceledException && received == 0U && !armRequested &&
+                capture != null && capture.Valid && capture.State != 255U && capture.Error == 0U &&
+                capture.ProducerError == 0U && capture.SourceError == 0U && capture.CaptureStartedMs == 0U;
+        }
         /* Keep the validated four-block RAW_IO transfer size. Read buffers are
          * copied to a preallocated RAM backlog and immediately rearmed; neither
          * verification, decoding nor disk latency holds a USB request slot. */
@@ -1599,7 +1617,7 @@ namespace USB512_interface
             var work = new BlockingCollection<Done>(buffers.ReadBuffers);
             var warnings = new ConcurrentQueue<string>();
             Exception workerError = null, verificationWarning = null, error = null;
-            bool started = false, protocolComplete = false, stopRequested = false, cancelSent = false;
+            bool started = false, protocolComplete = false, stopRequested = false, cancelSent = false, armRequested = false;
             NpV2CaptureStatus finalCapture = null;
             NpV2SourceStatus finalSource = null;
             NpV2DatRecorder dat = null;
@@ -1667,6 +1685,7 @@ namespace USB512_interface
                         NpV2ServiceStatus service = device.GetServiceStatus();
                         if (service.Mode != 2U || service.Busy != 0U) throw new IOException("V2 must be idle USB-stream mode before recording.");
                         NpV2CaptureStatus advertised = device.GetCaptureStatus();
+                        finalCapture = advertised;
                         if (!advertised.CurrentProfileSupported)
                             throw new IOException("The V2 firmware reports an unsupported NP2 USB sampling profile (format=" + advertised.Format +
                                 ", sample=" + advertised.SampleHz + " Hz, PSSI=" + advertised.PssiHz + " Hz, mask=0x" + advertised.ProbeMask.ToString("X1") + ").");
@@ -1720,12 +1739,7 @@ namespace USB512_interface
                             /* SETTLING=8 and RELEASE=9 are observable but the
                              * firmware deliberately rejects host-arm until the
                              * capture port is bound in READY=10. */
-                            if (finalCapture.SourceState == 10U) break;
-                            if (cancelled())
-                            {
-                                try { device.Cancel(); } catch { }
-                                throw new OperationCanceledException("Recording stopped during NP2013 configuration before data began.");
-                            }
+                            if (ConfigurationReadyToArm(finalCapture.SourceState, cancelled)) break;
                             double setupElapsed = clock.Elapsed.TotalSeconds;
                             if (setupElapsed > 200.0) throw new TimeoutException("NP2 source configuration did not reach the USB read-arm window within 200 seconds.");
                             if (setupElapsed >= nextSetupProgress)
@@ -1746,6 +1760,8 @@ namespace USB512_interface
                         GC.WaitForPendingFinalizers();
                         System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.SustainedLowLatency;
                         gcLatencyChanged = true;
+                        ConfigurationReadyToArm(finalCapture.SourceState, cancelled);
+                        armRequested = true; // An attempted host-arm is not a proven pre-capture cancellation.
                         device.ArmCapture();
                         queueFree();
                         double readArmStarted = clock.Elapsed.TotalSeconds;
@@ -1952,6 +1968,8 @@ namespace USB512_interface
             error = error ?? workerError;
             result.Error = DescribeError(error);
             result.Warning = JoinWarnings(warnings);
+            result.CancelledBeforeCapture = IsCancelledBeforeCapture(error, received, armRequested, finalCapture) &&
+                workerError == null && result.Warning == null;
             result.Complete = error == null && result.Warning == null && result.Verifier.Blocks == targetBlocks &&
                 finalCapture != null && finalCapture.CompleteFor(targetBlocks) && finalSource != null && finalSource.Error == 0U;
             result.ReceivedBlocks = received; result.VerifiedBlocks = result.Verifier.Blocks;
@@ -1961,6 +1979,7 @@ namespace USB512_interface
             result.FinalCapture = finalCapture; result.FinalSource = finalSource;
             File.WriteAllLines(Path.Combine(folder, "neuropixels_np2usb_status.txt"), new[] {
                 "complete=" + result.Complete,
+                "cancelled_before_capture=" + result.CancelledBeforeCapture,
                 "error=" + (result.Error ?? "none"),
                 "warning=" + (result.Warning ?? "none"),
                 "format=" + result.Verifier.FormatName,
@@ -2546,11 +2565,13 @@ namespace USB512_interface
 
         private string NpV2EnsureIdleStreamMode()
         {
+            string selectedUid = NpV2FirmwareForm.Uid(devicePath);
             NpV2ServiceStatus identity;
             bool ready;
             using (var device = NpV2UsbDevice.Open(devicePath))
             {
                 identity = device.GetServiceStatus();
+                identity.RequireDeviceUid(selectedUid, NpV2FirmwareForm.Uid(devicePath));
                 NpV2CaptureStatus capture = device.GetCaptureStatus();
                 NpV2SourceStatus source = device.GetSourceStatus();
                 ready = identity.Mode == 2U && identity.Busy == 0U && capture.State == 0U && source.State == 0U;
@@ -2562,7 +2583,7 @@ namespace USB512_interface
             Stopwatch wait = Stopwatch.StartNew();
             while (wait.Elapsed.TotalSeconds < 30.0)
             {
-                if (!running) throw new OperationCanceledException("Recording stopped while switching V2 USB mode.");
+                if (ce64StopRequested || !running) throw new OperationCanceledException("Recording stopped while switching V2 USB mode.");
                 Thread.Sleep(200);
                 foreach (string candidatePath in NpV2UsbDevice.EnumerateDevicePaths())
                 {
@@ -2571,7 +2592,8 @@ namespace USB512_interface
                         using (var candidate = NpV2UsbDevice.Open(candidatePath))
                         {
                             NpV2ServiceStatus status = candidate.GetServiceStatus();
-                            if (status.Uid0 != identity.Uid0 || status.UidXor != identity.UidXor || status.Mode != 2U || status.Busy != 0U) continue;
+                            status.RequireDeviceUid(selectedUid, NpV2FirmwareForm.Uid(candidatePath));
+                            if (status.Mode != 2U || status.Busy != 0U) continue;
                             NpV2CaptureStatus capture = candidate.GetCaptureStatus();
                             NpV2SourceStatus source = candidate.GetSourceStatus();
                             if (capture.State == 0U && source.State == 0U) { devicePath = candidatePath; return candidatePath; }
@@ -2648,7 +2670,7 @@ namespace USB512_interface
                     });
                 }
                 NpV2RecordingResult result = NpV2Recording.RunContinuousInFolder(streamPath, runFolder,
-                    delegate { return !running; },
+                    delegate { return ce64StopRequested || !running; },
                     delegate(NpV2RecordingProgress value)
                     {
                         Interlocked.Exchange(ref neuropixelsPayloadBytes, value.VerifiedBlocks * 46080L);
@@ -2684,6 +2706,7 @@ namespace USB512_interface
                     });
                 complete=result.Complete;metadataFailure=result.Error??result.Warning;
                 if(settings!=null) {
+                    settings.Context("np2_cancelled_before_capture",result.CancelledBeforeCapture);
                     if(result.DecodedDatSampleHz!=0 && result.DecodedDatProbeMask!=0)
                         settings.Actual((int)result.DecodedDatSampleHz,(int)result.DecodedDatSampleHz,(int)result.DecodedDatProbeMask,false,result.DecodedDatProbeMask!=1 && result.DecodedDatProbeMask!=2 && result.DecodedDatProbeMask!=4,"validated decoded NP2 wire format");
                     if(result.FinalCapture!=null)settings.Context("np2_capture_status_words",result.FinalCapture.Words);
@@ -2695,6 +2718,8 @@ namespace USB512_interface
                 if (result.Complete)
                     message = "Stopped WILD-X V2 NP2 USB recording cleanly: " + result.VerifiedBlocks.ToString("N0") + " verified blocks; " +
                         result.DecodedDatRows.ToString("N0") + " AP rows at " + result.DecodedDatSampleHz.ToString("N0") + " samples/s";
+                else if (result.CancelledBeforeCapture)
+                    message = "Stopped WILD-X V2 NP2 USB preparation before capture began; no USB blocks were captured. Setup files remain incomplete.";
                 else if (result.Error == null && result.ReceivedBlocks != 0U)
                     message = "Stopped WILD-X V2 NP2 best-effort recording: raw USB capture kept running despite warning(s). " +
                         (result.Warning ?? "See neuropixels_np2usb_status.txt for incomplete integrity details");

@@ -1,15 +1,14 @@
 {
   "application": "WILD-X Neuropixels Console",
   "version": "1.0.0.3",
-  "releaseDate": "2026-10-10",
-  "status": "Engineering release: checked USB/IMRO logging binaries packaged without rebuild",
-  "hardwareQualified": false,
-  "installerExecuted": false,
+  "releaseDate": "2026-10-11",
+  "status": "Engineering release: exact USB/UI-tested console, unchanged published firmware",
   "installer": {
     "file": "WILDX_console-Setup-1.0.0.3.exe",
-    "bytes": 2240976,
-    "sha256": "BD0DC44DCC43403CB8A770B71923A453BDCED72B1287C3247E1ACE01F887CFFF"
+    "bytes": 2248179,
+    "sha256": "34CA66023882429E7E1C29CBEA60B66257EC504ED2DED40A85B564E8AF04D8F0"
   },
+  "installerExecuted": false,
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
     "branch": "V2",
@@ -25,25 +24,43 @@
   "releaseValidation": {
     "rebuiltApplicationForPackaging": false,
     "firmwareRebuiltForPackaging": false,
-    "installerCompilationCount": 1,
-    "independentlyExtractedMatchingPayloads": 13,
-    "targetedNpc2ChecksPreviouslyPassed": 43,
-    "preferencesChecksPreviouslyPassed": 4,
     "hardwareAccessForPackaging": false,
+    "installerCompilationCount": 2,
+    "firstPackageRejected": "Identity check found newer bin/Release updater helpers; corrected to byte-identical helpers from the published 2026-10-10 installer.",
+    "independentlyExtractedMatchingPayloads": 13,
     "fullEndToEndPairQualified": false,
-    "usbHardwareEvidence": "Note/Tools/V2Usb/NP2_CONFIGURATION_20261010.md in XE_NP V2;10 headless production capture cases with IMRO receipts, DAT and preview callbacks"
+    "softwareChecks": {
+      "preArmCancelAndUid": 25,
+      "uiLifecycle": 134
+    },
+    "actualGuiHardwareChecks": 5046,
+    "actualGuiHardwareModes": [
+      "P1/30 kHz: 11.517 s, complete, 4492 verified blocks, 344984 DAT rows",
+      "P1+P2+P3/20 kHz: 11.331 s, complete, 8836 verified blocks, 226201 DAT rows per probe",
+      "Same-form repeated Start and preparation cancellation: no host-arm, zero captured bytes, incomplete metadata"
+    ],
+    "posthocMatchedDatBytes": 786114816,
+    "evidence": "Note/USB_UI_RELEASE_20261011.md; XE_NP V2 Note/Tools/V2SdLogger/PROGRESS_PLAN.md section 309"
+  },
+  "buildProvenance": {
+    "packagedExeSha256": "986AF3369664B19A740EF34C5DC53AA673D9AC535F4235E7638FDE52496DF68F",
+    "build": "Previously checked isolated Release component build; dependencies/exporter reused, not rebuilt.",
+    "bleCompileInputSha256": "2DD24EBE1C3A2460F0CDA3C776B961DDBE1F989B3F8C09529C6779920D0AAA5F",
+    "privateBleCandidateExcluded": true,
+    "workingTreeDefaultBuildNotReleaseIdentity": "A private Compile-item override used the recorded F779-era BLE input; this package is pinned to the tested binary, not an assertion that the current dirty/default source tree reproduces it."
   },
   "firmwareUpdate": {
     "gui": "Firmware Update > Recovery loader / Update NP2 APP",
     "transport": "UID-pinned protected WinUSB APP updater",
     "residentUsbUpdate": "USB-only addressed HEX over SWD; APP updater cannot replace resident USB",
-    "residentUsbRomDfu": false
+    "residentUsbRomDfu": false,
+    "updaterHelpers": "Unchanged byte-identical runtime from published 2026-10-10 package; no new update-cycle qualification."
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "bytes": 1163776,
-      "sha256": "3C70D2104979AA468E507CD6DF1CCCB1E84CE9FE20E5EC1C9FEAC261C2FC0BC1"
+      "bytes": 1184256,
+      "sha256": "986AF3369664B19A740EF34C5DC53AA673D9AC535F4235E7638FDE52496DF68F"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -62,18 +79,18 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 165376,
-      "sha256": "179E3A6A2D55BAA2C3FF49FB98AE577D1F7A125D0405C82530AC3DF3A07C3B15"
+      "bytes": 165888,
+      "sha256": "71F0EA0CAE654A3F262E788C6E1CE2338E5D26AFFDA9A754A8E9FFC05F24324E"
     },
     {
       "path": "NPConfigurator/NPConfigurator.exe",
       "bytes": 151552,
-      "sha256": "F115ABE51C4DE082DCE08E723E25652320EF09DC121DFD6E6621F7635B97A6EE"
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6"
     },
     {
       "path": "NPConfigurator/NPConfigurator.dll",
       "bytes": 364544,
-      "sha256": "2A58ADCE74B1D40A32B026C64F2359F31C15F1C2734E5D47BE6B2A38D463F43B"
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E"
     },
     {
       "path": "NPConfigurator/NPConfigurator.deps.json",
@@ -107,11 +124,13 @@
     }
   ],
   "limitations": [
-    "ROM DFU is not available from the V2 USB GUI; protected recovery is not STM32 ROM DFU.",
-    "P1/P2 solo15/20/30k, dual15/20k and triple15/20k passed bounded headless USB tests; longest new run59.185s.",
-    "Multi-probe30k,7.5k and P3-alone/other-pair USB profiles are unqualified or unsupported.",
-    "Three selected NP2013 IMROs are applied and checked before USB capture; analog/electrode routing remains unqualified.",
-    "The SD/BLE APP ED881256 is unchanged; do not assume three-probe SD or BLE IMRO application from USB results.",
-    "GUI appearance/live interaction, clean install/uninstall, full fused boot and firmware-update cycles were not retested for this packaging pass."
+    "Engineering USB/UI release, not hours-long endurance, clean-install, full fused boot/update or SD/BLE release-pair qualification.",
+    "P1/P2 solo 15/20/30 kHz, dual 15/20 kHz and triple 15/20 kHz reuse prior bounded headless USB evidence; longest retained triple20 run 59.185 s.",
+    "New actual GUI captures are P1/30 kHz and triple/20 kHz; both zero reported errors, warnings and raw/decoded/display drops, with every saved DAT byte matching actual-app RAW replay.",
+    "Multi-probe30 kHz remains warned/unqualified; USB7.5 kHz, P3-alone and other probe pairs are unsupported.",
+    "Analog/electrode mapping remains unqualified; RAW/DAT replay is not independent analog calibration.",
+    "Interruption remains incomplete; there is no gapless mid-stream USB auto-reconnect.",
+    "The published SD/BLE APP ED881256 is retained; hardware USB/UI tests used resident USB1138F666, not a new full-stack test of the published fused APP.",
+    "Protected recovery is not STM32 ROM DFU."
   ]
 }

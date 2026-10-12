@@ -674,6 +674,69 @@ internal static class NpV2UsbConsoleTests
         slow.Progress(16);
         Check(slow.StopExpired(16), "trickling completions cannot keep Stop alive forever");
     }
+    static void PreArmTests()
+    {
+        bool stop = false;
+        Func<bool> cancelled = delegate { return stop; };
+        Check(!NpV2Recording.ConfigurationReadyToArm(9U, cancelled), "Release must not admit host-arm");
+        Check(NpV2Recording.ConfigurationReadyToArm(10U, cancelled), "READY must admit an uncancelled capture");
+        stop = true;
+        foreach (uint state in new[] { 9U, 10U })
+        {
+            bool rejected = false;
+            try { NpV2Recording.ConfigurationReadyToArm(state, cancelled); }
+            catch (OperationCanceledException) { rejected = true; }
+            Check(rejected, "READY must not bypass owner Stop");
+        }
+        int arms = 0;
+        stop = false;
+        Check(NpV2Recording.ConfigurationReadyToArm(10U, cancelled), "Initial READY check failed");
+        // Stop arrives during applied-receipt/pipe/GC work, after READY was observed.
+        stop = true;
+        bool lateRejected = false;
+        try { NpV2Recording.ConfigurationReadyToArm(10U, cancelled); arms++; }
+        catch (OperationCanceledException) { lateRejected = true; }
+        Check(lateRejected && arms == 0, "Late pre-arm Stop armed capture");
+        stop = false;
+        NpV2Recording.ConfigurationReadyToArm(10U, cancelled); arms++;
+        Check(arms == 1, "Uncancelled pre-arm boundary rejected capture");
+
+        var beforeCapture = IdleCapture();
+        var cancellation = new OperationCanceledException("owner Stop");
+        Check(NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, beforeCapture), "Proven pre-arm Stop was reported as a capture failure");
+        beforeCapture.Words[2] = 1U; beforeCapture.Words[22] = 10U;
+        Check(NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, beforeCapture), "READY pre-arm Stop was reported as a capture failure");
+        Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, true, beforeCapture), "Stop after attempted host-arm was called pre-capture");
+        Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 1U, false, beforeCapture), "Received USB data was called pre-capture");
+        beforeCapture.Words[17] = 1U;
+        Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, beforeCapture), "Started source was called pre-capture");
+        beforeCapture.Words[17] = 0U;
+        Check(!NpV2Recording.IsCancelledBeforeCapture(new IOException("firmware/transport error"), 0U, false, beforeCapture), "Another error was classified as user Stop");
+        Check(!NpV2Recording.IsCancelledBeforeCapture(null, 0U, false, beforeCapture), "Successful empty result was classified as cancellation");
+        Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, null), "Unknown capture receipt was called pre-capture");
+        foreach (int word in new[] { 3, 12, 23 })
+        {
+            beforeCapture.Words[word] = 1U;
+            Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, beforeCapture), "Faulted capture receipt was classified as user Stop");
+            beforeCapture.Words[word] = 0U;
+        }
+        beforeCapture.Words[2] = 255U;
+        Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, beforeCapture), "Failed capture receipt was classified as user Stop");
+        beforeCapture.Words[0] = 0U;
+        Check(!NpV2Recording.IsCancelledBeforeCapture(cancellation, 0U, false, beforeCapture), "Invalid capture receipt was called pre-capture");
+
+        const string selected = "112233445566778899AABBCC";
+        const string xorCollision = "112233445566778999AABBCD";
+        var service = new NpV2ServiceStatus { Magic = NpV2ServiceStatus.MagicValue, Abi = 4U,
+            Uid0 = 0x11223344U, UidXor = 0x55667788U ^ 0x99aabbccU };
+        service.RequireDeviceUid(selected, selected.ToLowerInvariant()); checks++;
+        service.RequireUid(xorCollision); // Both status fields collide; the full path must still reject it.
+        RejectIo(() => service.RequireDeviceUid(selected, xorCollision), "XOR-colliding rebound device accepted");
+        RejectIo(() => service.RequireDeviceUid(selected, null), "Rebound path without a full UID accepted");
+        RejectIo(() => service.RequireDeviceUid(null, selected), "Missing selected full UID accepted");
+        service.Uid0 ^= 1U;
+        RejectIo(() => service.RequireDeviceUid(selected, selected), "Correct path with a mismatched service identity accepted");
+    }
     static void TopologyTests()
     {
         var direct = NpV2UsbTopology.FromLocationPath("PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(3)");
@@ -737,6 +800,9 @@ internal static class NpV2UsbConsoleTests
     }
     private static int Run(string[] args)
     {
+        if(args.Length==1 && args[0]=="--pre-arm-only"){
+            PreArmTests();Console.WriteLine("PASS: "+checks+" focused pre-arm Stop/full-UID rebind checks (no hardware).");return 0;
+        }
         if(args.Length==1 && args[0]=="--np2-config-only"){
             Np2ConfigurationTests();Console.WriteLine("PASS: "+checks+" focused NPC2 codec/staging/applied-receipt checks (no hardware).");return 0;
         }
@@ -751,7 +817,7 @@ internal static class NpV2UsbConsoleTests
             }
             SelfTestReportTests();Console.WriteLine("PASS: "+checks+" focused V2 self-test report/admission checks (no hardware accessed).");return 0;
         }
-        WireTests(); DecoderTests(); DecodeEveryChannelTests(); LargeCounterTests(); DeferredRawD8DecoderTests(); BufferedWriterTests(); ConcurrentPreviewTests(); StatusTests(); SelfTestReportTests(); ReadWatchdogTests(); TopologyTests(); Np2ConfigurationTests();
+        WireTests(); DecoderTests(); DecodeEveryChannelTests(); LargeCounterTests(); DeferredRawD8DecoderTests(); BufferedWriterTests(); ConcurrentPreviewTests(); StatusTests(); SelfTestReportTests(); ReadWatchdogTests(); PreArmTests(); TopologyTests(); Np2ConfigurationTests();
         if ((args.Length == 1 || args.Length == 2) && args[0] == "--hil-topology")
         {
             string path = args.Length == 2 ? args[1] : null;

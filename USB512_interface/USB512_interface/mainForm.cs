@@ -820,7 +820,7 @@ namespace USB512_interface
                 {
                     Path = path,
                     Kind = v2 ? DeviceKind.NpV2 : v1 ? DeviceKind.XeNp : DeviceKind.NpUnavailable,
-                    DisplayName = v2 ? "WILD-X V2 / NP2 USB (20 kHz raw)" :
+                    DisplayName = v2 ? "WILD-X V2 / NP2 USB" :
                         v1 ? "WILD-X V1 / NP1 USB (384 AP + 384 LFP)" :
                         (String.IsNullOrWhiteSpace(productName) ? "Unidentified NP USB device" : productName) +
                         " (NP service unavailable; recording disabled)"
@@ -1221,6 +1221,16 @@ namespace USB512_interface
             NpCancelRecovery();
             if (!running && captureThread == null)
                 return;
+
+            if (selectedDeviceKind == DeviceKind.NpV2)
+            {
+                // The capture owner cancels/drains and posts completion. Keep
+                // every UI/device owner busy until that callback releases it.
+                ce64StopRequested = true;
+                btnStop.Enabled = false;
+                lblRecInfo.Text = "Stopping V2 NP USB; preserving completed blocks...";
+                return;
+            }
 
             // CE64 must freeze, drain, and then disarm on its capture thread.
             // Closing the physical-drive handle here would discard its final
@@ -4072,7 +4082,7 @@ namespace USB512_interface
             if (btnNpLogger != null) btnNpLogger.Enabled = !running && !ztestRunning;
             if(btnSdInfo!=null)btnSdInfo.Enabled=!running && selectedDeviceKind==DeviceKind.XeNp && !String.IsNullOrWhiteSpace(devicePath);
             btnStart.Enabled = !running && selectedDeviceKind != DeviceKind.NpUnavailable && !String.IsNullOrWhiteSpace(devicePath) && !String.IsNullOrWhiteSpace(saveFolder);
-            btnStop.Enabled = running;
+            btnStop.Enabled = running && (selectedDeviceKind != DeviceKind.NpV2 || !ce64StopRequested);
             btnDfu.Text="Firmware Update";
             btnDfu.Enabled = !running && !ztestRunning && !firmwareManagementActive && systemInfoActive==0 && deviceRefreshActive==0 && npRecoveryCancelled;
             if (btnImpedance != null) btnImpedance.Enabled = !running && !ztestRunning && selectedDeviceKind == DeviceKind.Ce64Msc && !String.IsNullOrWhiteSpace(devicePath);
@@ -4204,7 +4214,7 @@ namespace USB512_interface
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             StopCapture();
-            if(captureThread!=null && captureThread.IsAlive) {
+            if(captureThread!=null && (captureThread.IsAlive || selectedDeviceKind==DeviceKind.NpV2)) {
                 e.Cancel=true;
                 lblRecInfo.Text="Stopping USB; waiting for buffered data to finish saving...";
             }
