@@ -1,0 +1,191 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.13",
+  "releaseDate": "2026-10-13",
+  "releaseTag": "RECORDING_INFO_20261013",
+  "status": "Software-checked recording-info layout fix; prior SR/IMU behavior retained",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.13.exe",
+    "sha256": "032E786EC0F402CC0F6E9861007D4F05E9B5E22084F790EEC8ABBAF51185024B",
+    "bytes": 2304049
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "9152A8862D1815EF3F19D293F71562A0691910D85740B1B22C358B90AC7A1B50",
+      "bytes": 1279488
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2",
+      "bytes": 532
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA",
+      "bytes": 5757952
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B",
+      "bytes": 24576
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "C5D398F5839F647B20291A97F809809E214624DA86F6A692CE9A1108B3FEB654",
+      "bytes": 211456
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6",
+      "bytes": 151552
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E",
+      "bytes": 364544
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9",
+      "bytes": 434
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782",
+      "bytes": 458
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A",
+      "bytes": 152064
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC",
+      "bytes": 55808
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01",
+      "bytes": 449
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306",
+      "bytes": 340
+    }
+  ],
+  "compatibleFirmware": {
+    "repository": "https://github.com/zifangzhao/XE_NP",
+    "branch": "V2",
+    "directory": "LATEST_FIRMWARE/V2_NP2",
+    "loaderCrc32": "6408DBB8",
+    "usbCrc32": "BFF0A8A2",
+    "appCrc32": "E07FB882",
+    "fusedHexSha256": "674FEB9E365A5F1C91D1A004B4D7D35D447F238E2CBF122A1A79AF0A55E82154",
+    "usbOnlyHexSha256": "0FD1F92E529A5593D5C9DE1B84570EA8CF4B91D031C6A148FD2F0F1FD2A33D51",
+    "appOnlyHexSha256": "3E7CC1944BCB1190374AA7C09552991C122A031DB64769A3ABB1263285BF95AD",
+    "appUpdateContainerSha256": "720A6CFD9DC31211CC8FD32600105695794DBFA773DCA07046D4C80BA3EBAD95"
+  },
+  "layout": {
+    "wrappedRecordingStatus": true,
+    "wrappedOutputFileLink": true,
+    "contentSizedRows": true,
+    "dpiAwareCardHeight": true,
+    "fullTextNoEllipsis": true,
+    "resizeAndTextChangeRefresh": true
+  },
+  "releaseValidation": {
+    "guiBuildWarnings": 0,
+    "guiBuildErrors": 0,
+    "offscreenRecordingInfoChecks": 60,
+    "existingStandaloneChecks": 294,
+    "minimumWindowAndLongPathsVerified": true,
+    "scaledLayoutsVerifiedPercent": [
+      100,
+      150,
+      200
+    ],
+    "independentInstallerExtraction": true,
+    "extractedRuntimeFilesVerified": 13,
+    "nonGuiRuntimeFilesUnchanged": 12,
+    "protectedSourceAndOutputsUnchanged": true,
+    "installerExecuted": false,
+    "hardwareAccess": false,
+    "firmwareBuildOrFlash": false,
+    "fullEndToEndPairQualified": false,
+    "cleanInstallUninstallQualified": false
+  },
+  "retainedSrImuHardwareEvidence": {
+    "guiSha256": "53E5AFDB5A4C238C7A1AAC8C80F86C63D716B57F55BD1D0E4CD052C78FD9963B",
+    "installer": "WILDX_console-Setup-1.0.0.12-SR_IMU_20261013.exe",
+    "validation": {
+      "scope": "Existing short real USB capture and exact checked GUI; packaging checks only this pass",
+      "mask": 7,
+      "sampleHz": 20000,
+      "requestedSeconds": 30,
+      "dataSeconds": 29.354,
+      "received": 22916,
+      "verified": 22916,
+      "rawDrops": 0,
+      "decodedDrops": 0,
+      "imuRecords": 584,
+      "validAccelGyroDisplayCallbacks": 125,
+      "magnetometerAvailable": false,
+      "sensorError": 9,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "installerExecuted": false,
+      "hardwareAccessDuringPackaging": false,
+      "fullEndToEndPairQualified": false,
+      "fusedBootRetested": false,
+      "damagedShankHardwareQualified": false,
+      "enduranceQualified": false
+    },
+    "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this layout-only release"
+  },
+  "buildProvenance": {
+    "sourceBase": "9837e7f71456094f78589b063e05147365dc824c",
+    "guiSha256": "9152A8862D1815EF3F19D293F71562A0691910D85740B1B22C358B90AC7A1B50",
+    "guiBuild": "Private component-only cached Release build; no project reference/helper/SDK build",
+    "helpersAndCompanion": "Twelve exact non-GUI runtime files retained from published SR/IMU installer",
+    "sourceChangesThisRelease": [
+      "USB512_interface/USB512_interface/mainForm.WildX.cs",
+      "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    ],
+    "retainedPendingSensorInputs": [
+      {
+        "path": "USB512_interface\\USB512_interface\\NpUsbSensorMonitor.cs",
+        "sha256": "5F2AE74B68B86B05ED16C7BD0D5BBFF7B1AF169E9BA39ADCC7138E4CEB195618"
+      },
+      {
+        "path": "USB512_interface\\USB512_interface\\NpUsbSensors.cs",
+        "sha256": "C111F11A6AE71F6C33FA0C103C2A29E0DC57F9D9633E30B32E8455A74D5E8FBF"
+      },
+      {
+        "path": "USB512_interface\\USB512_interface\\mainForm.SystemInfo.cs",
+        "sha256": "1C29D22EB2838214E44B77DC0C1C92CE60F22DF7992EF3900D7F7200604F1D66"
+      },
+      {
+        "path": "Neuropixels\\USBConsoleV2\\NpV2UsbConsole.cs",
+        "sha256": "F16C13AC7F253C25C42A8C7E4FB5BE834F7983CB0615AB9E7416734DE7865E4C"
+      },
+      {
+        "path": "Neuropixels\\Tests\\TestNp2UsbImuLifecycle.cs",
+        "sha256": "E73FA1ACC837BADB4BFA6A00FCFC11FA28B8187C18BEBBB7DF1AA0096A549A59"
+      }
+    ],
+    "sensorSourceIntegration": "Previous SR/IMU source remains locally preserved and pending owner integration; unchanged by this layout release",
+    "evidence": "Note/RECORDING_INFO_LAYOUT_20261013.md"
+  },
+  "knownLimitations": [
+    "Magnetometer unavailable (error9); accelerometer/gyro valid.",
+    "Short three-probe 20k USB test only, not endurance or all rates.",
+    "Shank-only SR warning policy is USB-only; actual damaged probe not qualified.",
+    "Existing recovery and logger unchanged; new safer boot architecture not implemented.",
+    "Installer clean-install/uninstall and fused boot cycle not newly qualified.",
+    "This GUI revision was checked offscreen; no new device or clean installation qualification."
+  ],
+  "previousPublishedInstaller": "legacy/20261013_before_recording_info_1.0.0.13/WILDX_console-Setup-1.0.0.12-SR_IMU_20261013.exe"
+}

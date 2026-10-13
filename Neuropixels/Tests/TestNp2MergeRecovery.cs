@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ static class Np2MergeRecoveryTests {
  static void Check(bool ok,string why){checks++;if(!ok)throw new Exception(why);}
  static object CallTyped(Type t,object target,string name,Type[] types,params object[] args){
   var method=t.GetMethod(name,All,null,types,null);if(method==null)throw new MissingMethodException(t.FullName,name+"("+String.Join(",",Array.ConvertAll(types,x=>x.Name))+")");
-  try{return method.Invoke(target,args);}catch(TargetInvocationException ex){throw new InvalidOperationException("Fixture call "+name+" failed",ex.InnerException??ex);}
+  try{return method.Invoke(target,args);}catch(TargetInvocationException ex){ExceptionDispatchInfo.Capture(ex.InnerException??ex).Throw();throw;}
  }
  static object Call(object target,string name,params object[] args){return CallTyped(target.GetType(),target,name,Array.ConvertAll(args,x=>x.GetType()),args);}
  static object Get(object o,string field){return o.GetType().GetField(field,All).GetValue(o);}
@@ -108,7 +109,7 @@ static class Np2MergeRecoveryTests {
   object form=FormatterServices.GetUninitializedObject(formType);
   foreach(string name in new[]{"btnStart","btnStop","btnRefresh","btnNpLogger","btnSdInfo","btnDfu","btnStreams","btnSystemInfoRefresh"})Set(form,name,new Button());
   Set(form,"lblRecInfo",new Label());Set(form,"comboDrives",new ComboBox());Set(form,"npAutoRecover",new CheckBox{Checked=true});Set(form,"npRetryTimer",new System.Windows.Forms.Timer());
-  foreach(string name in new[]{"npPortConfigurations","npV2PendingMerges","npV2HostConfigurations","npV2ApplyConfigurations","npV2PersistedConfigurations"}){var f=formType.GetField(name,All);f.SetValue(form,Activator.CreateInstance(f.FieldType));}
+  foreach(string name in new[]{"npPortConfigurations","npV2HostConfigurations","npV2ApplyConfigurations","npV2PersistedConfigurations"}){var f=formType.GetField(name,All);f.SetValue(form,Activator.CreateInstance(f.FieldType));}
   Set(form,"selectedDeviceKind",Enum.Parse(formType.GetNestedType("DeviceKind",All),"NpV2"));Set(form,"saveFolder",root);
   Set(form,"devicePath","usb#vid_1209&pid_b387#npv2-001a0004434250062039314e#{fixture}");Set(form,"npV2RequestedProbeMask",7U);Set(form,"npV2RequestedSampleHz",15000U);return form;
  }

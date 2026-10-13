@@ -1,6 +1,6 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.13**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.14**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -47,7 +47,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current engineering installer is [WILDX 1.0.0.13](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.13.exe), packaged on 2026-10-13. Recording status and file paths now wrap in a card that grows with their content. The shared workflow, calibration, recording bundles, V1 media preview and V2 SR/IMU behavior are retained. The exact release app passed offscreen layout and existing standalone checks; all 13 runtime files were independently extracted and verified. See [layout fix and release validation](Note/RECORDING_INFO_LAYOUT_20261013.md).
+The current engineering installer is [WILDX 1.0.0.14](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.14.exe), packaged on 2026-10-13. Recording status and file paths now wrap in a card that grows with their content. The shared workflow, calibration, recording bundles, V1 media preview and V2 SR/IMU behavior are retained. V2 now writes a combined DAT live when the merge option is enabled: each sample contains a complete 384-channel block per active probe in physical connector order. The actual app passed live file-growth/byte-order, calibration, recovery and UI checks; all 13 runtime files were independently extracted and verified. See [live DAT validation](Note/LIVE_COMBINED_DAT_20261013.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 

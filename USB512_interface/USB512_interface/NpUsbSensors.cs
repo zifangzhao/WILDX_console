@@ -6,7 +6,7 @@ namespace USB512_interface {
  // CE64-compatible 16 x 16-bit layout on an explicit 1.25 kHz held-value grid.
  internal sealed class NpUsbSensors : IDisposable {
   private readonly NpMisc1250 uniform;
-  internal long Misc1250Records { get { return uniform.Records; } }
+  internal long Misc1250Records { get { return uniform==null?0:uniform.Records; } }
   private bool haveImu,haveRecord,haveSession;
   private uint lastImu,lastRecord,session;
   internal long Records,ImuSamples,ImuSequenceGaps;
@@ -18,11 +18,12 @@ namespace USB512_interface {
   internal NpImuDisplay GetDisplay() {return new NpImuDisplay {
    Values=(double[])displayValues.Clone(),Valid=Valid,Sequence=displaySequence,
    DeviceMs=displayTick,ImuError=ImuError,EnvironmentError=EnvironmentError,Overflow=Overflow};}
-  internal NpUsbSensors(string folder) {
+  internal NpUsbSensors(string folder):this(folder,true) {}
+  internal NpUsbSensors(string folder,bool save) {
    // Keep one canonical sensor sidecar.  The 1.25 kHz held-value stream is
    // the useful acquisition product; raw metadata packets and a duplicate
    // CSV made each NP USB recording needlessly large and ambiguous.
-   uniform=new NpMisc1250(folder);
+   if(save)uniform=new NpMisc1250(folder);
   }
   private static uint U(byte[] b,int o){return BitConverter.ToUInt32(b,o);}
   private static int I(byte[] b,int o){return BitConverter.ToInt32(b,o);}
@@ -62,7 +63,7 @@ namespace USB512_interface {
    for(int axis=0;axis<9;axis++)displayValues[axis]=I(b,o+48+axis*4)/(axis<3?1e6:1e3);
    displaySequence=seq;displayTick=U(b,o+32);
    Records++;
-   uniform.FeedSnapshot(b,o,observedMs);
+   if(uniform!=null)uniform.FeedSnapshot(b,o,observedMs);
    if((Valid&1)!=0 && (!haveImu || seq!=lastImu)) {
     if(haveImu) {uint delta=unchecked(seq-lastImu);if(delta>1)ImuSequenceGaps+=delta-1;}
     ImuSamples++;lastImu=seq;haveImu=true;
@@ -76,7 +77,7 @@ namespace USB512_interface {
     I(b,o+60)/1e3,I(b,o+64)/1e3,I(b,o+68)/1e3,magText,
     ImuError,EnvironmentError,Overflow,MissedEstimate);
   }
-  public void Dispose(){uniform.Dispose();}
+  public void Dispose(){if(uniform!=null)uniform.Dispose();}
  }
 
  internal sealed class NpImuDisplay {

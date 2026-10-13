@@ -46,6 +46,13 @@ if($LASTEXITCODE){throw 'NP2 BLE configuration tests did not compile.'}
 & $bleConfig $app
 if($LASTEXITCODE){throw 'NP2 BLE configuration regression failed.'}
 & (Join-Path $PSScriptRoot 'test_np2_degraded_chains.ps1') -Compiler $compiler -OutputDirectory (Join-Path $output 'np2-degraded-chains')
+& (Join-Path $PSScriptRoot 'test_np2_live_dat.ps1') -Compiler $compiler -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'np2-live-dat')
+$imu=Join-Path $output 'TestNp2UsbImuLifecycle.exe'
+$usbSource=Join-Path $PSScriptRoot 'USB512_interface\USB512_interface'
+& $compiler /nologo /optimize+ "/out:$imu" (Join-Path $PSScriptRoot 'Neuropixels\Tests\TestNp2UsbImuLifecycle.cs') "$usbSource\NpUsbSensorMonitor.cs" "$usbSource\NpUsbSensors.cs" "$usbSource\NpClockFit.cs" "$usbSource\NpClockJournal.cs"
+if($LASTEXITCODE){throw 'USB IMU lifecycle fixture did not compile.'}
+& $imu (Join-Path $PSScriptRoot 'Neuropixels\USBConsoleV2\NpV2UsbConsole.cs') "$usbSource\mainForm.SystemInfo.cs" (Join-Path $output ('imu-lifecycle-'+[Guid]::NewGuid().ToString('N')))
+if($LASTEXITCODE){throw 'USB IMU lifecycle checks failed.'}
 $updater=Join-Path (Split-Path -Parent $app) 'FirmwareUpdater\XeNpFirmwareUpdater.exe'
 & $updater --selector-self-test
 if($LASTEXITCODE){throw 'Updater selector regression failed.'}

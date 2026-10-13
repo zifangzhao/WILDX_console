@@ -929,7 +929,7 @@ namespace USB512_interface
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (running || npV2MergeActive || systemInfoActive!=0 || String.IsNullOrWhiteSpace(devicePath) || String.IsNullOrWhiteSpace(saveFolder))
+            if (running || systemInfoActive!=0 || String.IsNullOrWhiteSpace(devicePath) || String.IsNullOrWhiteSpace(saveFolder))
                 return;
             if (selectedDeviceKind == DeviceKind.NpUnavailable)
             {
@@ -945,7 +945,6 @@ namespace USB512_interface
                      selectedDeviceKind == DeviceKind.XeNp ? "WILDX_" :
                      selectedDeviceKind == DeviceKind.Ce64Msc ? "WILD64_" : "USB512_") +
                     DateTime.Now.ToString(selectedDeviceKind==DeviceKind.XeNp?"yyyy-MM-dd_HH-mm-ss_fff":"yyyy-MM-dd_HH-mm-ss"));
-                if(!npInternalRestart)npV2PendingMerges.Clear();
                 runFolder=NpSegmentFolder(runFolder);
                 if(selectedDeviceKind==DeviceKind.XeNp && Directory.Exists(runFolder))
                     runFolder+="_"+Guid.NewGuid().ToString("N").Substring(0,8);
@@ -1227,9 +1226,7 @@ namespace USB512_interface
 
         private void StopCapture()
         {
-            if(npV2MergeActive) {npV2MergeCancelled=true;btnStop.Enabled=false;lblRecInfo.Text="Cancelling NP2 merge; per-probe recordings retained…";return;}
             NpCancelRecovery();
-            if(npV2MergeActive)return;
             if (!running && captureThread == null)
                 return;
 
@@ -4102,12 +4099,12 @@ namespace USB512_interface
 
         private void UpdateStartEnabled()
         {
-            if(calibrationButton!=null)calibrationButton.Enabled=!running && !npV2MergeActive && !firmwareManagementActive && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2);
+            if(calibrationButton!=null)calibrationButton.Enabled=!running && !firmwareManagementActive && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2);
             if(npAutoRecover!=null)npAutoRecover.Visible=selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2;
             if (btnNpLogger != null) btnNpLogger.Enabled = !running && !ztestRunning;
             if(btnSdInfo!=null)btnSdInfo.Enabled=!running && selectedDeviceKind==DeviceKind.XeNp && !String.IsNullOrWhiteSpace(devicePath);
             btnStart.Enabled = !running && npRecoveryCancelled && selectedDeviceKind != DeviceKind.NpUnavailable && !String.IsNullOrWhiteSpace(devicePath) && !String.IsNullOrWhiteSpace(saveFolder);
-            btnStop.Enabled = npV2MergeActive ? !npV2MergeCancelled : running && (selectedDeviceKind != DeviceKind.NpV2 || !ce64StopRequested);
+            btnStop.Enabled = running && (selectedDeviceKind != DeviceKind.NpV2 || !ce64StopRequested);
             btnDfu.Text="Firmware Update";
             btnDfu.Enabled = !running && !ztestRunning && !firmwareManagementActive && systemInfoActive==0 && deviceRefreshActive==0 && npRecoveryCancelled;
             if (btnImpedance != null) btnImpedance.Enabled = !running && !ztestRunning && selectedDeviceKind == DeviceKind.Ce64Msc && !String.IsNullOrWhiteSpace(devicePath);
@@ -4167,7 +4164,6 @@ namespace USB512_interface
             running = false;
             try {if(NpFinishRecovery(message))return;}
             catch(Exception ex) {npRecoveryCancelled=true;message="Capture error: recovery journal failed: "+ex.Message;}
-            if(NpV2BeginMergeFinalization(message))return;
             FinishCapturePresentation(message);
         }
 

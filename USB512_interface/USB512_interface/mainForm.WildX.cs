@@ -119,7 +119,7 @@ namespace USB512_interface
                 if(!NpControlsAvailable)return;
                 try{ShowNpProbeConfiguration(this);}catch(Exception ex){MessageBox.Show(this,ex.Message,"Probe configuration",MessageBoxButtons.OK,MessageBoxIcon.Error);}
             };
-            calibrationButton.Click+=delegate {if(!running && !npV2MergeActive && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
+            calibrationButton.Click+=delegate {if(!running && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
             WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,probeConfigurationButton,calibrationButton),0,4);
             npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,5);
             online.Controls.Add(Card("USB acquisition",null,capture),0,0);

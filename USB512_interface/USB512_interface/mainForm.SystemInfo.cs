@@ -7,8 +7,9 @@ namespace USB512_interface
 {
     public partial class Form1
     {
-        private int systemInfoActive, systemInfoGeneration;
+        private int systemInfoActive, systemInfoGeneration, idleNpSensorPosted;
         private bool firmwareManagementActive;
+        private System.Threading.Timer idleNpSensorTimer;
         private NpSystemInfo systemInfo;
         private TextBox systemInfoSummary;
         private Button btnSystemInfoRefresh;
@@ -31,6 +32,46 @@ namespace USB512_interface
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom, Text = "Select a device to view firmware and SD-card information." };
             panel.Controls.AddRange(new Control[] { btnSystemInfoRefresh, details, systemInfoSummary });
             Controls.Add(panel);
+            idleNpSensorTimer = new System.Threading.Timer(delegate {
+                if (Interlocked.CompareExchange(ref idleNpSensorPosted, 1, 0) != 0) return;
+                try { PostToUi(delegate { Interlocked.Exchange(ref idleNpSensorPosted, 0); RefreshIdleNp2Sensor(); }); }
+                catch { Interlocked.Exchange(ref idleNpSensorPosted, 0); }
+            }, null, 250, 250);
+            FormClosed += delegate { idleNpSensorTimer.Dispose(); };
+        }
+
+        private bool CanRefreshIdleNp2Sensor()
+        {
+            return selectedDeviceKind == DeviceKind.NpV2 && !String.IsNullOrWhiteSpace(devicePath) &&
+                !running && !ztestRunning && !firmwareManagementActive && !DownloadBusy && !BleInUse &&
+                deviceRefreshActive == 0 && npRecoveryCancelled && !npRecoveryAttempt;
+        }
+
+        private void RefreshIdleNp2Sensor()
+        {
+            if (!CanRefreshIdleNp2Sensor() || Interlocked.CompareExchange(ref systemInfoActive, 1, 0) != 0) return;
+            string selectedPath = devicePath; int generation = systemInfoGeneration;
+            ThreadPool.QueueUserWorkItem(delegate {
+                NpImuDisplay display = null;
+                try {
+                    using (var device = NpV2UsbDevice.Open(selectedPath)) {
+                        NpV2ServiceStatus service = device.GetServiceStatus();
+                        if (service.Mode != 2U || service.Busy != 0U) return;
+                        NpV2CaptureStatus capture = device.GetCaptureStatus();
+                        if (capture.State != 0U || capture.SourceState != 0U) return;
+                        using (var monitor = new NpUsbSensorMonitor(device, String.Empty, selectedPath, false, delegate(NpImuDisplay value) { display = value; }))
+                            monitor.FeedSnapshot(device.GetSensorSnapshot(), 0);
+                    }
+                } catch { }
+                finally {
+                    try { PostToUi(delegate {
+                            Interlocked.Exchange(ref systemInfoActive, 0);
+                            if (display != null && generation == systemInfoGeneration && String.Equals(selectedPath, devicePath, StringComparison.OrdinalIgnoreCase) && CanRefreshIdleNp2Sensor())
+                                imuTelemetry.SetNpSample(display, false);
+                        }); }
+                    catch { Interlocked.Exchange(ref systemInfoActive, 0); }
+                }
+            });
         }
         private string SystemInfoDeviceName()
         {

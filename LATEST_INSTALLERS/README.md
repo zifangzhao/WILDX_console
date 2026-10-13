@@ -1,24 +1,23 @@
-# WILDX 1.0.0.13 - 2026-10-13
+# WILDX 1.0.0.14 - live combined DAT
 
-[Download the installer](WILDX_console-Setup-1.0.0.13.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.14.exe).
 
-Capture activity now wraps the recording status and output file link. Its rows
-and card grow to display the full text, including long paths and multiline
-messages, then shrink again for short status messages. Resizing and DPI/font
-changes refresh the layout while retaining the live monitor area.
+With **Merge active probes into one DAT per signal band** enabled, V2 writes
+`neuropixels_ap.dat` during recording. Each sample contains probe1 channels
+1..384, then probe2 channels 1..384, then probe3 channels 1..384; only active
+physical probes are included. There is no post-recording merge or duplicate
+full-session probe DAT folders. V1 retains its live AP/LFP output.
 
-The exact app passed 60 focused offscreen layout checks at normal/minimum
-window sizes and 100%, 150% and 200% scaling, plus the existing 294 standalone
-checks. The final GUI build had zero warnings/errors. All 13 installer runtime
-files were independently extracted and verified; the twelve non-GUI files
-match the previous SR/IMU package.
+RAW and all probe/configuration/calibration metadata stay alongside data.
+Small unmatched tails retain their source ticks. Each recovery segment owns
+its own combined DAT; native phase offsets are recorded without correction.
+SD downloads still export per-probe DAT.
 
-The previously released V2 sensor behavior and firmware baseline are retained:
-recovery 6408DBB8 / resident USB BFF0A8A2 / logger E07FB882. Prior short USB
-evidence covers accelerometer/gyro only; magnetometer remained unavailable
-(error 9). This layout release performs no device test or firmware change.
-Endurance, damaged-shank, all-rate and clean installation qualification remain
-pending. The prior SR/IMU installer is retained under `legacy`.
+The actual app passed 16,943,326 live DAT checks, including file growth before
+Stop and exact sample/probe/channel bytes, plus calibration, recovery, UI and
+sensor regressions. All 13 runtime files were independently extracted and
+verified. Twelve non-GUI files match 1.0.0.13. No firmware or device operation
+was performed; live hardware throughput and prior SR/IMU limits remain pending.
 
-[Validation and layout preview](../Note/RECORDING_INFO_LAYOUT_20261013.md),
-[release manifest](release-manifest.json) and [checksums](SHA256SUMS.txt).
+[Validation](../Note/LIVE_COMBINED_DAT_20261013.md),
+[manifest](release-manifest.json) and [checksums](SHA256SUMS.txt).

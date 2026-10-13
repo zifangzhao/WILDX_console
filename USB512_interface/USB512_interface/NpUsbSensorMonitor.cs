@@ -7,7 +7,7 @@ namespace USB512_interface {
  // Optional metadata consumer, called only by the ordered verifier worker.
  // No device ownership/thread and no EP0 transfer during bulk acquisition.
  internal sealed class NpUsbSensorMonitor : IDisposable {
-  readonly string folder,uid;readonly Action<NpImuDisplay> display;
+  readonly string folder,uid;readonly Action<NpImuDisplay> display;readonly bool saving;
   NpUsbSensors sensors;NpClockJournal journal;FileStream raw;
   bool disposed,sensorDisabled;long records,samples,nextDisplay;
   internal volatile string Error;
@@ -16,12 +16,11 @@ namespace USB512_interface {
   internal NpImuDisplay LastDisplay;
   // Preserve callers/idle diagnostic signature; never retain the borrowed handle.
   internal NpUsbSensorMonitor(NpV2UsbDevice captureDevice,string directory,string deviceUid,bool saveSensors,Action<NpImuDisplay> onDisplay) {
-   folder=directory;uid=deviceUid;display=onDisplay;
-   try {journal=new NpClockJournal(folder,uid,Guid.NewGuid().ToString("N"));}
-   catch(Exception ex){Error=ex.Message;}
-   if(saveSensors)try {
-    sensors=new NpUsbSensors(folder);
-    raw=new FileStream(Path.Combine(folder,"imu_snapshots.bin"),FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);
+   folder=directory;uid=deviceUid;display=onDisplay;saving=saveSensors;
+   try {
+    if(saving)journal=new NpClockJournal(folder,uid,Guid.NewGuid().ToString("N"));
+    sensors=new NpUsbSensors(folder,saving);
+    if(saving)raw=new FileStream(Path.Combine(folder,"imu_snapshots.bin"),FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);
    }catch(Exception ex){Error=ex.Message;sensorDisabled=true;}
   }
   // Only caller-owned stopped/control-only windows may invoke this method.
@@ -54,9 +53,9 @@ namespace USB512_interface {
    if(disposed || sensorDisabled)return;
    try {
     RequireSnapshot(snapshot,offset);
-    if(sensors==null || raw==null)return;
+    if(sensors==null)return;
     uint observedMs=BitConverter.ToUInt32(snapshot,offset+16);
-    raw.Write(snapshot,offset,140);sensors.FeedSnapshot(snapshot,offset,observedMs);
+    if(raw!=null)raw.Write(snapshot,offset,140);sensors.FeedSnapshot(snapshot,offset,observedMs);
     Interlocked.Exchange(ref samples,sensors.ImuSamples);Interlocked.Increment(ref records);
     long now=journal==null?DateTime.UtcNow.Ticks/10:journal.NowMicroseconds;
     if(now>=nextDisplay){nextDisplay=now+200000;LastDisplay=sensors.GetDisplay();if(display!=null)try{display(LastDisplay);}catch{}}
@@ -73,6 +72,7 @@ namespace USB512_interface {
    try{if(sensors!=null)sensors.Dispose();}catch(Exception ex){Error=ex.Message;}
    try{if(raw!=null)raw.Dispose();}catch(Exception ex){Error=ex.Message;}
    if(journal!=null){journal.Dispose();if(journal.Error!=null)Error=journal.Error;}
+   if(!saving)return;
    try {File.WriteAllLines(Path.Combine(folder,"imu_observation_status.txt"),new[]{
     "optional=true; failures never stop neural recording","device_uid="+uid,
     "snapshot_bytes=140; raw_file=imu_snapshots.bin; native_sensor_time_24_offset=44",

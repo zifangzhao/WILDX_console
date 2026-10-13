@@ -77,7 +77,7 @@ namespace USB512_interface {
     File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state=stopped\r\nhas_gaps="+npSessionHasGap+"\r\nlossless=False\r\n");
     NpRecordingSettings.RefreshBundle(npSessionFolder);
     lblRecInfo.Text="Stopped gap-aware NP session";
-    if(!NpV2BeginMergeFinalization("Stopped gap-aware NP session"))UpdateStartEnabled();
+    UpdateStartEnabled();
    }
   }
   internal static bool NpRetryable(string message) {
