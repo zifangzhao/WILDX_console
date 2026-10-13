@@ -335,6 +335,32 @@ namespace USB512_interface
 
         internal void RequestRecovery() { VendorOut(0x46,0,0); }
 
+        internal NpCameraStatus GetCameraStatus()
+        {
+            var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {RequestType=0xc0,Request=0x53,Length=128};
+            var bytes=new byte[128];uint count;
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,bytes,128,out count,IntPtr.Zero))
+                throw new NotSupportedException("This USB firmware does not provide camera capabilities.");
+            return NpCameraStatus.Parse(bytes,checked((int)count));
+        }
+        internal void StartCameraOnly(ushort rate)
+        {
+            var caps=GetModeCapabilities();var camera=GetCameraStatus();
+            if(GetStatus().Streaming || caps==null || !caps.CameraOnlyActive || !camera.SupportsCameraOnly || !camera.SupportsControls)
+                throw new IOException("Select an idle, advertised camera-only USB profile before starting preview.");
+            if(rate<1 || rate>58)throw new ArgumentOutOfRangeException("rate");
+            VendorOut(0x46,rate,3); // V1: rate in wValue, stream ID in wIndex.
+            VendorOut(0x47,USB512WinUsbDevice.StreamMaskCamera,0);
+        }
+        internal void SetCameraExposure(byte rows,byte gain) { VendorOut(0x4c,rows,gain); }
+        internal void SelectCameraOnly()
+        {
+            var caps=GetModeCapabilities();
+            if(GetStatus().Streaming || caps==null || !caps.SupportsCameraOnly)
+                throw new IOException("Camera-only selection requires an idle supported device.");
+            VendorOut(0x74,0,0);
+        }
+
         // Optional cached firmware evidence, queried only on failed startup.
         // This never sends configuration/I2C/reset requests or reads the ring.
         internal string GetStartupDiagnostic(byte port)

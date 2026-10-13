@@ -78,7 +78,7 @@ namespace USB512_interface
         public CameraPreviewForm(Action<byte, byte> setSensorExposure)
         {
             this.setSensorExposure = setSensorExposure;
-            Text = "USB512 camera preview (lossy)";
+            Text = "Camera preview";
             ClientSize = new Size(760, 800);
             MinimumSize = new Size(380, 440);
 
@@ -114,7 +114,7 @@ namespace USB512_interface
 
             exposureStatus.AutoSize = true;
             exposureStatus.Margin = new Padding(0, 9, 0, 0);
-            exposureStatus.Text = "CE64 sensor exposure: waiting";
+            exposureStatus.Text = "Sensor exposure: waiting";
             exposureControls.Controls.Add(exposureStatus);
             Controls.Add(exposureControls);
 
@@ -134,7 +134,7 @@ namespace USB512_interface
 
             decodeThread = new Thread(DecodeLoop);
             decodeThread.IsBackground = true;
-            decodeThread.Name = "USB512 camera preview decoder";
+            decodeThread.Name = "Camera preview decoder";
             decodeThread.Start();
         }
 
@@ -298,8 +298,8 @@ namespace USB512_interface
             exposureStatus.Text = !String.IsNullOrEmpty(exposureError)
                 ? "Sensor exposure error: " + exposureError
                 : meter == 0
-                    ? "CE64 sensor exposure: waiting"
-                    : string.Format("CE64 meter: {0} / 1023; row reset: {1}; ramp gain: {2} {3}",
+                    ? "Sensor exposure: waiting"
+                    : string.Format("Meter: {0} / 1023; row reset: {1}; ramp gain: {2} {3}",
                         meter, rows, ramp, automatic ? "(auto)" : "(manual)");
         }
 
@@ -603,7 +603,7 @@ namespace USB512_interface
             try
             {
                 if (setSensorExposure == null)
-                    throw new InvalidOperationException("No USB512 exposure controller is available.");
+                    throw new InvalidOperationException("No camera exposure controller is available.");
 
                 setSensorExposure(rows, gain);
                 lock (exposureLock)

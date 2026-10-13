@@ -292,6 +292,7 @@ namespace USB512_interface
     // extension; the first 64 bytes retain the version 1 diagnostics.
     internal sealed class NpCameraStatus
     {
+        internal byte[] RawBytes;
         internal uint Version,Flags,RateHz,CapturedFrames,DeliveredFrames,Packets,PayloadBytes;
         internal uint FailureCount,FailureOrigin,FailurePhase,FailureSpiError,FailureDmaError,Recoveries,LastStatus,CreditBytes;
         internal uint RequestedHz,MaxHz,SclkHz,Profile,DroppedFrames,MissedDeadlines,FrameId,FrameTick;
@@ -314,6 +315,7 @@ namespace USB512_interface
                 FailurePhase=BitConverter.ToUInt32(b,40),FailureSpiError=BitConverter.ToUInt32(b,44),
                 FailureDmaError=BitConverter.ToUInt32(b,48),Recoveries=BitConverter.ToUInt32(b,52),
                 LastStatus=BitConverter.ToUInt32(b,56),CreditBytes=BitConverter.ToUInt32(b,60)};
+            s.RawBytes=new byte[count];Buffer.BlockCopy(b,0,s.RawBytes,0,count);
             if(version==1)return s;
             s.RequestedHz=BitConverter.ToUInt32(b,64);s.MaxHz=BitConverter.ToUInt32(b,68);
             s.SclkHz=BitConverter.ToUInt32(b,72);s.Profile=BitConverter.ToUInt32(b,76);

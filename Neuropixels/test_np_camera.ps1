@@ -6,6 +6,7 @@ New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $exe=Join-Path $OutputDirectory 'NpCameraTests.exe'
 $sources=@("$PSScriptRoot\Tests\TestNpCamera.cs","$console\XeNpWinUsb.cs","$console\XeNpStreamDecoder.cs","$console\NpCaptureModes.cs","$console\NpProbeManifest.cs","$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\USB512WinUsb.cs","$console\XeNpSdInfo.cs","$console\NpLogger\NpV1Management.cs","$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\RawBurst.cs")
 $sources+="$console\CameraPreviewForm.cs"
+$sources+="$console\WildXTheme.cs"
 & $Compiler /nologo /optimize+ /target:exe /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$exe" @sources
 if($LASTEXITCODE){throw 'NP camera tests did not compile'}
 & $exe (Join-Path ([IO.Path]::GetFullPath($OutputDirectory)) ('run-'+[Guid]::NewGuid().ToString('N')))

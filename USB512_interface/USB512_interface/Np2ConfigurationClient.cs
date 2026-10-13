@@ -40,6 +40,9 @@ namespace USB512_interface
         // Exactly low-nibble 2 with one to three failed UNUSED shanks. Value 1
         // still means all six chains passed; unknown combinations are rejected.
         internal byte FailedUnusedShankMask { get { return (Verification & 15) == 2 && (Verification >> 4) >= 1 && (Verification >> 4) <= 14 ? (byte)(Verification >> 4) : (byte)0; } }
+        // Low-nibble 3 records one to four failed shanks. It is APPLIED only
+        // as a degraded receipt: mapping/SR, not silicon or analog, is unverified.
+        internal byte FailedShankMask { get { return (Verification & 15) == 3 && (Verification >> 4) >= 1 && (Verification >> 4) <= 15 ? (byte)(Verification >> 4) : (byte)0; } }
     }
 
     internal sealed class Np2ConfigClient
@@ -207,15 +210,18 @@ namespace USB512_interface
         {
             if (reply == null || request == null) throw new ArgumentNullException();
             Require(reply); RequireIdentity(reply, request);
-            if (reply.PortState != 3 || (reply.Verification != 1 && reply.FailedUnusedShankMask == 0))
+            if (reply.PortState != 3 || (reply.Verification != 1 && reply.FailedUnusedShankMask == 0 && reply.FailedShankMask == 0))
                 throw new IOException("NP2 configuration lacks the required shift/status/control verification receipt; probe application is not confirmed.");
         }
 
         internal static string AppliedWarning(Np2ConfigReply reply)
         {
-            if(reply.FailedUnusedShankMask==0)return null;
+            byte mask=reply.FailedUnusedShankMask;
+            if(mask==0)mask=reply.FailedShankMask;
+            if(mask==0)return null;
             var failed=new List<string>();
-            for(int shank=0;shank<4;shank++)if((reply.FailedUnusedShankMask&(1<<shank))!=0)failed.Add("P"+(reply.Port+1)+" shank "+shank);
+            for(int shank=0;shank<4;shank++)if((mask&(1<<shank))!=0)failed.Add("P"+(reply.Port+1)+" shank "+shank);
+            if(reply.FailedShankMask!=0)return "DEGRADED: "+String.Join(", ",failed)+" failed SR_OUT_OK. Mapping/SR unverified; selected configuration is not verified and no confirmed silicon map is claimed.";
             return "DEGRADED: "+String.Join(", ",failed)+" failed unused-shank SR_OUT_OK. Selected chains verified; full six-chain verification unavailable. Requested mapping retained.";
         }
     }

@@ -1,28 +1,37 @@
-# Current installer — WILDX 1.0.0.9, 2026-10-12
+# WILDX 1.0.0.12 - 2026-10-13
 
-[Install WILDX 1.0.0.9](WILDX_console-Setup-1.0.0.9.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.12.exe).
 
-NP2 output now undoes the ASIC's inverting amplifier: `2048 - raw12`.
-USB recording and SD export save signed nominal counts (-2047..2048),
-sample-major little-endian int16, in unchanged384-channel hardware order.
-USB preview is centered at zero; BLE preview applies the same PC-only sign
-conversion. RAW transport/capture bytes remain unchanged. This is not gain
-calibration or a microvolt conversion. Existing NP2 DAT files from before9
-remain unsigned raw codes; metadata identifies the new encoding.
+This release packages the modern USB Mode, BLE Mode, Data Download and Advanced
+workspaces, shared V1/V2 controls, factory ADC/gain calibration and recording
+bundles. BLE reads the device version automatically and shares one connection
+with Advanced; other tabs remain accessible while BLE is connected.
 
-The actual built GUI/exporter passed1,827,449 focused software checks:
-all4096 ADC codes, all384 channels/all3 ports, packed3/6, PSSI8/split9,
-15/20/30k offline replay, USB DAT/RAW/preview, SD export/metadata and BLE plot.
-The old GUI fails the new gate. No hardware capture, installer execution,
-independent extraction or new full firmware/GUI pair qualification this cycle.
-Triple30k USB remains unsupported for live capture.
+V1 Media preview adds camera Start/Stop, FPS/exposure and raw saving, plus
+waveform/playback of exported microphone WAVs. Live USB microphone streaming
+requires firmware support. The tested V1 camera timed out before delivering
+frames; the V1 developer owns the remaining hardware test.
 
-Firmware is unchanged: recovery6408DBB8 / USB A33B9912 / published APP ED881256.
-ROM DFU controls and updater are retained unchanged. Earlier004B direct/combined
-ROM enumeration/USB-return validation passed with private APP6A74E6AE preserved;
-that is not qualification of the published fused APP. Eleven other runtime
-files remain identical. The installer was built once and copied here.
+V2 degraded-shank receipts preserve requested configuration and explicitly
+report unverified mapping. The exact stopped ring-overrun fault can continue in
+a fresh segment when its verified prefix has no host writer/drop errors.
+Recovery keeps the same UID/profile, records an unknown gap and remains bounded
+and cancelable. Live automatic recovery is pending hardware qualification;
+this release makes no continuous/lossless or WinUSB error 31 repair claim.
 
-See [manifest](release-manifest.json), [checksum](SHA256SUMS.txt),
-[previous8](legacy/20261012_before_np2_polarity_1.0.0.9/README.md) and
-[polarity evidence](https://github.com/zifangzhao/WILDX_console/blob/main/Note/NP2_POLARITY_20261012.md).
+The exact release app passed 739,091 focused software assertions across media,
+calibration, shared workflow, recording bundles, BLE, USB lifecycle, recovery
+and probe receipt checks. Its main build had zero warnings/errors. The bundled
+updater's exact-UID selector self-test passed. All 13 runtime files were
+independently extracted and matched their SHA-256 hashes. The configuration
+helper and updater retain their previously published binaries. No firmware was
+built, flashed or promoted during packaging.
+
+This is a software-checked engineering installer. Full V1/V2 hardware checks
+and clean install/uninstall on a separate Windows machine remain pending.
+Requirements: 64-bit Windows, .NET Framework 4.8.1 and .NET 8 Desktop Runtime.
+
+[Release manifest](release-manifest.json), [checksums](SHA256SUMS.txt) and
+[validation details](../Note/INSTALLER_RELEASE_1.0.0.12_20261013.md).
+The prior published 1.0.0.9 installer is preserved under
+`legacy/20261013_before_shared_workflow_1.0.0.12`.

@@ -90,6 +90,8 @@
     <Compile Include="NpProbeManifest.cs" />
     <Compile Include="NpRecordingSettings.cs" />
     <Compile Include="NpRecordingDialog.cs" />
+    <Compile Include="NpMediaUsbForm.cs" />
+    <Compile Include="NpAudioPreview.cs" />
     <Compile Include="NpDiagnosticsForm.cs" />
     <Compile Include="NpCalibrationForm.cs" />
     <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpConfigClient.cs"><Link>NpConfigClient.cs</Link></Compile>

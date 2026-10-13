@@ -117,13 +117,22 @@ namespace USB512_interface {
     NpV2TransportRetryable(win32.Message+" (Win32 error "+win32.NativeErrorCode+")");
   }
   internal static bool NpV2Retryable(NpV2RecordingResult result) {
-   return result!=null && !result.Complete && !result.CancelledBeforeCapture &&
-    result.RawWriterError==null && result.DecodeError==null &&
-    result.RawDroppedBlocks==0 && result.DecodedDroppedLaneBlocks==0 &&
-    result.VerifiedBlocks==result.ReceivedBlocks &&
-    (result.FinalCapture==null || (result.FinalCapture.State!=255U && result.FinalCapture.Error==0U &&
-     result.FinalCapture.ProducerError==0U && result.FinalCapture.SourceError==0U)) &&
-    (result.FinalSource==null || (result.FinalSource.State!=255U && result.FinalSource.Error==0U)) && NpV2TransportRetryable(result.Error);
+   if(result==null || result.Complete || result.CancelledBeforeCapture ||
+    result.RawWriterError!=null || result.DecodeError!=null ||
+    result.RawDroppedBlocks!=0 || result.DecodedDroppedLaneBlocks!=0 ||
+    result.VerifiedBlocks!=result.ReceivedBlocks)return false;
+   // Best effort: the exact stopped ring-overrun fault can start a NEW segment.
+   // Never resume the overwritten ring or append across the unknown gap. The
+   // existing idle/busy/UID handshake still owns any subsequent mode reset.
+   var capture=result.FinalCapture;var source=result.FinalSource;
+   if(result.ReceivedBlocks>0 && capture!=null && capture.Valid &&
+    capture.State==255U && capture.Error==4U && capture.ProducerError==6U && capture.SourceError==0U &&
+    source!=null && source.Valid && source.State==11U && source.Error==0U && source.I2cError==0U &&
+    (source.ChainFailMask&0xFFFF0C30U)==0U &&
+    (source.ChainFailMask==0U || (source.Flags&16U)!=0U))return true;
+   return (capture==null || (capture.State!=255U && capture.Error==0U &&
+     capture.ProducerError==0U && capture.SourceError==0U)) &&
+    (source==null || (source.State!=255U && source.Error==0U)) && NpV2TransportRetryable(result.Error);
   }
   private static bool NpFreshStartExporterFault(string message) {
    // This exact firmware fault was observed after a structurally clean prefix.

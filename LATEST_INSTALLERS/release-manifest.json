@@ -1,12 +1,153 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.9",
-  "releaseDate": "2026-10-12",
-  "status": "Software-checked NP2 nominal polarity correction; unchanged firmware/transport",
+  "version": "1.0.0.12",
+  "releaseDate": "2026-10-13",
+  "publication": "origin/main; installer and source released together",
+  "status": "Software-checked engineering installer; complete hardware qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.9.exe",
-    "bytes": 2250015,
-    "sha256": "54118FC3E7E8E989D71059B7CB40F7CF97994C597C0352C3F09D3A0BDCE8FCFD"
+    "file": "WILDX_console-Setup-1.0.0.12.exe",
+    "sha256": "D205863C8F814D94EAEFC6267B0FD1BB4594A9611B697C012C0A854B9BA60705",
+    "bytes": 2302421
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "DDCFE1E0D76AEDE5DE13637A508281D2322B87863F6C399E5B8541E444296384",
+      "bytes": 1275392
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2",
+      "bytes": 532
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA",
+      "bytes": 5757952
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B",
+      "bytes": 24576
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "C5D398F5839F647B20291A97F809809E214624DA86F6A692CE9A1108B3FEB654",
+      "bytes": 211456
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6",
+      "bytes": 151552
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E",
+      "bytes": 364544
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9",
+      "bytes": 434
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782",
+      "bytes": 458
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A",
+      "bytes": 152064
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC",
+      "bytes": 55808
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01",
+      "bytes": 449
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306",
+      "bytes": 340
+    }
+  ],
+  "buildProvenance": {
+    "sourceBase": "8867d4ae128c7ce541ca4a350f5a11d3f85753b1",
+    "source": "Complete canonical GUI source delivered with this release",
+    "guiBuild": "Isolated Release component targets; no project/helper/SDK rebuild",
+    "frozenCompanionSha256": "C5D398F5839F647B20291A97F809809E214624DA86F6A692CE9A1108B3FEB654",
+    "configurationAndUpdaterHelpers": "Exact binaries retained from previously published 1.0.0.9 installer",
+    "evidence": "Note/INSTALLER_RELEASE_1.0.0.12_20261013.md"
+  },
+  "releaseValidation": {
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "focusedSoftwareAssertions": {
+      "mediaPreview": 19224,
+      "universalWorkflow": 88,
+      "recordingBundles": 203,
+      "factoryCalibration": 716128,
+      "standalone": 294,
+      "bleFeatures": 1433,
+      "usbUiLifecycle": 134,
+      "v2TargetedRecovery": 120,
+      "degradedChainPolicy": 1467
+    },
+    "focusedSoftwareAssertionTotal": 739091,
+    "updaterExactUidSelectorSelfTest": true,
+    "independentInstallerExtraction": true,
+    "extractedRuntimeFilesVerified": 13,
+    "unchangedPriorRuntimeFiles": 11,
+    "protectedProductionOutputsUnchanged": true,
+    "installerExecuted": false,
+    "hardwareAccessDuringPackaging": false,
+    "firmwareBuildOrFlashDuringPackaging": false,
+    "fullEndToEndPairQualified": false,
+    "cleanInstallUninstallQualified": false,
+    "existingFixtureWarnings": "Unused NpDownloadStream.Cancelled field in bundle/calibration fixture compilation"
+  },
+  "features": [
+    "Four modern USB/BLE/Data Download/Advanced workspaces",
+    "Shared V1/V2 recording, probe configuration and diagnostics workflow",
+    "One BLE connection with automatic device version and accessible tabs",
+    "Factory ADC/gain CSV correction online and offline; native RAW retained",
+    "Recording metadata, probe/configuration files, receipts and calibration inputs saved alongside data",
+    "V1 USB camera preview and raw saving; exported microphone WAV preview",
+    "V2 degraded-shank receipt warnings and unverified mapping provenance",
+    "Bounded same-UID fresh-segment recovery for the exact stopped ring-overrun fault"
+  ],
+  "media": {
+    "usbCamera": "V1 only; advertised camera-only capability required",
+    "exportedMicrophoneWavPreview": true,
+    "liveUsbAudio": "Unavailable with tested resident USB contract",
+    "bleLiveMediaPreview": false,
+    "successfulCameraDeliveryQualified": false,
+    "cameraHardwareFollowupOwner": "V1 developer"
+  },
+  "probeConfiguration": {
+    "exactRequestIdAndCrcRequired": true,
+    "degradedSelectedShankState": "requested_applied_unverified",
+    "confirmedSiliconMapInvented": false,
+    "baseControlAndI2cFailuresFatal": true,
+    "damagedShankHardwareQualified": false
+  },
+  "recovery": {
+    "sameUid": true,
+    "sameProfile": true,
+    "freshSegments": true,
+    "boundedAttempts": 12,
+    "stopCancels": true,
+    "exactGapUnknown": true,
+    "losslessClaim": false,
+    "stoppedRingOverrunAdmission": "Valid capture state255/error4/producer6/source0 and stopped source11/error0/I2C0; nonempty received==verified prefix; no host writer/decode/drop faults; no base/unknown chain errors",
+    "liveAutomaticOverrunRecoveryQualified": false,
+    "winUsb31RootCauseFixed": false,
+    "sdOrBleRecoveryAdded": false
   },
   "compatibleFirmware": {
     "repository": "https://github.com/zifangzhao/XE_NP",
@@ -20,103 +161,15 @@
     "appOnlyHexSha256": "8A4BB9985FB8C5F2940C9A866AA79BF3C1DBDAA32BE1DAA92AFA01791279F21E",
     "appUpdateContainerSha256": "04A167A036EACA6F0F6B5BE3A28CA9890304F61AAC5AA02E72B271D937C76132"
   },
-  "releaseValidation": {
-    "targetedActualAssemblyChecks": 1827449,
-    "negativeControlOldGuiFailed": true,
-    "all4096Codes": true,
-    "all384ChannelsAndThreePorts": true,
-    "rawTransportAndFilesUnmodified": true,
-    "usbDatAndPreview": true,
-    "sdExportAndMetadata": true,
-    "bleDisplayConversion": true,
-    "elevenOtherRuntimeFilesUnchanged": true,
-    "newHardwareAccess": false,
-    "fullEndToEndPairQualified": false,
-    "gainCalibrationOrMicrovoltConversion": false,
-    "installerExecuted": false,
-    "independentInstallerExtraction": false
-  },
-  "sampleEncoding": {
-    "name": "np2_signed_nominal_v1",
-    "transform": "2048 - raw12",
-    "range": "-2047..2048",
-    "format": "sample-major signed int16 little-endian, 384 hardware-order channels",
-    "legacy": "DAT before 1.0.0.9 is unsigned raw12; existing files are not rewritten"
-  },
-  "retainedRecordingEvidence": "GUI7 USB A33: dual30 209.33632s, triple20 129.3312s, triple15 180s Stop window. Recording transport unchanged; not new hardware polarity qualification.",
-  "retainedDfuEvidence": "004B loader6408 hardware direct/combined ROM DFU enumeration and normal USB return PASS; updater unchanged",
-  "buildProvenance": {
-    "sourceBase": "25a5f874daf5d975d00b6b656af21b22c8fc5369",
-    "privateBleAndSdDevelopmentExcluded": true,
-    "guiBuild": "Existing frozen release inputs plus polarity-only changes",
-    "sdBuild": "Published SD exporter plus polarity metadata; shared checked decoder/preview",
-    "evidence": "Note/NP2_POLARITY_20261012.md"
-  },
-  "payload": [
-    {
-      "path": "WILDX_console.exe",
-      "bytes": 1183232,
-      "sha256": "EA3163288A8A6B49C36DE7B62AD043EAB36ECF2D682A68AC703A2DF375AD2355"
-    },
-    {
-      "path": "WILDX_console.exe.config",
-      "bytes": 532,
-      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
-    },
-    {
-      "path": "OpenTK.dll",
-      "bytes": 5757952,
-      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
-    },
-    {
-      "path": "OpenTK.GLControl.dll",
-      "bytes": 24576,
-      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
-    },
-    {
-      "path": "NpV2SdDatExport.dll",
-      "bytes": 169984,
-      "sha256": "9864B4997DD241E9B90023D088558483F908D7DC2C4410BDBC09D3BAAD7134E5"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.exe",
-      "bytes": 151552,
-      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.dll",
-      "bytes": 364544,
-      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.deps.json",
-      "bytes": 434,
-      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
-      "bytes": 458,
-      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
-      "bytes": 152064,
-      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
-      "bytes": 55808,
-      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
-      "bytes": 449,
-      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
-      "bytes": 340,
-      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
-    }
-  ]
+  "firmwareQualification": "Previously published V2 baseline retained for traceability; no new firmware or app/firmware pair qualification",
+  "knownLimitations": [
+    "Successful V1 camera delivery remains unqualified after native startup timeout",
+    "Live USB microphone streaming requires a supported firmware contract",
+    "V2 triple-probe 20 kHz long capture has retained ring-overwrite failure evidence",
+    "Automatic V2 overrun recovery requires a separate hardware check",
+    "Full sustained recording, mode handoff, firmware update and clean install/uninstall qualification remain pending"
+  ],
+  "displayHighPass": null,
+  "merge": null,
+  "previousPublishedInstaller": "legacy/20261013_before_shared_workflow_1.0.0.12/WILDX_console-Setup-1.0.0.9.exe"
 }

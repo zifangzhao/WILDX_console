@@ -12,6 +12,7 @@ if($LASTEXITCODE){throw 'Standalone tests did not compile.'}
 if($LASTEXITCODE){throw 'Standalone regression failed.'}
 & (Join-Path $PSScriptRoot 'test_universal_workflow.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'universal-workflow')
 & (Join-Path $PSScriptRoot 'test_recording_bundle.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'recording-bundle')
+& (Join-Path $PSScriptRoot 'test_media_preview.ps1') -Compiler $compiler -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'media-preview')
 $ble=Join-Path $output 'BleFeaturesTests.exe'
 & $compiler /nologo /optimize+ /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$ble" (Join-Path $PSScriptRoot 'Tests\BleFeaturesTests.cs')
 if($LASTEXITCODE){throw 'BLE feature tests did not compile.'}

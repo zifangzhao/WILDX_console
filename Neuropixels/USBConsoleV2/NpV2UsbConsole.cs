@@ -336,7 +336,7 @@ namespace USB512_interface
                 if(Error!=0U || (Flags&16U)==0U)return null; // DEGRADED is bit 4, not bit 16.
                 var failed=new List<string>();
                 for(int p=0;p<3;p++)for(int shank=0;shank<4;shank++)if((ChainFailMask&(1U<<(p*6+shank)))!=0)failed.Add("P"+(p+1)+" shank "+shank);
-                return "DEGRADED: "+(failed.Count==0?"firmware reported degraded source without shank details":String.Join(", ",failed)+" failed unused-shank SR_OUT_OK")+". Full six-chain verification unavailable; requested mapping retained.";
+                return "DEGRADED: "+(failed.Count==0?"firmware reported degraded source without shank details":String.Join(", ",failed)+" failed shank SR_OUT_OK")+". Consult the applied configuration receipt; SR/mapping may be unverified.";
             }
         }
         internal uint EepromReads { get { return Words[28]; } }
@@ -2943,10 +2943,11 @@ namespace USB512_interface
                     },
                     stagedConfigurations.Count==0?null:(Action<NpV2UsbDevice>)delegate(NpV2UsbDevice device)
                     {
-                        var receipts=new List<string>();var degradedWarnings=new List<string>();
+                        var receipts=new List<string>();var degradedWarnings=new List<string>();var appliedVerification=new byte[3];
                         foreach(var request in stagedConfigurations)
                         {
                             Np2ConfigReply reply=Np2ConfigurationUsb.ConfirmApplied(device,request);
+                            appliedVerification[request.Port]=reply.Verification;
                             string warning=Np2ConfigClient.AppliedWarning(reply);if(warning!=null)degradedWarnings.Add(warning);
                             receipts.Add("P"+(request.Port+1)+": applied; ID="+BitConverter.ToString(reply.ConfigurationId).Replace("-","")+"; CRC32="+reply.PayloadCrc.ToString("X8")+"; verification="+reply.Verification+"; transaction="+reply.Transaction+(warning==null?"":"; "+warning));
                         }
@@ -2954,7 +2955,7 @@ namespace USB512_interface
                         if(settings!=null){
                             const string receiptFile="requested-configuration-applied-receipts.txt";
                             File.WriteAllLines(Path.Combine(runFolder,receiptFile),receipts);
-                            foreach(var request in stagedConfigurations)settings.ConfirmRequest(request.Port+1);
+                            foreach(var request in stagedConfigurations)settings.ConfirmRequestVerification(request.Port+1,appliedVerification[request.Port]);
                             settings.Context("np2_configuration_applied_receipt_file",receiptFile);
                             settings.Context("np2_configuration_applied_receipts",receipts.ToArray());
                             var appliedPorts=new List<int>();foreach(var request in stagedConfigurations)appliedPorts.Add(request.Port+1);

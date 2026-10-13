@@ -26,6 +26,7 @@ namespace USB512_interface
             btnStreams.Text = "Recording settings";
             btnDfu.Text = "Firmware Update";
             btnScope.Text = "NP Preview";
+            btnPreview.Text = "Media preview…";
             btnImpedance.Visible = false;
             BuildWildXWorkspace();
         }
@@ -208,6 +209,7 @@ namespace USB512_interface
             if(bleWorkspace!=null)bleWorkspace.SetHostBusy(usbBusy || DownloadBusy);
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
             if(probeConfigurationButton!=null)probeConfigurationButton.Enabled=NpControlsAvailable;
+            if(selectedDeviceKind==DeviceKind.XeNp)btnPreview.Enabled=NpControlsAvailable;
             if(diagnosticsButton!=null)diagnosticsButton.Enabled=NpControlsAvailable;
             if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;
         }

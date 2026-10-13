@@ -130,6 +130,17 @@ namespace USB512_interface {
     File.WriteAllBytes(Path.Combine(folder,binary),selection);p["selection_file"]=binary;
    }
   }
+  internal void ConfirmRequestVerification(int port,byte verification) {
+   if(!np2 || (verification&15)!=3){ConfirmRequest(port);return;}
+   var p=Probe(port);if(p["requested_configuration_file"]==null)throw new InvalidOperationException("No saved request to confirm.");
+   p["configuration_state"]="requested_applied_unverified";
+   p["configuration_evidence"]="Matching requested ID/CRC; shank SR failed. Mapping is unverified, not a confirmed silicon map.";
+   p["configuration_verification"]=verification;
+   p["device_receipt_file"]="requested-configuration-applied-receipts.txt";
+   p["imro_state"]=p["imro_file"]==null?"unavailable":"requested_unverified";
+   p["selection_file"]=p["requested_selection_file"];
+   appliedSelections.Remove(port);
+  }
   internal void Receipt(NpProbeManifest manifest) {
    int port=manifest.Port+1;var p=Probe(port);string prefix="probe_"+port;
    string receipt="neuropixels_probe"+port+"_metadata.json",selection="neuropixels_probe"+port+"_applied-selection.npb1";

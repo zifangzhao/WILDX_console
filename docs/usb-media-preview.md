@@ -1,0 +1,23 @@
+# Camera and audio preview
+
+For a V1 USB logger, **USB Mode → Media preview…** opens Camera and Audio panes. Camera has Start/Stop, requested FPS, existing sensor exposure controls and optional **Save camera data**. Acquisition starts only after Start. An advertised camera-only profile is required; the exact selected UID is retained across any USB personality/clock transition. This is a separate media session, so neural recording and conflicting USB/BLE operations are blocked while the window owns the device.
+
+The camera path reuses the V1 packet parser, independent camera sequence checks, raw recorder and three-buffer renderer. Display coalescing cannot change the recorded bytes. Stop drains completed USB reads and marks an unfinished final frame incomplete. Startup faults, missing frames and stalled delivery are reported without automatic restart. V2 media streaming is not enabled by this change.
+
+Saved camera folders contain `misc.dat` (original packed camera payload), `misc.frames.csv`, exact initial/final CAM1 receipt bytes and decoded status, `camera_exposure.csv`, `media_capture_status.txt` and `recording_files.json`. The report retains the UID, host UTC bounds, requested/effective rates, frame/packet counts, gaps, native failures and the 320×500 wire / 320×320 visible raster. USB exposure ACKs are logged; they are not register readback or analog verification. Source faults and partial recordings cannot be called complete.
+
+The Audio pane opens exported mono 16-bit PCM WAVs, displays a waveform and plays the first ten seconds. A bounded 48 kHz listening copy uses fractional box averaging. The original high-rate WAV and microphone data are untouched; this preview is not an analysis resampling pipeline. V1 microphone capture currently belongs to the SD media protocol. Its resident USB camera contract has no advertised microphone stream, so live USB audio is explicitly unavailable. Existing Data Download media export still produces the native microphone WAV.
+
+## Validation on 2026-10-13
+
+The original private media application built without warnings/errors, using unchanged dependencies and committed V2 inputs to preserve another task's in-progress probe policy. Installer 1.0.0.12 compiles the completed current V2 inputs together with media support; its exact app passes the 19,224 media checks below. See [release validation](../Note/INSTALLER_RELEASE_1.0.0.12_20261013.md).
+
+- 19,224 media assertions pass: signed PCM, DC/sign and duration preservation at 44.1/48/200/240 kHz, byte-exact 48 kHz input, bounded ten-second output, malformed/truncated WAV rejection, waveform and no-auto-start UI.
+- 17,918,955 existing camera framing/save assertions pass, including arbitrary fragmentation, short tails, sequence wrap, independent camera damage and unchanged neural/misc payloads. Its runner's missing theme dependency was repaired; existing isolated-fixture unused-field warnings remain.
+- Exact V1 UID `00190027434250062039314E` was idle in USB download, then switched to its resident stream service. It advertised camera-only mode, CAM1 v2, 75 MHz SCLK and a calculated 55 fps ceiling. The test requested 50 fps; **zero frames arrived**. Firmware reported status 3 (timeout), failure count 1, SPI/DMA error fields zero. No successful camera delivery or pixel-quality claim is made.
+- The fault-report build's hardware check displayed the native startup timeout, archived incomplete metadata and verified the device stopped. The final build adds a stricter recording-complete metadata guard and passes the software checks; that metadata-only adjustment was not hardware-retested. Live microphone streaming/playback from this device was not tested because its USB protocol does not expose it.
+- After testing, the exact V1 was restored to its original idle USB download service (role 3, busy 0, no pending transition). Its firmware and SD recordings were retained.
+
+After the camera-board switch, the current SWD target still reported the same MCU UID; USB preflight timed out before a new capture could start. No firmware flash or explicit reset was performed by this app task. At the user's request, the V1 developer owns the remaining hardware test. The installer packaging run did not access devices.
+
+Run `test_media_preview.ps1` for hardware-free application checks and `Neuropixels/test_np_camera.ps1` for packet/raw fixtures. `Tests/NpMediaUsbHardwareTests.cs` is an explicit, exact-UID HIL helper and is not invoked by normal tests. Successful live camera qualification requires a working connected camera; full live USB audio requires a firmware contract.

@@ -442,7 +442,7 @@ namespace USB512_interface
                 lblRecInfo.MaximumSize = Size.Empty;
             bool npDevice = selectedDeviceKind == DeviceKind.XeNp || selectedDeviceKind == DeviceKind.NpV2 || selectedDeviceKind == DeviceKind.NpUnavailable;
             btnScope.Text = npDevice ? "NP Preview" : "Ephys Preview";
-            btnPreview.Enabled = !npDevice && selectedDeviceKind != DeviceKind.Ce64Msc;
+            btnPreview.Enabled = selectedDeviceKind == DeviceKind.XeNp || (!npDevice && selectedDeviceKind != DeviceKind.Ce64Msc);
             btnStreams.Enabled = selectedDeviceKind != DeviceKind.Ce64Msc;
             btnScope.Enabled = selectedDeviceKind != DeviceKind.Ce64Msc && selectedDeviceKind != DeviceKind.NpUnavailable;
             if (btnImpedance != null) btnImpedance.Enabled = selectedDeviceKind == DeviceKind.Ce64Msc && !running && !ztestRunning;
@@ -3936,6 +3936,13 @@ namespace USB512_interface
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
+            if(selectedDeviceKind==DeviceKind.XeNp){
+                if(!NpControlsAvailable)return;
+                firmwareManagementActive=true;UpdateStartEnabled();
+                try{using(var media=new NpMediaUsbForm(devicePath,saveFolder))media.ShowDialog(this);}
+                finally{firmwareManagementActive=false;UpdateStartEnabled();}
+                return;
+            }
             CameraPreviewForm form;
             bool created = false;
             lock (previewLock)

@@ -55,6 +55,21 @@ internal static class NpRecordingBundleTests
     }
     static uint Crc(byte[] b){uint c=~0U;foreach(byte v in b){c^=v;for(int n=0;n<8;n++)c=(c>>1)^((c&1)==0?0:0xedb88320U);}return ~c;}
     static void Put(byte[] b,int at,uint n){Buffer.BlockCopy(BitConverter.GetBytes(n),0,b,at,4);}
+    static void UnverifiedRequest()
+    {
+        foreach(byte verification in new byte[]{0x13,0xf3}){
+            string folder=Folder("unverified-"+verification);
+            object s=Activator.CreateInstance(settings,All,null,new object[]{folder,null,"live_usb",true,DateTime.UtcNow,"peer","uid"},null);
+            Call(s,"Actual",15000,15000,1,false,false,"fixture");
+            Call(s,"Request",1,"{}",Selection(true,1));Call(s,"ConfirmRequestVerification",1,verification);Call(s,"Write");
+            var p=Read(Path.Combine(folder,"probe_1.json"));
+            Check((string)p["configuration_state"]=="requested_applied_unverified","SR warning promoted to confirmed map");
+            Check((int)p["configuration_verification"]==verification,"SR evidence lost");
+            Check((string)p["selection_file"]==(string)p["requested_selection_file"],"Unverified request mislabelled applied");
+            Check(File.ReadAllBytes(Path.Combine(folder,(string)p["selection_file"])).SequenceEqual(Selection(true,1)),"Unverified original request lost");
+            Check(!File.Exists(Path.Combine(folder,"probe_1.applied-selection.n2b1")),"Confirmed binary invented after SR failure");
+        }
+    }
     static void SdExport(string fixtureExe)
     {
         var fixture=Assembly.LoadFile(Path.GetFullPath(fixtureExe)).GetType("NpV2SdDatExportTests",true).GetMethod("MakeImage",All);
@@ -85,5 +100,5 @@ internal static class NpRecordingBundleTests
             }
         }
     }
-    static int Main(string[] args){try{app=Assembly.LoadFrom(Path.GetFullPath(args[0]));settings=app.GetType("USB512_interface.NpRecordingSettings",true);root=Path.GetFullPath(args[1]);Directory.CreateDirectory(root);foreach(bool np2 in new[]{false,true})foreach(bool merged in new[]{false,true})Bundles(np2,merged);SdExport(args[2]);Console.WriteLine("PASS "+checks+" actual-app recording bundle checks; files/images only, no hardware.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
+    static int Main(string[] args){try{app=Assembly.LoadFrom(Path.GetFullPath(args[0]));settings=app.GetType("USB512_interface.NpRecordingSettings",true);root=Path.GetFullPath(args[1]);Directory.CreateDirectory(root);foreach(bool np2 in new[]{false,true})foreach(bool merged in new[]{false,true})Bundles(np2,merged);UnverifiedRequest();SdExport(args[2]);Console.WriteLine("PASS "+checks+" actual-app recording bundle checks; files/images only, no hardware.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }
