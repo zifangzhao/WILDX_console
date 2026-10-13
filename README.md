@@ -1,6 +1,6 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.12**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.13**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -47,13 +47,13 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current engineering installer is [WILDX 1.0.0.12](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.12.exe), packaged on 2026-10-13. It includes the shared workflow, unified BLE controls, calibration, recording bundles, V1 media preview and latest V2 probe/recovery handling. The exact release app passed focused software checks, and all 13 runtime files were independently extracted and verified. See [installer validation and limitations](Note/INSTALLER_RELEASE_1.0.0.12_20261013.md).
+The current engineering installer is [WILDX 1.0.0.13](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.13.exe), packaged on 2026-10-13. Recording status and file paths now wrap in a card that grows with their content. The shared workflow, calibration, recording bundles, V1 media preview and V2 SR/IMU behavior are retained. The exact release app passed offscreen layout and existing standalone checks; all 13 runtime files were independently extracted and verified. See [layout fix and release validation](Note/RECORDING_INFO_LAYOUT_20261013.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 
 [Release manifest](LATEST_INSTALLERS/release-manifest.json) records the installer, all 13 extracted payload checksums, compatible V2 firmware identities and outstanding hardware qualification. The older pre-integration installer remains under `LATEST_INSTALLERS/legacy`.
 
-The manifest retains the previously published V2 firmware baseline: APP `ED881256`, resident USB `A33B9912`, loader `6408DBB8`. No firmware is promoted by this app release. Device-applied NP2013 requests require advertised capability and matching receipts. Degraded selected-shank receipts retain the requested configuration with explicit unverified mapping metadata. V2 auto recovery admits the exact stopped ring-overrun fault only with a clean verified prefix, then opens a fresh segment with an unknown gap; it does not establish uninterrupted capture or fix WinUSB error 31. Firmware compatibility and full hardware qualification remain separate from software regression results.
+The manifest retains the previously published V2 firmware baseline: APP `E07FB882`, resident USB `BFF0A8A2`, loader `6408DBB8`. No firmware is promoted by this app release. Device-applied NP2013 requests require advertised capability and matching receipts. Degraded selected-shank receipts retain the requested configuration with explicit unverified mapping metadata. V2 auto recovery admits the exact stopped ring-overrun fault only with a clean verified prefix, then opens a fresh segment with an unknown gap; it does not establish uninterrupted capture or fix WinUSB error 31. Firmware compatibility and full hardware qualification remain separate from software regression results.
 
 Requirements:
 

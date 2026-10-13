@@ -98,7 +98,6 @@ namespace USB512_interface
             online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));
             online.RowStyles.Add(new RowStyle(SizeType.Absolute,308));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));usbPage.Controls.Add(online);
             usbPage.AutoScroll=true;
-            usbPage.Resize+=delegate { online.Height=Math.Max(746,usbPage.ClientSize.Height-usbPage.Padding.Vertical); };
 
             var capture=Stack(20,38,20,36,88,30);
             label1.AutoSize=true;label1.Text="USB DEVICE";label1.ForeColor=WildXTheme.Muted;capture.Controls.Add(label1,0,0);
@@ -133,14 +132,39 @@ namespace USB512_interface
             systemInfoSummary.Dock=DockStyle.Fill;systemInfoSummary.Margin=Padding.Empty;systemInfoSummary.BorderStyle=BorderStyle.None;health.Controls.Add(systemInfoSummary,0,1);
             online.Controls.Add(Card("Device health",null,health),1,0);
 
-            var activity=Stack(40,0,22);
+            var activity=Stack(40,0,0);
+            activity.RowStyles[1].SizeType=activity.RowStyles[2].SizeType=SizeType.Absolute;
             lblSpeed.AutoSize=true;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";
             captureReportButton=new Button {Text="Report…",AutoSize=true,Enabled=false};
             captureReportButton.Click+=delegate {if(lastCaptureReport!=null)using(var report=new NpReportForm("Capture report",lastCaptureReport))report.ShowDialog(this);};
             activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,0);
-            lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=true;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,1);
-            llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=true;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,2);
+            lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=new Padding(0,0,0,6);lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,1);
+            llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=new Padding(0,0,0,6);llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,2);
             var activityCard=Card("Capture activity",null,activity);online.Controls.Add(activityCard,0,2);online.SetColumnSpan(activityCard,2);
+            bool arrangingActivity=false;
+            Action arrangeActivity=delegate {
+                if(arrangingActivity || activity.ClientSize.Width<=0)return;
+                arrangingActivity=true;
+                try {
+                    foreach(var label in new Label[]{lblRecInfo,llblSavefile}) {
+                        int width=Math.Max(1,activity.ClientSize.Width-label.Margin.Horizontal);
+                        int height=label.GetPreferredSize(new Size(width,0)).Height+label.Margin.Vertical;
+                        var row=activity.RowStyles[activity.GetRow(label)];
+                        if(row.Height!=height)row.Height=height;
+                    }
+                    var layout=(TableLayoutPanel)activityCard.Controls[0];
+                    int heightNeeded=(int)(layout.RowStyles[0].Height+activity.RowStyles.Cast<RowStyle>().Sum(row=>row.Height))+
+                        activityCard.Padding.Vertical+activityCard.Margin.Vertical;
+                    float scale=activity.RowStyles[0].Height/40F;
+                    int minimumActivityHeight=(int)Math.Ceiling(150*scale);
+                    int activityHeight=Math.Max(minimumActivityHeight,heightNeeded);
+                    online.RowStyles[2].Height=activityHeight;
+                    online.Height=Math.Max((int)Math.Ceiling(746*scale)+activityHeight-minimumActivityHeight,usbPage.ClientSize.Height-usbPage.Padding.Vertical);
+                } finally {arrangingActivity=false;}
+            };
+            lblRecInfo.TextChanged+=delegate {arrangeActivity();};llblSavefile.TextChanged+=delegate {arrangeActivity();};
+            lblRecInfo.FontChanged+=delegate {arrangeActivity();};llblSavefile.FontChanged+=delegate {arrangeActivity();};
+            activity.SizeChanged+=delegate {arrangeActivity();};usbPage.Resize+=delegate {arrangeActivity();};arrangeActivity();
             var clock=Stack(82,44,0);timeStatus.Dock=DockStyle.Fill;timeStatus.AutoEllipsis=true;clock.Controls.Add(timeStatus,0,0);clock.Controls.Add(ActionRow(timeSettings),0,1);
             clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="The network clock is an app-local UTC reference. Recordings retain their device timestamps.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
             online.Controls.Add(Card("Network time / UTC",null,clock),1,1);
