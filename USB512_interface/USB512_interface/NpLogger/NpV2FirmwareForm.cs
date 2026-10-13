@@ -31,8 +31,7 @@ namespace USB512_interface
             ClientSize = new Size(900, 460); StartPosition = FormStartPosition.CenterParent;
             Add("Refresh", () => { Discover(); return Task.CompletedTask; });
             Add("Read status", async () => { var target = Selected(); await Helper(target, target.Boot ? "--boot-info" : "--mode-info"); });
-            Add("Run + hold self-test", () => SelfTest(1U)); Add("Hold rails", () => SelfTest(2U)); Add("Read self-test report", ReadSelfTestReport);
-            Add("Release rails", () => SelfTest(4U)); Add("Manual SD 1.8 V", () => SelfTest(3U)); Add("Manual SD 3.3 V", () => SelfTest(5U));
+            Add("Diagnostics & self-test…", () => { var target=Selected();if(target.Boot)throw new IOException("Select the USB streaming service for self-test.");using(var form=new NpDiagnosticsForm(target.Path,true))form.ShowDialog(this);return Task.CompletedTask; });
             Add("Update NP2 APP…", UpdateApp);
             Add("USB streaming", () => Mode("--stream")); Add("USB download", () => Mode("--download"));
             Add("SD / BLE", () => Mode("--sd")); Add("Recovery loader", () => Mode("--recovery"));
@@ -89,43 +88,6 @@ namespace USB512_interface
             status.Text = mode == "--dfu" ?
                 "ROM DFU request acknowledged for UID " + target.Uid + ". Confirm STM32 BOOTLOADER in STM32CubeProgrammer; USB disconnect alone is not confirmation. No firmware was written." :
                 "Mode request acknowledged for UID " + target.Uid + ". Refresh after USB re-enumeration.";
-        }
-        async Task ReadSelfTestReport()
-        {
-            var target = Selected();
-            if (target.Boot) throw new IOException("The V2 self-test is available only from the resident B386 USB stream service.");
-            var report = await Task.Run(() => { using (var device = NpV2UsbDevice.Open(target.Path)) return device.GetSelfTestReport(target.Uid); });
-            ShowSelfTestReport(target, report);
-        }
-        async Task SelfTest(uint command)
-        {
-            var target = Selected();
-            if (target.Boot) throw new IOException("The V2 self-test is available only from the resident B386 USB stream service.");
-            var report = await Task.Run(() => {
-                using (var device = NpV2UsbDevice.Open(target.Path))
-                {
-                    uint baselineSequence = device.StartSelfTest(command,target.Uid);
-                    var watch = Stopwatch.StartNew(); NpV2UsbSelfTestReport latest = null;
-                    while (watch.Elapsed.TotalSeconds < 20.0)
-                    {
-                        latest = device.GetSelfTestReport(target.Uid);
-                        if (latest.IsNewTerminalFor(command, baselineSequence)) return latest;
-                        Thread.Sleep(200);
-                    }
-                    throw new TimeoutException("Self-test report did not advance to a new terminal state within 20 seconds. No retry or release was sent; any requested hold remains active.");
-                }
-            });
-            ShowSelfTestReport(target, report);
-        }
-        void ShowSelfTestReport(Target target, NpV2UsbSelfTestReport report)
-        {
-            string text = report.Text();
-            log.AppendText(DateTime.UtcNow.ToString("O")+" UID "+target.Uid+"\r\n"+text+"\r\n");
-            string outcome = report.State==NpV2UsbSelfTestReport.Rejected || report.Error!=0U ? "Self-test command rejected or failed; inspect the report." :
-                report.State==NpV2UsbSelfTestReport.Queued || report.State==NpV2UsbSelfTestReport.Running ? "Self-test is still in progress." :
-                report.Checked==0U && report.Skipped==0U ? "No component checks have run." :
-                report.Failed != 0U ? "Self-test has failed checks; inspect the report." : report.Skipped != 0U ? "Self-test has skipped checks; it is not an overall pass." : "Self-test has no failed or skipped checks.";
-            status.Text = outcome+" "+(report.Holding ? "Power hold remains active; use Release rails when measurements are complete." : "Use the explicit USB streaming action to reboot to normal mode before capture.");
         }
         async Task UpdateApp()
         {

@@ -23,7 +23,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Web.Extensions" />
     <Compile Include="NpV2SdDatExport.cs" />
+    <Compile Include="..\..\USB512_interface\USB512_interface\NpAdcCalibration.cs"><Link>NpAdcCalibration.cs</Link></Compile>
     <Compile Include="NpNeuroscopeXml.cs" />
     <!-- Reuse the maintained USB console wire/sample decoder. All sources
          belong to this console repository, not a firmware checkout. -->

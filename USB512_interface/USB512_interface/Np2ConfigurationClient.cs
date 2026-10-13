@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,6 +37,9 @@ namespace USB512_interface
         internal uint Transaction, Received, PayloadBytes, PayloadCrc;
         internal byte[] ConfigurationId;
         internal uint AvailableMask, SupportedModel, Uid0, Uid1, Uid2;
+        // Exactly low-nibble 2 with one to three failed UNUSED shanks. Value 1
+        // still means all six chains passed; unknown combinations are rejected.
+        internal byte FailedUnusedShankMask { get { return (Verification & 15) == 2 && (Verification >> 4) >= 1 && (Verification >> 4) <= 14 ? (byte)(Verification >> 4) : (byte)0; } }
     }
 
     internal sealed class Np2ConfigClient
@@ -203,8 +207,16 @@ namespace USB512_interface
         {
             if (reply == null || request == null) throw new ArgumentNullException();
             Require(reply); RequireIdentity(reply, request);
-            if (reply.PortState != 3 || (reply.Verification & 1) == 0)
-                throw new IOException("NP2 configuration lacks the required shift/status/control verification receipt. Capture was not released.");
+            if (reply.PortState != 3 || (reply.Verification != 1 && reply.FailedUnusedShankMask == 0))
+                throw new IOException("NP2 configuration lacks the required shift/status/control verification receipt; probe application is not confirmed.");
+        }
+
+        internal static string AppliedWarning(Np2ConfigReply reply)
+        {
+            if(reply.FailedUnusedShankMask==0)return null;
+            var failed=new List<string>();
+            for(int shank=0;shank<4;shank++)if((reply.FailedUnusedShankMask&(1<<shank))!=0)failed.Add("P"+(reply.Port+1)+" shank "+shank);
+            return "DEGRADED: "+String.Join(", ",failed)+" failed unused-shank SR_OUT_OK. Selected chains verified; full six-chain verification unavailable. Requested mapping retained.";
         }
     }
 }

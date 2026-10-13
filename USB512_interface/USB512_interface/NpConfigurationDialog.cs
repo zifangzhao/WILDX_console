@@ -5,7 +5,9 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
+using WildNpConfiguration;
 
 namespace USB512_interface {
  // The shared .NET 8 editor runs separately from the .NET Framework recorder.
@@ -20,62 +22,63 @@ namespace USB512_interface {
   private readonly Dictionary<int,string> requests;
   private readonly ISet<int> applyConnectors;
   private readonly HashSet<int> pendingApplyConnectors;
-  private readonly CheckBox applyOnCapture=new CheckBox {Text="Apply before next V2 capture",AutoSize=true};
+  private readonly CheckBox applyOnCapture=new CheckBox {Text="Apply before next recording",AutoSize=true};
+  private readonly Dictionary<byte,NpConfigRequest> v1Requests;
+  private readonly Func<int,string,Task<string>> readReceipt;
   private bool selectingConnector;
   internal static string HelperPath {get{return Path.Combine(Path.GetDirectoryName(typeof(NpConfigurationDialog).Assembly.Location),"NPConfigurator","NPConfigurator.exe");}}
-  internal NpConfigurationDialog(string current,string devicePath=null,bool np2=false,int availableMask=7,IDictionary<int,string> retainedRequests=null,ISet<int> applyConnectors=null) {
+  internal NpConfigurationDialog(string current,string devicePath=null,bool np2=false,int availableMask=7,IDictionary<int,string> retainedRequests=null,ISet<int> applyConnectors=null,
+   IDictionary<byte,NpConfigRequest> retainedV1Requests=null,Func<int,string,Task<string>> receipt=null) {
    this.np2=np2;requests=new Dictionary<int,string>(retainedRequests??new Dictionary<int,string>());this.applyConnectors=applyConnectors;pendingApplyConnectors=new HashSet<int>(applyConnectors??new HashSet<int>());
-   RequestedJson=current;Text="NP configuration — editor and device staging";
-   ClientSize=new Size(820,220);MinimumSize=Size;StartPosition=FormStartPosition.CenterParent;
+   v1Requests=new Dictionary<byte,NpConfigRequest>(retainedV1Requests??new Dictionary<byte,NpConfigRequest>());readReceipt=receipt;
+   if(!np2)foreach(var request in v1Requests){requests.Add(request.Key+1,request.Value.Json);pendingApplyConnectors.Add(request.Key+1);}
+   RequestedJson=current;Text="Probe configuration";
+   ClientSize=new Size(820,300);MinimumSize=Size;StartPosition=FormStartPosition.CenterParent;actions.Height=100;
    var edit=new Button {Text="Open configurator",AutoSize=true};
    var clear=new Button {Text="Clear request",AutoSize=true};
-   var keep=new Button {Text="Keep request only",AutoSize=true};
+   var keep=new Button {Text="Save settings",AutoSize=true};
    var cancel=new Button {Text="Cancel",AutoSize=true,DialogResult=DialogResult.Cancel};
    edit.Click+=async delegate {await Edit();};
-   clear.Click+=delegate {RequestedJson=null;RefreshStatus();};
    keep.Click+=delegate {
+    if(!np2 && retainedV1Requests!=null){retainedV1Requests.Clear();foreach(var request in v1Requests)retainedV1Requests.Add(request.Key,request.Value);}
     if(np2 && retainedRequests!=null){retainedRequests.Clear();foreach(var request in requests)retainedRequests.Add(request.Key,request.Value);}
     if(np2 && applyConnectors!=null){applyConnectors.Clear();foreach(int connector in pendingApplyConnectors)applyConnectors.Add(connector);}
     DialogResult=DialogResult.OK;Close();
    };
-   if(np2){
-    Text="NP2 IMRO / channel map";ClientSize=new Size(900,300);MinimumSize=Size;actions.Height=84;
+   {
     for(int p=1;p<=3;p++)if((availableMask&(1<<(p-1)))!=0)connector.Items.Add(p);
-    if(connector.Items.Count==0)connector.Items.AddRange(new object[]{1,2,3});
+    if(connector.Items.Count==0)throw new ArgumentOutOfRangeException("availableMask");
     connector.SelectedIndex=0;
     connector.SelectedIndexChanged+=delegate {SelectConnector();};
+    applyOnCapture.Enabled=np2;
     applyOnCapture.CheckedChanged+=delegate {if(!selectingConnector){if(applyOnCapture.Checked)pendingApplyConnectors.Add(SelectedConnector);else pendingApplyConnectors.Remove(SelectedConnector);RefreshStatus();}};
     var load=new Button {Text="Load IMRO / JSON…",AutoSize=true};
-    load.Click+=async delegate {using(var file=new OpenFileDialog {Filter="NP2 IMRO or configuration|*.imro;*.npconfig.json;*.json|IMRO|*.imro|NP configuration|*.json"}){
-     if(file.ShowDialog(this)==DialogResult.OK)try{await ImportFile(file.FileName);}catch(Exception ex){MessageBox.Show(this,ex.Message,"NP2 IMRO import",MessageBoxButtons.OK,MessageBoxIcon.Error);}
+    load.Click+=async delegate {using(var file=new OpenFileDialog {Filter="IMRO or configuration|*.imro;*.npconfig.json;*.json|IMRO|*.imro|NP configuration|*.json"}){
+     if(file.ShowDialog(this)==DialogResult.OK)try{await ImportFile(file.FileName);}catch(Exception ex){MessageBox.Show(this,ex.Message,"Probe configuration",MessageBoxButtons.OK,MessageBoxIcon.Error);}
     }};
     actions.Controls.AddRange(new Control[]{new Label {Text="Connector",AutoSize=true,Padding=new Padding(0,6,0,0)},connector,load,applyOnCapture});
-    clear.Click+=delegate {requests.Remove(SelectedConnector);pendingApplyConnectors.Remove(SelectedConnector);RefreshStatus();};
-    edit.Text="Edit NP2 channel map…";keep.Text="Keep request";SelectConnector();
+    clear.Click+=delegate {requests.Remove(SelectedConnector);v1Requests.Remove((byte)(SelectedConnector-1));pendingApplyConnectors.Remove(SelectedConnector);SelectConnector();};
+    edit.Text="Edit channel map…";SelectConnector();
    }
    actions.Controls.AddRange(new Control[]{edit,clear,keep,cancel});Controls.Add(status);Controls.Add(actions);
-   if(!np2 && !String.IsNullOrEmpty(devicePath)){
-    var device=new Button{Text="Device staging / receipt…",AutoSize=true};
-    device.Click+=delegate{RequestedJson=NpConfigurationUsb.Show(this,devicePath,RequestedJson);RefreshStatus();};actions.Controls.Add(device);
+   if(readReceipt!=null){
+    var device=new Button{Text="Read device receipt",AutoSize=true};
+    device.Click+=async delegate {
+     if(busy)return;busy=true;actions.Enabled=false;
+     try{status.Text=await readReceipt(SelectedConnector,RequestedJson);}catch(Exception ex){status.Text="Configuration not confirmed: "+ex.Message;}
+     finally{busy=false;actions.Enabled=true;}
+    };actions.Controls.Add(device);
    }
    CancelButton=cancel;RefreshStatus();
    WildXTheme.Apply(this);WildXTheme.Button(keep,true);
    FormClosing+=delegate(object sender,FormClosingEventArgs e){if(busy)e.Cancel=true;};
   }
   private void RefreshStatus() {
-   if(np2){
-    status.Text="Connector "+SelectedConnector+" — "+(RequestedJson==null?"no host channel map loaded.":pendingApplyConnectors.Contains(SelectedConnector)?"NP2 request will be applied before the next V2 capture.":"NP2 host request retained.")+"\r\n\r\n"+
-      "Load an NP2013 four-shank NP2 IMRO / JSON file, then edit or save it in the configurator. Each connector retains its own request.\r\n\r\n"+
-     "Loading alone does not change acquisition, routing, gains or BLE/SD recording. Check Apply before next V2 capture only for firmware that advertises the NP2013 configuration receipt; otherwise capture is blocked rather than treating this map as applied.\r\n"+
-     "USB recordings retain maps as requested/unverified metadata until the device returns a matching applied receipt.\r\n\r\nCancel leaves the previous host requests unchanged.";
-    return;
-   }
-   status.Text="Choose probe type, sites, gains and references in the shared NP configurator.\r\n"+
-    "Use its Open / Save controls for .npconfig.json files.\r\n\r\n"+
-    "Editing alone does not apply settings. Use Device staging / receipt with compatible firmware.\r\n"+
-    "A retained request is saved alongside each recording; it does not change or filter the data.\r\n\r\n"+
-    "Cancel / Clear request does not undo settings already staged on the device.\r\n"+
-    (RequestedJson==null?"No requested configuration retained.":"Requested configuration retained. Query the device for staged/applied state.");
+   status.Text="Probe "+SelectedConnector+" · "+(RequestedJson==null?"No channel map loaded":pendingApplyConnectors.Contains(SelectedConnector)?"Apply before next recording":"Host request retained")+"\r\n\r\n"+
+    (np2?"NP2: load an IMRO / JSON map. Device application currently supports NP2013 four-shank maps.":"NP1: choose sites, gains and references using an IMRO / JSON map.")+"\r\n\r\n"+
+    "Maps apply at the next recording after the final mode change. Matching device receipts confirm application.\r\n"+
+    (np2?"NP2 verifies selected chains; degraded unused shanks are reported.":"NP1 base chains use readback; the shank chain is ACK only.")+" Analog signals are not verified.\r\n\r\n"+
+    "Cancel keeps previous host requests. Clear does not undo device settings.";
   }
   private int SelectedConnector {get{return connector.SelectedItem==null?1:(int)connector.SelectedItem;}}
   private void SelectConnector(){requests.TryGetValue(SelectedConnector,out var request);RequestedJson=request;selectingConnector=true;applyOnCapture.Checked=pendingApplyConnectors.Contains(SelectedConnector);selectingConnector=false;RefreshStatus();}
@@ -104,6 +107,37 @@ namespace USB512_interface {
     try{if(File.Exists(input))File.Delete(input);if(File.Exists(normalized))File.Delete(normalized);if(File.Exists(selection))File.Delete(selection);if(Directory.Exists(folder))Directory.Delete(folder,false);}catch(IOException){}
    }
   }
+  internal static NpConfigRequest PrepareV1Request(string json,int connector){
+   if(connector<1 || connector>3)throw new ArgumentOutOfRangeException("connector");
+   string folder=Path.Combine(Path.GetTempPath(),"WILDX_NP1Prepare_"+Guid.NewGuid().ToString("N"));
+   string input=Path.Combine(folder,"input.json"),normalized=Path.Combine(folder,"normalized.json"),selection=Path.Combine(folder,"selection.bin");
+   try{
+    Directory.CreateDirectory(folder);File.WriteAllText(input,json);
+    if(Run("--prepare-v1 "+Quote(input)+" "+Quote(normalized)+" "+Quote(selection)+" "+connector).GetAwaiter().GetResult()!=0)
+     throw new IOException("NP1 configuration compiler declined the request.");
+    var result=new NpConfigRequest(ReadResult(normalized),File.ReadAllBytes(selection));
+    if(result.Port!=connector-1)throw new IOException("Configuration returned a different connector.");
+    return result;
+   }finally{
+    try{if(File.Exists(input))File.Delete(input);if(File.Exists(normalized))File.Delete(normalized);if(File.Exists(selection))File.Delete(selection);if(Directory.Exists(folder))Directory.Delete(folder,false);}catch(IOException){}
+   }
+  }
+  internal static string Receipt(NpConfigReply reply,NpConfigRequest request){
+   if(reply.Error!=0)throw new IOException("Firmware rejected configuration, code "+reply.Error);
+   if(reply.PortState==3 && request!=null)NpConfigClient.RequireApplied(reply,request.Selection);
+   return ReceiptText(reply.PortState,reply.PayloadCrc,reply.ConfigurationId)+"\r\nVerification: "+reply.Verification+
+    " · "+((reply.Verification&4)!=0?"NRIC ready indication":(reply.Verification&3)==3?"NP1 base readback / shank ACK":"Required verification unconfirmed")+". Analog signals not verified."+(request==null?"\r\nNo host request to compare.":reply.PortState==3?"\r\nMatches the applied host request.":"\r\nApplication of this host request is unconfirmed.");
+  }
+  internal static string Receipt(Np2ConfigReply reply,Np2ConfigRequest request){
+   if(reply.Error!=0)throw new IOException("Firmware rejected configuration, code "+reply.Error);
+   if(reply.PortState==3 && request!=null)Np2ConfigClient.RequireApplied(reply,request);
+   return ReceiptText(reply.PortState,reply.PayloadCrc,reply.ConfigurationId)+"\r\nVerification: "+reply.Verification+
+    " · NP2 chain verification. Analog signals not verified."+(request==null?"\r\nNo host request to compare.":reply.PortState==3?"\r\nMatches the applied host request.":"\r\nApplication of this host request is unconfirmed.")+"\r\n"+Np2ConfigClient.AppliedWarning(reply);
+  }
+  static string ReceiptText(byte state,uint crc,byte[] id){
+   string[] names={"No staged map","Receiving","Staged; application pending","Applied","Failed; application unconfirmed"};
+   return "Device receipt · "+(state<names.Length?names[state]:"Unknown state "+state)+"\r\nID: "+BitConverter.ToString(id).Replace("-","")+"\r\nPayload CRC32: "+crc.ToString("X8");
+  }
   private static void RequireInitialNp2013Scope(string json){
    var document=new JavaScriptSerializer {MaxJsonLength=1024*1024}.Deserialize<Dictionary<string,object>>(json);object profile,channels,revision;
    if(document==null || !document.TryGetValue("Profile",out profile) || (string)profile!="Np2Multi")throw new IOException("Initial V2 configuration supports NP2013 four-shank requests only.");
@@ -112,6 +146,7 @@ namespace USB512_interface {
   }
   private void RetainResult(string result){
     if(np2){result=NormalizeNp2Request(result,SelectedConnector);requests[SelectedConnector]=result;if(applyConnectors!=null){pendingApplyConnectors.Add(SelectedConnector);selectingConnector=true;applyOnCapture.Checked=true;selectingConnector=false;}}
+    else {var prepared=PrepareV1Request(result,SelectedConnector);result=prepared.Json;v1Requests[prepared.Port]=prepared;requests[SelectedConnector]=result;pendingApplyConnectors.Add(SelectedConnector);selectingConnector=true;applyOnCapture.Checked=true;selectingConnector=false;}
    RequestedJson=result;
   }
   internal async Task ImportFile(string path){
@@ -139,8 +174,8 @@ namespace USB512_interface {
   internal static async Task<int> Run(string arguments) {
    if(!File.Exists(HelperPath))throw new FileNotFoundException("NP configurator is missing. Reinstall the complete USB console package.",HelperPath);
    using(var process=new Process()) {
-    process.StartInfo=new ProcessStartInfo(HelperPath,arguments) {UseShellExecute=false,RedirectStandardError=true};
-    process.Start();var error=process.StandardError.ReadToEndAsync();await Task.Run(()=>process.WaitForExit());string detail=await error;
+    process.StartInfo=new ProcessStartInfo(HelperPath,arguments) {UseShellExecute=false,CreateNoWindow=true,RedirectStandardError=true};
+    process.Start();var error=process.StandardError.ReadToEndAsync();await Task.Run(()=>process.WaitForExit()).ConfigureAwait(false);string detail=await error.ConfigureAwait(false);
     if(process.ExitCode!=0 && process.ExitCode!=2)throw new IOException("NP configurator: "+(String.IsNullOrWhiteSpace(detail)?"exit "+process.ExitCode:detail.Trim()));
     return process.ExitCode;
    }
@@ -153,7 +188,7 @@ namespace USB512_interface {
     Directory.CreateDirectory(folder);
     if(RequestedJson!=null)File.WriteAllText(input,RequestedJson);
     status.Text="Configurator is open. Finish or cancel that window to return.\r\nNo settings are being sent to hardware.";
-    int exit=await Run((np2?"--host-edit-np2 ":"--host-edit ")+Quote(RequestedJson==null?"-":input)+" "+Quote(output)+(np2?" "+SelectedConnector:""));
+    int exit=await Run((np2?"--host-edit-np2 ":"--host-edit ")+Quote(RequestedJson==null?"-":input)+" "+Quote(output)+" "+SelectedConnector);
     if(exit==2)return;
     if(exit!=0)throw new IOException("Configurator failed (exit "+exit+"). Requires the .NET 8 Desktop Runtime; the previous request was retained.");
     // Validate with the exact shared mapping/schema rules before adopting it.

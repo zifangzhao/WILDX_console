@@ -7,9 +7,22 @@ namespace CE32_console {
    if(s.LastId!=0)return NpSdControl.NextId(s);
    uint id=BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(),0);return id==0?1:id;
   }
+  static uint Ticks(uint mask,uint hz){
+   if(mask==3 && (hz==20000 || hz==30000))return 61440;
+   if(mask==7 && (hz==15000 || hz==20000))return 40960;
+   return 0;
+  }
+  static bool ValidStatus(NpSdStatus s){return s!=null && Ticks(s.Mask,s.Hz)!=0 && (s.State<=7 || s.State==255);}
+  // BLE still carries P1/P2's low six PSSI bits for either SD storage codec.
+  internal static bool CanPreview(NpSdStatus s){return ValidStatus(s) && s.State==3 && (s.Flags&128)!=0;}
+  // Keep the five-argument reflection contract and all legacy call defaults.
   internal static byte[] Request(uint op,uint id,uint hz=0,uint blocks=0,ulong utc=0){
-   if(id==0 || op>8 || (op!=4 && utc!=0))throw new ArgumentException("Invalid V2 command/id");
-   var b=new byte[64];uint[] w={RequestMagic,2,op,id,(op==1||op==2||op==4)?3U:0U,hz,blocks,(uint)utc,(uint)(utc>>32)};
+   return Request(op,id,hz,blocks,utc,3);
+  }
+  internal static byte[] Request(uint op,uint id,uint hz,uint blocks,ulong utc,uint mask){
+   bool profile=op==1||op==2||op==4;
+   if(id==0 || op>8 || (op!=4 && utc!=0) || (profile && Ticks(mask,hz)==0))throw new ArgumentException("Invalid V2 command/id/profile");
+   var b=new byte[64];uint[] w={RequestMagic,2,op,id,profile?mask:0U,hz,blocks,(uint)utc,(uint)(utc>>32)};
    for(int i=0;i<w.Length;i++)Buffer.BlockCopy(BitConverter.GetBytes(w[i]),0,b,4*i,4);
    Buffer.BlockCopy(BitConverter.GetBytes(NpSdControl.Crc(b,60)),0,b,60,4);return b;
   }
@@ -43,19 +56,20 @@ namespace CE32_console {
    var s=new NpSdStatus{Operation=op,RequestId=id,Error=NpSdGeometry.U(b,16),State=NpSdGeometry.U(b,20),Fault=NpSdGeometry.U(b,24),
     Mask=NpSdGeometry.U(b,28),Hz=NpSdGeometry.U(b,32),Chunks=NpSdGeometry.U(b,36),Start=NpSdGeometry.U(b,40),End=NpSdGeometry.U(b,44),
     Capacity=NpSdGeometry.U(b,48),Flags=NpSdGeometry.U(b,52),LastId=NpSdGeometry.U(b,56)};
-   if(s.Mask!=3 || (s.Hz!=20000 && s.Hz!=30000) || (s.Flags&128)==0 || (s.State>7 && s.State!=255))
+   if(!ValidStatus(s) || (s.Flags&128)==0)
     throw new IOException("Unsupported V2 capability/status response");
    return s;
   }
   internal static string Describe(NpSdStatus s){
+   if(!ValidStatus(s))throw new IOException("Unsupported V2 capability/status response");
    string[] names={"SD not mounted","Idle","Preparing probes","Recording","Draining / verifying SD","Complete","Armed for UTC start","Cancelled before capture"};
    string state=s.State==255?"Failed":names[s.State];
-   return "WILD-X V2 / NP2 — "+state+"\r\nDevice-selected: probes 1 + 2, "+s.Hz.ToString("N0")+" samples/s (no separate LFP stream)"+
+   return "WILD-X V2 / NP2 — "+state+"\r\nDevice-selected: "+(s.Mask==3?"probes 1 + 2":"probes 1 + 2 + 3")+", "+s.Hz.ToString("N0")+" samples/s (no separate LFP stream)"+
     "\r\nCommitted: "+s.Chunks.ToString("N0")+" blocks / "+(s.Chunks*46592.0/1e6).ToString("F2")+" MB"+
     "\r\nDevice fault: "+s.Fault+"; command error: "+s.Error+
     ((s.Flags&8)!=0?"\r\nCommand queued — not yet confirmed running/stopped.":"")+
     ((s.Flags&64)!=0?"\r\nThis firmware requires a restart before another session.":"")+
-    "\r\nBLE is control only. Three-probe SD catalog mode is not supported by this firmware.";
+    "\r\nBLE is control only. The device must acknowledge the selected recording profile.";
   }
   internal static bool CanStart(NpSdStatus s){
    return s!=null && !s.Busy && s.Fault==0 && !IsFull(s) && !NeedsRecovery(s) &&
@@ -72,18 +86,24 @@ namespace CE32_console {
   }
   // Host-only immutable snapshot; not a fabricated CE64 voltage/ADC packet.
   internal static byte[] Telemetry(NpSdStatus s){
-   var b=new byte[24];uint[] words={1,s.State,s.Hz,s.Chunks,s.Flags,s.Fault};
+   if(!ValidStatus(s))throw new IOException("Unsupported NP2 telemetry");
+   var b=new byte[28];uint[] words={2,s.State,s.Hz,s.Chunks,s.Flags,s.Fault,s.Mask};
    for(int i=0;i<words.Length;i++)Buffer.BlockCopy(BitConverter.GetBytes(words[i]),0,b,i*4,4);
    return b;
   }
   internal static NpSdStatus ReadTelemetry(byte[] b){
-   if(b==null||b.Length!=24||BitConverter.ToUInt32(b,0)!=1)throw new IOException("Invalid NP2 telemetry");
+   bool legacy=b!=null && b.Length==24 && BitConverter.ToUInt32(b,0)==1;
+   if(!legacy && (b==null||b.Length!=28||BitConverter.ToUInt32(b,0)!=2))throw new IOException("Invalid NP2 telemetry");
    var s=new NpSdStatus{State=BitConverter.ToUInt32(b,4),Hz=BitConverter.ToUInt32(b,8),
-    Chunks=BitConverter.ToUInt32(b,12),Flags=BitConverter.ToUInt32(b,16),Fault=BitConverter.ToUInt32(b,20)};
-   if((s.State>7&&s.State!=255)||(s.Hz!=20000&&s.Hz!=30000))throw new IOException("Unsupported NP2 telemetry");
+    Chunks=BitConverter.ToUInt32(b,12),Flags=BitConverter.ToUInt32(b,16),Fault=BitConverter.ToUInt32(b,20),
+    Mask=legacy?3U:BitConverter.ToUInt32(b,24)};
+   if(!ValidStatus(s))throw new IOException("Unsupported NP2 telemetry");
    return s;
   }
-  internal static uint RecordedSeconds(NpSdStatus s){return (uint)((ulong)s.Chunks*61440/((ulong)s.Hz*1600));}
+  internal static uint RecordedSeconds(NpSdStatus s){
+   if(!ValidStatus(s))throw new IOException("Unsupported NP2 recording profile");
+   return (uint)((ulong)s.Chunks*Ticks(s.Mask,s.Hz)/((ulong)s.Hz*1600));
+  }
   internal static double RecordedMiB(NpSdStatus s){return s.Chunks*(46592.0/1048576);}
   internal static string OnlineState(NpSdStatus s){
    if(s==null)return "Reading device status...";
@@ -106,13 +126,13 @@ namespace CE32_console {
    }
   }
   internal static uint Blocks(NpSdStatus s,uint hz,uint seconds){
-   if(!CanStart(s) || s.Mask!=3 || (hz!=20000 && hz!=30000) || seconds>3600 || s.Start<8192)
+   if(!CanStart(s) || !ValidStatus(s) || Ticks(s.Mask,hz)==0 || seconds>3600 || s.Start<8192)
     throw new IOException("Device is not ready for a V2 recording.");
    ulong payload=((ulong)s.Start+8192+16383)&~16383UL,end=(ulong)s.Capacity&~16383UL;
    ulong available=end>payload?(end-payload)/364*4:0;
    if(available<4)throw new IOException("SD card is full.");
    if(seconds==0){if((s.Flags&512)==0)throw new IOException("Firmware does not support continuous recording");return 0;}
-   ulong blocks=((ulong)seconds*hz*1600/61440/4)*4;
+   ulong blocks=((ulong)seconds*hz*1600/Ticks(s.Mask,hz)/4)*4;
    if(blocks<4 || blocks>available || blocks>uint.MaxValue)throw new IOException("Not enough SD space for this recording.");
    return (uint)blocks;
   }

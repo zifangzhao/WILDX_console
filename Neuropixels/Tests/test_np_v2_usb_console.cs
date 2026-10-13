@@ -246,7 +246,7 @@ internal static class NpV2UsbConsoleTests
                     {
                         int ch = (adc / 2) * 32 + (adc & 1) + frame * 2;
                         // The existing scalar fixture pattern intentionally hashes low32 ticks.
-                        Check((ushort)row[ch] == V3DataWord(unchecked((int)at), frame, adc / 8, adc % 8, p),
+                        Check(row[ch] == 2048 - V3DataWord(unchecked((int)at), frame, adc / 8, adc % 8, p),
                             "Large-origin ADC/channel/byte ordering changed");
                     }
                     if (at < boundary && at + 1600UL > boundary) crossed[p] = true;

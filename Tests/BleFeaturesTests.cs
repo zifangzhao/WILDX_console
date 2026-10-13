@@ -54,10 +54,10 @@ internal static class BleFeaturesTests
         uint id=90;Func<uint> next=()=>++id;
         var clock=New("USB512_interface.NpBleClock");var device=new ClockDevice{ReadTimeouts=1};
         Await(Call(clock,"Initialize",Status(1),(Func<byte[],Task<byte[]>>)device.Exchange,next));
-        Check(device.Reads==65 && device.Commits==1 && (bool)Property(clock,"Synchronized"),"Stopped initialization did not collect 64 observations and one commit");
+        Check(device.Reads==17 && device.Commits==1 && (bool)Property(clock,"Synchronized"),"Stopped initialization did not collect 16 valid observations and one commit after a read timeout");
         Check((uint)Property(clock,"Generation")==8,"Acknowledged clock generation not retained");
         Await(Call(clock,"Observe",(Func<byte[],Task<byte[]>>)device.Exchange,next));
-        Check(device.Commits==1 && device.Reads==66,"Periodic clock check changed the device clock");
+        Check(device.Commits==1 && device.Reads==18,"Periodic clock check changed the device clock");
         device.Offset=30000000;
         Reject(()=>Await(Call(clock,"Observe",(Func<byte[],Task<byte[]>>)device.Exchange,next)),"Large PC-time offset accepted");
         Check(!(bool)Property(clock,"Synchronized") && device.Commits==1,"Clock check failure retimed/replayed a mutation");
@@ -122,7 +122,7 @@ internal static class BleFeaturesTests
     static object FieldTuple(object value,string property){return value.GetType().GetProperty(property).GetValue(value,null);}
     static void PreviewDecode()
     {
-        foreach(uint probe in new uint[]{1,2})foreach(uint hz in new uint[]{20000,30000}){
+        foreach(uint probe in new uint[]{1,2})foreach(uint hz in new uint[]{15000,20000,30000}){
             var raw=new byte[192];var expected=new ushort[16,3];
             for(int row=0;row<16;row++)for(int lane=0;lane<3;lane++)expected[row,lane]=(ushort)((row*271+lane*1013)&4095);
             expected[0,0]=0;expected[0,1]=4095;expected[0,2]=2048;
@@ -135,17 +135,17 @@ internal static class BleFeaturesTests
         }
         var rolling=New("CE32_console.NpV2PreviewBurst",91U);
         Check(!(bool)Call(rolling,"Accept",Preview(id:90)),"Stale preview ID accepted");
-        foreach(byte[] invalid in new[]{Preview(session:0),Preview(hz:15000),Preview(probe:3),Preview(channel:384),Preview(offset:0),Preview(total:193),Preview(kind:128,marked:false)})
+        foreach(byte[] invalid in new[]{Preview(session:0),Preview(hz:10000),Preview(hz:0),Preview(probe:3),Preview(channel:384),Preview(offset:0),Preview(total:193),Preview(kind:128,marked:false)})
             Reject(()=>Call(New("CE32_console.NpV2PreviewBurst",91U),"Accept",invalid),"Invalid preview metadata accepted");
         // Complete, phase-zero SuperSync for both probes; no assumed test-pattern edits.
         byte[] sync={0xd3,0x6a,0x59,0xc5,0x3e,0xa7,0x1d,0xe4,0xb2,0x4f,0x78,0x96};
-        foreach(uint probe in new uint[]{1,2}){
+        foreach(uint probe in new uint[]{1,2})foreach(uint hz in new uint[]{15000,20000,30000}){
             var raw=new byte[3200];
             for(int i=0;i<raw.Length;i++){int tick=i%100,frame=i%1600/100,value=0;
                 if(tick==0)value=frame==0?7:0;else if(tick==2 || tick==3)for(int lane=0;lane<3;lane++){int bit=frame*6+lane*2+tick-2;value|=((sync[bit/8]>>(bit&7))&1)<<lane;}
                 raw[i]=(byte)(value<<((int)(probe-1)*3));}
             var burst=New("CE32_console.NpV2PreviewBurst",91U);
-            for(int offset=0;offset<3200;offset+=192)Check((bool)Call(burst,"Accept",Preview(probe:probe,kind:0,offset:(uint)offset,total:3200,first:0,payload:Slice(raw,offset,Math.Min(192,3200-offset))))==(offset+192>=3200),"Partial calibration accepted/lost");
+            for(int offset=0;offset<3200;offset+=192)Check((bool)Call(burst,"Accept",Preview(probe:probe,hz:hz,kind:0,offset:(uint)offset,total:3200,first:0,payload:Slice(raw,offset,Math.Min(192,3200-offset))))==(offset+192>=3200),"Partial calibration accepted/lost");
             Check((int)Call(burst,"FindPhase")==0,"SuperSync phase not preserved");
         }
         var incomplete=New("CE32_console.NpV2PreviewBurst",91U);Call(incomplete,"Accept",Preview(kind:0,offset:0,total:3200,first:0));
@@ -153,6 +153,8 @@ internal static class BleFeaturesTests
         Reject(()=>Call(incomplete,"Accept",Preview(kind:0,offset:384,total:3200,first:0)),"Calibration fragment gap accepted");
         incomplete=New("CE32_console.NpV2PreviewBurst",91U);Call(incomplete,"Accept",Preview(kind:0,offset:0,total:3200,first:0));
         Reject(()=>Call(incomplete,"Accept",Preview(kind:0,offset:192,total:3200,first:0,session:8)),"Mixed calibration session accepted");
+        incomplete=New("CE32_console.NpV2PreviewBurst",91U);Call(incomplete,"Accept",Preview(kind:0,offset:0,total:3200,first:0,hz:15000));
+        Reject(()=>Call(incomplete,"Accept",Preview(kind:0,offset:192,total:3200,first:0,hz:20000)),"Mixed calibration rate accepted");
     }
     static void PreviewLifetime()
     {
@@ -222,8 +224,41 @@ internal static class BleFeaturesTests
             Console.WriteLine("PASS "+run+" preview replay: "+previews+" BA frames, "+calibrations+" calibrated bursts, "+rolling+" rolling packets, "+decoded+" phase-validated decodes, "+discarded+" disposable errors/gaps; no analog-quality claim.");
         }
     }
+    static void ConnectTrace(string source=null)
+    {
+        if(source!=null){
+            string text=File.ReadAllText(source);
+            const string discovery="GetGattServicesForUuidAsync(ServiceId,BluetoothCacheMode.Uncached)";
+            int first=text.IndexOf(discovery,StringComparison.Ordinal),second=first<0?-1:text.IndexOf(discovery,first+discovery.Length,StringComparison.Ordinal);
+            Check(first>=0 && second>first && text.IndexOf(discovery,second+discovery.Length,StringComparison.Ordinal)<0,"FFF0 discovery/retry is not exactly UUID-specific and uncached.");
+            Check(!text.Contains("GetGattServicesAsync(BluetoothCacheMode.Uncached)"),"Full-service uncached discovery remains in the connection path.");
+            Check(text.Contains("if(allowWarm && warmType.HasValue)") && text.Contains("lastResolvedWarm=true"),"Only an exact retained address/type may take the warm route.");
+            Check(text.Contains("if(!warm || freshFallback)") && text.Contains("ResolveAddress(address,timeout.Token,value=>{stage=value;TraceConnect(elapsed,value);},false)") && text.Contains("catch (OperationCanceledException error)"),"Warm discovery failure lacks one bounded cancellable fresh-observation fallback.");
+        }
+        using(var connection=(IDisposable)New("USB512_interface.NpBleConnection")){
+            Check(!String.IsNullOrEmpty((string)Property(connection,"LastConnectDiagnostic")),"Missing initial connect diagnostic");
+            Call(connection,"ResetConnectDiagnostic",0xF5D68A6BCC7CUL);
+            string reset=(string)Property(connection,"LastConnectDiagnostic");
+            Check(reset.Contains("address=F5D68A6BCC7C") && reset.Contains("0ms begin"),"Connect trace lost exact selected address");
+            var elapsed=Stopwatch.StartNew();
+            Call(connection,"TraceConnect",elapsed,"advertisement observed; observed_type=Random");
+            Call(connection,"TraceConnect",elapsed,"FFF0 service discovery");
+            string trace=(string)Property(connection,"LastConnectDiagnostic");
+            Check(trace.Contains("ms advertisement observed; observed_type=Random") && trace.Contains("ms FFF0 service discovery"),"Connect trace lost stage/type timing");
+            Call(connection,"Disconnect");
+            Check((string)Property(connection,"LastConnectDiagnostic")==trace,"Disconnect erased diagnostic evidence");
+            Call(connection,"ResetConnectDiagnostic",0xF5D68A6BCC7DUL);
+            reset=(string)Property(connection,"LastConnectDiagnostic");
+            Check(reset.Contains("address=F5D68A6BCC7D") && !reset.Contains("observed_type"),"New connect did not reset old diagnostic stages");
+            Check(T("USB512_interface.NpBleConnection").GetProperty("LastConnectDiagnostic",All).GetSetMethod(true)==null,"Connect diagnostic is externally writable");
+        }
+    }
     [STAThread] static int Main(string[] args){
-        try{app=Assembly.LoadFrom(Path.GetFullPath(args[0]));Application.EnableVisualStyles();Clocks();PreviewWire();PreviewDecode();PreviewLifetime();Snapshot(args[1]);
+        try{app=Assembly.LoadFrom(Path.GetFullPath(args[0]));
+            if((args.Length==2 || args.Length==3) && args[1]=="--connect-trace"){
+                ConnectTrace(args.Length==3?args[2]:null);Console.WriteLine("PASS "+checks+" connection-diagnostic/source checks; no GUI, BLE discovery or device commands.");return 0;
+            }
+            Application.EnableVisualStyles();Clocks();PreviewWire();PreviewDecode();PreviewLifetime();Snapshot(args[1]);
             if(args.Length==3)TraceReplay(args[2]);
             Console.WriteLine("PASS "+checks+" BLE feature checks: stopped-only automatic clock commit, read-only active/periodic checks, correlated preview framing/ADC/session/lease lifecycle and bounded queues; no hardware discovery or commands.");return 0;}
         catch(Exception ex){Console.Error.WriteLine(ex);return 1;}

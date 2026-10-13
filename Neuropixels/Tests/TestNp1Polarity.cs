@@ -124,6 +124,9 @@ internal static class Np1PolarityTests
         string text=File.ReadAllText(Path.Combine(output,"neuropixels_probes.txt"));
         Check(text.Contains("sample_transform_version=1") && text.Contains("sample_transform=512 - raw10") &&
             text.Contains("sample_range=-511..512") && text.Contains("sample_polarity=") && text.Contains("legacy_dat_encoding="),"Live sign/version/legacy metadata missing");
+        using(var session=new NpCaptureSession()){session.SampleCorrection=(p,a,n,l,m)=>{};session.WriteStatus(output,false);}
+        text=File.ReadAllText(Path.Combine(output,"neuropixels_probes.txt"));
+        Check(text.Contains("signed calibrated nominal ADC counts") && text.Contains("see adc_calibration.json") && !text.Contains("sample_range=-511..512"),"Calibrated live metadata claims uncorrected counts");
     }
     static void Put(byte[] b,int at,uint n){Buffer.BlockCopy(BitConverter.GetBytes(n),0,b,at,4);}
     static uint Crc(byte[] b,int count){uint c=~0U;for(int i=0;i<count;i++){c^=b[i];for(int bit=0;bit<8;bit++)c=(c>>1)^((0-(c&1))&0xedb88320U);}return ~c;}
@@ -137,7 +140,13 @@ internal static class Np1PolarityTests
         Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes("NPSDLOG1"),0,h,0,8);
         Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes("NPSDEND1"),0,f,0,8);
         Put(f,60,3);Put(f,68,chunks);Put(h,508,Crc(h,508));Put(f,508,Crc(f,508));
-        string output=Path.Combine(folder,"sd-export");
+        string output=Path.Combine(folder,"sd-export"),calibratedOutput=Path.Combine(folder,"sd-calibrated");
+        var gainCsv=new System.Text.StringBuilder("1234\n");var adcCsv=new System.Text.StringBuilder("1234\n");
+        for(int ch=0;ch<384;ch++){gainCsv.Append(ch);for(int column=1;column<=16;column++)gainCsv.Append(column<=8?",1.25":",0.75");gainCsv.Append('\n');}
+        for(int adc=0;adc<32;adc++)adcCsv.Append(adc).Append(",0,0,0,0,0,0,").Append(adc%4).Append(",512\n");
+        string gainPath=Path.Combine(folder,"np1_gain.csv"),adcPath=Path.Combine(folder,"np1_adc.csv");
+        File.WriteAllText(gainPath,gainCsv.ToString());File.WriteAllText(adcPath,adcCsv.ToString());
+        var calibration=new NpCalibrationSet();var profile=new NpAdcCalibration(gainPath,adcPath,"1234",1000,50);calibration.Set(1,profile);
         using(var card=new MemoryStream()){
             card.SetLength(end*512L);card.Position=3*512;card.Write(h,0,512);card.Write(f,0,512);
             card.Position=hs*512L;
@@ -150,6 +159,7 @@ internal static class Np1PolarityTests
                 card.Write(raw,0,raw.Length);card.Write(misc,0,misc.Length);
             }
             NpCe64Export.Export(card,0,end,output,null,null);
+            NpCe64Export.ExportCalibrated(card,0,end,calibratedOutput,null,null,calibration);
         }
         byte[] ap=File.ReadAllBytes(Path.Combine(output,"np1_ap.dat")),lfp=File.ReadAllBytes(Path.Combine(output,"np1_lfp.dat"));
         Check(ap.Length==630*768 && lfp.Length==52*768,"SD export row counts changed");
@@ -163,6 +173,14 @@ internal static class Np1PolarityTests
         string text=File.ReadAllText(Path.Combine(output,"capture_status.txt"));
         Check(text.Contains("complete=True") && text.Contains("sample_transform_version=1") && text.Contains("sample_transform=512 - raw10") &&
             text.Contains("sample_range=-511..512") && text.Contains("sample_polarity=") && text.Contains("legacy_dat_encoding="),"SD sign/version/legacy metadata missing");
+        byte[] correctedAp=File.ReadAllBytes(Path.Combine(calibratedOutput,"np1_ap.dat")),correctedLfp=File.ReadAllBytes(Path.Combine(calibratedOutput,"np1_lfp.dat"));
+        Check(correctedAp.Length==ap.Length && correctedLfp.Length==lfp.Length,"Calibrated NP1 SD row count changed");
+        for(int i=0;i<ap.Length/2;i++)Check(BitConverter.ToInt16(correctedAp,i*2)==profile.Correct(BitConverter.ToInt16(ap,i*2),i%384),"NP1 SD AP bypassed factory correction");
+        for(int i=0;i<lfp.Length/2;i++)Check(BitConverter.ToInt16(correctedLfp,i*2)==profile.Correct(BitConverter.ToInt16(lfp,i*2),i%384,true),"NP1 SD LFP bypassed factory correction");
+        byte[] calibratedRaw=File.ReadAllBytes(Path.Combine(calibratedOutput,"np1.lane8"));Check(calibratedRaw.Length==rawLanes.Length,"Calibrated RAW extent changed");
+        for(int i=0;i<rawLanes.Length;i++)Check(rawLanes[i]==calibratedRaw[i],"Calibration changed native NP1 SD RAW");
+        text=File.ReadAllText(Path.Combine(calibratedOutput,"capture_status.txt"));
+        Check(text.Contains("complete=True") && text.Contains("factory host correction") && File.Exists(Path.Combine(calibratedOutput,NpCalibrationSet.ManifestName)),"NP1 calibrated SD provenance missing");
     }
     [STAThread] static int Main(string[] args){
         string folder=Path.Combine(args[0],"polarity-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(folder);

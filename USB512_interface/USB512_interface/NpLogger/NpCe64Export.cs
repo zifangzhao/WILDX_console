@@ -96,6 +96,12 @@ namespace CE32_console
             return b;
         }
         internal static void Export(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress)
+        { ExportCore(card,start,directoryEnd,output,cancelled,progress,null); }
+
+        internal static void ExportCalibrated(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration)
+        { ExportCore(card,start,directoryEnd,output,cancelled,progress,calibration==null || calibration.Count==0?null:calibration.Copy()); }
+
+        static void ExportCore(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration)
         {
             // V2 shares the CE64 catalog, but its NP2 payload is not NP1 data.
             // Load the same strict decoder used by the WILD release bundle.
@@ -105,16 +111,30 @@ namespace CE32_console
                 if(String.IsNullOrWhiteSpace(output) || Directory.Exists(output) || File.Exists(output))
                     throw new IOException("A fresh NP export folder is required; existing outputs are never overwritten.");
                 bool success=false;string error=null;
-                try {USB512_interface.NpV2SdDatExport.Export(card,(uint)start,output,directoryEnd,cancelled,progress);success=true;}
+                try {
+                    if(calibration==null)USB512_interface.NpV2SdDatExport.Export(card,(uint)start,output,directoryEnd,cancelled,progress);
+                    else USB512_interface.NpV2SdDatExport.ExportCalibrated(card,(uint)start,output,calibration,directoryEnd,cancelled,progress);
+                    success=true;
+                }
                 catch(Exception ex){error=ex.Message;throw;}
                 finally {
                     string descriptor=Path.Combine(output,"descriptor.bin");
                     if(File.Exists(descriptor)) {
                         // The strict exporter saved this descriptor only after validation.
                         byte[] d=File.ReadAllBytes(descriptor);
-                        var settings=USB512_interface.NpRecordingSettings.Saved(output,true,(int)U(d,16),3,U(d,8),U(d,12),"sd_export");
-                        settings.Context("dat_files","neuropixels_probe1_ap.dat, neuropixels_probe2_ap.dat; .partial suffix until fully verified");
+                        var settings=USB512_interface.NpRecordingSettings.Saved(output,true,(int)U(d,16),(int)U(d,24),U(d,8),U(d,12),"sd_export");
+                        settings.Context("dat_files","neuropixels_probeN_ap.dat in recorded physical probe order; .partial suffix until fully verified");
                         settings.Context("descriptor_file","descriptor.bin");
+                        bool nativeSuccess=success;Exception metadataError=null;
+                        // Retain the exact dual full requests or triple fingerprints
+                        // with the DAT. These are recorded intents, not applied proof.
+                        try {
+                            var configuration=new byte[2048];card.Position=checked((start+8)*512);Exact(card,configuration);
+                            settings.SdConfiguration(configuration,d);
+                            var parameters=new byte[1536];card.Position=checked(start*512);Exact(card,parameters);
+                            File.WriteAllBytes(Path.Combine(output,"CE_params.bin"),parameters);
+                        }catch(Exception ex){metadataError=ex;settings.Context("configuration_archive_error",ex.Message);success=false;if(error==null)error="Recording metadata archive failed: "+ex.Message;}
+                        if(calibration!=null)settings.Context("adc_calibration_file",USB512_interface.NpCalibrationSet.ManifestName);
                         if(File.Exists(Path.Combine(output,"utc.bin"))) {
                             byte[] utc=File.ReadAllBytes(Path.Combine(output,"utc.bin"));
                             settings.Context("original_utc_receipt_file","utc.bin");
@@ -123,11 +143,13 @@ namespace CE32_console
                                 "before",BitConverter.ToUInt64(utc,56),"after",BitConverter.ToUInt64(utc,64)));
                         }
                         settings.Finished(success,error);settings.Write();
+                        if(nativeSuccess && metadataError!=null)throw new IOException("DAT exported, but recording metadata could not be archived.",metadataError);
                     }
                 }
                 return;
             }
             if(NpMediaExport.IsTyped(NpDownloadCatalog.Sector(card,start+3))) {
+                if(calibration!=null && calibration.Count!=0)throw new InvalidDataException("Neuropixels calibration does not apply to media recordings.");
                 NpMediaExport.Export(card,start,directoryEnd,output,cancelled,progress);return;
             }
             if(Directory.Exists(output))throw new IOException("NP export folder already exists; choose a new destination.");
@@ -138,11 +160,15 @@ namespace CE32_console
             try {
                 byte[] h=Header(card,start+3,"NPSDLOG1"),f=Header(card,start+4,"NPSDEND1");
                 NpSdGeometry.Validate(h,f,start,directoryEnd);
+                File.WriteAllBytes(Path.Combine(output,"descriptor.bin"),h);
+                File.WriteAllBytes(Path.Combine(output,"footer.bin"),f);
                 uint mask=U(h,16),width=U(h,20),hs=U(h,48),chunks=U(f,68);
+                if(calibration!=null){calibration.RequireModel(false,(int)mask);calibration.Save(output);}
                 bool sensors=U(h,8)>=4,paired=U(h,80)==2;
                 recordingSettings=USB512_interface.NpRecordingSettings.Saved(output,false,(int)U(h,24),(int)mask,U(h,8),U(h,12),"sd_export");
                 recordingSettings.Context("dat_files","npN_ap.dat, npN_lfp.dat in physical probe order; analogin.dat");
                 recordingSettings.Context("configuration_archive_file","CE_params.bin; exact probe selection not stored in this SD format");
+                if(calibration!=null)recordingSettings.Context("adc_calibration_file",USB512_interface.NpCalibrationSet.ManifestName);
                 report.AppendLine("format_version="+U(h,8)).AppendLine("probe_mask="+mask).AppendLine("probe_count="+NpSdGeometry.Count(mask));
                 report.AppendLine("ap_sample_rate_hz="+U(h,24)).AppendLine("lfp_sample_rate_hz="+(U(h,24)/12.0).ToString("0.######",CultureInfo.InvariantCulture))
                     .AppendLine("lfp_rate_numerator="+U(h,24)).AppendLine("lfp_rate_denominator=12");
@@ -150,8 +176,9 @@ namespace CE32_console
                 report.AppendLine("session="+U(h,12)).AppendLine("start_lba="+start).AppendLine("reserved_end_lba="+directoryEnd)
                     .AppendLine("committed_chunks="+chunks).AppendLine("channels_per_band=384")
                     .AppendLine("sample_format=little-endian signed int16; sample-major, channel0..383")
-                    .AppendLine("sample_units=nominal ADC counts; no gain calibration or microvolt conversion")
-                    .AppendLine("sample_transform_version=1").AppendLine("sample_transform=512 - raw10").AppendLine("sample_range=-511..512")
+                    .AppendLine(calibration==null?"sample_units=nominal ADC counts; no gain calibration or microvolt conversion":"sample_units=calibrated nominal ADC counts; factory host correction; no hardware trim or microvolt conversion claim")
+                    .AppendLine("sample_transform_version=1").AppendLine(calibration==null?"sample_transform=512 - raw10":"sample_transform=factory digital ADC threshold/offset; 512 - corrected_raw10; factory gain")
+                    .AppendLine(calibration==null?"sample_range=-511..512":"sample_range=int16; factory-dependent; no clipping")
                     .AppendLine("sample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone")
                     .AppendLine("legacy_dat_encoding=USB console <=1.0.3.16 NP1 DAT: unsigned raw codes 0..1023 stored as int16; existing DAT files are not modified")
                     .AppendLine("startup_qualification=2 consecutive superframes; sync/fixed/fill/heartbeat/counter continuity")
@@ -211,6 +238,7 @@ namespace CE32_console
                         raws[p].Write(chronological,0,chronological.Length);
                         int probe=p;
                         decoders[p].Feed(chronological,(ap,n,lfp,l)=>{
+                            if(calibration!=null)calibration.Correct(probe+1,ap,n,lfp,l);
                             apRows[probe]+=n;lfpRows[probe]+=l;
                             for(int row=0;row<n;row++){Buffer.BlockCopy(ap,row*768,sampleBytes,0,768);aps[probe].Write(sampleBytes,0,768);}
                             for(int row=0;row<l;row++){Buffer.BlockCopy(lfp,row*768,sampleBytes,0,768);lfps[probe].Write(sampleBytes,0,768);}

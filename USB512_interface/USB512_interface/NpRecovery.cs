@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Drawing;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 namespace USB512_interface {
@@ -10,8 +11,11 @@ namespace USB512_interface {
   private System.Windows.Forms.Timer npRetryTimer;
   private string npSessionFolder;
   private string npSessionDevicePath;
+  private string npSessionDeviceUid;
+  private DeviceKind npSessionDeviceKind;
   private int npSegmentNumber,npEmptyAttempts,npConsecutiveShortFailures;
   private bool npInternalRestart,npRecoveryCancelled=true,npSessionHasGap;
+  private bool npRecoveryAttempt,npV2RecoverySafe,npV2RecoveryComplete;
   private volatile bool npFreshStartAvailable;
   private DateTime npLastReceiveUtc=DateTime.MinValue,npPreviousReceiveUtc=DateTime.MinValue,npSegmentStartUtc=DateTime.MinValue;
   private void NpInitializeRecovery() {
@@ -24,18 +28,23 @@ namespace USB512_interface {
     npRetryTimer.Stop();
     if(npRecoveryCancelled || IsDisposed || Disposing)return;
     // Preserve the original target; EnsureStreaming never substitutes a board.
-    devicePath=npSessionDevicePath;npInternalRestart=true;
+    devicePath=npSessionDevicePath;selectedDeviceKind=npSessionDeviceKind;npInternalRestart=true;
     btnStart_Click(null,EventArgs.Empty);
    };
   }
   private string NpSegmentFolder(string fallback) {
-   if(selectedDeviceKind!=DeviceKind.XeNp || !npAutoRecover.Checked) {npSessionFolder=null;npRecoveryCancelled=true;return fallback;}
+   npRecoveryAttempt=npInternalRestart;npV2RecoverySafe=false;npV2RecoveryComplete=false;
+   if((selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2) || !npAutoRecover.Checked) {
+    npSessionFolder=null;npRecoveryCancelled=true;npInternalRestart=false;return fallback;
+   }
    if(!npInternalRestart) {
     npSessionFolder=Path.Combine(saveFolder,"WILDX_SESSION_"+DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_fff")+"_"+Guid.NewGuid().ToString("N").Substring(0,6));
     Directory.CreateDirectory(npSessionFolder);npSegmentNumber=0;npEmptyAttempts=0;npConsecutiveShortFailures=0;npSessionHasGap=false;
-    npSessionDevicePath=devicePath;npPreviousReceiveUtc=DateTime.MinValue;
+    npSessionDevicePath=devicePath;npSessionDeviceKind=selectedDeviceKind;
+    npSessionDeviceUid=selectedDeviceKind==DeviceKind.NpV2?NpV2FirmwareForm.Uid(devicePath):NpV1Management.UidFromPath(devicePath);
+    npPreviousReceiveUtc=DateTime.MinValue;
     File.WriteAllText(Path.Combine(npSessionFolder,"session_events.csv"),"event_utc,event,segment,folder,raw_bytes,ap_rows,lfp_rows,previous_last_host_receive_utc,current_first_or_last_host_receive_utc,detail\r\n");
-    File.WriteAllText(Path.Combine(npSessionFolder,"README.txt"),"GAP-AWARE RECORDING. Segments must NOT be concatenated as a continuous sample timeline.\r\nEach segment has independent framing/decoder state. Host receive timestamps are observations, not exact sample timestamps.\r\nMissing samples and exact gap duration are unknown; no zero padding or invented samples are inserted.\r\nA failed segment is an incomplete prefix; consult its capture status.\r\n");
+    File.WriteAllText(Path.Combine(npSessionFolder,"README.txt"),"GAP-AWARE RECORDING. Segments must NOT be concatenated as a continuous sample timeline.\r\nEach segment has independent framing/decoder state. Host receive timestamps are observations, not exact sample timestamps.\r\nMissing samples and exact gap duration are unknown; no zero padding or invented samples are inserted.\r\nA failed segment is an incomplete prefix; consult its capture status.\r\nDevice kind="+npSessionDeviceKind+"; target UID="+(npSessionDeviceUid??"unknown")+".\r\nRecovery reopens only this target, with the selected rate/probes/configuration retained.\r\n");
    }
    npInternalRestart=false;npRecoveryCancelled=false;npLastReceiveUtc=DateTime.MinValue;
    npFreshStartAvailable=false;npSegmentStartUtc=DateTime.UtcNow;
@@ -66,7 +75,9 @@ namespace USB512_interface {
    if(wasWaiting && npSessionFolder!=null && captureThread==null) {
     NpJournal("session_stopped",runFolder,"User stopped during reconnect wait");
     File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state=stopped\r\nhas_gaps="+npSessionHasGap+"\r\nlossless=False\r\n");
-    lblRecInfo.Text="Stopped gap-aware NP session";UpdateStartEnabled();
+    NpRecordingSettings.RefreshBundle(npSessionFolder);
+    lblRecInfo.Text="Stopped gap-aware NP session";
+    if(!NpV2BeginMergeFinalization("Stopped gap-aware NP session"))UpdateStartEnabled();
    }
   }
   internal static bool NpRetryable(string message) {
@@ -78,6 +89,42 @@ namespace USB512_interface {
     message.Contains("Win32 error 2)") || message.Contains("Win32 error 6)") ||
     message.Contains("No such device");
   }
+  private static bool NpV2TransportCode(int code) {
+   return code==2 || code==6 || code==31 || code==121 || code==1167;
+  }
+  internal static bool NpV2TransportRetryable(string message) {
+   if(message==null)return false;
+   // Scope the numeric error to WinUSB open/read, not an equally numbered
+   // disk error or a command whose application outcome is unknown.
+   if(message.StartsWith("IOException: ",StringComparison.Ordinal))message=message.Substring(13);
+   if(message.StartsWith("Win32Exception: ",StringComparison.Ordinal))message=message.Substring(16);
+   bool read=message.StartsWith("V2 bulk completion failed (Win32 ",StringComparison.Ordinal) ||
+    message.StartsWith("V2 queue bulk read failed",StringComparison.Ordinal) ||
+    message.StartsWith("V2 finish bulk read failed",StringComparison.Ordinal) ||
+    message.StartsWith("V2 wait for bulk read failed",StringComparison.Ordinal) ||
+    message.StartsWith("CreateFile for V2 WinUSB failed",StringComparison.Ordinal) ||
+    message.StartsWith("WinUsb_Initialize for V2 failed",StringComparison.Ordinal);
+   if(!read)return false;
+   foreach(int code in new[]{2,6,31,121,1167})
+    if(message.Contains("(Win32 "+code+";") || message.Contains("(Win32 error "+code+")"))return true;
+   return false;
+  }
+  internal static bool NpV2Retryable(Exception error) {
+   if(error is IOException && error.Message=="Selected NP2 USB device is no longer connected; waiting for the same UID.")return true;
+   if(error is TimeoutException)return error.Message=="WILD-X V2 did not re-enumerate in idle USB-stream mode within 30 seconds.";
+   var win32=error as Win32Exception;
+   return win32!=null && NpV2TransportCode(win32.NativeErrorCode) &&
+    NpV2TransportRetryable(win32.Message+" (Win32 error "+win32.NativeErrorCode+")");
+  }
+  internal static bool NpV2Retryable(NpV2RecordingResult result) {
+   return result!=null && !result.Complete && !result.CancelledBeforeCapture &&
+    result.RawWriterError==null && result.DecodeError==null &&
+    result.RawDroppedBlocks==0 && result.DecodedDroppedLaneBlocks==0 &&
+    result.VerifiedBlocks==result.ReceivedBlocks &&
+    (result.FinalCapture==null || (result.FinalCapture.State!=255U && result.FinalCapture.Error==0U &&
+     result.FinalCapture.ProducerError==0U && result.FinalCapture.SourceError==0U)) &&
+    (result.FinalSource==null || (result.FinalSource.State!=255U && result.FinalSource.Error==0U)) && NpV2TransportRetryable(result.Error);
+  }
   private static bool NpFreshStartExporterFault(string message) {
    // This exact firmware fault was observed after a structurally clean prefix.
    // It cannot resume the old file, but a firmware-advertised fresh START can
@@ -85,11 +132,14 @@ namespace USB512_interface {
    return message!=null && message.IndexOf("V1 USB exporter fault is latched (0xBADA0000)",StringComparison.OrdinalIgnoreCase)>=0;
   }
   private bool NpFinishRecovery(string message) {
-   if(npSessionFolder==null || selectedDeviceKind!=DeviceKind.XeNp)return false;
+   if(npSessionFolder==null || (selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2))return false;
    bool failure=message.StartsWith("Capture error:",StringComparison.Ordinal);
-   NpJournal(failure?"segment_failed":"segment_stopped",runFolder,message);
-   bool freshExporterRetry=npFreshStartAvailable && NpFreshStartExporterFault(message);
-   if(!npRecoveryCancelled && failure && (NpRetryable(message) || freshExporterRetry)) {
+   bool v2=selectedDeviceKind==DeviceKind.NpV2;
+   bool intact=!failure && (!v2 || npV2RecoveryComplete);
+   NpJournal(failure?"segment_failed":intact?"segment_stopped":"segment_incomplete",runFolder,message);
+   bool freshExporterRetry=!v2 && npFreshStartAvailable && NpFreshStartExporterFault(message);
+   bool retry=v2?npV2RecoverySafe && npSessionDeviceUid!=null:NpRetryable(message) || freshExporterRetry;
+   if(!npRecoveryCancelled && failure && retry) {
     npSessionHasGap=true;
     npEmptyAttempts=Interlocked.Read(ref neuropixelsPayloadBytes)>0?0:npEmptyAttempts+1;
     npConsecutiveShortFailures=(npSegmentStartUtc!=DateTime.MinValue &&
@@ -107,7 +157,8 @@ namespace USB512_interface {
     NpJournal("recovery_limit",runFolder,"Stopped after repeated empty or short failed segments");
    }
    npRecoveryCancelled=true;npAutoRecover.Enabled=true;
-   File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state="+(failure?"failed":"stopped")+"\r\nhas_gaps="+npSessionHasGap+"\r\nlossless="+(!failure && !npSessionHasGap)+"\r\n");
+   File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state="+(failure?"failed":intact?"stopped":"incomplete")+"\r\nhas_gaps="+npSessionHasGap+"\r\nlossless="+(intact && !npSessionHasGap)+"\r\n");
+   NpRecordingSettings.RefreshBundle(npSessionFolder);
    return false;
   }
  }

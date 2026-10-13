@@ -331,6 +331,14 @@ namespace USB512_interface
         internal uint I2cOperations { get { return Words[8]; } }
         internal uint ProbeId { get { return Words[14]; } }
         internal uint ChainFailMask { get { return Words[21]; } }
+        internal string DegradedWarning {
+            get {
+                if(Error!=0U || (Flags&16U)==0U)return null; // DEGRADED is bit 4, not bit 16.
+                var failed=new List<string>();
+                for(int p=0;p<3;p++)for(int shank=0;shank<4;shank++)if((ChainFailMask&(1U<<(p*6+shank)))!=0)failed.Add("P"+(p+1)+" shank "+shank);
+                return "DEGRADED: "+(failed.Count==0?"firmware reported degraded source without shank details":String.Join(", ",failed)+" failed unused-shank SR_OUT_OK")+". Full six-chain verification unavailable; requested mapping retained.";
+            }
+        }
         internal uint EepromReads { get { return Words[28]; } }
         internal uint EepromMatch { get { return Words[29]; } }
         internal string Serial { get { return Printable(SerialBytes); } }
@@ -357,6 +365,60 @@ namespace USB512_interface
                 builder.Append(value >= 32 && value <= 126 ? (char)value : '?');
             }
             return builder.ToString();
+        }
+    }
+
+    // Failure-only interpretation: no polling or work in the capture hot path.
+    internal static class NpV2RecordingDiagnostics
+    {
+        private static readonly string[] SourceErrors={"none","source argument","clock setup/readback","HSLV disabled","I2C bus initialization",
+            "I2C transfer/readback","ASIC ID check","EEPROM identity check","shift-register verification","shared capture/DMA binding","source cancellation","I2C operation timeout","probe setup deadline"};
+        private static readonly string[] Steps={"ASIC ID read","EEPROM read","release write","release readback","CAL write","CAL readback",
+            "shift reset assert","shift reset release","OP reset readback","REC reset readback","chain length low write","chain length low readback",
+            "chain length high write","chain length high readback","shift-chain programming","shift-chain status verification","final hold write",
+            "final hold readback","final CAL write","final CAL readback","supersync write","supersync readback","record OP write","record OP readback","record release write","record release readback"};
+        internal static string SourceStateName(uint state){
+            string[] names={"Idle","Power/clock preparation","Power settling","Clock settling","Reset settling","ASIC identification","EEPROM identity","Probe configuration","Analog settling","Probe release/capture binding","Ready","Stopped"};
+            return state<names.Length?names[state]:state==255U?"Failed":"Unknown state "+state;
+        }
+        internal static string ProbeList(uint mask){var names=new List<string>();for(int p=0;p<3;p++)if((mask&(1U<<p))!=0)names.Add("P"+(p+1));return names.Count==0?"unknown":String.Join("+",names);}
+        private static string Chain(uint n){return n<4U?"shank "+n:n==4U?"base-even":n==5U?"base-odd":"unknown chain";}
+        internal static string Explain(string stage,NpV2CaptureStatus capture,NpV2SourceStatus source,Exception error,string cause){
+            uint mask=capture==null?0U:capture.ProbeMask,sourceError=source==null?(capture==null?0U:capture.SourceError):source.Error;
+            string probe="not identified; shared path or firmware did not report a probe",comparatorHistory=null;
+            bool fatalProbeIdentified=false;
+            for(Exception ex=error;ex!=null;ex=ex.InnerException)if(ex.Data.Contains("NP2PhysicalProbe")){
+                int port=Convert.ToInt32(ex.Data["NP2PhysicalProbe"],CultureInfo.InvariantCulture);
+                if(port>=1 && port<=3){probe="P"+port;stage="Stream framing/supersync verification";}
+            }
+            if(sourceError!=0U){
+                stage="Probe setup / "+(sourceError<SourceErrors.Length?SourceErrors[sourceError]:"source error "+sourceError)+" failed";
+                if(source!=null && (source.Flags&0x100U)!=0){
+                    uint port=(source.Flags>>9)&3U,state=(source.Flags>>16)&255U,step=source.Flags>>24;
+                    stage+=" / "+SourceStateName(state)+(step<Steps.Length?" / "+Steps[step]:"");
+                    if(port<3U && (mask==0U || (mask&(1U<<(int)port))!=0)){
+                        probe="P"+(port+1)+" (I2C"+(port+2)+")";
+                        fatalProbeIdentified=true;
+                        if(step>=6U && step<=15U){uint chain=source.Words[18];probe+=" / "+Chain(chain<2U?chain+4U:chain-2U)+", pass "+source.Words[19]+", byte "+source.Words[20];}
+                    }
+                }
+            }else if(capture!=null && capture.ProducerError!=0U){
+                string[] names={"none","argument","DMA/hardware fault","DMA interrupt order","DMA position","source stall","PSSI ring overwrite/USB drain backlog","cache maintenance"};
+                stage="Capture / "+(capture.ProducerError<names.Length?names[capture.ProducerError]:"producer error "+capture.ProducerError);
+                probe="shared PSSI/SPI/DMA path; no individual probe implicated";
+            }
+            if(source!=null && source.ChainFailMask!=0U){
+                var failed=new List<string>();for(int p=0;p<3;p++)for(uint chain=0;chain<6;chain++)if((source.ChainFailMask&(1U<<(p*6+(int)chain)))!=0)failed.Add("P"+(p+1)+" "+Chain(chain));
+                if(failed.Count!=0){
+                    comparatorHistory=String.Join(", ",failed);
+                    if(sourceError==8U && !fatalProbeIdentified)probe=comparatorHistory;
+                }
+            }
+            string report="Stage: "+stage+". Probe: "+probe+". Selected: "+ProbeList(mask)+(capture==null?"":", "+capture.SampleHz.ToString("N0",CultureInfo.InvariantCulture)+" Hz")+".";
+            if(capture!=null)report+=" Firmware: capture="+capture.Error+", producer="+capture.ProducerError+", source="+capture.SourceError+".";
+            if(source!=null)report+=" I2C=0x"+source.I2cError.ToString("X8")+((source.I2cError&4U)!=0?" (NACK)":"")+", chain-fail=0x"+source.ChainFailMask.ToString("X5")+".";
+            if(comparatorHistory!=null)report+=" Comparator failure history: "+comparatorHistory+".";
+            return report+(String.IsNullOrWhiteSpace(cause)?"":" Detail: "+cause);
         }
     }
 
@@ -599,6 +661,10 @@ namespace USB512_interface
         }
 
         internal NpV2CaptureStatus GetCaptureStatus() { return NpV2CaptureStatus.Parse(ReadControl(0x71, 128)); }
+        internal byte[] GetSensorSnapshot() { return ReadControl(0x4A, 140); }
+        // Firmware admits this opt-in only while STOPPED. Legacy clients never
+        // issue it; an unsupported optional request must not block AP recording.
+        internal void EnableSensorHeaders(bool enabled) { VendorOut(0x7C, (ushort)(enabled ? 1 : 0), 0); }
         internal NpV2SourceStatus GetSourceStatus() { return NpV2SourceStatus.Parse(ReadControl(0x73, 144)); }
         internal NpV2ProfileCapabilities GetProfileCapabilities() { return NpV2ProfileCapabilities.Parse(ReadControl(0x76, 32)); }
         internal byte[] ExchangeConfiguration(byte[] request)
@@ -856,6 +922,7 @@ namespace USB512_interface
         internal uint TargetBlocks;
         internal long VerifiedBlocks;
         internal double PayloadMbPerSecond;
+        internal DateTime FirstReceiveUtc, LastReceiveUtc;
     }
 
     internal sealed class NpV2RecordingResult
@@ -876,6 +943,86 @@ namespace USB512_interface
         internal NpV2CaptureStatus FinalCapture;
         internal NpV2SourceStatus FinalSource;
         internal NpV2WireVerifier Verifier;
+        internal DateTime FirstReceiveUtc, LastReceiveUtc;
+#if !NP2_CONSOLE_STANDALONE
+        internal long OptionalImuRecords,OptionalImuSamples;
+        internal string OptionalImuError;
+        internal NpImuDisplay OptionalImuDisplay;
+#endif
+    }
+
+    // File-only finalization, never called while USB capture is active. Keep the
+    // per-probe originals: unequal tails and recovery gaps cannot be invented.
+    internal static class NpV2DatMerge
+    {
+        internal static long Run(string folder, uint mask, uint sampleHz, int[] phases, bool segmentComplete, Func<bool> cancelled)
+        {
+            if (mask < 1 || mask > 7 || (mask & (mask - 1)) == 0 || sampleHz == 0 || phases == null || phases.Length != 3)
+                throw new ArgumentException("NP2 merge requires multiple probes and their recorded clock phases.");
+            var ports = new List<int>();
+            for (int p = 1; p <= 3; p++) if ((mask & (1U << (p - 1))) != 0) {
+                if (phases[p - 1] < 0 || phases[p - 1] >= 1600) throw new InvalidDataException("NP2 merge phase is unavailable.");
+                ports.Add(p);
+            }
+            string output = Path.Combine(folder, "neuropixels_ap.dat"), partial = output + ".partial";
+            if (File.Exists(output) || File.Exists(partial)) throw new IOException("NP2 merge output already exists; originals were not changed.");
+            var inputs = new List<FileStream>();
+            var rows = new List<long>();
+            long common = Int64.MaxValue;
+            bool created = false;
+            try {
+                foreach (int p in ports) {
+                    var input = new FileStream(Path.Combine(folder, "probe" + p, "neuropixels_ap.dat"), FileMode.Open, FileAccess.Read, FileShare.Read, 1024 * 1024, FileOptions.SequentialScan);
+                    inputs.Add(input);
+                    if (input.Length % 768 != 0) throw new InvalidDataException("NP2 probe " + p + " has a partial DAT row.");
+                    rows.Add(input.Length / 768); common = Math.Min(common, input.Length / 768);
+                }
+                if (common == 0) throw new InvalidDataException("NP2 merge has no common complete row.");
+                const int batchRows = 1024;
+                var source = new byte[ports.Count][];
+                for (int p = 0; p < source.Length; p++) source[p] = new byte[batchRows * 768];
+                var merged = new byte[batchRows * 768 * ports.Count];
+                using (var destination = new FileStream(partial, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1024 * 1024, FileOptions.SequentialScan)) {
+                    created = true;
+                    for (long row = 0; row < common; row += batchRows) {
+                        if (cancelled != null && cancelled()) throw new OperationCanceledException("NP2 merge cancelled; per-probe files retained.");
+                        int count = (int)Math.Min(batchRows, common - row), bytes = count * 768;
+                        for (int p = 0; p < inputs.Count; p++) {
+                            int read = 0;
+                            while (read < bytes) {
+                                int n = inputs[p].Read(source[p], read, bytes - read);
+                                if (n == 0) throw new EndOfStreamException("NP2 source DAT changed during merge.");
+                                read += n;
+                            }
+                        }
+                        for (int r = 0; r < count; r++) for (int p = 0; p < inputs.Count; p++)
+                            Buffer.BlockCopy(source[p], r * 768, merged, (r * inputs.Count + p) * 768, 768);
+                        destination.Write(merged, 0, bytes * inputs.Count);
+                    }
+                    destination.Flush(true);
+                }
+                if (cancelled != null && cancelled()) throw new OperationCanceledException("NP2 merge cancelled; per-probe files retained.");
+                bool calibrated=File.Exists(Path.Combine(folder,"adc_calibration.json"));
+                var report = new List<string> {
+                    "merge_complete=True", "recording_segment_complete=" + segmentComplete,
+                    "file=neuropixels_ap.dat", "channels=" + ports.Count * 384, "rows=" + common,
+                    "sample_hz=" + sampleHz, "sample_encoding=" + (calibrated?"signed_calibrated_nominal_adc_counts":NpV2SampleDecoder.SampleEncoding),
+                    "channel_order=ascending physical probe; contiguous hardware channels 0..383 per probe",
+                    "alignment=first complete SuperSync row per probe; phase offsets retained, not corrected; NOT proof of simultaneous ADC samples",
+                    "source_tick_hz=" + sampleHz * 1600UL,
+                    "tails=only common complete rows merged; every per-probe source and unmatched tail retained",
+                    "gaps=never merged across recovery segments; no padding, interpolation or invented samples"
+                };
+                if(calibrated)report.Add("adc_calibration_file=adc_calibration.json; per-probe host correction retained; no additional correction during merge");
+                for (int p = 0; p < ports.Count; p++) report.Add("probe" + ports[p] + "_first_row_source_tick=" + (1600 - phases[ports[p] - 1]) % 1600 + "; source_rows=" + rows[p] + "; unmerged_tail_rows=" + (rows[p] - common));
+                File.Move(partial, output);
+                File.WriteAllLines(Path.Combine(folder, "np2_merge_status.txt"), report);
+                return common;
+            } catch {
+                if (created && File.Exists(partial)) File.Delete(partial); // Only our unpublished temporary, never source data.
+                throw;
+            } finally { foreach (var input in inputs) input.Dispose(); }
+        }
     }
 
     /* NP2 USB blocks preserve three serial 12-bit lanes.  Decode only blocks
@@ -1250,6 +1397,7 @@ namespace USB512_interface
         }
         private readonly string folder;
         private readonly Action<int, short[]> preview;
+        private readonly Action<int, short[]> correctSamples;
         private readonly BlockingCollection<PendingBlock> free;
         private readonly BlockingCollection<PendingBlock>[] queued = new BlockingCollection<PendingBlock>[4];
         private readonly FileStream rawFile;
@@ -1269,9 +1417,13 @@ namespace USB512_interface
             : this(folder, preview, NpV2BufferPolicy.ForHost()) { }
 
         internal NpV2DatRecorder(string folder, Action<int, short[]> preview, NpV2BufferPolicy buffers)
+            : this(folder, preview, buffers, null) { }
+
+        internal NpV2DatRecorder(string folder, Action<int, short[]> preview, NpV2BufferPolicy buffers, Action<int, short[]> correctSamples)
         {
             if (String.IsNullOrWhiteSpace(folder)) throw new ArgumentNullException("folder");
             this.folder = folder; this.preview = preview;
+            this.correctSamples = correctSamples;
             InputCapacityBlocks = buffers.SharedBlocks;
             free = new BlockingCollection<PendingBlock>(InputCapacityBlocks);
             for (int i = 0; i < InputCapacityBlocks; i++) free.Add(new PendingBlock(free));
@@ -1480,6 +1632,7 @@ namespace USB512_interface
             NpV2BatchedWriter file = probe >= 1 && probe <= 3 ? apFiles[probe] : null;
             if (file == null || row == null || row.Length != NpV2SampleDecoder.Channels)
                 throw new InvalidDataException("NP2 DAT row has no active output file.");
+            if(correctSamples!=null)correctSamples(probe,row);
             file.WriteRow(row);
             apRows[probe]++;
             /* Preview is deliberately outside the recording-integrity contract.
@@ -1600,13 +1753,25 @@ namespace USB512_interface
         }
 
         internal static NpV2RecordingResult RunContinuousInFolder(string devicePath, string folder, Func<bool> cancelled,
-            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration)
+            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration
+#if !NP2_CONSOLE_STANDALONE
+            , Action<NpImuDisplay> sensorDisplay=null
+#endif
+            )
         {
-            return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow, confirmConfiguration);
+            return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow, confirmConfiguration
+#if !NP2_CONSOLE_STANDALONE
+                ,sensorDisplay
+#endif
+                );
         }
 
         private static NpV2RecordingResult RunCore(string devicePath, string folder, uint targetBlocks, Func<bool> cancelled,
-            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration)
+            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration
+#if !NP2_CONSOLE_STANDALONE
+            , Action<NpImuDisplay> sensorDisplay=null
+#endif
+            )
         {
             if (String.IsNullOrWhiteSpace(devicePath)) throw new ArgumentNullException("devicePath");
             if (String.IsNullOrWhiteSpace(folder)) throw new ArgumentNullException("folder");
@@ -1634,7 +1799,11 @@ namespace USB512_interface
             bool started = false, protocolComplete = false, stopRequested = false, cancelSent = false, armRequested = false;
             NpV2CaptureStatus finalCapture = null;
             NpV2SourceStatus finalSource = null;
+            string recordingStage="USB device admission";
             NpV2DatRecorder dat = null;
+#if !NP2_CONSOLE_STANDALONE
+            NpUsbSensorMonitor sensorMonitor=null;
+#endif
             Thread worker = null;
             Stopwatch clock = Stopwatch.StartNew();
             long issue = 0;
@@ -1652,7 +1821,13 @@ namespace USB512_interface
                     slots[i] = new NpV2ReadSlot(i, BlocksPerRead * NpV2UsbDevice.BlockBytes);
                     handles[i] = slots[i].Event; free.Add(i);
                 }
+#if !NP2_CONSOLE_STANDALONE
+                var calibration = NpCalibrationSet.Read(folder);
+                if(calibration!=null)calibration.RequireModel(true,7);
+                dat = new NpV2DatRecorder(folder, decodedApRow, buffers, calibration == null ? null : (Action<int, short[]>)((probe, row) => calibration.Correct(probe, row, 1, null, 0)));
+#else
                 dat = new NpV2DatRecorder(folder, decodedApRow, buffers);
+#endif
                 worker = new Thread(delegate()
                 {
                     try
@@ -1679,7 +1854,12 @@ namespace USB512_interface
                                             warnings.Enqueue("Verifier disabled after " + DescribeError(ex) + "; raw capture continued.");
                                         }
                                     }
-                                    if (verified) dat.Enqueue(current.Buffer, at, result.Verifier);
+                                    if (verified) {
+#if !NP2_CONSOLE_STANDALONE
+                                        if(sensorMonitor!=null)sensorMonitor.FeedBlock(current.Buffer,at);
+#endif
+                                        dat.Enqueue(current.Buffer, at, result.Verifier);
+                                    }
                                     else dat.EnqueueRaw(current.Buffer, at);
                                 }
                                 backlogFree.Add(current);
@@ -1704,6 +1884,12 @@ namespace USB512_interface
                             throw new IOException("The V2 firmware reports an unsupported NP2 USB sampling profile (format=" + advertised.Format +
                                 ", sample=" + advertised.SampleHz + " Hz, PSSI=" + advertised.PssiHz + " Hz, mask=0x" + advertised.ProbeMask.ToString("X1") + ").");
                         if (advertised.Format == 3U) NpV2ProfileCapabilities.RequireUsbBandwidth(advertised.ProbeMask, advertised.SampleHz);
+#if !NP2_CONSOLE_STANDALONE
+                        if(sensorDisplay!=null)try {
+                            sensorMonitor=new NpUsbSensorMonitor(device,folder,NpV2FirmwareForm.Uid(devicePath),true,sensorDisplay);
+                            if(advertised.Format==3U)device.EnableSensorHeaders(true);
+                        }catch(Exception ex){result.OptionalImuError=ex.Message;}
+#endif
                         Action queueFree = delegate()
                         {
                             if (stopRequested) return;
@@ -1740,6 +1926,10 @@ namespace USB512_interface
                         };
                         progress(new NpV2RecordingProgress { Text = "Starting " + (continuous ? "continuous " : "") + advertised.SampleHz.ToString("N0", CultureInfo.InvariantCulture) + " sample/s NP2013 configuration (I2C can take about 70 seconds)…", TargetBlocks = targetBlocks });
                         if (cancelled()) throw new OperationCanceledException("Recording stopped before NP2 configuration began.");
+#if !NP2_CONSOLE_STANDALONE
+                        if(sensorMonitor!=null)sensorMonitor.ObserveIdleClock(device);
+#endif
+                        recordingStage="Probe initialization/configuration";
                         device.Start(targetBlocks); started = true;
                         /* Configuration can take about 125 seconds with the
                          * internal I2C pull-ups. Keep the bulk queue separate
@@ -1759,7 +1949,7 @@ namespace USB512_interface
                             if (setupElapsed > 200.0) throw new TimeoutException("NP2 source configuration did not reach the USB read-arm window within 200 seconds.");
                             if (setupElapsed >= nextSetupProgress)
                             {
-                                progress(new NpV2RecordingProgress { Text = "Configuring NP2 probes; source state=" + finalCapture.SourceState + " (USB reads not armed yet)…", TargetBlocks = targetBlocks });
+                                progress(new NpV2RecordingProgress { Text = "Configuring " + NpV2RecordingDiagnostics.ProbeList(finalCapture.ProbeMask) + "; " + NpV2RecordingDiagnostics.SourceStateName(finalCapture.SourceState) + " (USB reads not armed yet)…", TargetBlocks = targetBlocks });
                                 nextSetupProgress = setupElapsed + 5.0;
                             }
                             Thread.Sleep(100);
@@ -1770,6 +1960,10 @@ namespace USB512_interface
                          * one-second read-arm grace interval, then immediately
                          * post the complete queue. EP0 cannot be used after these
                          * RAW_IO requests are pending on this controller pair. */
+#if !NP2_CONSOLE_STANDALONE
+                        if(sensorMonitor!=null)sensorMonitor.ObserveIdleClock(device);
+#endif
+                        recordingStage="Host read-arm / USB queue preparation";
                         device.PrepareCapturePipe(BlocksPerRead * NpV2UsbDevice.BlockBytes);
                         GC.Collect(2, GCCollectionMode.Forced, true);
                         GC.WaitForPendingFinalizers();
@@ -1780,6 +1974,7 @@ namespace USB512_interface
                         device.ArmCapture();
                         queueFree();
                         double readArmStarted = clock.Elapsed.TotalSeconds;
+                        recordingStage="Bulk capture / USB receive";
                         var readWatchdog = new NpV2ReadWatchdog(readArmStarted);
                         bool initialDataWarning = false, dataStallWarning = false, shortReadWarning = false;
                         Thread.CurrentThread.Priority = ThreadPriority.Highest;
@@ -1803,6 +1998,7 @@ namespace USB512_interface
                             queueFree();
                             if (stopRequested && !cancelSent && received == queued)
                             {
+                                recordingStage="Stop boundary / final USB drain";
                                 /* Before asking firmware to stop, drain the outstanding reads. Do not wait for the verifier
                                  * worker to return every buffer: that gap is long enough to exhaust the small
                                  * lossless PSSI retention ring. The final drain reuses buffers as they return. */
@@ -1854,7 +2050,8 @@ namespace USB512_interface
                                         (continuous && targetBlocks == 0U ? (cancelSent ? " blocks (finding final boundary…)" : " blocks (continuous; press Stop to finish)") :
                                          "/" + targetBlocks.ToString("N0") + " blocks"),
                                     ReceivedBlocks = received, TargetBlocks = targetBlocks, VerifiedBlocks = result.Verifier.Blocks,
-                                    PayloadMbPerSecond = firstData < 0 || elapsed <= firstData ? 0 : result.Verifier.PayloadBytesSeen / (elapsed - firstData) / 1000000.0
+                                    PayloadMbPerSecond = firstData < 0 || elapsed <= firstData ? 0 : result.Verifier.PayloadBytesSeen / (elapsed - firstData) / 1000000.0,
+                                    FirstReceiveUtc = result.FirstReceiveUtc, LastReceiveUtc = result.LastReceiveUtc
                                 });
                                 nextProgress = elapsed + 1.0;
                             }
@@ -1907,6 +2104,8 @@ namespace USB512_interface
                             if (bytesDone > 0)
                             {
                                 firstData = firstData < 0 ? elapsed : firstData; lastData = elapsed;
+                                result.LastReceiveUtc = DateTime.UtcNow;
+                                if (result.FirstReceiveUtc == DateTime.MinValue) result.FirstReceiveUtc = result.LastReceiveUtc;
                                 readWatchdog.Progress(elapsed);
                             }
                             received += checked((uint)(bytesDone / NpV2UsbDevice.BlockBytes)); result.WireBytes += bytesDone;
@@ -1923,8 +2122,12 @@ namespace USB512_interface
                             queueFree();
                             if (cancelSent) queueStopReads();
                         }
+                        // Every target byte has been received. Retire even the
+                        // surplus queued reads BEFORE returning to EP0 controls.
+                        device.AbortAndRetire(slots);
                         for (int tries = 0; tries < 50; tries++)
                         {
+                            recordingStage="Final device-count verification";
                             finalCapture = device.GetCaptureStatus();
                             if (finalCapture.State == 4U || finalCapture.State == 255U) break;
                             Thread.Sleep(10);
@@ -1935,7 +2138,6 @@ namespace USB512_interface
                         if (finalSource.Error != 0U || finalSource.State != 11U)
                             throw new IOException("NP2 source did not stop cleanly after the requested recording.");
                         protocolComplete = true;
-                        device.AbortAndRetire(slots);
                     }
                     finally
                     {
@@ -1943,7 +2145,15 @@ namespace USB512_interface
                         {
                             try { device.Cancel(); } catch { }
                             device.AbortAndRetire(slots);
+                            // Failure-only query AFTER native ownership retired.
+                            if(finalSource==null)try{finalSource=device.GetSourceStatus();}catch{}
                         }
+#if !NP2_CONSOLE_STANDALONE
+                        if(sensorMonitor!=null && !Array.Exists(slots,slot=>slot!=null && slot.Active))
+                            sensorMonitor.ObserveIdleClock(device);
+#endif
+                        // Optional sidecar files outlive all queued verifier
+                        // work; finalization belongs after the worker join.
                     }
                 }
             }
@@ -1955,6 +2165,14 @@ namespace USB512_interface
                  * buffer. A non-success result is always retained as incomplete. */
                 work.CompleteAdding();
                 if (worker != null) worker.Join();
+#if !NP2_CONSOLE_STANDALONE
+                if(sensorMonitor!=null) {
+                    try{sensorMonitor.Dispose();}catch(Exception ex){result.OptionalImuError=ex.Message;}
+                    result.OptionalImuRecords=sensorMonitor.Records;result.OptionalImuSamples=sensorMonitor.Samples;
+                    result.OptionalImuError=result.OptionalImuError??sensorMonitor.Error;
+                    result.OptionalImuDisplay=sensorMonitor.LastDisplay;
+                }
+#endif
                 if (dat != null)
                 {
                     try { dat.Complete(); }
@@ -1998,11 +2216,17 @@ namespace USB512_interface
             result.DataSeconds = finalCapture == null || finalCapture.CaptureStartedMs == 0U ? 0.0 :
                 unchecked(finalCapture.DeviceNowMs - finalCapture.CaptureStartedMs) / 1000.0;
             result.FinalCapture = finalCapture; result.FinalSource = finalSource;
+            if(!result.Complete && !result.CancelledBeforeCapture){
+                string stage=result.RawWriterError!=null?"Host RAW file write":result.DecodeError!=null?"Host AP DAT decode/write":verificationWarning!=null?"Stream verification":recordingStage;
+                string detail=result.Error??result.RawWriterError??result.DecodeError??DescribeError(verificationWarning)??result.Warning??"Final counts did not certify complete recording.";
+                result.Error=NpV2RecordingDiagnostics.Explain(stage,finalCapture,finalSource,verificationWarning??error,detail);
+            }
             File.WriteAllLines(Path.Combine(folder, "neuropixels_np2usb_status.txt"), new[] {
                 "complete=" + result.Complete,
                 "cancelled_before_capture=" + result.CancelledBeforeCapture,
                 "error=" + (result.Error ?? "none"),
                 "warning=" + (result.Warning ?? "none"),
+                "source_degraded_warning=" + (finalSource==null?"unavailable":finalSource.DegradedWarning??"none"),
                 "format=" + result.Verifier.FormatName,
                 "codec=" + result.Verifier.Codec,
                 "application_crc=" + result.Verifier.ApplicationCrcPolicy,
@@ -2015,10 +2239,10 @@ namespace USB512_interface
                 "raw_writer_error=" + (result.RawWriterError ?? "none"),
                 "decode_error=" + (result.DecodeError ?? "none"),
                 "decoded_ap_sample_hz=" + result.DecodedDatSampleHz,
-                "decoded_ap_codes=signed nominal ADC counts stored in little-endian int16; no gain/comparator calibration or microvolt conversion",
-                "sample_encoding=" + NpV2SampleDecoder.SampleEncoding,
-                "sample_transform=" + NpV2SampleDecoder.SampleTransform,
-                "sample_range=-2047..2048",
+                File.Exists(Path.Combine(folder,"adc_calibration.json"))?"decoded_ap_codes=signed calibrated ADC counts stored in little-endian int16; see adc_calibration.json; no hardware trim or microvolt conversion claim":"decoded_ap_codes=signed nominal ADC counts stored in little-endian int16; no gain/comparator calibration or microvolt conversion",
+                "sample_encoding=" + (File.Exists(Path.Combine(folder,"adc_calibration.json"))?"signed_calibrated_nominal_adc_counts":NpV2SampleDecoder.SampleEncoding),
+                "sample_transform=" + NpV2SampleDecoder.SampleTransform + (File.Exists(Path.Combine(folder,"adc_calibration.json"))?"; then factory gain correction":""),
+                File.Exists(Path.Combine(folder,"adc_calibration.json"))?"sample_range=int16; factory-dependent; no clipping":"sample_range=-2047..2048",
                 "sample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone",
                 "legacy_dat_encoding=before WILDX 1.0.0.9: unsigned raw 12-bit ADC codes; existing DAT files are not rewritten",
                 "decoded_lfp_file=none (NP2 USB provides full-rate AP serial data only)",
@@ -2069,6 +2293,8 @@ namespace USB512_interface
             {
                 if (text.Length != 0) text.Append(" -> ");
                 text.Append(current.GetType().Name).Append(": ").Append(current.Message);
+                Win32Exception win32 = current as Win32Exception;
+                if (win32 != null) text.Append(" (Win32 error ").Append(win32.NativeErrorCode).Append(")");
             }
             return text.ToString();
         }
@@ -2166,7 +2392,9 @@ namespace USB512_interface
                     (blockSample != NpV2CaptureStatus.Np2Usb03Sample15KHz && blockSample != NpV2CaptureStatus.Np2Usb03Sample20KHz && blockSample != NpV2CaptureStatus.Np2Usb03Sample30KHz) ||
                     blockMclk != blockSample * 1600U || (blockIngress != 1U && blockIngress != 2U) ||
                     !profile || (blockIngress == 1U && (blockProbeMask & 4U) != 0U && codec != 6U) ||
-                    (blockFlags & 1U) == 0U || (blockFlags & ~127U) != 0U ||
+                    (blockFlags & 1U) == 0U || (blockFlags & ~255U) != 0U ||
+                    (blockFlags & 192U) == 192U ||
+                    ((blockFlags & 128U) != 0U && (blockFlags & 32U) == 0U) ||
                     (blockLiveMask != blockProbeMask && (blockFlags & 2U) == 0U) ||
                     (blockLiveMask == 0U && (blockFlags & 4U) == 0U) || U32(bytes, offset + 48) != WireMask(blockProbeMask))
                     throw new InvalidDataException("NP2USB03 capture profile is invalid.");
@@ -2177,7 +2405,10 @@ namespace USB512_interface
                             508 - 184 - (int)blockD8Lookahead))
                         throw new InvalidDataException("NP2USB03 raw D8 phase/lookahead metadata is invalid.");
                 }
-                else if (blockD8Phase != 0U || blockD8Lookahead != 0U || !AllZero(bytes, offset + 176, 508 - 176))
+                else if (blockD8Phase != 0U || blockD8Lookahead != 0U ||
+                    ((blockFlags & 128U) != 0U ?
+                        !AllZero(bytes, offset + 176, 256 - 176) || !AllZero(bytes, offset + 396, 508 - 396) :
+                        !AllZero(bytes, offset + 176, 508 - 176)))
                     throw new InvalidDataException("NP2USB03 has unexpected D8 phase metadata.");
                 for (int p = 0; p < 3; p++) if ((blockProbeMask & (1U << p)) == 0U &&
                     (!AllZero(bytes, offset + 96 + p * 8, 8) || !AllZero(bytes, offset + 120 + p * 8, 8) ||
@@ -2213,23 +2444,26 @@ namespace USB512_interface
                 d8PhaseBits = blockD8Phase; d8LookaheadBytes = blockD8Lookahead;
                 staticContract = new byte[448]; Buffer.BlockCopy(bytes, offset + 60, staticContract, 0, staticContract.Length);
                 if ((blockFlags & 64U) != 0U) Array.Clear(staticContract, 184 - 60, 200);
+                if ((blockFlags & 128U) != 0U) Array.Clear(staticContract, 256 - 60, 140);
             }
             else if (formatVersion != version || StoredBits != bits || TicksPerBlock != ticks ||
                      probeMask != blockProbeMask || liveProbeMask != blockLiveMask || mclkHz != blockMclk ||
                      sampleHz != blockSample || flags != blockFlags || ingressBytes != blockIngress || codecValue != codec ||
                      d8PhaseBits != blockD8Phase || d8LookaheadBytes != blockD8Lookahead ||
-                     !EqualContract(bytes, offset + 60, staticContract, (blockFlags & 64U) != 0U) || sequence != nextSequence || tick != nextTick)
+                     !EqualContract(bytes, offset + 60, staticContract, (blockFlags & 64U) != 0U, (blockFlags & 128U) != 0U) || sequence != nextSequence || tick != nextTick)
                 throw new InvalidDataException("NP2 USB format, metadata, sequence, or source-tick extent changed mid-stream.");
             for (int p = 0; p < 3; p++) if ((blockLiveMask & (1U << p)) != 0U)
             {
                 int group = version == 1 ? 1 : version == 2 ? 0 : Rank(blockProbeMask, p);
                 if (first)
                 {
-                    int relativePhase = FindPhase(bytes, offset, offset + HeaderBytes, bits, ticks, group, codec, p,
-                        blockD8Phase, (blockFlags & 64U) != 0U);
+                    int relativePhase;
+                    try { relativePhase = FindPhase(bytes, offset, offset + HeaderBytes, bits, ticks, group, codec, p,
+                        blockD8Phase, (blockFlags & 64U) != 0U); }
+                    catch(InvalidDataException ex){throw ProbeFault(p,ex.Message);}
                     phases[p] = (relativePhase + 1600 - (int)(tick % 1600UL)) % 1600;
                     if (v3 && (blockFlags & 16U) == 0U && U32(bytes, offset + 164 + p * 4) != (uint)phases[p])
-                        throw new InvalidDataException("NP2USB03 probe " + p + " phase metadata is incorrect.");
+                        throw ProbeFault(p,"phase metadata is incorrect.");
                 }
                 // Visit the four sync positions directly instead of doing two
                 // divisions on every wire tick. This is cheap enough to check
@@ -2244,7 +2478,7 @@ namespace USB512_interface
                             int i = start + bit;
                             if (GroupBits(bytes, offset, offset + HeaderBytes, i, bits, group, ticks, codec, p,
                                 blockD8Phase, (blockFlags & 64U) != 0U) != FrameSync[frame * 4 + bit])
-                                throw new InvalidDataException("NP2 probe " + p + " supersync mismatch at source tick " + (tick + (ulong)i).ToString(CultureInfo.InvariantCulture) + ".");
+                                throw ProbeFault(p,"supersync mismatch at source tick " + (tick + (ulong)i).ToString(CultureInfo.InvariantCulture) + ".");
                             SyncPositionsChecked++;
                         }
                     }
@@ -2253,6 +2487,9 @@ namespace USB512_interface
             nextSequence = sequence + 1UL; nextTick = tick + (uint)ticks; first = false;
             Blocks++; PayloadBytesSeen += PayloadBytes;
         }
+
+        private static InvalidDataException ProbeFault(int probe,string detail)
+        {var error=new InvalidDataException("NP2 P"+(probe+1)+": "+detail);error.Data["NP2PhysicalProbe"]=probe+1;return error;}
 
         private static int FindPhase(byte[] bytes, int headerOffset, int payloadOffset, int bits, int ticks,
             int group, uint codec, int probe, uint d8Phase, bool rawD8Phase)
@@ -2284,10 +2521,11 @@ namespace USB512_interface
             for (int i = 0; i < expected.Length; i++) if (bytes[offset + i] != expected[i]) return false;
             return true;
         }
-        private static bool EqualContract(byte[] bytes, int offset, byte[] expected, bool rawD8Phase)
+        private static bool EqualContract(byte[] bytes, int offset, byte[] expected, bool rawD8Phase, bool sensorHeaders)
         {
             for (int i = 0; i < expected.Length; i++)
-                if ((!rawD8Phase || i < 184 - 60 || i >= 184 - 60 + 200) && bytes[offset + i] != expected[i]) return false;
+                if ((!rawD8Phase || i < 184 - 60 || i >= 184 - 60 + 200) &&
+                    (!sensorHeaders || i < 256 - 60 || i >= 396 - 60) && bytes[offset + i] != expected[i]) return false;
             return true;
         }
         private static byte GroupBits(byte[] bytes, int headerOffset, int payloadOffset, int tick,
@@ -2427,7 +2665,7 @@ namespace USB512_interface
                         "\r\n  sampling-rate=" + capture.SampleHz.ToString("N0", CultureInfo.InvariantCulture) + " samples/s per probe  stored-mask=0x" + capture.ProbeMask.ToString("X1") + "  live-mask=0x" + capture.LiveProbeMask.ToString("X1") +
                         "  ingress=" + capture.IngressBytesPerTick + " B/tick  supported=" + capture.CurrentProfileSupported +
                         "\r\n  worst stage times: pack=" + capture.PackMaxMs + " ms  CRC=" + capture.CrcMaxMs + " ms  validate=" + capture.ValidateMaxMs + " ms  finalize=" + capture.FinalizeMaxMs + " ms" +
-                        "\r\nNP2013 source\r\n  state=" + source.State + "  error=" + source.Error + "  flags=0x" + source.Flags.ToString("X8") + "  I2C ops=" + source.I2cOperations + "  I2C error=0x" + source.I2cError.ToString("X8") +
+                        "\r\nNP2013 source\r\n  state=" + source.State + "  error=" + source.Error + "  flags=0x" + source.Flags.ToString("X8") + "  I2C ops=" + source.I2cOperations + "  I2C error=0x" + source.I2cError.ToString("X8") + (source.DegradedWarning==null?"":"\r\n  "+source.DegradedWarning) +
                         "\r\n  EEPROM identity match=" + source.EepromMatch + "/" + source.EepromReads + "  serial=" + (source.Serial.Length == 0 ? "not yet configured" : source.Serial) + "  model=" + (source.Model.Length == 0 ? "not yet configured" : source.Model) +
                         "\r\n\r\nThis read is non-invasive. Hardware identity is checked when a one-shot capture is started.";
                 }
@@ -2495,6 +2733,55 @@ namespace USB512_interface
     {
         private uint npV2RequestedProbeMask;
         private uint npV2RequestedSampleHz = 20000U;
+        private volatile bool npV2MergeActive, npV2MergeCancelled;
+        private sealed class NpV2MergeJob {
+            internal NpV2RecordingResult Result;
+            internal NpRecordingSettings Settings;
+        }
+        private readonly List<NpV2MergeJob> npV2PendingMerges = new List<NpV2MergeJob>();
+
+        private void NpV2ObserveReceive(DateTime first, DateTime last, string folder)
+        {
+            if (npSessionFolder == null || folder != runFolder || first == DateTime.MinValue) return;
+            if (npLastReceiveUtc == DateTime.MinValue) NpFirstReceive(first, folder);
+            npLastReceiveUtc = last;
+        }
+
+        private bool NpV2BeginMergeFinalization(string message)
+        {
+            if (selectedDeviceKind != DeviceKind.NpV2 || npV2PendingMerges.Count == 0) return false;
+            var jobs = npV2PendingMerges.ToArray(); npV2PendingMerges.Clear();
+            npV2MergeActive = true; npV2MergeCancelled = false; running = true;
+            btnStart.Enabled = btnRefresh.Enabled = btnStreams.Enabled = btnDfu.Enabled = comboDrives.Enabled = false;
+            btnStop.Enabled = true; lblRecInfo.Text = "Capture stopped. Merging NP2 DAT on PC; originals retained. Stop cancels merging.";
+            captureThread = new Thread(delegate() {
+                string finalMessage = message;
+                foreach (var job in jobs) {
+                    var result = job.Result;
+                    try {
+                        int[] phases = { result.Verifier.PhaseForProbe(0), result.Verifier.PhaseForProbe(1), result.Verifier.PhaseForProbe(2) };
+                        long rows = NpV2DatMerge.Run(result.Folder, result.DecodedDatProbeMask, result.DecodedDatSampleHz, phases, result.Complete,
+                            delegate { return npV2MergeCancelled || IsDisposed || Disposing; });
+                        if (job.Settings != null) {
+                            job.Settings.Actual((int)result.DecodedDatSampleHz, (int)result.DecodedDatSampleHz, (int)result.DecodedDatProbeMask, true, true, "validated per-probe decoding; post-session PC merge");
+                            job.Settings.Context("merged_ap_rows", rows);
+                            job.Settings.Context("merge_timing_evidence", "np2_merge_status.txt; first complete SuperSync rows, phase offsets retained");
+                            job.Settings.Context("dat_files", "neuropixels_ap.dat merged AP; probeN originals retained; LFP absent");
+                            job.Settings.Finished(result.Complete, result.Error ?? (result.Complete ? null : result.Warning)); job.Settings.Write();
+                        }
+                    } catch (Exception ex) {
+                        try { File.WriteAllText(Path.Combine(result.Folder, "np2_merge_failure.txt"), ex.Message + "\r\nPer-probe DAT and RAW retained. No gap repair was attempted.\r\n"); } catch (Exception) { }
+                        finalMessage += "; merge not finalized: " + ex.Message;
+                        if (npV2MergeCancelled || IsDisposed || Disposing) break;
+                    }
+                }
+                PostToUi(delegate {
+                    npV2MergeActive = false; running = false; captureThread = null;
+                    FinishCapturePresentation(finalMessage);
+                });
+            }) { IsBackground = true, Name = "NP2 post-session DAT merge", Priority = ThreadPriority.BelowNormal };
+            captureThread.Start(); return true;
+        }
 
         private static string NpV2ProfileText(NpV2ServiceStatus service, NpV2CaptureStatus capture, NpV2SourceStatus source, NpV2ProfileCapabilities capabilities)
         {
@@ -2506,94 +2793,19 @@ namespace USB512_interface
                 "Wire profile: NP2USB0" + capture.Format + "  PSSI/MCLK=" + capture.PssiHz.ToString("N0", CultureInfo.InvariantCulture) +
                 " Hz  ingress=" + capture.IngressBytesPerTick + " B/tick\r\n" +
                 "Capture: " + capture.StateName + "  source=" + source.State + "  fault=" + capture.Error + "/" + capture.SourceError + "/" + source.Error +
-                "  runtime configuration=" + capabilities.Valid;
-        }
-
-        private void NpV2ShowModeSettings()
-        {
-            using (var dialog = new Form { Text = "NP USB capture setup", ClientSize = new Size(560, 528), FormBorderStyle = FormBorderStyle.FixedDialog, StartPosition = FormStartPosition.CenterParent, MinimizeBox = false, MaximizeBox = false })
-            {
-                var port1 = new CheckBox { Text = "Connector 1", Location = new Point(16, 39), AutoSize = true };
-                var port2 = new CheckBox { Text = "Connector 2", Location = new Point(190, 39), AutoSize = true };
-                var port3 = new CheckBox { Text = "Connector 3", Location = new Point(372, 39), AutoSize = true };
-                var rate = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(16, 92), Size = new Size(180, 24) };
-                var mode = new Label { Location = new Point(290, 95), Size = new Size(254, 22), Text = "Continuous until Stop" };
-                var statusBox = new TextBox { Location = new Point(16, 132), Size = new Size(528, 180), Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Font = new Font(FontFamily.GenericMonospace, 9.0F) };
-                var hubWarning = new Label { Location = new Point(16, 318), Size = new Size(528, 37), ForeColor = Color.DarkOrange };
-                var note = new Label { Location = new Point(16, 361), Size = new Size(528, 55), Text = "Start automatically switches this board to its USB-stream personality, applies this profile, and records continuously. Stop ends on a complete 4-block boundary and drains queued USB data before the recording is marked complete." };
-                var configuration = new Button { Text = "NP2 IMRO / channel maps…", Location = new Point(16, 430), Size = new Size(225, 30) };
-                var refresh = new Button { Text = "Read device status", Location = new Point(16, 478), Size = new Size(140, 30) };
-                var ok = new Button { Text = "Use profile", Location = new Point(318, 478), Width = 115, Enabled = false };
-                var cancel = new Button { Text = "Cancel", Location = new Point(443, 478), DialogResult = DialogResult.Cancel };
-                NpV2ProfileCapabilities accepted = null;
-                configuration.Click += delegate {
-                    using(var editor=new NpConfigurationDialog(null,np2:true,availableMask:accepted==null?7:(int)accepted.AvailableProbeMask,
-                        retainedRequests:NpV2RequestsForDevice(devicePath),applyConnectors:NpV2ApplyRequestsForDevice(devicePath,true)))
-                        if(editor.ShowDialog(dialog)==DialogResult.OK)NpV2SaveConfigurationState(devicePath);
-                };
-                var rateValues = new List<uint>();
-                Action read = delegate
-                {
-                    NpV2UsbRoute route = NpV2UsbTopology.Inspect(devicePath);
-                    hubWarning.Text = route.Warning;
-                    hubWarning.ForeColor = route.HubCount == 0 ? Color.DarkGreen : Color.DarkOrange;
-                    try
-                    {
-                        using (var device = NpV2UsbDevice.Open(devicePath))
-                        {
-                            NpV2ServiceStatus service = device.GetServiceStatus();
-                            NpV2CaptureStatus capture = device.GetCaptureStatus();
-                            NpV2SourceStatus source = device.GetSourceStatus();
-                            NpV2ProfileCapabilities capabilities = device.GetProfileCapabilities();
-                            accepted = service.Busy == 0U && capabilities.Valid ? capabilities : null;
-                            statusBox.Text = NpV2ProfileText(service, capture, source, capabilities);
-                            uint selected = npV2RequestedProbeMask != 0U && (npV2RequestedProbeMask & ~capabilities.AvailableProbeMask) == 0U ?
-                                npV2RequestedProbeMask : capabilities.SelectedProbeMask;
-                            port1.Enabled = (capabilities.AvailableProbeMask & 1U) != 0U; port1.Checked = port1.Enabled && (selected & 1U) != 0U;
-                            port2.Enabled = (capabilities.AvailableProbeMask & 2U) != 0U; port2.Checked = port2.Enabled && (selected & 2U) != 0U;
-                            port3.Enabled = (capabilities.AvailableProbeMask & 4U) != 0U; port3.Checked = port3.Enabled && (selected & 4U) != 0U;
-                            rate.Items.Clear(); rateValues.Clear();
-                            uint[] supportedRates = capabilities.SupportedRates;
-                            int selectedRate = 0;
-                            for (int i = 0; i < supportedRates.Length; i++)
-                            {
-                                rateValues.Add(supportedRates[i]); rate.Items.Add(supportedRates[i].ToString("N0", CultureInfo.InvariantCulture) + " samples/s");
-                                if (supportedRates[i] == npV2RequestedSampleHz) selectedRate = i;
-                            }
-                            rate.Enabled = rateValues.Count > 0; if (rateValues.Count > 0) rate.SelectedIndex = selectedRate;
-                            ok.Enabled = accepted != null && rateValues.Count > 0;
-                        }
-                    }
-                    catch (Exception ex) { accepted = null; ok.Enabled = false; port1.Enabled = port2.Enabled = port3.Enabled = rate.Enabled = false; statusBox.Text = "V2 status read failed: " + ex.Message; }
-                };
-                refresh.Click += delegate { read(); };
-                ok.Click += delegate
-                {
-                    if (accepted == null || rate.SelectedIndex < 0) return;
-                    uint mask = (port1.Checked ? 1U : 0U) | (port2.Checked ? 2U : 0U) | (port3.Checked ? 4U : 0U);
-                    if (mask == 0U) { MessageBox.Show(dialog, "Select at least one available NP2 connector.", "NP USB capture setup", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-                    if (!accepted.SupportsProbeMask(mask)) { MessageBox.Show(dialog, "This connector combination has no optimized USB codec. Select connector 1, connector 2, connectors 1+2, or all three connectors.", "NP USB capture setup", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-                    uint requestedRate=rateValues[rate.SelectedIndex];
-                    try { NpV2ProfileCapabilities.RequireUsbBandwidth(mask, requestedRate); }
-                    catch (IOException ex) { MessageBox.Show(dialog, ex.Message, "NP USB bandwidth limit", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-                    if(NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning(mask,requestedRate) && MessageBox.Show(dialog,
-                        "Multi-probe 30 kHz USB capture is experimental and has not passed sustained qualification. 20 kHz profiles have separate test evidence. Continue in best-effort mode?",
-                        "Experimental NP2 USB profile",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
-                    npV2RequestedProbeMask = mask; npV2RequestedSampleHz = requestedRate; dialog.DialogResult = DialogResult.OK;
-                };
-                dialog.Controls.AddRange(new Control[] {
-                    new Label { Text = "NP2 connectors", Location = new Point(16, 12), AutoSize = true }, port1, port2, port3,
-                    new Label { Text = "Supported sampling rate", Location = new Point(16, 70), AutoSize = true }, rate,
-                    new Label { Text = "Recording mode", Location = new Point(290, 70), AutoSize = true }, mode,
-                    statusBox, hubWarning, note, configuration, refresh, ok, cancel });
-                WildXTheme.Apply(dialog); WildXTheme.Button(ok,true); note.ForeColor=WildXTheme.Muted;
-                dialog.AcceptButton = ok; dialog.CancelButton = cancel; read(); dialog.ShowDialog(this); UpdateStartEnabled();
-            }
+                "  runtime configuration=" + capabilities.Valid+(source.DegradedWarning==null?"":"\r\n"+source.DegradedWarning);
         }
 
         private string NpV2EnsureIdleStreamMode()
         {
-            string selectedUid = NpV2FirmwareForm.Uid(devicePath);
+            string selectedUid = npRecoveryAttempt ? npSessionDeviceUid : NpV2FirmwareForm.Uid(devicePath);
+            if (npRecoveryAttempt) {
+                string found = null;
+                foreach (string candidatePath in NpV2UsbDevice.EnumerateDevicePaths())
+                    if (String.Equals(selectedUid, NpV2FirmwareForm.Uid(candidatePath), StringComparison.OrdinalIgnoreCase)) { found = candidatePath; break; }
+                if (found == null) throw new IOException("Selected NP2 USB device is no longer connected; waiting for the same UID.");
+                devicePath = found;
+            }
             NpV2ServiceStatus identity;
             bool ready;
             using (var device = NpV2UsbDevice.Open(devicePath))
@@ -2638,6 +2850,7 @@ namespace USB512_interface
             string message;
             NpRecordingSettings settings=npRecordingSettings;
             bool complete=false;string metadataFailure=null;
+            string appliedDegradedWarning=null;
             try
             {
                 uint requestedMask = npV2RequestedProbeMask;
@@ -2645,7 +2858,7 @@ namespace USB512_interface
                     using (var device = NpV2UsbDevice.Open(devicePath)) requestedMask = device.GetProfileCapabilities().SelectedProbeMask;
                 NpV2ProfileCapabilities.RequireUsbBandwidth(requestedMask, npV2RequestedSampleHz);
                 NpV2UsbRoute route = NpV2UsbTopology.Inspect(devicePath);
-                if (route.HubCount != 0 && IsHandleCreated)
+                if (route.HubCount != 0 && IsHandleCreated && !npRecoveryAttempt)
                 {
                     DialogResult proceed = DialogResult.No;
                     Invoke((Action)delegate
@@ -2679,8 +2892,13 @@ namespace USB512_interface
                         settings.DeviceEvidence("usb_path",streamPath);
                         uint selected=capabilities.SelectedProbeMask;
                         settings.PlannedLayout((int)selected,false,(selected&(selected-1))!=0);
+                        settings.Context("merge_policy", npMergeProbeDat ? "post-session PC merge; per-probe sources retained; recovery segments separate" : "per-probe files only");
                         settings.Context("planned_ap_sample_rate_hz",capabilities.SampleHz);
-                        settings.Streams(false,false,false);
+                        settings.Streams(false,null,false);
+                        settings.Context("misc_signals_requested",npRecordMiscSignals);
+                        settings.Context("imu_delivery",npRecordMiscSignals?"optional 20 Hz latest-value EP0 snapshots; not lossless native 200 Hz acquisition":"disabled by recording settings");
+                        settings.Context("imu_timing","IMU I2C completion tick; analogin.dat is a 1250 Hz held-value grid from the first valid IMU snapshot, not AP sample zero");
+                        settings.Context("clock_observations_file",npRecordMiscSignals?"clock_observations.csv; offline linear fit on Stop; RAW/AP samples are not retimed":"disabled by recording settings");
                         var stagedPorts=new List<int>();
                         var hostOnlyPorts=new List<int>();
                         foreach(var request in stagedConfigurations)stagedPorts.Add(request.Port+1);
@@ -2701,9 +2919,10 @@ namespace USB512_interface
                         npPreviewMask = (int)capabilities.SelectedProbeMask;
                         PrepareNpPreviewForCapture((int)capabilities.SampleHz, npPreviewMask, true, 12);
                         neuropixelsPreview.PrepareProbeDefinitions(previewDefinitions);
-                        llblSavefile.Text = "neuropixels_ap.dat (+ neuropixels_np2usb.raw; one AP DAT per live probe)";
+                        llblSavefile.Text = npMergeProbeDat ? "Per-probe AP DAT + RAW; merged AP DAT finalized after Stop" : "Per-probe AP DAT + neuropixels_np2usb.raw";
                     });
                 }
+                string sensorFolder=runFolder;
                 NpV2RecordingResult result = NpV2Recording.RunContinuousInFolder(streamPath, runFolder,
                     delegate { return ce64StopRequested || !running; },
                     delegate(NpV2RecordingProgress value)
@@ -2713,7 +2932,8 @@ namespace USB512_interface
                         NeuropixelsPreviewForm preview = neuropixelsPreview;
                         if (preview != null) preview.UpdateRecordingReport(Interlocked.Read(ref neuropixelsPayloadBytes),
                             value.VerifiedBlocks, Interlocked.Read(ref neuropixelsApRows), 0, 0);
-                        PostToUi(delegate { if (running) lblRecInfo.Text = value.Text + "\r\nVerified=" + value.VerifiedBlocks.ToString("N0") + "  payload=" + value.PayloadMbPerSecond.ToString("F2", CultureInfo.InvariantCulture) + " MB/s"; });
+                        string thisFolder = runFolder;
+                        PostToUi(delegate { NpV2ObserveReceive(value.FirstReceiveUtc, value.LastReceiveUtc, thisFolder); if (running) lblRecInfo.Text = value.Text + (appliedDegradedWarning==null?"":"\r\n"+appliedDegradedWarning) + "\r\nVerified=" + value.VerifiedBlocks.ToString("N0") + "  payload=" + value.PayloadMbPerSecond.ToString("F2", CultureInfo.InvariantCulture) + " MB/s"; });
                     },
                     delegate(int probe, short[] row)
                     {
@@ -2723,12 +2943,14 @@ namespace USB512_interface
                     },
                     stagedConfigurations.Count==0?null:(Action<NpV2UsbDevice>)delegate(NpV2UsbDevice device)
                     {
-                        var receipts=new List<string>();
+                        var receipts=new List<string>();var degradedWarnings=new List<string>();
                         foreach(var request in stagedConfigurations)
                         {
                             Np2ConfigReply reply=Np2ConfigurationUsb.ConfirmApplied(device,request);
-                            receipts.Add("P"+(request.Port+1)+": applied; ID="+BitConverter.ToString(reply.ConfigurationId).Replace("-","")+"; CRC32="+reply.PayloadCrc.ToString("X8")+"; verification="+reply.Verification+"; transaction="+reply.Transaction);
+                            string warning=Np2ConfigClient.AppliedWarning(reply);if(warning!=null)degradedWarnings.Add(warning);
+                            receipts.Add("P"+(request.Port+1)+": applied; ID="+BitConverter.ToString(reply.ConfigurationId).Replace("-","")+"; CRC32="+reply.PayloadCrc.ToString("X8")+"; verification="+reply.Verification+"; transaction="+reply.Transaction+(warning==null?"":"; "+warning));
                         }
+                        if(degradedWarnings.Count!=0)appliedDegradedWarning=String.Join("\r\n",degradedWarnings);
                         if(settings!=null){
                             const string receiptFile="requested-configuration-applied-receipts.txt";
                             File.WriteAllLines(Path.Combine(runFolder,receiptFile),receipts);
@@ -2737,19 +2959,35 @@ namespace USB512_interface
                             settings.Context("np2_configuration_applied_receipts",receipts.ToArray());
                             var appliedPorts=new List<int>();foreach(var request in stagedConfigurations)appliedPorts.Add(request.Port+1);
                             settings.Context("np2_configuration_applied_ports",appliedPorts.ToArray());
+                            if(degradedWarnings.Count!=0)settings.Context("np2_degraded_configuration_warnings",degradedWarnings.ToArray());
                         }
                         // Publish only after every staged request has its matching
                         // applied receipt, while capture is still held before arm.
                         if(IsHandleCreated)Invoke((Action)delegate {
                             if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed)neuropixelsPreview.ConfirmProbeDefinitions();
                         });
-                    });
+                    }, npRecordMiscSignals ? new Action<NpImuDisplay>(delegate(NpImuDisplay display) { PostToUi(delegate { if(runFolder==sensorFolder)imuTelemetry.SetNpSample(display,false); }); }) : null);
+                npV2RecoverySafe = NpV2Retryable(result); npV2RecoveryComplete = result.Complete;
+                PostToUi(delegate { if(runFolder==sensorFolder && result.OptionalImuDisplay!=null)imuTelemetry.SetNpSample(result.OptionalImuDisplay,true); });
+                string completedFolder = runFolder;
+                PostToUi(delegate { NpV2ObserveReceive(result.FirstReceiveUtc, result.LastReceiveUtc, completedFolder); });
+                if (npMergeProbeDat && result.DecodedDatProbeMask != 0U && (result.DecodedDatProbeMask & (result.DecodedDatProbeMask - 1U)) != 0U &&
+                    result.DecodedDatRows > 0 && result.ReceivedBlocks == result.VerifiedBlocks && result.RawWriterError == null && result.DecodeError == null &&
+                    result.RawDroppedBlocks == 0 && result.DecodedDroppedLaneBlocks == 0)
+                    npV2PendingMerges.Add(new NpV2MergeJob { Result = result, Settings = settings });
                 complete=result.Complete;metadataFailure=result.Error??(result.Complete?null:result.Warning);
                 if(settings!=null) {
+                    settings.Streams(result.OptionalImuSamples>0,result.OptionalImuSamples>0,false);
+                    settings.Context("optional_imu_snapshots",result.OptionalImuRecords);
+                    settings.Context("optional_imu_error",result.OptionalImuError??"none");
                     settings.Context("np2_cancelled_before_capture",result.CancelledBeforeCapture);
                     if(result.DecodedDatSampleHz!=0 && result.DecodedDatProbeMask!=0)
                         settings.Actual((int)result.DecodedDatSampleHz,(int)result.DecodedDatSampleHz,(int)result.DecodedDatProbeMask,false,result.DecodedDatProbeMask!=1 && result.DecodedDatProbeMask!=2 && result.DecodedDatProbeMask!=4,"validated decoded NP2 wire format");
-                    if(result.FinalCapture!=null)settings.Context("np2_capture_status_words",result.FinalCapture.Words);
+                    if(result.FinalCapture!=null) {
+                        settings.Context("np2_capture_status_words",result.FinalCapture.Words);
+                        settings.Context("neural_software_arm_completed_ms",result.FinalCapture.CaptureStartedMs);
+                        settings.Context("neural_timing_anchor","software arm completion, 1 ms resolution; not a first ADC-conversion timestamp");
+                    }
                     if(result.FinalSource!=null)settings.Context("np2_source_status",NpRecordingSettings.Fields(
                         "words",result.FinalSource.Words,"serial",result.FinalSource.Serial,"model",result.FinalSource.Model,
                         "identity_scope","firmware source-status receipt; physical per-port identity is not advertised"));
@@ -2765,9 +3003,11 @@ namespace USB512_interface
                         (result.Warning ?? "See neuropixels_np2usb_status.txt for incomplete integrity details");
                 else
                     message = "Capture error: V2 NP2 USB recording could not continue: " + (result.Error ?? "no USB blocks were captured");
+                string degradedWarning=appliedDegradedWarning??(result.FinalSource==null?null:result.FinalSource.DegradedWarning);
+                if(degradedWarning!=null)message+="\r\n"+degradedWarning;
             }
             catch (OperationCanceledException ex) { metadataFailure=ex.Message;message = ex.Message; }
-            catch (Exception ex) { metadataFailure=DescribeCaptureFailure(ex);message = "Capture error: " + metadataFailure; }
+            catch (Exception ex) { npV2RecoverySafe = NpV2Retryable(ex); metadataFailure=DescribeCaptureFailure(ex);message = "Capture error: " + metadataFailure; }
             if(settings!=null)try {settings.Finished(complete,metadataFailure);settings.Write();}
                 catch(Exception ex){message+="; recording setup snapshot failed: "+ex.Message;}
             PostToUi(delegate { FinishCaptureOnUi(message); });

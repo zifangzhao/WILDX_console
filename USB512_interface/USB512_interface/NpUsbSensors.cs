@@ -13,6 +13,7 @@ namespace USB512_interface {
   internal uint Valid,Overflow,MissedEstimate,ImuError,EnvironmentError;
   internal string DisplayText="Waiting for NP sensor metadata...";
   private readonly double[] displayValues=new double[9];
+  private readonly byte[] snapshot=new byte[140];
   private uint displaySequence,displayTick;
   internal NpImuDisplay GetDisplay() {return new NpImuDisplay {
    Values=(double[])displayValues.Clone(),Valid=Valid,Sequence=displaySequence,
@@ -36,27 +37,43 @@ namespace USB512_interface {
       U(b,o+20)!=0x31534e53 || U(b,o+24)!=1 || !Magic(b,o+164,"NPUSB001") ||
       U(b,o+172)!=1 || U(b,o+160)!=Crc(b,o,160) || U(b,o+502)!=Crc(b,o,502))
     throw new IOException("Invalid NP sensor metadata/version/CRC; recording stopped.");
-   uint record=U(b,o+8), sid=U(b,o+176), seq=U(b,o+40);
+   uint record=U(b,o+8), sid=U(b,o+176);
    if(haveRecord && record!=unchecked(lastRecord+1))throw new IOException("NP sensor record sequence gap.");
    if(haveSession && session!=sid)throw new IOException("NP sensor firmware session changed without a new segment.");
    lastRecord=record;haveRecord=true;session=sid;haveSession=true;
-   Valid=U(b,o+32);Overflow=U(b,o+184);MissedEstimate=U(b,o+148);
-   ImuError=U(b,o+124);EnvironmentError=U(b,o+128);
-   for(int axis=0;axis<9;axis++)displayValues[axis]=I(b,o+68+axis*4)/(axis<3?1e6:1e3);
-   displaySequence=seq;displayTick=U(b,o+52);
+   Overflow=U(b,o+184);
+   FeedSnapshot(b,o+20,U(b,o+12));
+  }
+  internal void FeedSnapshot(byte[] b,int o,uint observedMs) {
+   if(b==null || o<0 || b.Length-o<140 || U(b,o)!=0x31534e53 || U(b,o+4)!=1)
+    throw new IOException("Invalid NP sensor snapshot ABI.");
+   // Preserve the NP1 packet path; EP0 snapshots are optional observations,
+   // not a lossless 200 Hz sensor stream. Native sequences remain visible.
+   uint seq=U(b,o+20);
+   Valid=U(b,o+12);MissedEstimate=U(b,o+128);
+   if(seq==0 || unchecked(observedMs-U(b,o+32))>100)Valid&=~1U;
+   if(U(b,o+24)==0 || unchecked(observedMs-U(b,o+36))>200)Valid&=~2U;
+   if(U(b,o+28)==0 || unchecked(observedMs-U(b,o+40))>3000)Valid&=~4U;
+   // Existing uniform serializer takes a private copy; never alter RAW input.
+   Buffer.BlockCopy(b,o,snapshot,0,140);
+   Buffer.BlockCopy(BitConverter.GetBytes(Valid),0,snapshot,12,4);
+   b=snapshot;o=0;
+   ImuError=U(b,o+104);EnvironmentError=U(b,o+108);
+   for(int axis=0;axis<9;axis++)displayValues[axis]=I(b,o+48+axis*4)/(axis<3?1e6:1e3);
+   displaySequence=seq;displayTick=U(b,o+32);
    Records++;
-   uniform.Feed(b,o);
+   uniform.FeedSnapshot(b,o,observedMs);
    if((Valid&1)!=0 && (!haveImu || seq!=lastImu)) {
     if(haveImu) {uint delta=unchecked(seq-lastImu);if(delta>1)ImuSequenceGaps+=delta-1;}
     ImuSamples++;lastImu=seq;haveImu=true;
    }
    string axes=(Valid&1)==0?"NOT READY":(Valid&2)==0?"6-axis; magnetic data unavailable":"9-axis";
    string magText=(Valid&2)==0?"Mag: unavailable (not zero-field data)":String.Format(CultureInfo.InvariantCulture,
-    "Mag (uT): {0:F2}, {1:F2}, {2:F2}",I(b,o+92)/1e3,I(b,o+96)/1e3,I(b,o+100)/1e3);
+    "Mag (uT): {0:F2}, {1:F2}, {2:F2}",I(b,o+72)/1e3,I(b,o+76)/1e3,I(b,o+80)/1e3);
    DisplayText=String.Format(CultureInfo.InvariantCulture,
     "NP IMU | {0} | sample {1} | device {2} ms\nAccel (g): {3:F3}, {4:F3}, {5:F3}\nGyro (deg/s): {6:F2}, {7:F2}, {8:F2}\n{9}\nErrors: IMU {10}, environment {11} | queue loss {12} | missed estimate {13}",
-    axes,seq,U(b,o+52),I(b,o+68)/1e6,I(b,o+72)/1e6,I(b,o+76)/1e6,
-    I(b,o+80)/1e3,I(b,o+84)/1e3,I(b,o+88)/1e3,magText,
+    axes,seq,U(b,o+32),I(b,o+48)/1e6,I(b,o+52)/1e6,I(b,o+56)/1e6,
+    I(b,o+60)/1e3,I(b,o+64)/1e3,I(b,o+68)/1e3,magText,
     ImuError,EnvironmentError,Overflow,MissedEstimate);
   }
   public void Dispose(){uniform.Dispose();}
@@ -96,28 +113,31 @@ namespace USB512_interface {
    return (short)scaled;
   }
   internal void Feed(byte[] b,int o) {
-   uint seq=U(b,o+40),tick=U(b,o+52),now=U(b,o+12);
+   FeedSnapshot(b,o+20,U(b,o+12));
+  }
+  internal void FeedSnapshot(byte[] b,int o,uint now) {
+   uint seq=U(b,o+20),tick=U(b,o+32);
    if(!started) {
     // Do not backfill before the first actual AG observation.
-    if((U(b,o+32)&1)==0)return;
+    if((U(b,o+12)&1)==0)return;
     lastTick=tick;lastSequence=seq;started=true;deviceOriginMs=tick;
     pcOriginMs=(uint)DateTime.Now.TimeOfDay.TotalMilliseconds;
-    Buffer.BlockCopy(b,o+20,held,0,140);
-   } else if(seq!=lastSequence && (U(b,o+32)&1)!=0) {
+    Buffer.BlockCopy(b,o,held,0,140);
+   } else if(seq!=lastSequence && (U(b,o+12)&1)!=0) {
     uint delta=unchecked(tick-lastTick);
     if(delta>60000)throw new IOException("NP misc source clock discontinuity (>60 s); start a new segment.");
     ulong time=sourceUs+(ulong)delta*1000;
     EmitBefore(time);sourceUs=time;lastTick=tick;lastSequence=seq;
-    Buffer.BlockCopy(b,o+20,held,0,140);
+    Buffer.BlockCopy(b,o,held,0,140);
    }
    // NP_OPTIONAL_SENSOR_VALIDITY: a failure/status transition is not a
    // new IMU sample, but it must end the previous held-value interval.
-   if(started && U(held,12)!=U(b,o+32)) {
+   if(started && U(held,12)!=U(b,o+12)) {
     uint delta=unchecked(now-lastTick);
     if(delta>60000)throw new IOException("NP misc status clock discontinuity.");
     ulong time=sourceUs+(ulong)delta*1000;
     EmitBefore(time);sourceUs=time;lastTick=now;
-    Buffer.BlockCopy(b,o+20,held,0,140);
+    Buffer.BlockCopy(b,o,held,0,140);
    }
    // Export observations can contain several queued samples with the same now.
    // Only use this watermark on close, after all those samples were consumed.

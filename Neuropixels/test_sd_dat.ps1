@@ -1,7 +1,11 @@
 param(
     [string]$Compiler,
     [string]$OutputDirectory = "$PSScriptRoot\_artifacts\sd-dat-tests",
-    [string]$ConsoleExecutable
+    [string]$ConsoleExecutable,
+    [switch]$MetadataV12,
+    [switch]$RuntimeProfiles,
+    [string]$BaselineExporterPath,
+    [switch]$CompileOnly
 )
 $ErrorActionPreference = 'Stop'
 if (-not $Compiler) {
@@ -16,6 +20,7 @@ New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $exe = Join-Path $OutputDirectory 'NpV2SdDatExportTests.exe'
 $sources = @(
     "$PSScriptRoot\SD\NpV2SdDatExport.cs",
+    "$console\NpAdcCalibration.cs",
     "$PSScriptRoot\SD\NpNeuroscopeXml.cs",
     "$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs", "$console\Np2ConfigurationClient.cs",
     "$console\USB512WinUsb.cs", "$console\NeuropixelsPreviewForm.cs", "$console\XeNpStreamDecoder.cs",
@@ -28,8 +33,18 @@ $sources = @(
 )
 & $Compiler /nologo /optimize+ /define:NP2_CONSOLE_STANDALONE /target:exe /main:NpV2SdDatExportTests /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll /r:System.Management.dll "/out:$exe" @sources
 if ($LASTEXITCODE) { throw 'SD DAT exporter tests did not compile.' }
+if($CompileOnly){return}
 $arguments = @($OutputDirectory)
+if($RuntimeProfiles){
+    if($MetadataV12 -or $ConsoleExecutable){throw 'Runtime profile fixture is standalone; do not combine selectors.'}
+    $arguments+='--runtime-only'
+}
 if ($ConsoleExecutable) { $arguments += [IO.Path]::GetFullPath($ConsoleExecutable) }
+if($MetadataV12){
+    if(-not $ConsoleExecutable){throw 'The focused v11/v12 check requires -ConsoleExecutable.'}
+    $arguments+='--v12-only'
+    if($BaselineExporterPath){$arguments += [IO.Path]::GetFullPath($BaselineExporterPath)}
+}
 & $exe @arguments
 if ($LASTEXITCODE) { throw 'SD DAT exporter tests failed.' }
 'PASS project-owned NP2 SD-to-DAT fixtures; no hardware was accessed.'

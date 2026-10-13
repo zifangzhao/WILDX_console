@@ -2,6 +2,8 @@
 
 Source integration against the frozen ABI4 / APP `ED881256` engineering release. No installer generation, version bump, firmware edit, push or hardware operation was performed.
 
+This record describes the 2026-10-10 source and tests. The V2 GUI was subsequently changed to 16 initial observations on 2026-10-11; see [the focused sync update](v2-ble-sync16.md). The 64-observation behavior and hashes below are historical evidence.
+
 ## Behavior
 
 - The BLE control version is read from the selected device using the common read-only handshake. A fresh, CRC-valid, correlated status transaction confirms the version before profiles or actions are enabled. Disconnect clears the detected version. Unsupported or invalid replies cannot select a fallback protocol.

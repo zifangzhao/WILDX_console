@@ -21,7 +21,7 @@ internal static class Np2ImroTests {
  static void Wait(Task task){while(!task.IsCompleted){Application.DoEvents();System.Threading.Thread.Sleep(5);}task.GetAwaiter().GetResult();}
  static string Request(Form form){return (string)form.GetType().GetProperty("RequestedJson",All).GetValue(form,null);}
  static Control Find(Control parent,string text){foreach(Control child in parent.Controls){if(child.Text==text)return child;var found=Find(child,text);if(found!=null)return found;}return null;}
- static Form Dialog(Type type,Dictionary<int,string> retained,bool np2=true){return (Form)Activator.CreateInstance(type,All,null,new object[]{null,null,np2,7,retained},null);}
+ static Form Dialog(Type type,Dictionary<int,string> retained,bool np2=true){return (Form)Activator.CreateInstance(type,All,null,new object[]{null,null,np2,7,retained,null,null,null},null);}
  static string Table(string model,Dictionary<string,object> mapping){
   bool multi=model=="24"||model=="2013";var text=new StringBuilder("("+model+",384)");
   for(int ch=0;ch<384;ch++){
@@ -38,7 +38,7 @@ internal static class Np2ImroTests {
   var retained=new Dictionary<int,string>();string expected=null;
   using(var form=Dialog(type,retained)){
    Check(Find(form,"Load IMRO / JSON…")!=null,"NP2 import control missing");
-   Check(Find(form,"Edit NP2 channel map…")!=null,"NP2 editor control missing");
+   Check(Find(form,"Edit channel map…")!=null,"Shared editor control missing");
    Check(Find(form,"Device staging / receipt…")==null,"Unsupported V1 staging exposed for NP2");
    var port=(ComboBox)type.GetField("connector",All).GetValue(form);
    foreach(string model in new[]{"21","2003","24","2013"}){
@@ -64,7 +64,7 @@ internal static class Np2ImroTests {
     try{Wait((Task)Call(form,"ImportFile",bad));}catch(IOException){rejected=true;}
     Check(rejected,"Incomplete or NP1 IMRO accepted");Check(Request(form)==expected,"Failed import replaced valid request");
    }
-   Call(Find(form,"Keep host requests"),"OnClick",EventArgs.Empty);
+   Call(Find(form,"Save settings"),"OnClick",EventArgs.Empty);
    Check(retained.Count==2 && retained[2]==expected && retained[3]==third,"Per-port requests not committed independently");
   }
   using(var cancel=Dialog(type,retained)){
@@ -79,7 +79,7 @@ internal static class Np2ImroTests {
    var actions=(Control)type.GetField("actions",All).GetValue(layout);
    foreach(Control action in actions.Controls)Check(actions.ClientRectangle.Contains(action.Bounds),"NP2 control clipped: "+action.Text);
   }
-  using(var v1=Dialog(type,null,false))Check(Find(v1,"Open configurator")!=null && Find(v1,"Load IMRO / JSON…")==null,"V1 editor behavior changed");
+  using(var v1=Dialog(type,null,false))Check(Find(v1,"Edit channel map…")!=null && Find(v1,"Load IMRO / JSON…")!=null,"V1 did not use the shared editor workflow");
   int samples=0,unsupported=0;
   using(var examples=Dialog(type,new Dictionary<int,string>()))foreach(string path in new List<string>(args).GetRange(3,args.Length-3)){
    string model=Regex.Match(File.ReadAllText(path),@"\((\d+)[, ]").Groups[1].Value;

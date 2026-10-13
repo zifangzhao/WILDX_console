@@ -704,6 +704,7 @@ namespace USB512_interface
         internal Action<byte[],int,int> OnMisc;
         internal Action<byte[],int,int,byte,ushort> OnCamera;
         internal Action<int,short[],int,short[],int> OnSamples;
+        internal Action<int,short[],int,short[],int> SampleCorrection;
         internal Action<int> OnPayload;
         // The scope queue was designed as a single-producer ring.  Probe
         // decoder/writer lanes run independently, so serialize only this very
@@ -786,6 +787,7 @@ namespace USB512_interface
                 // Merged output writes one root AP/LFP pair in physical-port order.
                 string dir=active.Count>1 && !MergedDat?Path.Combine(folder,"probe"+id):folder;
                 var p=new NpProbeRecording(dir,id,Tagged?XeNpLaneLayout.GpioV1Quad:status.Layout,!MergedDat,UpsampledAp);
+                p.SampleCorrection=SampleCorrection;
                 Probes.Add(p);byProbe[id]=p;p.Decoded=delegate(int probe,uint counter,short[] a,int na,short[] l,int nl) {
                     if(merged!=null)merged.Add(probe,counter,a,na,l,nl,p.DecodedReadStamp);
                     lock(samplesCallbackLock)if(OnSamples!=null)OnSamples(probe,a,na,l,nl);
@@ -838,8 +840,9 @@ namespace USB512_interface
                 "ap_resampler="+(UpsampledAp?"deterministic linear 4:3; integer nearest rounding; <=1 native-row latency":"none"),
                 "dat_layout="+(MergedDat?"merged":"individual"),"dat_channel_count="+OutputChannelCount,
                 "raw_lane_bin_saved=False","wire_id="+(Tagged?(tagged.PairedRaw?"0x77":"0x76"):"0x06"),
-                "codes=signed nominal ADC counts stored in little-endian int16; no gain calibration or microvolt conversion",
-                "sample_transform_version=1","sample_transform=512 - raw10","sample_range=-511..512",
+                SampleCorrection==null?"codes=signed nominal ADC counts stored in little-endian int16; no gain calibration or microvolt conversion":"codes=signed calibrated nominal ADC counts stored in little-endian int16; see adc_calibration.json; no hardware trim or microvolt conversion claim",
+                "sample_transform_version=1",SampleCorrection==null?"sample_transform=512 - raw10":"sample_transform=factory digital ADC threshold/offset; 512 - corrected_raw10; factory gain",
+                SampleCorrection==null?"sample_range=-511..512":"sample_range=int16; factory-dependent; no clipping",
                 "sample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone",
                 "legacy_dat_encoding=USB console <=1.0.3.16 NP1 DAT: unsigned raw codes 0..1023 stored as int16; existing DAT files are not modified",
                 "startup_qualification=2 consecutive superframes; sync/fixed/fill/heartbeat/counter continuity",
@@ -900,6 +903,7 @@ namespace USB512_interface
         internal long LfpOutputRows {get{return lfp==null?0:lfp.OutputRows;}}
         internal long FileBytes { get { return (ap==null?0:ap.FileBytes)+(lfp==null?0:lfp.FileBytes); } }
         internal Action<int,uint,short[],int,short[],int> Decoded;
+        internal Action<int,short[],int,short[],int> SampleCorrection;
         Action<short[],int,short[],int> samples;
         internal NpProbeRecording(string folder,int probe,XeNpLaneLayout layout) {
             Initialize(folder,probe,layout,true,false);
@@ -921,6 +925,7 @@ namespace USB512_interface
             samples=OnSamples;
         }
         void OnSamples(short[] a,int na,short[] l,int nl) {
+            if(SampleCorrection!=null)SampleCorrection(Probe,a,na,l,nl);
             if(ap!=null)ap.Write(a,na);if(lfp!=null)lfp.Write(l,nl);
             if(nl>0)LfpLastReceiveUtc=DecodedReadStamp.Utc;
             Interlocked.Add(ref ApRows,na);Interlocked.Add(ref LfpRows,nl);

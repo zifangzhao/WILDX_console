@@ -59,57 +59,74 @@ namespace USB512_interface {
    if(!npPortConfigurations.TryGetValue(key,out requests) && create){requests=new Dictionary<byte,NpConfigRequest>();npPortConfigurations.Add(key,requests);}
    return requests;
   }
-  private int NpDefaultProbeMask() {
-   if(npRequestedMode!=null)return npRequestedMode.ProbeMask;
-   try {using(var device=XeNpWinUsbDevice.OpenForControl(devicePath)) {
-    if(device.GetStatus().Streaming)return 0;
-    NpModeCapabilities caps=device.GetModeCapabilities();
-    return caps==null?0:caps.AvailableMask;
-   }} catch {return 0;}
+  private bool npRecordMiscSignals=true;
+  private NpUsbRecordingProfile ReadNpRecordingProfile() {
+   if(selectedDeviceKind==DeviceKind.NpV2)using(var device=NpV2UsbDevice.Open(devicePath)) {
+    var service=device.GetServiceStatus();var capture=device.GetCaptureStatus();var source=device.GetSourceStatus();var caps=device.GetProfileCapabilities();
+    if(!service.Valid || service.Busy!=0 || !caps.Valid)throw new System.IO.IOException("Wait for an idle device with recording capabilities.");
+    return new NpUsbRecordingProfile {
+     AvailableMask=(int)caps.AvailableProbeMask,SelectedMask=(int)caps.SelectedProbeMask,SelectedHz=(int)caps.SampleHz,
+     Rates=Array.ConvertAll(caps.SupportedRates,hz=>(int)hz),
+     Status=NpV2ProfileText(service,capture,source,caps)+"\r\n"+NpV2UsbTopology.Inspect(devicePath).Warning,
+     Validate=(mask,hz)=>{
+      if(mask==0 || !caps.SupportsProbeMask((uint)mask))return "Select an advertised connector combination.";
+      try{NpV2ProfileCapabilities.RequireUsbBandwidth((uint)mask,(uint)hz);return null;}catch(System.IO.IOException ex){return ex.Message;}
+     },
+     Warning=(mask,hz)=>NpV2ProfileCapabilities.NeedsMultiProbe30KQualificationWarning((uint)mask,(uint)hz)?
+      "Multi-probe 30 kHz USB recording is experimental. Continue with this profile?":null
+    };
+   }
+   using(var device=XeNpWinUsbDevice.OpenForControl(devicePath)) {
+    var status=device.GetStatus();if(status.Streaming)throw new System.IO.IOException("Stop recording before changing settings.");
+    var caps=device.GetModeCapabilities();
+    if(caps==null)return new NpUsbRecordingProfile {
+     AvailableMask=0,SelectedMask=0,SelectedHz=status.ApSampleRateHz,Rates=new[]{status.ApSampleRateHz},
+     Status="The firmware supplies a fixed recording profile. Physical connector identity is not advertised. 384 AP + 384 LFP channels per probe.",
+     Validate=(mask,hz)=>mask!=0 || hz!=status.ApSampleRateHz?"Use the fixed firmware profile.":null,Warning=(mask,hz)=>null
+    };
+    var rates=new List<int>();foreach(int hz in new[]{7500,15000,20000,30000})if((caps.Rates[0]|caps.Rates[1]|caps.Rates[2])!=0 && ((caps.Rates[0]|caps.Rates[1]|caps.Rates[2])&NpCaptureMode.RateBit(hz))!=0)rates.Add(hz);
+    if(!caps.Selectable){rates.Clear();rates.Add(caps.ApHz);}
+    return new NpUsbRecordingProfile {
+     AvailableMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedHz=caps.ApHz,Rates=rates.ToArray(),
+     Status="Device: Neuropixels V1\r\nAvailable: "+NpCaptureRequest.Ports(caps.AvailableMask)+"; active: "+NpCaptureRequest.Ports(caps.ActiveMask)+" at "+caps.ApHz+" Hz\r\n384 AP + 384 LFP channels per probe. The firmware resolves the requested rate; the accepted rate is saved with the recording.\r\nMisc signals retain device timestamps; analogin.dat uses a held-value 1,250 Hz grid.",
+     Validate=(mask,hz)=>{
+      if(mask==0 || (mask&~caps.AvailableMask)!=0)return "Select available connectors.";
+      if(!caps.Selectable && (mask!=caps.ActiveMask || hz!=caps.ApHz))return "This firmware uses a fixed recording profile.";
+      try {string resolution;new NpCaptureRequest(mask,hz).ResolveBest(caps,out resolution);return null;}catch(Exception ex){return ex.Message;}
+     },
+     Warning=(mask,hz)=>{
+      string resolution;var resolved=new NpCaptureRequest(mask,hz).ResolveBest(caps,out resolution);
+      string warning=resolved.ApHz!=hz?resolution+". Continue with the resolved profile?":null;
+      if(resolved.Experimental)warning=(warning==null?"":warning+"\r\n")+"This V1 profile is experimental. Continue?";
+      return warning;
+     }
+    };
+   }
+  }
+  private void ShowNpProbeConfiguration(IWin32Window owner) {
+   if(selectedDeviceKind==DeviceKind.NpV2) {
+    int available;using(var device=NpV2UsbDevice.Open(devicePath))available=(int)device.GetProfileCapabilities().AvailableProbeMask;
+    using(var editor=new NpConfigurationDialog(null,np2:true,availableMask:available,retainedRequests:NpV2RequestsForDevice(devicePath),applyConnectors:NpV2ApplyRequestsForDevice(devicePath,true),
+     receipt:async(port,json)=>{using(var device=NpV2UsbDevice.Open(devicePath)){
+      var reply=await new Np2ConfigClient(new Np2ConfigurationUsb(device)).StatusAsync((byte)(port-1),System.Threading.CancellationToken.None);
+      return NpConfigurationDialog.Receipt(reply,json==null?null:NpConfigurationDialog.PrepareV2Request(json,port));}}))
+     if(editor.ShowDialog(owner)==DialogResult.OK)NpV2SaveConfigurationState(devicePath);
+   } else {
+    string result=NpConfigurationUsb.Show(owner,devicePath,null,NpRequestsForDevice(devicePath,true));
+    if(result!=null){npRequestedConfiguration=result;npConfigurationDevicePath=devicePath;}
+   }
   }
   private void NpShowModeSettings() {
-   if(selectedDeviceKind==DeviceKind.NpV2) {NpV2ShowModeSettings();return;}
-   using(var dialog=new Form {Text="NP USB capture setup",ClientSize=new Size(560,414),FormBorderStyle=FormBorderStyle.FixedDialog,StartPosition=FormStartPosition.CenterParent,MinimizeBox=false,MaximizeBox=false}) {
-    int oldMask=NpDefaultProbeMask();
-    int oldRate=npRequestedMode==null?30000:npRequestedMode.RequestedApHz;
-    var port1=new CheckBox {Text="Probe 1",Location=new Point(16,39),AutoSize=true,Checked=(oldMask&1)!=0};
-    var port2=new CheckBox {Text="Probe 2",Location=new Point(190,39),AutoSize=true,Checked=(oldMask&2)!=0};
-    var port3=new CheckBox {Text="Probe 3",Location=new Point(372,39),AutoSize=true,Checked=(oldMask&4)!=0};
-    var rate=new ComboBox {DropDownStyle=ComboBoxStyle.DropDownList,Location=new Point(16,93),Size=new Size(110,24)};
-    foreach(int hz in new[]{7500,15000,20000,30000})rate.Items.Add(hz);
-    rate.SelectedItem=NpCaptureMode.RateBit(oldRate)!=0?oldRate:30000;
-    var rateLabel=new Label {Text="Hz AP per selected probe",Location=new Point(136,97),AutoSize=true};
-    var note=new Label {Location=new Point(16,130),Size=new Size(520,112),Text="Each probe has 384 AP + 384 LFP channels. The console resolves your request from the attached firmware's capabilities; accepted ports and rate are saved in status.\r\n\r\nNative 20 kHz supports any single port or probes 1+2 when advertised. This clock profile is unqualified. Other pairs and three probes resolve to supported rates.\r\n\r\n15-to-20 kHz AP upsampling changes host output, not acquisition rate. Two probes at 30 kHz remains experimental."};
-    var merge=new CheckBox {Text="Merge active probes into one AP DAT and one LFP DAT",Location=new Point(16,250),Size=new Size(500,24),Checked=npMergeProbeDat};
-    var upsample=new CheckBox {Text="Enable 15 kHz → 20 kHz AP output if 15 kHz is accepted (no effect at native 20/30 kHz)",Location=new Point(16,278),Size=new Size(530,24),Checked=npUpsampleAp15To20};
-    Action updateOptions=delegate {
-     int mask=(port1.Checked?1:0)|(port2.Checked?2:0)|(port3.Checked?4:0);
-     merge.Enabled=NpCaptureMode.Count(mask)>1;
-     // Keep the requested resampling preference visible and checked at 30 kHz;
-     // NpCaptureSession applies it only to an acknowledged 15 kHz profile.
-     upsample.Enabled=true;
-    };
-    port1.CheckedChanged+=delegate {updateOptions();};port2.CheckedChanged+=delegate {updateOptions();};port3.CheckedChanged+=delegate {updateOptions();};rate.SelectedIndexChanged+=delegate {updateOptions();};updateOptions();
-    var config=new Button {Text="Configure connected probe…",Location=new Point(16,318),Size=new Size(205,30)};
-    config.Click+=delegate {
-     string result=NpConfigurationUsb.Show(dialog,devicePath,null,NpRequestsForDevice(devicePath,true));
-     if(result!=null) {npRequestedConfiguration=result;npConfigurationDevicePath=devicePath;}
-    };
-    var ok=new Button {Text="Use request",Location=new Point(318,372),Width=115};
-    var cancel=new Button {Text="Cancel",Location=new Point(443,372),DialogResult=DialogResult.Cancel};
-    ok.Click+=delegate {
-     int mask=(port1.Checked?1:0)|(port2.Checked?2:0)|(port3.Checked?4:0);
-     int requestedRate=(int)rate.SelectedItem;
-     if(requestedRate==20000 && mask!=0 && !NpCaptureMode.Valid(mask,requestedRate) && MessageBox.Show(dialog,"Native 20 kHz supports one probe or probes 1+2 when advertised by the attached firmware. This selection will resolve to another advertised rate. Continue?","NP USB capture setup",MessageBoxButtons.YesNo,MessageBoxIcon.Information)!=DialogResult.Yes)return;
-     if(NpCaptureMode.Count(mask)==2 && requestedRate==30000 && MessageBox.Show(dialog,"2 × 30 kHz has not passed sustained real-probe USB qualification. Continue with this best-effort request? Firmware may select a lower profile.","Experimental mode",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
-     npRequestedMode=mask==0?null:new NpCaptureRequest(mask,requestedRate);
-     npMergeProbeDat=merge.Checked;
-     npUpsampleAp15To20=upsample.Checked;
-     dialog.DialogResult=DialogResult.OK;
-    };
-    dialog.Controls.AddRange(new Control[]{new Label {Text="Requested probes",Location=new Point(16,12),AutoSize=true},port1,port2,port3,new Label {Text="Requested sampling rate",Location=new Point(16,70),AutoSize=true},rate,rateLabel,note,merge,upsample,config,ok,cancel});
-    WildXTheme.Apply(dialog);WildXTheme.Button(ok,true);note.ForeColor=WildXTheme.Muted;
-    dialog.AcceptButton=ok;dialog.CancelButton=cancel;dialog.ShowDialog(this);UpdateStartEnabled();
+   bool np2=selectedDeviceKind==DeviceKind.NpV2;
+   using(var dialog=new NpRecordingDialog(np2,np2?(int)npV2RequestedProbeMask:npRequestedMode==null?0:npRequestedMode.ProbeMask,
+    np2?(int)npV2RequestedSampleHz:npRequestedMode==null?30000:npRequestedMode.RequestedApHz,
+    npMergeProbeDat,npUpsampleAp15To20,npRecordMiscSignals,ReadNpRecordingProfile,ShowNpProbeConfiguration)) {
+    if(dialog.ShowDialog(this)==DialogResult.OK) {
+     if(np2){npV2RequestedProbeMask=(uint)dialog.ProbeMask;npV2RequestedSampleHz=(uint)dialog.SampleHz;}
+     else {var profile=ReadNpRecordingProfile();int mask=dialog.ProbeMask==0?profile.SelectedMask:dialog.ProbeMask;npRequestedMode=mask==0?null:new NpCaptureRequest(mask,dialog.SampleHz);}
+     npMergeProbeDat=dialog.Merge;npUpsampleAp15To20=dialog.Upsample;npRecordMiscSignals=dialog.Misc;
+    }
+    UpdateStartEnabled();
    }
   }
  }

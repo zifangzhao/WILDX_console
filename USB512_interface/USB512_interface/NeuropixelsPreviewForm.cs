@@ -259,12 +259,49 @@ namespace USB512_interface
         }
     }
 
+    // One-pole, bilinear high-pass on display-owned rows only. No capture data
+    // or firmware setting changes. Missing rows start fresh, never interpolate.
+    internal sealed class NpDisplayHighPass
+    {
+        private readonly double[] input, output;
+        private double rate, cutoff, feedback, feedforward;
+        private long previousIndex;
+        private bool initialized;
+        internal NpDisplayHighPass(int channels) { input=new double[channels];output=new double[channels]; }
+        internal void Configure(double sampleRate,double cutoffHz)
+        {
+            if(Double.IsNaN(sampleRate) || Double.IsInfinity(sampleRate) || sampleRate<=0 ||
+               Double.IsNaN(cutoffHz) || Double.IsInfinity(cutoffHz) || cutoffHz<0 || cutoffHz>=sampleRate/2)
+                throw new ArgumentOutOfRangeException("cutoffHz");
+            if(rate==sampleRate && cutoff==cutoffHz)return;
+            rate=sampleRate;cutoff=cutoffHz;
+            double k=Math.Tan(Math.PI*cutoffHz/sampleRate);
+            feedback=(1-k)/(1+k);feedforward=1/(1+k);Reset();
+        }
+        internal void Reset() { initialized=false; }
+        internal void Apply(short[] source,int sourceOffset,short[] target,int targetOffset,long index)
+        {
+            if(source==null || target==null || sourceOffset<0 || sourceOffset>source.Length-input.Length ||
+               targetOffset<0 || targetOffset>target.Length-input.Length || index<0)throw new ArgumentOutOfRangeException("sourceOffset");
+            if(cutoff==0) {Buffer.BlockCopy(source,sourceOffset*2,target,targetOffset*2,input.Length*2);return;}
+            bool fresh=!initialized || index!=previousIndex+1;
+            for(int ch=0;ch<input.Length;ch++) {
+                double x=source[sourceOffset+ch];
+                double y=fresh?0:feedback*output[ch]+feedforward*(x-input[ch]);
+                input[ch]=x;output[ch]=y;
+                target[targetOffset+ch]=(short)Math.Max(Int16.MinValue,Math.Min(Int16.MaxValue,Math.Round(y)));
+            }
+            previousIndex=index;initialized=true;
+        }
+    }
+
     // Display-only phase buffer. Absolute sample indices stay at fixed X
     // positions; new samples overwrite only the section behind the sweep.
     internal sealed class NpSweepBuffer
     {
         internal int Period { get; private set; }
         internal readonly short[] Samples;
+        internal NpDisplayHighPass HighPass;
         private readonly long[] stamps;
         internal long Written { get; private set; }
         internal long CopiedRows { get; private set; }
@@ -281,12 +318,14 @@ namespace USB512_interface
         {
             if(period<2 || period>stamps.Length)throw new ArgumentOutOfRangeException("period");
             Period=period;Written=0;CopiedRows=0;initialized=false;Array.Clear(stamps,0,stamps.Length);
+            if(HighPass!=null)HighPass.Reset();
         }
         internal void AddRow(short[] source,int offset,long index)
         {
             if(index<Math.Max(0,Written-Period))return;
             int phase=(int)(index%Period);
-            Buffer.BlockCopy(source,offset*2,Samples,phase*128,128);
+            if(HighPass==null)Buffer.BlockCopy(source,offset*2,Samples,phase*128,128);
+            else HighPass.Apply(source,offset,Samples,phase*64,index);
             stamps[phase]=index+1;Written=Math.Max(Written,index+1);CopiedRows++;initialized=true;
         }
         internal void AdvanceTo(long written) { Written=Math.Max(Written,written); }
@@ -354,6 +393,9 @@ namespace USB512_interface
         private readonly ComboBox bandBox = new ComboBox();
         private readonly ComboBox probeBox = new ComboBox();
         private readonly ComboBox paletteBox=new ComboBox();
+        private readonly ComboBox highPassBox=new ComboBox();
+        private readonly NpDisplayHighPass displayHighPass=new NpDisplayHighPass(ChannelsPerBank);
+        private static readonly double[] HighPassCutoffs={0,1,10,100,300};
         private readonly Label pageLabel=new Label();
         private readonly NpPreviewPalette[] palettes=NpPreviewPalette.CreateAll();
         private NpPreviewDefinition[] preparedDefinitions;
@@ -379,7 +421,7 @@ namespace USB512_interface
         private volatile bool renderRunning;
         private volatile bool displayActive;
         private readonly object viewLock=new object();
-        private struct ViewState { internal bool Lfp; internal int Bank,Generation,Samples,Width,Height,Probe,Palette; internal float Gain; internal NpPreviewDefinition Definition; internal NpPreviewPage Page; }
+        private struct ViewState { internal bool Lfp; internal int Bank,Generation,Samples,Width,Height,Probe,Palette; internal float Gain; internal double HighPassHz; internal NpPreviewDefinition Definition; internal NpPreviewPage Page; }
         private ViewState view;
         private ViewState drawnView;
         private NpSweepBuffer sweep;
@@ -446,6 +488,10 @@ namespace USB512_interface
             foreach(var palette in palettes)paletteBox.Items.Add(palette.Name);
             paletteBox.SelectedIndex=0;paletteBox.SetBounds(210,35,110,24);
             paletteBox.SelectedIndexChanged+=delegate {UpdateView();};
+            highPassBox.DropDownStyle=ComboBoxStyle.DropDownList;
+            foreach(double hz in HighPassCutoffs)highPassBox.Items.Add(hz==0?"Off":hz+" Hz");
+            highPassBox.SelectedIndex=0;highPassBox.SetBounds(418,35,110,24);
+            highPassBox.SelectedIndexChanged+=delegate {previewQueue.InvalidateView();UpdateView();};
             report.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             report.AutoSize = false; report.TextAlign = ContentAlignment.MiddleLeft;
             report.SetBounds(575, 8, ClientSize.Width-590, 48);
@@ -463,9 +509,10 @@ namespace USB512_interface
             durationBox.ValueChanged += delegate { UpdateView(); };
             gainBox.ValueChanged += delegate { UpdateView(); };
             Controls.AddRange(new Control[] {
-                bandBox, bankBox, durationBox, gainBox, report, graph,probeBox,paletteBox,pageLabel,
+                bandBox, bankBox, durationBox, gainBox, report, graph,probeBox,paletteBox,highPassBox,pageLabel,
                 new Label { Text = "Probe", AutoSize = true, Location = new Point(8, 38) },
                 new Label { Text = "Palette", AutoSize = true, Location = new Point(150, 38) },
+                new Label { Text = "Display HPF", AutoSize = true, Location = new Point(332, 38) },
                 new Label { Text = "Sweep (s)", AutoSize = true, Location = new Point(305, 12) },
                 new Label { Text = "Gain", AutoSize = true, Location = new Point(450, 12) }
             });
@@ -584,6 +631,7 @@ namespace USB512_interface
                     Gain=(float)gainBox.Value, Width=Math.Min(RenderWidth,graph.ClientSize.Width),
                     Height=Math.Min(RenderHeight,graph.ClientSize.Height),Definition=definition,Page=page,
                     Palette=Math.Max(0,paletteBox.SelectedIndex) };
+                view.HighPassHz=HighPassCutoffs[Math.Max(0,highPassBox.SelectedIndex)];
             }
             UpdateReport();
             } finally {updatingView=false;}
@@ -614,9 +662,13 @@ namespace USB512_interface
             lock(viewLock)settings=view;
             if(settings.Width<40 || settings.Height<20)return;
             int period=(int)Math.Ceiling(Math.Min((settings.Lfp?lfpSampleRate:apSampleRate)*HistorySeconds,Math.Max(2,settings.Samples)));
-            bool reset=sweep==null || sweep.Period!=period || settings.Generation!=drawnView.Generation;
+            bool reset=sweep==null || sweep.Period!=period || settings.Generation!=drawnView.Generation || settings.HighPassHz!=drawnView.HighPassHz;
             if(sweep==null)throw new InvalidOperationException("Preview history was not prepared before capture.");
-            if(reset) { sweep.Reset(period);sweepReferences=null; }
+            if(reset) {
+                sweep.Reset(period);sweepReferences=null;
+                displayHighPass.Configure(settings.Lfp?lfpSampleRate:apSampleRate,settings.HighPassHz);
+                displayHighPass.Reset();sweep.HighPass=settings.HighPassHz==0?null:displayHighPass;
+            }
             long oldWritten=sweep.Written;
             // Read the producer clock BEFORE taking its published queue limit.
             // Missing display rows remain blank, with the true sample phase.
@@ -625,7 +677,7 @@ namespace USB512_interface
             sweep.AdvanceTo(written);changed|=sweep.Written!=oldWritten;
             if(!changed && !reset && settings.Width==drawnView.Width &&
                settings.Height==drawnView.Height && settings.Gain==drawnView.Gain && settings.Palette==drawnView.Palette)return;
-            if(settings.Lfp && sweepReferences==null && sweep.CopiedRows>=2)
+            if(settings.Lfp && settings.HighPassHz==0 && sweepReferences==null && sweep.CopiedRows>=2)
                 sweepReferences=CaptureSweepReferences(sweep);
             if(renderBuffer==null)throw new InvalidOperationException("Preview surface was not prepared before capture.");
             if(mapBuffer==null || mappedPage!=settings.Page || mappedPalette!=settings.Palette ||

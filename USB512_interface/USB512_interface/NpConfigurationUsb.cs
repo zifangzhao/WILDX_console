@@ -4,18 +4,17 @@ namespace USB512_interface {
   readonly XeNpWinUsbDevice device;
   NpConfigurationUsb(XeNpWinUsbDevice device){this.device=device;}
   public Task<byte[]> ExchangeAsync(byte[] request,CancellationToken cancel){return Task.Run(()=>device.ExchangeNpConfiguration(request,cancel),cancel);}
-  internal static string Show(Form owner,string path,string initial,IDictionary<byte,NpConfigRequest> requests=null){
+  internal static string Show(IWin32Window owner,string path,string initial,IDictionary<byte,NpConfigRequest> requests=null){
    int connectedMask=7;
    try {using(var probe=XeNpWinUsbDevice.OpenForControl(path)) {
     NpModeCapabilities caps=probe.GetModeCapabilities();
     if(caps!=null)connectedMask=caps.AvailableMask;
    }} catch { /* legacy firmware: retain all three choices for manual selection */ }
-   using(var form=new NpDeviceConfigForm(NpConfigurationDialog.HelperPath,
-    async(p,c)=>{using(var device=XeNpWinUsbDevice.OpenForControl(path)){
-     if(device.GetStatus().Streaming)throw new IOException("Stop recording before staging NP settings.");
-     return await new NpConfigClient(new NpConfigurationUsb(device)).StageAsync(p,c);}},
-    async(p,c)=>{using(var device=XeNpWinUsbDevice.OpenForControl(path)){
-    return await new NpConfigClient(new NpConfigurationUsb(device)).StatusAsync(p,c);}},initial,connectedMask,requests)){
+   using(var form=new NpConfigurationDialog(initial,availableMask:connectedMask,retainedV1Requests:requests,
+    receipt:async(port,json)=>{using(var device=XeNpWinUsbDevice.OpenForControl(path)){
+     var reply=await new NpConfigClient(new NpConfigurationUsb(device)).StatusAsync((byte)(port-1),CancellationToken.None);
+     NpConfigRequest request=json==null?null:NpConfigurationDialog.PrepareV1Request(json,port);
+     return NpConfigurationDialog.Receipt(reply,request);}})){
     WildXTheme.Apply(form);form.ShowDialog(owner);return form.RequestedJson;
    }
   }

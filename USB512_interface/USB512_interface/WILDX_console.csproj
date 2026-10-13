@@ -79,6 +79,9 @@
     <Compile Include="NpModeDialog.cs" />
     <Compile Include="NpRecovery.cs" />
     <Compile Include="NpUsbSensors.cs" />
+    <Compile Include="NpUsbSensorMonitor.cs" />
+    <Compile Include="NpClockFit.cs" />
+    <Compile Include="NpClockJournal.cs" />
     <Compile Include="NpConfigurationDialog.cs" />
     <Compile Include="NpConfigurationUsb.cs" />
     <Compile Include="Np2ConfigurationClient.cs" />
@@ -86,6 +89,9 @@
     <Compile Include="Np2ConfigurationUsb.cs" />
     <Compile Include="NpProbeManifest.cs" />
     <Compile Include="NpRecordingSettings.cs" />
+    <Compile Include="NpRecordingDialog.cs" />
+    <Compile Include="NpDiagnosticsForm.cs" />
+    <Compile Include="NpCalibrationForm.cs" />
     <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpConfigClient.cs"><Link>NpConfigClient.cs</Link></Compile>
     <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpDeviceConfigForm.cs"><Link>NpDeviceConfigForm.cs</Link></Compile>
     <Compile Include="XeNpSdInfo.cs" />
@@ -125,6 +131,7 @@
     <Compile Include="Ble\NpBleWire.cs" />
     <Compile Include="Ble\NpBleConnection.cs" />
     <Compile Include="Ble\NpBleForm.cs" />
+    <Compile Include="Ble\NpBleConfigurationReceipts.cs" />
     <Compile Include="Ble\NpBleClock.cs" />
     <Compile Include="Ble\NpV2Preview.cs" />
     <Compile Include="Ble\NpV2PreviewWire.cs" />

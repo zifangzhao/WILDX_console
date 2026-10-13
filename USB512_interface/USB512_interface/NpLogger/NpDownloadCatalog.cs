@@ -13,7 +13,7 @@ namespace CE32_console
         internal uint FormatVersion,CameraHz,MicrophoneHz;
         internal string ValidationError;
         internal bool Downloadable{get{return string.IsNullOrEmpty(ValidationError);}}
-        internal bool V2{get{return FormatVersion==11;}}
+        internal bool V2{get{return FormatVersion==11 || FormatVersion==12;}}
         internal bool Media{get{return (FormatVersion==7 || FormatVersion==8) && ProbeMask==0 && ApHz==0;}}
         internal bool Complete{get{return State==3 && Fault==0 && Chunks>0;}}
         public override string ToString(){if(V2)return string.Format("Session {0} | NP2 probes 1 + 2 | {1:N0} samples/s | {2:N1} s | {3}",Session,ApHz,Chunks*61440.0/(ApHz*1600.0),Downloadable?"complete (payload not yet validated)":"NOT DOWNLOADABLE — "+ValidationError);if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,!Downloadable?"NOT DOWNLOADABLE — "+ValidationError:Complete?"complete (payload not yet validated)":"INCOMPLETE");return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),Complete?"complete (not yet decoded)":"INCOMPLETE — committed prefix only");}
@@ -55,7 +55,7 @@ namespace CE32_console
                         try{USB512_interface.NpV2SdDatExport.ValidateMetadata(h,f,checked((uint)start),s.Length);
                             if(end<NpDownloadStream.U(f,116) || end>NpDownloadStream.U(h,68))throw new InvalidDataException("NP2 committed extent escapes the catalog entry.");}
                         catch(InvalidDataException ex){failure=ex.Message;}
-                        list.Add(new NpDownloadRecord{ValidationError=failure,FormatVersion=11,ProbeMask=3,LaneBytes=46592/4,Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)});
+                        list.Add(new NpDownloadRecord{ValidationError=failure,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=3,LaneBytes=46592/4,Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)});
                         previous=end;continue;
                     }
                     Header(h,"NPSDLOG1");Header(f,"NPSDEND1");

@@ -21,7 +21,7 @@ namespace USB512_interface
             Reset();
             if(status==null || (status.Flags&256)==0)throw new IOException("Device does not advertise PC-time support.");
             if(!status.Busy && NpV2OnlineClock.CanCalibrate(status.State)){
-                var result=await NpV2OnlineClock.Synchronize(exchange,next);
+                var result=await NpV2OnlineClock.Synchronize(exchange,next,16);
                 Generation=result.Receipt.Generation;Synchronized=true;
                 OffsetMilliseconds=result.OffsetSeconds*1000;BoundMilliseconds=result.UncertaintySeconds*1000;
             }else await Observe(exchange,next); // Attaching to an active recorder never commits its clock.

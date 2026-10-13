@@ -149,6 +149,13 @@ namespace USB512_interface
                         File.AppendAllText(archive+".status.txt","summary="+result+Environment.NewLine+"device_uid="+t.Uid+Environment.NewLine);
                     }
                 } // USB is closed before CPU/disk-intensive decoding starts.
+                if(choice!=2)using(var saved=new NpArchive(archive)){
+                    foreach(var part in new[]{Tuple.Create("CE_params.bin",0,1536),Tuple.Create("descriptor.bin",3,512),Tuple.Create("footer.bin",4,512)}){
+                        saved.Position=(saved.StartLba+part.Item2)*512;var bytes=new byte[part.Item3];int read=0;
+                        while(read<bytes.Length){int got=saved.Read(bytes,read,bytes.Length-read);if(got==0)throw new EndOfStreamException("Recording metadata archive is truncated.");read+=got;}
+                        File.WriteAllBytes(Path.Combine(recordingFolder,part.Item1),bytes);
+                    }
+                }
                 if(choice==0)using(var saved=new NpArchive(archive))NpCe64Export.Export(saved,saved.StartLba,saved.EndLba,output,()=>cancelled,p=>Report("Archive saved. Offline NP decoding: "+p+"%",p));
                 finished=true;
                 Report(choice==1?"Archive complete (transport checked; NP decoding not performed).":"Download + NP decoding complete. See capture_status.txt.",100);

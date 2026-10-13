@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 using System.Text;
 using CancellationToken = System.Threading.CancellationToken;
 using System.Threading.Tasks;
@@ -216,15 +217,39 @@ internal static class StandaloneTests
             Check(!ble.TopLevel && ble.Parent!=null,"BLE Mode did not embed its controls");
             Check(!(bool)ble.GetType().GetProperty("SessionOwned",All).GetValue(ble,null),"Entering BLE Mode started a connection or scan");
             Check(ble.GetType().GetProperty("DialogOwner",All).GetValue(ble,null)==form,"Embedded BLE dialogs do not belong to the main window");
+            Check(Descendants(form).Count(c=>c.GetType()==ble.GetType())==1,"Workspace created multiple BLE sessions");
+            var maintenance=(Control)ble.GetType().GetProperty("MaintenanceControls",All).GetValue(ble,null);
+            var maintenancePage=maintenance.Parent;while(maintenancePage!=null && !(maintenancePage is TabPage))maintenancePage=maintenancePage.Parent;
+            Check(maintenancePage==tabs.TabPages[3],"BLE maintenance did not use the shared session in Advanced");
+            Check(!Descendants(ble).Any(c=>c.Text=="Firmware loader" || c.Text=="ROM DFU" || c.Text=="Rescue reset"),"Firmware controls duplicated in BLE Mode");
+            Check(Descendants(maintenance).Any(c=>c.Text=="Firmware loader") && Descendants(maintenance).Any(c=>c.Text=="ROM DFU"),"Shared BLE firmware actions missing");
+            object connection=ble.GetType().GetField("connection",All).GetValue(ble);
+            ble.GetType().GetField("recorderVersion",All).SetValue(ble,2);
             var done=new TaskCompletionSource<object>();
             var command=(Task)Call(ble.GetType(),ble,"Run",(Func<Task>)(()=>done.Task));
-            tabs.SelectedIndex=0;Check(tabs.SelectedIndex==1,"USB Mode accessible during a BLE command");
-            tabs.SelectedIndex=3;Check(tabs.SelectedIndex==1,"Advanced accessible during a BLE command");
+            foreach(int page in new[]{0,3,2,1}){tabs.SelectedIndex=page;Check(tabs.SelectedIndex==page,"BLE session blocked tab navigation");}
+            Check(ReferenceEquals(connection,ble.GetType().GetField("connection",All).GetValue(ble)) && (int)ble.GetType().GetField("recorderVersion",All).GetValue(ble)==2,"Navigation replaced or reset the BLE session");
             Check(!((Button)type.GetField("btnDfu",All).GetValue(form)).Enabled,"Firmware allowed during a BLE command");
+            Check(!((Button)type.GetField("btnStart",All).GetValue(form)).Enabled,"USB recording allowed during a BLE command");
+            var sourceList=(ComboBox)download.GetType().GetField("sources",All).GetValue(download);
+            Type sourceType=download.GetType().GetNestedType("Source",All);object usbSource=Activator.CreateInstance(sourceType,true);
+            sourceType.GetField("Usb",All).SetValue(usbSource,true);sourceType.GetField("Path",All).SetValue(usbSource,"usb-fixture");sourceType.GetField("Label",All).SetValue(usbSource,"USB fixture");
+            sourceList.Items.Add(usbSource);sourceList.SelectedIndex=0;
+            Check(!((Button)download.GetType().GetField("list",All).GetValue(download)).Enabled && !((Button)download.GetType().GetField("fast",All).GetValue(download)).Enabled,"USB download allowed during BLE ownership");
+            Check(((Button)download.GetType().GetField("convert",All).GetValue(download)).Enabled,"BLE ownership blocked local file conversion");
+            bool usbReadBlocked=false;try{Call(download.GetType(),download,"Open",usbSource);}catch(IOException){usbReadBlocked=true;}Check(usbReadBlocked,"USB logger was opened despite BLE ownership");
+            object cardSource=Activator.CreateInstance(sourceType,true);sourceType.GetField("Path",All).SetValue(cardSource,"card-fixture");sourceType.GetField("Label",All).SetValue(cardSource,"Card fixture");sourceList.Items.Add(cardSource);sourceList.SelectedIndex=1;
+            Check(((Button)download.GetType().GetField("list",All).GetValue(download)).Enabled,"Independent card reader blocked during BLE ownership");
             close=new FormClosingEventArgs(CloseReason.UserClosing,false);typeof(Form).GetMethod("OnFormClosing",All).Invoke(form,new object[]{close});Check(close.Cancel,"Window closed during a BLE command");
             done.SetResult(null);var deadline=DateTime.UtcNow.AddSeconds(5);while(!command.IsCompleted && DateTime.UtcNow<deadline)Application.DoEvents();
             Check(command.IsCompleted,"BLE operation gate did not release");command.GetAwaiter().GetResult();
             tabs.SelectedIndex=0;Check(tabs.SelectedIndex==0,"USB Mode not restored after BLE command");
+            Call(download.GetType(),download,"SetBusy",true);bool ran=false;
+            ((Task)Call(ble.GetType(),ble,"Run",(Func<Task>)(()=>{ran=true;return Task.CompletedTask;}))).GetAwaiter().GetResult();
+            Check(!ran,"BLE command overlapped a storage operation");Call(download.GetType(),download,"SetBusy",false);
+            var feedbackButton=(Button)Call(ble.GetType(),ble,"Add",maintenance,"Fixture",(Func<Task>)(()=>Task.FromException(new IOException("Maintenance fixture error"))));
+            typeof(Button).GetMethod("OnClick",All).Invoke(feedbackButton,new object[]{EventArgs.Empty});
+            Check(((Label)ble.GetType().GetField("maintenanceResult",All).GetValue(ble)).Text=="Maintenance fixture error","Advanced command failure was only visible in BLE Mode");feedbackButton.Dispose();
         }
     }
     static void Snapshot(string typeName,string output,string filename,params object[] args)
@@ -260,6 +285,11 @@ internal static class StandaloneTests
                     Check(sdInfo.Bottom<=sdInfo.Parent.ClientSize.Height,"SD Info clipped at minimum width");
                     Check(((Control)T(typeName).GetField("imuTelemetry",All).GetValue(form)).Height>=136,"Live telemetry clipped at minimum window size");
                     using(var bitmap=new Bitmap(host.Width,host.Height)){host.DrawToBitmap(bitmap,new Rectangle(Point.Empty,host.Size));bitmap.Save(Path.Combine(output,"main-minimum.png"),ImageFormat.Png);}
+                    tabs.SelectedIndex=3;Application.DoEvents();
+                    var bleForm=T(typeName).GetField("bleWorkspace",All).GetValue(form);
+                    var maintenance=(Control)bleForm.GetType().GetProperty("MaintenanceControls",All).GetValue(bleForm,null);
+                    foreach(var button in maintenance.Controls.OfType<Button>())Check(button.Right<=maintenance.ClientSize.Width && button.Bottom<=maintenance.ClientSize.Height,"BLE maintenance action clipped at minimum window size");
+                    using(var bitmap=new Bitmap(host.Width,host.Height)){host.DrawToBitmap(bitmap,new Rectangle(Point.Empty,host.Size));bitmap.Save(Path.Combine(output,"advanced-minimum.png"),ImageFormat.Png);}
                 }
                 host.Hide();foreach(var child in controls)form.Controls.Add(child);
             }

@@ -7,13 +7,16 @@ namespace USB512_interface
 {
     public partial class Form1
     {
-        Button btnBleRecovery;
         TabControl workspaceTabs;
         TabPage usbPage,blePage,downloadPage,advancedPage;
         CE32_console.NpDownloadForm downloadWorkspace;
         NpBleForm bleWorkspace;
         Label workspaceStatus;
         Label advancedTarget,advancedStorageSource;
+        Button probeConfigurationButton,diagnosticsButton,captureReportButton;
+        string lastCaptureReport;
+        bool NpControlsAvailable {get{return (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && !String.IsNullOrWhiteSpace(devicePath) &&
+            !running && !ztestRunning && systemInfoActive==0 && deviceRefreshActive==0 && !firmwareManagementActive && npRecoveryCancelled && !DownloadBusy && !BleInUse;}}
         bool DownloadBusy { get { return downloadWorkspace!=null && downloadWorkspace.IsBusy; } }
         bool BleInUse { get { return bleWorkspace!=null && bleWorkspace.SessionOwned; } }
         void InitializeWildX()
@@ -26,19 +29,12 @@ namespace USB512_interface
             btnImpedance.Visible = false;
             BuildWildXWorkspace();
         }
-        void OpenBleRecovery()
-        {
-            if(running || systemInfoActive!=0 || firmwareManagementActive || DownloadBusy || BleInUse || deviceRefreshActive!=0 || !npRecoveryCancelled)return;
-            // Modal ownership prevents simultaneous USB acquisition/mode changes.
-            using(var dialog=new NpBleForm(true))dialog.ShowDialog(this);
-            RefreshDeviceList();
-        }
 
         static FlowLayoutPanel ActionRow(params Control[] controls)
         {
             var row=new FlowLayoutPanel { Dock=DockStyle.Fill,WrapContents=true,Margin=Padding.Empty,BackColor=WildXTheme.Surface };
             foreach(var control in controls){control.Dock=DockStyle.None;control.Anchor=AnchorStyles.Top|AnchorStyles.Left;control.Margin=new Padding(0,0,8,8);
-                if(control is Button){control.AutoSize=true;((Button)control).AutoSizeMode=AutoSizeMode.GrowAndShrink;control.MinimumSize=new Size(0,36);control.Height=36;}
+                if(control is Button){var button=(Button)control;if(button.FlatStyle!=FlatStyle.Flat)WildXTheme.Button(button);control.AutoSize=true;button.AutoSizeMode=AutoSizeMode.GrowAndShrink;control.MinimumSize=new Size(0,36);control.Height=36;}
                 row.Controls.Add(control);
             }
             return row;
@@ -86,7 +82,6 @@ namespace USB512_interface
             advancedPage=new TabPage("Advanced") { Name="advancedPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
             workspaceTabs.TabPages.AddRange(new[]{usbPage,blePage,downloadPage,advancedPage});workspaceTabs.DrawItem+=DrawWorkspaceTab;
             workspaceTabs.Selecting+=delegate(object sender,TabControlCancelEventArgs e){
-                if(BleInUse){e.Cancel=true;workspaceStatus.Text="Finish the BLE command, stop scanning, and disconnect before changing workspace.";return;}
                 if(running || ztestRunning || !npRecoveryCancelled || systemInfoActive!=0 || deviceRefreshActive!=0 || firmwareManagementActive || DownloadBusy){
                     e.Cancel=true;workspaceStatus.Text="Wait for the active operation to finish before changing workspace.";
                 }
@@ -98,13 +93,13 @@ namespace USB512_interface
             shell.Controls.Add(workspaceTabs,0,1);
             workspaceStatus=WildXTheme.Label("USB MODE  /  Live acquisition, previews and device health");workspaceStatus.Dock=DockStyle.Fill;shell.Controls.Add(workspaceStatus,0,2);
 
-            var online=new TableLayoutPanel { Dock=DockStyle.Top,Height=706,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
+            var online=new TableLayoutPanel { Dock=DockStyle.Top,Height=746,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
             online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));
-            online.RowStyles.Add(new RowStyle(SizeType.Absolute,268));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));usbPage.Controls.Add(online);
+            online.RowStyles.Add(new RowStyle(SizeType.Absolute,308));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));usbPage.Controls.Add(online);
             usbPage.AutoScroll=true;
-            usbPage.Resize+=delegate { online.Height=Math.Max(706,usbPage.ClientSize.Height-usbPage.Padding.Vertical); };
+            usbPage.Resize+=delegate { online.Height=Math.Max(746,usbPage.ClientSize.Height-usbPage.Padding.Vertical); };
 
-            var capture=Stack(20,38,20,36,48,30);
+            var capture=Stack(20,38,20,36,88,30);
             label1.AutoSize=true;label1.Text="USB DEVICE";label1.ForeColor=WildXTheme.Muted;capture.Controls.Add(label1,0,0);
             var deviceRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty };
             deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,102));
@@ -118,7 +113,14 @@ namespace USB512_interface
             llblSaveFolder.Text="Choose a destination folder";
             folderRow.Controls.Add(llblSaveFolder,0,0);folderRow.Controls.Add(btnSaveFolder,1,0);capture.Controls.Add(folderRow,0,3);
             btnStart.Text="Start recording";btnStop.Text="Stop recording";btnStreams.Text="Recording settings";
-            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams),0,4);
+            calibrationButton=new Button {Text="Calibration…",AutoSize=true};
+            probeConfigurationButton=new Button {Text="Probe configuration…",AutoSize=true};
+            probeConfigurationButton.Click+=delegate {
+                if(!NpControlsAvailable)return;
+                try{ShowNpProbeConfiguration(this);}catch(Exception ex){MessageBox.Show(this,ex.Message,"Probe configuration",MessageBoxButtons.OK,MessageBoxIcon.Error);}
+            };
+            calibrationButton.Click+=delegate {if(!running && !npV2MergeActive && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
+            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,probeConfigurationButton,calibrationButton),0,4);
             npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,5);
             online.Controls.Add(Card("USB acquisition",null,capture),0,0);
 
@@ -130,8 +132,11 @@ namespace USB512_interface
             systemInfoSummary.Dock=DockStyle.Fill;systemInfoSummary.Margin=Padding.Empty;systemInfoSummary.BorderStyle=BorderStyle.None;health.Controls.Add(systemInfoSummary,0,1);
             online.Controls.Add(Card("Device health",null,health),1,0);
 
-            var activity=Stack(22,0,22);
-            lblSpeed.AutoSize=false;lblSpeed.Dock=DockStyle.Fill;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";activity.Controls.Add(lblSpeed,0,0);
+            var activity=Stack(40,0,22);
+            lblSpeed.AutoSize=true;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";
+            captureReportButton=new Button {Text="Report…",AutoSize=true,Enabled=false};
+            captureReportButton.Click+=delegate {if(lastCaptureReport!=null)using(var report=new NpReportForm("Capture report",lastCaptureReport))report.ShowDialog(this);};
+            activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,0);
             lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=true;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,1);
             llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=true;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,2);
             var activityCard=Card("Capture activity",null,activity);online.Controls.Add(activityCard,0,2);online.SetColumnSpan(activityCard,2);
@@ -139,7 +144,7 @@ namespace USB512_interface
             clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="The network clock is an app-local UTC reference. Recordings retain their device timestamps.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
             online.Controls.Add(Card("Network time / UTC",null,clock),1,1);
 
-            bleWorkspace=new NpBleForm(true) {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
+            bleWorkspace=new NpBleForm() {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
             bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};
             blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
 
@@ -158,14 +163,18 @@ namespace USB512_interface
         }
         void BuildAdvancedWorkspace()
         {
-            var tools=new TableLayoutPanel {Dock=DockStyle.Top,Height=320,ColumnCount=2,RowCount=1,Margin=Padding.Empty,BackColor=WildXTheme.Canvas};
+            var tools=new TableLayoutPanel {Dock=DockStyle.Top,Height=510,ColumnCount=2,RowCount=2,Margin=Padding.Empty,BackColor=WildXTheme.Canvas};
             tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
-            tools.RowStyles.Add(new RowStyle(SizeType.Percent,100));advancedPage.Controls.Add(tools);
-            var firmware=Stack(58,48,0);
+            tools.RowStyles.Add(new RowStyle(SizeType.Absolute,320));tools.RowStyles.Add(new RowStyle(SizeType.Percent,100));advancedPage.Controls.Add(tools);advancedPage.AutoScroll=true;
+            var firmware=Stack(58,92,0);
             advancedTarget=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};firmware.Controls.Add(advancedTarget,0,0);
-            btnBleRecovery=new Button {Text="BLE firmware / recovery"};WildXTheme.Button(btnBleRecovery);
-            btnBleRecovery.Click+=delegate {OpenBleRecovery();};
-            WildXTheme.Button(btnDfu,true);firmware.Controls.Add(ActionRow(btnDfu,btnBleRecovery),0,1);
+            diagnosticsButton=new Button {Text="Diagnostics & self-test…",AutoSize=true};
+            diagnosticsButton.Click+=delegate {
+                if(!NpControlsAvailable)return;firmwareManagementActive=true;UpdateStartEnabled();
+                try{using(var dialog=new NpDiagnosticsForm(devicePath,selectedDeviceKind==DeviceKind.NpV2))dialog.ShowDialog(this);}
+                finally{firmwareManagementActive=false;UpdateStartEnabled();}
+            };
+            WildXTheme.Button(btnDfu,true);firmware.Controls.Add(ActionRow(btnDfu,diagnosticsButton),0,1);
             firmware.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
                 Text="NP1: validated APP / HEX firmware.\r\nNP2: transactional .xenp APP updates.\r\n\r\nThe manager also provides USB mode changes and recovery. Choose the exact device and firmware file before updating."},0,2);
             tools.Controls.Add(Card("Firmware & USB modes",null,firmware),0,0);
@@ -175,6 +184,8 @@ namespace USB512_interface
             storage.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
                 Text="Choose an SD card in Data Download first. Quick Format resets that card's recording catalog.\r\n\r\nThe selected card is inspected and confirmed before any write. USB logger endpoints remain read-only."},0,2);
             tools.Controls.Add(Card("Storage maintenance",null,storage),1,0);
+            var bleMaintenance=Card("BLE firmware & recovery",null,bleWorkspace.MaintenanceControls);
+            tools.Controls.Add(bleMaintenance,0,1);tools.SetColumnSpan(bleMaintenance,2);
         }
         void DrawWorkspaceTab(object sender,DrawItemEventArgs e)
         {
@@ -193,7 +204,12 @@ namespace USB512_interface
                 SystemInfoDeviceName()+" / UID "+(NpV2FirmwareForm.Uid(devicePath)??NpV1Management.UidFromPath(devicePath)??"unverified — confirm in manager");
             if(advancedStorageSource!=null)advancedStorageSource.Text=downloadWorkspace.SelectedSourceDescription??"No storage source selected. Choose a card in Data Download.";
             if(DownloadBusy || BleInUse)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
-            if(btnBleRecovery!=null)btnBleRecovery.Enabled=!running && systemInfoActive==0 && !firmwareManagementActive && deviceRefreshActive==0 && npRecoveryCancelled && !DownloadBusy && !BleInUse;
+            bool usbBusy=running || ztestRunning || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled;
+            if(bleWorkspace!=null)bleWorkspace.SetHostBusy(usbBusy || DownloadBusy);
+            if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
+            if(probeConfigurationButton!=null)probeConfigurationButton.Enabled=NpControlsAvailable;
+            if(diagnosticsButton!=null)diagnosticsButton.Enabled=NpControlsAvailable;
+            if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;
         }
         void OpenV2Firmware()
         {

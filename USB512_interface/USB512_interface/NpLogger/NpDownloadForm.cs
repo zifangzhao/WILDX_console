@@ -15,9 +15,11 @@ namespace CE32_console
         private readonly ProgressBar progress=new ProgressBar{Dock=DockStyle.Bottom};
         private readonly Button refresh=new Button{Text="Refresh sources",AutoSize=true},list=new Button{Text="List recordings",AutoSize=true},save=new Button{Text="Download selected…",AutoSize=true},cancel=new Button{Text="Cancel",AutoSize=true},play=new Button{Text="Play exported camera…",AutoSize=true};
         private readonly Button convert=new Button{Text="Convert exported media…",AutoSize=true};
+        private readonly Button calibrationButton=new Button{Text="Calibration…",AutoSize=true};
         private readonly Button format=new Button{Name="quickFormatNpSd",Text="Quick Format selected SD…",AutoSize=true};
+        private readonly Button fast=new Button{Text="NP1 fast archive…",AutoSize=true};
         private readonly CheckBox convertAfterDownload=new CheckBox{Text="MP4 + WAV",Checked=true,AutoSize=true};
-        private bool busy,refreshing;private volatile bool cancelled;private Source listedSource;
+        private bool busy,refreshing,usbBlocked;private volatile bool cancelled;private Source listedSource;
         private readonly string requestedSourcePath;
         private string boundSourcePath;
         private readonly Timer enumerationTimer=new Timer{Interval=1000};
@@ -34,15 +36,17 @@ namespace CE32_console
             boundSourcePath=requestedSourcePath;
             Text="WILD-X NP1 / NP2 / media — SD Download";Width=950;Height=500;
             var actions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};actions.Controls.AddRange(new Control[]{refresh,list,save,cancel,play,convert,convertAfterDownload,format});
-            var fast=new Button{Text="NP1 fast archive…",AutoSize=true};actions.Controls.Add(fast);
-            fast.Click+=(s,e)=>{if(busy)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null))form.ShowDialog(DialogOwner);};
+            actions.Controls.Add(calibrationButton);
+            calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
+            actions.Controls.Add(fast);
+            fast.Click+=(s,e)=>{if(busy || usbBlocked)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null))form.ShowDialog(DialogOwner);};
             Controls.Add(records);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
             refresh.Click+=(s,e)=>{RefreshSources();enumerationTimer.Start();};list.Click+=async(s,e)=>await ListAsync();save.Click+=async(s,e)=>await SaveAsync();cancel.Click+=(s,e)=>cancelled=true;
             records.ItemCheck+=(s,e)=>{var r=records.Items[e.Index] as NpDownloadRecord;if(r!=null&&!r.Downloadable){e.NewValue=CheckState.Unchecked;status.Text="Session "+r.Session+" is not downloadable: "+r.ValidationError;}};
             play.Click+=(s,e)=>new NpMediaPlaybackForm().Show(DialogOwner);
             convert.Click+=async(s,e)=>await ConvertExistingAsync();
             format.Click+=async(s,e)=>await FormatSelectedAsync();
-            sources.SelectedIndexChanged+=(s,e)=>{var source=sources.SelectedItem as Source;if(source!=null&&!refreshing)boundSourcePath=source.Path;format.Enabled=!busy && source!=null && source.CanFormat;};
+            sources.SelectedIndexChanged+=(s,e)=>{var source=sources.SelectedItem as Source;if(source!=null&&!refreshing)boundSourcePath=source.Path;UpdateControls();};
             FormClosing+=(s,e)=>{if(busy){cancelled=true;e.Cancel=true;status.Text="Wait for the current operation to finish before closing. A catalog reset cannot be interrupted.";}};
             Shown+=(s,e)=>{if(autoDiscover){RefreshSources();enumerationTimer.Start();}};
             enumerationTimer.Tick+=(s,e)=>{if(!busy && Visible)try{PollUsb();}catch(Exception ex){status.Text="USB discovery: "+ex.Message;}};
@@ -57,6 +61,7 @@ namespace CE32_console
             if(!autoDiscover)status.Text="Refresh sources to choose a USB device or card reader. List its recordings before downloading.";
         }
         internal void SetUsbSelection(string path){if(!busy && !string.Equals(path,parentUsbPath,StringComparison.OrdinalIgnoreCase)){parentUsbPath=path;if(!string.IsNullOrEmpty(path))boundSourcePath=path;}}
+        internal void SetUsbBlocked(bool value){usbBlocked=value;UpdateControls();}
         internal void RequestCancel(){if(busy){cancelled=true;status.Text="Waiting for the operation to finish. A catalog reset cannot be interrupted.";}}
         protected override void Dispose(bool disposing){if(disposing){enumerationTimer.Stop();enumerationTimer.Dispose();}base.Dispose(disposing);}
         private void PollUsb() {
@@ -69,7 +74,8 @@ namespace CE32_console
             if(sources.SelectedIndex<0)SelectBoundSource();
             }finally{refreshing=false;}
         }
-        private void SetBusy(bool value){busy=value;refresh.Enabled=list.Enabled=save.Enabled=sources.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!value;format.Enabled=!value && sources.SelectedItem is Source && ((Source)sources.SelectedItem).CanFormat;cancel.Enabled=value;var changed=BusyChanged;if(changed!=null)changed();}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;calibrationButton.Enabled=refresh.Enabled=sources.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;format.Enabled=!busy && source!=null && source.CanFormat;cancel.Enabled=busy;}
+        private void SetBusy(bool value){busy=value;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
         private async Task FormatSelectedAsync() {
             var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat){status.Text="Quick Format requires removable SD media. USB external disks/readers and logger USB endpoints remain read-only.";return;}
             SetBusy(true);cancel.Enabled=false;
@@ -123,7 +129,7 @@ namespace CE32_console
             return record.V2?checked(((long)record.Chunks*61440+1599)/1600*2*384*2):checked((long)record.Chunks*65536*4);
         }
         private Stream Open(Source source) {
-            if(source.Usb)return new NpDownloadStream(source.Path){Cancelled=()=>cancelled};
+            if(source.Usb){if(usbBlocked)throw new IOException("Disconnect BLE and finish the USB operation before accessing this USB logger.");return new NpDownloadStream(source.Path){Cancelled=()=>cancelled};}
             return NpDownloadStream.OpenDisk(source.Path);
         }
         private async Task ListAsync() {
@@ -145,6 +151,7 @@ namespace CE32_console
                 if(drive.AvailableFreeSpace<required){status.Text="Insufficient space: allow "+(required/1073741824.0).ToString("N1")+" GiB for raw, AP/LFP and auxiliary outputs.";return;}
             }catch(Exception ex){status.Text="Cannot check destination space: "+ex.Message;return;}
             bool makeMedia=convertAfterDownload.Checked;var conversionErrors=new List<string>();var conversionWarnings=new List<string>();
+            var calibration=USB512_interface.NpCalibrationStore.Get("offline");
             SetBusy(true);cancelled=false;progress.Value=0;var source=listedSource;
             var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=Math.Max(0,Math.Min(100,p.Item1));status.Text=p.Item2;});
             try {await Task.Run(()=>{using(var stream=Open(source)) {
@@ -154,11 +161,11 @@ namespace CE32_console
                     var r=chosen[i];if(!current.Any(n=>n.Downloadable&&n.Start==r.Start&&n.End==r.End&&n.Session==r.Session&&n.Chunks==r.Chunks&&n.State==r.State&&n.Fault==r.Fault&&n.FormatVersion==r.FormatVersion&&n.CameraHz==r.CameraHz&&n.MicrophoneHz==r.MicrophoneHz&&n.ProbeMask==r.ProbeMask&&n.ApHz==r.ApHz))throw new IOException("Recording directory changed. Refresh before downloading.");
                     string output=Path.Combine(root,"NP_"+r.Session+"_LBA"+r.Start);int index=i;
                     var watch=System.Diagnostics.Stopwatch.StartNew();
-                    NpCe64Export.Export(stream,r.Start,r.End,output,()=>cancelled,p=>{
+                    NpCe64Export.ExportCalibrated(stream,r.Start,r.End,output,()=>cancelled,p=>{
                         double bytes=(double)r.Chunks*65536*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
                         int local=r.Media&&makeMedia?p*75/100:p;
                         ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+": "+p+"% | native download "+(bytes/seconds/1e6).ToString("F1")+" MB/s — "+output));
-                    });
+                    },calibration.Count==0?null:calibration);
                     if(r.Media&&makeMedia)try{
                         string warning=NpMediaExport.ConvertFiles(output,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+75+p*25/100)/chosen.Count,message)));
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);

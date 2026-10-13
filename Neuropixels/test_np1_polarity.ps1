@@ -17,11 +17,14 @@ $sources=@(
  "$console\XeNpStreamDecoder.cs","$console\NeuropixelsPreviewForm.cs","$console\NpCaptureModes.cs",
  "$console\NpLogger\NpCe64Decoder.cs","$console\NpLogger\NpCe64Export.cs","$console\NpLogger\NpSdGeometry.cs",
  "$PSScriptRoot\SD\NpV2SdDatExport.cs","$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs","$console\Np2ConfigurationClient.cs",
+ "$console\NpAdcCalibration.cs",
+ "$PSScriptRoot\SD\NpNeuroscopeXml.cs","$console\WildXTheme.cs","$console\NpRecordingSettings.cs",
+ "$console\NpLogger\NpDownloadCatalog.cs","$console\Ble\NpMediaExport.cs","$console\Ble\WILD_VideoDecoder.cs",
  "$console\XeNpWinUsb.cs","$console\NpProbeManifest.cs","$console\USB512WinUsb.cs","$console\XeNpSdInfo.cs",
  "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\NpLogger\NpV1Management.cs",
  "$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\RawBurst.cs"
 )
-& $Compiler /nologo /optimize+ /define:NP2_CONSOLE_STANDALONE /target:exe /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$exe" @sources
+& $Compiler /nologo /optimize+ /define:NP2_CONSOLE_STANDALONE /target:exe /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll /r:System.Management.dll "/out:$exe" @sources
 if($LASTEXITCODE){throw 'NP1 polarity tests did not compile'}
 & $exe ([IO.Path]::GetFullPath($OutputDirectory))
 if($LASTEXITCODE){throw 'NP1 polarity tests failed'}

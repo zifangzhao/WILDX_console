@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Web.Script.Serialization;
 using USB512_interface;
 
 internal static class NpPreviewMappingTests
@@ -155,6 +158,77 @@ internal static class NpPreviewMappingTests
         for(int i=0;i<128;i++)Check(emptySweep.Samples[i]==0,"All-disabled page exposed hardware values");
     }
     static object Field(object value,string name){return value.GetType().GetField(name,Private).GetValue(value);}
+    static NpPreviewDefinition[] Np2Mapping(string output,string helper,string catalogPath,string sourcePath)
+    {
+        var serializer=new JavaScriptSerializer {MaxJsonLength=1024*1024};
+        var catalog=serializer.Deserialize<Dictionary<string,object>>(File.ReadAllText(catalogPath));
+        var routing=(Dictionary<string,object>)catalog["Np2Mapping"];
+        var definitions=new NpPreviewDefinition[4];
+        string fixtures=Path.Combine(output,"np2-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(fixtures);
+        for(int probe=1;probe<=3;probe++) {
+            var channels=new List<object>();
+            for(int ch=383;ch>=0;ch--) { // Deliberately unordered JSON; hardware channels are not site numbers.
+                int shank=probe==1?0:probe==2?(ch/96+1)%4:3;
+                var map=(IList)routing["Multi-shank Shank "+shank];int start=probe==1?0:probe==2?384:896,site=-1;
+                for(int i=start;i<1280;i++)if((int)map[i]==ch){site=i;break;}
+                if(site<0)for(int i=0;i<start;i++)if((int)map[i]==ch){site=i;break;}
+                channels.Add(new {Channel=ch,Site=site,Shank=shank,Standby=false,Export=true,Reference="Ground",ApGain=100,LfpGain=100,HighPass=false});
+            }
+            string input=Path.Combine(fixtures,"p"+probe+".json"),normalized=input+".normalized.json",payload=input+".n2b1",geometry=input+".geometry.json";
+            File.WriteAllText(input,serializer.Serialize(new {SchemaVersion=1,Numbering="zero-based",Profile="Np2Multi",Connector=probe,ModelRevision="2013",SerialNumber="",MappingId="imec-np2-sha256:"+catalog["Np2Sha256"],InternalReferenceBank=0,CalibrationIdentity="",HardwareState="NotApplied",Channels=channels}));
+            foreach(string command in new[]{"--prepare-v2 \""+input+"\" \""+normalized+"\" \""+payload+"\" "+probe,"--export-probeinterface \""+normalized+"\" \""+geometry+"\""}) {
+                using(var process=Process.Start(new ProcessStartInfo(helper,command){UseShellExecute=false,RedirectStandardError=true,CreateNoWindow=true})) {
+                    string error=process.StandardError.ReadToEnd();process.WaitForExit();Check(process.ExitCode==0,"Shared NP2013 compiler/geometry fixture failed: "+error);
+                }
+            }
+            byte[] bytes=File.ReadAllBytes(payload);string json=File.ReadAllText(normalized);
+            var definition=NpPreviewDefinition.FromNp2Request(json,bytes);definitions[probe]=definition;
+            Check(definition!=null && definition.Physical && definition.Np2,"NP2 compiled map was not accepted");
+            var doc=serializer.Deserialize<Dictionary<string,object>>(File.ReadAllText(geometry));
+            var oracle=(Dictionary<string,object>)((IList)doc["probes"])[0];
+            var indices=(IList)oracle["device_channel_indices"];var ids=(IList)oracle["contact_ids"];var positions=(IList)oracle["contact_positions"];
+            int count=0,lastShank=-1;float lastY=0,lastX=0;
+            var ap=Rows(3,0);var original=(short[])ap.Clone();
+            for(int p=0;p<definition.Pages.Length;p++) {
+                var page=definition.Pages[p];var queue=new NpPreviewQueue(8);queue.Select(false,p,probe,page.Channels);
+                var sweep=new NpSweepBuffer(8);queue.Push(ap,3,null,0,probe);queue.DrainTo(sweep,queue.Generation);
+                for(int i=0;i<page.Count;i++) {
+                    var site=page.Sites[i];int at=indices.IndexOf(site.Channel);var xy=(IList)positions[at];
+                    Check((string)ids[at]=="s"+site.Shank+"e"+site.Site,"NP2 site/channel differs from shared geometry export");
+                    Check(Convert.ToSingle(xy[0])==site.XUm && Convert.ToSingle(xy[1])==site.YUm,"NP2013 geometry must be aligned 32 um columns / 15 um rows");
+                    Check(site.Shank>lastShank || site.Shank==lastShank && (site.YUm<lastY || site.YUm==lastY && site.XUm>lastX),"NP2 shank/row/column display order changed");
+                    for(int row=0;row<3;row++)Check(sweep.Samples[row*64+i]==ap[row*384+site.Channel],"NP2 preview gathered a different hardware channel");
+                    lastShank=site.Shank;lastY=site.YUm;lastX=site.XUm;count++;
+                }
+                queue.Push(ap,3,null,0,probe==3?1:probe+1);Check(!queue.DrainTo(sweep,queue.Generation),"Different NP2 connector entered preview");
+            }
+            Check(count==384,"NP2 map lost channels");
+            for(int i=0;i<ap.Length;i++)Check(ap[i]==original[i],"NP2 display changed recording input");
+            byte saved=bytes[5];bytes[5]=(byte)((saved+1)%3);Check(NpPreviewDefinition.FromNp2Request(json,bytes)==null,"NP2 map accepted a different physical connector");bytes[5]=saved;
+            byte[] missing=(byte[])bytes.Clone();Array.Clear(missing,40,644);Check(NpPreviewDefinition.FromNp2Request(json,missing)==null,"JSON site not present in N2B1 accepted");
+            int first=definition.Pages[0].Channels[0];Array.Clear(bytes,0,bytes.Length);Check(definition.Pages[0].Channels[0]==first,"NP2 map retained mutable payload");
+        }
+        using(var form=new NeuropixelsPreviewForm(20000,7,true,12)) {
+            form.PrepareForCapture();form.PrepareProbeDefinitions(definitions);
+            Check(ReferenceEquals(Field(Field(form,"view"),"Definition"),NpPreviewDefinition.Hardware),"Unapplied NP2 request mislabeled as applied");
+            form.ConfirmProbeDefinitions();
+            for(int probe=1;probe<=3;probe++) {
+                ((ComboBox)Field(form,"probeBox")).SelectedItem=probe;
+                Check(ReferenceEquals(Field(Field(form,"view"),"Definition"),definitions[probe]),"Probe selector did not follow its own NP2 map");
+                Check(((Label)Field(form,"report")).Text.Contains("applied NP2 IMRO"),"NP2 receipt provenance is not visible");
+                typeof(NeuropixelsPreviewForm).GetMethod("RenderFrame",Private).Invoke(form,null);
+                using(var image=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(image,new Rectangle(0,0,image.Width,image.Height));image.Save(Path.Combine(output,"np2-applied-p"+probe+"-preview.png"),ImageFormat.Png);}
+            }
+            form.PrepareForCapture();Check(ReferenceEquals(Field(Field(form,"view"),"Definition"),NpPreviewDefinition.Hardware),"New recording leaked previous applied NP2 map");
+            form.KeepAliveWhileRecording=false;form.Close();
+        }
+        string source=File.ReadAllText(sourcePath);
+        int parse=source.IndexOf("NpPreviewDefinition.FromNp2Request",StringComparison.Ordinal),prepare=source.IndexOf("neuropixelsPreview.PrepareProbeDefinitions(previewDefinitions)",StringComparison.Ordinal);
+        int run=source.IndexOf("NpV2RecordingResult result = NpV2Recording.RunContinuousInFolder",StringComparison.Ordinal),confirm=source.IndexOf("Np2ConfigurationUsb.ConfirmApplied",StringComparison.Ordinal),display=source.IndexOf("neuropixelsPreview.ConfirmProbeDefinitions",StringComparison.Ordinal);
+        Check(parse>=0 && parse<prepare && prepare<run && run<confirm && confirm<display,"NP2 UI exposed mapping before preparation/matching applied receipt");
+        Check(NpPreviewDefinition.FromNp2Request(null,null)==null,"Missing NP2 mapping invented");
+        return definitions;
+    }
     static void AcceptedMaskShrink(string mainPath)
     {
         var definitions=new NpPreviewDefinition[4];for(int p=1;p<=3;p++)definitions[p]=NpPreviewDefinition.FromSelection(Selection(p));
@@ -190,7 +264,7 @@ internal static class NpPreviewMappingTests
             var queue=(NpPreviewQueue)Field(form,"previewQueue");
             var samples=new short[2048*384];
             for(int row=0;row<2048;row++)for(int ch=0;ch<384;ch++)
-                samples[row*384+ch]=(short)((np2?2048:0)+24*Math.Sin(row*0.12+ch*.2)+((row+ch*7)%173==0?50:0));
+                samples[row*384+ch]=(short)(24*Math.Sin(row*0.12+ch*.2)+((row+ch*7)%173==0?50:0));
             queue.Push(samples,2048,null,0,np2?1:2);
             typeof(NeuropixelsPreviewForm).GetMethod("RenderFrame",Private).Invoke(form,null);
             using(var image=new Bitmap(form.Width,form.Height)) {
@@ -242,7 +316,8 @@ internal static class NpPreviewMappingTests
     {
         try{
             Directory.CreateDirectory(args[0]);MappingAndQueue();AcceptedMaskShrink(args[1]);Render(args[0],false);Render(args[0],false,true);Render(args[0],true);
-            Console.WriteLine("PASS: "+checks+" cached NP1 top-to-bottom/same-row/shank/tie/P1-P3/page/AP-LFP/gather/input-invariance/map-trace-color/render checks; NP2 explicit fallback");
+            Np2Mapping(args[0],args[2],args[3],args[4]);
+            Console.WriteLine("PASS: "+checks+" NP1/NP2 per-connector electrode geometry, compiled payload, applied-receipt gate, gather/input-invariance and render checks");
             Console.WriteLine("Offline PNGs rendered from the real preview form; no device access.");return 0;
         }catch(Exception error){Console.Error.WriteLine(error);return 1;}
     }

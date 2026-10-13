@@ -51,9 +51,12 @@ namespace USB512_interface
         readonly NpBleConnection connection;
         readonly Func<NpSdStatus> status;
         readonly Func<bool> controlsBusy;
+        readonly NpCalibrationSet factoryCalibration;
         readonly NumericUpDown probe=new NumericUpDown{Minimum=1,Maximum=2,Value=1,Width=55};
         readonly NumericUpDown channel=new NumericUpDown{Minimum=0,Maximum=127,Width=65};
         readonly CheckBox enabled=new CheckBox{Text="Preview",AutoSize=true,Checked=true};
+        readonly ComboBox highPass=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=85};
+        static readonly double[] HighPassCutoffs={0,1,10,100}; // BLE display is 500 samples/s.
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
         readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=50};
@@ -67,12 +70,17 @@ namespace USB512_interface
         static int sequence=Environment.TickCount;
         static uint Next(){uint value=unchecked((uint)Interlocked.Increment(ref sequence));return value==0?Next():value;}
         internal NpBlePreviewForm(NpBleConnection source,Func<NpSdStatus> readStatus,Func<bool> ownerBusy)
+            : this(source,readStatus,ownerBusy,null) { }
+        internal NpBlePreviewForm(NpBleConnection source,Func<NpSdStatus> readStatus,Func<bool> ownerBusy,NpCalibrationSet calibration)
         {
             connection=source;epoch=source.Epoch;status=readStatus;controlsBusy=ownerBusy;
+            factoryCalibration=calibration==null?null:calibration.Copy();
             Text="WILD-X — BLE Preview";Icon=NpPreviewTheme.ApplicationIcon;ClientSize=new Size(850,550);MinimumSize=new Size(700,450);
             StartPosition=FormStartPosition.CenterParent;
             var controls=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,Padding=new Padding(10)};
-            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Base channel",AutoSize=true},channel,enabled,info});
+            foreach(double cutoff in HighPassCutoffs)highPass.Items.Add(cutoff==0?"Off":cutoff+" Hz");highPass.SelectedIndex=0;
+            highPass.SelectedIndexChanged+=delegate{plot.SetHighPass(HighPassCutoffs[highPass.SelectedIndex]);};
+            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Base channel",AutoSize=true},channel,enabled,new Label{Text="Display HPF",AutoSize=true},highPass,info});
             Controls.Add(plot);Controls.Add(controls);WildXTheme.Apply(this);info.ForeColor=WildXTheme.Muted;
             probe.ValueChanged+=delegate{enabled.Checked=false;DropStream();};channel.ValueChanged+=delegate{enabled.Checked=false;DropStream();};
             enabled.CheckedChanged+=delegate{DropStream();info.Text=enabled.Checked?"Waiting for recording…":"Paused";retry.Restart();};
@@ -81,7 +89,7 @@ namespace USB512_interface
         bool Current(uint rate)
         {
             var s=status();return !closed && enabled.Checked && connection.Connected && connection.Epoch==epoch &&
-                s!=null && s.State==3 && (s.Flags&128)!=0 && s.Mask==3 && (s.Hz==20000 || s.Hz==30000) && (rate==0 || s.Hz==rate);
+                NpV2SdControl.CanPreview(s) && (rate==0 || s.Hz==rate);
         }
         void DropStream(){var old=stream;stream=null;session=hz=0;previousEnd=0;if(old!=null)old.Dispose();}
         protected override void OnFormClosing(FormClosingEventArgs e){closed=true;lifetime.Cancel();DropStream();base.OnFormClosing(e);}
@@ -111,6 +119,8 @@ namespace USB512_interface
                     if(!await connection.TryWritePreview(NpV2PreviewBurst.Request(request,2,activeProbe,activeChannel,(uint)phase,session),epoch,token)){DropStream();retry.Restart();return;}
                     if(!Current(hz) || stream==null){DropStream();return;}
                     plot.Clear((int)activeChannel);gaps=skipped=0;packets=0;heartbeat.Restart();
+                    var profile=factoryCalibration==null?null:factoryCalibration.Get((int)activeProbe);
+                    plot.CorrectSample=profile==null?null:(Func<int,short,short>)((ch,value)=>profile.Correct(value,ch));
                 }
                 if(heartbeat.ElapsedMilliseconds>=750 && await connection.TryWritePreview(NpV2PreviewBurst.Request(request,4,activeProbe,activeChannel,(uint)phase,session),epoch,token))heartbeat.Restart();
                 if(!Current(hz) || stream==null){DropStream();return;}
@@ -136,14 +146,23 @@ namespace USB512_interface
         {
             const int Capacity=2000;
             readonly short[,] values=new short[Capacity,3];readonly ulong[] ticks=new ulong[Capacity];
+            readonly NpDisplayHighPass highPass=new NpDisplayHighPass(3);
+            readonly short[] displayRow=new short[3];
+            internal Func<int,short,short> CorrectSample;
             int count,write,baseChannel;ulong stride;
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;ForeColor=Color.LightGreen;}
-            internal void Clear(int channel){count=write=0;baseChannel=channel;Invalidate();}
+            internal void SetHighPass(double cutoff){highPass.Configure(500,cutoff);Clear(baseChannel);}
+            internal void Clear(int channel){count=write=0;baseChannel=channel;highPass.Reset();Invalidate();}
             internal void Append(ushort[,] data,ulong first,ulong step,uint valid)
             {
                 stride=step;for(int i=0;i<data.GetLength(0);i++){
                     if((valid&(1U<<i))==0)continue;ticks[write]=first+(ulong)i*step;
-                    for(int lane=0;lane<3;lane++)values[write,lane]=NpV2SampleDecoder.NominalCount(data[i,lane]);write=(write+1)%Capacity;if(count<Capacity)count++;
+                    for(int lane=0;lane<3;lane++){
+                        short value=NpV2SampleDecoder.NominalCount(data[i,lane]);
+                        displayRow[lane]=CorrectSample==null?value:CorrectSample(baseChannel+lane*128,value);
+                    }
+                    highPass.Apply(displayRow,0,displayRow,0,checked((long)(ticks[write]/step)));
+                    for(int lane=0;lane<3;lane++)values[write,lane]=displayRow[lane];write=(write+1)%Capacity;if(count<Capacity)count++;
                 }Invalidate();
             }
             protected override void OnPaint(PaintEventArgs e)
@@ -162,7 +181,7 @@ namespace USB512_interface
                         }
                         if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());
                     }
-                    e.Graphics.DrawString("Ch "+(baseChannel+lane*128)+" · nominal counts "+min+"–"+max,Font,Brushes.LightGray,10,top+5);
+                    e.Graphics.DrawString("Ch "+(baseChannel+lane*128)+(CorrectSample==null?" · nominal counts ":" · calibrated counts ")+min+"–"+max,Font,Brushes.LightGray,10,top+5);
                 }
             }
         }

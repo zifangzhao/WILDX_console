@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
+using System.Linq;
+using WildNpConfiguration;
 
 namespace USB512_interface {
  // File-only provenance writer. Call before START or after STOP, never from
@@ -49,6 +51,13 @@ namespace USB512_interface {
    document["requested"]=Fields("ap_sample_rate_hz",ap,"probe_mask",mask,"merge_probe_dat",merge,"upsample_ap_15_to_20",upsample);
   }
   internal void Streams(bool misc,bool? imu,bool camera){document["streams"]=Fields("neuropixels",true,"misc",misc,"imu",imu,"camera",camera);
+   var sidecar=Part("misc_output");sidecar["present"]=misc;sidecar["file"]=misc?"analogin.dat":null;
+   sidecar["words_per_record"]=misc?(object)16:null;sidecar["record_bytes"]=misc?(object)32:null;
+   sidecar["sample_format"]=misc?"headerless little-endian int16 words":null;
+   if((string)document["source"]=="live_usb"){
+    sidecar["sample_rate_hz"]=misc?(object)1250:null;
+    sidecar["sampling_semantics"]=misc?"800 us device-time grid; zero-order hold of latest sensor values; not 1250 Hz sensor acquisition":"misc recording disabled or unavailable";
+   }
    document["camera_output"]=Fields("enabled",camera,"file",camera?"misc.dat":null,"frame_index_file",camera?"misc.frames.csv":null,"requested_rate_hz",null,"actual_rate_hz",null);}
   internal void DeviceEvidence(string key,object value){Part("device")[key]=value;}
   internal void Context(string key,object value){document[key]=value;}
@@ -101,7 +110,11 @@ namespace USB512_interface {
    var p=Probe(port);string prefix="probe_"+port,request=prefix+".requested.npconfig.json";
    File.WriteAllText(Path.Combine(folder,request),configuration,new UTF8Encoding(false));
    p["requested_configuration_file"]=request;p["configuration_state"]="requested_unverified";
-   if(selection!=null)requestedSelections[port]=(byte[])selection.Clone();
+   if(selection!=null){
+    requestedSelections[port]=(byte[])selection.Clone();
+    string binary=prefix+".requested-selection."+(np2?"n2b1":"npb1");
+    File.WriteAllBytes(Path.Combine(folder,binary),selection);p["requested_selection_file"]=binary;
+   }
    if(Imro(p,request,prefix+".requested.imro")) {
     File.Copy(Path.Combine(folder,prefix+".requested.imro"),Path.Combine(folder,prefix+".imro"),true);
     p["imro_file"]=prefix+".imro";p["imro_state"]="requested_unverified";
@@ -111,7 +124,11 @@ namespace USB512_interface {
    var p=Probe(port);if(p["requested_configuration_file"]==null)throw new InvalidOperationException("No saved request to confirm.");
    p["configuration_state"]="device_confirmed_requested";p["configuration_evidence"]="Matching ID, CRC and verification receipt before capture release.";
    p["device_receipt_file"]="requested-configuration-applied-receipts.txt";p["imro_state"]=p["imro_file"]==null?"unavailable":"device_confirmed_requested";
-   byte[] selection;if(requestedSelections.TryGetValue(port,out selection))appliedSelections[port]=(byte[])selection.Clone();
+   byte[] selection;if(requestedSelections.TryGetValue(port,out selection)){
+    appliedSelections[port]=(byte[])selection.Clone();
+    string binary="probe_"+port+".applied-selection."+(np2?"n2b1":"npb1");
+    File.WriteAllBytes(Path.Combine(folder,binary),selection);p["selection_file"]=binary;
+   }
   }
   internal void Receipt(NpProbeManifest manifest) {
    int port=manifest.Port+1;var p=Probe(port);string prefix="probe_"+port;
@@ -155,6 +172,35 @@ namespace USB512_interface {
   }
   static bool Equal(byte[] a,byte[] b){if(a.Length!=b.Length)return false;for(int i=0;i<a.Length;i++)if(a[i]!=b[i])return false;return true;}
   internal void Finished(bool complete,string failure){document["state"]=complete?"complete":"incomplete";document["recording_complete"]=complete;document["failure"]=failure;}
+  internal void SdConfiguration(byte[] bytes,byte[] descriptor) {
+   const string name="configuration.bin";File.WriteAllBytes(Path.Combine(folder,name),bytes);
+   document["configuration_archive_file"]=name;
+   bool valid=bytes.Length==2048 && Encoding.ASCII.GetString(bytes,0,8)=="N2SDCFG1" && BitConverter.ToUInt32(bytes,8)==1 &&
+    NpConfigClient.Crc(bytes,bytes.Length)==BitConverter.ToUInt32(descriptor,76);
+   if(valid){for(int at=16;at<=40;at+=4)if(BitConverter.ToUInt32(bytes,at)!=BitConverter.ToUInt32(descriptor,at))valid=false;
+    for(int i=0;i<16;i++)if(bytes[48+i]!=descriptor[80+i])valid=false;}
+   document["configuration_archive_crc_valid"]=valid;
+   if(!valid){document["configuration_archive_note"]="Exact historical bytes retained; no valid configuration receipt. Probe maps are unavailable.";return;}
+   uint kind=BitConverter.ToUInt32(bytes,12);document["configuration_archive_kind"]=kind;
+   string magic=Encoding.ASCII.GetString(bytes,64,7);
+   for(int port=1;port<=3;port++)if((activeMask&(1<<(port-1)))!=0 && (bytes[72]&(1<<(port-1)))!=0){
+    var probe=Probe(port);probe["configuration_evidence"]="Saved staged request provenance; not an applied-probe receipt.";
+    if(kind==2 && magic=="N2IMRO1" && port<=2){
+     var selection=new byte[876];Buffer.BlockCopy(bytes,128+(port-1)*876,selection,0,selection.Length);
+     if(Encoding.ASCII.GetString(selection,0,4)!="N2B1" || selection[4]!=4 || selection[5]!=port-1 || selection[6]!=0 || selection[7]!=0){probe["configuration_snapshot_error"]="Invalid saved request header; exact configuration archive retained.";continue;}
+     string binary="probe_"+port+".sd-selection.n2b1";File.WriteAllBytes(Path.Combine(folder,binary),selection);
+     probe["selection_file"]=binary;probe["configuration_state"]="stored_request_unverified";
+     probe["recorded_configuration_id"]=BitConverter.ToString(selection,8,32).Replace("-","");
+     probe["recorded_request_crc32"]=NpConfigClient.Crc(selection,selection.Length).ToString("X8");
+     probe["imro_unavailable_reason"]="The saved binary request is retained; this SD format does not store the original IMRO text.";
+    }else if(kind==3 && magic=="N2IMRO2"){
+     probe["configuration_state"]="stored_fingerprint_unverified";
+     probe["recorded_configuration_id"]=BitConverter.ToString(bytes,128+(port-1)*36,32).Replace("-","");
+     probe["recorded_request_crc32"]=BitConverter.ToUInt32(bytes,160+(port-1)*36).ToString("X8");
+     probe["imro_unavailable_reason"]="Only ID/CRC fingerprints are stored by this SD format; full maps and original IMRO are unavailable.";
+    }
+   }
+  }
   void SaveJson(string path,object value) {
    string temporary=path+".tmp";File.WriteAllText(temporary,json.Serialize(value)+Environment.NewLine,new UTF8Encoding(false));
    if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
@@ -163,12 +209,18 @@ namespace USB512_interface {
    WriteXml(folder,activeMask,(string)Part("output")["dat_layout"]=="merged");
    var list=new List<object>();foreach(var item in probes){list.Add(item.Value);SaveJson(Path.Combine(folder,"probe_"+item.Key+".json"),item.Value);}
    document["probes"]=list;SaveJson(Path.Combine(folder,"recording_settings.json"),document);
-   if(!probeChildren)return;
+   if(!probeChildren){RefreshBundle(folder);return;}
    foreach(var item in probes)if((activeMask&(1<<(item.Key-1)))!=0) {
     string child=Path.Combine(folder,"probe"+item.Key);Directory.CreateDirectory(child);
-    foreach(var file in Directory.GetFiles(folder,"probe_"+item.Key+".*"))File.Copy(file,Path.Combine(child,Path.GetFileName(file)),true);
-    foreach(var name in new[]{"neuropixels_probe"+item.Key+"_metadata.json","neuropixels_probe"+item.Key+"_applied-selection.npb1","requested-configuration-applied-receipts.txt"})
-     if(File.Exists(Path.Combine(folder,name)))File.Copy(Path.Combine(folder,name),Path.Combine(child,name),true);
+    // Sidecars follow each per-probe DAT. Never copy bulk neural/sensor data or
+    // use a merged/root XML as the single-probe channel layout.
+    foreach(string file in Directory.GetFiles(folder))if(MetadataFile(file) && Path.GetFileName(file)!="recording_settings.json" && !Path.GetExtension(file).Equals(".xml",StringComparison.OrdinalIgnoreCase))
+     File.Copy(file,Path.Combine(child,Path.GetFileName(file)),true);
+    string calibration=Path.Combine(folder,"calibration");
+    if(Directory.Exists(calibration)){
+     string localCalibration=Path.Combine(child,"calibration");Directory.CreateDirectory(localCalibration);
+     foreach(string file in Directory.GetFiles(calibration))File.Copy(file,Path.Combine(localCalibration,Path.GetFileName(file)),true);
+    }
     var local=(Dictionary<string,object>)json.DeserializeObject(json.Serialize(document));
     local["parent_recording_settings"]="../recording_settings.json";local["folder_probe_mask"]=1<<(item.Key-1);
     foreach(string kind in new[]{"misc_output","camera_output"}) {
@@ -179,7 +231,31 @@ namespace USB512_interface {
     output["dat_layout"]="per_probe";output["channel_count_per_dat"]=384;output["probe_subfolders"]=false;
     WriteXml(child,1<<(item.Key-1),false);
     SaveJson(Path.Combine(child,"recording_settings.json"),local);
+    RefreshBundle(child);
    }
+   RefreshBundle(folder);
+  }
+  static bool MetadataFile(string path){return (new[]{".json",".imro",".npb1",".n2b1",".csv",".txt",".xml"}.Contains(Path.GetExtension(path).ToLowerInvariant()) ||
+   new[]{"descriptor.bin","footer.bin","configuration.bin","CE_params.bin","utc.bin"}.Contains(Path.GetFileName(path))) && !path.EndsWith("recording_files.json",StringComparison.OrdinalIgnoreCase);}
+  internal static void RefreshBundle(string folder){
+   if(!Directory.Exists(folder))return;
+   var root=Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar;
+   var files=Directory.GetFiles(root,"*",SearchOption.AllDirectories).Where(p=>!p.EndsWith(".tmp",StringComparison.OrdinalIgnoreCase) && Path.GetFileName(p)!="recording_files.json")
+    .OrderBy(p=>p,StringComparer.Ordinal).Select(p=>Fields("path",p.Substring(root.Length).Replace('\\','/'),"bytes",new FileInfo(p).Length,"role",MetadataFile(p)?"metadata":"data")).ToArray();
+   string path=Path.Combine(folder,"recording_files.json"),temporary=path+".tmp";
+   File.WriteAllText(temporary,new JavaScriptSerializer {MaxJsonLength=4*1024*1024}.Serialize(
+    Fields("schema_version",1,"format","neuropixels.recording_bundle","files",files,"note","Keep this folder with its subfolders. Requested, applied and unavailable probe settings are distinguished in recording_settings.json."))+Environment.NewLine,new UTF8Encoding(false));
+   if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
+  }
+  internal static void CopySourceMetadata(string input,string output){
+   string source=Path.GetDirectoryName(Path.GetFullPath(input)),destination=output+".source-metadata";
+   if(Directory.Exists(destination) || File.Exists(destination))throw new IOException("Choose a fresh source-metadata destination.");
+   Directory.CreateDirectory(destination);
+   foreach(string file in Directory.GetFiles(source))if(MetadataFile(file) && !Path.GetFullPath(file).StartsWith(Path.GetFullPath(output)+".",StringComparison.OrdinalIgnoreCase))File.Copy(file,Path.Combine(destination,Path.GetFileName(file)));
+   string sourceIndex=Path.Combine(source,"recording_files.json");
+   if(File.Exists(sourceIndex))File.Copy(sourceIndex,Path.Combine(destination,"source_recording_files.json"));
+   File.WriteAllText(Path.Combine(destination,"README.txt"),"Original source recording metadata. These files describe the source acquisition, not the corrected output encoding. See the adjacent corrected DAT .calibration.json receipt for the applied correction.\r\n");
+   RefreshBundle(destination);
   }
   void WriteXml(string target,int mask,bool merged) {
    object rate;if(mask==0 || !Part("output").TryGetValue("ap_sample_rate_hz",out rate) || rate==null)return;
