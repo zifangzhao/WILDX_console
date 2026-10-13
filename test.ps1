@@ -11,6 +11,16 @@ if($LASTEXITCODE){throw 'Standalone tests did not compile.'}
 & $exe $app $output
 if($LASTEXITCODE){throw 'Standalone regression failed.'}
 & (Join-Path $PSScriptRoot 'test_universal_workflow.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'universal-workflow')
+$imro=Join-Path $output 'Np2ImroTests.exe'
+& $compiler /nologo /optimize+ /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll "/out:$imro" (Join-Path $PSScriptRoot 'Tests\Np2ImroTests.cs')
+if($LASTEXITCODE){throw 'Probe configuration tests did not compile.'}
+& $imro $app (Join-Path $output 'probe-configuration') (Join-Path $PSScriptRoot 'Neuropixels\NPConfigurator\catalog.json') (Join-Path $PSScriptRoot 'ProbeConfig\probe_1 (1).imro') (Join-Path $PSScriptRoot 'ProbeConfig\probe_2 (1).imro') (Join-Path $PSScriptRoot 'ProbeConfig\probe_3.imro')
+if($LASTEXITCODE){throw 'Probe configuration regression failed.'}
+$highPass=Join-Path $output 'NpDisplayHighPassTests.exe'
+& $compiler /nologo /optimize+ /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$highPass" (Join-Path $PSScriptRoot 'Neuropixels\Tests\TestNpDisplayHighPass.cs')
+if($LASTEXITCODE){throw 'Display filter tests did not compile.'}
+& $highPass $app (Join-Path $output 'display-filter')
+if($LASTEXITCODE){throw 'Display filter regression failed.'}
 & (Join-Path $PSScriptRoot 'test_recording_bundle.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'recording-bundle')
 & (Join-Path $PSScriptRoot 'test_media_preview.ps1') -Compiler $compiler -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'media-preview')
 $ble=Join-Path $output 'BleFeaturesTests.exe'

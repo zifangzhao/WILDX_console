@@ -55,8 +55,7 @@ namespace USB512_interface
         readonly NumericUpDown probe=new NumericUpDown{Minimum=1,Maximum=2,Value=1,Width=55};
         readonly NumericUpDown channel=new NumericUpDown{Minimum=0,Maximum=127,Width=65};
         readonly CheckBox enabled=new CheckBox{Text="Preview",AutoSize=true,Checked=true};
-        readonly ComboBox highPass=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=85};
-        static readonly double[] HighPassCutoffs={0,1,10,100}; // BLE display is 500 samples/s.
+        readonly NpHighPassControl highPass=new NpHighPassControl();
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
         readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=50};
@@ -78,9 +77,9 @@ namespace USB512_interface
             Text="WILD-X — BLE Preview";Icon=NpPreviewTheme.ApplicationIcon;ClientSize=new Size(850,550);MinimumSize=new Size(700,450);
             StartPosition=FormStartPosition.CenterParent;
             var controls=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,Padding=new Padding(10)};
-            foreach(double cutoff in HighPassCutoffs)highPass.Items.Add(cutoff==0?"Off":cutoff+" Hz");highPass.SelectedIndex=0;
-            highPass.SelectedIndexChanged+=delegate{plot.SetHighPass(HighPassCutoffs[highPass.SelectedIndex]);};
-            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Base channel",AutoSize=true},channel,enabled,new Label{Text="Display HPF",AutoSize=true},highPass,info});
+            highPass.SampleRate=500;highPass.CutoffBox.Text="100";
+            highPass.Changed+=delegate{plot.SetHighPass(highPass.CutoffHz);};
+            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Base channel",AutoSize=true},channel,enabled,highPass,info});
             Controls.Add(plot);Controls.Add(controls);WildXTheme.Apply(this);info.ForeColor=WildXTheme.Muted;
             probe.ValueChanged+=delegate{enabled.Checked=false;DropStream();};channel.ValueChanged+=delegate{enabled.Checked=false;DropStream();};
             enabled.CheckedChanged+=delegate{DropStream();info.Text=enabled.Checked?"Waiting for recording…":"Paused";retry.Restart();};

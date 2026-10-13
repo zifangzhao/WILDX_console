@@ -45,18 +45,30 @@ static class NpDisplayHighPassTests {
  }
  static void Ui(string output){
   foreach(bool np2 in new[]{false,true})using(var form=(Form)New("NeuropixelsPreviewForm",7500,7,np2,np2?12:10)){
-   var box=(ComboBox)Get(form,"highPassBox");Check(box.SelectedIndex==0&&box.Items.Count==5,"USB filter default/options");
-   box.SelectedIndex=4;object view=Get(form,"view");Check((double)Get(view,"HighPassHz")==300,"UI selection not published");
+   var control=(Control)Get(form,"highPassControl");var check=(CheckBox)Get(control,"EnabledBox");var box=(TextBox)Get(control,"CutoffBox");Check(!check.Checked&&box.Text=="300","USB filter default/options");
+   check.Checked=true;object view=Get(form,"view");Check((double)Get(view,"HighPassHz")==300,"UI selection not published");
    if(!np2)((ComboBox)Get(form,"bandBox")).SelectedIndex=1;
+   var queue=Get(form,"previewQueue");Check((int)Get(Get(form,"view"),"Generation")== (int)queue.GetType().GetProperty("Generation",F).GetValue(queue,null),"Band/filter rate change published a stale preview generation");
    Call(form,"RenderFrame");Check((double)Get(Get(form,"displayHighPass"),"rate")== (np2?7500.0:625.0),"AP/LFP actual sample rate not used");
-   Check(box.Right<((Label)Get(form,"report")).Left,"HPF control overlaps status");
-   box.SelectedIndex=0;Call(form,"RenderFrame");Check(Get(Get(form,"sweep"),"HighPass")==null,"Off didn't remove USB display processing");
-   box.SelectedIndex=4;Call(form,"RenderFrame");form.StartPosition=FormStartPosition.Manual;form.Location=new Point(-32000,-32000);form.Show();Application.DoEvents();
+   Check(control.Right<((Label)Get(form,"report")).Left,"HPF control overlaps status");
+   check.Checked=false;Call(form,"RenderFrame");Check(Get(Get(form,"sweep"),"HighPass")==null,"Off didn't remove USB display processing");
+   check.Checked=true;
+   foreach(string invalid in new[]{"", "0", "-1", "NaN", "Infinity", "999999", "bad"}){
+    box.Text=invalid;Check((double)Get(Get(form,"view"),"HighPassHz")==0,"Invalid UI cutoff reached renderer");Call(form,"RenderFrame");
+   }
+   box.Text="125.5";Check((double)Get(Get(form,"view"),"HighPassHz")==125.5,"Manual cutoff ignored");
+   if(!np2){((ComboBox)Get(form,"bandBox")).SelectedIndex=0;box.Text="1000";((ComboBox)Get(form,"bandBox")).SelectedIndex=1;Check((double)Get(Get(form,"view"),"HighPassHz")==0 && box.Text=="1000","Band switch admitted an invalid cutoff or silently changed the requested target");}
+   box.Text="300";Call(form,"RenderFrame");form.StartPosition=FormStartPosition.Manual;form.Location=new Point(-32000,-32000);form.Show();Application.DoEvents();
    using(var image=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(image,new Rectangle(0,0,image.Width,image.Height));image.Save(Path.Combine(output,np2?"np2-hpf.png":"np1-lfp-hpf.png"),ImageFormat.Png);}
    form.Close();
   }
  }
  static void Ble(){
+  using(var control=(Control)New("NpHighPassControl")){
+   control.GetType().GetProperty("SampleRate",F).SetValue(control,500.0,null);var check=(CheckBox)Get(control,"EnabledBox");var text=(TextBox)Get(control,"CutoffBox");check.Checked=true;
+   Check((double)control.GetType().GetProperty("CutoffHz",F).GetValue(control,null)==0,"BLE accepted 300 Hz at 500 samples/s");text.Text="100";
+   Check((double)control.GetType().GetProperty("CutoffHz",F).GetValue(control,null)==100,"BLE manual target ignored");
+  }
   using(var plot=(Control)New("NpBlePreviewForm+Plot")){
    var raw=new ushort[16,3];for(int r=0;r<16;r++)for(int c=0;c<3;c++)raw[r,c]=(ushort)(1200+c*30+r*20);
    var original=(ushort[,])raw.Clone();Call(plot,"Append",raw,0UL,64000UL,65535U);

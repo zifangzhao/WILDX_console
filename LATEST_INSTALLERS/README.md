@@ -1,23 +1,27 @@
-# WILDX 1.0.0.14 - live combined DAT
+# WILDX 1.0.0.15
 
-[Download the installer](WILDX_console-Setup-1.0.0.14.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.15.exe).
 
-With **Merge active probes into one DAT per signal band** enabled, V2 writes
-`neuropixels_ap.dat` during recording. Each sample contains probe1 channels
-1..384, then probe2 channels 1..384, then probe3 channels 1..384; only active
-physical probes are included. There is no post-recording merge or duplicate
-full-session probe DAT folders. V1 retains its live AP/LFP output.
+Recording settings contains the probe configuration page. All three probes
+have stacked cards with direct IMRO/JSON loading, editing, application intent
+and device receipts. Loaded maps show physical shanks and selected electrode
+sites. Hover identifies the site and acquisition channel. The duplicate USB
+probe configuration button has been removed.
 
-RAW and all probe/configuration/calibration metadata stay alongside data.
-Small unmatched tails retain their source ticks. Each recovery segment owns
-its own combined DAT; native phase offsets are recorded without correction.
+USB and BLE live previews use a Display HPF checkbox and editable frequency.
+USB starts with 300 Hz and BLE with 100 Hz, both disabled. Cutoffs must be
+positive and below half the display sample rate. An invalid entry bypasses
+filtering and shows an error. Recording data is unchanged.
+
+The live combined DAT output from 1.0.0.14 is retained: each sample contains
+all 384 channels from each active probe, in physical connector order. RAW,
+probe/configuration/calibration files and timing/error metadata remain together.
 SD downloads still export per-probe DAT.
 
-The actual app passed 16,943,326 live DAT checks, including file growth before
-Stop and exact sample/probe/channel bytes, plus calibration, recovery, UI and
-sensor regressions. All 13 runtime files were independently extracted and
-verified. Twelve non-GUI files match 1.0.0.13. No firmware or device operation
-was performed; live hardware throughput and prior SR/IMU limits remain pending.
+Validation: 65 probe configuration checks, 3,896 display-filter checks,
+106 shared-workflow checks and 294 standalone checks. All 13 packaged runtime
+files were independently extracted and verified; 12 non-GUI files match
+1.0.0.14. No hardware access or installer execution was performed.
 
-[Validation](../Note/LIVE_COMBINED_DAT_20261013.md),
+[Validation](../Note/PROBE_CONFIGURATION_UI_20261013.md),
 [manifest](release-manifest.json) and [checksums](SHA256SUMS.txt).

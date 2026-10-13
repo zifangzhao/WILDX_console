@@ -259,6 +259,37 @@ namespace USB512_interface
         }
     }
 
+    internal sealed class NpHighPassControl : FlowLayoutPanel
+    {
+        internal readonly CheckBox EnabledBox=new CheckBox {Text="Display HPF",AutoSize=true,Margin=new Padding(0,3,4,0)};
+        internal readonly TextBox CutoffBox=new TextBox {Text="300",Width=58,Margin=new Padding(0,0,3,0),AccessibleName="High-pass cutoff in Hz"};
+        readonly ErrorProvider error=new ErrorProvider();
+        double sampleRate=20000;
+        internal event Action Changed;
+        internal NpHighPassControl()
+        {
+            AutoSize=false;Size=new Size(232,27);WrapContents=false;Margin=Padding.Empty;
+            Controls.AddRange(new Control[]{EnabledBox,CutoffBox,new Label {Text="Hz",AutoSize=true,Margin=new Padding(0,3,18,0)}});
+            error.BlinkStyle=ErrorBlinkStyle.NeverBlink;error.SetIconPadding(CutoffBox,21);
+            EnabledBox.CheckedChanged+=delegate {RefreshFilter();};CutoffBox.TextChanged+=delegate {RefreshFilter();};
+        }
+        internal double SampleRate {get{return sampleRate;} set{if(sampleRate==value)return;sampleRate=value;RefreshFilter();}}
+        internal double CutoffHz {
+            get {
+                double hz;
+                bool valid=Double.TryParse(CutoffBox.Text,System.Globalization.NumberStyles.Float,System.Globalization.CultureInfo.CurrentCulture,out hz) ||
+                    Double.TryParse(CutoffBox.Text,System.Globalization.NumberStyles.Float,System.Globalization.CultureInfo.InvariantCulture,out hz);
+                return EnabledBox.Checked && valid && !Double.IsNaN(hz) && hz>0 && hz<sampleRate/2?hz:0;
+            }
+        }
+        void RefreshFilter()
+        {
+            error.SetError(CutoffBox,EnabledBox.Checked && CutoffHz==0?"HPF is off. Enter a cutoff above 0 and below "+(sampleRate/2).ToString("0.##")+" Hz.":"");
+            if(Changed!=null)Changed();
+        }
+        protected override void Dispose(bool disposing){if(disposing)error.Dispose();base.Dispose(disposing);}
+    }
+
     // One-pole, bilinear high-pass on display-owned rows only. No capture data
     // or firmware setting changes. Missing rows start fresh, never interpolate.
     internal sealed class NpDisplayHighPass
@@ -393,9 +424,8 @@ namespace USB512_interface
         private readonly ComboBox bandBox = new ComboBox();
         private readonly ComboBox probeBox = new ComboBox();
         private readonly ComboBox paletteBox=new ComboBox();
-        private readonly ComboBox highPassBox=new ComboBox();
+        private readonly NpHighPassControl highPassControl=new NpHighPassControl();
         private readonly NpDisplayHighPass displayHighPass=new NpDisplayHighPass(ChannelsPerBank);
-        private static readonly double[] HighPassCutoffs={0,1,10,100,300};
         private readonly Label pageLabel=new Label();
         private readonly NpPreviewPalette[] palettes=NpPreviewPalette.CreateAll();
         private NpPreviewDefinition[] preparedDefinitions;
@@ -488,10 +518,8 @@ namespace USB512_interface
             foreach(var palette in palettes)paletteBox.Items.Add(palette.Name);
             paletteBox.SelectedIndex=0;paletteBox.SetBounds(210,35,110,24);
             paletteBox.SelectedIndexChanged+=delegate {UpdateView();};
-            highPassBox.DropDownStyle=ComboBoxStyle.DropDownList;
-            foreach(double hz in HighPassCutoffs)highPassBox.Items.Add(hz==0?"Off":hz+" Hz");
-            highPassBox.SelectedIndex=0;highPassBox.SetBounds(418,35,110,24);
-            highPassBox.SelectedIndexChanged+=delegate {previewQueue.InvalidateView();UpdateView();};
+            highPassControl.Location=new Point(332,35);
+            highPassControl.Changed+=delegate {previewQueue.InvalidateView();UpdateView();};
             report.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             report.AutoSize = false; report.TextAlign = ContentAlignment.MiddleLeft;
             report.SetBounds(575, 8, ClientSize.Width-590, 48);
@@ -509,10 +537,9 @@ namespace USB512_interface
             durationBox.ValueChanged += delegate { UpdateView(); };
             gainBox.ValueChanged += delegate { UpdateView(); };
             Controls.AddRange(new Control[] {
-                bandBox, bankBox, durationBox, gainBox, report, graph,probeBox,paletteBox,highPassBox,pageLabel,
+                bandBox, bankBox, durationBox, gainBox, report, graph,probeBox,paletteBox,highPassControl,pageLabel,
                 new Label { Text = "Probe", AutoSize = true, Location = new Point(8, 38) },
                 new Label { Text = "Palette", AutoSize = true, Location = new Point(150, 38) },
-                new Label { Text = "Display HPF", AutoSize = true, Location = new Point(332, 38) },
                 new Label { Text = "Sweep (s)", AutoSize = true, Location = new Point(305, 12) },
                 new Label { Text = "Gain", AutoSize = true, Location = new Point(450, 12) }
             });
@@ -617,6 +644,7 @@ namespace USB512_interface
             updatingView=true;
             try {
             bool lfpBand=!apOnly && bandBox.SelectedIndex==1;
+            highPassControl.SampleRate=lfpBand?lfpSampleRate:apSampleRate;
             lock(viewLock) {
                 int probe=probeBox.SelectedItem==null?1:(int)probeBox.SelectedItem;
                 NpPreviewDefinition definition=physicalPortsKnown && definitionsApplied && preparedDefinitions!=null &&
@@ -631,7 +659,7 @@ namespace USB512_interface
                     Gain=(float)gainBox.Value, Width=Math.Min(RenderWidth,graph.ClientSize.Width),
                     Height=Math.Min(RenderHeight,graph.ClientSize.Height),Definition=definition,Page=page,
                     Palette=Math.Max(0,paletteBox.SelectedIndex) };
-                view.HighPassHz=HighPassCutoffs[Math.Max(0,highPassBox.SelectedIndex)];
+                view.HighPassHz=highPassControl.CutoffHz;
             }
             UpdateReport();
             } finally {updatingView=false;}

@@ -13,7 +13,7 @@ namespace USB512_interface
         NpBleForm bleWorkspace;
         Label workspaceStatus;
         Label advancedTarget,advancedStorageSource;
-        Button probeConfigurationButton,diagnosticsButton,captureReportButton;
+        Button diagnosticsButton,captureReportButton;
         string lastCaptureReport;
         bool NpControlsAvailable {get{return (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && !String.IsNullOrWhiteSpace(devicePath) &&
             !running && !ztestRunning && systemInfoActive==0 && deviceRefreshActive==0 && !firmwareManagementActive && npRecoveryCancelled && !DownloadBusy && !BleInUse;}}
@@ -114,13 +114,8 @@ namespace USB512_interface
             folderRow.Controls.Add(llblSaveFolder,0,0);folderRow.Controls.Add(btnSaveFolder,1,0);capture.Controls.Add(folderRow,0,3);
             btnStart.Text="Start recording";btnStop.Text="Stop recording";btnStreams.Text="Recording settings";
             calibrationButton=new Button {Text="Calibration…",AutoSize=true};
-            probeConfigurationButton=new Button {Text="Probe configuration…",AutoSize=true};
-            probeConfigurationButton.Click+=delegate {
-                if(!NpControlsAvailable)return;
-                try{ShowNpProbeConfiguration(this);}catch(Exception ex){MessageBox.Show(this,ex.Message,"Probe configuration",MessageBoxButtons.OK,MessageBoxIcon.Error);}
-            };
             calibrationButton.Click+=delegate {if(!running && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
-            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,probeConfigurationButton,calibrationButton),0,4);
+            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,calibrationButton),0,4);
             npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,5);
             online.Controls.Add(Card("USB acquisition",null,capture),0,0);
 
@@ -232,7 +227,6 @@ namespace USB512_interface
             bool usbBusy=running || ztestRunning || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled;
             if(bleWorkspace!=null)bleWorkspace.SetHostBusy(usbBusy || DownloadBusy);
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
-            if(probeConfigurationButton!=null)probeConfigurationButton.Enabled=NpControlsAvailable;
             if(selectedDeviceKind==DeviceKind.XeNp)btnPreview.Enabled=NpControlsAvailable;
             if(diagnosticsButton!=null)diagnosticsButton.Enabled=NpControlsAvailable;
             if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;

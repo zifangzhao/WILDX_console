@@ -59,22 +59,23 @@ internal static class NpUniversalWorkflowTests
             Check(((TextBox)Get(failed,"status")).Text.Contains("status failed"),"Status failure hidden");
         }
     }
-    static Form Configuration(bool np2,IDictionary requests,ISet<int> apply)
+    static Form Configuration(bool np2,IDictionary requests,ISet<int> apply,int availableMask=3)
     {
-        return (Form)Activator.CreateInstance(T("NpConfigurationDialog"),All,null,new object[]{null,null,np2,3,np2?requests:null,np2?apply:null,np2?null:requests,null},null);
+        return (Form)Activator.CreateInstance(T("NpConfigurationDialog"),All,null,new object[]{null,null,np2,availableMask,np2?requests:null,np2?apply:null,np2?null:requests,null},null);
     }
     static void Configuration()
     {
         var maps=new Dictionary<int,string>{{1,"map1"},{2,"map2"}};var apply=new HashSet<int>{1,2};
         using(var form=Configuration(true,maps,apply)){
             Check(form.Text=="Probe configuration","Separate probe configuration title");
-            Check(((ComboBox)Get(form,"connector")).Items.Count==2,"Unadvertised connector shown");
-            Click(Children(form).OfType<Button>().Single(b=>b.Text=="Clear request"));
+            Check(((Array)Get(form,"cards")).Length==3 && !Children(form).Any(c=>c is ComboBox || c is NumericUpDown),"All probes must have their own card without a probe selector");
+            Check(!((CheckBox[])Get(form,"applyOnCapture"))[2].Enabled,"Unavailable connector admitted");
+            Click(Children((Control)((Array)Get(form,"cards")).GetValue(0)).OfType<Button>().Single(b=>b.Text=="Clear"));
             Check(maps.Count==2 && apply.Count==2,"Cancel leaked staged edits to host requests");
             Render(form,"probe-configuration-v2");
         }
         using(var form=Configuration(true,maps,apply)){
-            Click(Children(form).OfType<Button>().Single(b=>b.Text=="Clear request"));
+            Click(Children((Control)((Array)Get(form,"cards")).GetValue(0)).OfType<Button>().Single(b=>b.Text=="Clear"));
             Click(Children(form).OfType<Button>().Single(b=>b.Text=="Save settings"));
             Check(!maps.ContainsKey(1) && maps[2]=="map2" && apply.SetEquals(new[]{2}),"Save discarded another connector's map");
         }
@@ -84,8 +85,8 @@ internal static class NpUniversalWorkflowTests
         v1.Add((byte)0,Activator.CreateInstance(request,new object[]{"{}",selection}));
         using(var form=Configuration(false,v1,null)){
             Check(form.Text=="Probe configuration","V1 did not use common probe editor");
-            Check(((CheckBox)Get(form,"applyOnCapture")).Checked && !((CheckBox)Get(form,"applyOnCapture")).Enabled,"V1 mandatory restaging lost");
-            Click(Children(form).OfType<Button>().Single(b=>b.Text=="Clear request"));Check(v1.Count==1,"V1 Cancel removed retained request");
+            Check(((CheckBox[])Get(form,"applyOnCapture"))[0].Checked && !((CheckBox[])Get(form,"applyOnCapture"))[0].Enabled,"V1 mandatory restaging lost");
+            Click(Children((Control)((Array)Get(form,"cards")).GetValue(0)).OfType<Button>().Single(b=>b.Text=="Clear"));Check(v1.Count==1,"V1 Cancel removed retained request");
             Render(form,"probe-configuration-v1");
         }
         foreach(bool np2 in new[]{false,true})using(var diagnostics=(Form)Activator.CreateInstance(T("NpDiagnosticsForm"),All,null,new object[]{"offline",np2},null)){
@@ -104,9 +105,10 @@ internal static class NpUniversalWorkflowTests
         }
         using(var form=(Form)Activator.CreateInstance(T("Form1"),true)){
             var kind=form.GetType().GetField("selectedDeviceKind",All).FieldType;Set(form,"selectedDeviceKind",Enum.Parse(kind,"NpV2"));Set(form,"devicePath","offline");
-            Call(form,"UpdateStartEnabled");Check(((Button)Get(form,"probeConfigurationButton")).Enabled,"Idle probe controls unavailable");
+            Call(form,"UpdateStartEnabled");Check(((Button)Get(form,"btnStreams")).Enabled,"Idle recording settings unavailable");
+            Check(!Children((Control)Get(form,"usbPage")).OfType<Button>().Any(b=>b.Text=="Probe configuration…"),"Duplicate external probe button remains");
             Set(form,"running",true);Call(form,"UpdateStartEnabled");
-            Check(!((Button)Get(form,"probeConfigurationButton")).Enabled && !((Button)Get(form,"diagnosticsButton")).Enabled,"Maintenance admitted during recording");
+            Check(!((Button)Get(form,"btnStreams")).Enabled && !((Button)Get(form,"diagnosticsButton")).Enabled,"Maintenance admitted during recording");
         }
     }
     static void Imports(string root)
@@ -117,11 +119,14 @@ internal static class NpUniversalWorkflowTests
             Type request=app.GetType("WildNpConfiguration.NpConfigRequest",true);
             IDictionary maps=np2?(IDictionary)new Dictionary<int,string>():(IDictionary)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(typeof(byte),request));
             var apply=new HashSet<int>();using(var form=Configuration(np2,maps,apply)){
-                ((ComboBox)Get(form,"connector")).SelectedItem=2;
-                var task=(Task)Call(form,"ImportFile",np2?Path.Combine(root,"ProbeConfig","probe_3.imro"):imro);
+                var task=(Task)Call(form,"ImportFile",np2?Path.Combine(root,"ProbeConfig","probe_3.imro"):imro,2);
                 var deadline=Stopwatch.StartNew();while(!task.IsCompleted && deadline.Elapsed.TotalSeconds<30){Application.DoEvents();System.Threading.Thread.Sleep(10);}
                 Check(task.IsCompleted,"Import blocked the UI context");task.GetAwaiter().GetResult();
                 Check(maps.Count==0,"Import applied host settings before Save");
+                var mapsUi=(Array)Get(form,"maps");
+                Check(((Array)Prop(mapsUi.GetValue(1),"Channels")).Length==384 && Prop(mapsUi.GetValue(0),"Channels")==null,"Import refreshed the wrong probe map");
+                bool rejected=false;try{((Task)Call(form,"ImportFile",imro,3)).GetAwaiter().GetResult();}catch(ArgumentOutOfRangeException){rejected=true;}
+                Check(rejected,"Unavailable probe import admitted");
                 Click(Children(form).OfType<Button>().Single(b=>b.Text=="Save settings"));
                 Check(maps.Count==1,"Compiled request not saved");
                 if(np2){Check(maps.Contains(2) && apply.SetEquals(new[]{2}),"NP2 IMRO filename overrode selected connector");

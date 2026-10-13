@@ -15,7 +15,7 @@ namespace USB512_interface {
      var reply=await new NpConfigClient(new NpConfigurationUsb(device)).StatusAsync((byte)(port-1),CancellationToken.None);
      NpConfigRequest request=json==null?null:NpConfigurationDialog.PrepareV1Request(json,port);
      return NpConfigurationDialog.Receipt(reply,request);}})){
-    WildXTheme.Apply(form);form.ShowDialog(owner);return form.RequestedJson;
+    WildXTheme.Apply(form);return form.ShowDialog(owner)==DialogResult.OK?form.RequestedJson:null;
    }
   }
   internal static void StageForCapture(XeNpWinUsbDevice device,IList<NpConfigRequest> requests,int mask){

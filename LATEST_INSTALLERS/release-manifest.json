@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.14",
+  "version": "1.0.0.15",
   "releaseDate": "2026-10-13",
-  "status": "Software-checked live combined AP DAT; hardware throughput qualification pending",
+  "status": "Software-checked probe configuration and editable display HPF; hardware qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.14.exe",
-    "sha256": "318F7CF301D7E2993CCF44DB5B78E979DB2A95F48BE71D3A233AD91B1518F8FD",
-    "bytes": 2304976
+    "file": "WILDX_console-Setup-1.0.0.15.exe",
+    "sha256": "F1AB3C4811F402C1862C34E282B3BE5EBE4AB7921BCE0C3AEAD5CB6C1F3C91C2",
+    "bytes": 2308525
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "4DB86EB2C1DC9BDD61820E56011B28086284FBDE323D807C58330490859D1CE8",
-      "bytes": 1281536
+      "sha256": "2FF2C1AF19F9DFFB79BD337AE2D6C8B700F9C9A5D843980CB110114DD02AFE49",
+      "bytes": 1288192
     },
     {
       "path": "WILDX_console.exe.config",
@@ -107,18 +107,15 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "liveDatAssertions": 16943326,
-    "factoryCalibrationAssertions": 716128,
-    "fileMergeRecoveryAssertions": 10501835,
-    "usbUiLifecycleAssertions": 134,
-    "standaloneAssertions": 294,
-    "sensorLifecycleChecks": 5,
+    "probeConfigurationChecks": 65,
+    "displayHighPassChecks": 3896,
+    "universalWorkflowChecks": 106,
+    "standaloneChecks": 294,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
     "hardwareAccess": false,
     "installerExecuted": false,
-    "liveHardwareThroughputQualified": false,
     "fullEndToEndPairQualified": false
   },
   "retainedSrImuHardwareEvidence": {
@@ -150,11 +147,11 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this layout-only release"
   },
   "buildProvenance": {
-    "sourceBase": "4c6a4b78d3929d8bee0a29e333cc930bb149617b",
-    "guiSha256": "4DB86EB2C1DC9BDD61820E56011B28086284FBDE323D807C58330490859D1CE8",
-    "build": "Private cached component build, frozen companion and helper binaries",
-    "source": "Live DAT changes plus the already-published SR/IMU source baseline",
-    "evidence": "Note/LIVE_COMBINED_DAT_20261013.md"
+    "sourceBase": "1f7d00906770214c806d0802d2f7d025f148a11a",
+    "guiSha256": "2FF2C1AF19F9DFFB79BD337AE2D6C8B700F9C9A5D843980CB110114DD02AFE49",
+    "build": "Private cached GUI component build, frozen companion and helper binaries",
+    "source": "Stacked physical probe configuration cards and editable display filter",
+    "evidence": "Note/PROBE_CONFIGURATION_UI_20261013.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -163,5 +160,41 @@
     "SD downloads remain per-probe DAT",
     "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained"
   ],
-  "previousPublishedInstaller": "legacy/20261013_before_live_dat_1.0.0.14/WILDX_console-Setup-1.0.0.13.exe"
+  "previousPublishedInstaller": "legacy/20261013_before_probe_ui_1.0.0.15/WILDX_console-Setup-1.0.0.14.exe",
+  "retainedLiveDatSoftwareEvidence": {
+    "version": "1.0.0.14",
+    "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
+    "scope": "Recording implementation unchanged; no live DAT or hardware rerun for this UI release",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "liveDatAssertions": 16943326,
+      "factoryCalibrationAssertions": 716128,
+      "fileMergeRecoveryAssertions": 10501835,
+      "usbUiLifecycleAssertions": 134,
+      "standaloneAssertions": 294,
+      "sensorLifecycleChecks": 5,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "liveHardwareThroughputQualified": false,
+      "fullEndToEndPairQualified": false
+    }
+  },
+  "probeConfiguration": {
+    "layout": "Three stacked cards with independent IMRO/JSON import and shared editor actions",
+    "map": "Physical shanks and IMRO-selected sites, rotated sideways with shaft width enlarged for readability",
+    "externalUsbButtonRemoved": true,
+    "requestChangesCommittedOnSave": true
+  },
+  "displayHighPass": {
+    "control": "Checkbox and editable cutoff in Hz",
+    "defaultEnabled": false,
+    "usbDefaultHz": 300,
+    "bleDefaultHz": 100,
+    "scope": "Live display only; recorded samples unchanged",
+    "validation": "0 < cutoff < displayed sample rate / 2; invalid targets visibly bypass filter"
+  }
 }

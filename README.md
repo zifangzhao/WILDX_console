@@ -1,6 +1,6 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.14**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.15**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -12,7 +12,9 @@ Layout previews: [USB Mode](docs/screenshots/usb-mode.png), [BLE Mode](docs/scre
 
 **USB Mode → Media preview…** adds V1 camera-only live preview, FPS/exposure controls and optional raw camera saving. Its Audio pane displays and plays a bounded listening copy of exported microphone WAVs. The connected V1's camera startup timed out before any frames arrived; live USB microphone data is not advertised by its resident firmware. See [media preview and V1 test evidence](docs/usb-media-preview.md).
 
-V1 and V2 now share **Recording settings**, **Probe configuration…**, misc-signal recording, exportable reports and **Diagnostics & self-test…**. Controls adapt to device capabilities; firmware identity, applied-map receipts and native USB decoder checks remain enforced. The shared workflow is included in the installer and is awaiting hardware checks. See [universal workflow](docs/universal-workflow.md).
+V1 and V2 now share **Recording settings** with **Probe configuration…**, misc-signal recording, exportable reports and **Diagnostics & self-test…**. Controls adapt to device capabilities; firmware identity, applied-map receipts and native USB decoder checks remain enforced. The shared workflow is included in the installer and is awaiting hardware checks. See [universal workflow](docs/universal-workflow.md).
+
+The probe configuration page shows three stacked cards with independent IMRO loading and physical shank/site maps. The USB workspace has one entry through **Recording settings**. Live USB and BLE previews have a **Display HPF** checkbox and editable cutoff; defaults are 300 Hz for USB and 100 Hz for the 500-sample/s BLE preview, initially disabled. Filtering affects the display only. [Probe page](docs/screenshots/probe-configuration.png), [filter controls](docs/screenshots/live-hpf.png), and [validation](Note/PROBE_CONFIGURATION_UI_20261013.md).
 
 Recording metadata and probe files are saved alongside data, including per-probe sidecars, exact configuration binaries, calibration CSVs and timing/error reports. `recording_files.json` indexes each recording folder and its subfolders. SD downloads archive the recorded metadata bytes and preserve missing-map information explicitly. See [recording bundles](docs/recording-bundles.md).
 
