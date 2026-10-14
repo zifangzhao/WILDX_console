@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32.SafeHandles;
 using USB512_interface;
@@ -23,34 +24,43 @@ namespace CE32_console
         internal static List<ushort> Modes=new List<ushort>();
         internal static List<ushort> Operations=new List<ushort>();
         internal static List<string> Opened=new List<string>();
-        internal static bool EnumerationAllowed,Transaction,AppValid,WrongUid,HoldEntry,ShortWrite,BadReply;
+        internal static bool EnumerationAllowed,Transaction,AppValid,WrongUid,HoldEntry,ShortWrite,BadReply,FailPower;
         internal static uint Role,OriginalRole,Capabilities,Busy,Pending,LoaderAbi,Offset;
-        internal static int EntryPolls,BeginCalls,OutTimeout,InTimeout,FailOpcode,StatusReads;
+        internal static int EntryPolls,BeginCalls,OutTimeout,InTimeout,FailOpcode,StatusReads,PowerCalls,Freed,StatusError,InfoReads;
+        internal static SafeFileHandle File;
         internal static byte[] Reply,Written;
         internal static string Path(bool recovery,string uid){return @"\\?\usb#vid_1209&pid_"+(recovery?"b387":"b386")+"#npv1-"+uid+"#{test}";}
         internal static void Reset(uint role=2,uint capabilities=79,bool recovery=false)
         {
             Paths.Clear();Paths.Add(Path(recovery,Uid));Modes.Clear();Operations.Clear();Opened.Clear();
-            EnumerationAllowed=AppValid=true;Transaction=WrongUid=HoldEntry=ShortWrite=BadReply=false;
+            EnumerationAllowed=AppValid=true;Transaction=WrongUid=HoldEntry=ShortWrite=BadReply=FailPower=false;
             Role=OriginalRole=role;Capabilities=capabilities;Busy=Pending=Offset=0;LoaderAbi=258;
-            EntryPolls=BeginCalls=OutTimeout=InTimeout=FailOpcode=StatusReads=0;Reply=null;Written=new byte[0];
+            EntryPolls=BeginCalls=OutTimeout=InTimeout=FailOpcode=StatusReads=PowerCalls=Freed=StatusError=InfoReads=0;File=null;Reply=null;Written=new byte[0];
         }
         internal static IList<string> EnumerateInterfacePaths(Guid guid){if(!EnumerationAllowed)throw new Exception("Update re-enumerated or substituted a device");return Paths;}
-        internal static SafeFileHandle CreateFile(string path,uint a,uint b,IntPtr c,uint d,uint e,IntPtr f){Opened.Add(path);return new SafeFileHandle(new IntPtr(123),false);}
+        internal static SafeFileHandle CreateFile(string path,uint a,uint b,IntPtr c,uint d,uint e,IntPtr f){Opened.Add(path);return File=new SafeFileHandle(new IntPtr(123),false);}
         internal static bool WinUsbInitialize(SafeFileHandle f,out IntPtr usb){usb=new IntPtr(456);return true;}
-        internal static bool WinUsbFree(IntPtr usb){return true;}
+        internal static bool WinUsbFree(IntPtr usb){Freed++;return true;}
+        internal static bool WinUsbSetPowerPolicy(IntPtr h,uint policy,uint size,ref byte value)
+        {if(h!=new IntPtr(456) || policy!=0x81 || size!=1 || value!=0 || PowerCalls!=0 || InTimeout!=0 || OutTimeout!=0 || StatusReads!=0)throw new Exception("Power policy was not first or did not disable auto-suspend");PowerCalls++;return !FailPower;}
         internal static bool WinUsbSetPipePolicy(IntPtr h,byte pipe,uint policy,uint size,ref uint timeout)
-        {if(policy!=3 || size!=4 || timeout!=30000)throw new Exception("Wrong command timeout");if(pipe==1)OutTimeout=(int)timeout;else if(pipe==0x81)InTimeout=(int)timeout;else throw new Exception("Wrong pipe");return true;}
+        {if(PowerCalls!=1 || FailPower)throw new Exception("Pipe configured before D0 policy");if(policy!=3 || size!=4 || timeout!=30000)throw new Exception("Wrong command timeout");if(pipe==1)OutTimeout=(int)timeout;else if(pipe==0x81)InTimeout=(int)timeout;else throw new Exception("Wrong pipe");return true;}
         internal static void Put(byte[] b,int at,uint value){Buffer.BlockCopy(BitConverter.GetBytes(value),0,b,at,4);}
         internal static bool WinUsbControlTransfer(IntPtr h,WINUSB_SETUP_PACKET setup,byte[] bytes,uint count,out uint sent,IntPtr overlap)
         {
+            if(PowerCalls!=1 || FailPower)throw new Exception("Control request before D0 policy");
             if(h!=new IntPtr(456) || setup.Index!=0)throw new Exception("Handle/index changed");sent=count;
             if(setup.Request==0x6f){
                 if(setup.RequestType!=0x40 || count!=0 || Transaction || Busy!=0 || Pending!=0)throw new Exception("Unsafe mode OUT");
                 Modes.Add(setup.Value);Pending=setup.Value;EntryPolls=2;return true;
             }
+            if(setup.Request==0x60) {
+                if(setup.RequestType!=0xc0 || count!=32)throw new Exception("Wrong legacy info request");
+                InfoReads++;Put(bytes,0,0x3144504e);Put(bytes,4,1);Put(bytes,16,Busy);Put(bytes,28,1);return true;
+            }
             if(setup.Request!=0x6e || setup.RequestType!=0xc0 || count!=32)throw new Exception("Unexpected control request");
             StatusReads++;
+            if(StatusError!=0)throw new Win32Exception(StatusError);
             if(Pending!=0 && !HoldEntry && --EntryPolls<=0){Role=Pending;Pending=0;}
             Put(bytes,0,0x3153504e);Put(bytes,4,258);Put(bytes,8,Role);Put(bytes,12,Capabilities);
             Put(bytes,16,Busy|(Transaction?1U:0));Put(bytes,20,Pending);
@@ -151,14 +161,55 @@ internal static class TestNpInPlaceUpdate
         CE32_console.NpDownloadNative.Reset();CE32_console.NpDownloadNative.Paths.Add(CE32_console.NpDownloadNative.Path(false,"001E002A5942500B20313355"));
         using(var manager=Open()){Check(manager.ReadStatus().Role==2,"Exact target selection failed with neighboring logger");}
     }
+    static void PowerPolicy()
+    {
+        foreach(bool recovery in new[]{false,true}) {
+            CE32_console.NpDownloadNative.Reset(recovery?4U:2U,79,recovery);
+            using(var manager=Open(recovery)) {
+                Check(CE32_console.NpDownloadNative.PowerCalls==1,"Missing D0 policy");
+                Check(CE32_console.NpDownloadNative.InTimeout==30000,"Policy removed the control timeout");
+                Check(CE32_console.NpDownloadNative.OutTimeout==(recovery?30000:0),"Wrong recovery pipe policy");
+            }
+            Check(CE32_console.NpDownloadNative.Freed==1 && CE32_console.NpDownloadNative.File.IsClosed,"Normal handle cleanup failed");
+            CE32_console.NpDownloadNative.Reset(recovery?4U:2U,79,recovery);
+            CE32_console.NpDownloadNative.FailPower=true;
+            try {using(var manager=Open(recovery)){}throw new Exception("Accepted failed power policy");}
+            catch(Win32Exception) {checks++;}
+            Check(CE32_console.NpDownloadNative.PowerCalls==1 && CE32_console.NpDownloadNative.Freed==1 && CE32_console.NpDownloadNative.File.IsClosed,"Failed power policy leaked handles");
+            Check(CE32_console.NpDownloadNative.InTimeout==0 && CE32_console.NpDownloadNative.OutTimeout==0 && CE32_console.NpDownloadNative.StatusReads==0 && CE32_console.NpDownloadNative.Modes.Count==0 && CE32_console.NpDownloadNative.Operations.Count==0,"Failed policy continued USB work");
+        }
+    }
+    static void StatusFallback()
+    {
+        foreach(int error in new[]{121,5,1167,995}) {
+            CE32_console.NpDownloadNative.Reset();CE32_console.NpDownloadNative.StatusError=error;
+            using(var manager=Open()) {
+                try {manager.ReadStatus();throw new Exception("Transport failure accepted as legacy status");}
+                catch(Win32Exception failure) {Check(failure.NativeErrorCode==error,"Original status transport error was replaced");}
+                Check(CE32_console.NpDownloadNative.StatusReads==1 && CE32_console.NpDownloadNative.InfoReads==0,"Transport failure sent a second request");
+                Check(CE32_console.NpDownloadNative.Modes.Count==0 && CE32_console.NpDownloadNative.Operations.Count==0,"Status transport failure sent a mutation");
+            }
+        }
+        foreach(int error in new[]{1,31}) {
+            CE32_console.NpDownloadNative.Reset();CE32_console.NpDownloadNative.StatusError=error;
+            using(var manager=Open()) {
+                var status=manager.ReadStatus();
+                Check(status.Download && !status.Split && status.Role==3,"Unsupported split request lost legacy fallback");
+                Check(CE32_console.NpDownloadNative.StatusReads==1 && CE32_console.NpDownloadNative.InfoReads==1,"Legacy fallback did not issue exactly one info request");
+                Check(CE32_console.NpDownloadNative.Modes.Count==0 && CE32_console.NpDownloadNative.Operations.Count==0,"Legacy status fallback sent a mutation");
+            }
+        }
+    }
     static int Main(string[] args)
     {
         try{
+            PowerPolicy();
+            StatusFallback();
             Directory.CreateDirectory(args[0]);byte[] image=Image();string package=System.IO.Path.Combine(args[0],"test-app.xenp");File.WriteAllBytes(package,image);
             foreach(uint role in new[]{2U,3U,4U})Success(package,image,role,false);Success(package,image,4,true);Negative(package);
             byte[] corrupt=(byte[])image.Clone();corrupt[0]^=1;string invalid=System.IO.Path.Combine(args[0],"invalid.xenp");File.WriteAllBytes(invalid,corrupt);
             CE32_console.NpDownloadNative.Reset();using(var manager=Open()){Reject(()=>manager.Update(invalid,null),"invalid package");Check(CE32_console.NpDownloadNative.StatusReads==0 && CE32_console.NpDownloadNative.Modes.Count==0,"Invalid package accessed update state");}
-            Console.WriteLine("PASS maintained in-place APP updater source: "+checks+" mocked checks; same handle/path/UID, capability/idle/ACK/ABI/CRC admission, exact payload, COMMIT return, explicit ABORT and legacy recovery. No hardware/native USB calls.");return 0;
+            Console.WriteLine("PASS maintained in-place APP updater source: "+checks+" mocked checks; transport errors without legacy retry, unsupported-request fallback, D0-before-policy/control, failure cleanup, same handle/path/UID, capability/idle/ACK/ABI/CRC admission, exact payload, COMMIT return, explicit ABORT and legacy recovery. No hardware/native USB calls.");return 0;
         }catch(Exception error){Console.Error.WriteLine(error);return 1;}
     }
 }

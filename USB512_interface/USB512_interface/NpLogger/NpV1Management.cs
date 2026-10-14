@@ -90,6 +90,9 @@ namespace USB512_interface
             file=NpDownloadNative.CreateFile(target.Path,0xc0000000,3,IntPtr.Zero,3,0x40000080,IntPtr.Zero);
             try {
                 if(file.IsInvalid || !NpDownloadNative.WinUsbInitialize(file,out usb))throw Error();
+                byte autoSuspend=0;
+                if(!NpDownloadNative.WinUsbSetPowerPolicy(usb,0x81,1,ref autoSuspend))
+                    throw new Win32Exception(Marshal.GetLastWin32Error(),"V1 cannot disable WinUSB selective suspend");
                 uint timeout=30000;
                 if(!NpDownloadNative.WinUsbSetPipePolicy(usb,0x81,3,4,ref timeout))throw Error();
                 if(target.Recovery && !NpDownloadNative.WinUsbSetPipePolicy(usb,0x01,3,4,ref timeout))throw Error();
@@ -114,7 +117,11 @@ namespace USB512_interface
                 return new Status{Split=true,Recovery=true,AppValid=valid,Role=4,LoaderAbi=loaderAbi,Description="V1 recovery ABI "+loaderAbi+"; SD app "+(valid?"valid":"INVALID / missing")};
             }
             byte[] state=null;
-            try {state=Control(0x6e,0,32);}catch(Win32Exception) { /* Legacy standalone firmware stalls this optional request. */ }
+            try {state=Control(0x6e,0,32);}
+            catch(Win32Exception error) {
+                if(error.NativeErrorCode!=1 && error.NativeErrorCode!=31)throw;
+                // Legacy standalone firmware stalls this optional request.
+            }
             if(state!=null) {
                 return ParseSplitStatus(state,target.Uid);
             }

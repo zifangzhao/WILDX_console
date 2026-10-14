@@ -67,6 +67,8 @@ $updater=Join-Path (Split-Path -Parent $app) 'FirmwareUpdater\XeNpFirmwareUpdate
 & $updater --selector-self-test
 if($LASTEXITCODE){throw 'Updater selector regression failed.'}
 & (Join-Path $PSScriptRoot 'Neuropixels\test_np_inplace_update.ps1') -Compiler $compiler -OutputDirectory (Join-Path $output 'np1-inplace-update')
+& (Join-Path $PSScriptRoot 'test_v1_recording_profile.ps1') -Compiler $compiler -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'np1-recording-profile')
+& (Join-Path $PSScriptRoot 'test_v1_start_transition.ps1') -Compiler $compiler -ManagementFixtureDirectory (Join-Path $output 'np1-inplace-update') -OutputDirectory (Join-Path $output 'np1-start-transition')
 & (Join-Path $PSScriptRoot 'Neuropixels\test_np_management_forms.ps1') -Compiler $compiler -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'np1-management-forms')
 $np1=Join-Path $output 'Np1StartupTests.exe'
 $source=Join-Path $PSScriptRoot 'USB512_interface\USB512_interface'

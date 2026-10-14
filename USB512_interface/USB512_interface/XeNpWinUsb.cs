@@ -78,6 +78,13 @@ namespace USB512_interface
             }
             try
             {
+                // V1 control/preflight needs the capture policy too; preserve legacy/V2 control opens.
+                if(configureCapturePipe || NpV1Management.UidFromPath(path)!=null) {
+                    byte off = 0;
+                    if(!USB512WinUsbNative.WinUsbSetPowerPolicy(winUsb, AutoSuspend, 1, ref off))
+                        throw new Win32Exception(Marshal.GetLastWin32Error(),
+                            "WILDX cannot disable WinUSB selective suspend");
+                }
                 USB512WinUsbNative.USB_INTERFACE_DESCRIPTOR descriptor;
                 if (!USB512WinUsbNative.WinUsbQueryInterfaceSettings(winUsb, 0, out descriptor))
                     throw new Win32Exception(Marshal.GetLastWin32Error(), "WinUsb_QueryInterfaceSettings for WILDX failed");
@@ -109,10 +116,6 @@ namespace USB512_interface
 
         private void ConfigurePipe()
         {
-            byte off = 0;
-            if(!USB512WinUsbNative.WinUsbSetPowerPolicy(winUsb, AutoSuspend, 1, ref off))
-                throw new Win32Exception(Marshal.GetLastWin32Error(),
-                    "WILDX cannot disable WinUSB selective suspend");
             uint timeout = 1000;
             USB512WinUsbNative.WinUsbSetPipePolicy(winUsb, bulkInPipe, PipeTransferTimeout, 4, ref timeout);
             uint partial = 1;
@@ -124,6 +127,9 @@ namespace USB512_interface
         }
 
         internal NpModeCapabilities GetModeCapabilities()
+        { return ReadModeCapabilities(true); }
+
+        internal NpModeCapabilities ReadModeCapabilities(bool verifyLegacyStatus)
         {
             var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {RequestType=0xc0,Request=0x73,Length=48};
             byte[] data=new byte[48];uint got;
@@ -131,8 +137,8 @@ namespace USB512_interface
                 int error=Marshal.GetLastWin32Error();
                 // Legacy firmware stalls unimplemented requests. Verify its
                 // ordinary status still works before accepting legacy mode.
-                if(error==31 || error==1) {GetStatus();return null;}
-                throw new Win32Exception(error,"Cannot read NP mode capabilities");
+                if(error==31 || error==1) {if(verifyLegacyStatus)GetStatus();return null;}
+                throw new Win32Exception(error,"Cannot read NP mode capabilities (Win32 "+error+")");
             }
             return NpModeCapabilities.Parse(data,checked((int)got));
         }
@@ -323,13 +329,30 @@ namespace USB512_interface
             deferredAdmissionSession=0;
         }
 
+        internal NpV1Management.Status ReadV1ServiceStatus()
+        {
+            string uid=NpV1Management.UidFromPath(devicePath);
+            if(uid==null)return null; // Legacy capture identity has no split service.
+            var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {RequestType=0xc0,Request=0x6e,Length=32};
+            byte[] data=new byte[32];uint got;
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,data,32,out got,IntPtr.Zero)) {
+                int error=Marshal.GetLastWin32Error();
+                if(error==1 || error==31)return null; // Optional request unsupported.
+                throw new Win32Exception(error,"NP1 service status request failed (Win32 "+error+")");
+            }
+            if(got!=32)throw new IOException("Short NP1 service status reply.");
+            return NpV1Management.ParseSplitStatus(data,uid);
+        }
+
         internal XeNpStatus GetStatus()
         {
             var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {
                 RequestType=0xC0, Request=0x42, Value=0, Index=0, Length=400 };
             byte[] buffer=new byte[400]; uint transferred;
-            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,buffer,400,out transferred,IntPtr.Zero))
-                throw new Win32Exception(Marshal.GetLastWin32Error(),"WILDX status request failed");
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,buffer,400,out transferred,IntPtr.Zero)) {
+                int error=Marshal.GetLastWin32Error();
+                throw new Win32Exception(error,"WILDX status request failed (Win32 "+error+")");
+            }
             return XeNpStatus.Parse(buffer,checked((int)transferred));
         }
 

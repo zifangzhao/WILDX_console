@@ -76,19 +76,34 @@ namespace USB512_interface {
       "Multi-probe 30 kHz USB recording is experimental. Continue with this profile?":null
     };
    }
-   using(var device=XeNpWinUsbDevice.OpenForControl(devicePath)) {
-    var status=device.GetStatus();if(status.Streaming)throw new System.IO.IOException("Stop recording before changing settings.");
-    var caps=device.GetModeCapabilities();
-    if(caps==null)return new NpUsbRecordingProfile {
+   using(var device=XeNpWinUsbDevice.OpenForControl(devicePath))
+    return ReadNpV1RecordingProfile(device.ReadV1ServiceStatus,device.GetStatus,device.ReadModeCapabilities);
+  }
+  // The split service and capability replies work in both idle USB roles.
+  // Legacy live status (0x42) is not implemented by the download personality.
+  internal static NpUsbRecordingProfile ReadNpV1RecordingProfile(Func<NpV1Management.Status> readService,
+   Func<XeNpStatus> readStatus,Func<bool,NpModeCapabilities> readCapabilities) {
+    var service=readService();
+    if(service!=null && (!service.Split || service.Recovery || service.Busy!=0 || service.PendingMode!=0 ||
+     (service.Role!=2 && service.Role!=3)))throw new System.IO.IOException("Wait for an idle NP1 USB streaming or download service before changing settings.");
+    var status=service==null?readStatus():null;
+    if(status!=null && status.Streaming)throw new System.IO.IOException("Stop recording before changing settings.");
+    var caps=readCapabilities(service==null);
+    if(caps==null) {
+     if(service!=null && service.Role==3)throw new System.IO.IOException("This download service does not advertise a recording profile. Select its existing USB-streaming mode before editing recording settings.");
+     if(status==null)status=readStatus();
+     if(status.Streaming)throw new System.IO.IOException("Stop recording before changing settings.");
+     return new NpUsbRecordingProfile {
      AvailableMask=0,SelectedMask=0,SelectedHz=status.ApSampleRateHz,Rates=new[]{status.ApSampleRateHz},
      Status="The firmware supplies a fixed recording profile. Physical connector identity is not advertised. 384 AP + 384 LFP channels per probe.",
      Validate=(mask,hz)=>mask!=0 || hz!=status.ApSampleRateHz?"Use the fixed firmware profile.":null,Warning=(mask,hz)=>null
-    };
+     };
+    }
     var rates=new List<int>();foreach(int hz in new[]{7500,15000,20000,30000})if((caps.Rates[0]|caps.Rates[1]|caps.Rates[2])!=0 && ((caps.Rates[0]|caps.Rates[1]|caps.Rates[2])&NpCaptureMode.RateBit(hz))!=0)rates.Add(hz);
     if(!caps.Selectable){rates.Clear();rates.Add(caps.ApHz);}
     return new NpUsbRecordingProfile {
      AvailableMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedHz=caps.ApHz,Rates=rates.ToArray(),
-     Status="Device: Neuropixels V1\r\nAvailable: "+NpCaptureRequest.Ports(caps.AvailableMask)+"; active: "+NpCaptureRequest.Ports(caps.ActiveMask)+" at "+caps.ApHz+" Hz\r\n384 AP + 384 LFP channels per probe. The firmware resolves the requested rate; the accepted rate is saved with the recording.\r\nMisc signals retain device timestamps; analogin.dat uses a held-value 1,250 Hz grid.",
+     Status="Device: Neuropixels V1\r\n"+(service!=null && service.Role==3?"SD-download mode; Start prepares USB streaming.\r\n":"")+"Available: "+NpCaptureRequest.Ports(caps.AvailableMask)+"; active: "+NpCaptureRequest.Ports(caps.ActiveMask)+" at "+caps.ApHz+" Hz\r\n384 AP + 384 LFP channels per probe. The firmware resolves the requested rate; the accepted rate is saved with the recording.\r\nMisc signals retain device timestamps; analogin.dat uses a held-value 1,250 Hz grid.",
      Validate=(mask,hz)=>{
       if(mask==0 || (mask&~caps.AvailableMask)!=0)return "Select available connectors.";
       if(!caps.Selectable && (mask!=caps.ActiveMask || hz!=caps.ApHz))return "This firmware uses a fixed recording profile.";
@@ -101,7 +116,6 @@ namespace USB512_interface {
       return warning;
      }
     };
-   }
   }
   private void ShowNpProbeConfiguration(IWin32Window owner) {
    if(selectedDeviceKind==DeviceKind.NpV2) {

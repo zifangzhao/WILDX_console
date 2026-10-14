@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.17",
-  "releaseDate": "2026-10-13",
-  "status": "Software-checked folder naming and independent recording restarts; hardware qualification pending",
+  "version": "1.0.0.18",
+  "releaseDate": "2026-10-14",
+  "status": "Software-checked V1 recording compatibility; physical recording qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.17.exe",
-    "sha256": "CC18A7781A95BCC6AECFA10B277EF4DBEE1A255A1E981925AF68400669573BFA",
-    "bytes": 2311315
+    "file": "WILDX_console-Setup-1.0.0.18.exe",
+    "sha256": "950379A4716575A25FC4B12E27E916B7F8DBE6019CF464693B241CEBACFD9353",
+    "bytes": 2311800
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "59A43F654202FB5E74033569F912CB0811DD11E779C13808A9A5B3F6DB41F8DD",
-      "bytes": 1294848
+      "sha256": "39480DEAAC670DCF0DC5AD4020D9EE53697D72353B0F0759155D658977775A55",
+      "bytes": 1296896
     },
     {
       "path": "WILDX_console.exe.config",
@@ -108,10 +108,14 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "folderNamingTimeUiChecks": 53,
-    "v1V2TargetedRecoveryChecks": 125,
+    "v1RecordingProfileLegacyUiChecks": 97,
+    "v1ManagementMockChecks": 5886,
+    "v1StartTransitionChecks": 19,
+    "v1PairedDecoderAssertions": 74176,
     "usbUiLifecycleAssertions": 134,
     "universalWorkflowChecks": 106,
+    "folderNamingTimeUiChecks": 53,
+    "v1V2TargetedRecoveryChecks": 125,
     "standaloneChecks": 294,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
@@ -146,23 +150,35 @@
       "damagedShankHardwareQualified": false,
       "enduranceQualified": false
     },
-    "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this layout-only release"
+    "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "0670f6cc0cabeb8d16f41fccedd67e50ce8c6248",
-    "guiSha256": "59A43F654202FB5E74033569F912CB0811DD11E779C13808A9A5B3F6DB41F8DD",
-    "build": "Private GUI component build; previously published companion and helpers",
-    "source": "Shared editable folder labels, recorded SD START times, fresh independent recording restarts",
-    "evidence": "Note/FOLDER_NAMING_20261013.md"
+    "sourceBase": "71906e1ad2f8dc283777f78c41fdacf239a21f1f",
+    "guiSha256": "39480DEAAC670DCF0DC5AD4020D9EE53697D72353B0F0759155D658977775A55",
+    "build": "Isolated GUI component build; 12 non-GUI files retained byte-for-byte from 1.0.0.17",
+    "source": "Release 1.0.0.17 plus NP1 mode-aware settings, V1 control wake policy, restricted legacy fallback and assembly version",
+    "overlaidSourceFiles": [
+      "USB512_interface/USB512_interface/NpModeDialog.cs",
+      "USB512_interface/USB512_interface/XeNpWinUsb.cs",
+      "USB512_interface/USB512_interface/NpLogger/NpV1Management.cs",
+      "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    ],
+    "excludedPendingChanges": [
+      "BLE connection cache",
+      "Media export",
+      "BLE and media hardware tests"
+    ],
+    "evidence": "Note/V1_RECORDING_MODE_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
     "Native phase offsets retained without resampling or timing correction",
     "Automatic restarts create independent recordings; unknown gaps never joined",
     "SD downloads remain per-probe DAT",
-    "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained"
+    "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained",
+    "Yoshi physical V1 probe recording not tested in this pass; exact rat logger firmware identity remains unverified"
   ],
-  "previousPublishedInstaller": "legacy/20261013_before_folder_naming_1.0.0.17/WILDX_console-Setup-1.0.0.16.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_v1_recording_fix_1.0.0.18/WILDX_console-Setup-1.0.0.17.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -246,5 +262,38 @@
     "collisionPolicy": "fresh destination claim and numeric suffix; no existing data overwritten",
     "automaticRestart": "fresh independent timestamped sibling recording; no segment folders",
     "recoveryReceipt": "recovery_link.json links previous recording and original restart journal"
+  },
+  "v1RecordingCompatibility": {
+    "firmwareUpgradeRequired": false,
+    "firmwareImagePromoted": false,
+    "idleSplitRoles": [
+      2,
+      3
+    ],
+    "settingsRequests": [
+      "0x6E service status",
+      "0x73 recording capabilities"
+    ],
+    "downloadLiveStatus0x42": false,
+    "startPreparation": "Existing 0x6F value 2 mode command; exact MCU UID retained; no firmware-update operations",
+    "legacy": "Unsupported optional split status preserves live-status path; missing capabilities preserves fixed recording profile",
+    "unsupportedRequestErrors": [
+      1,
+      31
+    ],
+    "transportErrorsRemainErrors": [
+      121,
+      5,
+      1167,
+      995
+    ],
+    "sourceEvidence": "Retained V1 USB82 handlers; request routing only, not identification of Yoshi firmware",
+    "acquisitionAndDecoderChanged": false,
+    "physicalProbeRecordingQualified": false
+  },
+  "retainedFolderNamingSoftwareEvidence": {
+    "version": "1.0.0.17",
+    "commit": "71906e1ad2f8dc283777f78c41fdacf239a21f1f",
+    "manifest": "legacy/20261014_before_v1_recording_fix_1.0.0.18/release-manifest.json"
   }
 }

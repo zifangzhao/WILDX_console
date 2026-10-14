@@ -1,9 +1,9 @@
-# WILDX 1.0.0.17
+# WILDX 1.0.0.18
 
-[Download the installer](WILDX_console-Setup-1.0.0.17.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.18.exe).
 
-An optional Session label creates `<label>_wild_yyyyMMdd_HHmmss.fff` folders for live USB and saved-recording downloads. Downloads use validated stored START times; missing times are marked `time_unknown`. Automatic restarts create independent timestamped recording folders, each with its own DAT, metadata and recovery linkage. Existing data is never overwritten.
+V1 Recording settings now supports idle USB streaming and SD-download modes using requests already available in the existing firmware. Start prepares streaming on the same logger. Legacy selectable and fixed profiles remain supported. No firmware upgrade is required.
 
-Software naming, V1/V2 recovery, workflow and rendered UI checks passed. All 13 installer runtime files were independently extracted and hash-verified; the 12 non-GUI files match 1.0.0.16. No hardware or installer execution. Prior firmware/throughput qualification limits remain.
+Software settings, legacy compatibility, Start transition, AP/LFP decoder, workflow, folder naming and recovery checks passed. All 13 runtime files were independently extracted and hash-verified; the 12 non-GUI files match 1.0.0.17. No hardware or installer execution. Yoshi's physical probe recording and prior firmware/throughput qualification limits remain pending.
 
-See [release manifest](release-manifest.json), [checksums](SHA256SUMS.txt), [usage](../docs/folder-naming.md), and [validation](../Note/FOLDER_NAMING_20261013.md).
+Live DAT writing, probe/recording metadata, session labels and independent timestamped restarts are retained. See [release manifest](release-manifest.json), [checksums](SHA256SUMS.txt), [V1 validation](../Note/V1_RECORDING_MODE_20261014.md), and [folder naming](../docs/folder-naming.md).
