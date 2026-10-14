@@ -10,6 +10,7 @@ namespace USB512_interface {
   private CheckBox npAutoRecover;
   private System.Windows.Forms.Timer npRetryTimer;
   private string npSessionFolder;
+  private string npLatestRecordingFolder,npPreviousRecordingFolder;
   private string npSessionDevicePath;
   private string npSessionDeviceUid;
   private DeviceKind npSessionDeviceKind;
@@ -35,28 +36,37 @@ namespace USB512_interface {
   private string NpSegmentFolder(string fallback) {
    npRecoveryAttempt=npInternalRestart;npV2RecoverySafe=false;npV2RecoveryComplete=false;
    if((selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2) || !npAutoRecover.Checked) {
-    npSessionFolder=null;npRecoveryCancelled=true;npInternalRestart=false;return fallback;
+    npSessionFolder=null;npLatestRecordingFolder=npPreviousRecordingFolder=null;npRecoveryCancelled=true;npInternalRestart=false;return fallback;
    }
+   DateTime start=DateTime.Now;
+   string folder=NpFolderNaming.CreateFresh(saveFolder,NpFolderNaming.Name(npSessionLabel.Text,start,
+    "WILDX_"+start.ToString("yyyy-MM-dd_HH-mm-ss_fff")));
    if(!npInternalRestart) {
-    npSessionFolder=Path.Combine(saveFolder,"WILDX_SESSION_"+DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_fff")+"_"+Guid.NewGuid().ToString("N").Substring(0,6));
+    npSessionFolder=folder;npLatestRecordingFolder=npPreviousRecordingFolder=null;
     Directory.CreateDirectory(npSessionFolder);npSegmentNumber=0;npEmptyAttempts=0;npConsecutiveShortFailures=0;npSessionHasGap=false;
     npSessionDevicePath=devicePath;npSessionDeviceKind=selectedDeviceKind;
     npSessionDeviceUid=selectedDeviceKind==DeviceKind.NpV2?NpV2FirmwareForm.Uid(devicePath):NpV1Management.UidFromPath(devicePath);
     npPreviousReceiveUtc=DateTime.MinValue;
-    File.WriteAllText(Path.Combine(npSessionFolder,"session_events.csv"),"event_utc,event,segment,folder,raw_bytes,ap_rows,lfp_rows,previous_last_host_receive_utc,current_first_or_last_host_receive_utc,detail\r\n");
-    File.WriteAllText(Path.Combine(npSessionFolder,"README.txt"),"GAP-AWARE RECORDING. Segments must NOT be concatenated as a continuous sample timeline.\r\nEach segment has independent framing/decoder state. Host receive timestamps are observations, not exact sample timestamps.\r\nMissing samples and exact gap duration are unknown; no zero padding or invented samples are inserted.\r\nA failed segment is an incomplete prefix; consult its capture status.\r\nDevice kind="+npSessionDeviceKind+"; target UID="+(npSessionDeviceUid??"unknown")+".\r\nRecovery reopens only this target, with the selected rate/probes/configuration retained.\r\n");
+    File.WriteAllText(Path.Combine(npSessionFolder,"session_events.csv"),"event_utc,event,recording,folder,raw_bytes,ap_rows,lfp_rows,previous_last_host_receive_utc,current_first_or_last_host_receive_utc,detail\r\n");
+    File.WriteAllText(Path.Combine(npSessionFolder,"README.txt"),"AUTOMATIC RESTARTS CREATE SEPARATE RECORDINGS. Each fresh START creates a sibling folder with a new PC start-attempt timestamp.\r\nEach recording has independent files, metadata and decoder state. Host receive timestamps are observations, not exact sample timestamps.\r\nMissing samples and exact gap duration between recordings are unknown; no zero padding or invented samples are inserted.\r\nA failed recording is an incomplete prefix; consult its capture status.\r\nDevice kind="+npSessionDeviceKind+"; target UID="+(npSessionDeviceUid??"unknown")+".\r\nRecovery reopens only this target, with the selected rate/probes/configuration retained.\r\n");
    }
+   npPreviousRecordingFolder=npLatestRecordingFolder;npLatestRecordingFolder=folder;
    npInternalRestart=false;npRecoveryCancelled=false;npLastReceiveUtc=DateTime.MinValue;
    npFreshStartAvailable=false;npSegmentStartUtc=DateTime.UtcNow;
-   string folder=Path.Combine(npSessionFolder,"segment_"+(++npSegmentNumber).ToString("D4"));
-   NpJournal("segment_attempt",folder,"Fresh START; no continuation of previous files");
+   ++npSegmentNumber;
+   if(npPreviousRecordingFolder!=null)File.WriteAllText(Path.Combine(folder,"recovery_link.json"),
+    new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(NpRecordingSettings.Fields(
+     "previous_recording_folder",npPreviousRecordingFolder,"first_recording_folder",npSessionFolder,
+     "recovery_journal",Path.Combine(npSessionFolder,"session_events.csv"),"recording_number",npSegmentNumber,
+     "gap_duration_known",false,"missing_sample_count_known",false,"device_uid",npSessionDeviceUid))+"\n");
+   NpJournal("recording_attempt",folder,"Fresh START; no continuation of previous files");
    npAutoRecover.Enabled=false;return folder;
   }
   private static string Csv(string s){return "\""+(s??"").Replace("\"","\"\"")+"\"";}
   private static string Utc(DateTime t){return t==DateTime.MinValue?"unknown":t.ToString("O");}
   private void NpJournal(string kind,string folder,string detail) {
    if(npSessionFolder==null)return;
-   bool attempt=kind=="segment_attempt";
+   bool attempt=kind=="recording_attempt";
    File.AppendAllText(Path.Combine(npSessionFolder,"session_events.csv"),String.Join(",",new[]{
     Csv(DateTime.UtcNow.ToString("O")),Csv(kind),Csv(npSegmentNumber.ToString()),Csv(folder),
     Csv((attempt?0:Interlocked.Read(ref neuropixelsPayloadBytes)).ToString()),Csv((attempt?0:Interlocked.Read(ref neuropixelsApRows)).ToString()),
@@ -121,7 +131,7 @@ namespace USB512_interface {
     result.RawWriterError!=null || result.DecodeError!=null ||
     result.RawDroppedBlocks!=0 || result.DecodedDroppedLaneBlocks!=0 ||
     result.VerifiedBlocks!=result.ReceivedBlocks)return false;
-   // Best effort: the exact stopped ring-overrun fault can start a NEW segment.
+   // Best effort: the exact stopped ring-overrun fault can start a NEW recording.
    // Never resume the overwritten ring or append across the unknown gap. The
    // existing idle/busy/UID handshake still owns any subsequent mode reset.
    var capture=result.FinalCapture;var source=result.FinalSource;
@@ -137,7 +147,7 @@ namespace USB512_interface {
   private static bool NpFreshStartExporterFault(string message) {
    // This exact firmware fault was observed after a structurally clean prefix.
    // It cannot resume the old file, but a firmware-advertised fresh START can
-   // establish a new independent segment. Other BADA codes stay fail-closed.
+   // establish a new independent recording. Other BADA codes stay fail-closed.
    return message!=null && message.IndexOf("V1 USB exporter fault is latched (0xBADA0000)",StringComparison.OrdinalIgnoreCase)>=0;
   }
   private bool NpFinishRecovery(string message) {
@@ -145,7 +155,7 @@ namespace USB512_interface {
    bool failure=message.StartsWith("Capture error:",StringComparison.Ordinal);
    bool v2=selectedDeviceKind==DeviceKind.NpV2;
    bool intact=!failure && (!v2 || npV2RecoveryComplete);
-   NpJournal(failure?"segment_failed":intact?"segment_stopped":"segment_incomplete",runFolder,message);
+   NpJournal(failure?"recording_failed":intact?"recording_stopped":"recording_incomplete",runFolder,message);
    bool freshExporterRetry=!v2 && npFreshStartAvailable && NpFreshStartExporterFault(message);
    bool retry=v2?npV2RecoverySafe && npSessionDeviceUid!=null:NpRetryable(message) || freshExporterRetry;
    if(!npRecoveryCancelled && failure && retry) {
@@ -155,15 +165,15 @@ namespace USB512_interface {
      DateTime.UtcNow-npSegmentStartUtc>=TimeSpan.FromSeconds(10))?0:npConsecutiveShortFailures+1;
     if(npLastReceiveUtc!=DateTime.MinValue)npPreviousReceiveUtc=npLastReceiveUtc;
     if(npEmptyAttempts<12 && npConsecutiveShortFailures<12) {
-     NpJournal("gap_reconnect_pending",runFolder,"Reopen same UID with fresh START; previous segment incomplete; missing samples UNKNOWN");
+     NpJournal("gap_reconnect_pending",runFolder,"Reopen same UID with fresh START; previous recording incomplete; missing samples UNKNOWN");
      File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state=reconnecting\r\nhas_gaps=True\r\nlossless=False\r\n");
      btnStart.Enabled=false;btnStop.Enabled=true;btnRefresh.Enabled=false;comboDrives.Enabled=false;
      btnNpLogger.Enabled=false;btnSdInfo.Enabled=false;
-     npAutoRecover.Enabled=false;lblRecInfo.Text="NP interrupted; reconnecting into a NEW segment (gap recorded). Stop cancels.";
+     npAutoRecover.Enabled=false;lblRecInfo.Text="NP interrupted; starting a new timestamped recording. Stop cancels.";
      npRetryTimer.Interval=npEmptyAttempts==0?100:2000;
      npRetryTimer.Start();return true;
     }
-    NpJournal("recovery_limit",runFolder,"Stopped after repeated empty or short failed segments");
+    NpJournal("recovery_limit",runFolder,"Stopped after repeated empty or short failed recordings");
    }
    npRecoveryCancelled=true;npAutoRecover.Enabled=true;
    File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state="+(failure?"failed":intact?"stopped":"incomplete")+"\r\nhas_gaps="+npSessionHasGap+"\r\nlossless="+(intact && !npSessionHasGap)+"\r\n");

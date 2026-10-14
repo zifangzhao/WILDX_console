@@ -1,25 +1,9 @@
-# WILDX 1.0.0.16
+# WILDX 1.0.0.17
 
-[Download the installer](WILDX_console-Setup-1.0.0.16.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.17.exe).
 
-New V2 USB app recordings save decoded AP DAT without the extra
-`neuropixels_np2usb.raw` copy. V1 already saves AP/LFP DAT without a neural RAW
-copy. Metadata, probe maps, factory calibration files, timing and error reports
-remain alongside data. Existing recordings are untouched.
+An optional Session label creates `<label>_wild_yyyyMMdd_HHmmss.fff` folders for live USB and saved-recording downloads. Downloads use validated stored START times; missing times are marked `time_unknown`. Automatic restarts create independent timestamped recording folders, each with its own DAT, metadata and recovery linkage. Existing data is never overwritten.
 
-The combined DAT is written live, with each sample containing all 384 channels
-from each active probe in physical connector order. Recovery segments remain
-separate. Stream verification is retained. DAT-only decoding/writing or wire
-verification failures stop capture and mark it incomplete, including when
-incoming USB data pauses.
+Software naming, V1/V2 recovery, workflow and rendered UI checks passed. All 13 installer runtime files were independently extracted and hash-verified; the 12 non-GUI files match 1.0.0.16. No hardware or installer execution. Prior firmware/throughput qualification limits remain.
 
-The stacked physical probe maps and editable display HPF from 1.0.0.15 remain.
-SD downloads and optional camera saving keep their existing formats.
-
-Software checks: 20,511,105 live DAT assertions, 74,176 V1 checks, 134 USB UI
-lifecycle checks, 120 recovery checks and 5 sensor checks. All 13 installer
-runtime files were independently extracted and verified; 12 non-GUI runtime
-files match 1.0.0.15. No hardware or installer execution was performed.
-
-[Validation](../Note/DAT_ONLY_USB_20261013.md), [manifest](release-manifest.json)
-and [checksums](SHA256SUMS.txt).
+See [release manifest](release-manifest.json), [checksums](SHA256SUMS.txt), [usage](../docs/folder-naming.md), and [validation](../Note/FOLDER_NAMING_20261013.md).

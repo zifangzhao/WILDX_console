@@ -22,6 +22,38 @@ namespace CE32_console
         // Discovery is read-only; this wider USB policy must not admit formatting.
         internal static bool IsReadOnlyDiskSource(string mediaType,string interfaceType){return NpCardFormat.IsRemovableMedia(mediaType) || string.Equals(interfaceType,"USB",StringComparison.OrdinalIgnoreCase);}
         internal static byte[] Sector(Stream s,long lba){byte[] b=new byte[512];s.Position=checked(lba*512);int p=0;while(p<512){int n=s.Read(b,p,512-p);if(n==0)throw new EndOfStreamException();p+=n;}return b;}
+        // Folder dates use recorded START evidence, never the download clock.
+        // UTC brackets describe capture arming, not the first ADC conversion.
+        internal static DateTime? RecordingStartTime(Stream s,NpDownloadRecord record) {
+            if(record.Media) {
+                byte[] footer=Sector(s,record.Start+4);Header(footer,"NPSDEND1");
+                var metadata=NpMediaExport.Metadata(footer);
+                if(NpDownloadStream.U(footer,12)==record.Session && metadata!=null) {
+                    ulong? start=NpMediaExport.UtcAt(metadata,Convert.ToUInt32(metadata["start_tick"]),false);
+                    if(start.HasValue)return LocalTime(start.Value);
+                }
+            }
+            byte[] b=Sector(s,record.Start+5);bool v2=record.V2;
+            if(Encoding.ASCII.GetString(b,0,8)!=(v2?"N2SDUTC1":"N1SDUTC1") ||
+               NpDownloadStream.U(b,508)!=NpDownloadStream.Crc(b,0,508))return null;
+            uint flags=NpDownloadStream.U(b,16),uncertainty=NpDownloadStream.U(b,24);
+            ulong anchor=BitConverter.ToUInt64(b,32);
+            if(NpDownloadStream.U(b,8)!=1 || NpDownloadStream.U(b,12)!=record.Session ||
+               (flags&~7U)!=0 || (flags&3)!=3 || NpDownloadStream.U(b,20)==0 ||
+               uncertainty<1000 || uncertainty>5000000 || NpDownloadStream.U(b,72)!=record.ApHz ||
+               NpDownloadStream.U(b,76)!=1000 || anchor<1577836800000000UL || anchor>4102444800000000UL)return null;
+            if(v2 && b.Skip(80).Take(428).Any(value=>value!=0))return null;
+            uint before=unchecked(NpDownloadStream.U(b,v2?48:64)-NpDownloadStream.U(b,28));
+            uint after=unchecked(NpDownloadStream.U(b,v2?52:68)-NpDownloadStream.U(b,28));
+            ulong beforeUtc=BitConverter.ToUInt64(b,v2?56:48),afterUtc=BitConverter.ToUInt64(b,v2?64:56);
+            if(before>=0x80000000U || after>=0x80000000U || after<before ||
+               beforeUtc!=anchor+(ulong)before*1000 || afterUtc!=anchor+(ulong)after*1000)return null;
+            return LocalTime(beforeUtc);
+        }
+        static DateTime? LocalTime(ulong us) {
+            if(us<1577836800000000UL || us>4102444800000000UL)return null;
+            return new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddTicks(checked((long)us*10)).ToLocalTime();
+        }
         private static void Header(byte[] b,string magic){if(Encoding.ASCII.GetString(b,0,8)!=magic || NpDownloadStream.U(b,508)!=NpDownloadStream.Crc(b,0,508))throw new InvalidDataException("Invalid NP recording descriptor/footer.");}
         internal static bool IsNpIdentity(byte[] id){return id!=null && id.Length==512 && Encoding.ASCII.GetString(id,0,16)=="CE_FILESYSTEM_V1" && Encoding.ASCII.GetString(id,32,9)=="NP_CE64_1";}
         internal static bool IsCatalogIdentity(byte[] id){

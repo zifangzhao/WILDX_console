@@ -16,6 +16,7 @@ namespace USB512_interface
         readonly ListBox sessions=new ListBox{Dock=DockStyle.Fill,HorizontalScrollbar=true};
         readonly ComboBox method=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=270};
         readonly TextBox folder=new TextBox{Dock=DockStyle.Fill,ReadOnly=true};
+        readonly TextBox sessionLabel=new TextBox {Name="archiveSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
         readonly TextBox log=new TextBox{Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
         readonly Label status=new Label{Text="Refresh to discover V1 loggers (identified by MCU UID).",AutoSize=true,MaximumSize=new Size(810,0)};
         readonly Label progressText=new Label{AutoSize=true,Text="Idle",MaximumSize=new Size(850,0)};
@@ -40,7 +41,8 @@ namespace USB512_interface
         int pendingPercent;
 
         internal NpLoggerForm() : this(null) {}
-        internal NpLoggerForm(string selectedPath)
+        internal NpLoggerForm(string selectedPath) : this(selectedPath,"") {}
+        internal NpLoggerForm(string selectedPath,string label)
         {
             selectedUid=NpV1Management.UidFromPath(selectedPath);
             Text="NP V1 — SD Download";
@@ -54,6 +56,9 @@ namespace USB512_interface
             layout.Controls.Add(top,0,0);layout.Controls.Add(status,0,1);layout.Controls.Add(sessions,0,2);
             var output=new TableLayoutPanel{Dock=DockStyle.Fill,AutoSize=true,ColumnCount=2};output.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));output.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             folder.Text=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"NP downloads");output.Controls.Add(folder,0,0);output.Controls.Add(browse,1,0);layout.Controls.Add(output,0,3);
+            sessionLabel.Text=label;
+            output.Controls.Add(new Label {Text="Session label",AutoSize=true,Anchor=AnchorStyles.Left},0,1);output.SetColumnSpan(output.GetControlFromPosition(0,1),2);
+            output.Controls.Add(sessionLabel,0,2);output.SetColumnSpan(sessionLabel,2);
             method.Items.AddRange(new object[]{"Fast archive + decode (recommended)","Fast archive only","Compatible download + decode"});method.SelectedIndex=0;
             actions.Controls.AddRange(new Control[]{method,download,decode,cancel});layout.Controls.Add(actions,0,4);
             connection.Controls.Add(enterDownload);layout.Controls.Add(connection,0,5);layout.Controls.Add(progressText,0,6);layout.Controls.Add(progress,0,7);layout.Controls.Add(log,0,8);Controls.Add(layout);
@@ -81,7 +86,7 @@ namespace USB512_interface
         }
         void UpdateControls()
         {
-            devices.Enabled=refresh.Enabled=browse.Enabled=method.Enabled=decode.Enabled=!working;
+            sessionLabel.Enabled=devices.Enabled=refresh.Enabled=browse.Enabled=method.Enabled=decode.Enabled=!working;
             inspect.Enabled=!working && devices.SelectedItem!=null;
             download.Enabled=!working && deviceStatus!=null && deviceStatus.Download && sessions.SelectedItem!=null && catalogPath!=null;
             enterDownload.Enabled=!working && deviceStatus!=null && deviceStatus.Split && deviceStatus.Busy==0 && deviceStatus.PendingMode==0 && !deviceStatus.Download;
@@ -119,6 +124,7 @@ namespace USB512_interface
             var t=devices.SelectedItem as NpV1Target;var selected=sessions.SelectedItem as NpDownloadRecord;
             if(t==null || selected==null || catalogPath!=t.Path)return;
             int choice=method.SelectedIndex;string root=folder.Text;
+            string label;try{label=NpFolderNaming.Label(sessionLabel.Text);}catch(ArgumentException ex){progressText.Text=ex.Message;return;}
             if(!selected.Complete && MessageBox.Show(this,"Firmware marked this recording incomplete. Export only its committed prefix for diagnosis?", "Incomplete recording",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
             await Run(()=>Task.Run(()=>{
                 Directory.CreateDirectory(root);
@@ -126,15 +132,18 @@ namespace USB512_interface
                 long needed=choice==1?archiveBytes:checked((long)selected.Chunks*65536*4+(choice==0?archiveBytes:0));
                 if(new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root))).AvailableFreeSpace<needed+67108864)throw new IOException("Insufficient disk space for archive and decoded outputs.");
                 string name="NPV1_"+t.Uid+"_session"+selected.Session+"_"+DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                string recordingFolder=Path.Combine(root,name);
-                Directory.CreateDirectory(recordingFolder);
-                string archive=Path.Combine(recordingFolder,name+".npraw"),output=Path.Combine(recordingFolder,"decoded");
+                string recordingFolder=null,archive=null,output=null;
+                NpFolderNaming.Destination destination=null;
                 USB512_interface.NpRecordingSettings settings=null;bool finished=false,firmwareComplete=false;string failure=null;
                 try {
                 using(var s=new NpDownloadStream(t.Path)) {
                     s.Cancelled=()=>cancelled;
                     var current=NpDownloadCatalog.Read(s).Find(r=>r.Session==selected.Session && r.Start==selected.Start && r.End==selected.End && r.Chunks==selected.Chunks && r.State==selected.State && r.Fault==selected.Fault);
                     if(current==null)throw new IOException("SD catalog changed. Refresh before downloading.");
+                    name=NpFolderNaming.Name(label,label.Length==0?null:NpDownloadCatalog.RecordingStartTime(s,current),
+                        label.Length==0?name:"NPV1_"+t.Uid+"_session"+current.Session+"_LBA"+current.Start);
+                    destination=NpFolderNaming.Reserve(root,name);destination.Create();recordingFolder=destination.Path;
+                    archive=Path.Combine(recordingFolder,Path.GetFileName(recordingFolder)+".npraw");output=Path.Combine(recordingFolder,"decoded");
                     firmwareComplete=current.Complete;
                     settings=USB512_interface.NpRecordingSettings.Saved(recordingFolder,false,(int)current.ApHz,(int)current.ProbeMask,
                         current.FormatVersion,current.Session,"sd_download",t.Uid,false);
@@ -160,7 +169,7 @@ namespace USB512_interface
                 finished=true;
                 Report(choice==1?"Archive complete (transport checked; NP decoding not performed).":"Download + NP decoding complete. See capture_status.txt.",100);
                 } catch(Exception ex){failure=ex.Message;throw;}
-                finally {if(settings!=null){settings.Finished(finished && firmwareComplete,failure??(firmwareComplete?null:"Firmware marked recording incomplete"));settings.Context("download_complete",finished);settings.Context("completion_evidence",!finished?"transfer/export did not finish":choice==1?"archive transport checked; neural decoding not performed":"strict DAT export completed");settings.Write();}}
+                finally {try{if(settings!=null){settings.Finished(finished && firmwareComplete,failure??(firmwareComplete?null:"Firmware marked recording incomplete"));settings.Context("download_complete",finished);settings.Context("completion_evidence",!finished?"transfer/export did not finish":choice==1?"archive transport checked; neural decoding not performed":"strict DAT export completed");settings.Write();}}finally{if(destination!=null)destination.Dispose();}}
             }));
         }
         async Task DecodeArchive()

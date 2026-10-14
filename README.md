@@ -1,6 +1,6 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.16**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.17**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -49,13 +49,13 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current engineering installer is [WILDX 1.0.0.14](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.14.exe), packaged on 2026-10-13. Recording status and file paths now wrap in a card that grows with their content. The shared workflow, calibration, recording bundles, V1 media preview and V2 SR/IMU behavior are retained. V2 now writes a combined DAT live when the merge option is enabled: each sample contains a complete 384-channel block per active probe in physical connector order. The actual app passed live file-growth/byte-order, calibration, recovery and UI checks; all 13 runtime files were independently extracted and verified. See [live DAT validation](Note/LIVE_COMBINED_DAT_20261013.md).
+The current installer is [WILDX 1.0.0.17](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.17.exe), packaged on 2026-10-13. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts now create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [folder naming](docs/folder-naming.md) and [software validation](Note/FOLDER_NAMING_20261013.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 
 [Release manifest](LATEST_INSTALLERS/release-manifest.json) records the installer, all 13 extracted payload checksums, compatible V2 firmware identities and outstanding hardware qualification. The older pre-integration installer remains under `LATEST_INSTALLERS/legacy`.
 
-The manifest retains the previously published V2 firmware baseline: APP `E07FB882`, resident USB `BFF0A8A2`, loader `6408DBB8`. No firmware is promoted by this app release. Device-applied NP2013 requests require advertised capability and matching receipts. Degraded selected-shank receipts retain the requested configuration with explicit unverified mapping metadata. V2 auto recovery admits the exact stopped ring-overrun fault only with a clean verified prefix, then opens a fresh segment with an unknown gap; it does not establish uninterrupted capture or fix WinUSB error 31. Firmware compatibility and full hardware qualification remain separate from software regression results.
+The manifest retains the previously published V2 firmware baseline: APP `E07FB882`, resident USB `BFF0A8A2`, loader `6408DBB8`. No firmware is promoted by this app release. Device-applied NP2013 requests require advertised capability and matching receipts. Degraded selected-shank receipts retain the requested configuration with explicit unverified mapping metadata. V2 auto recovery admits the exact stopped ring-overrun fault only with a clean verified prefix, then starts a new independent timestamped recording with an unknown gap; it does not establish uninterrupted capture or fix WinUSB error 31. Firmware compatibility and full hardware qualification remain separate from software regression results.
 
 Requirements:
 

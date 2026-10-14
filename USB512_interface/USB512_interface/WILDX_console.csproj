@@ -78,6 +78,7 @@
     <Compile Include="NpCaptureModes.cs" />
     <Compile Include="NpModeDialog.cs" />
     <Compile Include="NpRecovery.cs" />
+    <Compile Include="NpFolderNaming.cs" />
     <Compile Include="NpUsbSensors.cs" />
     <Compile Include="NpUsbSensorMonitor.cs" />
     <Compile Include="NpClockFit.cs" />

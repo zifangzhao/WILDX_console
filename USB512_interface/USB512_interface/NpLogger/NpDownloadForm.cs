@@ -11,6 +11,9 @@ namespace CE32_console
         private sealed class Source {internal string Path,Label,MediaType;internal bool Usb;internal bool CanFormat{get{return !Usb && NpCardFormat.IsRemovableMedia(MediaType);}}public override string ToString(){return Label;}}
         private readonly ComboBox sources=new ComboBox{Dock=DockStyle.Top,DropDownStyle=ComboBoxStyle.DropDownList};
         private readonly CheckedListBox records=new CheckedListBox{Dock=DockStyle.Fill,CheckOnClick=true};
+        private readonly TextBox sessionLabel=new TextBox{Name="downloadSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
+        internal string SessionLabel{get{return sessionLabel.Text;}set{sessionLabel.Text=value??"";}}
+        internal event Action<string> SessionLabelChanged;
         private readonly Label status=new Label{Dock=DockStyle.Bottom,Height=55,Text="Stop recording before download. USB requires the read-only NP download firmware."};
         private readonly ProgressBar progress=new ProgressBar{Dock=DockStyle.Bottom};
         private readonly Button refresh=new Button{Text="Refresh sources",AutoSize=true},list=new Button{Text="List recordings",AutoSize=true},save=new Button{Text="Download selected…",AutoSize=true},cancel=new Button{Text="Cancel",AutoSize=true},play=new Button{Text="Play exported camera…",AutoSize=true};
@@ -39,8 +42,13 @@ namespace CE32_console
             actions.Controls.Add(calibrationButton);
             calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
             actions.Controls.Add(fast);
-            fast.Click+=(s,e)=>{if(busy || usbBlocked)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null))form.ShowDialog(DialogOwner);};
+            fast.Click+=(s,e)=>{if(busy || usbBlocked)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null,sessionLabel.Text))form.ShowDialog(DialogOwner);};
             Controls.Add(records);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
+            var nameRow=new TableLayoutPanel {Dock=DockStyle.Top,Height=38,ColumnCount=2,Padding=new Padding(0,4,0,4)};
+            nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+            nameRow.Controls.Add(new Label {Text="Session label",Dock=DockStyle.Fill,TextAlign=System.Drawing.ContentAlignment.MiddleLeft},0,0);nameRow.Controls.Add(sessionLabel,1,0);Controls.Add(nameRow);
+            Controls.SetChildIndex(nameRow,2);
+            sessionLabel.TextChanged+=(s,e)=>{var changed=SessionLabelChanged;if(changed!=null)changed(sessionLabel.Text);};
             refresh.Click+=(s,e)=>{RefreshSources();enumerationTimer.Start();};list.Click+=async(s,e)=>await ListAsync();save.Click+=async(s,e)=>await SaveAsync();cancel.Click+=(s,e)=>cancelled=true;
             records.ItemCheck+=(s,e)=>{var r=records.Items[e.Index] as NpDownloadRecord;if(r!=null&&!r.Downloadable){e.NewValue=CheckState.Unchecked;status.Text="Session "+r.Session+" is not downloadable: "+r.ValidationError;}};
             play.Click+=(s,e)=>new NpMediaPlaybackForm().Show(DialogOwner);
@@ -74,7 +82,7 @@ namespace CE32_console
             if(sources.SelectedIndex<0)SelectBoundSource();
             }finally{refreshing=false;}
         }
-        private void UpdateControls(){var source=sources.SelectedItem as Source;calibrationButton.Enabled=refresh.Enabled=sources.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;format.Enabled=!busy && source!=null && source.CanFormat;cancel.Enabled=busy;}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;format.Enabled=!busy && source!=null && source.CanFormat;cancel.Enabled=busy;}
         private void SetBusy(bool value){busy=value;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
         private async Task FormatSelectedAsync() {
             var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat){status.Text="Quick Format requires removable SD media. USB external disks/readers and logger USB endpoints remain read-only.";return;}
@@ -142,6 +150,7 @@ namespace CE32_console
             }catch(Exception ex){status.Text=ex.Message;}finally{SetBusy(false);}
         }
         private async Task SaveAsync() {
+            string label;try{label=USB512_interface.NpFolderNaming.Label(sessionLabel.Text);}catch(ArgumentException ex){status.Text=ex.Message;return;}
             if(listedSource==null || !ReferenceEquals(listedSource,sources.SelectedItem)){status.Text="List this source first.";return;}
             var chosen=records.CheckedItems.Cast<NpDownloadRecord>().ToList();if(chosen.Count==0){status.Text="Select at least one recording.";return;}
             if(chosen.Any(r=>!r.Downloadable)){status.Text="Failed/empty recordings cannot be downloaded.";return;}
@@ -159,7 +168,9 @@ namespace CE32_console
                 var current=NpDownloadCatalog.Read(stream);
                 for(int i=0;i<chosen.Count;i++) {
                     var r=chosen[i];if(!current.Any(n=>n.Downloadable&&n.Start==r.Start&&n.End==r.End&&n.Session==r.Session&&n.Chunks==r.Chunks&&n.State==r.State&&n.Fault==r.Fault&&n.FormatVersion==r.FormatVersion&&n.CameraHz==r.CameraHz&&n.MicrophoneHz==r.MicrophoneHz&&n.ProbeMask==r.ProbeMask&&n.ApHz==r.ApHz))throw new IOException("Recording directory changed. Refresh before downloading.");
-                    string output=Path.Combine(root,"NP_"+r.Session+"_LBA"+r.Start);int index=i;
+                    string name=USB512_interface.NpFolderNaming.Name(label,label.Length==0?null:NpDownloadCatalog.RecordingStartTime(stream,r),"NP_"+r.Session+"_LBA"+r.Start);
+                    using(var destination=USB512_interface.NpFolderNaming.Reserve(root,name)) {
+                    string output=destination.Path;int index=i;
                     var watch=System.Diagnostics.Stopwatch.StartNew();
                     NpCe64Export.ExportCalibrated(stream,r.Start,r.End,output,()=>cancelled,p=>{
                         double bytes=(double)r.Chunks*65536*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
@@ -170,6 +181,7 @@ namespace CE32_console
                         string warning=NpMediaExport.ConvertFiles(output,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+75+p*25/100)/chosen.Count,message)));
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);
                     }catch(OperationCanceledException){throw;}catch(Exception ex){conversionErrors.Add("Session "+r.Session+": "+ex.Message);}
+                    }
                 }
             }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Download complete. Native files and timestamps retained; MP4/WAV created when selected. NP: capture_status.txt.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+string.Join("; ",conversionWarnings);
             }catch(OperationCanceledException){status.Text="Cancelled. Partial files are retained and marked incomplete.";}

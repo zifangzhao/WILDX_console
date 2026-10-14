@@ -940,14 +940,15 @@ namespace USB512_interface
 
             try
             {
-                runFolder = Path.Combine(saveFolder,
+                DateTime folderStart=DateTime.Now;
+                string folderName=NpFolderNaming.Name(npSessionLabel.Text,folderStart,
                     (selectedDeviceKind == DeviceKind.NpV2 ? "WILD_X_V2_NP2_" :
                      selectedDeviceKind == DeviceKind.XeNp ? "WILDX_" :
                      selectedDeviceKind == DeviceKind.Ce64Msc ? "WILD64_" : "USB512_") +
-                    DateTime.Now.ToString(selectedDeviceKind==DeviceKind.XeNp?"yyyy-MM-dd_HH-mm-ss_fff":"yyyy-MM-dd_HH-mm-ss"));
+                    folderStart.ToString(selectedDeviceKind==DeviceKind.XeNp?"yyyy-MM-dd_HH-mm-ss_fff":"yyyy-MM-dd_HH-mm-ss"));
+                runFolder=Path.Combine(saveFolder,folderName);
                 runFolder=NpSegmentFolder(runFolder);
-                if(selectedDeviceKind==DeviceKind.XeNp && Directory.Exists(runFolder))
-                    runFolder+="_"+Guid.NewGuid().ToString("N").Substring(0,8);
+                if(npSessionFolder==null)runFolder=NpFolderNaming.CreateFresh(saveFolder,folderName);
                 Directory.CreateDirectory(runFolder);
                 npRecordingSettings=null;
                 npRunCalibration = null;
@@ -959,6 +960,9 @@ namespace USB512_interface
                 if(selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) {
                     bool np2=selectedDeviceKind==DeviceKind.NpV2;
                     npRecordingSettings=new NpRecordingSettings(runFolder,NpConfigurationDialog.HelperPath,"live_usb",np2,DateTime.UtcNow,devicePath,np2?NpV2FirmwareForm.Uid(devicePath):NpV1Management.UidFromPath(devicePath));
+                    npRecordingSettings.Context("session_label",NpFolderNaming.Label(npSessionLabel.Text));
+                    npRecordingSettings.Context("recording_folder",runFolder);
+                    if(npPreviousRecordingFolder!=null)npRecordingSettings.Context("recovery_link_file","recovery_link.json");
                     npRecordingSettings.Requested(np2?(int?)npV2RequestedSampleHz:npRequestedMode==null?null:(int?)npRequestedMode.RequestedApHz,
                         np2?npV2RequestedProbeMask==0?null:(int?)npV2RequestedProbeMask:npRequestedMode==null?null:(int?)npRequestedMode.ProbeMask,
                         npMergeProbeDat,np2?false:npUpsampleAp15To20);
@@ -1003,6 +1007,7 @@ namespace USB512_interface
             captureStartedAtUtc = DateTime.UtcNow;
             if(npRecordingSettings!=null)npRecordingSettings.Context("recording_start_time_utc_host",captureStartedAtUtc.ToString("O",System.Globalization.CultureInfo.InvariantCulture));
             running = true;
+            npSessionLabel.Enabled=false;
             if(calibrationButton!=null)calibrationButton.Enabled=false;
             if (selectedDeviceKind != DeviceKind.Ce64Msc && selectedDeviceKind != DeviceKind.NpV2)
                 StartGoodChannelCounter();
@@ -3936,7 +3941,7 @@ namespace USB512_interface
             if(selectedDeviceKind==DeviceKind.XeNp){
                 if(!NpControlsAvailable)return;
                 firmwareManagementActive=true;UpdateStartEnabled();
-                try{using(var media=new NpMediaUsbForm(devicePath,saveFolder))media.ShowDialog(this);}
+                try{using(var media=new NpMediaUsbForm(devicePath,saveFolder,npSessionLabel.Text))media.ShowDialog(this);}
                 finally{firmwareManagementActive=false;UpdateStartEnabled();}
                 return;
             }

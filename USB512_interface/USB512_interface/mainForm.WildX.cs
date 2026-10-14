@@ -15,6 +15,7 @@ namespace USB512_interface
         Label advancedTarget,advancedStorageSource;
         Button diagnosticsButton,captureReportButton;
         string lastCaptureReport;
+        readonly TextBox npSessionLabel=new TextBox {Name="npSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
         bool NpControlsAvailable {get{return (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && !String.IsNullOrWhiteSpace(devicePath) &&
             !running && !ztestRunning && systemInfoActive==0 && deviceRefreshActive==0 && !firmwareManagementActive && npRecoveryCancelled && !DownloadBusy && !BleInUse;}}
         bool DownloadBusy { get { return downloadWorkspace!=null && downloadWorkspace.IsBusy; } }
@@ -94,12 +95,12 @@ namespace USB512_interface
             shell.Controls.Add(workspaceTabs,0,1);
             workspaceStatus=WildXTheme.Label("USB MODE  /  Live acquisition, previews and device health");workspaceStatus.Dock=DockStyle.Fill;shell.Controls.Add(workspaceStatus,0,2);
 
-            var online=new TableLayoutPanel { Dock=DockStyle.Top,Height=746,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
+            var online=new TableLayoutPanel { Dock=DockStyle.Top,Height=782,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
             online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));
-            online.RowStyles.Add(new RowStyle(SizeType.Absolute,308));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));usbPage.Controls.Add(online);
+            online.RowStyles.Add(new RowStyle(SizeType.Absolute,344));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));usbPage.Controls.Add(online);
             usbPage.AutoScroll=true;
 
-            var capture=Stack(20,38,20,36,88,30);
+            var capture=Stack(20,38,20,36,36,88,30);
             label1.AutoSize=true;label1.Text="USB DEVICE";label1.ForeColor=WildXTheme.Muted;capture.Controls.Add(label1,0,0);
             var deviceRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty };
             deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,102));
@@ -112,11 +113,15 @@ namespace USB512_interface
             llblSaveFolder.LinkColor=WildXTheme.Accent;btnSaveFolder.Dock=DockStyle.Fill;btnSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.Text="Choose a destination folder";
             folderRow.Controls.Add(llblSaveFolder,0,0);folderRow.Controls.Add(btnSaveFolder,1,0);capture.Controls.Add(folderRow,0,3);
+            var nameRow=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty};
+            nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+            nameRow.Controls.Add(new Label {Text="Session label",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted},0,0);
+            nameRow.Controls.Add(npSessionLabel,1,0);WildXTheme.Apply(npSessionLabel);capture.Controls.Add(nameRow,0,4);
             btnStart.Text="Start recording";btnStop.Text="Stop recording";btnStreams.Text="Recording settings";
             calibrationButton=new Button {Text="Calibration…",AutoSize=true};
             calibrationButton.Click+=delegate {if(!running && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
-            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,calibrationButton),0,4);
-            npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,5);
+            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,calibrationButton),0,5);
+            npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,6);
             online.Controls.Add(Card("USB acquisition",null,capture),0,0);
 
             var monitor=Stack(44,0);
@@ -154,7 +159,7 @@ namespace USB512_interface
                     int minimumActivityHeight=(int)Math.Ceiling(150*scale);
                     int activityHeight=Math.Max(minimumActivityHeight,heightNeeded);
                     online.RowStyles[2].Height=activityHeight;
-                    online.Height=Math.Max((int)Math.Ceiling(746*scale)+activityHeight-minimumActivityHeight,usbPage.ClientSize.Height-usbPage.Padding.Vertical);
+                    online.Height=Math.Max((int)Math.Ceiling(782*scale)+activityHeight-minimumActivityHeight,usbPage.ClientSize.Height-usbPage.Padding.Vertical);
                 } finally {arrangingActivity=false;}
             };
             lblRecInfo.TextChanged+=delegate {arrangeActivity();};llblSavefile.TextChanged+=delegate {arrangeActivity();};
@@ -169,6 +174,8 @@ namespace USB512_interface
             blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
 
             downloadWorkspace=new CE32_console.NpDownloadForm(null,false) { TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill };
+            npSessionLabel.TextChanged+=delegate {if(downloadWorkspace.SessionLabel!=npSessionLabel.Text)downloadWorkspace.SessionLabel=npSessionLabel.Text;};
+            downloadWorkspace.SessionLabelChanged+=value=>{if(npSessionLabel.Text!=value)npSessionLabel.Text=value;};
             downloadWorkspace.BusyChanged+=UpdateStartEnabled;
             downloadPage.Controls.Add(Card("Recordings & storage","Refresh sources, list sessions, then select recordings to download or decode.",downloadWorkspace));downloadWorkspace.Show();
             BuildAdvancedWorkspace();
@@ -218,6 +225,7 @@ namespace USB512_interface
         }
         void UpdateWildXControls()
         {
+            npSessionLabel.Enabled=!running && npRecoveryCancelled && !DownloadBusy;
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbSelection(devicePath);
             if(advancedTarget!=null)advancedTarget.Text=String.IsNullOrWhiteSpace(devicePath)?
                 "Select a device in USB Mode, or choose an exact device in the firmware manager.":

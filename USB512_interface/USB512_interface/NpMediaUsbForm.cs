@@ -12,7 +12,7 @@ namespace USB512_interface
     // existing packet parser, recorder and bounded renderer for this V1 mode.
     internal sealed class NpMediaUsbForm : Form
     {
-        readonly string selectedPath,outputRoot;
+        readonly string selectedPath,outputRoot,sessionLabel;
         readonly CameraPreviewForm camera;
         readonly Button start=new Button {Text="Start preview",AutoSize=true};
         readonly Button stop=new Button {Text="Stop",AutoSize=true,Enabled=false};
@@ -31,9 +31,10 @@ namespace USB512_interface
         internal long Frames,Packets,Bytes,SequenceGaps;
         internal bool Active {get{return capture!=null && !capture.IsCompleted;}}
 
-        internal NpMediaUsbForm(string path,string folder)
+        internal NpMediaUsbForm(string path,string folder) : this(path,folder,"") {}
+        internal NpMediaUsbForm(string path,string folder,string label)
         {
-            selectedPath=path;outputRoot=folder;Text="Media preview";ClientSize=new Size(800,850);MinimumSize=new Size(600,550);
+            selectedPath=path;outputRoot=folder;sessionLabel=label;Text="Media preview";ClientSize=new Size(800,850);MinimumSize=new Size(600,550);
             camera=new CameraPreviewForm((rows,gain)=>{lock(deviceGate){if(device==null)throw new IOException("Camera is stopped.");device.SetCameraExposure(rows,gain);
                 if(exposureLog!=null)exposureLog.WriteLine(DateTime.UtcNow.ToString("O")+","+rows+","+gain+",USB ACK");}});
             camera.TopLevel=false;camera.FormBorderStyle=FormBorderStyle.None;camera.Dock=DockStyle.Fill;camera.Text="Camera";
@@ -77,6 +78,7 @@ namespace USB512_interface
             Action<byte[],int,int> noNeural=delegate {throw new IOException("Unexpected neural payload in camera-only mode.");};
             byte[] block=new byte[64*1024];
             try {
+                if(save)NpFolderNaming.Label(sessionLabel);
                 string path=NpV1Management.EnsureStreaming(selectedPath);
                 using(var control=XeNpWinUsbDevice.OpenForControl(path)) {
                     if(control.GetStatus().Streaming)throw new IOException("The device is already streaming.");
@@ -90,7 +92,7 @@ namespace USB512_interface
                 }
                 usb=XeNpWinUsbDevice.Open(path);lock(deviceGate)device=usb;
                 initial=usb.GetCameraStatus();
-                if(save){LastFolder=Path.Combine(outputRoot,"camera_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff"));Directory.CreateDirectory(LastFolder);recording=new NpCameraRecording(LastFolder);
+                if(save){LastFolder=NpFolderNaming.CreateFresh(outputRoot,NpFolderNaming.Name(sessionLabel,DateTime.Now,"camera_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff")));recording=new NpCameraRecording(LastFolder);
                     initial.Save(Path.Combine(LastFolder,"camera_initial_status.txt"));File.WriteAllBytes(Path.Combine(LastFolder,"camera_initial_status.bin"),initial.RawBytes);
                     lock(deviceGate){exposureLog=new StreamWriter(Path.Combine(LastFolder,"camera_exposure.csv"));exposureLog.WriteLine("host_utc,rows_in_reset,ramp_gain,receipt");}}
                 parser.OnMisc=delegate {};

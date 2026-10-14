@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.16",
+  "version": "1.0.0.17",
   "releaseDate": "2026-10-13",
-  "status": "Software-checked DAT-only USB recording; hardware throughput qualification pending",
+  "status": "Software-checked folder naming and independent recording restarts; hardware qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.16.exe",
-    "sha256": "917ED1EFB832D5FCFFCB8A48B0C985F563AB54F346DBDCAA0B2B1452B908B571",
-    "bytes": 2308708
+    "file": "WILDX_console-Setup-1.0.0.17.exe",
+    "sha256": "CC18A7781A95BCC6AECFA10B277EF4DBEE1A255A1E981925AF68400669573BFA",
+    "bytes": 2311315
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "751F2E53E9D9EC0D47E1FE2AAAA3C3CB671392BE3C5C70B10AA0F155B0106966",
-      "bytes": 1288704
+      "sha256": "59A43F654202FB5E74033569F912CB0811DD11E779C13808A9A5B3F6DB41F8DD",
+      "bytes": 1294848
     },
     {
       "path": "WILDX_console.exe.config",
@@ -91,7 +91,7 @@
     "enabledBy": "Merge active probes into one DAT per signal band",
     "writeDuringCapture": true,
     "postRecordingMerge": false,
-    "path": "neuropixels_ap.dat at recording/segment root",
+    "path": "neuropixels_ap.dat at each independent recording root",
     "sampleFormat": "signed little-endian int16",
     "order": "S0 probe1 channels1..384, S0 probe2 channels1..384, S0 probe3 channels1..384, then S1 in the same order; active physical probes only",
     "channelsPerProbe": 384,
@@ -100,19 +100,19 @@
     "tailFiles": "unpaired_tail with exact source ticks",
     "rawPreserved": false,
     "phaseOffsets": "recorded, not corrected",
-    "recoverySegmentsSeparate": true,
     "metadataAlongsideData": true,
     "sdDownloadCombined": false,
-    "rawUsbCopySaved": false
+    "rawUsbCopySaved": false,
+    "recoveryRecordingsIndependent": true
   },
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "liveDatAssertions": 20511105,
-    "v1PairedAssertions": 74176,
+    "folderNamingTimeUiChecks": 53,
+    "v1V2TargetedRecoveryChecks": 125,
     "usbUiLifecycleAssertions": 134,
-    "targetedRecoveryChecks": 120,
-    "sensorLifecycleChecks": 5,
+    "universalWorkflowChecks": 106,
+    "standaloneChecks": 294,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
@@ -149,20 +149,20 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this layout-only release"
   },
   "buildProvenance": {
-    "sourceBase": "49f48ad55d681d436a3b923eb4ef8b620d2e4221",
-    "guiSha256": "751F2E53E9D9EC0D47E1FE2AAAA3C3CB671392BE3C5C70B10AA0F155B0106966",
-    "build": "Private cached GUI component build; previously published companion and helpers",
-    "source": "V2 app capture disables optional RAW writer and propagates DAT-only failures to stop/drain",
-    "evidence": "Note/DAT_ONLY_USB_20261013.md"
+    "sourceBase": "0670f6cc0cabeb8d16f41fccedd67e50ce8c6248",
+    "guiSha256": "59A43F654202FB5E74033569F912CB0811DD11E779C13808A9A5B3F6DB41F8DD",
+    "build": "Private GUI component build; previously published companion and helpers",
+    "source": "Shared editable folder labels, recorded SD START times, fresh independent recording restarts",
+    "evidence": "Note/FOLDER_NAMING_20261013.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
     "Native phase offsets retained without resampling or timing correction",
-    "Recovery segments never joined across unknown gaps",
+    "Automatic restarts create independent recordings; unknown gaps never joined",
     "SD downloads remain per-probe DAT",
     "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained"
   ],
-  "previousPublishedInstaller": "legacy/20261013_before_dat_only_1.0.0.16/WILDX_console-Setup-1.0.0.15.exe",
+  "previousPublishedInstaller": "legacy/20261013_before_folder_naming_1.0.0.17/WILDX_console-Setup-1.0.0.16.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -216,5 +216,35 @@
       "installerExecuted": false,
       "fullEndToEndPairQualified": false
     }
+  },
+  "retainedDatOnlySoftwareEvidence": {
+    "version": "1.0.0.16",
+    "commit": "0670f6cc0cabeb8d16f41fccedd67e50ce8c6248",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "liveDatAssertions": 20511105,
+      "v1PairedAssertions": 74176,
+      "usbUiLifecycleAssertions": 134,
+      "targetedRecoveryChecks": 120,
+      "sensorLifecycleChecks": 5,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "liveHardwareThroughputQualified": false
+    }
+  },
+  "folderNaming": {
+    "sessionLabel": "optional, shared between USB Mode and Data Download while the app is open",
+    "format": "<label>_wild_yyyyMMdd_HHmmss.fff",
+    "usbDateSource": "PC Start-attempt local time",
+    "downloadDateSource": "Validated recorded START UTC converted to PC local time",
+    "missingRecordedTime": "<label>_wild_time_unknown_<recording identity>; download time never substituted",
+    "blankLabel": "default naming",
+    "collisionPolicy": "fresh destination claim and numeric suffix; no existing data overwritten",
+    "automaticRestart": "fresh independent timestamped sibling recording; no segment folders",
+    "recoveryReceipt": "recovery_link.json links previous recording and original restart journal"
   }
 }

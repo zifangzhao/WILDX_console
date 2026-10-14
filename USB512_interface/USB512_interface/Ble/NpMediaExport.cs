@@ -78,7 +78,7 @@ namespace CE32_console
             return result;
         }
 
-        static ulong? UtcAt(Dictionary<string, object> metadata, uint tick, bool stop)
+        internal static ulong? UtcAt(Dictionary<string, object> metadata, uint tick, bool stop)
         {
             if (metadata == null || Number(metadata, "version") != 1 || (Number(metadata, "flags") & (stop ? 2UL : 1UL)) == 0) return null;
             string prefix = stop ? "stop" : "start";
