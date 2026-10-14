@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.21",
+  "version": "1.0.0.22",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked extended GPIO RTC panel and four port activity LEDs; hardware qualification pending",
+  "status": "Software-checked per-port GPIO event frequency; hardware qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.21.exe",
-    "sha256": "2E173744E9ED2930C84DE3503715F2967F47123D3F954C6A02D3EDF4D32A4FF0",
-    "bytes": 2330640
+    "file": "WILDX_console-Setup-1.0.0.22.exe",
+    "sha256": "8539A37B6A24BC034619E46F5DE5631C7845375D718473D79BA824DCB7A7F433",
+    "bytes": 2331780
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "62CDC6AA978C7458939B1F1F9985CD68B20942DD91E042B3E62FA99E2C1BA2D4",
-      "bytes": 1333248
+      "sha256": "00D35B3F752230AFBECBA897EDAE623ED31A2AECE0FC971CD6B02A66CE53364B",
+      "bytes": 1336320
     },
     {
       "path": "WILDX_console.exe.config",
@@ -109,8 +109,8 @@
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
     "companionRebuilt": false,
-    "gpioRtcProtocolClockLifecycleChecks": 26,
-    "recordingWarningsPanelPolicyBundleChecks": 29,
+    "gpioRtcProtocolClockLifecycleFrequencyChecks": 36,
+    "recordingWarningsPanelPolicyFrequencyChecks": 32,
     "recordingMetricsChecks": 16,
     "standaloneChecks": 294,
     "usbUiLifecycleAssertions": 134,
@@ -150,27 +150,23 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "f29100c918bd02766a6a80f8b800f0b90b3b2e3b",
-    "guiSha256": "62CDC6AA978C7458939B1F1F9985CD68B20942DD91E042B3E62FA99E2C1BA2D4",
+    "sourceBase": "3680b4becc5f36d071fba2c4224dd49420bda10d",
+    "guiSha256": "00D35B3F752230AFBECBA897EDAE623ED31A2AECE0FC971CD6B02A66CE53364B",
     "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
-    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.20",
-    "source": "Taller GPIO panel/right-column alignment, four activity LEDs, read-only event counter snapshot and version",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.21",
+    "source": "Per-port device-RTC event frequency, rate metadata, GUI Hz labels and version",
     "sourceInputs": [
       {
-        "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
-        "sha256": "AE5BDFB2EF68C03624BB8D1F24BB1EDC18755F15375C7309522A13151709671C"
-      },
-      {
         "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
-        "sha256": "6ADF26254AD0C5C4A03DD5105190CC086B242B748363866648B20E17A572AD5E"
+        "sha256": "7B0A9388E0925183CD5A0EDFD7C77D28289BE5D8F30B48A00EA3EF08F1093FB6"
       },
       {
         "path": "USB512_interface/USB512_interface/NpGpioRtcLogger.cs",
-        "sha256": "3E6065C141D7AF81AA4C503000E26034D96DF6105BC58F16190FD0D8C9EB69C9"
+        "sha256": "04B3C5C784C684A9D0B4FFEBEA5EBCBFDA4D90F041B0239090F1A16AE10149B3"
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "7A88501D627490AD63B22A89E38AFD1F50C5949F0431A3179051A0D2BBCFB42D"
+        "sha256": "03582F8AD026A2A8A94EB13DB42C3CCF4A58DFF779362136B1574E4341840DE5"
       }
     ],
     "excludedPendingChanges": [
@@ -182,7 +178,7 @@
       "USB512_interface/USB512_interface/NpMediaUsbForm.cs",
       "legacy/"
     ],
-    "evidence": "Note/GPIO_PANEL_LEDS_20261014.md"
+    "evidence": "Note/GPIO_EVENT_FREQUENCY_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -197,7 +193,7 @@
     "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
     "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_gpio_leds_1.0.0.21/WILDX_console-Setup-1.0.0.20.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_gpio_frequency_1.0.0.22/WILDX_console-Setup-1.0.0.21.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -337,24 +333,17 @@
     "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   },
   "retainedPreviousReleaseValidation": {
-    "version": "1.0.0.20",
-    "manifest": "legacy/20261014_before_gpio_leds_1.0.0.21/release-manifest.json",
+    "version": "1.0.0.21",
+    "manifest": "legacy/20261014_before_gpio_frequency_1.0.0.22/release-manifest.json",
     "validation": {
       "guiBuildWarnings": 0,
       "guiBuildErrors": 0,
       "companionRebuilt": false,
-      "gpioRtcProtocolClockLifecycleChecks": 25,
-      "recordingWarningsPanelPolicyBundleChecks": 18,
+      "gpioRtcProtocolClockLifecycleChecks": 26,
+      "recordingWarningsPanelPolicyBundleChecks": 29,
       "recordingMetricsChecks": 16,
-      "v1RecordingProfileLegacyUiChecks": 103,
-      "metadataPersistenceChecks": 22,
-      "recordingBundleChecks": 203,
-      "universalWorkflowChecks": 106,
-      "usbUiLifecycleAssertions": 134,
-      "v1V2TargetedRecoveryChecks": 125,
-      "folderNamingTimeUiChecks": 53,
       "standaloneChecks": 294,
-      "sensorLifecycleChecks": 5,
+      "usbUiLifecycleAssertions": 134,
       "independentInstallerExtraction": true,
       "extractedRuntimeFilesVerified": 13,
       "nonGuiRuntimeFilesUnchanged": 12,
@@ -411,6 +400,19 @@
       "pollMilliseconds": 100,
       "stopDimsAndRetainsCounts": true,
       "freshRecordingResets": true
+    },
+    "eventFrequency": {
+      "perPort": true,
+      "unit": "Hz",
+      "windowMilliseconds": 1000,
+      "binMilliseconds": 1,
+      "updateMilliseconds": 100,
+      "timebase": "device RTC event timestamps; PC monotonic extrapolation between RTC observations",
+      "meaning": "received trigger events per recent second; not waveform frequency",
+      "rtcRollbackResetsWindow": true,
+      "stopOrErrorShowsZero": true,
+      "totalCountsRetained": true,
+      "savedInSessionMetadata": true
     }
   },
   "recordingWarnings": {

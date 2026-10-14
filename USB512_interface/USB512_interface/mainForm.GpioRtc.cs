@@ -9,7 +9,7 @@ namespace USB512_interface {
  public partial class Form1 {
   ComboBox gpioRtcDevices;Button gpioRtcRefresh;Label gpioRtcStatus;
   TextBox gpioRtcInfo;string gpioRtcLastInfo;
-  readonly Label[] gpioPortLeds=new Label[4],gpioPortCounts=new Label[4];
+  readonly Label[] gpioPortLeds=new Label[4],gpioPortCounts=new Label[4],gpioPortRates=new Label[4];
   readonly long[] gpioPortEventCounts=new long[4];readonly DateTime[] gpioPortPulseUntil=new DateTime[4];
   NpGpioRtcLogger gpioRtcLogger;bool refreshingGpioRtc;
   readonly HashSet<string> recordingWarnings=new HashSet<string>(StringComparer.Ordinal);
@@ -45,18 +45,26 @@ namespace USB512_interface {
     gpioPortLeds[p]=new Label {Name="gpioPortLed"+(p+1),Text="●",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleCenter,
      Font=WildXTheme.Title,ForeColor=WildXTheme.Border,AccessibleName="GPIO port "+(p+1)+" activity"};
     ports.Controls.Add(gpioPortLeds[p],0,p);
-    ports.Controls.Add(new Label {Text="Port "+(p+1)+" (CH"+p+")",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Ink},1,p);
+    var details=Stack(0,0);
+    details.Controls.Add(new Label {Text="Port "+(p+1)+" (CH"+p+")",Dock=DockStyle.Fill,TextAlign=ContentAlignment.BottomLeft,
+     ForeColor=WildXTheme.Ink,Margin=Padding.Empty},0,0);
+    gpioPortRates[p]=new Label {Name="gpioPortRate"+(p+1),Text="0.0 Hz",Dock=DockStyle.Fill,TextAlign=ContentAlignment.TopLeft,
+     ForeColor=WildXTheme.Muted,Margin=Padding.Empty,AccessibleName="GPIO port "+(p+1)+" event frequency"};
+    details.Controls.Add(gpioPortRates[p],0,1);ports.Controls.Add(details,1,p);
     gpioPortCounts[p]=new Label {Name="gpioPortCount"+(p+1),Text="0",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleRight,
      Font=WildXTheme.Strong,ForeColor=WildXTheme.Ink,AccessibleName="GPIO port "+(p+1)+" events"};ports.Controls.Add(gpioPortCounts[p],2,p);
    }
    content.Controls.Add(ports,0,1);
    var activityTimer=new Timer {Interval=100};components.Add(activityTimer);
-   activityTimer.Tick+=delegate {UpdateGpioPortActivity(gpioRtcLogger==null?null:gpioRtcLogger.ChannelCounts,
-    gpioRtcLogger!=null && gpioRtcLogger.IsLogging,DateTime.UtcNow);};activityTimer.Start();
+   activityTimer.Tick+=delegate {bool logging=gpioRtcLogger!=null && gpioRtcLogger.IsLogging;
+    UpdateGpioPortActivity(gpioRtcLogger==null?null:gpioRtcLogger.ChannelCounts,logging,DateTime.UtcNow);
+    if(logging)UpdateGpioPortFrequency(gpioRtcLogger.ChannelFrequencies);
+   };activityTimer.Start();
    var card=Card("GPIO / RTC",null,content);card.Name="gpioRtcCard";return card;
   }
   // The wire reports trigger events, not input levels. LEDs pulse for 350 ms.
   void UpdateGpioPortActivity(long[] counts,bool logging,DateTime now) {
+   if(!logging)UpdateGpioPortFrequency(new double[4]);
    for(int p=0;p<4;p++) {
     if(counts!=null && counts[p]!=gpioPortEventCounts[p]) {
      gpioPortEventCounts[p]=counts[p];gpioPortPulseUntil[p]=logging?now.AddMilliseconds(350):DateTime.MinValue;
@@ -66,6 +74,9 @@ namespace USB512_interface {
     gpioPortLeds[p].ForeColor=active?WildXTheme.Accent:WildXTheme.Border;
     gpioPortLeds[p].AccessibleDescription=active?"Recent event":"No recent event";
    }
+  }
+  void UpdateGpioPortFrequency(double[] hz) {
+   for(int p=0;p<4;p++)gpioPortRates[p].Text=hz[p].ToString("F1")+" Hz";
   }
   void RefreshGpioRtcInfo() {
    if(gpioRtcInfo==null)return;

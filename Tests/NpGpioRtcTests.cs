@@ -28,6 +28,19 @@ static class NpGpioRtcTests {
  static void Until(Func<bool> done){DateTime end=DateTime.UtcNow.AddSeconds(5);while(!done() && DateTime.UtcNow<end)Thread.Sleep(10);if(!done())throw new Exception("fixture timed out");}
  static int Main(string[] args){try {
   string root=Path.Combine(Path.GetFullPath(args[0]),"run_"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(root);
+  var rate=new NpGpioEventRate();Check(rate.Read(0).All(f=>f==0),"idle GPIO frequency was nonzero");
+  // One second of device events delivered together must retain its device rate.
+  for(int i=0;i<100;i++)rate.Add(0,(ulong)(10000+i*10),500);
+  rate.Add(1,10990,500);var hz=rate.Read(500);
+  Check(hz.SequenceEqual(new double[]{100,1,0,0}),"USB batching changed per-port device-window rate");
+  Check(rate.Read(510)[0]==99,"event was not removed at the exact one-second boundary");
+  Check(rate.Read(1500).All(f=>f==0),"silent GPIO rate stayed nonzero");
+  rate.Observe(12000,2000);Check(rate.Read(2000).All(f=>f==0),"clock observation did not advance idle window");
+  rate.Add(2,500,3000);Check(rate.Read(3000).SequenceEqual(new double[]{0,0,1,0}),"RTC rollback did not reset the frequency window");
+  rate.Add(9,600,3000);rate.Add(0,UInt64.MaxValue,3000);Check(rate.Read(3000).SequenceEqual(new double[]{0,0,1,0}),"invalid port/RTC corrupted frequency");
+  hz=rate.Read(3000);hz[2]=999;Check(rate.Read(3000)[2]==1,"frequency snapshot mutated live data");
+  rate=new NpGpioEventRate();for(int i=0;i<10000;i++)rate.Add(3,1000,4000);
+  Check(rate.Read(4000)[3]==10000 && rate.Read(5000)[3]==0,"same-millisecond burst count or idle expiration failed");
   var parser=new NpGpioRtcParser();int events=0,replies=0;uint last=0;ulong ms=0;byte channel=0;
   Action<byte,uint,ulong> trigger=(c,s,t)=>{events++;last=s;ms=t;channel=c;};Action<uint,ulong> sync=(s,t)=>replies++;
   foreach(byte b in Event(UInt32.MaxValue,3))parser.Feed(b,trigger,sync);
@@ -59,6 +72,7 @@ static class NpGpioRtcTests {
   Check(lines.Length==1001 && lines[0].Contains("Sequence: 4294967295") && lines.Last().Contains("Sequence: 999"),"Stop did not drain every accepted event in order");
   Check(lines.All(l=>l.Contains("DeviceMs:") && l.Contains("PcReceive:") && !l.Contains("UNSYNCED")),"RTC/raw/PC timestamps missing");
   Check((bool)receipt["complete"] && Convert.ToInt64(receipt["events_saved"])==1001 && Convert.ToInt64(receipt["sequence_discontinuities"])==0,"wraparound counted as a gap or receipt incomplete");
+  Check(((object[])receipt["recent_channel_event_rate_hz"]).Length==4 && Convert.ToInt32(receipt["event_rate_window_ms"])==1000 && ((string)receipt["event_rate_timebase"]).Contains("device RTC"),"frequency timing metadata not saved with GPIO session");
   Check((string)receipt["port"]=="COM77" && (string)receipt["pnp_device_id"]=="fixture-board" && receipt["neural_first_receive_utc"]!=null,"selected board or neural anchor not retained");
   Check(port.Closed && port.Disposed && port.Commands.Count>0 && port.Commands.All(b=>b.Length==7 && b[0]==0x3c && b[1]==0x90 && b[6]==0x3e),"wrong command or serial handle leaked");
   var csv=File.ReadAllLines(Path.Combine(folder,"gpio_rtc_sync.csv"));Check(csv.Any(l=>l.StartsWith("query,")) && csv.Any(l=>l.StartsWith("reply,")) && csv.All(l=>l.Split(',').Length==9),"raw clock query/reply observations missing or malformed CSV");

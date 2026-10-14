@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
@@ -75,18 +76,47 @@ namespace USB512_interface {
    return DateTimeOffset.FromUnixTimeMilliseconds((long)ms).UtcDateTime;
   }
  }
+ // Fixed memory: count received events in the latest 1000 device-RTC milliseconds.
+ // PC monotonic time advances the window between RTC observations, including silence.
+ internal sealed class NpGpioEventRate {
+  const ulong Window=1000;const ulong MaximumRtcMs=253402300799999UL;
+  readonly long[,] counts=new long[4,1000];readonly ulong[] stamps=new ulong[1000];
+  bool anchored;ulong latestDeviceMs;long latestHostMs;
+  internal void Observe(ulong deviceMs,long hostMs) {
+   if(deviceMs>MaximumRtcMs)return;
+   if(anchored && deviceMs<latestDeviceMs && latestDeviceMs-deviceMs>=Window) {
+    Array.Clear(counts,0,counts.Length);anchored=false;
+   }
+   if(!anchored || deviceMs>=latestDeviceMs){latestDeviceMs=deviceMs;latestHostMs=hostMs;anchored=true;}
+  }
+  internal void Add(byte channel,ulong deviceMs,long hostMs) {
+   if(channel>=4 || deviceMs>MaximumRtcMs)return;Observe(deviceMs,hostMs);
+   int bin=(int)(deviceMs%Window);
+   if(stamps[bin]!=deviceMs){for(int p=0;p<4;p++)counts[p,bin]=0;stamps[bin]=deviceMs;}
+   counts[channel,bin]++;
+  }
+  internal double[] Read(long hostMs) {
+   var hz=new double[4];if(!anchored)return hz;
+   ulong now=latestDeviceMs+(ulong)Math.Max(0,hostMs-latestHostMs);
+   for(int bin=0;bin<1000;bin++)if(stamps[bin]<=now && now-stamps[bin]<Window)
+    for(int p=0;p<4;p++)hz[p]+=counts[p,bin];
+   return hz; // One-second window: event count / 1 s.
+  }
+ }
  internal sealed class NpGpioRtcLogger : IDisposable {
   sealed class Line {internal bool Sync;internal string Text;}
   readonly string folder;readonly NpGpioRtcDevice device;readonly INpGpioRtcPort port;
   readonly BlockingCollection<Line> lines=new BlockingCollection<Line>(16384);
   readonly ManualResetEvent stop=new ManualResetEvent(false);readonly object gate=new object();
   readonly NpGpioRtcParser parser=new NpGpioRtcParser();readonly NpGpioRtcClock clock=new NpGpioRtcClock();
+  readonly NpGpioEventRate eventRate=new NpGpioEventRate();
   StreamWriter events,sync;Thread receiver,writer,probes;volatile bool running;bool disposed,haveSequence;
   uint lastSequence;long received,saved,rejected,gaps;DateTime started,finished;internal DateTime? NeuralFirstReceiveUtc;
   readonly long[] channelEvents=new long[4];byte lastChannel;ulong lastDeviceMs;
   string error;internal string Error {get{lock(gate)return error;}}
   internal long EventsSaved {get{return Interlocked.Read(ref saved);}}
   internal long[] ChannelCounts {get{lock(gate)return (long[])channelEvents.Clone();}}
+  internal double[] ChannelFrequencies {get{lock(gate)return eventRate.Read(MonotonicMs());}}
   internal bool IsLogging {get{return running;}}
   internal long SyncReplies {get{lock(gate)return clock.Replies;}}
   internal bool ClockSynchronized {get{lock(gate)return clock.Best!=null && Now()>=clock.LastReply && Now()-clock.LastReply<=10000;}}
@@ -94,6 +124,7 @@ namespace USB512_interface {
    folder=directory;device=selected;port=transport??new NpGpioRtcSerial(selected.Port);
   }
   static long Now(){return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();}
+  static long MonotonicMs(){return (long)(Stopwatch.GetTimestamp()*(1000.0/Stopwatch.Frequency));}
   static string F(double number){return number.ToString("R",CultureInfo.InvariantCulture);}
   void Fail(string message){lock(gate){if(error==null)error=message;}running=false;stop.Set();}
   internal void Start() {
@@ -118,7 +149,8 @@ namespace USB512_interface {
   }
   void Trigger(byte channel,uint sequence,ulong deviceMs) {
    DateTime receive=DateTime.UtcNow;DateTime? mapped;
-   lock(gate){mapped=ClockSynchronized?clock.Map(deviceMs):null;if(channel<channelEvents.Length)channelEvents[channel]++;lastChannel=channel;lastDeviceMs=deviceMs;}
+   lock(gate){mapped=ClockSynchronized?clock.Map(deviceMs):null;if(channel<channelEvents.Length)channelEvents[channel]++;
+    eventRate.Add(channel,deviceMs,MonotonicMs());lastChannel=channel;lastDeviceMs=deviceMs;}
    if(haveSequence && sequence!=unchecked(lastSequence+1))Interlocked.Increment(ref gaps);
    haveSequence=true;lastSequence=sequence;Interlocked.Increment(ref received);
    Enqueue(false,String.Format(CultureInfo.InvariantCulture,"Time: {0}, DeviceMs: {1}, Sequence: {2}, Data: {3}, PcReceive: {4}",
@@ -127,7 +159,7 @@ namespace USB512_interface {
   }
   void Reply(uint sequence,ulong deviceMs) {
    long now=Now();NpGpioRtcClock.Sample sample,best;
-   lock(gate){sample=clock.Reply(sequence,deviceMs,now);best=clock.Best;}
+   lock(gate){sample=clock.Reply(sequence,deviceMs,now);best=clock.Best;if(sample!=null)eventRate.Observe(deviceMs,MonotonicMs());}
    Enqueue(true,"reply,"+sequence+","+(sample==null?"":sample.Sent.ToString(CultureInfo.InvariantCulture))+","+now+","+deviceMs+","+
     (sample==null?",":sample.Rtt+","+F(sample.Offset))+","+(best==null?",":best.Sequence+","+F(best.Offset)));
   }
@@ -168,6 +200,8 @@ namespace USB512_interface {
     neural_first_receive_utc=NeuralFirstReceiveUtc.HasValue?NeuralFirstReceiveUtc.Value.ToString("O"):null,
     events_file="gpio_rtc_events.txt",clock_queries_file="gpio_rtc_sync.csv",events_received=Interlocked.Read(ref received),events_saved=EventsSaved,
     channel_event_counts=channelEvents,last_channel=haveSequence?(byte?)lastChannel:null,last_device_rtc_ms=haveSequence?(ulong?)lastDeviceMs:null,
+    recent_channel_event_rate_hz=ChannelFrequencies,event_rate_window_ms=1000,
+    event_rate_timebase="received events in device RTC window; PC monotonic extrapolation between RTC observations; not waveform frequency",
     rejected_records=Interlocked.Read(ref rejected),sequence_discontinuities=Interlocked.Read(ref gaps),invalid_frames=parser.InvalidFrames,pending_frame_bytes=parser.PendingBytes,
     valid_clock_replies=SyncReplies,clock_synchronized=ClockSynchronized,best_rtt_ms=best==null?(long?)null:best.Rtt,selected_offset_ms=best==null?(double?)null:best.Offset,
     error=Error,complete=state=="stopped" && Error==null && received==saved && gaps==0 && parser.InvalidFrames==0 && parser.PendingBytes==0,
