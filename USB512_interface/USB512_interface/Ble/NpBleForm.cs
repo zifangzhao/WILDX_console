@@ -78,14 +78,17 @@ namespace USB512_interface
         internal NpBleForm():this(false){}
         internal NpBleForm(bool maintenance)
         {
+            SuspendLayout();
+            Font=WildXTheme.Body;Padding=new Padding(12);
+            AutoScaleDimensions=new SizeF(96,96);AutoScaleMode=AutoScaleMode.Dpi;
             Text = "WILD-X — BLE Control"+(maintenance?" / Advanced":""); Icon = NpPreviewTheme.ApplicationIcon;
             ClientSize = new Size(910, 610); MinimumSize = new Size(820, 550); StartPosition = FormStartPosition.CenterParent;
-            var top = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, Padding = new Padding(10) };
-            top.Controls.AddRange(new Control[] { devices, new Label { Text = "BLE address:", AutoSize = true }, address });
-            scan=Add(top, "Scan", () => { if (watcher.Status != BluetoothLEAdvertisementWatcherStatus.Started) watcher.Start(); state.Text = "Scanning…"; return Task.CompletedTask; });
-            stopScan=Add(top, "Stop scan", () => { watcher.Stop(); return Task.CompletedTask; });
-            connect=Add(top, "Connect", Connect);
-            disconnect=new Button {Text="Disconnect",AutoSize=true};top.Controls.Add(disconnect);
+            var connectionActions=new FlowLayoutPanel();
+            var top=FieldGrid("Device",devices,"BLE address",address,connectionActions);top.Name="bleConnectionFields";
+            scan=Add(connectionActions, "Scan", () => { if (watcher.Status != BluetoothLEAdvertisementWatcherStatus.Started) watcher.Start(); state.Text = "Scanning…"; return Task.CompletedTask; });
+            stopScan=Add(connectionActions, "Stop scan", () => { watcher.Stop(); return Task.CompletedTask; });
+            connect=Add(connectionActions, "Connect", Connect);
+            disconnect=new Button {Text="Disconnect",AutoSize=true};connectionActions.Controls.Add(disconnect);
             disconnect.Click+=async delegate {
                 // Local cancellation must not wait behind Run's connecting lease.
                 if(connecting){connection.Disconnect();state.Text="Canceling connection…";return;}
@@ -93,8 +96,8 @@ namespace USB512_interface
             };
             maintenanceActions.Controls.Add(maintenancePeer);maintenanceActions.SetFlowBreak(maintenancePeer,true);
             rescueReset=Add(maintenanceActions,"Rescue reset",RescueReset);
-            var settings = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, Padding = new Padding(10) };
-            settings.Controls.AddRange(new Control[] { profiles, new Label { Text = "Storage bound (s; 0 = continuous):", AutoSize = true }, seconds, unqualified, poll });
+            var options=new FlowLayoutPanel();options.Controls.AddRange(new Control[]{unqualified,poll});
+            var settings=FieldGrid("Recording profile",profiles,"Storage bound (s; 0 = continuous)",seconds,options);settings.Name="bleRecordingFields";
             Add(actions, "Read status", async () => { await ReadStatus(); });
             Add(actions, "Apply profile", Apply);
             startRecording=Add(actions, "Start recording", StartRecording);
@@ -121,7 +124,12 @@ namespace USB512_interface
             Add(maintenanceActions, "ROM DFU", () => SwitchMode(3, 3));
             maintenanceActions.SetFlowBreak(maintenanceActions.Controls[maintenanceActions.Controls.Count-1],true);
             maintenanceActions.Controls.Add(maintenanceResult);
-            var statusPanel = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, Padding = new Padding(10) }; statusPanel.Controls.Add(state);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
+            var statusPanel = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, FlowDirection=FlowDirection.TopDown,WrapContents=false,Padding=Padding.Empty };
+            statusPanel.Controls.Add(state);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
+            statusPanel.SizeChanged+=delegate {foreach(var label in new[]{state,clockStatus,configurationStatus})label.MaximumSize=new Size(Math.Max(1,statusPanel.ClientSize.Width),0);};
+            foreach(var label in new[]{clockStatus,configurationStatus}) {
+                label.Visible=false;label.TextChanged+=delegate {label.Visible=label.Text.Length!=0;};
+            }
             Controls.Add(log); Controls.Add(statusPanel); Controls.Add(actions); Controls.Add(settings); Controls.Add(top);
             if(maintenance)Controls.Add(maintenanceActions);
             devices.SelectedIndexChanged += delegate { var p = devices.SelectedItem as Peer; if (p != null) address.Text = p.Address.ToString("X12"); };
@@ -139,13 +147,33 @@ namespace USB512_interface
             Profiles(null); timer.Start();WildXTheme.Apply(this);
             WildXTheme.Apply(maintenanceActions);maintenancePeer.ForeColor=maintenanceResult.ForeColor=WildXTheme.Muted;
             foreach(Control control in maintenanceActions.Controls)if(control is Button && (control.Text=="ROM DFU" || control.Text=="Rescue reset"))WildXTheme.Button((Button)control,false,true);
-            foreach(Control control in top.Controls)if(control is Button && control.Text=="Connect")WildXTheme.Button((Button)control,true);
+            WildXTheme.Button(connect,true);
             foreach(Control control in actions.Controls)if(control is Button){
                 if(control.Text=="Start recording")WildXTheme.Button((Button)control,true);
                 else if(control.Text=="Stop recording" || control.Text=="ROM DFU")WildXTheme.Button((Button)control,false,true);
             }
+            foreach(var row in new[]{connectionActions,options,actions,maintenanceActions,statusPanel})foreach(Control control in row.Controls) {
+                control.Anchor=AnchorStyles.Left;
+                if(control is Button){control.MinimumSize=new Size(0,36);((Button)control).AutoSizeMode=AutoSizeMode.GrowAndShrink;}
+                if(row==options)control.Margin=new Padding(0,0,16,0);
+            }
+            foreach(var label in new[]{state,clockStatus,configurationStatus})label.Margin=new Padding(0,0,0,6);
             state.ForeColor=clockStatus.ForeColor=configurationStatus.ForeColor=WildXTheme.Muted;
-            UpdateControls();
+            UpdateControls();ResumeLayout(true);
+        }
+        static TableLayoutPanel FieldGrid(string leftTitle,Control left,string rightTitle,Control right,FlowLayoutPanel below)
+        {
+            var grid=new TableLayoutPanel {AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,Dock=DockStyle.Top,ColumnCount=2,RowCount=3,
+                Margin=Padding.Empty,Padding=new Padding(0,0,0,12)};
+            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,250));
+            for(int row=0;row<3;row++)grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            grid.Controls.Add(WildXTheme.Label(leftTitle),0,0);grid.Controls.Add(WildXTheme.Label(rightTitle),1,0);
+            left.Anchor=right.Anchor=AnchorStyles.Left|AnchorStyles.Right;
+            left.Margin=new Padding(0,0,16,0);right.Margin=Padding.Empty;
+            grid.Controls.Add(left,0,1);grid.Controls.Add(right,1,1);
+            below.AutoSize=true;below.AutoSizeMode=AutoSizeMode.GrowAndShrink;below.Dock=DockStyle.Top;
+            below.WrapContents=true;below.Margin=new Padding(0,12,0,0);below.Padding=Padding.Empty;
+            grid.Controls.Add(below,0,2);grid.SetColumnSpan(below,2);return grid;
         }
         void WatcherStopped(BluetoothLEAdvertisementWatcher sender,BluetoothLEAdvertisementWatcherStoppedEventArgs e)
         {

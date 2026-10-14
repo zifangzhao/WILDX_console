@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.23",
+  "version": "1.0.0.24",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked GPIO channel table with extensible IDs; hardware qualification pending",
+  "status": "Software-checked BLE layout alignment; hardware qualification unchanged",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.23.exe",
-    "sha256": "C0E7ED680A5C8B49D7EC0F5E6E50F6A0349F20688CDA0AB1993259D935076265",
-    "bytes": 2333427
+    "file": "WILDX_console-Setup-1.0.0.24.exe",
+    "sha256": "73D1B7D18E445EFBBDD602DB46CB06A4C1BC5E1D1BE69537DCCA153D2D121F2D",
+    "bytes": 2334076
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "1A4AE577230AFE4E5BCE1A692A14267EBD5A78C54884C082740674C5F6B29513",
-      "bytes": 1339392
+      "sha256": "90087AA9212158DD498239E75D3DE03E42716EFB5DE0F91F3BC767E00A373454",
+      "bytes": 1340928
     },
     {
       "path": "WILDX_console.exe.config",
@@ -106,16 +106,23 @@
     "recoveryRecordingsIndependent": true
   },
   "releaseValidation": {
-    "guiCompilerWarnings": 0,
-    "guiBuildWarnings": 1,
-    "transientDefenderCopyRetries": 1,
+    "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
     "companionRebuilt": false,
-    "gpioRtcProtocolClockLifecycleFrequencyChannelChecks": 42,
-    "recordingWarningsTablePolicyFrequencyChecks": 37,
-    "recordingMetricsChecks": 16,
-    "standaloneChecks": 294,
-    "usbUiLifecycleAssertions": 134,
+    "actualGuiAlignmentContainmentChecks": 1042,
+    "universalWorkflowChecks": 106,
+    "standaloneClientWidths": [
+      820,
+      910,
+      1200
+    ],
+    "embeddedClientWidths": [
+      1044,
+      1180,
+      1450
+    ],
+    "additionalLayoutScalePercent": 150,
+    "longStatusAndCancelLabelChecked": true,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
@@ -152,23 +159,19 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "c94c0d7ea2e22dd6ddb54b8001ae89de08bcbd78",
-    "guiSha256": "1A4AE577230AFE4E5BCE1A692A14267EBD5A78C54884C082740674C5F6B29513",
+    "sourceBase": "7ab8800af089960610f0fa2af9e1d24b1e029fc0",
+    "guiSha256": "90087AA9212158DD498239E75D3DE03E42716EFB5DE0F91F3BC767E00A373454",
     "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
-    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.22",
-    "source": "GPIO ID/status/count/frequency table, dynamic channel handling, aligned metadata and version",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.23",
+    "source": "BLE field grids, aligned action rows, wrapping status details, DPI layout and version",
     "sourceInputs": [
       {
-        "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
-        "sha256": "43261D159E238E712DD8FA60B976C51A4383C18527368BF4766FE74E185ED2E5"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/NpGpioRtcLogger.cs",
-        "sha256": "4AA2227DA8B78F5DA1D354BA64256281409A6AEA52ACAD03392EAEBAEC0384B7"
+        "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+        "sha256": "04A969571D9810D4D2C370D8E68C8EFF125E97F4FB36B167D6F68C45C2DABF40"
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "329BD8BF385B9E8FA999A4EC3DC9B8EB19B57427C190707B3B9269BCE339A2E2"
+        "sha256": "2FB0ADF2ABDF8FEBE43E1784FA609F32C3EFEF27B36FB36BB6F14715AD7A1462"
       }
     ],
     "excludedPendingChanges": [
@@ -181,7 +184,7 @@
       "legacy/",
       "USB512_interface/USB512_interface/NpUsbSensors.cs"
     ],
-    "evidence": "Note/GPIO_CHANNEL_TABLE_20261014.md"
+    "evidence": "Note/BLE_LAYOUT_ALIGNMENT_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -196,7 +199,7 @@
     "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
     "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_gpio_table_1.0.0.23/WILDX_console-Setup-1.0.0.22.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_ble_alignment_1.0.0.24/WILDX_console-Setup-1.0.0.23.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -336,14 +339,16 @@
     "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   },
   "retainedPreviousReleaseValidation": {
-    "version": "1.0.0.22",
-    "manifest": "legacy/20261014_before_gpio_table_1.0.0.23/release-manifest.json",
+    "version": "1.0.0.23",
+    "manifest": "legacy/20261014_before_ble_alignment_1.0.0.24/release-manifest.json",
     "validation": {
-      "guiBuildWarnings": 0,
+      "guiCompilerWarnings": 0,
+      "guiBuildWarnings": 1,
+      "transientDefenderCopyRetries": 1,
       "guiBuildErrors": 0,
       "companionRebuilt": false,
-      "gpioRtcProtocolClockLifecycleFrequencyChecks": 36,
-      "recordingWarningsPanelPolicyFrequencyChecks": 32,
+      "gpioRtcProtocolClockLifecycleFrequencyChannelChecks": 42,
+      "recordingWarningsTablePolicyFrequencyChecks": 37,
       "recordingMetricsChecks": 16,
       "standaloneChecks": 294,
       "usbUiLifecycleAssertions": 134,
@@ -456,5 +461,15 @@
     "file": "recording_warnings.txt",
     "modalUiDoesNotPauseCaptureWorkers": true,
     "fatalNeuralErrorsStillStopRecording": true
+  },
+  "bleLayout": {
+    "fields": "Device/address and recording profile/storage bound use the same two-column grid with labels above",
+    "connectionActions": "Separate aligned row below device fields",
+    "buttonMinimumHeightAt96Dpi": 36,
+    "narrowActionRowsWrap": true,
+    "emptyStatusDetailsHidden": true,
+    "longStatusWrapsAtAvailableWidth": true,
+    "formScaleMode": "DPI",
+    "behaviorChanged": false
   }
 }

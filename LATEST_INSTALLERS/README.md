@@ -1,9 +1,9 @@
-# WILDX 1.0.0.23
+# WILDX 1.0.0.24
 
-[Download the installer](WILDX_console-Setup-1.0.0.23.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.24.exe).
 
-GPIO signals now appear in a table: **ID / Status LED / Count / Freq (Hz)**. The initial five rows contain a header and IDs 0–3. Additional received channel IDs add sorted rows, scrolling vertically as needed. Each channel retains its own LED, count and one-second RTC event frequency. GPIO session metadata saves the explicit channel-ID order.
+BLE Control now uses aligned device/address and recording-profile/storage-bound fields, with labels above each field. Connection actions have their own row. Buttons share a height and spacing, action rows wrap at narrow widths, long status messages wrap within the panel, and empty status details take no space.
 
-Software checks passed for additional IDs, consistent counts/rates, metadata, table layout, scrolling, reset and capture ownership. All 13 extracted runtime files match the checked payload; all 12 non-GUI files are unchanged from 1.0.0.22. No hardware or installer execution; existing V1 firmware support is unchanged.
+Actual UI checks passed across standalone and embedded window widths, enlarged layout, long messages and the Cancel connection label. The existing 106 shared workflow checks passed. All 13 extracted runtime files match the checked payload; all 12 non-GUI files are unchanged from 1.0.0.23. No hardware or installer execution; existing V1 firmware support is unchanged.
 
-[UI render with sample values](../docs/screenshots/usb-recording-gpio.png), [validation](../Note/GPIO_CHANNEL_TABLE_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
+[UI render with sample values](../docs/screenshots/ble-mode.png), [validation](../Note/BLE_LAYOUT_ALIGNMENT_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).

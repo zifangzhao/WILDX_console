@@ -1,8 +1,10 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.23**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.24**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
+
+BLE Control aligns device/address and recording-profile/storage-bound fields in shared columns, with connection actions below. Buttons have consistent height and spacing; narrower action rows and long status messages wrap. [BLE layout render](docs/screenshots/ble-mode.png) and [validation](Note/BLE_LAYOUT_ALIGNMENT_20261014.md).
 
 The original Neuropixels entry points in WILD_console remain available until WILDX passes hardware checks, as requested.
 
@@ -55,7 +57,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX 1.0.0.23](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.23.exe), packaged on 2026-10-14, with the GPIO channel table and additional channel-ID support. No V1 firmware upgrade is required. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [validation](Note/GPIO_CHANNEL_TABLE_20261014.md) and [folder naming](docs/folder-naming.md).
+The current installer is [WILDX 1.0.0.24](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.24.exe), packaged on 2026-10-14, with aligned BLE fields, buttons and status details. No V1 firmware upgrade is required. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [validation](Note/BLE_LAYOUT_ALIGNMENT_20261014.md) and [folder naming](docs/folder-naming.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 
