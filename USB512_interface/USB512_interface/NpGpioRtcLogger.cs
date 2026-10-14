@@ -76,34 +76,41 @@ namespace USB512_interface {
    return DateTimeOffset.FromUnixTimeMilliseconds((long)ms).UtcDateTime;
   }
  }
- // Fixed memory: count received events in the latest 1000 device-RTC milliseconds.
+ // Bounded per-channel memory: count events in the latest 1000 device-RTC milliseconds.
  // PC monotonic time advances the window between RTC observations, including silence.
  internal sealed class NpGpioEventRate {
   const ulong Window=1000;const ulong MaximumRtcMs=253402300799999UL;
-  readonly long[,] counts=new long[4,1000];readonly ulong[] stamps=new ulong[1000];
+  readonly SortedDictionary<byte,long[]> counts=new SortedDictionary<byte,long[]>();readonly ulong[] stamps=new ulong[1000];
   bool anchored;ulong latestDeviceMs;long latestHostMs;
+  internal NpGpioEventRate(){foreach(byte id in NpGpioRtcLogger.DefaultChannelIds)counts.Add(id,new long[1000]);}
   internal void Observe(ulong deviceMs,long hostMs) {
    if(deviceMs>MaximumRtcMs)return;
    if(anchored && deviceMs<latestDeviceMs && latestDeviceMs-deviceMs>=Window) {
-    Array.Clear(counts,0,counts.Length);anchored=false;
+    foreach(var bins in counts.Values)Array.Clear(bins,0,bins.Length);anchored=false;
    }
    if(!anchored || deviceMs>=latestDeviceMs){latestDeviceMs=deviceMs;latestHostMs=hostMs;anchored=true;}
   }
   internal void Add(byte channel,ulong deviceMs,long hostMs) {
-   if(channel>=4 || deviceMs>MaximumRtcMs)return;Observe(deviceMs,hostMs);
+   if(deviceMs>MaximumRtcMs)return;Observe(deviceMs,hostMs);
+   long[] channelBins;if(!counts.TryGetValue(channel,out channelBins)){channelBins=new long[1000];counts.Add(channel,channelBins);}
    int bin=(int)(deviceMs%Window);
-   if(stamps[bin]!=deviceMs){for(int p=0;p<4;p++)counts[p,bin]=0;stamps[bin]=deviceMs;}
-   counts[channel,bin]++;
+   if(stamps[bin]!=deviceMs){foreach(var bins in counts.Values)bins[bin]=0;stamps[bin]=deviceMs;}
+   channelBins[bin]++;
   }
-  internal double[] Read(long hostMs) {
-   var hz=new double[4];if(!anchored)return hz;
+  internal double[] Read(long hostMs,byte[] ids=null) {
+   ids=ids??counts.Keys.ToArray();var hz=new double[ids.Length];if(!anchored)return hz;
    ulong now=latestDeviceMs+(ulong)Math.Max(0,hostMs-latestHostMs);
-   for(int bin=0;bin<1000;bin++)if(stamps[bin]<=now && now-stamps[bin]<Window)
-    for(int p=0;p<4;p++)hz[p]+=counts[p,bin];
+   for(int p=0;p<ids.Length;p++){long[] bins;if(!counts.TryGetValue(ids[p],out bins))continue;
+    for(int bin=0;bin<1000;bin++)if(stamps[bin]<=now && now-stamps[bin]<Window)hz[p]+=bins[bin];}
    return hz; // One-second window: event count / 1 s.
   }
  }
+ internal sealed class NpGpioRtcActivity {
+  internal readonly byte[] Ids;internal readonly long[] Counts;internal readonly double[] Frequencies;
+  internal NpGpioRtcActivity(byte[] ids,long[] counts,double[] frequencies){Ids=ids;Counts=counts;Frequencies=frequencies;}
+ }
  internal sealed class NpGpioRtcLogger : IDisposable {
+  internal static byte[] DefaultChannelIds {get{return new byte[]{0,1,2,3};}}
   sealed class Line {internal bool Sync;internal string Text;}
   readonly string folder;readonly NpGpioRtcDevice device;readonly INpGpioRtcPort port;
   readonly BlockingCollection<Line> lines=new BlockingCollection<Line>(16384);
@@ -112,16 +119,18 @@ namespace USB512_interface {
   readonly NpGpioEventRate eventRate=new NpGpioEventRate();
   StreamWriter events,sync;Thread receiver,writer,probes;volatile bool running;bool disposed,haveSequence;
   uint lastSequence;long received,saved,rejected,gaps;DateTime started,finished;internal DateTime? NeuralFirstReceiveUtc;
-  readonly long[] channelEvents=new long[4];byte lastChannel;ulong lastDeviceMs;
+  readonly SortedDictionary<byte,long> channelEvents=new SortedDictionary<byte,long>();byte lastChannel;ulong lastDeviceMs;
   string error;internal string Error {get{lock(gate)return error;}}
   internal long EventsSaved {get{return Interlocked.Read(ref saved);}}
-  internal long[] ChannelCounts {get{lock(gate)return (long[])channelEvents.Clone();}}
-  internal double[] ChannelFrequencies {get{lock(gate)return eventRate.Read(MonotonicMs());}}
+  internal long[] ChannelCounts {get{lock(gate)return channelEvents.Values.ToArray();}}
+  internal NpGpioRtcActivity GetActivity() {lock(gate){var ids=channelEvents.Keys.ToArray();
+   return new NpGpioRtcActivity(ids,channelEvents.Values.ToArray(),eventRate.Read(MonotonicMs(),ids));}}
   internal bool IsLogging {get{return running;}}
   internal long SyncReplies {get{lock(gate)return clock.Replies;}}
   internal bool ClockSynchronized {get{lock(gate)return clock.Best!=null && Now()>=clock.LastReply && Now()-clock.LastReply<=10000;}}
   internal NpGpioRtcLogger(string directory,NpGpioRtcDevice selected,INpGpioRtcPort transport=null) {
    folder=directory;device=selected;port=transport??new NpGpioRtcSerial(selected.Port);
+   foreach(byte id in DefaultChannelIds)channelEvents.Add(id,0);
   }
   static long Now(){return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();}
   static long MonotonicMs(){return (long)(Stopwatch.GetTimestamp()*(1000.0/Stopwatch.Frequency));}
@@ -149,7 +158,7 @@ namespace USB512_interface {
   }
   void Trigger(byte channel,uint sequence,ulong deviceMs) {
    DateTime receive=DateTime.UtcNow;DateTime? mapped;
-   lock(gate){mapped=ClockSynchronized?clock.Map(deviceMs):null;if(channel<channelEvents.Length)channelEvents[channel]++;
+   lock(gate){mapped=ClockSynchronized?clock.Map(deviceMs):null;long count;channelEvents.TryGetValue(channel,out count);channelEvents[channel]=count+1;
     eventRate.Add(channel,deviceMs,MonotonicMs());lastChannel=channel;lastDeviceMs=deviceMs;}
    if(haveSequence && sequence!=unchecked(lastSequence+1))Interlocked.Increment(ref gaps);
    haveSequence=true;lastSequence=sequence;Interlocked.Increment(ref received);
@@ -195,12 +204,14 @@ namespace USB512_interface {
   }
   void SaveReceipt(string state) {
    NpGpioRtcClock.Sample best;lock(gate){best=clock.Best;}
+   var activity=GetActivity();
    var receipt=new {schema_version=1,format="wild.gpio_rtc",state=state,port=device.Port,pnp_device_id=device.Identity,baud=119200,
     started_utc=started.ToString("O"),stopped_utc=finished==DateTime.MinValue?null:finished.ToString("O"),
     neural_first_receive_utc=NeuralFirstReceiveUtc.HasValue?NeuralFirstReceiveUtc.Value.ToString("O"):null,
     events_file="gpio_rtc_events.txt",clock_queries_file="gpio_rtc_sync.csv",events_received=Interlocked.Read(ref received),events_saved=EventsSaved,
-    channel_event_counts=channelEvents,last_channel=haveSequence?(byte?)lastChannel:null,last_device_rtc_ms=haveSequence?(ulong?)lastDeviceMs:null,
-    recent_channel_event_rate_hz=ChannelFrequencies,event_rate_window_ms=1000,
+    channel_ids=activity.Ids.Select(id=>(int)id).ToArray(),channel_event_counts=activity.Counts,
+    last_channel=haveSequence?(byte?)lastChannel:null,last_device_rtc_ms=haveSequence?(ulong?)lastDeviceMs:null,
+    recent_channel_event_rate_hz=activity.Frequencies,event_rate_window_ms=1000,
     event_rate_timebase="received events in device RTC window; PC monotonic extrapolation between RTC observations; not waveform frequency",
     rejected_records=Interlocked.Read(ref rejected),sequence_discontinuities=Interlocked.Read(ref gaps),invalid_frames=parser.InvalidFrames,pending_frame_bytes=parser.PendingBytes,
     valid_clock_replies=SyncReplies,clock_synchronized=ClockSynchronized,best_rtt_ms=best==null?(long?)null:best.Rtt,selected_offset_ms=best==null?(double?)null:best.Offset,

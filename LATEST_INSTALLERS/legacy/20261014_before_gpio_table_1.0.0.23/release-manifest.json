@@ -1,0 +1,425 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.22",
+  "releaseDate": "2026-10-14",
+  "status": "Software-checked per-port GPIO event frequency; hardware qualification pending",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.22.exe",
+    "sha256": "8539A37B6A24BC034619E46F5DE5631C7845375D718473D79BA824DCB7A7F433",
+    "bytes": 2331780
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "00D35B3F752230AFBECBA897EDAE623ED31A2AECE0FC971CD6B02A66CE53364B",
+      "bytes": 1336320
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2",
+      "bytes": 532
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA",
+      "bytes": 5757952
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B",
+      "bytes": 24576
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
+      "bytes": 220672
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6",
+      "bytes": 151552
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E",
+      "bytes": 364544
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9",
+      "bytes": 434
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782",
+      "bytes": 458
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A",
+      "bytes": 152064
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC",
+      "bytes": 55808
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01",
+      "bytes": 449
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306",
+      "bytes": 340
+    }
+  ],
+  "compatibleFirmware": {
+    "repository": "https://github.com/zifangzhao/XE_NP",
+    "branch": "V2",
+    "directory": "LATEST_FIRMWARE/V2_NP2",
+    "loaderCrc32": "6408DBB8",
+    "usbCrc32": "BFF0A8A2",
+    "appCrc32": "E07FB882",
+    "fusedHexSha256": "674FEB9E365A5F1C91D1A004B4D7D35D447F238E2CBF122A1A79AF0A55E82154",
+    "usbOnlyHexSha256": "0FD1F92E529A5593D5C9DE1B84570EA8CF4B91D031C6A148FD2F0F1FD2A33D51",
+    "appOnlyHexSha256": "3E7CC1944BCB1190374AA7C09552991C122A031DB64769A3ABB1263285BF95AD",
+    "appUpdateContainerSha256": "720A6CFD9DC31211CC8FD32600105695794DBFA773DCA07046D4C80BA3EBAD95"
+  },
+  "liveDat": {
+    "enabledBy": "Merge active probes into one DAT per signal band",
+    "writeDuringCapture": true,
+    "postRecordingMerge": false,
+    "path": "neuropixels_ap.dat at each independent recording root",
+    "sampleFormat": "signed little-endian int16",
+    "order": "S0 probe1 channels1..384, S0 probe2 channels1..384, S0 probe3 channels1..384, then S1 in the same order; active physical probes only",
+    "channelsPerProbe": 384,
+    "probeDataSubfolders": false,
+    "boundedPendingRowsPerProbe": 2048,
+    "tailFiles": "unpaired_tail with exact source ticks",
+    "rawPreserved": false,
+    "phaseOffsets": "recorded, not corrected",
+    "metadataAlongsideData": true,
+    "sdDownloadCombined": false,
+    "rawUsbCopySaved": false,
+    "recoveryRecordingsIndependent": true
+  },
+  "releaseValidation": {
+    "guiBuildWarnings": 0,
+    "guiBuildErrors": 0,
+    "companionRebuilt": false,
+    "gpioRtcProtocolClockLifecycleFrequencyChecks": 36,
+    "recordingWarningsPanelPolicyFrequencyChecks": 32,
+    "recordingMetricsChecks": 16,
+    "standaloneChecks": 294,
+    "usbUiLifecycleAssertions": 134,
+    "independentInstallerExtraction": true,
+    "extractedRuntimeFilesVerified": 13,
+    "nonGuiRuntimeFilesUnchanged": 12,
+    "hardwareAccess": false,
+    "installerExecuted": false,
+    "liveHardwareThroughputQualified": false
+  },
+  "retainedSrImuHardwareEvidence": {
+    "guiSha256": "53E5AFDB5A4C238C7A1AAC8C80F86C63D716B57F55BD1D0E4CD052C78FD9963B",
+    "installer": "WILDX_console-Setup-1.0.0.12-SR_IMU_20261013.exe",
+    "validation": {
+      "scope": "Existing short real USB capture and exact checked GUI; packaging checks only this pass",
+      "mask": 7,
+      "sampleHz": 20000,
+      "requestedSeconds": 30,
+      "dataSeconds": 29.354,
+      "received": 22916,
+      "verified": 22916,
+      "rawDrops": 0,
+      "decodedDrops": 0,
+      "imuRecords": 584,
+      "validAccelGyroDisplayCallbacks": 125,
+      "magnetometerAvailable": false,
+      "sensorError": 9,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "installerExecuted": false,
+      "hardwareAccessDuringPackaging": false,
+      "fullEndToEndPairQualified": false,
+      "fusedBootRetested": false,
+      "damagedShankHardwareQualified": false,
+      "enduranceQualified": false
+    },
+    "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
+  },
+  "buildProvenance": {
+    "sourceBase": "3680b4becc5f36d071fba2c4224dd49420bda10d",
+    "guiSha256": "00D35B3F752230AFBECBA897EDAE623ED31A2AECE0FC971CD6B02A66CE53364B",
+    "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.21",
+    "source": "Per-port device-RTC event frequency, rate metadata, GUI Hz labels and version",
+    "sourceInputs": [
+      {
+        "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
+        "sha256": "7B0A9388E0925183CD5A0EDFD7C77D28289BE5D8F30B48A00EA3EF08F1093FB6"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/NpGpioRtcLogger.cs",
+        "sha256": "04B3C5C784C684A9D0B4FFEBEA5EBCBFDA4D90F041B0239090F1A16AE10149B3"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+        "sha256": "03582F8AD026A2A8A94EB13DB42C3CCF4A58DFF779362136B1574E4341840DE5"
+      }
+    ],
+    "excludedPendingChanges": [
+      "Tests/NpBleWarmLinkTests.cs",
+      "Tests/NpMediaUsbHardwareTests.cs",
+      "Tests/NpMediaUsbImuTests.cs",
+      "USB512_interface/USB512_interface/Ble/NpBleConnection.cs",
+      "USB512_interface/USB512_interface/Ble/NpMediaExport.cs",
+      "USB512_interface/USB512_interface/NpMediaUsbForm.cs",
+      "legacy/"
+    ],
+    "evidence": "Note/GPIO_EVENT_FREQUENCY_20261014.md"
+  },
+  "knownLimitations": [
+    "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
+    "Native phase offsets retained without resampling or timing correction",
+    "Automatic restarts create independent recordings; unknown gaps never joined",
+    "SD downloads remain per-probe DAT",
+    "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained",
+    "Yoshi physical V1 probe recording not tested in this pass; exact rat logger firmware identity remains unverified",
+    "Persistent metadata failures retain candidates and report a warning; resolve metadata before qualifying the complete recording bundle",
+    "Exact remote metadata destination/Windows cause unconfirmed; local replacement-lock reproducer uses a different native error",
+    "GPIO RTC integration covers local USB recording only; BLE SD recording is not wired to the local GPIO lifecycle",
+    "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
+    "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
+  ],
+  "previousPublishedInstaller": "legacy/20261014_before_gpio_frequency_1.0.0.22/WILDX_console-Setup-1.0.0.21.exe",
+  "retainedLiveDatSoftwareEvidence": {
+    "version": "1.0.0.14",
+    "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
+    "scope": "Recording implementation unchanged; no live DAT or hardware rerun for this UI release",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "liveDatAssertions": 16943326,
+      "factoryCalibrationAssertions": 716128,
+      "fileMergeRecoveryAssertions": 10501835,
+      "usbUiLifecycleAssertions": 134,
+      "standaloneAssertions": 294,
+      "sensorLifecycleChecks": 5,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "liveHardwareThroughputQualified": false,
+      "fullEndToEndPairQualified": false
+    }
+  },
+  "probeConfiguration": {
+    "layout": "Three stacked cards with independent IMRO/JSON import and shared editor actions",
+    "map": "Physical shanks and IMRO-selected sites, rotated sideways with shaft width enlarged for readability",
+    "externalUsbButtonRemoved": true,
+    "requestChangesCommittedOnSave": true
+  },
+  "displayHighPass": {
+    "control": "Checkbox and editable cutoff in Hz",
+    "defaultEnabled": false,
+    "usbDefaultHz": 300,
+    "bleDefaultHz": 100,
+    "scope": "Live display only; recorded samples unchanged",
+    "validation": "0 < cutoff < displayed sample rate / 2; invalid targets visibly bypass filter"
+  },
+  "retainedProbeUiSoftwareEvidence": {
+    "version": "1.0.0.15",
+    "commit": "49f48ad55d681d436a3b923eb4ef8b620d2e4221",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "probeConfigurationChecks": 65,
+      "displayHighPassChecks": 3896,
+      "universalWorkflowChecks": 106,
+      "standaloneChecks": 294,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "fullEndToEndPairQualified": false
+    }
+  },
+  "retainedDatOnlySoftwareEvidence": {
+    "version": "1.0.0.16",
+    "commit": "0670f6cc0cabeb8d16f41fccedd67e50ce8c6248",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "liveDatAssertions": 20511105,
+      "v1PairedAssertions": 74176,
+      "usbUiLifecycleAssertions": 134,
+      "targetedRecoveryChecks": 120,
+      "sensorLifecycleChecks": 5,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "liveHardwareThroughputQualified": false
+    }
+  },
+  "folderNaming": {
+    "sessionLabel": "optional, shared between USB Mode and Data Download while the app is open",
+    "format": "<label>_wild_yyyyMMdd_HHmmss.fff",
+    "usbDateSource": "PC Start-attempt local time",
+    "downloadDateSource": "Validated recorded START UTC converted to PC local time",
+    "missingRecordedTime": "<label>_wild_time_unknown_<recording identity>; download time never substituted",
+    "blankLabel": "default naming",
+    "collisionPolicy": "fresh destination claim and numeric suffix; no existing data overwritten",
+    "automaticRestart": "fresh independent timestamped sibling recording; no segment folders",
+    "recoveryReceipt": "recovery_link.json links previous recording and original restart journal"
+  },
+  "v1RecordingCompatibility": {
+    "firmwareUpgradeRequired": false,
+    "firmwareImagePromoted": false,
+    "idleSplitRoles": [
+      2,
+      3
+    ],
+    "settingsRequests": [
+      "0x6E service status",
+      "0x73 recording capabilities"
+    ],
+    "downloadLiveStatus0x42": false,
+    "startPreparation": "Existing 0x6F value 2 mode command; exact MCU UID retained; no firmware-update operations",
+    "legacy": "Unsupported optional split status preserves live-status path; missing capabilities preserves fixed recording profile",
+    "unsupportedRequestErrors": [
+      1,
+      31
+    ],
+    "transportErrorsRemainErrors": [
+      121,
+      5,
+      1167,
+      995
+    ],
+    "sourceEvidence": "Retained V1 USB82 handlers; request routing only, not identification of Yoshi firmware",
+    "acquisitionAndDecoderChanged": false,
+    "physicalProbeRecordingQualified": false,
+    "connectorSelection": "Direct editable boxes; initial selection follows active firmware mask; advertised ports are not physical-presence evidence",
+    "experimentalWarning": "Two-probe 30k only; generic 20k popup removed; firmware admission retained"
+  },
+  "retainedFolderNamingSoftwareEvidence": {
+    "version": "1.0.0.17",
+    "commit": "71906e1ad2f8dc283777f78c41fdacf239a21f1f",
+    "manifest": "legacy/20261014_before_v1_recording_fix_1.0.0.18/release-manifest.json"
+  },
+  "metadataPersistence": {
+    "writer": "Flushed unique staged sidecar; Windows same-directory replacement rename; no delete-then-move or direct overwrite fallback",
+    "boundedRetryMilliseconds": 1000,
+    "preservePreviousOnFailure": true,
+    "retainCompleteFailedCandidate": true,
+    "candidateIncludedInCanonicalIndex": false,
+    "errorReport": "metadata_save_error.txt with destination/native errors and retained candidate paths",
+    "independentSidecarsAttempted": true,
+    "completionUiRepeatsSettingsWrite": false,
+    "acquisitionErrorsSeparate": true,
+    "neuralDatRewritten": false,
+    "remoteWindowsCauseConfirmed": false,
+    "remoteHardwareRetestPending": true
+  },
+  "retainedV1ModeSoftwareEvidence": {
+    "version": "1.0.0.18",
+    "commit": "5b163e795e029dd5e4f1cf0c6c36112d3d24c3b6",
+    "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
+  },
+  "retainedPreviousReleaseValidation": {
+    "version": "1.0.0.21",
+    "manifest": "legacy/20261014_before_gpio_frequency_1.0.0.22/release-manifest.json",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "companionRebuilt": false,
+      "gpioRtcProtocolClockLifecycleChecks": 26,
+      "recordingWarningsPanelPolicyBundleChecks": 29,
+      "recordingMetricsChecks": 16,
+      "standaloneChecks": 294,
+      "usbUiLifecycleAssertions": 134,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "liveHardwareThroughputQualified": false
+    }
+  },
+  "recordingMetrics": {
+    "scope": "USB recording",
+    "elapsedAnchor": "first neural host receive; excludes preparation",
+    "stopTimeRetained": true,
+    "recordedSize": "actual files in the current recording folder including auxiliary files",
+    "diskSpace": "available space on the selected destination volume",
+    "freshRecordingResetsTotals": true
+  },
+  "gpioRtc": {
+    "scope": "USB recording",
+    "autoStartWithRecording": true,
+    "stopDrainsAcceptedEvents": true,
+    "vidPid": "VID_0481&PID_5741",
+    "selectedPnpIdentityPinned": true,
+    "baud": 119200,
+    "eventFile": "gpio_rtc_events.txt",
+    "clockQueryFile": "gpio_rtc_sync.csv",
+    "sessionFile": "gpio_rtc_session.json",
+    "filesAtRecordingRoot": true,
+    "perProbeMetadataReferencesParent": true,
+    "startupFailurePolicy": "warn and continue neural recording",
+    "runtimeFailurePolicy": "warn and continue neural recording",
+    "panel": "Right column from Device health to Network time, alongside Capture activity; COM/state, events, latest RTC event/clock and four port activity LEDs/counts; final counts retained after Stop",
+    "queueCapacity": 16384,
+    "clockMapping": "lowest RTT PC midpoint offset among latest 16 valid replies; raw observations retained; replies stale after 10 s",
+    "neuralAdcClockSynchronized": false,
+    "firmwareUpgradePerformed": false,
+    "referenceCommit": "af7ea5950d16b4c8f4d60d81950e738b555de8d1",
+    "hardwareTested": false,
+    "portLeds": {
+      "ports": 4,
+      "wireChannels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "portLabels": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "meaning": "trigger event activity; not sustained input logic levels",
+      "pulseMilliseconds": 350,
+      "pollMilliseconds": 100,
+      "stopDimsAndRetainsCounts": true,
+      "freshRecordingResets": true
+    },
+    "eventFrequency": {
+      "perPort": true,
+      "unit": "Hz",
+      "windowMilliseconds": 1000,
+      "binMilliseconds": 1,
+      "updateMilliseconds": 100,
+      "timebase": "device RTC event timestamps; PC monotonic extrapolation between RTC observations",
+      "meaning": "received trigger events per recent second; not waveform frequency",
+      "rtcRollbackResetsWindow": true,
+      "stopOrErrorShowsZero": true,
+      "totalCountsRetained": true,
+      "savedInSessionMetadata": true
+    }
+  },
+  "recordingWarnings": {
+    "scope": "USB recording",
+    "deduplication": "once per error category per recording, including final-result duplication",
+    "file": "recording_warnings.txt",
+    "modalUiDoesNotPauseCaptureWorkers": true,
+    "fatalNeuralErrorsStillStopRecording": true
+  }
+}

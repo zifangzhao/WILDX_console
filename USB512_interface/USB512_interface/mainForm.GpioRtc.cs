@@ -9,8 +9,12 @@ namespace USB512_interface {
  public partial class Form1 {
   ComboBox gpioRtcDevices;Button gpioRtcRefresh;Label gpioRtcStatus;
   TextBox gpioRtcInfo;string gpioRtcLastInfo;
-  readonly Label[] gpioPortLeds=new Label[4],gpioPortCounts=new Label[4],gpioPortRates=new Label[4];
-  readonly long[] gpioPortEventCounts=new long[4];readonly DateTime[] gpioPortPulseUntil=new DateTime[4];
+  sealed class GpioChannelRow {
+   internal Label Id,Led,Count,Frequency;internal long Events;internal DateTime PulseUntil;
+   internal Label[] Cells {get{return new[]{Id,Led,Count,Frequency};}}
+  }
+  readonly SortedDictionary<byte,GpioChannelRow> gpioRows=new SortedDictionary<byte,GpioChannelRow>();
+  TableLayoutPanel gpioChannelTable;Panel gpioChannelViewport;
   NpGpioRtcLogger gpioRtcLogger;bool refreshingGpioRtc;
   readonly HashSet<string> recordingWarnings=new HashSet<string>(StringComparer.Ordinal);
   internal Action<string> recordingWarningPresenter=null;
@@ -25,7 +29,7 @@ namespace USB512_interface {
    gpioRtcDevices.Items.Add(new NpGpioRtcDevice());gpioRtcDevices.SelectedIndex=0;
    gpioRtcDevices.SelectedIndexChanged+=delegate {
     if(refreshingGpioRtc)return;var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
-    gpioRtcLastInfo=null;UpdateGpioPortActivity(new long[4],false,DateTime.UtcNow);RefreshGpioRtcInfo();
+    gpioRtcLastInfo=null;ResetGpioChannelDisplay();RefreshGpioRtcInfo();
     try{Properties.Settings.Default.GpioRtcDevice=selected==null || selected.Port==null?"off":selected.Identity;Properties.Settings.Default.Save();}
     catch(Exception ex){gpioRtcStatus.Text="Save failed";WarnRecordingOnce("gpio-settings","GPIO/RTC selection could not be saved: "+ex.Message);}
    };
@@ -38,45 +42,72 @@ namespace USB512_interface {
    gpioRtcInfo=new TextBox {Name="gpioRtcInfo",Dock=DockStyle.Fill,Multiline=true,ReadOnly=true,BorderStyle=BorderStyle.None,
     ScrollBars=ScrollBars.Vertical,BackColor=WildXTheme.Surface,ForeColor=WildXTheme.Ink,Text="Off"};
    var content=Stack(64,0);content.Controls.Add(gpioRtcInfo,0,0);
-   var ports=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=3,RowCount=4,Margin=Padding.Empty};
-   ports.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,36));ports.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));ports.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,85));
-   for(int p=0;p<4;p++) {
-    ports.RowStyles.Add(new RowStyle(SizeType.Percent,25));
-    gpioPortLeds[p]=new Label {Name="gpioPortLed"+(p+1),Text="●",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleCenter,
-     Font=WildXTheme.Title,ForeColor=WildXTheme.Border,AccessibleName="GPIO port "+(p+1)+" activity"};
-    ports.Controls.Add(gpioPortLeds[p],0,p);
-    var details=Stack(0,0);
-    details.Controls.Add(new Label {Text="Port "+(p+1)+" (CH"+p+")",Dock=DockStyle.Fill,TextAlign=ContentAlignment.BottomLeft,
-     ForeColor=WildXTheme.Ink,Margin=Padding.Empty},0,0);
-    gpioPortRates[p]=new Label {Name="gpioPortRate"+(p+1),Text="0.0 Hz",Dock=DockStyle.Fill,TextAlign=ContentAlignment.TopLeft,
-     ForeColor=WildXTheme.Muted,Margin=Padding.Empty,AccessibleName="GPIO port "+(p+1)+" event frequency"};
-    details.Controls.Add(gpioPortRates[p],0,1);ports.Controls.Add(details,1,p);
-    gpioPortCounts[p]=new Label {Name="gpioPortCount"+(p+1),Text="0",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleRight,
-     Font=WildXTheme.Strong,ForeColor=WildXTheme.Ink,AccessibleName="GPIO port "+(p+1)+" events"};ports.Controls.Add(gpioPortCounts[p],2,p);
+   gpioChannelViewport=new Panel {Dock=DockStyle.Fill,AutoScroll=true,Margin=Padding.Empty};
+   gpioChannelTable=new TableLayoutPanel {Name="gpioChannelTable",Dock=DockStyle.Top,ColumnCount=4,RowCount=1,Margin=Padding.Empty,BackColor=WildXTheme.Border};
+   foreach(int width in new[]{20,20,30,30})gpioChannelTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,width));
+   string[] headers={"ID","Status","Count","Freq (Hz)"};
+   for(int c=0;c<headers.Length;c++) {
+    var header=GpioTableCell(headers[c],c==0?ContentAlignment.MiddleLeft:c==1?ContentAlignment.MiddleCenter:ContentAlignment.MiddleRight);
+    header.Font=WildXTheme.Strong;header.BackColor=WildXTheme.SurfaceSoft;gpioChannelTable.Controls.Add(header,c,0);
    }
-   content.Controls.Add(ports,0,1);
+   gpioChannelViewport.Controls.Add(gpioChannelTable);content.Controls.Add(gpioChannelViewport,0,1);
+   SetGpioChannelRows(NpGpioRtcLogger.DefaultChannelIds,true);
    var activityTimer=new Timer {Interval=100};components.Add(activityTimer);
    activityTimer.Tick+=delegate {bool logging=gpioRtcLogger!=null && gpioRtcLogger.IsLogging;
-    UpdateGpioPortActivity(gpioRtcLogger==null?null:gpioRtcLogger.ChannelCounts,logging,DateTime.UtcNow);
-    if(logging)UpdateGpioPortFrequency(gpioRtcLogger.ChannelFrequencies);
+    var activity=gpioRtcLogger==null?null:gpioRtcLogger.GetActivity();
+    if(activity!=null)SetGpioChannelRows(activity.Ids,false);
+    UpdateGpioPortActivity(activity==null?null:activity.Counts,logging,DateTime.UtcNow);
+    if(logging)UpdateGpioPortFrequency(activity.Frequencies);
    };activityTimer.Start();
    var card=Card("GPIO / RTC",null,content);card.Name="gpioRtcCard";return card;
   }
+  static Label GpioTableCell(string text,ContentAlignment alignment) {
+   return new Label {Text=text,Dock=DockStyle.Fill,TextAlign=alignment,Margin=new Padding(0,0,1,1),
+    Padding=new Padding(4,0,4,0),BackColor=WildXTheme.Surface,ForeColor=WildXTheme.Ink,UseMnemonic=false};
+  }
+  void SetGpioChannelRows(byte[] ids,bool replace) {
+   if(!replace && ids.All(id=>gpioRows.ContainsKey(id)))return;
+   gpioChannelTable.SuspendLayout();
+   if(replace)foreach(byte id in gpioRows.Keys.Where(id=>!ids.Contains(id)).ToArray()) {
+    foreach(var cell in gpioRows[id].Cells){gpioChannelTable.Controls.Remove(cell);cell.Dispose();}gpioRows.Remove(id);
+   }
+   foreach(byte id in ids)if(!gpioRows.ContainsKey(id)) {
+    var row=new GpioChannelRow {Id=GpioTableCell(id.ToString(),ContentAlignment.MiddleLeft),Led=GpioTableCell("●",ContentAlignment.MiddleCenter),
+     Count=GpioTableCell("0",ContentAlignment.MiddleRight),Frequency=GpioTableCell("0.0",ContentAlignment.MiddleRight)};
+    row.Id.Name="gpioChannelId"+id;row.Led.Name="gpioChannelLed"+id;row.Count.Name="gpioChannelCount"+id;row.Frequency.Name="gpioChannelRate"+id;
+    row.Led.Font=WildXTheme.Title;row.Led.ForeColor=WildXTheme.Border;
+    row.Led.AccessibleName="GPIO channel "+id+" activity";row.Count.AccessibleName="GPIO channel "+id+" events";
+    row.Frequency.AccessibleName="GPIO channel "+id+" event frequency in Hz";
+    gpioRows.Add(id,row);foreach(var cell in row.Cells)gpioChannelTable.Controls.Add(cell);
+   }
+   float scale=DeviceDpi/96F;int headerHeight=(int)Math.Ceiling(28*scale),rowHeight=(int)Math.Ceiling(34*scale);
+   gpioChannelTable.RowCount=gpioRows.Count+1;gpioChannelTable.RowStyles.Clear();gpioChannelTable.RowStyles.Add(new RowStyle(SizeType.Absolute,headerHeight));
+   int r=1;foreach(var row in gpioRows.Values) {
+    gpioChannelTable.RowStyles.Add(new RowStyle(SizeType.Absolute,rowHeight));var cells=row.Cells;
+    for(int c=0;c<cells.Length;c++)gpioChannelTable.SetCellPosition(cells[c],new TableLayoutPanelCellPosition(c,r));r++;
+   }
+   gpioChannelTable.Height=headerHeight+rowHeight*gpioRows.Count;
+   gpioChannelViewport.AutoScrollMinSize=new Size(0,gpioChannelTable.Height);gpioChannelTable.ResumeLayout(true);
+  }
+  void ResetGpioChannelDisplay() {
+   if(gpioChannelTable==null)return;SetGpioChannelRows(NpGpioRtcLogger.DefaultChannelIds,true);
+   UpdateGpioPortActivity(new long[gpioRows.Count],false,DateTime.UtcNow);
+  }
   // The wire reports trigger events, not input levels. LEDs pulse for 350 ms.
   void UpdateGpioPortActivity(long[] counts,bool logging,DateTime now) {
-   if(!logging)UpdateGpioPortFrequency(new double[4]);
-   for(int p=0;p<4;p++) {
-    if(counts!=null && counts[p]!=gpioPortEventCounts[p]) {
-     gpioPortEventCounts[p]=counts[p];gpioPortPulseUntil[p]=logging?now.AddMilliseconds(350):DateTime.MinValue;
-     gpioPortCounts[p].Text=counts[p].ToString("N0");
+   if(!logging)UpdateGpioPortFrequency(null);
+   int p=0;foreach(var row in gpioRows.Values) {
+    if(counts!=null && p<counts.Length && counts[p]!=row.Events) {
+     row.Events=counts[p];row.PulseUntil=logging?now.AddMilliseconds(350):DateTime.MinValue;
+     row.Count.Text=counts[p].ToString("N0");
     }
-    bool active=logging && now<gpioPortPulseUntil[p];
-    gpioPortLeds[p].ForeColor=active?WildXTheme.Accent:WildXTheme.Border;
-    gpioPortLeds[p].AccessibleDescription=active?"Recent event":"No recent event";
+    bool active=logging && now<row.PulseUntil;
+    row.Led.ForeColor=active?WildXTheme.Accent:WildXTheme.Border;
+    row.Led.AccessibleDescription=active?"Recent event":"No recent event";p++;
    }
   }
   void UpdateGpioPortFrequency(double[] hz) {
-   for(int p=0;p<4;p++)gpioPortRates[p].Text=hz[p].ToString("F1")+" Hz";
+   int p=0;foreach(var row in gpioRows.Values){row.Frequency.Text=(hz!=null && p<hz.Length?hz[p]:0).ToString("F1");p++;}
   }
   void RefreshGpioRtcInfo() {
    if(gpioRtcInfo==null)return;
@@ -99,12 +130,12 @@ namespace USB512_interface {
     }
     gpioRtcDevices.SelectedItem=match??gpioRtcDevices.Items[0];gpioRtcStatus.Text=match==null?"":match.Port=="Unavailable"?"Unavailable":"Ready";
    }catch(Exception ex){gpioRtcStatus.Text="Scan failed";WarnRecordingOnce("gpio-scan","GPIO/RTC device detection failed: "+ex.Message);}
-   finally{refreshingGpioRtc=false;gpioRtcLastInfo=null;UpdateGpioPortActivity(new long[4],false,DateTime.UtcNow);RefreshGpioRtcInfo();}
+   finally{refreshingGpioRtc=false;gpioRtcLastInfo=null;ResetGpioChannelDisplay();RefreshGpioRtcInfo();}
   }
   void StartGpioRtcRecording() {
    recordingWarnings.Clear();
    gpioRtcLastInfo=null;
-   UpdateGpioPortActivity(new long[4],false,DateTime.UtcNow);
+   ResetGpioChannelDisplay();
    gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=false;
    var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
    if(selected==null || selected.Port==null){gpioRtcStatus.Text="";RefreshGpioRtcInfo();return;}
@@ -137,7 +168,7 @@ namespace USB512_interface {
     logger.NeuralFirstReceiveUtc=recordingSummaryStartUtc==DateTime.MinValue?(DateTime?)null:recordingSummaryStartUtc;
     logger.Dispose();gpioRtcStatus.Text=logger.Error==null?"Stopped":"Error";
     gpioRtcLastInfo=logger.Describe(gpioRtcStatus.Text);
-    UpdateGpioPortActivity(logger.ChannelCounts,false,DateTime.UtcNow);
+    var activity=logger.GetActivity();SetGpioChannelRows(activity.Ids,false);UpdateGpioPortActivity(activity.Counts,false,DateTime.UtcNow);
     if(logger.Warning!=null)WarnRecordingOnce(logger.WarningKey,logger.Warning+"\r\n\r\nSee gpio_rtc_session.json in the recording folder.");
     gpioRtcLogger=null;
    }

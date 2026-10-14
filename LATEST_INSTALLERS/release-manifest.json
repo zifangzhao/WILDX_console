@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.22",
+  "version": "1.0.0.23",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked per-port GPIO event frequency; hardware qualification pending",
+  "status": "Software-checked GPIO channel table with extensible IDs; hardware qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.22.exe",
-    "sha256": "8539A37B6A24BC034619E46F5DE5631C7845375D718473D79BA824DCB7A7F433",
-    "bytes": 2331780
+    "file": "WILDX_console-Setup-1.0.0.23.exe",
+    "sha256": "C0E7ED680A5C8B49D7EC0F5E6E50F6A0349F20688CDA0AB1993259D935076265",
+    "bytes": 2333427
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "00D35B3F752230AFBECBA897EDAE623ED31A2AECE0FC971CD6B02A66CE53364B",
-      "bytes": 1336320
+      "sha256": "1A4AE577230AFE4E5BCE1A692A14267EBD5A78C54884C082740674C5F6B29513",
+      "bytes": 1339392
     },
     {
       "path": "WILDX_console.exe.config",
@@ -106,11 +106,13 @@
     "recoveryRecordingsIndependent": true
   },
   "releaseValidation": {
-    "guiBuildWarnings": 0,
+    "guiCompilerWarnings": 0,
+    "guiBuildWarnings": 1,
+    "transientDefenderCopyRetries": 1,
     "guiBuildErrors": 0,
     "companionRebuilt": false,
-    "gpioRtcProtocolClockLifecycleFrequencyChecks": 36,
-    "recordingWarningsPanelPolicyFrequencyChecks": 32,
+    "gpioRtcProtocolClockLifecycleFrequencyChannelChecks": 42,
+    "recordingWarningsTablePolicyFrequencyChecks": 37,
     "recordingMetricsChecks": 16,
     "standaloneChecks": 294,
     "usbUiLifecycleAssertions": 134,
@@ -150,23 +152,23 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "3680b4becc5f36d071fba2c4224dd49420bda10d",
-    "guiSha256": "00D35B3F752230AFBECBA897EDAE623ED31A2AECE0FC971CD6B02A66CE53364B",
+    "sourceBase": "c94c0d7ea2e22dd6ddb54b8001ae89de08bcbd78",
+    "guiSha256": "1A4AE577230AFE4E5BCE1A692A14267EBD5A78C54884C082740674C5F6B29513",
     "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
-    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.21",
-    "source": "Per-port device-RTC event frequency, rate metadata, GUI Hz labels and version",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.22",
+    "source": "GPIO ID/status/count/frequency table, dynamic channel handling, aligned metadata and version",
     "sourceInputs": [
       {
         "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
-        "sha256": "7B0A9388E0925183CD5A0EDFD7C77D28289BE5D8F30B48A00EA3EF08F1093FB6"
+        "sha256": "43261D159E238E712DD8FA60B976C51A4383C18527368BF4766FE74E185ED2E5"
       },
       {
         "path": "USB512_interface/USB512_interface/NpGpioRtcLogger.cs",
-        "sha256": "04B3C5C784C684A9D0B4FFEBEA5EBCBFDA4D90F041B0239090F1A16AE10149B3"
+        "sha256": "4AA2227DA8B78F5DA1D354BA64256281409A6AEA52ACAD03392EAEBAEC0384B7"
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "03582F8AD026A2A8A94EB13DB42C3CCF4A58DFF779362136B1574E4341840DE5"
+        "sha256": "329BD8BF385B9E8FA999A4EC3DC9B8EB19B57427C190707B3B9269BCE339A2E2"
       }
     ],
     "excludedPendingChanges": [
@@ -176,9 +178,10 @@
       "USB512_interface/USB512_interface/Ble/NpBleConnection.cs",
       "USB512_interface/USB512_interface/Ble/NpMediaExport.cs",
       "USB512_interface/USB512_interface/NpMediaUsbForm.cs",
-      "legacy/"
+      "legacy/",
+      "USB512_interface/USB512_interface/NpUsbSensors.cs"
     ],
-    "evidence": "Note/GPIO_EVENT_FREQUENCY_20261014.md"
+    "evidence": "Note/GPIO_CHANNEL_TABLE_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -193,7 +196,7 @@
     "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
     "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_gpio_frequency_1.0.0.22/WILDX_console-Setup-1.0.0.21.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_gpio_table_1.0.0.23/WILDX_console-Setup-1.0.0.22.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -333,14 +336,14 @@
     "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   },
   "retainedPreviousReleaseValidation": {
-    "version": "1.0.0.21",
-    "manifest": "legacy/20261014_before_gpio_frequency_1.0.0.22/release-manifest.json",
+    "version": "1.0.0.22",
+    "manifest": "legacy/20261014_before_gpio_table_1.0.0.23/release-manifest.json",
     "validation": {
       "guiBuildWarnings": 0,
       "guiBuildErrors": 0,
       "companionRebuilt": false,
-      "gpioRtcProtocolClockLifecycleChecks": 26,
-      "recordingWarningsPanelPolicyBundleChecks": 29,
+      "gpioRtcProtocolClockLifecycleFrequencyChecks": 36,
+      "recordingWarningsPanelPolicyFrequencyChecks": 32,
       "recordingMetricsChecks": 16,
       "standaloneChecks": 294,
       "usbUiLifecycleAssertions": 134,
@@ -374,7 +377,7 @@
     "perProbeMetadataReferencesParent": true,
     "startupFailurePolicy": "warn and continue neural recording",
     "runtimeFailurePolicy": "warn and continue neural recording",
-    "panel": "Right column from Device health to Network time, alongside Capture activity; COM/state, events, latest RTC event/clock and four port activity LEDs/counts; final counts retained after Stop",
+    "panel": "Right column from Device health to Network time, alongside Capture activity; COM/state, events, latest RTC event/clock and ID/status/count/frequency table; final counts retained after Stop",
     "queueCapacity": 16384,
     "clockMapping": "lowest RTT PC midpoint offset among latest 16 valid replies; raw observations retained; replies stale after 10 s",
     "neuralAdcClockSynchronized": false,
@@ -382,19 +385,14 @@
     "referenceCommit": "af7ea5950d16b4c8f4d60d81950e738b555de8d1",
     "hardwareTested": false,
     "portLeds": {
-      "ports": 4,
-      "wireChannels": [
+      "initialChannels": [
         0,
         1,
         2,
         3
       ],
-      "portLabels": [
-        1,
-        2,
-        3,
-        4
-      ],
+      "labels": "zero-based wire channel IDs",
+      "additionalObservedIdsSupported": true,
       "meaning": "trigger event activity; not sustained input logic levels",
       "pulseMilliseconds": 350,
       "pollMilliseconds": 100,
@@ -413,6 +411,43 @@
       "stopOrErrorShowsZero": true,
       "totalCountsRetained": true,
       "savedInSessionMetadata": true
+    },
+    "table": {
+      "columns": [
+        "ID",
+        "Status",
+        "Count",
+        "Freq (Hz)"
+      ],
+      "initialRows": 5,
+      "initialColumns": 4,
+      "initialChannelIds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "order": "numeric channel ID",
+      "addObservedChannelIds": true,
+      "verticalScrolling": true,
+      "freshRecordingOrSelectionResetsToInitialIds": true,
+      "protocolChannelIdRange": [
+        0,
+        255
+      ],
+      "physicalInputs": "provided by firmware/hardware; host rows do not add inputs"
+    },
+    "channelMetadata": {
+      "idArray": "channel_ids",
+      "countsArray": "channel_event_counts",
+      "ratesArray": "recent_channel_event_rate_hz",
+      "order": "IDs, counts and rates copied together; matching array indices",
+      "legacyDefaultIds": [
+        0,
+        1,
+        2,
+        3
+      ]
     }
   },
   "recordingWarnings": {

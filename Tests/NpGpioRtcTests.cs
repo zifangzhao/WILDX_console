@@ -37,10 +37,12 @@ static class NpGpioRtcTests {
   Check(rate.Read(1500).All(f=>f==0),"silent GPIO rate stayed nonzero");
   rate.Observe(12000,2000);Check(rate.Read(2000).All(f=>f==0),"clock observation did not advance idle window");
   rate.Add(2,500,3000);Check(rate.Read(3000).SequenceEqual(new double[]{0,0,1,0}),"RTC rollback did not reset the frequency window");
-  rate.Add(9,600,3000);rate.Add(0,UInt64.MaxValue,3000);Check(rate.Read(3000).SequenceEqual(new double[]{0,0,1,0}),"invalid port/RTC corrupted frequency");
+  rate.Add(9,UInt64.MaxValue,3000);Check(rate.Read(3000).SequenceEqual(new double[]{0,0,1,0}),"invalid RTC corrupted frequency");
   hz=rate.Read(3000);hz[2]=999;Check(rate.Read(3000)[2]==1,"frequency snapshot mutated live data");
   rate=new NpGpioEventRate();for(int i=0;i<10000;i++)rate.Add(3,1000,4000);
   Check(rate.Read(4000)[3]==10000 && rate.Read(5000)[3]==0,"same-millisecond burst count or idle expiration failed");
+  rate=new NpGpioEventRate();rate.Add(7,1000,0);rate.Add(255,1000,0);
+  Check(rate.Read(0).SequenceEqual(new double[]{0,0,0,0,1,1}),"sparse or maximum byte channel not counted in frequency");
   var parser=new NpGpioRtcParser();int events=0,replies=0;uint last=0;ulong ms=0;byte channel=0;
   Action<byte,uint,ulong> trigger=(c,s,t)=>{events++;last=s;ms=t;channel=c;};Action<uint,ulong> sync=(s,t)=>replies++;
   foreach(byte b in Event(UInt32.MaxValue,3))parser.Feed(b,trigger,sync);
@@ -73,9 +75,19 @@ static class NpGpioRtcTests {
   Check(lines.All(l=>l.Contains("DeviceMs:") && l.Contains("PcReceive:") && !l.Contains("UNSYNCED")),"RTC/raw/PC timestamps missing");
   Check((bool)receipt["complete"] && Convert.ToInt64(receipt["events_saved"])==1001 && Convert.ToInt64(receipt["sequence_discontinuities"])==0,"wraparound counted as a gap or receipt incomplete");
   Check(((object[])receipt["recent_channel_event_rate_hz"]).Length==4 && Convert.ToInt32(receipt["event_rate_window_ms"])==1000 && ((string)receipt["event_rate_timebase"]).Contains("device RTC"),"frequency timing metadata not saved with GPIO session");
+  Check(((object[])receipt["channel_ids"]).Select(Convert.ToInt32).SequenceEqual(new[]{0,1,2,3}),"default channel ID mapping missing from session");
   Check((string)receipt["port"]=="COM77" && (string)receipt["pnp_device_id"]=="fixture-board" && receipt["neural_first_receive_utc"]!=null,"selected board or neural anchor not retained");
   Check(port.Closed && port.Disposed && port.Commands.Count>0 && port.Commands.All(b=>b.Length==7 && b[0]==0x3c && b[1]==0x90 && b[6]==0x3e),"wrong command or serial handle leaked");
   var csv=File.ReadAllLines(Path.Combine(folder,"gpio_rtc_sync.csv"));Check(csv.Any(l=>l.StartsWith("query,")) && csv.Any(l=>l.StartsWith("reply,")) && csv.All(l=>l.Split(',').Length==9),"raw clock query/reply observations missing or malformed CSV");
+  string extended=Path.Combine(root,"extended");Directory.CreateDirectory(extended);var extraPort=new Port {Reply=false};
+  using(var logger=new NpGpioRtcLogger(extended,new NpGpioRtcDevice{Port="COM77",Identity="fixture-board"},extraPort)) {
+   logger.Start();extraPort.Feed(Event(1,7));extraPort.Feed(Event(2,255));extraPort.Feed(Event(3,5));Until(()=>logger.EventsSaved==3);
+   var activity=logger.GetActivity();Check(activity.Ids.SequenceEqual(new byte[]{0,1,2,3,5,7,255}) && activity.Counts.SequenceEqual(new long[]{0,0,0,0,1,1,1}),"extended IDs were dropped or counts misaligned");
+   Check(activity.Frequencies.Length==7 && activity.Frequencies[4]>0 && activity.Frequencies[5]>0 && activity.Frequencies[6]>0,"extended rate mapping lost channels");
+   activity.Ids[4]=42;activity.Counts[4]=999;activity.Frequencies[4]=999;var fresh=logger.GetActivity();
+   Check(fresh.Ids[4]==5 && fresh.Counts[4]==1 && fresh.Frequencies[4]!=999,"activity snapshot could mutate logger state");
+  }
+  var extraReceipt=Receipt(extended);Check(((object[])extraReceipt["channel_ids"]).Select(Convert.ToInt32).SequenceEqual(new[]{0,1,2,3,5,7,255}) && ((object[])extraReceipt["channel_event_counts"]).Length==7 && ((object[])extraReceipt["recent_channel_event_rate_hz"]).Length==7,"extended metadata IDs/counts/rates not aligned");
   string second=Path.Combine(root,"second");Directory.CreateDirectory(second);var noSync=new Port {Reply=false};
   using(var logger=new NpGpioRtcLogger(second,new NpGpioRtcDevice{Port="COM77",Identity="fixture-board"},noSync)) {
    logger.Start();noSync.Feed(Event(1));noSync.Feed(Event(3));Until(()=>logger.EventsSaved==2);
