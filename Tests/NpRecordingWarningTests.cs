@@ -14,8 +14,17 @@ static class NpRecordingWarningTests {
   using(var form=(Form)Activator.CreateInstance(type)) {
    form.Load-=(EventHandler)Delegate.CreateDelegate(typeof(EventHandler),form,type.GetMethod("Form1_Load",All));form.StartPosition=FormStartPosition.Manual;form.Location=new Point(-20000,-20000);form.Show();Application.DoEvents();
    type.GetField("runFolder",All).SetValue(form,folder);int shown=0;type.GetField("recordingWarningPresenter",All).SetValue(form,new Action<string>(s=>shown++));
-   var info=(TextBox)type.GetField("gpioRtcInfo",All).GetValue(form);var infoCard=info.Parent.Parent;var split=(TableLayoutPanel)infoCard.Parent;
+   var info=(TextBox)type.GetField("gpioRtcInfo",All).GetValue(form);Control infoCard=info;while(infoCard.Name!="gpioRtcCard")infoCard=infoCard.Parent;var split=(TableLayoutPanel)infoCard.Parent;
    Check(split.GetRow(infoCard)==1 && info.Text=="Off","GPIO information panel is missing below device health");
+   var leds=(Label[])type.GetField("gpioPortLeds",All).GetValue(form);var counts=(Label[])type.GetField("gpioPortCounts",All).GetValue(form);
+   Action<long[],bool,DateTime> activity=(n,on,now)=>type.GetMethod("UpdateGpioPortActivity",All).Invoke(form,new object[]{n,on,now});DateTime pulse=DateTime.UtcNow;
+   activity(new long[]{1,0,3,0},true,pulse);Color active=leds[0].ForeColor,inactive=leds[1].ForeColor;
+   Check(active!=inactive && leds[2].ForeColor==active && leds[3].ForeColor==inactive,"GPIO pulses did not map CH0/CH2 to ports 1/3");
+   activity(new long[]{1,0,3,0},true,pulse.AddMilliseconds(349));Check(leds[0].ForeColor==active,"short GPIO event was invisible before 350 ms");
+   activity(new long[]{1,0,3,0},true,pulse.AddMilliseconds(350));Check(leds[0].ForeColor==inactive && leds[2].ForeColor==inactive,"idle GPIO LEDs stayed lit as logic levels");
+   activity(new long[]{1,1000,3,0},true,pulse.AddMilliseconds(400));Check(leds[1].ForeColor==active && counts[1].Text=="1,000" && leds[0].ForeColor==inactive,"GPIO event burst lost count or lit wrong port");
+   activity(new long[]{1,1000,3,0},false,pulse.AddMilliseconds(450));Check(leds[1].ForeColor==inactive && counts[1].Text=="1,000","Stop did not dim LEDs while retaining counts");
+   activity(new long[4],false,pulse.AddMilliseconds(500));Check(Array.TrueForAll(counts,l=>l.Text=="0"),"new GPIO recording retained old port counts");
    var sample=Activator.CreateInstance(sampleType);sampleType.GetField("Values",All).SetValue(sample,new double[9]);
    Action observe=()=>{type.GetMethod("ObserveNpImu",All).Invoke(form,new object[]{sample,false});Application.DoEvents();};
    observe();Check(shown==0,"healthy sensors produced warning");
@@ -52,11 +61,16 @@ static class NpRecordingWarningTests {
    type.GetMethod("FinishCaptureOnUi",All).Invoke(form,new object[]{"Capture error: simulated USB disconnect"});Application.DoEvents();
    Check(shown==5 && !(bool)type.GetField("running",All).GetValue(form),"capture failure did not stop and warn once");
    type.GetMethod("FinishCaptureOnUi",All).Invoke(form,new object[]{"Capture error: simulated USB disconnect"});Application.DoEvents();Check(shown==5,"repeated completion reopened capture warning");
-   info.Text="COM77 · Logging\r\nEvents: 1,001 | Clock: RTT 2 ms\r\nCH0: 250   CH1: 251   CH2: 250   CH3: 250\r\nLast: CH1 · RTC 100999 ms";
-   form.ClientSize=new Size(1100,920);Application.DoEvents();Check(info.ClientSize.Height>=info.Font.Height*4,"GPIO information panel clips four status rows");
+   info.Text="COM77 · Logging\r\nEvents: 1,001 | Clock: RTT 2 ms\r\nLast: CH1 · RTC 100999 ms";
+   foreach(int width in new[]{1044,1100,1450}) {
+    form.ClientSize=new Size(width,920);Application.DoEvents();var network=form.Controls.Find("networkTimeCard",true)[0];
+    Check(network.Parent==split && network.Top-network.Margin.Top==infoCard.Bottom+infoCard.Margin.Bottom && infoCard.Height>=280,"GPIO panel does not extend to network-time panel after resize");
+    Check(info.ClientSize.Height>=info.Font.Height*3 && Array.TrueForAll(leds,l=>l.Parent.ClientRectangle.Contains(l.Bounds)) && Array.TrueForAll(counts,l=>l.Parent.ClientRectangle.Contains(l.Bounds)),"GPIO text/LEDs clipped after resize");
+   }
+   form.ClientSize=new Size(1100,920);Application.DoEvents();
    using(var bitmap=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(bitmap,new Rectangle(Point.Empty,bitmap.Size));bitmap.Save(Path.Combine(folder,"gpio-panel-1100.png"));}
    form.Close();
   }
-  Console.WriteLine("PASS "+checks+" delivered-GUI once-per-recording warning checks; no discovery or hardware.");return 0;
+  Console.WriteLine("PASS "+checks+" delivered-GUI warning/panel/port-LED checks; no discovery or hardware.");return 0;
  }catch(Exception e){Console.Error.WriteLine(e);return 1;}}
 }

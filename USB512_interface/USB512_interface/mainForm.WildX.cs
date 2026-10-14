@@ -135,9 +135,9 @@ namespace USB512_interface
             online.Controls.Add(Card("Live monitor","Open a neural or camera preview during USB recording.",monitor),0,2);
             var health=Stack(44,0);health.Controls.Add(ActionRow(btnSystemInfoRefresh,infoDetails,btnSdInfo),0,0);
             systemInfoSummary.Dock=DockStyle.Fill;systemInfoSummary.Margin=Padding.Empty;systemInfoSummary.BorderStyle=BorderStyle.None;health.Controls.Add(systemInfoSummary,0,1);
-            var healthAndGpio=Stack(0,156);
+            var healthAndGpio=Stack(232,306,0);
             healthAndGpio.Controls.Add(Card("Device health",null,health),0,0);
-            healthAndGpio.Controls.Add(BuildGpioRtcInfo(),0,1);online.Controls.Add(healthAndGpio,1,0);
+            healthAndGpio.Controls.Add(BuildGpioRtcInfo(),0,1);online.Controls.Add(healthAndGpio,1,0);online.SetRowSpan(healthAndGpio,3);
 
             var activity=Stack(0,40,0,0);
             activity.RowStyles[0].SizeType=activity.RowStyles[2].SizeType=activity.RowStyles[3].SizeType=SizeType.Absolute;
@@ -149,7 +149,7 @@ namespace USB512_interface
             activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,1);
             lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=new Padding(0,0,0,6);lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
             llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=new Padding(0,0,0,6);llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
-            var activityCard=Card("Capture activity",null,activity);online.Controls.Add(activityCard,0,1);online.SetColumnSpan(activityCard,2);
+            var activityCard=Card("Capture activity",null,activity);online.Controls.Add(activityCard,0,1);
             bool arrangingActivity=false;
             Action arrangeActivity=delegate {
                 if(arrangingActivity || activity.ClientSize.Width<=0)return;
@@ -168,6 +168,8 @@ namespace USB512_interface
                     int minimumActivityHeight=(int)Math.Ceiling(150*scale);
                     int activityHeight=Math.Max(minimumActivityHeight,heightNeeded);
                     online.RowStyles[1].Height=activityHeight;
+                    healthAndGpio.RowStyles[0].Height=232*scale;
+                    healthAndGpio.RowStyles[1].Height=online.RowStyles[0].Height-healthAndGpio.RowStyles[0].Height+activityHeight;
                     online.Height=Math.Max((int)Math.Ceiling(826*scale)+activityHeight-minimumActivityHeight,usbPage.ClientSize.Height-usbPage.Padding.Vertical);
                 } finally {arrangingActivity=false;}
             };
@@ -180,7 +182,8 @@ namespace USB512_interface
             RefreshRecordingSummary(DateTime.UtcNow);recordingSummaryTimer.Start();
             var clock=Stack(82,44,0);timeStatus.Dock=DockStyle.Fill;timeStatus.AutoEllipsis=true;clock.Controls.Add(timeStatus,0,0);clock.Controls.Add(ActionRow(timeSettings),0,1);
             clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="The network clock is an app-local UTC reference. Recordings retain their device timestamps.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
-            online.Controls.Add(Card("Network time / UTC",null,clock),1,2);
+            var networkTimeCard=Card("Network time / UTC",null,clock);networkTimeCard.Name="networkTimeCard";
+            healthAndGpio.Controls.Add(networkTimeCard,0,2);
 
             bleWorkspace=new NpBleForm() {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
             bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};

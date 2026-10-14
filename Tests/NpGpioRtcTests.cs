@@ -52,7 +52,8 @@ static class NpGpioRtcTests {
    for(uint i=0;i<1000;i++)port.Feed(Event(i));
    Until(()=>port.Reads>=1003);logger.NeuralFirstReceiveUtc=DateTime.UtcNow;
    logger.Dispose();string panel=logger.Describe("Stopped");
-   Check(panel.Contains("COM77 · Stopped") && panel.Contains("CH1: 1,001") && panel.Contains("RTC 100999 ms") && panel.Contains("RTT"),"GPIO panel lost final device/channel/clock/event information");
+   Check(panel.Contains("COM77 · Stopped") && logger.ChannelCounts.SequenceEqual(new long[]{0,1001,0,0}) && panel.Contains("RTC 100999 ms") && panel.Contains("RTT") && !logger.IsLogging,"GPIO panel lost final device/channel/clock/event information");
+   var copiedCounts=logger.ChannelCounts;copiedCounts[1]=0;Check(logger.ChannelCounts[1]==1001,"UI snapshot could alter recorded port counts");
   }
   string[] lines=File.ReadAllLines(Path.Combine(folder,"gpio_rtc_events.txt"));var receipt=Receipt(folder);
   Check(lines.Length==1001 && lines[0].Contains("Sequence: 4294967295") && lines.Last().Contains("Sequence: 999"),"Stop did not drain every accepted event in order");

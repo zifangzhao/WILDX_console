@@ -1,11 +1,9 @@
-# WILDX 1.0.0.20
+# WILDX 1.0.0.21
 
-[Download the installer](WILDX_console-Setup-1.0.0.20.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.21.exe).
 
-USB recording now displays elapsed time, actual recording-folder size and available disk space. GPIO / RTC starts the selected WILD board with recording and saves event, clock-query and session files beside neural data. Its panel below Device health shows COM/state, per-channel counts, latest event and clock status, retaining final values after Stop.
+GPIO / RTC now extends from Device health down to Network time, beside Capture activity. Four LEDs show Port 1–4 activity (CH0–CH3), with event counts. LEDs flash for 350 ms after new activity, dim after Stop/error and retain final counts. These indicate trigger events; the protocol does not report sustained input levels.
 
-GPIO failures warn and allow neural recording to continue. Sensor, GPIO, metadata and capture warnings appear once per category per recording. Fatal neural errors still stop recording. Existing V1 firmware remains supported; no firmware upgrade is required. BLE SD recording is not yet connected to the local GPIO logger.
+Software checks passed for LED timing/mapping, counts/Stop/reset, panel alignment and window resizing, recording metrics, capture ownership and existing protocol/catalog behavior. All 13 extracted runtime files match the checked payload; all 12 non-GUI files are unchanged from 1.0.0.20. No hardware or installer execution; existing V1 firmware remains supported.
 
-Software checks passed with a simulated serial device and ordinary local files. All 13 extracted runtime files match the checked payload; all 12 non-GUI files are unchanged from 1.0.0.19. No hardware or installer execution. Physical V1/V2/GPIO qualification remains pending.
-
-See [validation and workflow](../Note/RECORDING_STATUS_GPIO_RTC_20261014.md), [manifest](release-manifest.json), and [checksums](SHA256SUMS.txt).
+[UI render with sample values](../docs/screenshots/usb-recording-gpio.png), [validation](../Note/GPIO_PANEL_LEDS_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).

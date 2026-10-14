@@ -86,6 +86,8 @@ namespace USB512_interface {
   readonly long[] channelEvents=new long[4];byte lastChannel;ulong lastDeviceMs;
   string error;internal string Error {get{lock(gate)return error;}}
   internal long EventsSaved {get{return Interlocked.Read(ref saved);}}
+  internal long[] ChannelCounts {get{lock(gate)return (long[])channelEvents.Clone();}}
+  internal bool IsLogging {get{return running;}}
   internal long SyncReplies {get{lock(gate)return clock.Replies;}}
   internal bool ClockSynchronized {get{lock(gate)return clock.Best!=null && Now()>=clock.LastReply && Now()-clock.LastReply<=10000;}}
   internal NpGpioRtcLogger(string directory,NpGpioRtcDevice selected,INpGpioRtcPort transport=null) {
@@ -157,7 +159,6 @@ namespace USB512_interface {
   internal string Describe(string state) {
    lock(gate)return device.Port+" · "+state+Environment.NewLine+
     "Events: "+EventsSaved.ToString("N0")+" | Clock: "+(!ClockSynchronized?"unsynced":"RTT "+clock.Best.Rtt+" ms")+Environment.NewLine+
-    String.Join("   ",channelEvents.Select((n,c)=>"CH"+c+": "+n.ToString("N0")))+Environment.NewLine+
     (received==0?"Waiting for events":"Last: CH"+lastChannel+" · RTC "+lastDeviceMs+" ms")+(Error==null?"":Environment.NewLine+Error);
   }
   void SaveReceipt(string state) {

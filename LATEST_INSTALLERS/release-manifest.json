@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.20",
+  "version": "1.0.0.21",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked USB recording metrics, GPIO RTC logger and once-per-recording warnings; hardware qualification pending",
+  "status": "Software-checked extended GPIO RTC panel and four port activity LEDs; hardware qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.20.exe",
-    "sha256": "25F61149E5BE13790D7B4318DAD9C0995742A76FE201968CECD0F413613F0394",
-    "bytes": 2330105
+    "file": "WILDX_console-Setup-1.0.0.21.exe",
+    "sha256": "2E173744E9ED2930C84DE3503715F2967F47123D3F954C6A02D3EDF4D32A4FF0",
+    "bytes": 2330640
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "11ACCF7C3893D26E5D08546D5C4E73DA35F94B17FEC243A542A5C1565921897E",
-      "bytes": 1331200
+      "sha256": "62CDC6AA978C7458939B1F1F9985CD68B20942DD91E042B3E62FA99E2C1BA2D4",
+      "bytes": 1333248
     },
     {
       "path": "WILDX_console.exe.config",
@@ -109,18 +109,11 @@
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
     "companionRebuilt": false,
-    "gpioRtcProtocolClockLifecycleChecks": 25,
-    "recordingWarningsPanelPolicyBundleChecks": 18,
+    "gpioRtcProtocolClockLifecycleChecks": 26,
+    "recordingWarningsPanelPolicyBundleChecks": 29,
     "recordingMetricsChecks": 16,
-    "v1RecordingProfileLegacyUiChecks": 103,
-    "metadataPersistenceChecks": 22,
-    "recordingBundleChecks": 203,
-    "universalWorkflowChecks": 106,
-    "usbUiLifecycleAssertions": 134,
-    "v1V2TargetedRecoveryChecks": 125,
-    "folderNamingTimeUiChecks": 53,
     "standaloneChecks": 294,
-    "sensorLifecycleChecks": 5,
+    "usbUiLifecycleAssertions": 134,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
@@ -157,67 +150,27 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "fe4e7827347110f77202b0e7c7e763a63f2f3b83",
-    "guiSha256": "11ACCF7C3893D26E5D08546D5C4E73DA35F94B17FEC243A542A5C1565921897E",
+    "sourceBase": "f29100c918bd02766a6a80f8b800f0b90b3b2e3b",
+    "guiSha256": "62CDC6AA978C7458939B1F1F9985CD68B20942DD91E042B3E62FA99E2C1BA2D4",
     "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
-    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.19",
-    "source": "Recording metrics, USB GPIO RTC logger and info panel, warning notifications, shared root auxiliary references, report integration and version",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.20",
+    "source": "Taller GPIO panel/right-column alignment, four activity LEDs, read-only event counter snapshot and version",
     "sourceInputs": [
       {
-        "path": "Neuropixels/USBConsoleV2/NpV2UsbConsole.cs",
-        "sha256": "363FEDA57AF4EC08F18930776C12E4CA0AB650C5AC045843559FAFD37FC50EA9"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/NpRecovery.cs",
-        "sha256": "3DD743CF81DA538F254D07AFF9E358D1DD8FD66D5472B2F645A8BA935B008820"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/mainForm.cs",
-        "sha256": "E82BD7D886A4F710222F0E84BCB7A58891FE65984635C4CA647C7A3D3A0EC36E"
-      },
-      {
         "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
-        "sha256": "94C649B807126FEF1A1115BB2FDF8FD2AA388B914E117F9242EDA0EF8237DB84"
+        "sha256": "AE5BDFB2EF68C03624BB8D1F24BB1EDC18755F15375C7309522A13151709671C"
       },
       {
         "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
-        "sha256": "298C10796484B3D151D75428ED4AF46B670F034CFF881F42C0671D23D6EA672E"
+        "sha256": "6ADF26254AD0C5C4A03DD5105190CC086B242B748363866648B20E17A572AD5E"
       },
       {
         "path": "USB512_interface/USB512_interface/NpGpioRtcLogger.cs",
-        "sha256": "D09DE8B61496848A81E074BEC8D836A315A258A1870C527FB0995AA3874466E3"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/NpUsbSensors.cs",
-        "sha256": "E114D3B71E6A4D2928E3F5ED0B158398F7528897A27BFA9A0304831649D7099F"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/NpUsbSensorMonitor.cs",
-        "sha256": "4DED31C00F4FBEBF234C49D606B4285475F3C8430527D285E137DFA6A2967070"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/WILDX_console.csproj",
-        "sha256": "2CF395A4C5DA0FF3F2F6D771211A22007F552C5C8A4E378198DB6A947C2723EE"
+        "sha256": "3E6065C141D7AF81AA4C503000E26034D96DF6105BC58F16190FD0D8C9EB69C9"
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "818E173103B2C39F255FA20FA368D83805DA3FAF0D6622BE1A865D25C02EA2E1"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/Properties/Settings.settings",
-        "sha256": "858051700A8D081D592322F82292E3821902BC4379077F1C3E3867733C30B09E"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/Properties/Settings.Designer.cs",
-        "sha256": "733CF0CC55B07A6AEDEC3A4B46A9643F45BE877CE0BFEE5F0A972A354531CF83"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/NpDiagnosticsForm.cs",
-        "sha256": "0706C3B52551831B81FC8AA254CBF43C65AF8DA740D98EB9F8C227A6B363814D"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/NpRecordingSettings.cs",
-        "sha256": "B6EF4CB7F1949A5538CE8B295618754ACB21D08738301774E4C8B7778F0EFB43"
+        "sha256": "7A88501D627490AD63B22A89E38AFD1F50C5949F0431A3179051A0D2BBCFB42D"
       }
     ],
     "excludedPendingChanges": [
@@ -229,7 +182,7 @@
       "USB512_interface/USB512_interface/NpMediaUsbForm.cs",
       "legacy/"
     ],
-    "evidence": "Note/RECORDING_STATUS_GPIO_RTC_20261014.md"
+    "evidence": "Note/GPIO_PANEL_LEDS_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -244,7 +197,7 @@
     "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
     "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_gpio_rtc_1.0.0.20/WILDX_console-Setup-1.0.0.19.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_gpio_leds_1.0.0.21/WILDX_console-Setup-1.0.0.20.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -384,27 +337,27 @@
     "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   },
   "retainedPreviousReleaseValidation": {
-    "version": "1.0.0.19",
-    "manifest": "legacy/20261014_before_gpio_rtc_1.0.0.20/release-manifest.json",
+    "version": "1.0.0.20",
+    "manifest": "legacy/20261014_before_gpio_leds_1.0.0.21/release-manifest.json",
     "validation": {
       "guiBuildWarnings": 0,
       "guiBuildErrors": 0,
-      "companionBuildWarnings": 0,
-      "companionBuildErrors": 0,
+      "companionRebuilt": false,
+      "gpioRtcProtocolClockLifecycleChecks": 25,
+      "recordingWarningsPanelPolicyBundleChecks": 18,
+      "recordingMetricsChecks": 16,
       "v1RecordingProfileLegacyUiChecks": 103,
       "metadataPersistenceChecks": 22,
-      "xmlGeometryRateChecks": 107,
       "recordingBundleChecks": 203,
-      "v1PairedDecoderAssertions": 74176,
-      "v2SdV11V12MetadataChecks": 196,
       "universalWorkflowChecks": 106,
       "usbUiLifecycleAssertions": 134,
       "v1V2TargetedRecoveryChecks": 125,
       "folderNamingTimeUiChecks": 53,
       "standaloneChecks": 294,
+      "sensorLifecycleChecks": 5,
       "independentInstallerExtraction": true,
       "extractedRuntimeFilesVerified": 13,
-      "unrelatedRuntimeFilesUnchanged": 11,
+      "nonGuiRuntimeFilesUnchanged": 12,
       "hardwareAccess": false,
       "installerExecuted": false,
       "liveHardwareThroughputQualified": false
@@ -432,13 +385,33 @@
     "perProbeMetadataReferencesParent": true,
     "startupFailurePolicy": "warn and continue neural recording",
     "runtimeFailurePolicy": "warn and continue neural recording",
-    "panel": "below Device health; port/state, events, channel counts, latest event and clock RTT; retained after Stop",
+    "panel": "Right column from Device health to Network time, alongside Capture activity; COM/state, events, latest RTC event/clock and four port activity LEDs/counts; final counts retained after Stop",
     "queueCapacity": 16384,
     "clockMapping": "lowest RTT PC midpoint offset among latest 16 valid replies; raw observations retained; replies stale after 10 s",
     "neuralAdcClockSynchronized": false,
     "firmwareUpgradePerformed": false,
     "referenceCommit": "af7ea5950d16b4c8f4d60d81950e738b555de8d1",
-    "hardwareTested": false
+    "hardwareTested": false,
+    "portLeds": {
+      "ports": 4,
+      "wireChannels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "portLabels": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "meaning": "trigger event activity; not sustained input logic levels",
+      "pulseMilliseconds": 350,
+      "pollMilliseconds": 100,
+      "stopDimsAndRetainsCounts": true,
+      "freshRecordingResets": true
+    }
   },
   "recordingWarnings": {
     "scope": "USB recording",
