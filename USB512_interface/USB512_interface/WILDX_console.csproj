@@ -78,6 +78,7 @@
     <Compile Include="NpCaptureModes.cs" />
     <Compile Include="NpModeDialog.cs" />
     <Compile Include="NpRecovery.cs" />
+    <Compile Include="NpGpioRtcLogger.cs" />
     <Compile Include="NpFolderNaming.cs" />
     <Compile Include="NpUsbSensors.cs" />
     <Compile Include="NpUsbSensorMonitor.cs" />
@@ -126,6 +127,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="mainForm.WildX.cs" />
+    <Compile Include="mainForm.GpioRtc.cs" />
     <Compile Include="WildXTheme.cs" />
     <Compile Include="Ble\NpSdControl.cs" />
     <Compile Include="Ble\NpV1BleProtocol.cs" />

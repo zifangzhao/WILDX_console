@@ -2885,6 +2885,7 @@ namespace USB512_interface
 
         private void NpV2ObserveReceive(DateTime first, DateTime last, string folder)
         {
+            ObserveRecordingSummary(first,folder);
             if (npSessionFolder == null || folder != runFolder || first == DateTime.MinValue) return;
             if (npLastReceiveUtc == DateTime.MinValue) NpFirstReceive(first, folder);
             npLastReceiveUtc = last;
@@ -3059,7 +3060,10 @@ namespace USB512_interface
                             string warning=Np2ConfigClient.AppliedWarning(reply);if(warning!=null)degradedWarnings.Add(warning);
                             receipts.Add("P"+(request.Port+1)+": applied; ID="+BitConverter.ToString(reply.ConfigurationId).Replace("-","")+"; CRC32="+reply.PayloadCrc.ToString("X8")+"; verification="+reply.Verification+"; transaction="+reply.Transaction+(warning==null?"":"; "+warning));
                         }
-                        if(degradedWarnings.Count!=0)appliedDegradedWarning=String.Join("\r\n",degradedWarnings);
+                        if(degradedWarnings.Count!=0) {
+                            appliedDegradedWarning=String.Join("\r\n",degradedWarnings);
+                            PostToUi(delegate {WarnRecordingOnce("probe-configuration",appliedDegradedWarning);});
+                        }
                         if(settings!=null){
                             const string receiptFile="requested-configuration-applied-receipts.txt";
                             File.WriteAllLines(Path.Combine(runFolder,receiptFile),receipts);
@@ -3075,9 +3079,12 @@ namespace USB512_interface
                         if(IsHandleCreated)Invoke((Action)delegate {
                             if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed)neuropixelsPreview.ConfirmProbeDefinitions();
                         });
-                    }, new Action<NpImuDisplay>(delegate(NpImuDisplay display) { PostToUi(delegate { if(runFolder==sensorFolder)imuTelemetry.SetNpSample(display,false); }); }), npRecordMiscSignals,npMergeProbeDat,saveRaw:false);
+                    }, new Action<NpImuDisplay>(delegate(NpImuDisplay display) { PostToUi(delegate { if(runFolder==sensorFolder)ObserveNpImu(display,false); }); }), npRecordMiscSignals,npMergeProbeDat,saveRaw:false);
                 npV2RecoverySafe = NpV2Retryable(result); npV2RecoveryComplete = result.Complete;
-                PostToUi(delegate { if(runFolder==sensorFolder && result.OptionalImuDisplay!=null)imuTelemetry.SetNpSample(result.OptionalImuDisplay,true); });
+                PostToUi(delegate { if(runFolder==sensorFolder) {
+                    if(result.OptionalImuDisplay!=null)ObserveNpImu(result.OptionalImuDisplay,true);
+                    if(result.OptionalImuError!=null)WarnRecordingOnce("sensor-monitor","Sensor monitoring error: "+result.OptionalImuError);
+                }});
                 string completedFolder = runFolder;
                 PostToUi(delegate { NpV2ObserveReceive(result.FirstReceiveUtc, result.LastReceiveUtc, completedFolder); });
                 complete=result.Complete;metadataFailure=result.Error??(result.Complete?null:result.Warning);
@@ -3108,8 +3115,10 @@ namespace USB512_interface
                         (result.Warning ?? "See neuropixels_np2usb_status.txt for incomplete integrity details");
                 else
                     message = "Capture error: V2 NP2 USB recording could not continue: " + (result.Error ?? "no USB blocks were captured");
+                if(!result.Complete && !result.CancelledBeforeCapture && result.Error==null && result.ReceivedBlocks!=0U)
+                    PostToUi(delegate {WarnRecordingOnce("dat-integrity",message);});
                 string degradedWarning=appliedDegradedWarning??(result.FinalSource==null?null:result.FinalSource.DegradedWarning);
-                if(degradedWarning!=null)message+="\r\n"+degradedWarning;
+                if(degradedWarning!=null){message+="\r\n"+degradedWarning;PostToUi(delegate {WarnRecordingOnce("probe-configuration",degradedWarning);});}
             }
             catch (OperationCanceledException ex) { metadataFailure=ex.Message;message = ex.Message; }
             catch (Exception ex) { npV2RecoverySafe = NpV2Retryable(ex); metadataFailure=DescribeCaptureFailure(ex);message = "Capture error: " + metadataFailure; }

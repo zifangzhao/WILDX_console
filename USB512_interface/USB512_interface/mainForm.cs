@@ -341,6 +341,7 @@ namespace USB512_interface
         {
             lblSpeed.Text = "WinUSB idle";
             lblRecInfo.Text = "Select a Neuropixels USB device and destination folder, or use BLE Mode.";
+            RefreshGpioRtcDevices();
             RefreshDeviceList();
         }
 
@@ -1007,6 +1008,8 @@ namespace USB512_interface
             captureStartedAtUtc = DateTime.UtcNow;
             if(npRecordingSettings!=null)npRecordingSettings.Context("recording_start_time_utc_host",captureStartedAtUtc.ToString("O",System.Globalization.CultureInfo.InvariantCulture));
             running = true;
+            ResetRecordingSummary(runFolder);
+            StartGpioRtcRecording();
             npSessionLabel.Enabled=false;
             if(calibrationButton!=null)calibrationButton.Enabled=false;
             if (selectedDeviceKind != DeviceKind.Ce64Msc && selectedDeviceKind != DeviceKind.NpV2)
@@ -1231,6 +1234,7 @@ namespace USB512_interface
 
         private void StopCapture()
         {
+            FreezeRecordingSummary(DateTime.UtcNow);
             NpCancelRecovery();
             if (!running && captureThread == null)
                 return;
@@ -1437,7 +1441,7 @@ namespace USB512_interface
                     var now=DateTime.UtcNow;
                     if((now-lastSensorPreview).TotalMilliseconds>=100 || sensors.Valid!=lastSensorPreviewValid) {
                         lastSensorPreview=now;lastSensorPreviewValid=sensors.Valid;NpImuDisplay display=sensors.GetDisplay();
-                        PostToUi(delegate {imuTelemetry.SetNpSample(display,false);});
+                        PostToUi(delegate {ObserveNpImu(display,false);});
                     }
                 };
                 parser.Configure(runFolder,profile,modeCaps,new NpCaptureOptions(npMergeProbeDat,npUpsampleAp15To20));
@@ -1836,7 +1840,9 @@ namespace USB512_interface
                 NpImuDisplay finalImu=sensors==null?null:sensors.GetDisplay();
                 PostToUi(delegate {
                     if(cameraPreview!=null && !cameraPreview.IsDisposed)cameraPreview.KeepAliveWhileRecording=false;
-                    if(finalImu!=null)imuTelemetry.SetNpSample(finalImu,true);FinishCaptureOnUi(message);
+                    if(finalImu!=null)ObserveNpImu(finalImu,true);
+                    if(camera!=null && (camera.SequenceGaps!=0 || camera.FramingErrors!=0))WarnRecordingOnce("camera-integrity","Camera data contains sequence gaps or framing errors. See neuropixels_capture_status.txt; camera completeness is independent of neural completeness.");
+                    FinishCaptureOnUi(message);
                 });
             }
         }
@@ -3543,7 +3549,6 @@ namespace USB512_interface
             long frames = cameraFrames;
             long gaps = sequenceGaps;
             long recoveries = Interlocked.Read(ref transportRecoveries);
-            long recordedBytes = GetRecordedOutputBytes();
             int npQueueCapacityBlocks=npHostQueueCapacityBlocks;
             int npQueuedBlocks=Math.Max(0,Volatile.Read(ref npHostQueueQueuedBlocks));
             long npQueueCapacityBytes=npHostQueueCapacityBytes;
@@ -3556,12 +3561,7 @@ namespace USB512_interface
                 "\r\nRAM reserve "+npQueueUsedMiB.ToString("F1")+" / "+
                 (npQueueCapacityBytes/1048576.0).ToString("F0")+" MiB queued; "+
                 npQueueFreeSeconds.ToString("F2")+" s free ("+npQueuedBlocks+" / "+npQueueCapacityBlocks+" blocks)":"";
-            string remainingDiskSpace = GetRemainingDiskSpace();
             string clockSyncStatistics = GetClockSyncStatistics(now);
-            TimeSpan elapsed = (captureStartedAtUtc == DateTime.MinValue) ?
-                TimeSpan.Zero : now - captureStartedAtUtc;
-            string elapsedText = ((int)elapsed.TotalHours).ToString("00") + ":" +
-                elapsed.Minutes.ToString("00") + ":" + elapsed.Seconds.ToString("00");
             ImuSample imuSample;
             bool hasImuSample;
             ImuFreshness imuFreshness;
@@ -3588,9 +3588,7 @@ namespace USB512_interface
                     " kS/s | LFP " + (neuropixelsLfpRate / 1000.0).ToString("F2") + " kS/s"+
                     (selectedDeviceKind==DeviceKind.XeNp?" (per-probe average, "+npActiveProbeCount+" probes)":"");
                 lblRecInfo.Text = "Payload " + payloadRateMBytes.ToString("F2") +
-                    " MiB/s | elapsed " + elapsedText + " | recorded " +
-                    (recordedBytes / 1000000000.0).ToString("F2") +
-                    " GB | disk free " + remainingDiskSpace + "\r\nsequence gaps " +
+                    " MiB/s\r\nsequence gaps " +
                      gaps.ToString("N0") + " (permanent packet loss); USB pipe recoveries " +
                      recoveries.ToString("N0") + "; " + clockSyncStatistics +
                      npRamReserve+
@@ -3744,9 +3742,9 @@ namespace USB512_interface
             catch (ObjectDisposedException) { return 0; }
         }
 
-        private string GetRemainingDiskSpace()
+        private string GetRemainingDiskSpace(string folder=null)
         {
-            string folder = !String.IsNullOrEmpty(runFolder) ? runFolder : saveFolder;
+            if(folder==null)folder = !String.IsNullOrEmpty(runFolder) ? runFolder : saveFolder;
             if (String.IsNullOrEmpty(folder))
                 return "n/a";
 
@@ -4168,6 +4166,11 @@ namespace USB512_interface
 
         private void FinishCaptureOnUi(string message)
         {
+            FreezeRecordingSummary(DateTime.UtcNow);
+            StopGpioRtcRecording();
+            if(message.IndexOf("metadata warning:",StringComparison.OrdinalIgnoreCase)>=0)WarnRecordingOnce("metadata",message);
+            if((selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && message.StartsWith("Capture error:",StringComparison.Ordinal))
+                WarnRecordingOnce("capture",message+"\r\n\r\nRecording stopped to protect continuity. Treat these files as incomplete; inspect the capture status in the recording folder.");
             if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed)
                 neuropixelsPreview.KeepAliveWhileRecording=false;
             captureThread = null;
@@ -4194,14 +4197,13 @@ namespace USB512_interface
                     NpRecordingSettings.RefreshBundle(runFolder);
                     if(npSessionFolder!=null && !String.Equals(npSessionFolder,runFolder,StringComparison.OrdinalIgnoreCase))NpRecordingSettings.RefreshBundle(npSessionFolder);
                 }
-                    catch(Exception ex){lastCaptureReport+="\r\nReport persistence failed: "+ex.Message;lblRecInfo.Text+="\r\nReport persistence warning: "+ex.Message;}
+                    catch(Exception ex){lastCaptureReport+="\r\nReport persistence failed: "+ex.Message;lblRecInfo.Text+="\r\nReport persistence warning: "+ex.Message;WarnRecordingOnce("report-persistence","Capture report/index could not be saved: "+ex.Message);}
             }
             if (message.StartsWith("Capture error:", StringComparison.Ordinal))
             {
                 if(selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) {
                     string statusFile=selectedDeviceKind==DeviceKind.NpV2?"neuropixels_np2usb_status.txt":"neuropixels_capture_status.txt";
-                    MessageBox.Show(this,message+"\r\n\r\nRecording stopped to protect continuity. Treat these files as incomplete; see "+statusFile+" for firmware and host-queue diagnostics.",
-                        "Neuropixels recording",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    WarnRecordingOnce("capture",message+"\r\n\r\nRecording stopped to protect continuity. Treat these files as incomplete; see "+statusFile+" for firmware and host-queue diagnostics.");
                     return;
                 }
                 MessageBox.Show(this, message + "\r\n\r\n" +

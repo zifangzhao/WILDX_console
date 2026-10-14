@@ -73,6 +73,7 @@ namespace USB512_interface {
     Csv((attempt?0:Interlocked.Read(ref neuropixelsLfpRows)).ToString()),Csv(Utc(npPreviousReceiveUtc)),Csv(Utc(npLastReceiveUtc)),Csv(detail)})+"\r\n");
   }
   private void NpFirstReceive(DateTime when,string folder) {
+   ObserveRecordingSummary(when,folder);
    if(npSessionFolder==null || folder!=runFolder)return;
    npLastReceiveUtc=when;
    NpJournal(npSessionHasGap?"resumed_first_host_receive":"first_host_receive",folder,

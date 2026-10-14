@@ -14,6 +14,11 @@ namespace USB512_interface {
   internal long Records {get{return Interlocked.Read(ref records);}}
   internal long Samples {get{return Interlocked.Read(ref samples);}}
   internal NpImuDisplay LastDisplay;
+  void ReportError(Exception ex) {
+   Error=ex.Message;
+   LastDisplay=LastDisplay??new NpImuDisplay {Values=new double[9]};LastDisplay.Error=Error;
+   if(display!=null)try{display(LastDisplay);}catch{}
+  }
   // Preserve callers/idle diagnostic signature; never retain the borrowed handle.
   internal NpUsbSensorMonitor(NpV2UsbDevice captureDevice,string directory,string deviceUid,bool saveSensors,Action<NpImuDisplay> onDisplay) {
    folder=directory;uid=deviceUid;display=onDisplay;saving=saveSensors;
@@ -21,7 +26,7 @@ namespace USB512_interface {
     if(saving)journal=new NpClockJournal(folder,uid,Guid.NewGuid().ToString("N"));
     sensors=new NpUsbSensors(folder,saving);
     if(saving)raw=new FileStream(Path.Combine(folder,"imu_snapshots.bin"),FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);
-   }catch(Exception ex){Error=ex.Message;sensorDisabled=true;}
+   }catch(Exception ex){ReportError(ex);sensorDisabled=true;}
   }
   // Only caller-owned stopped/control-only windows may invoke this method.
   // Host bulk-arrival time is NEVER a precision-clock observation.
@@ -34,7 +39,7 @@ namespace USB512_interface {
     RequireSnapshot(snapshot,0);
     journal.Add(0,BitConverter.ToUInt32(snapshot,16),start+(end-start)/2,
      (end-start)/2.0+1000,"USB_EP0_CONTROL_ONLY");
-   }catch(Exception ex){Error=ex.Message;}
+   }catch(Exception ex){ReportError(ex);}
   }
   internal void FeedBlock(byte[] block,int offset) {
    if(disposed || sensorDisabled)return;
@@ -46,7 +51,7 @@ namespace USB512_interface {
     uint magic=BitConverter.ToUInt32(block,offset+256);
     if(magic==0U)return; // Sparse publisher clears only magic; other bytes may be stale.
     FeedSnapshot(block,offset+256);
-   }catch(Exception ex){Error=ex.Message;sensorDisabled=true;}
+   }catch(Exception ex){ReportError(ex);sensorDisabled=true;}
   }
   // Explicit idle HIL may feed snapshots obtained through its OWN device handle.
   internal void FeedSnapshot(byte[] snapshot,int offset) {
@@ -59,7 +64,7 @@ namespace USB512_interface {
     Interlocked.Exchange(ref samples,sensors.ImuSamples);Interlocked.Increment(ref records);
     long now=journal==null?DateTime.UtcNow.Ticks/10:journal.NowMicroseconds;
     if(now>=nextDisplay){nextDisplay=now+200000;LastDisplay=sensors.GetDisplay();if(display!=null)try{display(LastDisplay);}catch{}}
-   }catch(Exception ex){Error=ex.Message;sensorDisabled=true;}
+   }catch(Exception ex){ReportError(ex);sensorDisabled=true;}
   }
   static void RequireSnapshot(byte[] snapshot,int offset) {
    if(snapshot==null || offset<0 || snapshot.Length-offset<140 ||

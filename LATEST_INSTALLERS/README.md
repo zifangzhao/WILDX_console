@@ -1,11 +1,11 @@
-# WILDX 1.0.0.19
+# WILDX 1.0.0.20
 
-[Download the installer](WILDX_console-Setup-1.0.0.19.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.20.exe).
 
-V1 probe boxes are directly editable and default to the active profile. Advertised 20 kHz profiles no longer show the generic experimental popup. Existing V1 firmware remains supported; no firmware upgrade is required.
+USB recording now displays elapsed time, actual recording-folder size and available disk space. GPIO / RTC starts the selected WILD board with recording and saves event, clock-query and session files beside neural data. Its panel below Device health shows COM/state, per-channel counts, latest event and clock status, retaining final values after Stop.
 
-Metadata saves retry brief file locks and preserve completed replacement files when persistence fails. Stop reports metadata warnings separately from capture errors, with destination paths and native errors in the recording folder/report. The completion UI no longer repeats settings/probe/XML writes. Neural data encoding and live DAT writing are unchanged.
+GPIO failures warn and allow neural recording to continue. Sensor, GPIO, metadata and capture warnings appear once per category per recording. Fatal neural errors still stop recording. Existing V1 firmware remains supported; no firmware upgrade is required. BLE SD recording is not yet connected to the local GPIO logger.
 
-Software checks passed, including real local file locks, legacy settings, AP/LFP decoding, metadata bundles, XML, V2 SD byte equivalence and Stop/recovery ownership. All 13 extracted runtime files match the checked payload; 11 are unchanged from 1.0.0.18. Only GUI and shared metadata companion changed. No hardware or installer execution. Yoshi's hardware retest and exact remote Windows cause remain pending.
+Software checks passed with a simulated serial device and ordinary local files. All 13 extracted runtime files match the checked payload; all 12 non-GUI files are unchanged from 1.0.0.19. No hardware or installer execution. Physical V1/V2/GPIO qualification remains pending.
 
-See [validation](../Note/V1_METADATA_FIX_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt), and [workflow](../docs/universal-workflow.md).
+See [validation and workflow](../Note/RECORDING_STATUS_GPIO_RTC_20261014.md), [manifest](release-manifest.json), and [checksums](SHA256SUMS.txt).

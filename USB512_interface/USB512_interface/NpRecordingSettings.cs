@@ -226,7 +226,8 @@ namespace USB512_interface {
     string child=Path.Combine(folder,"probe"+item.Key);Directory.CreateDirectory(child);
     // Sidecars follow each per-probe DAT. Never copy bulk neural/sensor data or
     // use a merged/root XML as the single-probe channel layout.
-    foreach(string file in Directory.GetFiles(folder))if(MetadataFile(file) && Path.GetFileName(file)!="recording_settings.json" && !Path.GetExtension(file).Equals(".xml",StringComparison.OrdinalIgnoreCase))
+    foreach(string file in Directory.GetFiles(folder))if(MetadataFile(file) && !Path.GetFileName(file).StartsWith("gpio_rtc_",StringComparison.OrdinalIgnoreCase) &&
+     Path.GetFileName(file)!="recording_warnings.txt" && Path.GetFileName(file)!="recording_settings.json" && !Path.GetExtension(file).Equals(".xml",StringComparison.OrdinalIgnoreCase))
      File.Copy(file,Path.Combine(child,Path.GetFileName(file)),true);
     string calibration=Path.Combine(folder,"calibration");
     if(Directory.Exists(calibration)){
@@ -235,6 +236,10 @@ namespace USB512_interface {
     }
     var local=(Dictionary<string,object>)json.DeserializeObject(json.Serialize(document));
     local["parent_recording_settings"]="../recording_settings.json";local["folder_probe_mask"]=1<<(item.Key-1);
+    if(local.ContainsKey("gpio_rtc")) {
+     var gpio=(Dictionary<string,object>)local["gpio_rtc"];
+     foreach(string key in new[]{"session_file","events_file","clock_queries_file"})if(gpio.ContainsKey(key) && gpio[key]!=null)gpio[key]="../"+gpio[key];
+    }
     foreach(string kind in new[]{"misc_output","camera_output"}) {
      var shared=(Dictionary<string,object>)local[kind];
      foreach(string key in new[]{"file","frame_index_file"})if(shared.ContainsKey(key) && shared[key]!=null)shared[key]="../"+shared[key];

@@ -1,6 +1,6 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.19**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.20**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -19,6 +19,8 @@ V1 Recording settings can read the existing firmware's profile while the logger 
 V1 probe boxes are directly editable and initially reflect the active firmware profile. Advertised connectors do not establish physical probe presence. Advertised 20 kHz V1 profiles no longer show the generic experimental confirmation; two-probe 30 kHz retains its qualification warning. Metadata saves retry transient file locks, retain completed failed replacements beside the data, and report destination paths and native errors. Stop reports metadata persistence separately from USB/decoder failures; the report UI no longer repeats final settings/probe/XML writes. See [metadata fix and validation](Note/V1_METADATA_FIX_20261014.md).
 
 The probe configuration page shows three stacked cards with independent IMRO loading and physical shank/site maps. The USB workspace has one entry through **Recording settings**. Live USB and BLE previews have a **Display HPF** checkbox and editable cutoff; defaults are 300 Hz for USB and 100 Hz for the 500-sample/s BLE preview, initially disabled. Filtering affects the display only. [Probe page](docs/screenshots/probe-configuration.png), [filter controls](docs/screenshots/live-hpf.png), and [validation](Note/PROBE_CONFIGURATION_UI_20261013.md).
+
+USB Capture activity displays elapsed recording time, actual recording-folder size and available destination disk space. The **GPIO / RTC** selector starts the selected WILD GPIO RTC board with each USB recording and saves its event, clock-query and session files beside the neural data. A panel below Device health shows COM port, logging state, per-channel counts, latest event and clock status; final values remain after Stop. GPIO startup failure warns and allows neural recording to continue. Sensor errors warn once per category per recording. See [behavior and software checks](Note/RECORDING_STATUS_GPIO_RTC_20261014.md).
 
 New USB app recordings save decoded DAT without an extra neural RAW file. V1 saves AP/LFP; V2 saves AP. The combined channel layout and live writing remain unchanged. Recording metadata and probe files are saved alongside data, including per-probe sidecars, exact configuration binaries, calibration CSVs and timing/error reports. `recording_files.json` indexes each recording folder and its subfolders. SD downloads archive the recorded metadata bytes and preserve missing-map information explicitly. See [recording bundles](docs/recording-bundles.md).
 
@@ -53,7 +55,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX 1.0.0.19](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.19.exe), packaged on 2026-10-14, with V1 connector and metadata persistence fixes. No V1 firmware upgrade is required. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [validation](Note/V1_METADATA_FIX_20261014.md) and [folder naming](docs/folder-naming.md).
+The current installer is [WILDX 1.0.0.20](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.20.exe), packaged on 2026-10-14, with recording metrics, GPIO/RTC integration and warning popups. No V1 firmware upgrade is required. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [validation](Note/RECORDING_STATUS_GPIO_RTC_20261014.md) and [folder naming](docs/folder-naming.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 

@@ -82,6 +82,7 @@ namespace USB512_interface {
 
  internal sealed class NpImuDisplay {
   internal double[] Values;
+  internal string Error;
   internal uint Valid,Sequence,DeviceMs,ImuError,EnvironmentError,Overflow;
  }
 

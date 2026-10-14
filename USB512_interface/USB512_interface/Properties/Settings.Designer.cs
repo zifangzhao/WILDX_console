@@ -42,5 +42,9 @@ namespace USB512_interface.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Np2ConfigurationIntents { get { return (string)this["Np2ConfigurationIntents"]; } set { this["Np2ConfigurationIntents"] = value; } }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GpioRtcDevice { get { return (string)this["GpioRtcDevice"]; } set { this["GpioRtcDevice"] = value; } }
     }
 }
