@@ -1476,7 +1476,7 @@ namespace USB512_interface
                 }
             }
         }
-        internal void WriteReport(bool recordingComplete)
+        internal void WriteReport(bool recordingComplete,bool rawSaved=true)
         {
             if(row==null)return;
             var report=new List<string>{"merge_mode=live","file=neuropixels_ap.dat","channels="+ChannelCount,"rows="+WrittenRows,"sample_hz="+rate,
@@ -1485,7 +1485,7 @@ namespace USB512_interface
                 "channel_order=ascending physical probe; contiguous hardware channels 0..383 per probe",
                 "alignment=first complete SuperSync row per probe; phase offsets retained, not corrected; NOT proof of simultaneous ADC samples",
                 "gaps=one combined DAT per recovery segment; no padding, interpolation or invented samples",
-                "tails=unpaired_tail retains unmatched complete rows and uint64 little-endian source ticks; native RAW retained"};
+                "tails=unpaired_tail retains unmatched complete rows and uint64 little-endian source ticks","raw_saved="+rawSaved};
             for(int p=1;p<=3;p++)if((mask&(1U<<(p-1)))!=0)report.Add("probe"+p+"_first_row_source_tick="+(1600-phases[p-1])%1600+"; decoded_rows="+rings[p].Produced+"; unpaired_tail_rows="+rings[p].Count);
             File.WriteAllLines(Path.Combine(folder,"np2_merge_status.txt"),report);
         }
@@ -1537,6 +1537,9 @@ namespace USB512_interface
             : this(folder,preview,buffers,correctSamples,false) { }
 
         internal NpV2DatRecorder(string folder, Action<int, short[]> preview, NpV2BufferPolicy buffers, Action<int, short[]> correctSamples, bool mergeProbes)
+            : this(folder,preview,buffers,correctSamples,mergeProbes,true) { }
+
+        internal NpV2DatRecorder(string folder, Action<int, short[]> preview, NpV2BufferPolicy buffers, Action<int, short[]> correctSamples, bool mergeProbes, bool saveRaw)
         {
             if (String.IsNullOrWhiteSpace(folder)) throw new ArgumentNullException("folder");
             this.folder = folder; this.preview = preview;
@@ -1546,12 +1549,14 @@ namespace USB512_interface
             for (int i = 0; i < InputCapacityBlocks; i++) free.Add(new PendingBlock(free));
             if(mergeProbes)merged=new NpV2LiveDatWriter(folder,buffers);
             else for (int p = 1; p <= 3; p++) apFiles[p] = new NpV2BatchedWriter(buffers.WriteBuffersPerProbe);
+            if(saveRaw) {
             rawFile = new FileStream(Path.Combine(folder, "neuropixels_np2usb.raw"), FileMode.CreateNew,
                 FileAccess.Write, FileShare.Read, 4 * 1024 * 1024, FileOptions.SequentialScan);
             queued[0] = new BlockingCollection<PendingBlock>(InputCapacityBlocks);
             workers[0] = new Thread(new ThreadStart(RawLoop))
                 { IsBackground = true, Priority = ThreadPriority.Normal, Name = "NP2 raw writer" };
             workers[0].Start();
+            }
             for (int p = 1; p <= 3; p++)
             {
                 int probe = p;
@@ -1567,7 +1572,7 @@ namespace USB512_interface
         internal bool MergedDat {get{return merged!=null && ProbeCount(liveProbeMask)>1;}}
         internal long TotalRows { get { if(merged!=null)return merged.WrittenRows;long rows = 0; for (int p = 1; p <= 3; p++) rows += apRows[p]; return rows; } }
         internal long RowsForProbe(int probe) { return probe >= 1 && probe <= 3 ? merged!=null && (liveProbeMask&(1U<<(probe-1)))!=0?merged.WrittenRows:apRows[probe] : 0; }
-        internal void WriteMergeReport(bool recordingComplete){if(merged!=null)merged.WriteReport(recordingComplete);}
+        internal void WriteMergeReport(bool recordingComplete){if(merged!=null)merged.WriteReport(recordingComplete,rawFile!=null);}
         internal long RawDroppedBlocks { get { return Interlocked.Read(ref rawDroppedBlocks); } }
         internal long DecodedDroppedLaneBlocks { get { return Interlocked.Read(ref decodedDroppedLaneBlocks); } }
         internal string RawError { get { return DescribeWorkerError(Volatile.Read(ref rawFailure)); } }
@@ -1584,10 +1589,22 @@ namespace USB512_interface
         internal void Enqueue(byte[] source, int offset, NpV2WireVerifier verifier)
         {
             EnqueueCore(source, offset, verifier, true);
+            ThrowIfDatOnlyFailed();
+        }
+
+        internal void ThrowIfDatOnlyFailed()
+        {
+            // DAT-only capture has no fallback file: surface an asynchronous
+            // decode/write failure to the USB owner's existing stop/drain path.
+            if(rawFile==null) {
+                Exception error=Volatile.Read(ref decodeFailure);
+                if(error!=null)throw new IOException("NP2 DAT recording failed.",error);
+            }
         }
 
         internal void EnqueueRaw(byte[] source, int offset)
         {
+            if(rawFile==null)throw new IOException("USB block verification failed; DAT-only recording cannot continue.");
             EnqueueCore(source, offset, null, false);
         }
 
@@ -1609,12 +1626,12 @@ namespace USB512_interface
                  * remaining far below the firmware/USB headroom. */
                 if (decode)
                 {
-                    DisableDecode(new IOException("NP2 DAT decoder queue reached capacity; decoded output was disabled so raw capture could continue."));
+                    DisableDecode(new IOException(rawFile==null?"NP2 DAT decoder queue reached capacity; recording cannot continue.":"NP2 DAT decoder queue reached capacity; decoded output was disabled so raw capture could continue."));
                     decode = false;
                 }
                 if (!free.TryTake(out block, 1))
                 {
-                    Interlocked.Increment(ref rawDroppedBlocks);
+                    if(rawFile!=null)Interlocked.Increment(ref rawDroppedBlocks);
                     if (includeDecoded) Interlocked.Add(ref decodedDroppedLaneBlocks, Math.Max(1, ProbeCount(verifier == null ? 0U : verifier.LiveProbeMask)));
                     return;
                 }
@@ -1623,10 +1640,10 @@ namespace USB512_interface
             try
             {
                 Buffer.BlockCopy(source, offset, block.Bytes, 0, block.Bytes.Length);
-                bool raw = Volatile.Read(ref rawFailure) == null;
+                bool raw = rawFile!=null && Volatile.Read(ref rawFailure) == null;
                 uint decodeMask = decode ? liveProbeMask : 0U;
                 users = (raw ? 1 : 0) + ProbeCount(decodeMask);
-                if (!raw) Interlocked.Increment(ref rawDroppedBlocks);
+                if (rawFile!=null && !raw) Interlocked.Increment(ref rawDroppedBlocks);
                 if (includeDecoded && decodeMask == 0U)
                     Interlocked.Add(ref decodedDroppedLaneBlocks, Math.Max(1, ProbeCount(verifier == null ? 0U : verifier.LiveProbeMask)));
                 if (users == 0) { free.Add(block); return; }
@@ -1650,8 +1667,8 @@ namespace USB512_interface
         {
             if (completed) return;
             completed = true;
-            for (int worker = 0; worker <= 3; worker++) queued[worker].CompleteAdding();
-            for (int worker = 0; worker <= 3; worker++) if (workers[worker] != Thread.CurrentThread) workers[worker].Join();
+            for (int worker = 0; worker <= 3; worker++) if(queued[worker]!=null)queued[worker].CompleteAdding();
+            for (int worker = 0; worker <= 3; worker++) if (workers[worker]!=null && workers[worker] != Thread.CurrentThread) workers[worker].Join();
             if(merged!=null)try{merged.Complete();}catch(Exception ex){DisableDecode(ex);}
         }
 
@@ -1787,7 +1804,7 @@ namespace USB512_interface
             finally
             {
                 free.Dispose();
-                for (int worker = 0; worker <= 3; worker++) queued[worker].Dispose();
+                for (int worker = 0; worker <= 3; worker++) if(queued[worker]!=null)queued[worker].Dispose();
                 for (int probe = 1; probe <= 3; probe++)
                     try { if(apFiles[probe]!=null)apFiles[probe].Dispose(); } catch (Exception ex) { DisableDecode(ex); }
                 if(merged!=null)try{merged.Dispose();}catch(Exception ex){DisableDecode(ex);}
@@ -1881,14 +1898,14 @@ namespace USB512_interface
 #if !NP2_CONSOLE_STANDALONE
             , Action<NpImuDisplay> sensorDisplay=null, bool saveSensors=false
 #endif
-            , bool mergeProbes=false
+            , bool mergeProbes=false, bool saveRaw=true
             )
         {
             return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow, confirmConfiguration
 #if !NP2_CONSOLE_STANDALONE
                 ,sensorDisplay,saveSensors
 #endif
-                ,mergeProbes
+                ,mergeProbes,saveRaw
                 );
         }
 
@@ -1897,7 +1914,7 @@ namespace USB512_interface
 #if !NP2_CONSOLE_STANDALONE
             , Action<NpImuDisplay> sensorDisplay=null, bool saveSensors=false
 #endif
-            , bool mergeProbes=false
+            , bool mergeProbes=false, bool saveRaw=true
             )
         {
             if (String.IsNullOrWhiteSpace(devicePath)) throw new ArgumentNullException("devicePath");
@@ -1951,9 +1968,9 @@ namespace USB512_interface
 #if !NP2_CONSOLE_STANDALONE
                 var calibration = NpCalibrationSet.Read(folder);
                 if(calibration!=null)calibration.RequireModel(true,7);
-                dat = new NpV2DatRecorder(folder, decodedApRow, buffers, calibration == null ? null : (Action<int, short[]>)((probe, row) => calibration.Correct(probe, row, 1, null, 0)),mergeProbes);
+                dat = new NpV2DatRecorder(folder, decodedApRow, buffers, calibration == null ? null : (Action<int, short[]>)((probe, row) => calibration.Correct(probe, row, 1, null, 0)),mergeProbes,saveRaw);
 #else
-                dat = new NpV2DatRecorder(folder, decodedApRow, buffers,null,mergeProbes);
+                dat = new NpV2DatRecorder(folder, decodedApRow, buffers,null,mergeProbes,saveRaw);
 #endif
                 worker = new Thread(delegate()
                 {
@@ -1978,7 +1995,7 @@ namespace USB512_interface
                                         catch (Exception ex)
                                         {
                                             verificationWarning = ex;
-                                            warnings.Enqueue("Verifier disabled after " + DescribeError(ex) + "; raw capture continued.");
+                                            warnings.Enqueue("Stream verification failed: " + DescribeError(ex) + (saveRaw?"; raw capture continued.":"; DAT recording stopped."));
                                         }
                                     }
                                     if (verified) {
@@ -1997,7 +2014,7 @@ namespace USB512_interface
                     }
                     catch (Exception ex) { Interlocked.CompareExchange(ref workerError, ex, null); }
                 });
-                worker.IsBackground = true; worker.Name = "NP2 V2 continuity + raw logger"; worker.Priority = ThreadPriority.AboveNormal; worker.Start();
+                worker.IsBackground = true; worker.Name = "NP2 V2 continuity verifier"; worker.Priority = ThreadPriority.AboveNormal; worker.Start();
 
                 using (var device = NpV2UsbDevice.Open(devicePath))
                 {
@@ -2108,6 +2125,7 @@ namespace USB512_interface
                         while (continuous || received < targetBlocks)
                         {
                             if (Volatile.Read(ref workerError) != null) throw new IOException("NP2 verifier/logger failed; recording marked incomplete.", workerError);
+                            dat.ThrowIfDatOnlyFailed();
                             if (!stopRequested && cancelled())
                             {
                                 if (!continuous) throw new OperationCanceledException("Recording stopped by user.");
@@ -2359,7 +2377,8 @@ namespace USB512_interface
                 "format=" + result.Verifier.FormatName,
                 "codec=" + result.Verifier.Codec,
                 "application_crc=" + result.Verifier.ApplicationCrcPolicy,
-                "raw_file=neuropixels_np2usb.raw",
+                "raw_saved=" + (saveRaw && File.Exists(Path.Combine(folder,"neuropixels_np2usb.raw"))),
+                "raw_file=" + (saveRaw?"neuropixels_np2usb.raw":"none"),
                 "decoded_ap_files=" + (result.DecodedDatProbeMask == 0U ? "none" : result.DecodedDatMerged?"neuropixels_ap.dat (live combined AP)":"neuropixels_ap.dat (one per live physical probe)"),
                 "decoded_ap_layout="+(result.DecodedDatMerged?"live combined; sample then ascending physical probe, 384 contiguous channels per probe":"per probe"),
                 "decoded_ap_probe_mask=0x" + result.DecodedDatProbeMask.ToString("X1", CultureInfo.InvariantCulture),
@@ -2984,6 +3003,7 @@ namespace USB512_interface
                         settings.Context("planned_ap_sample_rate_hz",capabilities.SampleHz);
                         settings.Streams(false,null,false);
                         settings.Context("misc_signals_requested",npRecordMiscSignals);
+                        settings.Context("raw_usb_saved",false);
                         settings.Context("imu_delivery",npRecordMiscSignals?"sparse verified bulk snapshots are monitored and saved; not lossless native 200 Hz acquisition":"sparse verified bulk snapshots are monitored only; saving disabled by recording settings");
                         settings.Context("imu_timing","IMU I2C completion tick; analogin.dat is a 1250 Hz held-value grid from the first valid IMU snapshot, not AP sample zero");
                         settings.Context("clock_observations_file",npRecordMiscSignals?"clock_observations.csv; offline linear fit on Stop; RAW/AP samples are not retimed":"not written; monitoring uses sparse verified bulk snapshots only");
@@ -3007,7 +3027,7 @@ namespace USB512_interface
                         npPreviewMask = (int)capabilities.SelectedProbeMask;
                         PrepareNpPreviewForCapture((int)capabilities.SampleHz, npPreviewMask, true, 12);
                         neuropixelsPreview.PrepareProbeDefinitions(previewDefinitions);
-                        llblSavefile.Text = npMergeProbeDat ? Path.Combine(runFolder,"neuropixels_ap.dat")+" (live combined AP) + RAW" : "Per-probe AP DAT + neuropixels_np2usb.raw";
+                        llblSavefile.Text = npMergeProbeDat ? Path.Combine(runFolder,"neuropixels_ap.dat")+" (live combined AP)" : "Per-probe AP DAT";
                     });
                 }
                 string sensorFolder=runFolder;
@@ -3055,7 +3075,7 @@ namespace USB512_interface
                         if(IsHandleCreated)Invoke((Action)delegate {
                             if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed)neuropixelsPreview.ConfirmProbeDefinitions();
                         });
-                    }, new Action<NpImuDisplay>(delegate(NpImuDisplay display) { PostToUi(delegate { if(runFolder==sensorFolder)imuTelemetry.SetNpSample(display,false); }); }), npRecordMiscSignals,npMergeProbeDat);
+                    }, new Action<NpImuDisplay>(delegate(NpImuDisplay display) { PostToUi(delegate { if(runFolder==sensorFolder)imuTelemetry.SetNpSample(display,false); }); }), npRecordMiscSignals,npMergeProbeDat,saveRaw:false);
                 npV2RecoverySafe = NpV2Retryable(result); npV2RecoveryComplete = result.Complete;
                 PostToUi(delegate { if(runFolder==sensorFolder && result.OptionalImuDisplay!=null)imuTelemetry.SetNpSample(result.OptionalImuDisplay,true); });
                 string completedFolder = runFolder;
@@ -3084,7 +3104,7 @@ namespace USB512_interface
                 else if (result.CancelledBeforeCapture)
                     message = "Stopped WILD-X V2 NP2 USB preparation before capture began; no USB blocks were captured. Setup files remain incomplete.";
                 else if (result.Error == null && result.ReceivedBlocks != 0U)
-                    message = "Stopped WILD-X V2 NP2 best-effort recording: raw USB capture kept running despite warning(s). " +
+                    message = "Stopped WILD-X V2 NP2 recording with incomplete DAT output. " +
                         (result.Warning ?? "See neuropixels_np2usb_status.txt for incomplete integrity details");
                 else
                     message = "Capture error: V2 NP2 USB recording could not continue: " + (result.Error ?? "no USB blocks were captured");

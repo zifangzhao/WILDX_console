@@ -1,0 +1,200 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.15",
+  "releaseDate": "2026-10-13",
+  "status": "Software-checked probe configuration and editable display HPF; hardware qualification pending",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.15.exe",
+    "sha256": "F1AB3C4811F402C1862C34E282B3BE5EBE4AB7921BCE0C3AEAD5CB6C1F3C91C2",
+    "bytes": 2308525
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "2FF2C1AF19F9DFFB79BD337AE2D6C8B700F9C9A5D843980CB110114DD02AFE49",
+      "bytes": 1288192
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2",
+      "bytes": 532
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA",
+      "bytes": 5757952
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B",
+      "bytes": 24576
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "C5D398F5839F647B20291A97F809809E214624DA86F6A692CE9A1108B3FEB654",
+      "bytes": 211456
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6",
+      "bytes": 151552
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E",
+      "bytes": 364544
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9",
+      "bytes": 434
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782",
+      "bytes": 458
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A",
+      "bytes": 152064
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC",
+      "bytes": 55808
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01",
+      "bytes": 449
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306",
+      "bytes": 340
+    }
+  ],
+  "compatibleFirmware": {
+    "repository": "https://github.com/zifangzhao/XE_NP",
+    "branch": "V2",
+    "directory": "LATEST_FIRMWARE/V2_NP2",
+    "loaderCrc32": "6408DBB8",
+    "usbCrc32": "BFF0A8A2",
+    "appCrc32": "E07FB882",
+    "fusedHexSha256": "674FEB9E365A5F1C91D1A004B4D7D35D447F238E2CBF122A1A79AF0A55E82154",
+    "usbOnlyHexSha256": "0FD1F92E529A5593D5C9DE1B84570EA8CF4B91D031C6A148FD2F0F1FD2A33D51",
+    "appOnlyHexSha256": "3E7CC1944BCB1190374AA7C09552991C122A031DB64769A3ABB1263285BF95AD",
+    "appUpdateContainerSha256": "720A6CFD9DC31211CC8FD32600105695794DBFA773DCA07046D4C80BA3EBAD95"
+  },
+  "liveDat": {
+    "enabledBy": "Merge active probes into one DAT per signal band",
+    "writeDuringCapture": true,
+    "postRecordingMerge": false,
+    "path": "neuropixels_ap.dat at recording/segment root",
+    "sampleFormat": "signed little-endian int16",
+    "order": "S0 probe1 channels1..384, S0 probe2 channels1..384, S0 probe3 channels1..384, then S1 in the same order; active physical probes only",
+    "channelsPerProbe": 384,
+    "probeDataSubfolders": false,
+    "boundedPendingRowsPerProbe": 2048,
+    "tailFiles": "unpaired_tail with exact source ticks",
+    "rawPreserved": true,
+    "phaseOffsets": "recorded, not corrected",
+    "recoverySegmentsSeparate": true,
+    "metadataAlongsideData": true,
+    "sdDownloadCombined": false
+  },
+  "releaseValidation": {
+    "guiBuildWarnings": 0,
+    "guiBuildErrors": 0,
+    "probeConfigurationChecks": 65,
+    "displayHighPassChecks": 3896,
+    "universalWorkflowChecks": 106,
+    "standaloneChecks": 294,
+    "independentInstallerExtraction": true,
+    "extractedRuntimeFilesVerified": 13,
+    "nonGuiRuntimeFilesUnchanged": 12,
+    "hardwareAccess": false,
+    "installerExecuted": false,
+    "fullEndToEndPairQualified": false
+  },
+  "retainedSrImuHardwareEvidence": {
+    "guiSha256": "53E5AFDB5A4C238C7A1AAC8C80F86C63D716B57F55BD1D0E4CD052C78FD9963B",
+    "installer": "WILDX_console-Setup-1.0.0.12-SR_IMU_20261013.exe",
+    "validation": {
+      "scope": "Existing short real USB capture and exact checked GUI; packaging checks only this pass",
+      "mask": 7,
+      "sampleHz": 20000,
+      "requestedSeconds": 30,
+      "dataSeconds": 29.354,
+      "received": 22916,
+      "verified": 22916,
+      "rawDrops": 0,
+      "decodedDrops": 0,
+      "imuRecords": 584,
+      "validAccelGyroDisplayCallbacks": 125,
+      "magnetometerAvailable": false,
+      "sensorError": 9,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "installerExecuted": false,
+      "hardwareAccessDuringPackaging": false,
+      "fullEndToEndPairQualified": false,
+      "fusedBootRetested": false,
+      "damagedShankHardwareQualified": false,
+      "enduranceQualified": false
+    },
+    "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this layout-only release"
+  },
+  "buildProvenance": {
+    "sourceBase": "1f7d00906770214c806d0802d2f7d025f148a11a",
+    "guiSha256": "2FF2C1AF19F9DFFB79BD337AE2D6C8B700F9C9A5D843980CB110114DD02AFE49",
+    "build": "Private cached GUI component build, frozen companion and helper binaries",
+    "source": "Stacked physical probe configuration cards and editable display filter",
+    "evidence": "Note/PROBE_CONFIGURATION_UI_20261013.md"
+  },
+  "knownLimitations": [
+    "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
+    "Native phase offsets retained without resampling or timing correction",
+    "Recovery segments never joined across unknown gaps",
+    "SD downloads remain per-probe DAT",
+    "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained"
+  ],
+  "previousPublishedInstaller": "legacy/20261013_before_probe_ui_1.0.0.15/WILDX_console-Setup-1.0.0.14.exe",
+  "retainedLiveDatSoftwareEvidence": {
+    "version": "1.0.0.14",
+    "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
+    "scope": "Recording implementation unchanged; no live DAT or hardware rerun for this UI release",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "liveDatAssertions": 16943326,
+      "factoryCalibrationAssertions": 716128,
+      "fileMergeRecoveryAssertions": 10501835,
+      "usbUiLifecycleAssertions": 134,
+      "standaloneAssertions": 294,
+      "sensorLifecycleChecks": 5,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "liveHardwareThroughputQualified": false,
+      "fullEndToEndPairQualified": false
+    }
+  },
+  "probeConfiguration": {
+    "layout": "Three stacked cards with independent IMRO/JSON import and shared editor actions",
+    "map": "Physical shanks and IMRO-selected sites, rotated sideways with shaft width enlarged for readability",
+    "externalUsbButtonRemoved": true,
+    "requestChangesCommittedOnSave": true
+  },
+  "displayHighPass": {
+    "control": "Checkbox and editable cutoff in Hz",
+    "defaultEnabled": false,
+    "usbDefaultHz": 300,
+    "bleDefaultHz": 100,
+    "scope": "Live display only; recorded samples unchanged",
+    "validation": "0 < cutoff < displayed sample rate / 2; invalid targets visibly bypass filter"
+  }
+}

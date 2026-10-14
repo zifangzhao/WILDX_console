@@ -24,16 +24,16 @@ static class Np2LiveDatTests
     static byte[] Block(ulong sequence,uint mask,uint hz,bool packed){ulong ticks=mask==7?40960UL:mask==3?(packed?61440UL:46080UL):122880UL;return (byte[])make.Invoke(null,new object[]{sequence,sequence*ticks,mask,mask,hz,packed,UInt32.MaxValue});}
     static int[] Ports(uint mask){return Enumerable.Range(1,3).Where(p=>(mask&(1U<<(p-1)))!=0).ToArray();}
     static string ProbePath(string root,int probe,int count){return Path.Combine(count==1?root:Path.Combine(root,"probe"+probe),"neuropixels_ap.dat");}
-    static void Layout(string root,uint mask,uint hz,bool packed,bool correction)
+    static void Layout(string root,uint mask,uint hz,bool packed,bool correction,bool saveRaw=false)
     {
-        string name=mask+"-"+hz+"-"+packed+"-"+correction;
+        string name=mask+"-"+hz+"-"+packed+"-"+correction+"-raw"+saveRaw;
         string original=Path.Combine(root,name+"-per-probe"),combined=Path.Combine(root,name+"-live");
         Directory.CreateDirectory(original);Directory.CreateDirectory(combined);
         var policy=New("NpV2BufferPolicy",64);
         Action<int,short[]> correct=correction?(Action<int,short[]>)((p,row)=>{for(int ch=0;ch<384;ch++)row[ch]=(short)(row[ch]+p*100);}):null;
         Action<int,short[]> preview=(p,row)=>{throw new IOException("Synthetic preview failure; recording must remain valid.");};
         var baseline=New("NpV2DatRecorder",original,null,policy,correct);
-        var live=New("NpV2DatRecorder",combined,preview,policy,correct,true);
+        var live=New("NpV2DatRecorder",combined,preview,policy,correct,true,saveRaw);
         var verifier=New("NpV2WireVerifier");var wire=new MemoryStream();
         try{
             for(ulong seq=0;seq<121;seq++){
@@ -49,7 +49,9 @@ static class Np2LiveDatTests
             Check(Get(live,"DecodeError")==null && Get(live,"RawError")==null,"Live writer failed");
             Check((long)Get(live,"RawDroppedBlocks")==0 && (long)Get(live,"DecodedDroppedLaneBlocks")==0,"Live writer dropped data");
             Check(((string)Get(live,"PreviewError")).Contains("Synthetic preview"),"Preview failure test not exercised");
-            Check(File.ReadAllBytes(Path.Combine(combined,"neuropixels_np2usb.raw")).SequenceEqual(wire.ToArray()),"Live merge changed native RAW bytes");
+            if(saveRaw)Check(File.ReadAllBytes(Path.Combine(combined,"neuropixels_np2usb.raw")).SequenceEqual(wire.ToArray()),"Live merge changed native RAW bytes");
+            else {Check(!File.Exists(Path.Combine(combined,"neuropixels_np2usb.raw")),"DAT-only recording created RAW");
+                Check(((Array)live.GetType().GetField("queued",All).GetValue(live)).GetValue(0)==null,"DAT-only recording started a RAW queue");}
             int[] ports=Ports(mask);var sources=ports.Select(p=>File.ReadAllBytes(ProbePath(original,p,ports.Length))).ToArray();
             long common=sources.Min(bytes=>bytes.Length/768);byte[] dat=File.ReadAllBytes(file);
             Check(dat.LongLength==common*ports.Length*768,"Combined complete row extent differs from per-probe reference");
@@ -64,7 +66,7 @@ static class Np2LiveDatTests
                     Check(ticks.Length==tail/768*8 && BitConverter.ToUInt64(ticks,0)==(ulong)((1600-phase)%1600)+(ulong)common*1600UL,"Tail source tick provenance incorrect");}
             }
             Check(!Directory.GetDirectories(combined,"probe*").Any(),"Live mode left duplicate probe DAT folders");
-            string report=File.ReadAllText(Path.Combine(combined,"np2_merge_status.txt"));Check(report.Contains("merge_mode=live") && report.Contains("phase offsets retained, not corrected"),"Live merge/timing receipt missing");
+            string report=File.ReadAllText(Path.Combine(combined,"np2_merge_status.txt"));Check(report.Contains("raw_saved="+saveRaw),"RAW metadata differs from recording policy");Check(report.Contains("merge_mode=live") && report.Contains("phase offsets retained, not corrected"),"Live merge/timing receipt missing");
             var settings=New("NpRecordingSettings",combined,null,"live_usb",true,null,null,"FIXTURE-UID");
             Call(settings,"PlannedLayout",(int)mask,true,false);Call(settings,"Actual",(int)hz,(int)hz,(int)mask,ports.Length>1,false,"Synthetic verified native V2 profile; live combined output");Call(settings,"Finished",true,null);Call(settings,"Write");
             var json=(Dictionary<string,object>)new JavaScriptSerializer().DeserializeObject(File.ReadAllText(Path.Combine(combined,"recording_settings.json")));
@@ -88,6 +90,36 @@ static class Np2LiveDatTests
             Check(new FileInfo(Path.Combine(folder,"neuropixels_ap.dat")).Length%2304==0,"Failure left a partial merged sample row");
         }finally{((IDisposable)recorder).Dispose();wire.Dispose();}
     }
+    static void DatOnlyFailure(string root)
+    {
+        string folder=Path.Combine(root,"dat-only-failure");Directory.CreateDirectory(folder);
+        var verifier=New("NpV2WireVerifier");int rows=0;
+        Action<int,short[]> fail=(p,row)=>{if(p==2 && Interlocked.Increment(ref rows)==10)throw new IOException("Injected DAT-only failure");};
+        var recorder=New("NpV2DatRecorder",folder,null,New("NpV2BufferPolicy",64),fail,true,false);
+        try{
+            bool stopped=false;
+            for(ulong seq=0;seq<100 && !stopped;seq++){
+                byte[] bytes=Block(seq,7,20000,false);Call(verifier,"Feed",bytes,0);
+                try{Call(recorder,"Enqueue",bytes,0,verifier);}catch(IOException){stopped=true;}
+                Thread.Sleep(2);
+            }
+            Check(stopped,"DAT-only decoder failure did not reach the USB owner");
+            bool pollFailed=false;try{Call(recorder,"ThrowIfDatOnlyFailed");}catch(IOException){pollFailed=true;}
+            Check(pollFailed,"DAT-only failure requires another USB block to be noticed");
+            var clock=Stopwatch.StartNew();Call(recorder,"Complete");Call(recorder,"WriteMergeReport",false);
+            Check(clock.ElapsedMilliseconds<5000,"DAT-only failure deadlocked final drain");
+            Check(((string)Get(recorder,"DecodeError")).Contains("Injected DAT-only failure"),"DAT-only error was lost");
+            Check(Get(recorder,"RawError")==null && (long)Get(recorder,"RawDroppedBlocks")==0,"Disabled RAW reported write failure/drops");
+            Check(!File.Exists(Path.Combine(folder,"neuropixels_np2usb.raw")),"Failure created unexpected RAW fallback");
+            Check(new FileInfo(Path.Combine(folder,"neuropixels_ap.dat")).Length%2304==0,"DAT-only failure left a partial sample row");
+            string report=File.ReadAllText(Path.Combine(folder,"np2_merge_status.txt"));Check(report.Contains("raw_saved=False") && report.Contains("recording_segment_complete=False"),"Incomplete DAT-only receipt missing");
+        }finally{((IDisposable)recorder).Dispose();}
+        folder=Path.Combine(root,"dat-only-verification-failure");Directory.CreateDirectory(folder);
+        using(var invalid=(IDisposable)New("NpV2DatRecorder",folder,null,New("NpV2BufferPolicy",64),null,true,false)){
+            bool stopped=false;try{Call(invalid,"EnqueueRaw",Block(0,1,20000,false),0);}catch(IOException){stopped=true;}
+            Check(stopped && !Directory.GetFiles(folder).Any(),"Unverified blocks silently discarded or saved in DAT-only mode");
+        }
+    }
     static void BoundedSkewAbort(string root)
     {
         string folder=Path.Combine(root,"skew-abort");Directory.CreateDirectory(folder);var verifier=New("NpV2WireVerifier");Call(verifier,"Feed",Block(0,3,20000,true),0);
@@ -104,7 +136,7 @@ static class Np2LiveDatTests
         app=Assembly.LoadFrom(Path.GetFullPath(args[0]));make=Assembly.LoadFile(Path.GetFullPath(args[2])).GetType("NpV2UsbConsoleTests",true).GetMethod("MakeV3Block",All);
         string root=Path.GetFullPath(args[1]);Directory.CreateDirectory(root);
         Layout(root,1,20000,false,false);Layout(root,3,20000,true,true);Layout(root,3,30000,false,false);Layout(root,7,15000,false,false);Layout(root,7,20000,false,true);
-        DecodeFailureKeepsRaw(root);BoundedSkewAbort(root);
-        Console.WriteLine("PASS "+checks+" actual-app live DAT checks: pre-Stop file growth, exact sample/probe/channel blocks, RAW, correction, preview isolation, tails/ticks, metadata/XML and bounded skew/abort; no hardware.");return 0;
+        Layout(root,1,20000,false,false,true);DecodeFailureKeepsRaw(root);DatOnlyFailure(root);BoundedSkewAbort(root);
+        Console.WriteLine("PASS "+checks+" actual-app live DAT checks: pre-Stop file growth, exact sample/probe/channel blocks, DAT-only/optional RAW, correction, preview isolation, tails/ticks, metadata/XML and bounded skew/abort; no hardware.");return 0;
     }catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

@@ -37,7 +37,7 @@ internal static class TestNp2UsbImuLifecycle
             int startAt = source.IndexOf("device.Start(targetBlocks)", StringComparison.Ordinal);
             Check(monitorAt >= 0 && headersAt > monitorAt && startAt > headersAt, "SNS1 headers are not armed before NP2 source start");
             Check(source.IndexOf("npRecordMiscSignals ? new Action<NpImuDisplay>", StringComparison.Ordinal) < 0 &&
-                source.IndexOf("}), npRecordMiscSignals,npMergeProbeDat);", StringComparison.Ordinal) >= 0, "IMU monitoring remains gated by record-misc persistence");
+                source.IndexOf("}), npRecordMiscSignals,npMergeProbeDat,saveRaw:false);", StringComparison.Ordinal) >= 0, "IMU monitoring remains gated by record-misc persistence");
             string systemInfo = File.ReadAllText(Path.GetFullPath(args[1]));
             int guardAt = systemInfo.IndexOf("private bool CanRefreshIdleNp2Sensor()", StringComparison.Ordinal);
             int readAt = systemInfo.IndexOf("device.GetSensorSnapshot()", guardAt, StringComparison.Ordinal);

@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.15",
+  "version": "1.0.0.16",
   "releaseDate": "2026-10-13",
-  "status": "Software-checked probe configuration and editable display HPF; hardware qualification pending",
+  "status": "Software-checked DAT-only USB recording; hardware throughput qualification pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.15.exe",
-    "sha256": "F1AB3C4811F402C1862C34E282B3BE5EBE4AB7921BCE0C3AEAD5CB6C1F3C91C2",
-    "bytes": 2308525
+    "file": "WILDX_console-Setup-1.0.0.16.exe",
+    "sha256": "917ED1EFB832D5FCFFCB8A48B0C985F563AB54F346DBDCAA0B2B1452B908B571",
+    "bytes": 2308708
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "2FF2C1AF19F9DFFB79BD337AE2D6C8B700F9C9A5D843980CB110114DD02AFE49",
-      "bytes": 1288192
+      "sha256": "751F2E53E9D9EC0D47E1FE2AAAA3C3CB671392BE3C5C70B10AA0F155B0106966",
+      "bytes": 1288704
     },
     {
       "path": "WILDX_console.exe.config",
@@ -98,25 +98,27 @@
     "probeDataSubfolders": false,
     "boundedPendingRowsPerProbe": 2048,
     "tailFiles": "unpaired_tail with exact source ticks",
-    "rawPreserved": true,
+    "rawPreserved": false,
     "phaseOffsets": "recorded, not corrected",
     "recoverySegmentsSeparate": true,
     "metadataAlongsideData": true,
-    "sdDownloadCombined": false
+    "sdDownloadCombined": false,
+    "rawUsbCopySaved": false
   },
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "probeConfigurationChecks": 65,
-    "displayHighPassChecks": 3896,
-    "universalWorkflowChecks": 106,
-    "standaloneChecks": 294,
+    "liveDatAssertions": 20511105,
+    "v1PairedAssertions": 74176,
+    "usbUiLifecycleAssertions": 134,
+    "targetedRecoveryChecks": 120,
+    "sensorLifecycleChecks": 5,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
     "hardwareAccess": false,
     "installerExecuted": false,
-    "fullEndToEndPairQualified": false
+    "liveHardwareThroughputQualified": false
   },
   "retainedSrImuHardwareEvidence": {
     "guiSha256": "53E5AFDB5A4C238C7A1AAC8C80F86C63D716B57F55BD1D0E4CD052C78FD9963B",
@@ -147,11 +149,11 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this layout-only release"
   },
   "buildProvenance": {
-    "sourceBase": "1f7d00906770214c806d0802d2f7d025f148a11a",
-    "guiSha256": "2FF2C1AF19F9DFFB79BD337AE2D6C8B700F9C9A5D843980CB110114DD02AFE49",
-    "build": "Private cached GUI component build, frozen companion and helper binaries",
-    "source": "Stacked physical probe configuration cards and editable display filter",
-    "evidence": "Note/PROBE_CONFIGURATION_UI_20261013.md"
+    "sourceBase": "49f48ad55d681d436a3b923eb4ef8b620d2e4221",
+    "guiSha256": "751F2E53E9D9EC0D47E1FE2AAAA3C3CB671392BE3C5C70B10AA0F155B0106966",
+    "build": "Private cached GUI component build; previously published companion and helpers",
+    "source": "V2 app capture disables optional RAW writer and propagates DAT-only failures to stop/drain",
+    "evidence": "Note/DAT_ONLY_USB_20261013.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -160,7 +162,7 @@
     "SD downloads remain per-probe DAT",
     "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained"
   ],
-  "previousPublishedInstaller": "legacy/20261013_before_probe_ui_1.0.0.15/WILDX_console-Setup-1.0.0.14.exe",
+  "previousPublishedInstaller": "legacy/20261013_before_dat_only_1.0.0.16/WILDX_console-Setup-1.0.0.15.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -196,5 +198,23 @@
     "bleDefaultHz": 100,
     "scope": "Live display only; recorded samples unchanged",
     "validation": "0 < cutoff < displayed sample rate / 2; invalid targets visibly bypass filter"
+  },
+  "retainedProbeUiSoftwareEvidence": {
+    "version": "1.0.0.15",
+    "commit": "49f48ad55d681d436a3b923eb4ef8b620d2e4221",
+    "validation": {
+      "guiBuildWarnings": 0,
+      "guiBuildErrors": 0,
+      "probeConfigurationChecks": 65,
+      "displayHighPassChecks": 3896,
+      "universalWorkflowChecks": 106,
+      "standaloneChecks": 294,
+      "independentInstallerExtraction": true,
+      "extractedRuntimeFilesVerified": 13,
+      "nonGuiRuntimeFilesUnchanged": 12,
+      "hardwareAccess": false,
+      "installerExecuted": false,
+      "fullEndToEndPairQualified": false
+    }
   }
 }

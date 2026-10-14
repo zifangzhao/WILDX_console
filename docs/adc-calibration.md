@@ -1,6 +1,6 @@
 # Factory ADC/gain correction
 
-The host pipeline applies factory-file corrections after native decoding and before DAT writing, resampling and display filtering. It preserves native RAW, sample order, rates, timestamps and the existing nominal polarity. It is opt-in; a recording without a loaded profile follows its existing decoding/output path.
+The host pipeline applies factory-file corrections after native decoding and before DAT writing, resampling and display filtering. It preserves sample order, rates, timestamps and the existing nominal polarity. Offline source archives are kept. USB app recordings save decoded DAT without an additional native RAW file. It is opt-in; a recording without a loaded profile follows its existing decoding/output path.
 
 ## Use
 

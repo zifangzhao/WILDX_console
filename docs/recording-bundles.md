@@ -1,6 +1,6 @@
 # Recording files stay together
 
-Each USB recording, recovery segment and downloaded session saves its data and metadata in one recording folder. `recording_files.json` lists the files using relative paths. Keep the folder and its subfolders together.
+Each USB recording, recovery segment and downloaded session saves its data and metadata in one recording folder. `recording_files.json` lists the files using relative paths. Keep the folder and its subfolders together. Since 1.0.0.16, USB app recordings save decoded neural DAT without an extra RAW copy. Metadata records this policy; earlier recordings are untouched.
 
 The bundle includes recording settings, rates and channel layout, per-probe JSON, available IMRO/configuration files, exact requested/applied binary selections, device receipts, calibration manifest and factory CSVs, clock/timing records and completion/error reports. Metadata checkpoints run before capture and after completion. They do not change the neural RAW/DAT format or add work to sample callbacks.
 

@@ -1014,7 +1014,7 @@ namespace USB512_interface
             comboDrives.Enabled = false;
             lblRecInfo.Text = "Opening WinUSB stream…";
             llblSavefile.Text = Path.Combine(runFolder,
-                selectedDeviceKind == DeviceKind.NpV2 ? "neuropixels_np2usb.raw" :
+                selectedDeviceKind == DeviceKind.NpV2 ? "neuropixels_ap.dat" :
                 selectedDeviceKind == DeviceKind.XeNp ? "neuropixels_ap.dat" : "amplifier.dat");
             if (selectedDeviceKind == DeviceKind.Ce64Msc)
                 llblSavefile.Text += "  (+ analogin.dat, timestamp.dat)";
