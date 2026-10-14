@@ -61,6 +61,7 @@ namespace USB512_interface
         {
             if (mask < 1 || mask > 7 || apHz <= 0) throw new ArgumentOutOfRangeException("mask");
             var written = new List<string>();
+            var errors = new List<Exception>();
             foreach (string path in Directory.GetFiles(folder, "*.dat*"))
             {
                 string name = Path.GetFileName(path);
@@ -78,10 +79,13 @@ namespace USB512_interface
                     continue; // multi-probe per-probe files belong in their own directories.
                 if (fileMask == 0) continue;
                 string xmlName = Path.ChangeExtension(datName, ".xml");
-                Write(Path.Combine(folder, xmlName), datName, partial, fileMask,
-                    lfp ? lfpHz.Value : apHz, lfpHz, selections);
-                written.Add(xmlName);
+                try {
+                    Write(Path.Combine(folder, xmlName), datName, partial, fileMask,
+                        lfp ? lfpHz.Value : apHz, lfpHz, selections);
+                    written.Add(xmlName);
+                } catch(NpMetadataWriteException error) { errors.Add(error); }
             }
+            if(errors.Count!=0)throw new NpMetadataWriteException(String.Join(Environment.NewLine,errors.ConvertAll(e=>e.Message)),new AggregateException(errors));
             return written;
         }
 
@@ -94,10 +98,8 @@ namespace USB512_interface
         static void Write(string path, string datName, bool partial, int mask, double rate,
             double? lfpHz, IDictionary<int, byte[]> selections)
         {
-            string temporary = path + ".tmp";
-            try
-            {
-                using (var xml = XmlWriter.Create(temporary, new XmlWriterSettings { Indent = true, Encoding = new UTF8Encoding(false) }))
+            NpMetadataFile.Write(path, stream => {
+                using (var xml = XmlWriter.Create(stream, new XmlWriterSettings { Indent = true, Encoding = new UTF8Encoding(false) }))
                 {
                     xml.WriteStartDocument();
                     xml.WriteStartElement("parameters");
@@ -147,9 +149,7 @@ namespace USB512_interface
                     xml.WriteStartElement("spikeDetection"); xml.WriteEndElement();
                     xml.WriteEndElement(); xml.WriteEndDocument();
                 }
-                if (File.Exists(path)) File.Replace(temporary, path, null); else File.Move(temporary, path);
-            }
-            finally { if (File.Exists(temporary)) File.Delete(temporary); }
+            });
         }
     }
 }

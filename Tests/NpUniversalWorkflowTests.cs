@@ -44,7 +44,7 @@ internal static class NpUniversalWorkflowTests
         Set(profile,"Warning",(Func<int,int,string>)((mask,hz)=>null));
         using(var form=(Form)Activator.CreateInstance(T("NpRecordingDialog"),All,null,new object[]{np2,0,20000,true,true,true,Reader(profile),(Action<IWin32Window>)(owner=>{})},null)){
             Call(form,"ReadProfile");Check(form.Text=="Recording settings","Generation-specific recording screen");
-            Check((int)Prop(form,"ProbeMask")==0 && (int)Prop(form,"SampleHz")==20000,"Device selection/rate lost");
+            Check((int)Prop(form,"ProbeMask")== (np2?0:3) && (int)Prop(form,"SampleHz")==20000,"Device selection/rate lost");
             var ports=(CheckBox[])Get(form,"ports");var automatic=(CheckBox)Get(form,"automatic");automatic.Checked=false;
             Check(ports[0].Enabled && ports[1].Enabled && ports[2].Enabled==!np2,"Unavailable connector admitted");
             ports[0].Checked=ports[1].Checked=false;Check(!((Button)Get(form,"accept")).Enabled,"Empty profile admitted");

@@ -53,15 +53,23 @@ static class NpV1RecordingProfileTests {
   }
  }
  static void Dialog(){
-  Reset(State(),new Exception("0x42 unavailable in download mode"),Caps());
+  Reset(State(),new Exception("0x42 unavailable in download mode"),Caps(true,3,20000));
+  var current=Profile();Check((int)Get(current,"SelectedMask")==3,"Default selected advertised P3 instead of the active P1+P2 profile");
+  var warning=(Func<int,int,string>)Get(current,"Warning");Check(warning(3,20000)==null,"Advertised P1+P2 20 kHz still requires experimental confirmation");Check(warning(3,30000)!=null,"Two-probe 30 kHz qualification warning lost");
   var read=Reader("ReadProfile",T("NpUsbRecordingProfile"));
   using(var form=(Form)Activator.CreateInstance(T("NpRecordingDialog"),All,null,new object[]{false,0,30000,true,true,true,read,(Action<IWin32Window>)(owner=>{})},null)) {
    Invoke(T("NpRecordingDialog").GetMethod("ReadProfile",All),form);
-   Check(((Button)Get(form,"accept")).Enabled,"Yoshi download-mode dialog still blocks Save");var ports=(CheckBox[])Get(form,"ports");((CheckBox)Get(form,"automatic")).Checked=false;
+   Check(((Button)Get(form,"accept")).Enabled,"Yoshi download-mode dialog still blocks Save");var ports=(CheckBox[])Get(form,"ports");
+   Check(!((CheckBox)Get(form,"automatic")).Checked && !ports[2].Checked,"V1 selection still locks or defaults to P3");
    Check(ports[0].Enabled&&ports[1].Enabled&&ports[2].Enabled,"Yoshi cannot select probes");ports[1].Checked=ports[2].Checked=false;
    Check((int)T("NpRecordingDialog").GetProperty("ProbeMask",All).GetValue(form,null)==1,"Manual probe request lost");
    service=new Win32Exception(121,"service timeout (Win32 121)");Invoke(T("NpRecordingDialog").GetMethod("ReadProfile",All),form);
    Check(!((Button)Get(form,"accept")).Enabled&&!ports[0].Enabled&&((TextBox)Get(form,"status")).Text.Contains("121"),"Failure retained a stale profile or hid diagnostic code");
+  }
+  Reset(null,Legacy(false,15000),null);
+  using(var form=(Form)Activator.CreateInstance(T("NpRecordingDialog"),All,null,new object[]{false,0,15000,true,true,true,read,(Action<IWin32Window>)(owner=>{})},null)) {
+   Invoke(T("NpRecordingDialog").GetMethod("ReadProfile",All),form);Check(((Button)Get(form,"accept")).Enabled,"Fixed legacy firmware lost Save after manual selection change");
+   Check((int)T("NpRecordingDialog").GetProperty("ProbeMask",All).GetValue(form,null)==0,"Fixed legacy mask was invented");
   }
  }
  static TValue ReadProfile<TValue>(){return (TValue)Profile();}

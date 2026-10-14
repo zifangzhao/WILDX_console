@@ -213,15 +213,16 @@ namespace USB512_interface {
    }
   }
   void SaveJson(string path,object value) {
-   string temporary=path+".tmp";File.WriteAllText(temporary,json.Serialize(value)+Environment.NewLine,new UTF8Encoding(false));
-   if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
+   NpMetadataFile.WriteText(path,json.Serialize(value)+Environment.NewLine);
   }
   internal void Write() {
-   WriteXml(folder,activeMask,(string)Part("output")["dat_layout"]=="merged");
-   var list=new List<object>();foreach(var item in probes){list.Add(item.Value);SaveJson(Path.Combine(folder,"probe_"+item.Key+".json"),item.Value);}
-   document["probes"]=list;SaveJson(Path.Combine(folder,"recording_settings.json"),document);
-   if(!probeChildren){RefreshBundle(folder);return;}
+    var errors=new List<Exception>();
+    TrySave(errors,()=>WriteXml(folder,activeMask,(string)Part("output")["dat_layout"]=="merged"));
+    var list=new List<object>();foreach(var item in probes){list.Add(item.Value);TrySave(errors,()=>SaveJson(Path.Combine(folder,"probe_"+item.Key+".json"),item.Value));}
+    document["probes"]=list;TrySave(errors,()=>SaveJson(Path.Combine(folder,"recording_settings.json"),document));
+    if(!probeChildren){TrySave(errors,()=>RefreshBundle(folder));RequireSaved(errors);return;}
    foreach(var item in probes)if((activeMask&(1<<(item.Key-1)))!=0) {
+     TrySave(errors,()=>{
     string child=Path.Combine(folder,"probe"+item.Key);Directory.CreateDirectory(child);
     // Sidecars follow each per-probe DAT. Never copy bulk neural/sensor data or
     // use a merged/root XML as the single-probe channel layout.
@@ -243,8 +244,17 @@ namespace USB512_interface {
     WriteXml(child,1<<(item.Key-1),false);
     SaveJson(Path.Combine(child,"recording_settings.json"),local);
     RefreshBundle(child);
+     });
    }
-   RefreshBundle(folder);
+    TrySave(errors,()=>RefreshBundle(folder));RequireSaved(errors);
+  }
+  static void TrySave(List<Exception> errors,Action save){try{save();}catch(IOException ex){errors.Add(ex);}catch(UnauthorizedAccessException ex){errors.Add(ex);}}
+  static void RequireSaved(List<Exception> errors){if(errors.Count!=0)throw new NpMetadataWriteException(String.Join(Environment.NewLine,errors.Select(e=>e.Message)),new AggregateException(errors));}
+  internal static string ReportWriteFailure(string folder,Exception error){
+   string detail=error.Message;
+   try{NpMetadataFile.WriteText(Path.Combine(folder,"metadata_save_error.txt"),DateTime.UtcNow.ToString("O")+Environment.NewLine+error+Environment.NewLine);}
+   catch(Exception report){detail+="; metadata error report also failed: "+report.Message;}
+   return detail;
   }
   static bool MetadataFile(string path){return (new[]{".json",".imro",".npb1",".n2b1",".csv",".txt",".xml"}.Contains(Path.GetExtension(path).ToLowerInvariant()) ||
    new[]{"descriptor.bin","footer.bin","configuration.bin","CE_params.bin","utc.bin"}.Contains(Path.GetFileName(path))) && !path.EndsWith("recording_files.json",StringComparison.OrdinalIgnoreCase);}
@@ -253,10 +263,8 @@ namespace USB512_interface {
    var root=Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar;
    var files=Directory.GetFiles(root,"*",SearchOption.AllDirectories).Where(p=>!p.EndsWith(".tmp",StringComparison.OrdinalIgnoreCase) && Path.GetFileName(p)!="recording_files.json")
     .OrderBy(p=>p,StringComparer.Ordinal).Select(p=>Fields("path",p.Substring(root.Length).Replace('\\','/'),"bytes",new FileInfo(p).Length,"role",MetadataFile(p)?"metadata":"data")).ToArray();
-   string path=Path.Combine(folder,"recording_files.json"),temporary=path+".tmp";
-   File.WriteAllText(temporary,new JavaScriptSerializer {MaxJsonLength=4*1024*1024}.Serialize(
-    Fields("schema_version",1,"format","neuropixels.recording_bundle","files",files,"note","Keep this folder with its subfolders. Requested, applied and unavailable probe settings are distinguished in recording_settings.json."))+Environment.NewLine,new UTF8Encoding(false));
-   if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
+    NpMetadataFile.WriteText(Path.Combine(folder,"recording_files.json"),new JavaScriptSerializer {MaxJsonLength=4*1024*1024}.Serialize(
+     Fields("schema_version",1,"format","neuropixels.recording_bundle","files",files,"note","Keep this folder with its subfolders. Requested, applied and unavailable probe settings are distinguished in recording_settings.json."))+Environment.NewLine);
   }
   internal static void CopySourceMetadata(string input,string output){
    string source=Path.GetDirectoryName(Path.GetFullPath(input)),destination=output+".source-metadata";

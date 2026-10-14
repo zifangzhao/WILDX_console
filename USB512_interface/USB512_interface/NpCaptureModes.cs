@@ -13,7 +13,7 @@ namespace USB512_interface
     {
         internal readonly int ProbeMask, ApHz;
         internal int ProbeCount { get { return Count(ProbeMask); } }
-        internal bool Experimental { get { return ApHz==20000 || (ProbeCount==2 && ApHz==30000); } }
+        internal bool Experimental { get { return ProbeCount==2 && ApHz==30000; } }
         internal static bool Valid(int mask,int hz) {
             return mask>=1 && mask<=7 &&
                 (hz==7500 || hz==15000 || (hz==20000 && (Count(mask)==1 || mask==3)) || (hz==30000 && Count(mask)<3));

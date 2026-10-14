@@ -27,6 +27,7 @@
     <Compile Include="NpV2SdDatExport.cs" />
     <Compile Include="..\..\USB512_interface\USB512_interface\NpAdcCalibration.cs"><Link>NpAdcCalibration.cs</Link></Compile>
     <Compile Include="NpNeuroscopeXml.cs" />
+    <Compile Include="NpMetadataFile.cs" />
     <!-- Reuse the maintained USB console wire/sample decoder. All sources
          belong to this console repository, not a firmware checkout. -->
     <Compile Include="..\USBConsoleV2\NpV2UsbConsole.cs"><Link>NpV2UsbConsole.cs</Link></Compile>

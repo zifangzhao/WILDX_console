@@ -102,7 +102,7 @@ namespace USB512_interface {
     var rates=new List<int>();foreach(int hz in new[]{7500,15000,20000,30000})if((caps.Rates[0]|caps.Rates[1]|caps.Rates[2])!=0 && ((caps.Rates[0]|caps.Rates[1]|caps.Rates[2])&NpCaptureMode.RateBit(hz))!=0)rates.Add(hz);
     if(!caps.Selectable){rates.Clear();rates.Add(caps.ApHz);}
     return new NpUsbRecordingProfile {
-     AvailableMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedHz=caps.ApHz,Rates=rates.ToArray(),
+     AvailableMask=caps.Selectable?caps.AvailableMask:caps.ActiveMask,SelectedMask=caps.ActiveMask,SelectedHz=caps.ApHz,Rates=rates.ToArray(),
      Status="Device: Neuropixels V1\r\n"+(service!=null && service.Role==3?"SD-download mode; Start prepares USB streaming.\r\n":"")+"Available: "+NpCaptureRequest.Ports(caps.AvailableMask)+"; active: "+NpCaptureRequest.Ports(caps.ActiveMask)+" at "+caps.ApHz+" Hz\r\n384 AP + 384 LFP channels per probe. The firmware resolves the requested rate; the accepted rate is saved with the recording.\r\nMisc signals retain device timestamps; analogin.dat uses a held-value 1,250 Hz grid.",
      Validate=(mask,hz)=>{
       if(mask==0 || (mask&~caps.AvailableMask)!=0)return "Select available connectors.";

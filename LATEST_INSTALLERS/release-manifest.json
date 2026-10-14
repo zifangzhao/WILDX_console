@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.18",
+  "version": "1.0.0.19",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked V1 recording compatibility; physical recording qualification pending",
+  "status": "Software-checked V1 connector and metadata persistence fixes; remote hardware retest pending",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.18.exe",
-    "sha256": "950379A4716575A25FC4B12E27E916B7F8DBE6019CF464693B241CEBACFD9353",
-    "bytes": 2311800
+    "file": "WILDX_console-Setup-1.0.0.19.exe",
+    "sha256": "BC2E48A5F7059DEDBBAA8812F029D7F2B19B42264E877BC8C92761A2BE36E619",
+    "bytes": 2316527
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "39480DEAAC670DCF0DC5AD4020D9EE53697D72353B0F0759155D658977775A55",
-      "bytes": 1296896
+      "sha256": "34867999308EFCFCDD4CBA93CBB6100CB8F923F7A019E9F026EC638EE55E71EE",
+      "bytes": 1298432
     },
     {
       "path": "WILDX_console.exe.config",
@@ -31,8 +31,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "sha256": "C5D398F5839F647B20291A97F809809E214624DA86F6A692CE9A1108B3FEB654",
-      "bytes": 211456
+      "sha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
+      "bytes": 220672
     },
     {
       "path": "NPConfigurator/NPConfigurator.exe",
@@ -108,18 +108,22 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "v1RecordingProfileLegacyUiChecks": 97,
-    "v1ManagementMockChecks": 5886,
-    "v1StartTransitionChecks": 19,
+    "companionBuildWarnings": 0,
+    "companionBuildErrors": 0,
+    "v1RecordingProfileLegacyUiChecks": 103,
+    "metadataPersistenceChecks": 22,
+    "xmlGeometryRateChecks": 107,
+    "recordingBundleChecks": 203,
     "v1PairedDecoderAssertions": 74176,
-    "usbUiLifecycleAssertions": 134,
+    "v2SdV11V12MetadataChecks": 196,
     "universalWorkflowChecks": 106,
-    "folderNamingTimeUiChecks": 53,
+    "usbUiLifecycleAssertions": 134,
     "v1V2TargetedRecoveryChecks": 125,
+    "folderNamingTimeUiChecks": 53,
     "standaloneChecks": 294,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
-    "nonGuiRuntimeFilesUnchanged": 12,
+    "unrelatedRuntimeFilesUnchanged": 11,
     "hardwareAccess": false,
     "installerExecuted": false,
     "liveHardwareThroughputQualified": false
@@ -153,22 +157,63 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "71906e1ad2f8dc283777f78c41fdacf239a21f1f",
-    "guiSha256": "39480DEAAC670DCF0DC5AD4020D9EE53697D72353B0F0759155D658977775A55",
-    "build": "Isolated GUI component build; 12 non-GUI files retained byte-for-byte from 1.0.0.17",
-    "source": "Release 1.0.0.17 plus NP1 mode-aware settings, V1 control wake policy, restricted legacy fallback and assembly version",
-    "overlaidSourceFiles": [
-      "USB512_interface/USB512_interface/NpModeDialog.cs",
-      "USB512_interface/USB512_interface/XeNpWinUsb.cs",
-      "USB512_interface/USB512_interface/NpLogger/NpV1Management.cs",
-      "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    "sourceBase": "5b163e795e029dd5e4f1cf0c6c36112d3d24c3b6",
+    "guiSha256": "34867999308EFCFCDD4CBA93CBB6100CB8F923F7A019E9F026EC638EE55E71EE",
+    "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
+    "build": "Isolated GUI and shared metadata companion; 11 runtime files retained byte-for-byte from 1.0.0.18",
+    "source": "Shared metadata writer and failure category, independent sidecar saves, Stop/report ownership, V1 active/manual connector defaults, 20k warning policy and version",
+    "sourceInputs": [
+      {
+        "path": "Neuropixels/SD/NpMetadataFile.cs",
+        "sha256": "6578CE6806FC38A3C04DE47E059A82FB44AE33CE98188A88C6F8BB53ED866A14"
+      },
+      {
+        "path": "Neuropixels/SD/NpNeuroscopeXml.cs",
+        "sha256": "9BFC0C42467B06C3CD42BD0B5A85FE2CEF77B6157D6D7FEA7370367D87CEFE2D"
+      },
+      {
+        "path": "Neuropixels/SD/NpV2SdDatExport.csproj",
+        "sha256": "4340FCB774E84182C15B15F95E431E0E75B2B8A10594CE82FD9F20A8739AA097"
+      },
+      {
+        "path": "Neuropixels/USBConsoleV2/NpV2UsbConsole.cs",
+        "sha256": "B20F58FA41DDAC55CA218C841A3F1EC35B04DFD28AA81353AA7C06842AF9259E"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/NpRecordingSettings.cs",
+        "sha256": "EEFB315E4176231E41E59E5E1887F8FE0A6CB2D56AC95E753B9932B247E029A7"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/NpRecordingDialog.cs",
+        "sha256": "0A50311A831DA308030FAD36435A1A6F17194A3B4B7E6C5F56DD86FAA68E5A32"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/NpModeDialog.cs",
+        "sha256": "5A9ADB1338CC64A8853A0DDC29A07661FC60F2A6239F322C19430FAA6025F98D"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/NpCaptureModes.cs",
+        "sha256": "95236D6938F7538833C0AA9CF23E6E76699ED70C970D177271462785A177FE2A"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/mainForm.cs",
+        "sha256": "AC434554745C56B76A9281FEA2D3B6DC1E79010B1247124347EF37A262769E0C"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/NpDiagnosticsForm.cs",
+        "sha256": "CC3FB1D0EE80D37A950E97BA97474EFFF4441B5FAC461DB0CAB0270B8D22F566"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+        "sha256": "5C02311158CC83B4A4E21A1E78BFB3CA759EFA7EBB40085B94093FC55D11AE23"
+      }
     ],
     "excludedPendingChanges": [
       "BLE connection cache",
       "Media export",
       "BLE and media hardware tests"
     ],
-    "evidence": "Note/V1_RECORDING_MODE_20261014.md"
+    "evidence": "Note/V1_METADATA_FIX_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -176,9 +221,11 @@
     "Automatic restarts create independent recordings; unknown gaps never joined",
     "SD downloads remain per-probe DAT",
     "Previous SR/IMU magnetometer error9, damaged-shank and endurance limits retained",
-    "Yoshi physical V1 probe recording not tested in this pass; exact rat logger firmware identity remains unverified"
+    "Yoshi physical V1 probe recording not tested in this pass; exact rat logger firmware identity remains unverified",
+    "Persistent metadata failures retain candidates and report a warning; resolve metadata before qualifying the complete recording bundle",
+    "Exact remote metadata destination/Windows cause unconfirmed; local replacement-lock reproducer uses a different native error"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_v1_recording_fix_1.0.0.18/WILDX_console-Setup-1.0.0.17.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_metadata_fix_1.0.0.19/WILDX_console-Setup-1.0.0.18.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -289,11 +336,32 @@
     ],
     "sourceEvidence": "Retained V1 USB82 handlers; request routing only, not identification of Yoshi firmware",
     "acquisitionAndDecoderChanged": false,
-    "physicalProbeRecordingQualified": false
+    "physicalProbeRecordingQualified": false,
+    "connectorSelection": "Direct editable boxes; initial selection follows active firmware mask; advertised ports are not physical-presence evidence",
+    "experimentalWarning": "Two-probe 30k only; generic 20k popup removed; firmware admission retained"
   },
   "retainedFolderNamingSoftwareEvidence": {
     "version": "1.0.0.17",
     "commit": "71906e1ad2f8dc283777f78c41fdacf239a21f1f",
     "manifest": "legacy/20261014_before_v1_recording_fix_1.0.0.18/release-manifest.json"
+  },
+  "metadataPersistence": {
+    "writer": "Flushed unique staged sidecar; Windows same-directory replacement rename; no delete-then-move or direct overwrite fallback",
+    "boundedRetryMilliseconds": 1000,
+    "preservePreviousOnFailure": true,
+    "retainCompleteFailedCandidate": true,
+    "candidateIncludedInCanonicalIndex": false,
+    "errorReport": "metadata_save_error.txt with destination/native errors and retained candidate paths",
+    "independentSidecarsAttempted": true,
+    "completionUiRepeatsSettingsWrite": false,
+    "acquisitionErrorsSeparate": true,
+    "neuralDatRewritten": false,
+    "remoteWindowsCauseConfirmed": false,
+    "remoteHardwareRetestPending": true
+  },
+  "retainedV1ModeSoftwareEvidence": {
+    "version": "1.0.0.18",
+    "commit": "5b163e795e029dd5e4f1cf0c6c36112d3d24c3b6",
+    "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   }
 }

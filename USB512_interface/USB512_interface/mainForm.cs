@@ -1312,7 +1312,7 @@ namespace USB512_interface
             int readBytes=64*1024, readDepth=64;
             int bufferCount=256;
             double hostQueueSeconds=0;
-            string failure=null;
+            string failure=null,metadataFailure=null;
             XeNpWinUsbDevice device=null;
             USB512WinUsbQueuedReader reader=null;
             XeNpStatus profile=null;
@@ -1830,9 +1830,9 @@ namespace USB512_interface
                 // Final sidecars must exist before copying/indexing the segment,
                 // including a failed segment that will immediately reconnect.
                 if(settings!=null)try{settings.Finished(failure==null && finalStatusRead,failure);settings.Write();}
-                    catch(Exception ex){if(failure==null)failure="Could not save recording metadata: "+ex.Message;}
+                    catch(Exception ex){metadataFailure=NpRecordingSettings.ReportWriteFailure(runFolder,ex);}
                 if(captureGcLatencySet)System.Runtime.GCSettings.LatencyMode=previousGcLatency;
-                string message=failure==null?"Stopped":"Capture error: "+failure;
+                string message=NpCaptureOutcome(failure,metadataFailure);
                 NpImuDisplay finalImu=sensors==null?null:sensors.GetDisplay();
                 PostToUi(delegate {
                     if(cameraPreview!=null && !cameraPreview.IsDisposed)cameraPreview.KeepAliveWhileRecording=false;
@@ -4161,6 +4161,11 @@ namespace USB512_interface
             return "WinUSB streams (" + String.Join(", ", streams.ToArray()) + ").";
         }
 
+        internal static string NpCaptureOutcome(string failure,string metadataFailure) {
+            return (failure==null?"Stopped":"Capture error: "+failure)+
+                (metadataFailure==null?"":"; metadata warning: "+metadataFailure);
+        }
+
         private void FinishCaptureOnUi(string message)
         {
             if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed)
@@ -4168,6 +4173,7 @@ namespace USB512_interface
             captureThread = null;
             running = false;
             try {if(NpFinishRecovery(message))return;}
+            catch(NpMetadataWriteException ex) {npRecoveryCancelled=true;message+="; metadata warning: "+NpRecordingSettings.ReportWriteFailure(runFolder,ex);}
             catch(Exception ex) {npRecoveryCancelled=true;message="Capture error: recovery journal failed: "+ex.Message;}
             FinishCapturePresentation(message);
         }
@@ -4183,10 +4189,12 @@ namespace USB512_interface
                 captureReportButton.Enabled=true;
                 if(!String.IsNullOrEmpty(runFolder) && Directory.Exists(runFolder))try{
                     File.WriteAllText(Path.Combine(runFolder,"capture_report.txt"),lastCaptureReport);
-                    if(npRecordingSettings!=null)npRecordingSettings.Write();else NpRecordingSettings.RefreshBundle(runFolder);
-                    if(npSessionFolder!=null)NpRecordingSettings.RefreshBundle(npSessionFolder);
+                    // The capture owner already finalized settings/probe/XML.
+                    // Only the new report needs to enter the bundle index here.
+                    NpRecordingSettings.RefreshBundle(runFolder);
+                    if(npSessionFolder!=null && !String.Equals(npSessionFolder,runFolder,StringComparison.OrdinalIgnoreCase))NpRecordingSettings.RefreshBundle(npSessionFolder);
                 }
-                    catch(Exception ex){lastCaptureReport+="\r\nReport persistence failed: "+ex.Message;}
+                    catch(Exception ex){lastCaptureReport+="\r\nReport persistence failed: "+ex.Message;lblRecInfo.Text+="\r\nReport persistence warning: "+ex.Message;}
             }
             if (message.StartsWith("Capture error:", StringComparison.Ordinal))
             {

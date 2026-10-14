@@ -3114,7 +3114,7 @@ namespace USB512_interface
             catch (OperationCanceledException ex) { metadataFailure=ex.Message;message = ex.Message; }
             catch (Exception ex) { npV2RecoverySafe = NpV2Retryable(ex); metadataFailure=DescribeCaptureFailure(ex);message = "Capture error: " + metadataFailure; }
             if(settings!=null)try {settings.Finished(complete,metadataFailure);settings.Write();}
-                catch(Exception ex){message+="; recording setup snapshot failed: "+ex.Message;}
+                catch(Exception ex){message+="; metadata warning: "+NpRecordingSettings.ReportWriteFailure(runFolder,ex);}
             PostToUi(delegate { FinishCaptureOnUi(message); });
         }
     }

@@ -22,6 +22,7 @@ $sources = @(
     "$PSScriptRoot\SD\NpV2SdDatExport.cs",
     "$console\NpAdcCalibration.cs",
     "$PSScriptRoot\SD\NpNeuroscopeXml.cs",
+    "$PSScriptRoot\SD\NpMetadataFile.cs",
     "$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs", "$console\Np2ConfigurationClient.cs",
     "$console\USB512WinUsb.cs", "$console\NeuropixelsPreviewForm.cs", "$console\XeNpStreamDecoder.cs",
     "$PSScriptRoot\Tests\TestNpV2SdDatExport.cs", "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",

@@ -30,6 +30,7 @@ namespace USB512_interface
         readonly Button accept = new Button { Text="Save settings", AutoSize=true, Enabled=false };
         NpUsbRecordingProfile profile;
         readonly int requestedMask, requestedHz;
+        readonly bool np2;
         internal int ProbeMask { get { return automatic.Checked?0:ports.Select((p,i)=>p.Checked?1<<i:0).Sum(); } }
         internal int SampleHz { get { return rate.SelectedItem==null?0:((Rate)rate.SelectedItem).Hz; } }
         internal bool Merge { get { return merge.Checked; } }
@@ -40,7 +41,7 @@ namespace USB512_interface
         internal NpRecordingDialog(bool np2,int mask,int hz,bool mergeProbes,bool resample,bool recordMisc,
             Func<NpUsbRecordingProfile> readProfile,Action<IWin32Window> configure)
         {
-            read=readProfile;requestedMask=mask;requestedHz=hz;
+            this.np2=np2;read=readProfile;requestedMask=mask;requestedHz=hz;
             Text="Recording settings";ClientSize=new Size(660,530);MinimumSize=new Size(610,500);
             StartPosition=FormStartPosition.CenterParent;Icon=NpPreviewTheme.ApplicationIcon;
             var layout=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=1,RowCount=8,Padding=new Padding(18) };
@@ -49,7 +50,7 @@ namespace USB512_interface
             layout.Controls.Add(WildXTheme.Label("Connectors",true),0,0);
             var connectorRow=new FlowLayoutPanel { Dock=DockStyle.Fill };
             for(int i=0;i<3;i++){ports[i]=new CheckBox { Text="Probe "+(i+1), AutoSize=true };connectorRow.Controls.Add(ports[i]);ports[i].CheckedChanged+=delegate {UpdateSelection();};}
-            automatic.Checked=mask==0;automatic.CheckedChanged+=delegate {UpdateSelection();};connectorRow.Controls.Add(automatic);layout.Controls.Add(connectorRow,0,1);
+            automatic.Visible=np2;automatic.Checked=np2 && mask==0;automatic.CheckedChanged+=delegate {UpdateSelection();};connectorRow.Controls.Add(automatic);layout.Controls.Add(connectorRow,0,1);
             var rateRow=new FlowLayoutPanel { Dock=DockStyle.Fill };
             rateRow.Controls.Add(WildXTheme.Label("AP sample rate"));rateRow.Controls.Add(rate);rateRow.Controls.Add(WildXTheme.Label("Continuous until Stop"));layout.Controls.Add(rateRow,0,2);
             layout.Controls.Add(WildXTheme.Label(np2?"384 AP channels per probe":"384 AP + 384 LFP channels per probe"),0,3);
@@ -80,6 +81,7 @@ namespace USB512_interface
         {
             try {
                 var next=read();profile=null;rate.Items.Clear();
+                if(!np2)automatic.Checked=next.AvailableMask==0;
                 int selected=requestedMask==0?next.SelectedMask:requestedMask;
                 for(int i=0;i<3;i++){ports[i].Checked=(selected&next.AvailableMask&(1<<i))!=0;ports[i].Enabled=(next.AvailableMask&(1<<i))!=0;}
                 foreach(int hz in next.Rates)rate.Items.Add(new Rate {Hz=hz});

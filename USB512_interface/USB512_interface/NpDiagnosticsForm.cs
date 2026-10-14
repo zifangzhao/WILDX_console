@@ -28,7 +28,7 @@ namespace USB512_interface
             report.AppendLine("Device: "+device);report.AppendLine("USB interface: "+path);report.AppendLine("Outcome: "+outcome);report.AppendLine("Folder: "+folder);
             // Keep native firmware fields and timing evidence; do not infer an
             // overall pass from missing/optional records or repair the stream.
-            if(!String.IsNullOrEmpty(folder))foreach(string name in new[]{"neuropixels_capture_status.txt","neuropixels_np2usb_status.txt","np2_merge_status.txt","np2_merge_failure.txt","requested-configuration-applied-receipts.txt"}){
+            if(!String.IsNullOrEmpty(folder))foreach(string name in new[]{"neuropixels_capture_status.txt","neuropixels_np2usb_status.txt","np2_merge_status.txt","np2_merge_failure.txt","metadata_save_error.txt","requested-configuration-applied-receipts.txt"}){
                 string file=Path.Combine(folder,name);if(!File.Exists(file))continue;
                 report.AppendLine();report.AppendLine(name);
                 try{if(new FileInfo(file).Length<=1024*1024)report.AppendLine(File.ReadAllText(file));else report.AppendLine("See the full report in the recording folder.");}
