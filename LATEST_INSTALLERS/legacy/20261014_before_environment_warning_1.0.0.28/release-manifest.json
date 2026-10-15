@@ -1,0 +1,85 @@
+{
+  "version": "1.0.0.27",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.27.exe",
+    "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_camera40_package_20261014\\wildx\\bin\\WILDX_console-Setup-1.0.0.27.exe",
+    "sha256": "DE59B90417B337B248F6824EEDC06E036B4E0FE505E235CAA1B4730124343530",
+    "bytes": 2338846
+  },
+  "payload": [
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
+      "bytes": 220672
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA",
+      "bytes": 5757952
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B",
+      "bytes": 24576
+    },
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "CC3CF93A77CFDE2039E564E99E79754ED93A1C561A8B695B01C11B0138B7D372",
+      "bytes": 1354240
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2",
+      "bytes": 532
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01",
+      "bytes": 449
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.dll",
+      "sha256": "0028D17AD36A0BFA66AF9553FFEEA5780A2761376B61E162CF6986578C73B1DC",
+      "bytes": 55808
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.exe",
+      "sha256": "C8A9EF481B86A90255DB2298F1E306B3181E24C4F7F9CA731632762B8F4F813A",
+      "bytes": 152064
+    },
+    {
+      "path": "FirmwareUpdater\\XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306",
+      "bytes": 340
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9",
+      "bytes": 434
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.dll",
+      "sha256": "C47DCF5F6B4022520E8FC6CED4BF4E64C3C6471F2111A455DAD0A4B566E2923E",
+      "bytes": 364544
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.exe",
+      "sha256": "A2B03789B3AD5B49DA3F69A31F51378E17FA083FA5F5FFC973E7CC3E2CC6B5C6",
+      "bytes": 151552
+    },
+    {
+      "path": "NPConfigurator\\NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782",
+      "bytes": 458
+    }
+  ],
+  "extractedPayloadFilesVerified": 13,
+  "installerExecuted": false,
+  "hardwareAccess": false,
+  "publication_kind": "existing_checked_installer_only",
+  "default_camera_hz": 40,
+  "device_confirmed_rates_preserved": true,
+  "firmware_pair": "V1_APP121_USB83_WILD204_WILDX27_CAMERA40_20261014",
+  "source_changes_integrated": false,
+  "validation_scope": "8 focused actual-form rate/default checks; installer payload verified"
+}

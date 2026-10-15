@@ -1,13 +1,9 @@
-# WILDX1.0.0.27 camera40 candidate
+# WILDX 1.0.0.28
 
-[Download installer](WILDX_console-Setup-1.0.0.27.exe).
+[Download installer](WILDX_console-Setup-1.0.0.28.exe).
 
-V1 USB Media preview/capture defaults to40fps and retains explicit rate selection.
-Confirmed device settings are preserved; select/apply40 if the device still reports50.
+Environmental sensor errors remain in device health and recording reports without opening a warning popup. The USB 40 fps default, explicit rate selection and camera/IMU saving are retained.
 
-This publishes the previously checked installer. 8 focused actual-form rate/default/no-auto-start checks passed. All13 extracted runtime files match the checked payload. Existing runtimes are reused.
+Checked: 38 actual-GUI warning/panel checks, 42 GPIO checks, 8 camera UI checks and 12 focused warning checks. All 13 extracted runtime files match the package; 12 runtime dependencies match release 27.
 
-[Manifest](release-manifest.json), [checksums](SHA256SUMS.txt), [candidate evidence](../Note/CAMERA40_RELEASE_20261014.md).
-APP121/USB83 and this UI were not hardware retested as a pair. The accepted40fps SD result has startup gaps. Installers contain no firmware and do not flash the device.
-
-This package-only publication preserves pending source work in its checkout.
+[Release notes](../Note/ENVIRONMENT_WARNING_RELEASE_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).

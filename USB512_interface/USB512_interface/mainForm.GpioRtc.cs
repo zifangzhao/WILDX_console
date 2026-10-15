@@ -180,7 +180,6 @@ namespace USB512_interface {
    imuTelemetry.SetNpSample(display,stopped);if(display==null)return;
    var messages=new List<string>();
    if(display.ImuError!=0 && recordingWarnings.Add("imu"))messages.Add("IMU error "+display.ImuError+". IMU data may be unavailable or invalid.");
-   if(display.EnvironmentError!=0 && recordingWarnings.Add("environment"))messages.Add("Environment sensor error "+display.EnvironmentError+".");
    if(display.Overflow!=0 && recordingWarnings.Add("imu-overflow"))messages.Add("IMU queue overflow. Sensor samples have been lost.");
    if(display.Error!=null && recordingWarnings.Add("sensor-monitor"))messages.Add("Sensor monitoring error: "+display.Error);
    if(messages.Count>0)PresentRecordingWarning(String.Join("\r\n",messages)+"\r\n\r\nCheck the sensor status and capture report."+(stopped?" Recording has stopped.":" Neural recording continues unless a capture error is reported."));

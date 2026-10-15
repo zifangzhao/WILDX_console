@@ -44,6 +44,8 @@ static class NpRecordingWarningTests {
    var sample=Activator.CreateInstance(sampleType);sampleType.GetField("Values",All).SetValue(sample,new double[9]);
    Action observe=()=>{type.GetMethod("ObserveNpImu",All).Invoke(form,new object[]{sample,false});Application.DoEvents();};
    observe();Check(shown==0,"healthy sensors produced warning");
+   sampleType.GetField("EnvironmentError",All).SetValue(sample,3U);observe();observe();
+   Check(shown==0,"environment sensor error opened a warning popup");
    sampleType.GetField("ImuError",All).SetValue(sample,2U);sampleType.GetField("EnvironmentError",All).SetValue(sample,3U);sampleType.GetField("Overflow",All).SetValue(sample,1U);observe();
    Check(shown==1,"initial sensor errors were not grouped into one warning");
    for(int i=0;i<50;i++)observe();Check(shown==1,"repeated packet errors reopened warning");
