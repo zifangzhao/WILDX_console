@@ -12,6 +12,10 @@ V1 connector boxes are directly editable and default to the active profile, so P
 
 USB **Report…** displays the capture outcome and native firmware/host status, and saves `capture_report.txt` in the recording folder. BLE **Report…** exports connection, recorder, clock and map status plus the command log. Native error codes and incomplete-data warnings remain intact.
 
+Neural USB/BLE, camera, scope and V1 media previews use independent modeless windows. The console and other windows can come forward normally. V1 media retains its exclusive USB lease until closed, and console shutdown waits for media drain. Live neural/camera previews can be hidden and reopened without discarding capture resources.
+
+Network time uses local time with an explicit Windows UTC offset and a **±10 ms** target. Automatic server selection compares Cloudflare, NIST and Microsoft; manual laboratory-server selection remains available. Internal UTC and recorder clocks are unchanged. [Clock behavior](network-time.md).
+
 USB **Capture activity** keeps elapsed time, recording-folder size and destination disk free space in a dedicated row. V1/V2 elapsed time begins with the first received neural data, excluding preparation. Stop freezes the time while file-size updates include the final saved files. Each fresh timestamped recording starts new totals.
 
 Select a WILD board in **GPIO / RTC** to automatically log it with USB recording. One matching board is selected automatically on initial discovery; **Off** disables it, and an explicitly selected device is retained by PNP identity. Multiple boards require selection. Discovery does not open COM ports. The **GPIO / RTC** panel below Device health displays status, saved events, channel counts, latest RTC event and clock RTT, retaining final values after Stop. GPIO failures warn while neural recording continues. Event, clock-query and session files stay at the recording root; optional per-probe metadata references those shared files. This integration currently covers USB recording. See [protocol, timing limits and checks](../Note/RECORDING_STATUS_GPIO_RTC_20261014.md).

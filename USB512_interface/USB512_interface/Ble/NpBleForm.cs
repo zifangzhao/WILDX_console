@@ -407,7 +407,7 @@ namespace USB512_interface
             if(preview!=null && !preview.IsDisposed){preview.Activate();return;}
             var calibration=NpCalibrationStore.Get("ble:"+address.Text.Trim().ToUpperInvariant());calibration.RequireModel(true,(int)current.Mask);
             preview=new NpBlePreviewForm(connection,()=>V2?current:null,()=>busy,calibration);
-            preview.Show(DialogOwner);
+            preview.Show();
         }
         async Task ConfigureChannels()
         {

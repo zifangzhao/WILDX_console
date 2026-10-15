@@ -181,8 +181,8 @@ namespace USB512_interface
             recordingSummaryTimer.Tick+=delegate {RefreshRecordingSummary(DateTime.UtcNow);PollGpioRtcRecording();};
             RefreshRecordingSummary(DateTime.UtcNow);recordingSummaryTimer.Start();
             var clock=Stack(82,44,0);timeStatus.Dock=DockStyle.Fill;timeStatus.AutoEllipsis=true;clock.Controls.Add(timeStatus,0,0);clock.Controls.Add(ActionRow(timeSettings),0,1);
-            clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="The network clock is an app-local UTC reference. Recordings retain their device timestamps.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
-            var networkTimeCard=Card("Network time / UTC",null,clock);networkTimeCard.Name="networkTimeCard";
+            clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="Time uses your Windows time zone.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
+            var networkTimeCard=Card("Network time / Local",null,clock);networkTimeCard.Name="networkTimeCard";
             healthAndGpio.Controls.Add(networkTimeCard,0,2);
 
             bleWorkspace=new NpBleForm() {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};

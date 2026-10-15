@@ -38,11 +38,11 @@ namespace USB512_interface
                     if (settings.NetworkTimeUpgradeRequired) {
                         settings.Upgrade(); settings.NetworkTimeUpgradeRequired = false; settings.Save();
                     }
-                    NetworkClock.Configure(settings.NetworkTimeEnabled, settings.NetworkTimeServer);
+                    NetworkClock.Configure(settings.NetworkTimeEnabled, settings.NetworkTimeServer, settings.NetworkTimeAutomatic);
                 }
                 catch (Exception ex) {
                     NetworkTimeSettingsError = "Using default server because preferences could not be loaded: " + ex.Message;
-                    NetworkClock.Configure(true, NetworkTimeClock.DefaultServer);
+                    NetworkClock.Configure(true, NetworkTimeClock.DefaultServer, true);
                 }
                 NetworkClock.Start();
                 Application.Run(new Form1());

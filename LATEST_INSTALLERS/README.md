@@ -1,9 +1,11 @@
-# WILDX 1.0.0.24
+# WILDX 1.0.0.25
 
-[Download the installer](WILDX_console-Setup-1.0.0.24.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.25.exe).
 
-BLE Control now uses aligned device/address and recording-profile/storage-bound fields, with labels above each field. Connection actions have their own row. Buttons share a height and spacing, action rows wrap at narrow widths, long status messages wrap within the panel, and empty status details take no space.
+Network time now displays your Windows local time zone and UTC offset. Automatic selection compares Cloudflare, NIST and Microsoft using measured uncertainty and jitter, with per-server retry/backoff and manual override. The target is **±10 ms**; the UI reports when the current estimate exceeds it. Internal UTC values and recording timestamps keep their existing meaning.
 
-Actual UI checks passed across standalone and embedded window widths, enlarged layout, long messages and the Cancel connection label. The existing 106 shared workflow checks passed. All 13 extracted runtime files match the checked payload; all 12 non-GUI files are unchanged from 1.0.0.23. No hardware or installer execution; existing V1 firmware support is unchanged.
+USB/BLE neural, camera, scope and V1 media previews use normal independent windows, allowing the console and other windows to come forward. Live-preview resources and media/capture drain guards remain intact.
 
-[UI render with sample values](../docs/screenshots/ble-mode.png), [validation](../Note/BLE_LAYOUT_ALIGNMENT_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
+20,083 clock checks, 37 actual clock-UI checks, 11 preview lifecycle checks and 134 capture ownership assertions passed. The final 20-second public NTP comparison selected Cloudflare; estimated error was ±12.431–15.394 ms, above the 10 ms target on this network. All 13 extracted runtime files match the checked payload; all 12 non-GUI files remain identical to 1.0.0.24. No recording hardware or installer execution.
+
+[Time settings preview](../docs/screenshots/network-time-settings.png), [clock behavior](../docs/network-time.md), [validation](../Note/NETWORK_TIME_LOCAL_PREVIEW_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).

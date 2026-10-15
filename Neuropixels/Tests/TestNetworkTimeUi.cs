@@ -1,77 +1,79 @@
 using System;
+using System.ComponentModel;
+using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-// Inspect the actual Release assembly. The main form is never shown or loaded;
-// its controls are painted in an inert host, without USB discovery or capture.
+// Actual WILDX controls, with a synthetic clock and device-owning Load removed.
 internal static class TestNetworkTimeUi
 {
-    private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-    private static int checks;
-    private static void Check(bool condition, string reason) { checks++; if (!condition) throw new Exception(reason); }
-    private static void Render(Form form, string path)
-    {
-        form.ShowInTaskbar = false; form.StartPosition = FormStartPosition.Manual; form.Location = new Point(-20000, -20000);
-        form.Show(); form.PerformLayout(); Application.DoEvents();
-        using (var bitmap = new Bitmap(form.Width, form.Height)) { form.DrawToBitmap(bitmap, new Rectangle(Point.Empty, bitmap.Size)); bitmap.Save(path); }
-        form.Hide();
+    const BindingFlags All=BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic;
+    static int checks;
+    static void Check(bool value,string reason){checks++;if(!value)throw new Exception(reason);}
+    static object Field(object o,string name){return o.GetType().GetField(name,All).GetValue(o);}
+    static System.Collections.Generic.IEnumerable<Control> Children(Control owner){foreach(Control child in owner.Controls){yield return child;foreach(var next in Children(child))yield return next;}}
+    static void Render(Form form,string path){
+        form.ShowInTaskbar=false;form.StartPosition=FormStartPosition.Manual;form.Location=new Point(-20000,-20000);form.Show();Application.DoEvents();
+        using(var bitmap=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(bitmap,new Rectangle(Point.Empty,bitmap.Size));bitmap.Save(path);}
     }
-    [STAThread] private static int Main(string[] args)
-    {
-        try {
-            Application.EnableVisualStyles();
-            var assembly = Assembly.LoadFrom(args[0]); Directory.CreateDirectory(args[1]);
-            Check(assembly.GetName().Version.ToString() == "1.0.3.34", "Actual app version");
-            var clockType = assembly.GetType("USB512_interface.NetworkTimeClock", true);
-            var programType = assembly.GetType("USB512_interface.Program", true);
-            object clock = Activator.CreateInstance(clockType, true);
-            programType.GetField("<NetworkClock>k__BackingField", Flags).SetValue(null, clock);
-            try {
-                clockType.GetMethod("Configure", Flags).Invoke(clock, new object[] { true, "time.cloudflare.com" });
-                object sample = Activator.CreateInstance(assembly.GetType("USB512_interface.NtpSample", true), true);
-                var sampleType = sample.GetType();
-                sampleType.GetField("Timestamp", Flags).SetValue(sample, System.Diagnostics.Stopwatch.GetTimestamp());
-                sampleType.GetField("OffsetMilliseconds", Flags).SetValue(sample, 12.0);
-                sampleType.GetField("DelayMilliseconds", Flags).SetValue(sample, 9.0);
-                sampleType.GetField("UncertaintyMilliseconds", Flags).SetValue(sample, 10.0);
-                sampleType.GetField("Stratum", Flags).SetValue(sample, 3);
-                sampleType.GetField("Endpoint", Flags).SetValue(sample, "offline fixture");
-                clockType.GetMethod("Observe", Flags).Invoke(clock, new[] { sample });
-                using (var main = (Form)Activator.CreateInstance(assembly.GetType("USB512_interface.Form1", true)))
-                using (var host = new Form { Text = main.Text, ClientSize = main.ClientSize }) {
-                    var panel = main.Controls.OfType<GroupBox>().Single(g => g.Text == "Secondary network time (UTC)");
-                    Check(main.ClientSize.Height == 755 && panel.Bottom < main.ClientSize.Height, "Main clock panel fits");
-                    Check(panel.Controls.OfType<Button>().Single().Enabled, "Time settings available independently of USB");
-                    string label = panel.Controls.OfType<Label>().Single().Text;
-                    Check(label.Contains("UTC") && label.Contains("above 1 ms target") && label.Contains("recording clock unchanged"), "Main status states timing quality");
-                    Control[] controls = main.Controls.Cast<Control>().ToArray();
-                    main.Controls.Clear(); host.Controls.AddRange(controls);
-                    Render(host, Path.Combine(args[1], "main-network-time.png"));
-                }
-                var formType = assembly.GetType("USB512_interface.NetworkTimeForm", true);
-                using (var form = (Form)Activator.CreateInstance(formType, Flags, null, new[] { clock }, null)) {
-                    var status = form.Controls.OfType<TextBox>().Single(t => t.Multiline);
-                    Check(status.Text.Contains("1 ms target not met") && status.Text.Contains("±10."), "Quality displayed without claiming 1 ms");
-                    Check(status.Text.Contains("stratum 3") && status.Text.Contains("Frequency correction"), "Time diagnostics displayed");
-                    Check(form.Controls.OfType<TextBox>().Single(t => !t.Multiline).Text == "time.cloudflare.com", "Default server shown");
-                    Check(form.Controls.OfType<CheckBox>().Single().Checked, "Background sync enabled");
-                    Render(form, Path.Combine(args[1], "network-time-settings.png"));
-                    clockType.GetMethod("Configure", Flags).Invoke(clock, new object[] { false, "localhost" });
-                    formType.GetMethod("RefreshStatus", Flags).Invoke(form, null);
-                    Check(status.Text.Contains("Disabled") && !status.Text.Contains("UTC:"), "Disabled status does not claim a synchronized time");
-                }
-                var settingsType = assembly.GetType("USB512_interface.Properties.Settings", true);
-                object settings = Activator.CreateInstance(settingsType, true);
-                Check((bool)settingsType.GetProperty("NetworkTimeEnabled").GetValue(settings), "Enabled preference default");
-                Check((string)settingsType.GetProperty("NetworkTimeServer").GetValue(settings) == "time.cloudflare.com", "Server preference default");
+    [STAThread]static int Main(string[] args){try{
+        Application.EnableVisualStyles();var app=Assembly.LoadFrom(Path.GetFullPath(args[0]));Directory.CreateDirectory(args[1]);
+        Check(app.GetName().Name=="WILDX_console","Actual WILDX assembly");
+        var clockType=app.GetType("USB512_interface.NetworkTimeClock",true);var program=app.GetType("USB512_interface.Program",true);
+        var configure=clockType.GetMethod("Configure",All,null,new[]{typeof(bool),typeof(string),typeof(bool)},null);
+        object clock=Activator.CreateInstance(clockType,true);program.GetField("<NetworkClock>k__BackingField",All).SetValue(null,clock);
+        try{
+            configure.Invoke(clock,new object[]{true,"time.cloudflare.com",true});
+            var sampleType=app.GetType("USB512_interface.NtpSample",true);
+            string[] hosts={"time.cloudflare.com","time.nist.gov","time.windows.com"};
+            for(int i=0;i<hosts.Length;i++){
+                var sample=Activator.CreateInstance(sampleType,true);
+                sampleType.GetField("Timestamp",All).SetValue(sample,Stopwatch.GetTimestamp());
+                sampleType.GetField("OffsetMilliseconds",All).SetValue(sample,12.0);
+                sampleType.GetField("DelayMilliseconds",All).SetValue(sample,9.0+i*20);
+                sampleType.GetField("UncertaintyMilliseconds",All).SetValue(sample,10.0+i*10);
+                sampleType.GetField("Stratum",All).SetValue(sample,3);
+                sampleType.GetField("Endpoint",All).SetValue(sample,"UI fixture "+i);
+                clockType.GetMethod("ObserveServer",All).Invoke(clock,new[]{hosts[i],sample});
             }
-            finally { ((IDisposable)clock).Dispose(); programType.GetField("<NetworkClock>k__BackingField", Flags).SetValue(null, null); }
-            Console.WriteLine("PASS: " + checks + " actual Release network-time UI/default preference checks; no main-form Load, network, USB or capture");
-            return 0;
-        }
-        catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
-    }
+            var mainType=app.GetType("USB512_interface.Form1",true);
+            using(var main=(Form)Activator.CreateInstance(mainType)){
+                main.Load-=(EventHandler)Delegate.CreateDelegate(typeof(EventHandler),main,mainType.GetMethod("Form1_Load",All));
+                foreach(IComponent component in ((IContainer)Field(main,"components")).Components)if(component is Timer)((Timer)component).Stop();
+                ((Timer)Field(Field(main,"bleWorkspace"),"timer")).Stop();
+                var card=main.Controls.Find("networkTimeCard",true).Single();var label=main.Controls.Find("networkTimeStatus",true).Single();
+                Check(Children(card).Any(c=>c.Text=="Network time / Local"),"Panel title not local time");
+                Check(label.Text.Contains(DateTimeOffset.Now.ToString("zzz")) && label.Text.Contains("above 10 ms target") && label.Text.Contains("time.cloudflare.com"),"Local offset/source/uncertainty omitted");
+                Check(Children(card).OfType<Button>().Single().Enabled,"Time settings unavailable independently of USB");
+                main.ClientSize=new Size(1320,1060);Render(main,Path.Combine(args[1],"network-time-local-usb.png"));
+                foreach(int width in new[]{1044,1180,1450}){main.ClientSize=new Size(width,920);Application.DoEvents();Check(label.Parent.ClientRectangle.Contains(label.Bounds) && label.Height>=label.Font.Height*3,"Local clock text clipped on resize");}
+            }
+            var formType=app.GetType("USB512_interface.NetworkTimeForm",true);
+            using(var form=(Form)Activator.CreateInstance(formType,All,null,new[]{clock},null)){
+                var status=(TextBox)Field(form,"status");var automatic=(CheckBox)Field(form,"automatic");var enabled=(CheckBox)Field(form,"enabled");var server=(TextBox)Field(form,"server");
+                Check(automatic.Checked && enabled.Checked && !server.Enabled,"Automatic setting or manual-field gating incorrect");
+                Check(status.Text.Contains("Local time:") && status.Text.Contains(DateTimeOffset.Now.ToString("zzz")) && !status.Text.Contains("UTC:"),"Settings did not use local time with offset");
+                Check(status.Text.Contains("above 10 ms target") && status.Text.Contains("stratum 3"),"Accuracy diagnosis omitted");
+                Check(hosts.All(host=>status.Text.Contains(host)) && status.Text.Contains("quality"),"Candidate comparison omitted");
+                automatic.Checked=false;Check(server.Enabled,"Manual server override unavailable");
+                enabled.Checked=false;Check(!automatic.Enabled && !server.Enabled,"Disabled clock still permits server edits");
+                enabled.Checked=automatic.Checked=true;
+                Render(form,Path.Combine(args[1],"network-time-settings.png"));
+                foreach(int width in new[]{680,720,960}){
+                    form.ClientSize=new Size(width,480);Application.DoEvents();
+                    foreach(var control in Children(form).Where(c=>c.Visible && (c is TextBox || c is Button || c is CheckBox || c is Label)))Check(control.Parent.ClientRectangle.Contains(control.Bounds),"Clipped time settings control: "+control.Text);
+                }
+                configure.Invoke(clock,new object[]{false,"localhost",false});formType.GetMethod("RefreshStatus",All).Invoke(form,null);
+                Check(status.Text.Contains("Disabled") && !status.Text.Contains("Local time:"),"Disabled clock claims synchronization");
+            }
+            var settingsType=app.GetType("USB512_interface.Properties.Settings",true);
+            Check(((DefaultSettingValueAttribute)settingsType.GetProperty("NetworkTimeAutomatic").GetCustomAttributes(typeof(DefaultSettingValueAttribute),false).Single()).Value=="True","Automatic selection not default");
+            Check(((DefaultSettingValueAttribute)settingsType.GetProperty("NetworkTimeEnabled").GetCustomAttributes(typeof(DefaultSettingValueAttribute),false).Single()).Value=="True","Background sync default disabled");
+        }finally{((IDisposable)clock).Dispose();program.GetField("<NetworkClock>k__BackingField",All).SetValue(null,null);}
+        Console.WriteLine("PASS: "+checks+" actual WILDX network-time UI/default checks; no discovery, network or hardware.");return 0;
+    }catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

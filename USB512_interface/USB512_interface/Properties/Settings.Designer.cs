@@ -37,6 +37,10 @@ namespace USB512_interface.Properties
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NetworkTimeAutomatic { get { return (bool)this["NetworkTimeAutomatic"]; } set { this["NetworkTimeAutomatic"] = value; } }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool NetworkTimeUpgradeRequired { get { return (bool)this["NetworkTimeUpgradeRequired"]; } set { this["NetworkTimeUpgradeRequired"] = value; } }
 
         [global::System.Configuration.UserScopedSettingAttribute()]

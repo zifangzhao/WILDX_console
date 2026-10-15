@@ -98,17 +98,25 @@ namespace USB512_interface
 
     internal sealed class NetworkTimeSnapshot
     {
-        internal bool Enabled, HasEstimate, IsFresh;
-        internal string Server, Endpoint, Status, Error;
+        internal bool Enabled, HasEstimate, IsFresh, Automatic;
+        internal string Server, ConfiguredServer, Endpoint, Status, Error;
+        internal string[] ServerResults;
         internal DateTime Utc, LastSyncUtc;
         internal double OffsetMilliseconds, DelayMilliseconds, UncertaintyMilliseconds, AgeSeconds, FrequencyPpm;
         internal int Stratum, Samples;
-        internal bool MeetsOneMillisecondTarget { get { return IsFresh && UncertaintyMilliseconds <= 1; } }
+        internal bool MeetsAccuracyTarget { get { return IsFresh && UncertaintyMilliseconds <= NetworkTimeClock.TargetAccuracyMilliseconds; } }
+        internal string TargetStatus { get { return (MeetsAccuracyTarget ? "within " : "above ") + NetworkTimeClock.TargetAccuracyMilliseconds.ToString("0") + " ms target"; } }
+        internal static DateTimeOffset LocalTime(DateTime utc, TimeZoneInfo zone = null)
+        {
+            return TimeZoneInfo.ConvertTime(new DateTimeOffset(DateTime.SpecifyKind(utc, DateTimeKind.Utc)), zone ?? TimeZoneInfo.Local);
+        }
     }
 
     internal sealed class NetworkTimeClock : IDisposable
     {
         internal const string DefaultServer = "time.cloudflare.com";
+        internal const double TargetAccuracyMilliseconds = 10;
+        internal static readonly string[] AutomaticServers = { DefaultServer, "time.nist.gov", "time.windows.com" };
         internal const double MaximumAgeSeconds = 120;
         private const double DriftBoundPpm = 100, SlewMillisecondsPerSecond = 0.5;
         private readonly object gate = new object();
@@ -122,6 +130,18 @@ namespace USB512_interface
         private bool enabled, disposed, denied;
         private int generation;
         private string server = DefaultServer, error;
+        private bool automatic;
+        private sealed class Source
+        {
+            internal string Host, Error;
+            internal readonly List<NtpSample> Samples = new List<NtpSample>();
+            internal IPEndPoint Endpoint;
+            internal int AddressIndex, PollSeconds = 16, MinimumPollSeconds = 16;
+            internal long NextPoll;
+            internal bool Denied;
+        }
+        private Source[] sources = new Source[0];
+        private Source activeSource;
         private NtpSample selected, latest;
         private long anchorTimestamp;
         private DateTime anchorUtc;
@@ -159,10 +179,16 @@ namespace USB512_interface
         }
         internal void Configure(bool enable, string hostname)
         {
+            Configure(enable, hostname, false);
+        }
+        internal void Configure(bool enable, string hostname, bool automaticSelection)
+        {
             hostname = ValidateServer(hostname);
             lock (gate) {
                 if (disposed) throw new ObjectDisposedException("NetworkTimeClock");
                 enabled = enable; server = hostname; generation++; denied = false; error = null;
+                automatic = automaticSelection; activeSource = null;
+                sources = (automatic ? AutomaticServers : new[] { hostname }).Select(host => new Source { Host = host }).ToArray();
                 samples.Clear(); selected = latest = null; frequencyPpm = phaseMilliseconds = jitterMilliseconds = 0;
                 if (activeSocket != null) activeSocket.Close();
             }
@@ -216,6 +242,64 @@ namespace USB512_interface
             double remaining = Math.Max(0, Math.Abs(phaseMilliseconds) - Math.Max(0, Seconds(timestamp, anchorTimestamp)) * SlewMillisecondsPerSecond);
             return selected.UncertaintyMilliseconds + jitterMilliseconds + Math.Max(0, Seconds(timestamp, selected.Timestamp)) * DriftBoundPpm / 1000 + remaining;
         }
+        private double SourceScore(Source source, long timestamp)
+        {
+            var recent = source.Samples.Where(s => Seconds(timestamp, s.Timestamp) <= MaximumAgeSeconds).ToArray();
+            if (source.Denied || source.Error != null || recent.Length == 0) return Double.PositiveInfinity;
+            // Keep source ranking separate from holdover age; polling phase must not
+            // make otherwise stable peers swap every few seconds.
+            return recent.Min(s => s.UncertaintyMilliseconds) + recent.Max(s => s.OffsetMilliseconds) - recent.Min(s => s.OffsetMilliseconds);
+        }
+        internal void ObserveServer(string hostname, NtpSample observation)
+        {
+            lock (gate) {
+                var source = sources.Single(s => String.Equals(s.Host, hostname, StringComparison.OrdinalIgnoreCase));
+                if (source.Samples.Count != 0 && source.Samples.Last().Endpoint != observation.Endpoint) source.Samples.Clear();
+                source.Samples.Add(observation);
+                if (source.Samples.Count > 8) source.Samples.RemoveAt(0);
+                source.Error = null; source.PollSeconds = source.MinimumPollSeconds;
+                var best = sources.OrderBy(s => SourceScore(s, observation.Timestamp)).First();
+                // Retain an equally good source, avoiding needless phase corrections.
+                if (activeSource != null && SourceScore(activeSource, observation.Timestamp) <= SourceScore(best, observation.Timestamp) + 0.1) best = activeSource;
+                if (best != source) return;
+                if (activeSource != source || latest != null && latest.Endpoint != observation.Endpoint) {
+                    samples.Clear(); latest = null;
+                }
+                activeSource = source;
+                // Observe retains the running QPC anchor and slews toward a new
+                // source; it never fits a frequency slope across different peers.
+                Observe(observation);
+            }
+        }
+        internal void RecordServerFailure(string hostname, Exception exception)
+        {
+            lock (gate) {
+                var source = sources.Single(s => String.Equals(s.Host, hostname, StringComparison.OrdinalIgnoreCase));
+                var kiss = exception as NtpServerException;
+                if (kiss != null && (kiss.KissCode == "DENY" || kiss.KissCode == "RSTR")) source.Denied = true;
+                if (kiss != null && kiss.KissCode == "RATE") {
+                    if (source.PollSeconds >= 1024) source.Denied = true;
+                    else source.MinimumPollSeconds = source.PollSeconds = Math.Min(1024, source.PollSeconds * 2);
+                }
+                else if (!source.Denied) source.PollSeconds = Math.Min(1024, source.PollSeconds * 2);
+                source.Error = exception is SocketException && ((SocketException)exception).SocketErrorCode == SocketError.TimedOut
+                    ? "No NTP response (UDP port 123)." : exception.GetBaseException().Message;
+                source.Endpoint = null;
+                denied = sources.All(s => s.Denied);
+                if (activeSource == source || activeSource == null) error = source.Host + ": " + source.Error;
+                if (denied) error = "All servers paused polling; reapply settings to retry.";
+            }
+        }
+        private string DescribeSource(Source source, long timestamp)
+        {
+            if (source.Denied) return source.Host + ": paused by server";
+            if (source.Error != null) return source.Host + ": " + source.Error;
+            if (source.Samples.Count == 0) return source.Host + ": waiting";
+            var last = source.Samples.Last();
+            double age = Math.Max(0, Seconds(timestamp, last.Timestamp));
+            return source.Host + ": " + (age > MaximumAgeSeconds ? "stale" : String.Format("RTT {0:F2} ms · quality {1:F2} ms · {2}/8 samples",
+                last.DelayMilliseconds, SourceScore(source, timestamp), source.Samples.Count));
+        }
         internal bool TryGetUtc(out DateTime utc, out double uncertaintyMilliseconds)
         {
             lock (gate) {
@@ -240,7 +324,10 @@ namespace USB512_interface
                 bool fresh = enabled && !disposed && !denied && has && age <= MaximumAgeSeconds;
                 DateTime utc = has ? EstimateUtc(timestamp) : DateTime.MinValue;
                 return new NetworkTimeSnapshot {
-                    Enabled = enabled, Server = server, HasEstimate = has, IsFresh = fresh, Utc = utc,
+                    Enabled = enabled, Automatic = automatic, ConfiguredServer = server,
+                    Server = activeSource == null ? automatic ? "Automatic selection" : server : activeSource.Host,
+                    ServerResults = sources.Select(source => DescribeSource(source, timestamp)).ToArray(),
+                    HasEstimate = has, IsFresh = fresh, Utc = utc,
                     Status = disposed ? "Stopped" : !enabled ? "Disabled" : denied ? "Polling paused by server" : !has ? "Waiting for time server" : !fresh ? "Stale holdover" : error != null ? "Holdover" : "Tracking",
                     Error = error, AgeSeconds = age, Endpoint = has ? selected.Endpoint : null,
                     LastSyncUtc = has ? BaselineUtc(latest.Timestamp).AddTicks((long)(latest.OffsetMilliseconds * TimeSpan.TicksPerMillisecond)) : DateTime.MinValue,
@@ -253,41 +340,38 @@ namespace USB512_interface
         }
         private void Run()
         {
-            int seenGeneration = -1, addressIndex = 0, pollSeconds = 16, ratePollSeconds = 16;
             while (true) {
-                string hostname; int currentGeneration; bool canPoll;
+                Source source; int currentGeneration, waitMilliseconds;
                 lock (gate) {
                     if (disposed) return;
-                    hostname = server; currentGeneration = generation; canPoll = enabled && !denied;
+                    currentGeneration = generation;
+                    source = enabled ? sources.Where(s => !s.Denied).OrderBy(s => s.NextPoll).FirstOrDefault() : null;
+                    waitMilliseconds = source == null ? Timeout.Infinite : (int)Math.Min(Int32.MaxValue, Math.Max(0, Seconds(source.NextPoll, Stopwatch.GetTimestamp()) * 1000));
                 }
-                if (seenGeneration != currentGeneration) { seenGeneration = currentGeneration; pollSeconds = ratePollSeconds = 16; addressIndex = 0; wake.WaitOne(0); }
-                if (!canPoll) { wake.WaitOne(); continue; }
+                if (source == null || waitMilliseconds > 0) { wake.WaitOne(waitMilliseconds); continue; }
                 try {
-                    var dns = Dns.GetHostAddressesAsync(hostname);
-                    if (!dns.Wait(3000)) throw new TimeoutException("NTP hostname lookup timed out.");
-                    IPAddress[] addresses = dns.GetAwaiter().GetResult().Where(a => a.AddressFamily == AddressFamily.InterNetwork || a.AddressFamily == AddressFamily.InterNetworkV6)
-                        .OrderBy(a => a.AddressFamily == AddressFamily.InterNetwork ? 0 : 1).ToArray();
-                    if (addresses.Length == 0) throw new InvalidOperationException("No NTP server address found.");
-                    NtpSample observation = Query(new IPEndPoint(addresses[addressIndex++ % addresses.Length], 123), currentGeneration);
-                    lock (gate) { if (!disposed && currentGeneration == generation) { Observe(observation); pollSeconds = ratePollSeconds; } }
+                    if (source.Endpoint == null) {
+                        var dns = Dns.GetHostAddressesAsync(source.Host);
+                        if (!dns.Wait(3000)) throw new TimeoutException("NTP hostname lookup timed out.");
+                        IPAddress[] addresses = dns.GetAwaiter().GetResult().Where(a => a.AddressFamily == AddressFamily.InterNetwork || a.AddressFamily == AddressFamily.InterNetworkV6)
+                            .OrderBy(a => a.AddressFamily == AddressFamily.InterNetwork ? 0 : 1).ToArray();
+                        if (addresses.Length == 0) throw new InvalidOperationException("No NTP server address found.");
+                        source.Endpoint = new IPEndPoint(addresses[source.AddressIndex++ % addresses.Length], 123);
+                    }
+                    NtpSample observation = Query(source.Endpoint, currentGeneration);
+                    lock (gate) { if (!disposed && currentGeneration == generation) ObserveServer(source.Host, observation); }
                 }
                 catch (Exception ex) {
                     lock (gate) {
                         if (disposed) return;
                         if (currentGeneration != generation) continue;
-                        var kiss = ex as NtpServerException;
-                        if (kiss != null && (kiss.KissCode == "DENY" || kiss.KissCode == "RSTR")) denied = true;
-                        if (kiss != null && kiss.KissCode == "RATE") {
-                            if (pollSeconds >= 1024) denied = true;
-                            else pollSeconds = ratePollSeconds = Math.Min(1024, pollSeconds * 2);
-                        }
-                        else if (!denied) pollSeconds = Math.Max(ratePollSeconds, Math.Min(256, pollSeconds * 2));
-                        error = ex is SocketException && ((SocketException)ex).SocketErrorCode == SocketError.TimedOut ? "No NTP response (UDP port 123)." : ex.GetBaseException().Message;
-                        if (denied) error += ". Polling stopped; reapply settings to retry.";
+                        RecordServerFailure(source.Host, ex);
                     }
                 }
-                lock (gate) { if (disposed) return; if (currentGeneration != generation) continue; }
-                wake.WaitOne(pollSeconds * 1000);
+                lock (gate) {
+                    if (disposed) return; if (currentGeneration != generation) continue;
+                    source.NextPoll = Stopwatch.GetTimestamp() + (long)(source.PollSeconds * frequency);
+                }
             }
         }
         internal NtpSample Query(IPEndPoint endpoint, int expectedGeneration)

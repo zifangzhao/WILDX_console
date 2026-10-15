@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.24",
+  "version": "1.0.0.25",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked BLE layout alignment; hardware qualification unchanged",
+  "status": "Software-checked local network time, automatic server selection, 10 ms target and independent preview windows",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.24.exe",
-    "sha256": "73D1B7D18E445EFBBDD602DB46CB06A4C1BC5E1D1BE69537DCCA153D2D121F2D",
-    "bytes": 2334076
+    "file": "WILDX_console-Setup-1.0.0.25.exe",
+    "sha256": "C4C30788FAAC9A5358DF08E33C006C4071FE74672FB902AC67B66E95FCD9C23B",
+    "bytes": 2336367
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "90087AA9212158DD498239E75D3DE03E42716EFB5DE0F91F3BC767E00A373454",
-      "bytes": 1340928
+      "sha256": "A126E04143BD5FEE7F6FAAC31D60AAB1C733FB1640BC81ACBA37D293622D075D",
+      "bytes": 1346560
     },
     {
       "path": "WILDX_console.exe.config",
@@ -109,24 +109,27 @@
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
     "companionRebuilt": false,
-    "actualGuiAlignmentContainmentChecks": 1042,
-    "universalWorkflowChecks": 106,
-    "standaloneClientWidths": [
-      820,
-      910,
-      1200
+    "networkTimeChecks": 20083,
+    "actualNetworkTimeUiChecks": 37,
+    "previewWindowLifecycleChecks": 11,
+    "usbUiLifecycleAssertions": 134,
+    "finalLiveNtpComparisonSeconds": 20,
+    "liveServersResponding": 3,
+    "liveSelectedServer": "time.cloudflare.com",
+    "liveCloudflareRttMilliseconds": [
+      14.74,
+      8.769
     ],
-    "embeddedClientWidths": [
-      1044,
-      1180,
-      1450
+    "liveEstimatedErrorMilliseconds": [
+      12.431,
+      15.394
     ],
-    "additionalLayoutScalePercent": 150,
-    "longStatusAndCancelLabelChecked": true,
+    "targetMetThroughoutLiveCheck": false,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
     "hardwareAccess": false,
+    "publicNtpNetworkAccess": true,
     "installerExecuted": false,
     "liveHardwareThroughputQualified": false
   },
@@ -159,19 +162,47 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "7ab8800af089960610f0fa2af9e1d24b1e029fc0",
-    "guiSha256": "90087AA9212158DD498239E75D3DE03E42716EFB5DE0F91F3BC767E00A373454",
+    "sourceBase": "2f2303ccde873d5a603e9a80e6c979a8b3ae55f1",
+    "guiSha256": "A126E04143BD5FEE7F6FAAC31D60AAB1C733FB1640BC81ACBA37D293622D075D",
     "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
-    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.23",
-    "source": "BLE field grids, aligned action rows, wrapping status details, DPI layout and version",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.24",
+    "source": "Local-time display, automatic NTP choice, 10 ms target, independent preview windows, settings and version",
     "sourceInputs": [
       {
-        "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
-        "sha256": "04A969571D9810D4D2C370D8E68C8EFF125E97F4FB36B167D6F68C45C2DABF40"
+        "path": "USB512_interface/USB512_interface/NetworkTimeClock.cs",
+        "sha256": "27AF992021B83A3F565A96A6F6B8B8EB60241CD05B194B8729E86EAF958189E2"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/mainForm.NetworkTime.cs",
+        "sha256": "B3650DB2F53CE6A1F18F23953DE99704A8145B561957B3A37A9B21F40208289B"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
+        "sha256": "BFA9288FF9BF185C171A11B37DF32FC2A15821AD1EF77D29A2AE69A027C2EAD4"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/Program.cs",
+        "sha256": "79269F2B2DA151C212B1846B7627B29501365573E4FE91891871176B09F2D1C0"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/Properties/Settings.settings",
+        "sha256": "15603E99A0307B3B5E0777C9C2B7D44AADBECB5E9DD0AE51D0AB87226A80C135"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/Properties/Settings.Designer.cs",
+        "sha256": "ECC3AB3000932187615666D0BEC50864CABF220A0970267F24F58C86F0A28096"
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "2FB0ADF2ABDF8FEBE43E1784FA609F32C3EFEF27B36FB36BB6F14715AD7A1462"
+        "sha256": "4300BC50AD696B5B7C7F47868F4D9A09BB2F03B41EF6F6E3A2C3CD62DA75E6F6"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/mainForm.cs",
+        "sha256": "87B615F8AD6830066D74B4E1C56602FB0EA917E771425D3C97F88CFCD825CE59"
+      },
+      {
+        "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+        "sha256": "8AADCC022C3C0BD0C3D7C40294BA8DC16A086E598CA8CF793ACA5C0567634B18"
       }
     ],
     "excludedPendingChanges": [
@@ -184,7 +215,7 @@
       "legacy/",
       "USB512_interface/USB512_interface/NpUsbSensors.cs"
     ],
-    "evidence": "Note/BLE_LAYOUT_ALIGNMENT_20261014.md"
+    "evidence": "Note/NETWORK_TIME_LOCAL_PREVIEW_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -199,7 +230,7 @@
     "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
     "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_ble_alignment_1.0.0.24/WILDX_console-Setup-1.0.0.23.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_network_time_preview_1.0.0.25/WILDX_console-Setup-1.0.0.24.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -339,19 +370,26 @@
     "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   },
   "retainedPreviousReleaseValidation": {
-    "version": "1.0.0.23",
-    "manifest": "legacy/20261014_before_ble_alignment_1.0.0.24/release-manifest.json",
+    "version": "1.0.0.24",
+    "manifest": "legacy/20261014_before_network_time_preview_1.0.0.25/release-manifest.json",
     "validation": {
-      "guiCompilerWarnings": 0,
-      "guiBuildWarnings": 1,
-      "transientDefenderCopyRetries": 1,
+      "guiBuildWarnings": 0,
       "guiBuildErrors": 0,
       "companionRebuilt": false,
-      "gpioRtcProtocolClockLifecycleFrequencyChannelChecks": 42,
-      "recordingWarningsTablePolicyFrequencyChecks": 37,
-      "recordingMetricsChecks": 16,
-      "standaloneChecks": 294,
-      "usbUiLifecycleAssertions": 134,
+      "actualGuiAlignmentContainmentChecks": 1042,
+      "universalWorkflowChecks": 106,
+      "standaloneClientWidths": [
+        820,
+        910,
+        1200
+      ],
+      "embeddedClientWidths": [
+        1044,
+        1180,
+        1450
+      ],
+      "additionalLayoutScalePercent": 150,
+      "longStatusAndCancelLabelChecked": true,
       "independentInstallerExtraction": true,
       "extractedRuntimeFilesVerified": 13,
       "nonGuiRuntimeFilesUnchanged": 12,
@@ -471,5 +509,38 @@
     "longStatusWrapsAtAvailableWidth": true,
     "formScaleMode": "DPI",
     "behaviorChanged": false
+  },
+  "networkTime": {
+    "display": "Windows local time zone with explicit UTC offset and DST conversion",
+    "internalTimescale": "UTC",
+    "accuracyTargetMilliseconds": 10,
+    "qualifiedTargetRequiresFreshEstimate": true,
+    "automaticByDefault": true,
+    "candidates": [
+      "time.cloudflare.com",
+      "time.nist.gov",
+      "time.windows.com"
+    ],
+    "selection": "minimum sample uncertainty plus observed offset range; retain incumbent within 0.1 ms; exclude failed/paused/stale candidates",
+    "samplesPerServer": 8,
+    "sampleMaximumAgeSeconds": 120,
+    "minimumPollSeconds": 16,
+    "perServerRateBackoffPreserved": true,
+    "healthyEndpointPinned": true,
+    "sourceHandoff": "QPC clock continues; phase correction slews; frequency histories never mix across peers",
+    "manualServerOverride": true,
+    "windowsSystemClockChanged": false,
+    "recordingTimestampBasisChanged": false,
+    "targetAccuracyGuaranteed": false
+  },
+  "previewWindows": {
+    "neuralUsb": "independent modeless window",
+    "neuralBle": "independent modeless window",
+    "cameraAndScope": "independent modeless windows",
+    "v1Media": "modeless; existing exclusive USB lease retained until window closes",
+    "alwaysAboveConsole": false,
+    "livePreviewCloseHidesWithoutDestroyingCaptureResources": true,
+    "consoleCloseWaitsForMediaDrain": true,
+    "consoleCloseClosesIndependentPreviews": true
   }
 }

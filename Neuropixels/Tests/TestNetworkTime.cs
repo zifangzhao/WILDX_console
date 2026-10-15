@@ -86,10 +86,10 @@ internal static class TestNetworkTime
             clock.Observe(Sample(0));
             var first = clock.GetSnapshot(0, Origin);
             Near((first.Utc - Origin).TotalMilliseconds, 25, 0.001, "Initial UTC anchor");
-            Check(first.IsFresh && first.MeetsOneMillisecondTarget, "Initial low-uncertainty result");
+            Check(first.IsFresh && first.MeetsAccuracyTarget, "Initial low-uncertainty result");
             var held = clock.GetSnapshot(100000000, Origin.AddSeconds(100));
             Near(held.UncertaintyMilliseconds, 10.05, 0.001, "100 ppm holdover bound");
-            Check(held.IsFresh && !held.MeetsOneMillisecondTarget, "Holdover loses millisecond target before expiration");
+            Check(held.IsFresh && !held.MeetsAccuracyTarget, "Holdover loses 10 ms target before expiration");
             Check(!clock.GetSnapshot(120001000, Origin.AddSeconds(120.001)).IsFresh, "Stale after 120 seconds");
             var steppedWindows = clock.GetSnapshot(1000000, Origin.AddHours(1));
             Near((steppedWindows.Utc - Origin).TotalMilliseconds, 1025, 0.001, "Windows step does not alter network clock");
@@ -160,23 +160,72 @@ internal static class TestNetworkTime
     private static void Live(int durationSeconds)
     {
         using (var clock = new NetworkTimeClock()) {
-            clock.Configure(true, NetworkTimeClock.DefaultServer); clock.Start();
+            clock.Configure(true, NetworkTimeClock.DefaultServer, true); clock.Start();
             var timer = Stopwatch.StartNew(); NetworkTimeSnapshot snapshot; DateTime lastSync = DateTime.MinValue;
             do {
                 Thread.Sleep(100); snapshot = clock.GetSnapshot();
                 if (snapshot.HasEstimate && snapshot.LastSyncUtc != lastSync || !snapshot.HasEstimate && snapshot.Error != null) {
-                    Console.WriteLine("LIVE: elapsed_s={0:F1}; status={1}; server={2}; endpoint={3}; offset_ms={4:F3}; delay_ms={5:F3}; estimated_error_ms={6:F3}; frequency_ppm={7:F2}; samples={8}; error={9}",
-                        timer.Elapsed.TotalSeconds, snapshot.Status, snapshot.Server, snapshot.Endpoint, snapshot.OffsetMilliseconds, snapshot.DelayMilliseconds, snapshot.UncertaintyMilliseconds, snapshot.FrequencyPpm, snapshot.Samples, snapshot.Error);
+                    Console.WriteLine("LIVE: elapsed_s={0:F1}; status={1}; server={2}; endpoint={3}; offset_ms={4:F3}; delay_ms={5:F3}; estimated_error_ms={6:F3}; frequency_ppm={7:F2}; samples={8}; error={9}; target_status={10}",
+                        timer.Elapsed.TotalSeconds, snapshot.Status, snapshot.Server, snapshot.Endpoint, snapshot.OffsetMilliseconds, snapshot.DelayMilliseconds, snapshot.UncertaintyMilliseconds, snapshot.FrequencyPpm, snapshot.Samples, snapshot.Error,snapshot.TargetStatus);
                     lastSync = snapshot.LastSyncUtc;
                 }
-                if (!snapshot.HasEstimate && snapshot.Error != null) break;
             } while (timer.Elapsed.TotalSeconds < durationSeconds);
+            foreach(string result in snapshot.ServerResults)Console.WriteLine("SOURCE: "+result);
             if (!snapshot.IsFresh) throw new Exception("Live server synchronization unavailable: " + snapshot.Error);
         }
     }
+    private static void AutomaticSelection()
+    {
+        var threshold=new NetworkTimeSnapshot { IsFresh=true,UncertaintyMilliseconds=10 };
+        Check(threshold.MeetsAccuracyTarget && threshold.TargetStatus=="within 10 ms target","10 ms target boundary rejected");
+        threshold.UncertaintyMilliseconds=10.001;Check(!threshold.MeetsAccuracyTarget && threshold.TargetStatus=="above 10 ms target","Above-target estimate accepted");
+        threshold.UncertaintyMilliseconds=0.1;threshold.IsFresh=false;Check(!threshold.MeetsAccuracyTarget,"Stale clock met the target");
+        string cloud=NetworkTimeClock.AutomaticServers[0],nist=NetworkTimeClock.AutomaticServers[1],windows=NetworkTimeClock.AutomaticServers[2];
+        using(var clock=new NetworkTimeClock(Origin,0,1000000)) {
+            clock.Configure(true,cloud,true);
+            var initial=clock.GetSnapshot(0,Origin);Check(initial.Automatic && initial.ServerResults.Length==3 && !initial.HasEstimate,"Automatic candidates not initialized");
+            clock.ObserveServer(cloud,Sample(0,25,10));clock.ObserveServer(nist,Sample(1,26,2));
+            var best=clock.GetSnapshot(1000000,Origin.AddSeconds(1));
+            Check(best.Server==nist && best.Samples==1 && best.FrequencyPpm==0,"Lower-uncertainty source not selected independently");
+            clock.ObserveServer(windows,Sample(2,26,20));
+            Check(clock.GetSnapshot(2000000,Origin).Server==nist,"Higher-error source replaced the better one");
+            DateTime before=clock.GetSnapshot(16000000,Origin).Utc;
+            clock.ObserveServer(cloud,Sample(16,25,1));
+            var switched=clock.GetSnapshot(16000000,Origin);
+            Check(switched.Server==cloud && switched.Utc==before && switched.FrequencyPpm==0 && switched.Samples==1,"Source switch stepped the running clock or mixed drift histories");
+            clock.RecordServerFailure(cloud,new TimeoutException("fixture timeout"));clock.ObserveServer(nist,Sample(17,26,2));
+            Check(clock.GetSnapshot(17000000,Origin).Server==nist,"Failed source blocked healthy fallback");
+            clock.RecordServerFailure(nist,new NtpServerException("DENY"));clock.ObserveServer(windows,Sample(18,26,20));
+            var fallback=clock.GetSnapshot(18000000,Origin);
+            Check(fallback.Server==windows && fallback.IsFresh && fallback.ServerResults[1].Contains("paused"),"One denied source paused all candidates");
+            clock.RecordServerFailure(windows,new NtpServerException("RATE"));
+            var sources=(Array)typeof(NetworkTimeClock).GetField("sources",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).GetValue(clock);
+            var source=sources.GetValue(2);var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+            Check((int)source.GetType().GetField("PollSeconds",flags).GetValue(source)==32,"RATE did not back off this source");
+            clock.ObserveServer(windows,Sample(50,26,20));
+            Check((int)source.GetType().GetField("PollSeconds",flags).GetValue(source)==32,"Successful reply discarded RATE minimum interval");
+            clock.RecordServerFailure(cloud,new NtpServerException("DENY"));clock.RecordServerFailure(windows,new NtpServerException("RSTR"));
+            Check(!clock.GetSnapshot(50000000,Origin).IsFresh,"All paused sources still qualified time");
+            clock.Configure(true,"localhost");
+            var manual=clock.GetSnapshot(51000000,Origin);Check(!manual.Automatic && manual.ServerResults.Length==1 && manual.ConfiguredServer=="localhost" && !manual.HasEstimate,"Manual override did not reset automatic state");
+        }
+        using(var clock=new NetworkTimeClock(Origin,0,1000000)) {
+            clock.Configure(true,cloud,true);clock.ObserveServer(cloud,Sample(0,25,1));clock.ObserveServer(nist,Sample(1,25,0.95));
+            Check(clock.GetSnapshot(1000000,Origin).Server==cloud,"Nearly equal scores caused needless source flapping");
+            clock.ObserveServer(nist,Sample(2,25,0.5));Check(clock.GetSnapshot(2000000,Origin).Server==nist,"Materially better source not selected");
+            clock.ObserveServer(windows,Sample(130,25,5));Check(clock.GetSnapshot(130000000,Origin).Server==windows,"Stale low-error source blocked a fresh source");
+        }
+        var eastern=TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+        var summer=NetworkTimeSnapshot.LocalTime(new DateTime(2026,7,1,12,0,0,DateTimeKind.Utc),eastern);
+        var winter=NetworkTimeSnapshot.LocalTime(new DateTime(2026,1,1,12,0,0,DateTimeKind.Utc),eastern);
+        Check(summer.Hour==8 && summer.Offset==TimeSpan.FromHours(-4) && winter.Hour==7 && winter.Offset==TimeSpan.FromHours(-5),"Local display ignored seasonal UTC offsets");
+        var first=NetworkTimeSnapshot.LocalTime(new DateTime(2026,11,1,5,30,0,DateTimeKind.Utc),eastern);
+        var second=NetworkTimeSnapshot.LocalTime(new DateTime(2026,11,1,6,30,0,DateTimeKind.Utc),eastern);
+        Check(first.Hour==second.Hour && first.Offset!=second.Offset && second.UtcDateTime-first.UtcDateTime==TimeSpan.FromHours(1),"Repeated local hour lost its UTC offset or changed the timestamp");
+    }
     private static int Main(string[] args)
     {
-        try { if (args.Length > 0 && args[0] == "--live") Live(args.Length > 1 ? Int32.Parse(args[1]) : 3); else { Protocol(); Discipline(); UdpExchange(); Console.WriteLine("PASS: " + checks + " network-time checks"); } return 0; }
+        try { if (args.Length > 0 && args[0] == "--live") Live(args.Length > 1 ? Int32.Parse(args[1]) : 40); else { Protocol(); Discipline(); UdpExchange(); AutomaticSelection(); Console.WriteLine("PASS: " + checks + " network-time checks"); } return 0; }
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
     }
 }

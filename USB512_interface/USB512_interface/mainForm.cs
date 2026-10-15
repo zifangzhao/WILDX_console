@@ -170,6 +170,7 @@ namespace USB512_interface
         private CameraPreviewForm cameraPreview;
         private ScopeForm scopeForm;
         private NeuropixelsPreviewForm neuropixelsPreview;
+        private NpMediaUsbForm mediaPreview;
         // Match the proven mass-storage console's port health indicator: it
         // checks the latest decoded 512-channel multiplexed frame, not raw USB
         // packet bytes.
@@ -3937,14 +3938,21 @@ namespace USB512_interface
         private void btnPreview_Click(object sender, EventArgs e)
         {
             if(selectedDeviceKind==DeviceKind.XeNp){
+                if(mediaPreview!=null && !mediaPreview.IsDisposed){mediaPreview.Show();mediaPreview.Activate();return;}
                 if(!NpControlsAvailable)return;
+                var media=new NpMediaUsbForm(devicePath,saveFolder,npSessionLabel.Text);
+                mediaPreview=media;
+                media.FormClosed+=delegate {
+                    if(Object.ReferenceEquals(mediaPreview,media))mediaPreview=null;
+                    firmwareManagementActive=false;
+                    if(!IsDisposed && !Disposing)UpdateStartEnabled();
+                };
                 firmwareManagementActive=true;UpdateStartEnabled();
-                try{using(var media=new NpMediaUsbForm(devicePath,saveFolder,npSessionLabel.Text))media.ShowDialog(this);}
-                finally{firmwareManagementActive=false;UpdateStartEnabled();}
+                try{media.Show();}
+                catch{mediaPreview=null;firmwareManagementActive=false;media.Dispose();UpdateStartEnabled();throw;}
                 return;
             }
             CameraPreviewForm form;
-            bool created = false;
             lock (previewLock)
             {
                 form = cameraPreview;
@@ -3953,11 +3961,10 @@ namespace USB512_interface
                     form = new CameraPreviewForm(SetCameraSensorExposure);
                     form.FormClosed += CameraPreview_FormClosed;
                     cameraPreview = form;
-                    created = true;
                 }
             }
-            if (created)
-                form.Show(this);
+            if (!form.Visible)
+                form.Show();
             if (form.WindowState == FormWindowState.Minimized)
                 form.WindowState = FormWindowState.Normal;
             form.BringToFront();
@@ -3980,10 +3987,9 @@ namespace USB512_interface
                 neuropixelsPreview=new NeuropixelsPreviewForm(rate,mask,apOnly,adcBits);
                 neuropixelsPreview.StartPosition=FormStartPosition.Manual;
                 neuropixelsPreview.Location=new Point(Right+10,Top);
-                if(IsHandleCreated)neuropixelsPreview.Owner=this;
             }
             neuropixelsPreview.PrepareForCapture();
-            if(show && !neuropixelsPreview.Visible)neuropixelsPreview.Show(this);
+            if(show && !neuropixelsPreview.Visible)neuropixelsPreview.Show();
             npPreviewShowRequested=false;
             npPreviewPreparationMs=clock.Elapsed.TotalMilliseconds;
         }
@@ -4009,11 +4015,11 @@ namespace USB512_interface
                     neuropixelsPreview = new NeuropixelsPreviewForm(rate,mask,np2,np2?12:10);
                     neuropixelsPreview.StartPosition = FormStartPosition.Manual;
                     neuropixelsPreview.Location = new Point(Right + 10, Top);
-                    neuropixelsPreview.Show(this);
+                    neuropixelsPreview.Show();
                 }
                 else
                 {
-                    if(!neuropixelsPreview.Visible)neuropixelsPreview.Show(this);
+                    if(!neuropixelsPreview.Visible)neuropixelsPreview.Show();
                     neuropixelsPreview.BringToFront();
                     neuropixelsPreview.Focus();
                 }
@@ -4039,7 +4045,7 @@ namespace USB512_interface
                 scopeForm = new ScopeForm(previewChannels, previewRateHz, previewTitle);
                 scopeForm.StartPosition = FormStartPosition.Manual;
                 scopeForm.Location = new Point(Right + 10, Top);
-                scopeForm.Show(this);
+                scopeForm.Show();
             }
             else
             {
@@ -4129,7 +4135,6 @@ namespace USB512_interface
                 if(cameraPreview==null || cameraPreview.IsDisposed) {
                     cameraPreview=new CameraPreviewForm(SetCameraSensorExposure);
                     cameraPreview.FormClosed+=CameraPreview_FormClosed;
-                    cameraPreview.Owner=this;
                 }
                 cameraPreview.KeepAliveWhileRecording=true;
             }
@@ -4270,7 +4275,18 @@ namespace USB512_interface
                 e.Cancel=true;
                 lblRecInfo.Text="Stopping USB; waiting for buffered data to finish saving...";
             }
+            if(mediaPreview!=null && !mediaPreview.IsDisposed) {
+                mediaPreview.Close();
+                if(mediaPreview!=null && !mediaPreview.IsDisposed){e.Cancel=true;lblRecInfo.Text="Stopping media preview; waiting for data to finish saving...";}
+            }
             base.OnFormClosing(e);
+        }
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            if(neuropixelsPreview!=null && !neuropixelsPreview.IsDisposed){neuropixelsPreview.KeepAliveWhileRecording=false;neuropixelsPreview.Close();}
+            if(cameraPreview!=null && !cameraPreview.IsDisposed){cameraPreview.KeepAliveWhileRecording=false;cameraPreview.Close();}
+            if(scopeForm!=null && !scopeForm.IsDisposed)scopeForm.Close();
+            base.OnFormClosed(e);
         }
 
         // Compact, direct display for the newest IMU packet. It intentionally
