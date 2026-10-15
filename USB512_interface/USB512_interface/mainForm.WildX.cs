@@ -143,28 +143,35 @@ namespace USB512_interface
             healthAndGpio.Controls.Add(Card("Device health",null,health,true),0,0);
             healthAndGpio.Controls.Add(BuildGpioRtcInfo(),0,1);online.Controls.Add(healthAndGpio,1,0);online.SetRowSpan(healthAndGpio,3);
 
-            var activity=Stack(0,36,0,0,0);
-            activity.RowStyles[0].SizeType=activity.RowStyles[2].SizeType=activity.RowStyles[3].SizeType=activity.RowStyles[4].SizeType=SizeType.Absolute;
+            var activity=Stack(0,36,0,0);
+            activity.RowStyles[0].SizeType=activity.RowStyles[2].SizeType=activity.RowStyles[3].SizeType=SizeType.Absolute;
             recordingSummary=new Label {Name="recordingSummary",Dock=DockStyle.Fill,Font=WildXTheme.Strong,UseMnemonic=false,Margin=Padding.Empty};
             activity.Controls.Add(recordingSummary,0,0);
             lblSpeed.AutoSize=true;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";
             captureReportButton=new Button {Text="Report…",AutoSize=true,Enabled=false};
             captureReportButton.Click+=delegate {if(lastCaptureReport!=null)using(var report=new NpReportForm("Capture report",lastCaptureReport))report.ShowDialog(this);};
-            var usbDetails=new Button {Name="usbHealthDetails",Text="USB details…",AutoSize=true};
+            var usbDetails=new Button {Name="usbHealthDetails",Text="Details…",AutoSize=true};
             usbDetails.Click+=delegate {using(var report=new NpReportForm("USB transfer health",CurrentUsbHealthReport))report.ShowDialog(this);};
             usbQualityTestButton=new Button {Name="usbQualityTest",Text="USB quality test…",AutoSize=true};usbQualityTestButton.Click+=async delegate {await TestUsbQualityAsync();};
             usbQualityContinuous=new CheckBox {Name="usbQualityContinuous",Text="Continuous",Checked=true,AutoSize=true};
-            activity.Controls.Add(ActionRow(lblSpeed,captureReportButton,usbDetails,usbQualityTestButton,usbQualityContinuous),0,1);usbQualityContinuous.Margin=new Padding(0,8,0,8);
+            activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,1);
             lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=Padding.Empty;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
             llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=Padding.Empty;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
-            usbHealthSummary=new Label {Name="usbHealthSummary",Dock=DockStyle.Fill,UseMnemonic=false,Margin=Padding.Empty,ForeColor=WildXTheme.Muted};activity.Controls.Add(usbHealthSummary,0,4);
-            var activityCard=Card("Capture activity",null,activity,true);online.Controls.Add(activityCard,0,1);
+            var usbInfo=Stack(36,24,0);usbInfo.RowStyles[2].SizeType=SizeType.Absolute;
+            usbInfo.Controls.Add(ActionRow(usbQualityTestButton,usbDetails),0,0);
+            usbQualityContinuous.Margin=Padding.Empty;usbInfo.Controls.Add(usbQualityContinuous,0,1);
+            usbHealthSummary=new Label {Name="usbHealthSummary",Dock=DockStyle.Fill,UseMnemonic=false,Margin=Padding.Empty,ForeColor=WildXTheme.Muted};usbInfo.Controls.Add(usbHealthSummary,0,2);
+            var usbCard=Card("USB",null,usbInfo,true);usbCard.Name="usbHealthCard";
+            var activityCard=Card("Capture activity",null,activity,true);activityCard.Name="captureActivityCard";
+            var activitySplit=new TableLayoutPanel {Name="captureActivitySplit",Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty};
+            activitySplit.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,55));activitySplit.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,45));
+            activitySplit.Controls.Add(activityCard,0,0);activitySplit.Controls.Add(usbCard,1,0);online.Controls.Add(activitySplit,0,1);
             bool arrangingActivity=false;
             Action arrangeActivity=delegate {
                 if(arrangingActivity || activity.ClientSize.Width<=0)return;
                 arrangingActivity=true;
                 try {
-                    foreach(var label in new Label[]{recordingSummary,lblRecInfo,llblSavefile,usbHealthSummary}) {
+                    foreach(var label in new Label[]{recordingSummary,lblRecInfo,llblSavefile}) {
                         int width=Math.Max(1,activity.ClientSize.Width-label.Margin.Horizontal);
                         int height=String.IsNullOrEmpty(label.Text)?0:label.GetPreferredSize(new Size(width,0)).Height+label.Margin.Vertical;
                         var row=activity.RowStyles[activity.GetRow(label)];
@@ -180,8 +187,13 @@ namespace USB512_interface
                     int captureHeight=(int)Math.Ceiling(acquisitionLayout.RowStyles[0].Height+capture.RowStyles.Cast<RowStyle>().Sum(row=>row.Height))+
                         acquisitionCard.Padding.Vertical+acquisitionCard.Margin.Vertical;
                     capture.Height=(int)Math.Ceiling(capture.RowStyles.Cast<RowStyle>().Sum(row=>row.Height));
+                    usbInfo.RowStyles[0].Height=Math.Max(36*scale,usbQualityTestButton.Parent.GetPreferredSize(new Size(usbInfo.ClientSize.Width,0)).Height);
+                    usbInfo.RowStyles[1].Height=Math.Max(24*scale,usbQualityContinuous.GetPreferredSize(Size.Empty).Height);
+                    usbInfo.RowStyles[2].Height=usbHealthSummary.GetPreferredSize(new Size(Math.Max(1,usbInfo.ClientSize.Width),0)).Height;
+                    var usbLayout=(TableLayoutPanel)usbCard.Controls[0];
+                    int usbHeight=(int)Math.Ceiling(usbLayout.RowStyles[0].Height+usbInfo.RowStyles.Cast<RowStyle>().Sum(row=>row.Height))+usbCard.Padding.Vertical+usbCard.Margin.Vertical;
                     int minimumActivityHeight=(int)Math.Ceiling(120*scale);
-                    int activityHeight=Math.Max(minimumActivityHeight,heightNeeded);
+                    int activityHeight=Math.Max(minimumActivityHeight,Math.Max(heightNeeded,usbHeight));
                     int upperHeight=Math.Max(captureHeight+activityHeight,(int)Math.Ceiling(408*scale));
                     online.RowStyles[0].Height=upperHeight-activityHeight;
                     online.RowStyles[1].Height=activityHeight;
@@ -193,6 +205,7 @@ namespace USB512_interface
             lblRecInfo.TextChanged+=delegate {arrangeActivity();};llblSavefile.TextChanged+=delegate {arrangeActivity();};
             recordingSummary.TextChanged+=delegate {arrangeActivity();};recordingSummary.FontChanged+=delegate {arrangeActivity();};
             usbHealthSummary.TextChanged+=delegate {arrangeActivity();};usbHealthSummary.FontChanged+=delegate {arrangeActivity();};
+            usbInfo.SizeChanged+=delegate {arrangeActivity();};
             lblRecInfo.FontChanged+=delegate {arrangeActivity();};llblSavefile.FontChanged+=delegate {arrangeActivity();};
             activity.SizeChanged+=delegate {arrangeActivity();};capture.SizeChanged+=delegate {arrangeActivity();};
             captureActions.Layout+=delegate {arrangeActivity();};npAutoRecover.VisibleChanged+=delegate {arrangeActivity();};

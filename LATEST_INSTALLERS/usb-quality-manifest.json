@@ -1,21 +1,21 @@
 {
   "application": "WILD-X Neuropixels Console",
   "version": "1.0.0.33",
-  "build": "USB_QUALITY_CONTINUOUS_20261015",
+  "build": "USB_QUALITY_FIX_20261015",
   "releaseDate": "2026-10-15",
-  "sourceBaseCommit": "f844ac829aab86af6f317d18c1122e681750c81d",
-  "sourceReceipt": "All 86 pre-build application inputs, including concurrent V2 development inputs, are recorded below. The source patch reconstructs the checked GUI input delta from sourceBaseCommit; concurrent V2 work remains uncommitted as application source.",
-  "sourcePatch": "../Note/USB_QUALITY_BUILD_SOURCE_20261015.patch.gz",
+  "sourceBaseCommit": "6716f801978507050e0a9a0a802ad80d472e3b74",
+  "sourceReceipt": "The 86 checked application inputs include concurrent V2 development inputs. The frozen source delta records all checked GUI changes from sourceBaseCommit; unrelated V2 application work remains uncommitted as source.",
+  "sourcePatch": "../Note/USB_QUALITY_FIX_BUILD_SOURCE_20261015.patch.gz",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.33-USB_QUALITY_CONTINUOUS_20261015.exe",
-    "sha256": "8C4723CAD4F3A6C995C72ACD1E6719721CC758C7B611BA32AF8D4ADA98CA16BD",
-    "bytes": 2355111
+    "file": "WILDX_console-Setup-1.0.0.33-USB_QUALITY_FIX_20261015.exe",
+    "sha256": "75F9E4E14CAA8C30B5B757AF90AC7CF7FA2291370348D9818101E5FB06233D0C",
+    "bytes": 2357744
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "68DF134129D34EC9419CD5FDD4D6F376491EF9A542F4B9F30D255E1C07612640",
-      "bytes": 1398272
+      "sha256": "D1271EC76DF47FEA84BA83395121832D861F7AC6C56132F369D0525529A11CF7",
+      "bytes": 1404928
     },
     {
       "path": "WILDX_console.exe.config",
@@ -97,11 +97,11 @@
     },
     {
       "path": "USB512_interface/USB512_interface/UsbQualityTest.cs",
-      "sha256": "064CAD5F0737910DF8C12F8B1071BF3F67781CBC6D7F7F576906284C75D0D791"
+      "sha256": "537B02EF089A6D8BD3B925FF43198009501AC2F9FD1057BDCE4B9D78CCECBE89"
     },
     {
       "path": "USB512_interface/USB512_interface/mainForm.UsbQuality.cs",
-      "sha256": "0804626FB4B6A5A18CA8A6614B13812E2F8E5FF7BAE9CF70F62E1A8405793B14"
+      "sha256": "1BF3BEB4EC0D6D6849AA3299BB0FE839F3D30334F5B141F6BB6FA531D92A413F"
     },
     {
       "path": "USB512_interface/USB512_interface/Ce64MscProtocol.cs",
@@ -241,7 +241,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadStream.cs",
-      "sha256": "0D2142FCD34906835A811C2687B5B340FBE69D90CFF6FA85CD19FCE50E3C3C96"
+      "sha256": "F86AC4F723E8026A41087028BE453B5DFD25B6D486623BAF9D58BDBBD0D101C4"
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadCatalog.cs",
@@ -321,7 +321,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
-      "sha256": "4FA4877297B1B68F4E17C8A493FD55A3933CF360CDD2D97DDDDF1AAE815F1B5C"
+      "sha256": "9DC2B41664807C0B423C45ACD8C9DA699C008B96B9871F4E786FBA5102DA4ACC"
     },
     {
       "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
@@ -425,10 +425,11 @@
     }
   ],
   "validation": {
-    "actualAssemblyChecks": 65,
-    "actualSourceFakeNativeChecks": 19,
-    "softwareChecks": 84,
+    "actualAssemblyChecks": 69,
+    "actualSourceFakeNativeChecks": 44,
+    "softwareChecks": 113,
     "extractedPayloadFilesVerified": 13,
+    "unchangedRuntimeDependencyFiles": 12,
     "guiRebuilt": false,
     "firmwareRebuilt": false,
     "installerExecuted": false,
@@ -436,21 +437,30 @@
     "hardwareEnduranceTested": false,
     "runAfterInstallationOption": true
   },
+  "validationEvidence": {
+    "buildLog": "WILDX_console -> D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_quality_acquisition_20261015\\bin\\WILDX_console.exe",
+    "actualAssemblyLog": "PASS 69 actual-assembly USB health/quality accounting, bounds, ownership, routing and UI checks; no USB enumeration, hardware I/O, or ETW session.",
+    "fakeNativeLog": "PASS 44 actual-source quality transport checks with fake native boundary; no hardware calls."
+  },
   "usbQuality": {
     "continuousDefault": true,
     "boundedSeconds": 10,
     "boundedMaximumMiB": 256,
-    "stopsOnFirstTransferOrIntegrityError": true,
-    "automaticRetry": false,
-    "firmwareChanged": false,
-    "requiresSupportedDownloadOrDiagnosticProtocol": true,
+    "v1AcquisitionSyntheticFallback": true,
+    "v2AcquisitionFallback": false,
+    "requiresExistingFirmwareProtocol": true,
+    "cleansOwnPartialDownloadRequest": true,
+    "cancelsPreexistingBusyDownload": false,
     "modeChangedAutomatically": false,
-    "sdBackedIsNotRamOnly": true
+    "firmwareChanged": false,
+    "sdBackedIsNotRamOnly": true,
+    "stopsOnFirstTransferOrIntegrityError": true,
+    "automaticRetry": false
   },
-  "sourcePatchSha256": "94E960BDD41E1F2CE7AB0562F0D01F77180835FC4154504C7F996CCD19210EEA",
-  "validationEvidence": {
-    "buildLog": "WILDX_console -> D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_quality_continuous_20261015\\bin\\WILDX_console.exe",
-    "actualAssemblyLog": "PASS 65 actual-assembly USB health/quality accounting, bounds, ownership, routing and UI checks; no USB enumeration, hardware I/O, or ETW session.",
-    "fakeNativeLog": "PASS 19 actual-source quality transport checks with fake native boundary; no hardware calls."
-  }
+  "layout": {
+    "splitOriginalCaptureActivityCell": true,
+    "recordingLeftUsbRight": true,
+    "existingRightColumnPreserved": true
+  },
+  "sourcePatchSha256": "FCB1F7FF1B29ADCA51DBDACC10B5432B927C6380B067C5B81628A91E80ECB95D"
 }

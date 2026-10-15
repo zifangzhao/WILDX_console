@@ -81,7 +81,7 @@ static class UsbHealthTests {
     }
     static void Admission(Form form,Type type) {
         var button=(Button)Descendants(form).Single(c=>c.Name=="usbQualityTest");Check(button.Parent==Descendants(form).Single(c=>c.Name=="usbHealthDetails").Parent,"Quality test action left recording info");
-        var continuous=(CheckBox)Descendants(form).Single(c=>c.Name=="usbQualityContinuous");Check(continuous.Checked&&continuous.Parent==button.Parent,"Continuous option missing or not the default");
+        var continuous=(CheckBox)Descendants(form).Single(c=>c.Name=="usbQualityContinuous");Check(continuous.Checked&&continuous.Parent==button.Parent.Parent,"Continuous option missing from the USB panel or not the default");
         var kind=type.GetField("selectedDeviceKind",All);kind.SetValue(form,Enum.Parse(kind.FieldType,"XeNp"));
         Func<bool> can=()=> (bool)type.GetProperty("CanTestUsb",All).GetValue(form,null);Check(can(),"Idle selected NP device not admitted");
         foreach(string name in new[]{"running","ztestRunning","systemInfoActive","deviceRefreshActive","firmwareManagementActive","npRecoveryCancelled"}) {
@@ -101,19 +101,29 @@ static class UsbHealthTests {
         var type=app.GetType("USB512_interface.Form1",true);
         using(var form=(Form)Activator.CreateInstance(type)) {
             var label=(Label)type.GetField("usbHealthSummary",All).GetValue(form);var summary=(Label)type.GetField("recordingSummary",All).GetValue(form);
-            Check(label.Parent==summary.Parent,"USB health became a separate panel");Check(Descendants(form).Any(c=>c.Name=="usbHealthDetails"),"Detail report action missing");
+            var usbCard=Descendants(form).Single(c=>c.Name=="usbHealthCard");
+            Check(label.Parent!=summary.Parent&&Descendants(usbCard).Contains(label),"USB info did not move to its own right-side panel");Check(Descendants(usbCard).Any(c=>c.Name=="usbHealthDetails"),"USB panel detail action missing");
+            var split=(TableLayoutPanel)Descendants(form).Single(c=>c.Name=="captureActivitySplit");var capture=Descendants(form).Single(c=>c.Name=="captureActivityCard");
+            Check(capture.Parent==split&&usbCard.Parent==split&&split.GetColumn(capture)==0&&split.GetColumn(usbCard)==1,"Capture activity was not split within its original cell");
+            var online=(TableLayoutPanel)Descendants(form).Single(c=>c.Name=="usbLayout");var right=(TableLayoutPanel)online.GetControlFromPosition(1,0);
+            Check(online.GetColumn(split)==0&&online.GetRow(split)==1&&right.RowCount==3&&!Descendants(right).Contains(usbCard),"USB card changed the existing right-column panels");
             IntPtr h=new IntPtr(300);const string path="usb-health-inline-fixture";Call("Open",h,path,(byte?)3,0);
             long tick=Stopwatch.GetTimestamp();var a=Begin(h,0x81,tick);Submit(h,a,IntPtr.Zero,true,0,1048576U,false,tick+Stopwatch.Frequency/2);
             a=Begin(h,0x81,tick+Stopwatch.Frequency/2);Submit(h,a,IntPtr.Zero,false,121,0U,false,tick+Stopwatch.Frequency);
             type.GetField("devicePath",All).SetValue(form,path);type.GetMethod("RefreshRecordingSummary",All).Invoke(form,new object[]{DateTime.UtcNow});
             Check(label.Text.Contains("1 OK / 1 failed")&&label.Text.Contains("50.000%"),"Inline summary not populated from selected target");
-            Admission(form,type);type.GetField("usbQualityPath",All).SetValue(form,null);type.GetMethod("RefreshRecordingSummary",All).Invoke(form,new object[]{DateTime.UtcNow});
+            Admission(form,type);type.GetField("usbQualityPath",All).SetValue(form,null);type.GetMethod("UpdateStartEnabled",All).Invoke(form,null);type.GetMethod("RefreshRecordingSummary",All).Invoke(form,new object[]{DateTime.UtcNow});
             // Only reparent controls to an offscreen host. Product Load/Shown
             // handlers that enumerate or connect devices are never invoked.
             using(var host=new Form{ClientSize=new Size(1044,741),ShowInTaskbar=false,StartPosition=FormStartPosition.Manual,Location=new Point(-20000,-20000),Font=form.Font,BackColor=form.BackColor}) {
                 foreach(var child in form.Controls.Cast<Control>().ToArray())host.Controls.Add(child);host.Show();Application.DoEvents();
                 Check(label.Parent.ClientSize.Width>0&&label.Height>=label.GetPreferredSize(new Size(label.Width,0)).Height,"Inline health label clipped");
+                Check(usbCard.PointToScreen(Point.Empty).X>summary.PointToScreen(Point.Empty).X,"USB panel is not on the right side");
                 using(var bitmap=new Bitmap(host.Width,host.Height)){host.DrawToBitmap(bitmap,new Rectangle(Point.Empty,host.Size));bitmap.Save(output);}
+                host.ClientSize=new Size(1180,920);Application.DoEvents();
+                var time=Descendants(host).Single(c=>c.Name=="networkTimeCard");
+                Check(time.Bottom<=time.Parent.ClientSize.Height&&usbCard.Bottom<=usbCard.Parent.ClientSize.Height,"Right-side cards overlap or leave the workspace at the default size");
+                using(var bitmap=new Bitmap(host.Width,host.Height)){host.DrawToBitmap(bitmap,new Rectangle(Point.Empty,host.Size));bitmap.Save(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(output),"usb-panel-default.png"));}
             }
             Call("Close",h);
         }

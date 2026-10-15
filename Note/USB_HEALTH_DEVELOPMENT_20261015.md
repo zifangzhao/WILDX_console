@@ -266,3 +266,93 @@ preserves the checked GUI source delta from base commit
 `f844ac829aab86af6f317d18c1122e681750c81d`, including those concurrent inputs,
 for provenance. Only this task's application source hunks are committed as
 source changes; unrelated pending development stays in the working tree.
+
+## Acquisition-mode failure and capture-panel split — 2026-10-15
+
+The human reported two failures from the published feature build on V1 UID
+`001B0019434250062039314E`: request 0x60 failed with Windows 31 in acquisition
+mode, and a separate download-mode run reported either zero capacity or a busy
+service. Neither run received bulk data, so neither is a cable-quality result.
+The old combined unavailable-card/busy error did not distinguish those states.
+
+The test now routes unsupported download probes (Windows 1/31 on the initial
+0x60 only) to the existing V1 acquisition SRAM test, when the selected device
+is V1. A fresh exclusive handle verifies the bulk endpoint and a recognized,
+configured, idle 0x42 status before sending the existing synthetic START 0x43.
+The firmware must acknowledge and report the synthetic flag. Every A512 packet
+checks stream ID, flags, exact sequence and all 506 reference bytes against the
+existing firmware's 0/17 SRAM-buffer pattern. It does not start probe capture,
+save files, touch the SD card, switch modes, flash or retry a failed block.
+STOP 0x41 and an idle-status check retire the attempted test before closing.
+Cleanup failure is reported as a failure, including already-validated bytes.
+Unsupported firmware is refused rather than given a false pass.
+
+Source evidence is the existing `Core/Src/xe_np_usb_stream.c` synthetic command,
+status flags and `FillSyntheticPayload` / `PrepareSyntheticPacket` contract,
+and the V1 UnifiedUsb vendor-router fixture. V1 camera source preparation also
+preserves the synthetic path. These sources were inspected read-only. The new
+acquisition fallback is deliberately V1-only; it does not send legacy commands
+to V2. V2 retains the supported download/diagnostic path. This change does not
+establish that every installed V1 build implements 0x43.
+
+Download-mode errors now distinguish **busy (with the service state)** from
+**no usable card**. A busy service found before the test is not cancelled.
+A card-independent V1 test must run in USB-stream mode. After this test has
+admitted an idle download service and issued its own read, an interrupted
+partial read is cancelled with existing 0x62 and checked for idle for up to
+two seconds. It cannot leave its own pending read behind after Stop without
+reporting cleanup failure. No card reset, pipe reset or automatic mode change
+was added. Short control replies are separate malformed-reply failures; generic
+Windows 31 is not by itself described as proof of a firmware or cable fault.
+
+The final requested layout splits only the original **Capture activity** cell
+into adjacent **Capture activity** and **USB** cards. Recording time, file size,
+free space, capture report and paths remain on the left; USB status, test,
+Continuous and Details occupy the right part of that same cell. Device health,
+GPIO/RTC and Network time retain their existing separate right column. Labels
+wrap and the shared row grows to fit both cards. The earlier right-column USB
+placement was corrected after the human clarified the desired split.
+
+Final validation: 69 actual-assembly accounting/ownership/routing/UI checks and
+44 actual-source checks with fake native I/O, 113 total, passed. Cases include
+both optional-request error codes, V1-only routing, busy/unknown/short-status
+refusal, no fallback after timeout, exact pattern/sequence errors without retry,
+partial-stop cleanup, unconfirmed STOP failure, separate diagnostic counters,
+and both compact/default UI renders. An initial new-fixture failure expected
+IOException for a malformed reply; the fixture now also accepts the actual
+InvalidDataException and passed. No physical USB, BLE or SWD access occurred.
+
+GUI-only cached development output and source receipts are under
+`_artifacts/usb_quality_acquisition_20261015`. Two follow-up incremental compiles
+corrected generic-error wording and the human's clarified layout; dependencies
+were reused and the final build log has no warnings/errors. Final GUI SHA256:
+`D1271EC76DF47FEA84BA83395121832D861F7AC6C56132F369D0525529A11CF7`.
+Version remains private 1.0.0.33. No new installer, commit, push, firmware build,
+hardware test or deployment was performed in this follow-up.
+
+### Checked-fix delivery — 2026-10-15
+
+At the human's explicit "pack installer and push" request, the checked GUI
+`D1271EC76DF47FEA84BA83395121832D861F7AC6C56132F369D0525529A11CF7`
+was packaged once, with no GUI/firmware rebuild or repeated qualification.
+The existing 69 actual-assembly and 44 fake-native checks are the development
+evidence. All 13 independently extracted runtime files match the checked
+payload; its 12 non-GUI runtime files match the preceding USB feature build.
+The installer was not executed and no hardware was accessed.
+
+Installer:
+`LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.33-USB_QUALITY_FIX_20261015.exe`.
+SHA256:
+`75F9E4E14CAA8C30B5B757AF90AC7CF7FA2291370348D9818101E5FB06233D0C`.
+The previous USB feature installer and its manifest/checksums are archived in
+`LATEST_INSTALLERS/legacy/20261015_before_usb_quality_fix`; the general
+1.0.0.33 installer remains available. The **Run WILD-X** finish option is kept.
+
+`LATEST_INSTALLERS/usb-quality-manifest.json` records the exact payload and
+86 checked source inputs. The frozen source delta from base commit
+`6716f801978507050e0a9a0a802ad80d472e3b74` is preserved as
+`Note/USB_QUALITY_FIX_BUILD_SOURCE_20261015.patch.gz`. It includes the checked
+concurrent V2 inputs for provenance; this delivery commits only this task's
+six modified application/test files plus release records. Unrelated pending
+V2 development is preserved. Firmware compatibility and hardware limitations
+remain as recorded above; packaging does not add hardware qualification.

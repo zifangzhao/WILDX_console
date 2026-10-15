@@ -7,6 +7,9 @@ using Microsoft.Win32.SafeHandles;
 
 namespace CE32_console
 {
+    internal sealed class NpDownloadProtocolUnavailableException : IOException {
+        internal NpDownloadProtocolUnavailableException(Exception inner):base("The SD-download test protocol could not be confirmed. No bulk data was tested; this is not a cable-quality result.",inner) {}
+    }
     // One synchronous bounded request at a time. No unmanaged OVERLAPPED/buffer
     // lifetime races and no automatic restart/resync after a transport failure.
     internal sealed partial class NpDownloadStream : Stream
@@ -21,6 +24,7 @@ namespace CE32_console
         private uint maxBlocks;
         private bool faulted;
         private readonly bool qualityTestSession;
+        private bool qualityRequestPending;
         internal string TransportDescription {get;private set;}
         internal bool IsSynthetic {get;private set;}
         internal Func<bool> Cancelled;
@@ -84,7 +88,8 @@ namespace CE32_console
                 IsSynthetic=U(info,0)==0x3154504e && U(info,28)==3;
                 if((U(info,0)!=0x3144504e && !(allowSynthetic && IsSynthetic)) || U(info,4)!=1 || U(info,12)<1 || U(info,12)>1020 || (U(info,28)!=1 && !(allowSynthetic && IsSynthetic)))
                     throw new IOException(qualityTest?"This firmware mode does not provide the USB transfer test. Select SD download mode or supported RAM diagnostic firmware first. No mode was changed.":"Install the NP read-only USB download firmware; acquisition firmware does not serve SD recordings.");
-                if(qualityTest && (U(info,8)==0 || U(info,16)!=0))throw new IOException("USB test requires an available, idle download device. No card reset or stream cancellation was attempted.");
+                if(qualityTest && U(info,16)!=0)throw new IOException("USB download service is busy (state "+U(info,16)+"). Finish the active download before testing. No existing request was cancelled.");
+                if(qualityTest && U(info,8)==0)throw new IOException("The SD-download firmware reports no usable card. The SD-backed test needs a readable card. For a card-independent V1 test, select USB streaming mode and run the test again. No card reset was sent.");
                 if(U(info,8)==0 && !IsSynthetic)info=ResetSdDownloadOnce();
                 length=(long)U(info,8)*512;
                 if(length==0)throw new IOException("SD card remains unavailable after the bounded USB reset; the card was not modified.");
@@ -106,8 +111,12 @@ namespace CE32_console
         private byte[] Control(byte type,byte request,ushort value,ushort index,ushort size) {
             byte[] b=new byte[size];uint n;
             var setup=new NpDownloadNative.WINUSB_SETUP_PACKET{RequestType=type,Request=request,Value=value,Index=index,Length=size};
-            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,b,size,out n,IntPtr.Zero) || n!=size)
-                throw new IOException("NP SD download control request failed (Windows "+Marshal.GetLastWin32Error()+"). Acquisition firmware cannot download SD data.");
+            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,b,size,out n,IntPtr.Zero)) {
+                int error=Marshal.GetLastWin32Error();var native=new Win32Exception(error);
+                if(qualityTestSession && type==0xc0 && request==0x60 && (error==1 || error==31))throw new NpDownloadProtocolUnavailableException(native);
+                throw new IOException("NP SD download control request 0x"+request.ToString("X2")+" failed (Windows "+error+").",native);
+            }
+            if(n!=size)throw new InvalidDataException("Short NP SD download control reply for request 0x"+request.ToString("X2")+" ("+n+"/"+size+" bytes).");
             return b;
         }
         private byte[] ResetSdDownloadOnce() {
@@ -151,6 +160,7 @@ namespace CE32_console
             if(Cancelled!=null && Cancelled())throw new OperationCanceledException();
             uint lba=checked((uint)(position/512)),blocks=(uint)Math.Min(maxBlocks,length/512-lba);
             try {
+                if(qualityTestSession)qualityRequestPending=true;
                 Control(0x40,0x61,(ushort)lba,(ushort)(lba>>16),0);
                 int expected=checked(32+(int)blocks*512);
                 if(wireBuffer==null)wireBuffer=new byte[32+maxBlocks*512];
@@ -166,6 +176,7 @@ namespace CE32_console
                     // Error response is deliberately a short header-only transfer.
                     if(got==32 && U(reply,16)!=0)break;
                 }
+                qualityRequestPending=false;
                 try {ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);USB512_interface.UsbHealth.Integrity(usb,0x81,false,"download header/sequence/payload CRC");}
                 catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
                 sequence++;
