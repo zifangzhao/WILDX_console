@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.25",
+  "version": "1.0.0.26",
   "releaseDate": "2026-10-14",
-  "status": "Software-checked local network time, automatic server selection, 10 ms target and independent preview windows",
+  "status": "Software-checked compact USB recording page; normal recording fits without page scrolling at checked client sizes",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.25.exe",
-    "sha256": "C4C30788FAAC9A5358DF08E33C006C4071FE74672FB902AC67B66E95FCD9C23B",
-    "bytes": 2336367
+    "file": "WILDX_console-Setup-1.0.0.26.exe",
+    "sha256": "5075C8C9E92EB2A85EFD79A057ADAE58596F277D7AA1402B93F64F35105D8E4E",
+    "bytes": 2336701
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "A126E04143BD5FEE7F6FAAC31D60AAB1C733FB1640BC81ACBA37D293622D075D",
-      "bytes": 1346560
+      "sha256": "5F8112F03FB763FB7D484106FB5E471FE6950D21122E36D4A8E4DAF61CDC4F26",
+      "bytes": 1348096
     },
     {
       "path": "WILDX_console.exe.config",
@@ -109,27 +109,35 @@
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
     "companionRebuilt": false,
-    "networkTimeChecks": 20083,
+    "compactUsbLayoutChecks": 42,
+    "noScrollClientSizes": [
+      [
+        1044,
+        780
+      ],
+      [
+        1180,
+        820
+      ],
+      [
+        1180,
+        920
+      ],
+      [
+        1450,
+        920
+      ]
+    ],
+    "gpioRtcProtocolChecks": 42,
+    "actualGpioPanelWarningChecks": 37,
+    "recordingMetricsChecks": 16,
+    "universalWorkflowChecks": 106,
     "actualNetworkTimeUiChecks": 37,
-    "previewWindowLifecycleChecks": 11,
-    "usbUiLifecycleAssertions": 134,
-    "finalLiveNtpComparisonSeconds": 20,
-    "liveServersResponding": 3,
-    "liveSelectedServer": "time.cloudflare.com",
-    "liveCloudflareRttMilliseconds": [
-      14.74,
-      8.769
-    ],
-    "liveEstimatedErrorMilliseconds": [
-      12.431,
-      15.394
-    ],
-    "targetMetThroughoutLiveCheck": false,
     "independentInstallerExtraction": true,
     "extractedRuntimeFilesVerified": 13,
     "nonGuiRuntimeFilesUnchanged": 12,
     "hardwareAccess": false,
-    "publicNtpNetworkAccess": true,
+    "publicNtpNetworkAccess": false,
     "installerExecuted": false,
     "liveHardwareThroughputQualified": false
   },
@@ -162,47 +170,23 @@
     "scope": "Earlier exact SR/IMU artifact; no hardware rerun for this app compatibility release"
   },
   "buildProvenance": {
-    "sourceBase": "2f2303ccde873d5a603e9a80e6c979a8b3ae55f1",
-    "guiSha256": "A126E04143BD5FEE7F6FAAC31D60AAB1C733FB1640BC81ACBA37D293622D075D",
+    "sourceBase": "494785dc013b7fa0638f326550c418a4c775dc0b",
+    "guiSha256": "5F8112F03FB763FB7D484106FB5E471FE6950D21122E36D4A8E4DAF61CDC4F26",
     "companionSha256": "15A59CC99E4F90973BE11D4E55D109242AEC8133746478345F7B78AF4EEBF72D",
-    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.24",
-    "source": "Local-time display, automatic NTP choice, 10 ms target, independent preview windows, settings and version",
+    "build": "Isolated GUI component only; all 12 non-GUI runtime files frozen at 1.0.0.25",
+    "source": "Compact USB cards, content-sized recording action/recovery rows, aligned field labels, GPIO table spacing and version",
     "sourceInputs": [
       {
-        "path": "USB512_interface/USB512_interface/NetworkTimeClock.cs",
-        "sha256": "27AF992021B83A3F565A96A6F6B8B8EB60241CD05B194B8729E86EAF958189E2"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/mainForm.NetworkTime.cs",
-        "sha256": "B3650DB2F53CE6A1F18F23953DE99704A8145B561957B3A37A9B21F40208289B"
-      },
-      {
         "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
-        "sha256": "BFA9288FF9BF185C171A11B37DF32FC2A15821AD1EF77D29A2AE69A027C2EAD4"
+        "sha256": "9CA43031BCC8F70F9198579CF7D72506C21385D266C6265D49AE9CF94F13A586"
       },
       {
-        "path": "USB512_interface/USB512_interface/Program.cs",
-        "sha256": "79269F2B2DA151C212B1846B7627B29501365573E4FE91891871176B09F2D1C0"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/Properties/Settings.settings",
-        "sha256": "15603E99A0307B3B5E0777C9C2B7D44AADBECB5E9DD0AE51D0AB87226A80C135"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/Properties/Settings.Designer.cs",
-        "sha256": "ECC3AB3000932187615666D0BEC50864CABF220A0970267F24F58C86F0A28096"
+        "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
+        "sha256": "2A46E3EDDE5BA121CB0C8418069AC8745C22FDF504138BD2E85940D4C36282BB"
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "4300BC50AD696B5B7C7F47868F4D9A09BB2F03B41EF6F6E3A2C3CD62DA75E6F6"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/mainForm.cs",
-        "sha256": "87B615F8AD6830066D74B4E1C56602FB0EA917E771425D3C97F88CFCD825CE59"
-      },
-      {
-        "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
-        "sha256": "8AADCC022C3C0BD0C3D7C40294BA8DC16A086E598CA8CF793ACA5C0567634B18"
+        "sha256": "EE7049FF33C6E927BBEF4AC6FBD2D0408D8673431C93D2597383EF23301CC204"
       }
     ],
     "excludedPendingChanges": [
@@ -215,7 +199,7 @@
       "legacy/",
       "USB512_interface/USB512_interface/NpUsbSensors.cs"
     ],
-    "evidence": "Note/NETWORK_TIME_LOCAL_PREVIEW_20261014.md"
+    "evidence": "Note/COMPACT_USB_LAYOUT_20261014.md"
   },
   "knownLimitations": [
     "New live path software-tested with verified synthetic wire blocks; sustained hardware throughput pending",
@@ -230,7 +214,7 @@
     "GPIO protocol has no advertised CRC; RTC-to-PC mapping is not neural ADC synchronization",
     "New GPIO integration is tested with simulated serial transport only; physical V1/V2/GPIO hardware testing pending"
   ],
-  "previousPublishedInstaller": "legacy/20261014_before_network_time_preview_1.0.0.25/WILDX_console-Setup-1.0.0.24.exe",
+  "previousPublishedInstaller": "legacy/20261014_before_compact_usb_1.0.0.26/WILDX_console-Setup-1.0.0.25.exe",
   "retainedLiveDatSoftwareEvidence": {
     "version": "1.0.0.14",
     "commit": "1f7d00906770214c806d0802d2f7d025f148a11a",
@@ -370,30 +354,33 @@
     "manifest": "legacy/20261014_before_metadata_fix_1.0.0.19/release-manifest.json"
   },
   "retainedPreviousReleaseValidation": {
-    "version": "1.0.0.24",
-    "manifest": "legacy/20261014_before_network_time_preview_1.0.0.25/release-manifest.json",
+    "version": "1.0.0.25",
+    "manifest": "legacy/20261014_before_compact_usb_1.0.0.26/release-manifest.json",
     "validation": {
       "guiBuildWarnings": 0,
       "guiBuildErrors": 0,
       "companionRebuilt": false,
-      "actualGuiAlignmentContainmentChecks": 1042,
-      "universalWorkflowChecks": 106,
-      "standaloneClientWidths": [
-        820,
-        910,
-        1200
+      "networkTimeChecks": 20083,
+      "actualNetworkTimeUiChecks": 37,
+      "previewWindowLifecycleChecks": 11,
+      "usbUiLifecycleAssertions": 134,
+      "finalLiveNtpComparisonSeconds": 20,
+      "liveServersResponding": 3,
+      "liveSelectedServer": "time.cloudflare.com",
+      "liveCloudflareRttMilliseconds": [
+        14.74,
+        8.769
       ],
-      "embeddedClientWidths": [
-        1044,
-        1180,
-        1450
+      "liveEstimatedErrorMilliseconds": [
+        12.431,
+        15.394
       ],
-      "additionalLayoutScalePercent": 150,
-      "longStatusAndCancelLabelChecked": true,
+      "targetMetThroughoutLiveCheck": false,
       "independentInstallerExtraction": true,
       "extractedRuntimeFilesVerified": 13,
       "nonGuiRuntimeFilesUnchanged": 12,
       "hardwareAccess": false,
+      "publicNtpNetworkAccess": true,
       "installerExecuted": false,
       "liveHardwareThroughputQualified": false
     }
@@ -478,7 +465,9 @@
         0,
         255
       ],
-      "physicalInputs": "provided by firmware/hardware; host rows do not add inputs"
+      "physicalInputs": "provided by firmware/hardware; host rows do not add inputs",
+      "headerHeightAt96Dpi": 24,
+      "rowHeightAt96Dpi": 28
     },
     "channelMetadata": {
       "idArray": "channel_ids",
@@ -542,5 +531,35 @@
     "livePreviewCloseHidesWithoutDestroyingCaptureResources": true,
     "consoleCloseWaitsForMediaDrain": true,
     "consoleCloseClosesIndependentPreviews": true
+  },
+  "usbLayout": {
+    "contentSizedRecordingActions": true,
+    "hiddenRecoveryRowCollapses": true,
+    "hiddenRowGapObservedPixels": 15,
+    "fieldLabelsInlineAndAligned": true,
+    "compactCardPaddingPixelsAt96Dpi": 10,
+    "gpioHeaderHeightPixelsAt96Dpi": 24,
+    "gpioRowHeightPixelsAt96Dpi": 28,
+    "normalRecordingNoPageScrollAtClientSizes": [
+      [
+        1044,
+        780
+      ],
+      [
+        1180,
+        820
+      ],
+      [
+        1180,
+        920
+      ],
+      [
+        1450,
+        920
+      ]
+    ],
+    "imuMinimumVisiblePixelsAt96Dpi": 136,
+    "longRecordingMessagesGrow": true,
+    "smallWindowOverflowRemainsAccessible": true
   }
 }

@@ -22,10 +22,10 @@ namespace USB512_interface {
    String.Equals(d.Port,port,StringComparison.OrdinalIgnoreCase) && String.Equals(d.Identity,id,StringComparison.OrdinalIgnoreCase));
   Control BuildGpioRtcControls() {
    var row=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=4,RowCount=1,Margin=Padding.Empty};
-   row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,90));row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+   row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
    row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,88));row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,105));
-   row.Controls.Add(new Label {Text="GPIO / RTC",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted},0,0);
-   gpioRtcDevices=new ComboBox {Name="gpioRtcDevices",Dock=DockStyle.Fill,DropDownStyle=ComboBoxStyle.DropDownList,AccessibleName="GPIO RTC logger"};
+   row.Controls.Add(new Label {Text="GPIO / RTC",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted,Margin=Padding.Empty},0,0);
+   gpioRtcDevices=new ComboBox {Name="gpioRtcDevices",Anchor=AnchorStyles.Left|AnchorStyles.Right,DropDownStyle=ComboBoxStyle.DropDownList,AccessibleName="GPIO RTC logger",Margin=Padding.Empty};
    gpioRtcDevices.Items.Add(new NpGpioRtcDevice());gpioRtcDevices.SelectedIndex=0;
    gpioRtcDevices.SelectedIndexChanged+=delegate {
     if(refreshingGpioRtc)return;var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
@@ -34,14 +34,15 @@ namespace USB512_interface {
     catch(Exception ex){gpioRtcStatus.Text="Save failed";WarnRecordingOnce("gpio-settings","GPIO/RTC selection could not be saved: "+ex.Message);}
    };
    row.Controls.Add(gpioRtcDevices,1,0);gpioRtcRefresh=new Button {Text="Refresh",Dock=DockStyle.Fill};WildXTheme.Button(gpioRtcRefresh);
+   gpioRtcRefresh.Margin=new Padding(6,0,8,0);
    gpioRtcRefresh.Click+=delegate {RefreshGpioRtcDevices();};row.Controls.Add(gpioRtcRefresh,2,0);
    gpioRtcStatus=new Label {Name="gpioRtcStatus",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted};row.Controls.Add(gpioRtcStatus,3,0);
    return row;
   }
   Control BuildGpioRtcInfo() {
-   gpioRtcInfo=new TextBox {Name="gpioRtcInfo",Dock=DockStyle.Fill,Multiline=true,ReadOnly=true,BorderStyle=BorderStyle.None,
+   gpioRtcInfo=new TextBox {Name="gpioRtcInfo",Dock=DockStyle.Fill,Multiline=true,ReadOnly=true,BorderStyle=BorderStyle.None,Margin=Padding.Empty,
     ScrollBars=ScrollBars.Vertical,BackColor=WildXTheme.Surface,ForeColor=WildXTheme.Ink,Text="Off"};
-   var content=Stack(64,0);content.Controls.Add(gpioRtcInfo,0,0);
+   var content=Stack(48,0);content.Controls.Add(gpioRtcInfo,0,0);
    gpioChannelViewport=new Panel {Dock=DockStyle.Fill,AutoScroll=true,Margin=Padding.Empty};
    gpioChannelTable=new TableLayoutPanel {Name="gpioChannelTable",Dock=DockStyle.Top,ColumnCount=4,RowCount=1,Margin=Padding.Empty,BackColor=WildXTheme.Border};
    foreach(int width in new[]{20,20,30,30})gpioChannelTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,width));
@@ -59,7 +60,7 @@ namespace USB512_interface {
     UpdateGpioPortActivity(activity==null?null:activity.Counts,logging,DateTime.UtcNow);
     if(logging)UpdateGpioPortFrequency(activity.Frequencies);
    };activityTimer.Start();
-   var card=Card("GPIO / RTC",null,content);card.Name="gpioRtcCard";return card;
+   var card=Card("GPIO / RTC",null,content,true);card.Name="gpioRtcCard";return card;
   }
   static Label GpioTableCell(string text,ContentAlignment alignment) {
    return new Label {Text=text,Dock=DockStyle.Fill,TextAlign=alignment,Margin=new Padding(0,0,1,1),
@@ -80,7 +81,7 @@ namespace USB512_interface {
     row.Frequency.AccessibleName="GPIO channel "+id+" event frequency in Hz";
     gpioRows.Add(id,row);foreach(var cell in row.Cells)gpioChannelTable.Controls.Add(cell);
    }
-   float scale=DeviceDpi/96F;int headerHeight=(int)Math.Ceiling(28*scale),rowHeight=(int)Math.Ceiling(34*scale);
+   float scale=DeviceDpi/96F;int headerHeight=(int)Math.Ceiling(24*scale),rowHeight=(int)Math.Ceiling(28*scale);
    gpioChannelTable.RowCount=gpioRows.Count+1;gpioChannelTable.RowStyles.Clear();gpioChannelTable.RowStyles.Add(new RowStyle(SizeType.Absolute,headerHeight));
    int r=1;foreach(var row in gpioRows.Values) {
     gpioChannelTable.RowStyles.Add(new RowStyle(SizeType.Absolute,rowHeight));var cells=row.Cells;

@@ -1,12 +1,14 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current version **1.0.0.25**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current version **1.0.0.26**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
 BLE Control aligns device/address and recording-profile/storage-bound fields in shared columns, with connection actions below. Buttons have consistent height and spacing; narrower action rows and long status messages wrap. [BLE layout render](docs/screenshots/ble-mode.png) and [validation](Note/BLE_LAYOUT_ALIGNMENT_20261014.md).
 
 Network time displays local time with the Windows UTC offset and selects among Cloudflare, NIST and Microsoft automatically, with a manual server override. The accuracy target is **±10 ms**; the UI reports the estimated error honestly. Preview windows use normal window ordering. [Clock settings](docs/network-time.md), [preview](docs/screenshots/network-time-settings.png) and [validation](Note/NETWORK_TIME_LOCAL_PREVIEW_20261014.md).
+
+The compact USB page sizes the recording actions and recovery option to their visible content. Aligned inline field labels and tighter card spacing keep the complete normal recording view visible at checked client sizes from 1044×780. Long diagnostics remain expandable. [Updated render](docs/screenshots/usb-recording-gpio.png) and [validation](Note/COMPACT_USB_LAYOUT_20261014.md).
 
 The original Neuropixels entry points in WILD_console remain available until WILDX passes hardware checks, as requested.
 
@@ -59,7 +61,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX 1.0.0.25](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.25.exe), packaged on 2026-10-14, with local network time, automatic NTP server selection, a ±10 ms target and independent preview windows. No V1 firmware upgrade is required. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [validation](Note/NETWORK_TIME_LOCAL_PREVIEW_20261014.md) and [folder naming](docs/folder-naming.md).
+The current installer is [WILDX 1.0.0.26](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.26.exe), packaged on 2026-10-14, with a compact USB recording page that removes blank vertical reservations and fits without page scrolling at the checked normal sizes. No V1 firmware upgrade is required. Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage, instead of segment subfolders. USB saves decoded neural DAT without an extra RAW copy. See [validation](Note/COMPACT_USB_LAYOUT_20261014.md) and [folder naming](docs/folder-naming.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console` and creates its own Start menu entry and uninstall registration. It does not replace WILD_console or USB_PCconsole and does not bundle or select a firmware image.
 

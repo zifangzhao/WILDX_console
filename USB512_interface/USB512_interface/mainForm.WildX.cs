@@ -52,11 +52,12 @@ namespace USB512_interface
             foreach(int height in heights)stack.RowStyles.Add(height==0?new RowStyle(SizeType.Percent,100):new RowStyle(SizeType.Absolute,height));
             return stack;
         }
-        static WildXCard Card(string title,string description,Control content)
+        static WildXCard Card(string title,string description,Control content,bool compact=false)
         {
             var card=new WildXCard { Dock=DockStyle.Fill };
-            var layout=description==null?Stack(28,0):Stack(28,32,0);
-            layout.Controls.Add(WildXTheme.Label(title,true),0,0);
+            if(compact){card.Padding=new Padding(10);card.Margin=new Padding(0,0,8,8);}
+            var layout=description==null?Stack(compact?20:28,0):Stack(compact?20:28,compact?24:32,0);
+            var heading=WildXTheme.Label(title,true);if(compact)heading.Margin=new Padding(0,0,0,4);layout.Controls.Add(heading,0,0);
             if(description!=null)layout.Controls.Add(new Label { Text=description,Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted },0,1);
             content.Dock=DockStyle.Fill;layout.Controls.Add(content,0,description==null?1:2);card.Controls.Add(layout);return card;
         }
@@ -75,14 +76,14 @@ namespace USB512_interface
             BackColor=WildXTheme.Canvas;Font=WildXTheme.Body;ClientSize=new Size(1180,920);
             MinimumSize=new Size(1060,780);StartPosition=FormStartPosition.CenterScreen;MaximizeBox=true;
 
-            var shell=Stack(76,0,28);shell.BackColor=WildXTheme.Canvas;shell.Padding=new Padding(24,0,24,0);Controls.Add(shell);
+            var shell=Stack(52,0,24);shell.BackColor=WildXTheme.Canvas;shell.Padding=new Padding(24,0,24,0);Controls.Add(shell);
             var brand=new Panel { Dock=DockStyle.Fill,BackColor=WildXTheme.Canvas };
-            brand.Controls.Add(new Label { Text="WILD-X",AutoSize=true,Font=WildXTheme.Title,ForeColor=WildXTheme.Ink,Location=new Point(0,16) });
+            brand.Controls.Add(new Label { Text="WILD-X",AutoSize=true,Font=WildXTheme.Title,ForeColor=WildXTheme.Ink,Location=new Point(0,4) });
             shell.Controls.Add(brand,0,0);
 
             workspaceTabs=new TabControl { Name="workspaceTabs",Dock=DockStyle.Fill,DrawMode=TabDrawMode.OwnerDrawFixed,SizeMode=TabSizeMode.Fixed,
-                ItemSize=new Size(180,44),Padding=new Point(18,8),Margin=Padding.Empty };
-            usbPage=new TabPage("USB Mode") { Name="usbPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
+                ItemSize=new Size(180,40),Padding=new Point(18,8),Margin=Padding.Empty };
+            usbPage=new TabPage("USB Mode") { Name="usbPage",BackColor=WildXTheme.Canvas,Padding=new Padding(12),UseVisualStyleBackColor=false };
             blePage=new TabPage("BLE Mode") { Name="blePage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
             downloadPage=new TabPage("Data Download") { Name="downloadPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
             advancedPage=new TabPage("Advanced") { Name="advancedPage",BackColor=WildXTheme.Canvas,Padding=new Padding(16),UseVisualStyleBackColor=false };
@@ -99,57 +100,60 @@ namespace USB512_interface
             shell.Controls.Add(workspaceTabs,0,1);
             workspaceStatus=WildXTheme.Label("USB MODE  /  Live acquisition, previews and device health");workspaceStatus.Dock=DockStyle.Fill;shell.Controls.Add(workspaceStatus,0,2);
 
-            var online=new TableLayoutPanel { Dock=DockStyle.Top,Height=826,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
+            var online=new TableLayoutPanel { Name="usbLayout",Dock=DockStyle.Top,Height=650,ColumnCount=2,RowCount=3,Margin=Padding.Empty,BackColor=WildXTheme.Canvas };
             online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));online.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));
-            online.RowStyles.Add(new RowStyle(SizeType.Absolute,388));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));usbPage.Controls.Add(online);
+            online.RowStyles.Add(new RowStyle(SizeType.Absolute,276));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));usbPage.Controls.Add(online);
             usbPage.AutoScroll=true;
 
-            var capture=Stack(20,38,20,36,36,88,30,44);
-            label1.AutoSize=true;label1.Text="USB DEVICE";label1.ForeColor=WildXTheme.Muted;capture.Controls.Add(label1,0,0);
-            var deviceRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty };
+            var capture=Stack(36,36,30,44,24,36);
+            label1.AutoSize=false;label1.Text="USB device";label1.ForeColor=WildXTheme.Muted;label1.Dock=DockStyle.Fill;label1.TextAlign=ContentAlignment.MiddleLeft;label1.Margin=Padding.Empty;
+            var deviceRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=3,RowCount=1,Margin=Padding.Empty };
+            deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));
             deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,102));
-            comboDrives.Dock=DockStyle.Fill;comboDrives.Margin=new Padding(0,0,10,0);btnRefresh.Dock=DockStyle.Fill;btnRefresh.Margin=Padding.Empty;
-            deviceRow.Controls.Add(comboDrives,0,0);deviceRow.Controls.Add(btnRefresh,1,0);capture.Controls.Add(deviceRow,0,1);
-            label2.Text="OUTPUT FOLDER";label2.ForeColor=WildXTheme.Muted;label2.AutoSize=true;capture.Controls.Add(label2,0,2);
-            var folderRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty };
+            comboDrives.Dock=DockStyle.None;comboDrives.Anchor=AnchorStyles.Left|AnchorStyles.Right;comboDrives.Margin=new Padding(0,0,10,0);btnRefresh.Dock=DockStyle.Fill;btnRefresh.Margin=Padding.Empty;
+            deviceRow.Controls.Add(label1,0,0);deviceRow.Controls.Add(comboDrives,1,0);deviceRow.Controls.Add(btnRefresh,2,0);capture.Controls.Add(deviceRow,0,0);
+            label2.Text="Output folder";label2.ForeColor=WildXTheme.Muted;label2.AutoSize=false;label2.Dock=DockStyle.Fill;label2.TextAlign=ContentAlignment.MiddleLeft;label2.Margin=Padding.Empty;
+            var folderRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=3,RowCount=1,Margin=Padding.Empty };
+            folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));
             folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,132));
-            llblSaveFolder.AutoSize=false;llblSaveFolder.Dock=DockStyle.Fill;llblSaveFolder.TextAlign=ContentAlignment.MiddleLeft;llblSaveFolder.AutoEllipsis=true;
+            llblSaveFolder.AutoSize=false;llblSaveFolder.Dock=DockStyle.Fill;llblSaveFolder.TextAlign=ContentAlignment.MiddleLeft;llblSaveFolder.AutoEllipsis=true;llblSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.LinkColor=WildXTheme.Accent;btnSaveFolder.Dock=DockStyle.Fill;btnSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.Text="Choose a destination folder";
-            folderRow.Controls.Add(llblSaveFolder,0,0);folderRow.Controls.Add(btnSaveFolder,1,0);capture.Controls.Add(folderRow,0,3);
+            folderRow.Controls.Add(label2,0,0);folderRow.Controls.Add(llblSaveFolder,1,0);folderRow.Controls.Add(btnSaveFolder,2,0);capture.Controls.Add(folderRow,0,1);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty};
-            nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-            nameRow.Controls.Add(new Label {Text="Session label",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted},0,0);
-            nameRow.Controls.Add(npSessionLabel,1,0);WildXTheme.Apply(npSessionLabel);capture.Controls.Add(nameRow,0,4);
+            nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+            nameRow.Controls.Add(new Label {Text="Session label",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted,Margin=Padding.Empty},0,0);
+            nameRow.Controls.Add(npSessionLabel,1,0);npSessionLabel.Dock=DockStyle.None;npSessionLabel.Anchor=AnchorStyles.Left|AnchorStyles.Right;npSessionLabel.Margin=Padding.Empty;WildXTheme.Apply(npSessionLabel);capture.Controls.Add(nameRow,0,2);
             btnStart.Text="Start recording";btnStop.Text="Stop recording";btnStreams.Text="Recording settings";
             calibrationButton=new Button {Text="Calibration…",AutoSize=true};
             calibrationButton.Click+=delegate {if(!running && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
-            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);capture.Controls.Add(ActionRow(btnStart,btnStop,btnStreams,calibrationButton),0,5);
-            npAutoRecover.AutoSize=true;capture.Controls.Add(npAutoRecover,0,6);
-            capture.Controls.Add(BuildGpioRtcControls(),0,7);
-            online.Controls.Add(Card("USB acquisition",null,capture),0,0);
+            WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);
+            var captureActions=ActionRow(btnStart,btnStop,btnStreams,calibrationButton);captureActions.Name="usbAcquisitionActions";capture.Controls.Add(captureActions,0,3);
+            npAutoRecover.AutoSize=true;npAutoRecover.Margin=Padding.Empty;capture.Controls.Add(npAutoRecover,0,4);
+            capture.Controls.Add(BuildGpioRtcControls(),0,5);
+            var acquisitionCard=Card("USB acquisition",null,capture,true);acquisitionCard.Name="usbAcquisitionCard";capture.Dock=DockStyle.Top;online.Controls.Add(acquisitionCard,0,0);
 
-            var monitor=Stack(44,0);
+            var monitor=Stack(40,0);
             monitor.Controls.Add(ActionRow(btnScope,btnPreview,btnNpLogger),0,0);
             imuTelemetry.Dock=DockStyle.Fill;imuTelemetry.Margin=Padding.Empty;imuTelemetry.BackColor=WildXTheme.Dark;monitor.Controls.Add(imuTelemetry,0,1);
-            online.Controls.Add(Card("Live monitor","Open a neural or camera preview during USB recording.",monitor),0,2);
-            var health=Stack(44,0);health.Controls.Add(ActionRow(btnSystemInfoRefresh,infoDetails,btnSdInfo),0,0);
+            online.Controls.Add(Card("Live monitor",null,monitor,true),0,2);
+            var health=Stack(40,0);health.Controls.Add(ActionRow(btnSystemInfoRefresh,infoDetails,btnSdInfo),0,0);
             systemInfoSummary.Dock=DockStyle.Fill;systemInfoSummary.Margin=Padding.Empty;systemInfoSummary.BorderStyle=BorderStyle.None;health.Controls.Add(systemInfoSummary,0,1);
-            var healthAndGpio=Stack(232,306,0);
-            healthAndGpio.Controls.Add(Card("Device health",null,health),0,0);
+            var healthAndGpio=Stack(176,232,0);
+            healthAndGpio.Controls.Add(Card("Device health",null,health,true),0,0);
             healthAndGpio.Controls.Add(BuildGpioRtcInfo(),0,1);online.Controls.Add(healthAndGpio,1,0);online.SetRowSpan(healthAndGpio,3);
 
-            var activity=Stack(0,40,0,0);
+            var activity=Stack(0,36,0,0);
             activity.RowStyles[0].SizeType=activity.RowStyles[2].SizeType=activity.RowStyles[3].SizeType=SizeType.Absolute;
-            recordingSummary=new Label {Name="recordingSummary",Dock=DockStyle.Fill,Font=WildXTheme.Strong,UseMnemonic=false,Margin=new Padding(0,0,0,6)};
+            recordingSummary=new Label {Name="recordingSummary",Dock=DockStyle.Fill,Font=WildXTheme.Strong,UseMnemonic=false,Margin=Padding.Empty};
             activity.Controls.Add(recordingSummary,0,0);
             lblSpeed.AutoSize=true;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";
             captureReportButton=new Button {Text="Report…",AutoSize=true,Enabled=false};
             captureReportButton.Click+=delegate {if(lastCaptureReport!=null)using(var report=new NpReportForm("Capture report",lastCaptureReport))report.ShowDialog(this);};
             activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,1);
-            lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=new Padding(0,0,0,6);lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
-            llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=new Padding(0,0,0,6);llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
-            var activityCard=Card("Capture activity",null,activity);online.Controls.Add(activityCard,0,1);
+            lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=Padding.Empty;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
+            llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=Padding.Empty;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
+            var activityCard=Card("Capture activity",null,activity,true);online.Controls.Add(activityCard,0,1);
             bool arrangingActivity=false;
             Action arrangeActivity=delegate {
                 if(arrangingActivity || activity.ClientSize.Width<=0)return;
@@ -157,32 +161,42 @@ namespace USB512_interface
                 try {
                     foreach(var label in new Label[]{recordingSummary,lblRecInfo,llblSavefile}) {
                         int width=Math.Max(1,activity.ClientSize.Width-label.Margin.Horizontal);
-                        int height=label.GetPreferredSize(new Size(width,0)).Height+label.Margin.Vertical;
+                        int height=String.IsNullOrEmpty(label.Text)?0:label.GetPreferredSize(new Size(width,0)).Height+label.Margin.Vertical;
                         var row=activity.RowStyles[activity.GetRow(label)];
                         if(row.Height!=height)row.Height=height;
                     }
                     var layout=(TableLayoutPanel)activityCard.Controls[0];
                     int heightNeeded=(int)(layout.RowStyles[0].Height+activity.RowStyles.Cast<RowStyle>().Sum(row=>row.Height))+
                         activityCard.Padding.Vertical+activityCard.Margin.Vertical;
-                    float scale=activity.RowStyles[1].Height/40F;
-                    int minimumActivityHeight=(int)Math.Ceiling(150*scale);
+                    float scale=activity.RowStyles[1].Height/36F;
+                    capture.RowStyles[3].Height=Math.Max(40*scale,captureActions.GetPreferredSize(new Size(capture.ClientSize.Width,0)).Height);
+                    capture.RowStyles[4].Height=npAutoRecover.Visible?npAutoRecover.GetPreferredSize(Size.Empty).Height+npAutoRecover.Margin.Vertical:0;
+                    var acquisitionLayout=(TableLayoutPanel)acquisitionCard.Controls[0];
+                    int captureHeight=(int)Math.Ceiling(acquisitionLayout.RowStyles[0].Height+capture.RowStyles.Cast<RowStyle>().Sum(row=>row.Height))+
+                        acquisitionCard.Padding.Vertical+acquisitionCard.Margin.Vertical;
+                    capture.Height=(int)Math.Ceiling(capture.RowStyles.Cast<RowStyle>().Sum(row=>row.Height));
+                    int minimumActivityHeight=(int)Math.Ceiling(120*scale);
                     int activityHeight=Math.Max(minimumActivityHeight,heightNeeded);
+                    int upperHeight=Math.Max(captureHeight+activityHeight,(int)Math.Ceiling(408*scale));
+                    online.RowStyles[0].Height=upperHeight-activityHeight;
                     online.RowStyles[1].Height=activityHeight;
-                    healthAndGpio.RowStyles[0].Height=232*scale;
-                    healthAndGpio.RowStyles[1].Height=online.RowStyles[0].Height-healthAndGpio.RowStyles[0].Height+activityHeight;
-                    online.Height=Math.Max((int)Math.Ceiling(826*scale)+activityHeight-minimumActivityHeight,usbPage.ClientSize.Height-usbPage.Padding.Vertical);
+                    healthAndGpio.RowStyles[0].Height=176*scale;
+                    healthAndGpio.RowStyles[1].Height=upperHeight-healthAndGpio.RowStyles[0].Height;
+                    online.Height=Math.Max(upperHeight+(int)Math.Ceiling(224*scale),usbPage.ClientSize.Height-usbPage.Padding.Vertical);
                 } finally {arrangingActivity=false;}
             };
             lblRecInfo.TextChanged+=delegate {arrangeActivity();};llblSavefile.TextChanged+=delegate {arrangeActivity();};
             recordingSummary.TextChanged+=delegate {arrangeActivity();};recordingSummary.FontChanged+=delegate {arrangeActivity();};
             lblRecInfo.FontChanged+=delegate {arrangeActivity();};llblSavefile.FontChanged+=delegate {arrangeActivity();};
-            activity.SizeChanged+=delegate {arrangeActivity();};usbPage.Resize+=delegate {arrangeActivity();};arrangeActivity();
+            activity.SizeChanged+=delegate {arrangeActivity();};capture.SizeChanged+=delegate {arrangeActivity();};
+            captureActions.Layout+=delegate {arrangeActivity();};npAutoRecover.VisibleChanged+=delegate {arrangeActivity();};
+            usbPage.Resize+=delegate {arrangeActivity();};arrangeActivity();
             var recordingSummaryTimer=new Timer {Interval=1000};components.Add(recordingSummaryTimer);
             recordingSummaryTimer.Tick+=delegate {RefreshRecordingSummary(DateTime.UtcNow);PollGpioRtcRecording();};
             RefreshRecordingSummary(DateTime.UtcNow);recordingSummaryTimer.Start();
-            var clock=Stack(82,44,0);timeStatus.Dock=DockStyle.Fill;timeStatus.AutoEllipsis=true;clock.Controls.Add(timeStatus,0,0);clock.Controls.Add(ActionRow(timeSettings),0,1);
-            clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="Time uses your Windows time zone.\r\n\r\nUse Sync PC time in BLE Mode to synchronize the onboard recorder."},0,2);
-            var networkTimeCard=Card("Network time / Local",null,clock);networkTimeCard.Name="networkTimeCard";
+            var clock=Stack(54,40,0);timeStatus.Dock=DockStyle.Fill;timeStatus.AutoEllipsis=true;clock.Controls.Add(timeStatus,0,0);clock.Controls.Add(ActionRow(timeSettings),0,1);
+            clock.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,Text="Use Sync PC time in BLE Mode to set the recorder clock."},0,2);
+            var networkTimeCard=Card("Network time / Local",null,clock,true);networkTimeCard.Name="networkTimeCard";
             healthAndGpio.Controls.Add(networkTimeCard,0,2);
 
             bleWorkspace=new NpBleForm() {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};

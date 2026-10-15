@@ -80,7 +80,7 @@ static class NpRecordingWarningTests {
    info.Text="COM77 · Logging\r\nEvents: 1,001 | Clock: RTT 2 ms\r\nLast: CH1 · RTC 100999 ms";
    foreach(int width in new[]{1044,1100,1450}) {
     form.ClientSize=new Size(width,920);Application.DoEvents();var network=form.Controls.Find("networkTimeCard",true)[0];
-    Check(network.Parent==split && network.Top-network.Margin.Top==infoCard.Bottom+infoCard.Margin.Bottom && infoCard.Height>=280,"GPIO panel does not extend to network-time panel after resize");
+    Check(network.Parent==split && network.Top-network.Margin.Top==infoCard.Bottom+infoCard.Margin.Bottom && viewport.ClientSize.Height>=table.Height,"GPIO panel does not extend to network time or clips the four-channel table after resize");
     Check(info.ClientSize.Height>=info.Font.Height*3 && Array.TrueForAll(leds,l=>l.Parent.ClientRectangle.Contains(l.Bounds)) && Array.TrueForAll(counts,l=>l.Parent.ClientRectangle.Contains(l.Bounds)) && Array.TrueForAll(rates,l=>l.Parent.ClientRectangle.Contains(l.Bounds) && l.Height>=l.Font.Height),"GPIO text/LEDs/Hz clipped after resize");
    }
    form.ClientSize=new Size(1100,920);Application.DoEvents();

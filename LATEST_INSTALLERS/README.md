@@ -1,11 +1,9 @@
-# WILDX 1.0.0.25
+# WILDX 1.0.0.26
 
-[Download the installer](WILDX_console-Setup-1.0.0.25.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.26.exe).
 
-Network time now displays your Windows local time zone and UTC offset. Automatic selection compares Cloudflare, NIST and Microsoft using measured uncertainty and jitter, with per-server retry/backoff and manual override. The target is **±10 ms**; the UI reports when the current estimate exceeds it. Internal UTC values and recording timestamps keep their existing meaning.
+The USB recording page is more compact. Action rows use their actual height, hidden recovery controls reserve no blank row, and device/folder/session/GPIO labels share a column. Reduced card and header spacing keeps the full recording page visible without page scrolling at the checked client sizes, including 1044×780 and 1180×820. Long recording diagnostics still expand so text remains accessible. GPIO keeps all four default rows, and the IMU retains space for every axis.
 
-USB/BLE neural, camera, scope and V1 media previews use normal independent windows, allowing the console and other windows to come forward. Live-preview resources and media/capture drain guards remain intact.
+Compact-layout, recording-metrics, GPIO/warning, shared-workflow and local-time UI checks passed. All 13 extracted runtime files match the checked payload; all 12 non-GUI files remain identical to 1.0.0.25. No hardware or installer execution.
 
-20,083 clock checks, 37 actual clock-UI checks, 11 preview lifecycle checks and 134 capture ownership assertions passed. The final 20-second public NTP comparison selected Cloudflare; estimated error was ±12.431–15.394 ms, above the 10 ms target on this network. All 13 extracted runtime files match the checked payload; all 12 non-GUI files remain identical to 1.0.0.24. No recording hardware or installer execution.
-
-[Time settings preview](../docs/screenshots/network-time-settings.png), [clock behavior](../docs/network-time.md), [validation](../Note/NETWORK_TIME_LOCAL_PREVIEW_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
+[Updated UI with sample values](../docs/screenshots/usb-recording-gpio.png), [validation](../Note/COMPACT_USB_LAYOUT_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
