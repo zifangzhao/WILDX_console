@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.30",
+  "version": "1.0.0.31",
   "releaseDate": "2026-10-14",
-  "status": "V1 BLE camera/microphone SD recording controls and stable background status refresh",
+  "status": "Explicit Neuropixels V1/V2 USB storage source labels with MCU UID",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.30.exe",
-    "sha256": "23E5449446C8AB960DC807A442D9803DD45FE02FE30848E313AD49F638CCEAAB",
-    "bytes": 2342833
+    "file": "WILDX_console-Setup-1.0.0.31.exe",
+    "sha256": "4271E0DA27A859723AD7C41E5EBD2081B2EC18CCBFE00DEC58EDBA0797B7CB2A",
+    "bytes": 2342916
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "2C8C03E0D4D81897487331217939DD29E0DBA2753243F1ECB19759D2AB8A00E9",
-      "bytes": 1366016
+      "sha256": "C122886C1134AEBB33C9F0CEAC1C3DA4A614C2BB73E2E519A0618A88BDACA825",
+      "bytes": 1366528
     },
     {
       "path": "WILDX_console.exe.config",
@@ -75,8 +75,8 @@
       "bytes": 340
     }
   ],
-  "baseRelease": "1.0.0.29",
-  "baseInstallerSha256": "23CBE31BFA478C00D5CB95EC2EA078E41087C5472F9841791FA1595ED27D79C3",
+  "baseRelease": "1.0.0.30",
+  "baseInstallerSha256": "23E5449446C8AB960DC807A442D9803DD45FE02FE30848E313AD49F638CCEAAB",
   "default_camera_hz": 40,
   "device_confirmed_rates_preserved": true,
   "usb_camera_imu_sidecars_preserved": true,
@@ -85,13 +85,8 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "mediaSourceFlowChecks": 40,
-    "mediaAssemblyChecks": 116,
-    "existingBleFeatureChecks": 1433,
-    "profileMenuChecks": 12,
-    "commandWriteChecks": 653,
-    "standaloneChecks": 294,
-    "actualFormRendered": true,
+    "actualAppSourceLabelChecks": 5,
+    "inheritedApplicationRegressionRelease": "1.0.0.30",
     "extractedPayloadFilesVerified": 13,
     "unchangedRuntimeDependencyFiles": 12,
     "installerExecuted": false,
@@ -160,7 +155,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
-      "sha256": "852612100E22BC73AC254B3710B8FE9BA00D82DCA3720152ACBB44E5294405D9"
+      "sha256": "21D1FB2F2CD263841545FFB81C7C90B503945023FF613DED43A2E79EBB26B2DE"
     },
     {
       "path": "Neuropixels/V1Capture/Configuration/NpConfigClient.cs",
@@ -420,7 +415,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-      "sha256": "1BAEFAC58AF419C5D5BA1174003404210FB2D1E3D913FA9B03841E8B3E179FE2"
+      "sha256": "0F66A92459CB9754E4197DC8FCA21F1810F400825DC2BEEE9CDF4737771C165E"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.Media.cs",
@@ -455,5 +450,6 @@
     "v2MediaControl": false,
     "sdExportTimingRateAware": true,
     "statusRefreshDoesNotDisableControls": true
-  }
+  },
+  "usbStorageGenerationLabels": true
 }

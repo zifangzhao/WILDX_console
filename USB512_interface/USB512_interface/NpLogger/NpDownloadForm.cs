@@ -30,6 +30,12 @@ namespace CE32_console
         internal bool IsBusy{get{return busy;}}
         internal Button FormatButton{get{return format;}}
         internal string SelectedSourceDescription{get{var source=sources.SelectedItem as Source;return source==null?null:source.Label;}}
+        internal static string UsbSourceLabel(string path) {
+            string uid=USB512_interface.NpV1Management.UidFromPath(path);
+            if(uid!=null)return "Neuropixels V1 USB — "+uid;
+            uid=USB512_interface.NpV2FirmwareForm.Uid(path);
+            return uid!=null?"Neuropixels V2 USB — "+uid:"Neuropixels USB — version unknown — "+path;
+        }
         IWin32Window DialogOwner{get{return TopLevelControl??this;}}
         internal event Action BusyChanged;
         internal NpDownloadForm(string sourcePath=null):this(sourcePath,true){}
@@ -78,7 +84,7 @@ namespace CE32_console
             var paths=NpDownloadNative.EnumerateNpPaths()
                 .Where(p=>p.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)>=0).ToList();
             for(int i=sources.Items.Count-1;i>=0;i--){var item=(Source)sources.Items[i];if(item.Usb&&!paths.Contains(item.Path))sources.Items.RemoveAt(i);}
-            foreach(string path in paths)if(!sources.Items.Cast<Source>().Any(p=>p.Usb&&p.Path==path))sources.Items.Insert(0,new Source{Usb=true,Path=path,Label="NP board USB — "+path});
+            foreach(string path in paths)if(!sources.Items.Cast<Source>().Any(p=>p.Usb&&p.Path==path))sources.Items.Insert(0,new Source{Usb=true,Path=path,Label=UsbSourceLabel(path)});
             if(sources.SelectedIndex<0)SelectBoundSource();
             }finally{refreshing=false;}
         }
@@ -109,7 +115,7 @@ namespace CE32_console
             refreshing=true;
             try {sources.Items.Clear();records.Items.Clear();listedSource=null;
                 foreach(string path in NpDownloadNative.EnumerateNpPaths())
-                    if(path.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)>=0)sources.Items.Add(new Source{Usb=true,Path=path,Label="NP board USB — "+path});
+                    if(path.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)>=0)sources.Items.Add(new Source{Usb=true,Path=path,Label=UsbSourceLabel(path)});
                 using(var search=new ManagementObjectSearcher("SELECT DeviceID,Model,MediaType,InterfaceType FROM Win32_DiskDrive"))using(var disks=search.Get())foreach(ManagementObject d in disks) {
                     string mediaType=Convert.ToString(d["MediaType"]);
                     if(NpDownloadCatalog.IsReadOnlyDiskSource(mediaType,Convert.ToString(d["InterfaceType"])))
