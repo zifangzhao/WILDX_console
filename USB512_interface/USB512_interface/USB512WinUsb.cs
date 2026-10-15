@@ -136,7 +136,7 @@ namespace USB512_interface
             }
 
             IntPtr winUsb;
-            if (!USB512WinUsbNative.WinUsbInitialize(handle, out winUsb))
+            if (!USB512WinUsbNative.WinUsbInitialize(handle, out winUsb, path))
             {
                 handle.Dispose();
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "WinUsb_Initialize failed");
@@ -1370,13 +1370,9 @@ namespace USB512_interface
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool CloseHandle(IntPtr handle);
 
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_Initialize", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool WinUsbInitialize(SafeFileHandle deviceHandle, out IntPtr interfaceHandle);
+        internal static bool WinUsbInitialize(SafeFileHandle deviceHandle, out IntPtr interfaceHandle, string target=null) { return USB512_interface.UsbHealthNative.Initialize(deviceHandle,out interfaceHandle,target); }
 
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_Free", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool WinUsbFree(IntPtr interfaceHandle);
+        internal static bool WinUsbFree(IntPtr interfaceHandle) { return USB512_interface.UsbHealthNative.Free(interfaceHandle); }
 
         [DllImport("winusb.dll", EntryPoint = "WinUsb_QueryInterfaceSettings", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -1394,25 +1390,17 @@ namespace USB512_interface
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool WinUsbSetPowerPolicy(IntPtr interfaceHandle, uint policyType, uint valueLength, ref byte value);
 
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_ReadPipe", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool WinUsbReadPipe(IntPtr interfaceHandle, byte pipeId, [Out] byte[] buffer, uint bufferLength, out uint transferred, IntPtr overlapped);
+        internal static bool WinUsbReadPipe(IntPtr interfaceHandle, byte pipeId, byte[] buffer, uint bufferLength, out uint transferred, IntPtr overlapped) { return USB512_interface.UsbHealthNative.Read(interfaceHandle,pipeId,buffer,bufferLength,out transferred,overlapped); }
 
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_ReadPipe", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool WinUsbReadPipeOverlapped(IntPtr interfaceHandle, byte pipeId, IntPtr buffer, uint bufferLength, out uint transferred, IntPtr overlapped);
+        internal static bool WinUsbReadPipeOverlapped(IntPtr interfaceHandle, byte pipeId, IntPtr buffer, uint bufferLength, out uint transferred, IntPtr overlapped) { return USB512_interface.UsbHealthNative.ReadOverlapped(interfaceHandle,pipeId,buffer,bufferLength,out transferred,overlapped); }
 
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_GetOverlappedResult", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool WinUsbGetOverlappedResult(IntPtr interfaceHandle, IntPtr overlapped, out uint transferred, [MarshalAs(UnmanagedType.Bool)] bool wait);
+        internal static bool WinUsbGetOverlappedResult(IntPtr interfaceHandle, IntPtr overlapped, out uint transferred, bool wait) { return USB512_interface.UsbHealthNative.Result(interfaceHandle,overlapped,out transferred,wait); }
 
         [DllImport("winusb.dll", EntryPoint = "WinUsb_ControlTransfer", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool WinUsbControlTransfer(IntPtr interfaceHandle, WINUSB_SETUP_PACKET setupPacket, [In, Out] byte[] buffer, uint bufferLength, out uint transferred, IntPtr overlapped);
 
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_AbortPipe", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool WinUsbAbortPipe(IntPtr interfaceHandle, byte pipeId);
+        internal static bool WinUsbAbortPipe(IntPtr interfaceHandle, byte pipeId) { return USB512_interface.UsbHealthNative.Abort(interfaceHandle,pipeId); }
 
         [DllImport("winusb.dll", EntryPoint = "WinUsb_ResetPipe", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

@@ -514,9 +514,7 @@ namespace USB512_interface
         [DllImport("winusb.dll", EntryPoint = "WinUsb_GetPipePolicy", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetPipePolicyUInt(IntPtr interfaceHandle, byte pipeId, uint policyType, ref uint valueLength, out uint value);
-        [DllImport("winusb.dll", EntryPoint = "WinUsb_ReadPipe", ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool ReadPipe(IntPtr interfaceHandle, byte pipeId, IntPtr buffer, uint bufferLength, IntPtr transferred, IntPtr overlapped);
+        private static bool ReadPipe(IntPtr interfaceHandle, byte pipeId, IntPtr buffer, uint bufferLength, IntPtr transferred, IntPtr overlapped) { return UsbHealthNative.ReadDeferred(interfaceHandle,pipeId,buffer,bufferLength,transferred,overlapped); }
         [StructLayout(LayoutKind.Sequential)]
         private struct DeviceInterfaceData { internal int Size; internal Guid Guid; internal int Flags; internal IntPtr Reserved; }
         [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
@@ -618,7 +616,7 @@ namespace USB512_interface
                 USB512WinUsbNative.FileAttributeNormal | USB512WinUsbNative.FileFlagOverlapped, IntPtr.Zero);
             if (file.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error(), "CreateFile for V2 WinUSB failed");
             IntPtr interfaceHandle;
-            if (!USB512WinUsbNative.WinUsbInitialize(file, out interfaceHandle))
+            if (!USB512WinUsbNative.WinUsbInitialize(file, out interfaceHandle, path))
             {
                 file.Dispose();
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "WinUsb_Initialize for V2 failed");

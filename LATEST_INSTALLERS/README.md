@@ -1,5 +1,15 @@
 # WILDX 1.0.0.33
 
+**Continuous USB quality test:** [Download installer](WILDX_console-Setup-1.0.0.33-USB_QUALITY_CONTINUOUS_20261015.exe).
+
+This feature build adds USB transfer health and a **Continuous** checkbox beside **USB quality test** in recording info. Continuous runs until Stop or the first transfer/integrity error. Uncheck it for the short test. It requires an existing supported SD-download or RAM-diagnostic firmware mode; the app does not change modes automatically. SD-backed timing includes the card.
+
+The exact checked application and exporter were packaged without rebuilding or changing their 1.0.0.33 version. The build includes the recorded concurrent V2 application inputs. Its 84 software checks passed; no hardware endurance test was performed. All 13 extracted installer payload files match the checked files. The installer retains **Run WILD-X**.
+
+[USB quality development and delivery record](../Note/USB_HEALTH_DEVELOPMENT_20261015.md), [feature-build manifest](usb-quality-manifest.json).
+
+The previous general installer remains available below.
+
 [Download installer](WILDX_console-Setup-1.0.0.33.exe).
 
 Data Download now offers **Delete last recording…** and **Format card…**, with confirmation of the selected card. Delete retains earlier recordings; format clears the native recording catalog and retains settings.

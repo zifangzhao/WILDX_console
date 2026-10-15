@@ -931,7 +931,7 @@ namespace USB512_interface
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (running || systemInfoActive!=0 || String.IsNullOrWhiteSpace(devicePath) || String.IsNullOrWhiteSpace(saveFolder))
+            if (usbQualityRunning || running || systemInfoActive!=0 || String.IsNullOrWhiteSpace(devicePath) || String.IsNullOrWhiteSpace(saveFolder))
                 return;
             if (selectedDeviceKind == DeviceKind.NpUnavailable)
             {

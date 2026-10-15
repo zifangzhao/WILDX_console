@@ -71,7 +71,7 @@ namespace USB512_interface
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "CreateFile for WILDX WinUSB failed");
 
             IntPtr winUsb;
-            if (!USB512WinUsbNative.WinUsbInitialize(handle, out winUsb))
+            if (!USB512WinUsbNative.WinUsbInitialize(handle, out winUsb, path))
             {
                 handle.Dispose();
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "WinUsb_Initialize for WILDX failed");

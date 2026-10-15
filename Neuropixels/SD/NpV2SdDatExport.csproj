@@ -33,6 +33,8 @@
     <Compile Include="..\USBConsoleV2\NpV2UsbConsole.cs"><Link>NpV2UsbConsole.cs</Link></Compile>
     <Compile Include="..\..\USB512_interface\USB512_interface\Np2ConfigurationClient.cs"><Link>Np2ConfigurationClient.cs</Link></Compile>
     <Compile Include="..\..\USB512_interface\USB512_interface\USB512WinUsb.cs"><Link>USB512WinUsb.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\UsbHealth.cs"><Link>UsbHealth.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\UsbHealthNative.cs"><Link>UsbHealthNative.cs</Link></Compile>
     <Compile Include="..\..\USB512_interface\USB512_interface\NeuropixelsPreviewForm.cs"><Link>NeuropixelsPreviewForm.cs</Link></Compile>
     <Compile Include="..\..\USB512_interface\USB512_interface\XeNpStreamDecoder.cs"><Link>XeNpStreamDecoder.cs</Link></Compile>
   </ItemGroup>

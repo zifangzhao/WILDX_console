@@ -16,7 +16,7 @@ namespace USB512_interface
         Label advancedTarget,advancedStorageSource;
         Button diagnosticsButton,captureReportButton;
         string lastCaptureReport;
-        Label recordingSummary;
+        Label recordingSummary,usbHealthSummary;
         string recordingSummaryFolder;
         DateTime recordingSummaryStartUtc=DateTime.MinValue,recordingSummaryStopUtc=DateTime.MinValue;
         readonly TextBox npSessionLabel=new TextBox {Name="npSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
@@ -143,23 +143,28 @@ namespace USB512_interface
             healthAndGpio.Controls.Add(Card("Device health",null,health,true),0,0);
             healthAndGpio.Controls.Add(BuildGpioRtcInfo(),0,1);online.Controls.Add(healthAndGpio,1,0);online.SetRowSpan(healthAndGpio,3);
 
-            var activity=Stack(0,36,0,0);
-            activity.RowStyles[0].SizeType=activity.RowStyles[2].SizeType=activity.RowStyles[3].SizeType=SizeType.Absolute;
+            var activity=Stack(0,36,0,0,0);
+            activity.RowStyles[0].SizeType=activity.RowStyles[2].SizeType=activity.RowStyles[3].SizeType=activity.RowStyles[4].SizeType=SizeType.Absolute;
             recordingSummary=new Label {Name="recordingSummary",Dock=DockStyle.Fill,Font=WildXTheme.Strong,UseMnemonic=false,Margin=Padding.Empty};
             activity.Controls.Add(recordingSummary,0,0);
             lblSpeed.AutoSize=true;lblSpeed.Font=WildXTheme.Strong;lblSpeed.Text="USB idle";
             captureReportButton=new Button {Text="Report…",AutoSize=true,Enabled=false};
             captureReportButton.Click+=delegate {if(lastCaptureReport!=null)using(var report=new NpReportForm("Capture report",lastCaptureReport))report.ShowDialog(this);};
-            activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,1);
+            var usbDetails=new Button {Name="usbHealthDetails",Text="USB details…",AutoSize=true};
+            usbDetails.Click+=delegate {using(var report=new NpReportForm("USB transfer health",CurrentUsbHealthReport))report.ShowDialog(this);};
+            usbQualityTestButton=new Button {Name="usbQualityTest",Text="USB quality test…",AutoSize=true};usbQualityTestButton.Click+=async delegate {await TestUsbQualityAsync();};
+            usbQualityContinuous=new CheckBox {Name="usbQualityContinuous",Text="Continuous",Checked=true,AutoSize=true};
+            activity.Controls.Add(ActionRow(lblSpeed,captureReportButton,usbDetails,usbQualityTestButton,usbQualityContinuous),0,1);usbQualityContinuous.Margin=new Padding(0,8,0,8);
             lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=Padding.Empty;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
             llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=Padding.Empty;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
+            usbHealthSummary=new Label {Name="usbHealthSummary",Dock=DockStyle.Fill,UseMnemonic=false,Margin=Padding.Empty,ForeColor=WildXTheme.Muted};activity.Controls.Add(usbHealthSummary,0,4);
             var activityCard=Card("Capture activity",null,activity,true);online.Controls.Add(activityCard,0,1);
             bool arrangingActivity=false;
             Action arrangeActivity=delegate {
                 if(arrangingActivity || activity.ClientSize.Width<=0)return;
                 arrangingActivity=true;
                 try {
-                    foreach(var label in new Label[]{recordingSummary,lblRecInfo,llblSavefile}) {
+                    foreach(var label in new Label[]{recordingSummary,lblRecInfo,llblSavefile,usbHealthSummary}) {
                         int width=Math.Max(1,activity.ClientSize.Width-label.Margin.Horizontal);
                         int height=String.IsNullOrEmpty(label.Text)?0:label.GetPreferredSize(new Size(width,0)).Height+label.Margin.Vertical;
                         var row=activity.RowStyles[activity.GetRow(label)];
@@ -187,6 +192,7 @@ namespace USB512_interface
             };
             lblRecInfo.TextChanged+=delegate {arrangeActivity();};llblSavefile.TextChanged+=delegate {arrangeActivity();};
             recordingSummary.TextChanged+=delegate {arrangeActivity();};recordingSummary.FontChanged+=delegate {arrangeActivity();};
+            usbHealthSummary.TextChanged+=delegate {arrangeActivity();};usbHealthSummary.FontChanged+=delegate {arrangeActivity();};
             lblRecInfo.FontChanged+=delegate {arrangeActivity();};llblSavefile.FontChanged+=delegate {arrangeActivity();};
             activity.SizeChanged+=delegate {arrangeActivity();};capture.SizeChanged+=delegate {arrangeActivity();};
             captureActions.Layout+=delegate {arrangeActivity();};npAutoRecover.VisibleChanged+=delegate {arrangeActivity();};
@@ -210,6 +216,7 @@ namespace USB512_interface
             downloadPage.Controls.Add(Card("Recordings & storage","Refresh sources, list sessions, then select recordings to download or decode.",downloadWorkspace));downloadWorkspace.Show();
             BuildAdvancedWorkspace();
             FormClosing+=delegate(object sender,FormClosingEventArgs e){
+                if(usbQualityRunning){usbQualityCancel=true;e.Cancel=true;usbQualityStatus="Stopping USB test after the current transfer…";return;}
                 if(bleWorkspace.IsBusy){e.Cancel=true;workspaceStatus.Text="Waiting for the BLE command to finish before closing.";return;}
                 if(DownloadBusy){downloadWorkspace.RequestCancel();e.Cancel=true;workspaceStatus.Text="Waiting for the storage operation to finish before closing.";}
             };
@@ -219,6 +226,8 @@ namespace USB512_interface
             AutoScaleDimensions=new SizeF(96F,96F);AutoScaleMode=AutoScaleMode.Dpi;ResumeLayout(true);UpdateStartEnabled();
         }
         void ResetRecordingSummary(string folder) {
+            usbQualityPath=usbQualityStatus=lastUsbQualityReport=null;
+            UsbHealth.BeginRecording(devicePath);
             recordingSummaryFolder=folder;recordingSummaryStartUtc=recordingSummaryStopUtc=DateTime.MinValue;
             if(selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2)recordingSummaryStartUtc=captureStartedAtUtc;
             RefreshRecordingSummary(DateTime.UtcNow);
@@ -246,6 +255,7 @@ namespace USB512_interface
         }
         void RefreshRecordingSummary(DateTime now) {
             if(recordingSummary==null)return;
+            usbHealthSummary.Text=CurrentUsbHealthSummary;
             TimeSpan elapsed=recordingSummaryStartUtc==DateTime.MinValue?TimeSpan.Zero:
                 (recordingSummaryStopUtc==DateTime.MinValue?now:recordingSummaryStopUtc)-recordingSummaryStartUtc;
             if(elapsed<TimeSpan.Zero)elapsed=TimeSpan.Zero;
@@ -305,6 +315,8 @@ namespace USB512_interface
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
             if(selectedDeviceKind==DeviceKind.XeNp)btnPreview.Enabled=NpControlsAvailable;
             if(diagnosticsButton!=null)diagnosticsButton.Enabled=NpControlsAvailable;
+            if(usbQualityTestButton!=null)usbQualityTestButton.Enabled=usbQualityRunning || CanTestUsb;
+            if(usbQualityContinuous!=null)usbQualityContinuous.Enabled=!usbQualityRunning && CanTestUsb;
             if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;
         }
         void OpenV2Firmware()

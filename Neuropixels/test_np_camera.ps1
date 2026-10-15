@@ -4,7 +4,7 @@ if(!$Compiler){$locator=Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Stu
 $console=Join-Path $PSScriptRoot '..\USB512_interface\USB512_interface'
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $exe=Join-Path $OutputDirectory 'NpCameraTests.exe'
-$sources=@("$PSScriptRoot\Tests\TestNpCamera.cs","$console\XeNpWinUsb.cs","$console\XeNpStreamDecoder.cs","$console\NpCaptureModes.cs","$console\NpProbeManifest.cs","$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\USB512WinUsb.cs","$console\XeNpSdInfo.cs","$console\NpLogger\NpV1Management.cs","$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\RawBurst.cs")
+$sources=@("$PSScriptRoot\Tests\TestNpCamera.cs","$console\XeNpWinUsb.cs","$console\XeNpStreamDecoder.cs","$console\NpCaptureModes.cs","$console\NpProbeManifest.cs","$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs","$console\XeNpSdInfo.cs","$console\NpLogger\NpV1Management.cs","$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\RawBurst.cs")
 $sources+="$console\CameraPreviewForm.cs"
 $sources+="$console\WildXTheme.cs"
 & $Compiler /nologo /optimize+ /target:exe /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$exe" @sources

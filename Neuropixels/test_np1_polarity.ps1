@@ -20,7 +20,7 @@ $sources=@(
  "$console\NpAdcCalibration.cs",
  "$PSScriptRoot\SD\NpNeuroscopeXml.cs","$PSScriptRoot\SD\NpMetadataFile.cs","$console\WildXTheme.cs","$console\NpRecordingSettings.cs",
  "$console\NpLogger\NpDownloadCatalog.cs","$console\Ble\NpMediaExport.cs","$console\Ble\WILD_VideoDecoder.cs",
- "$console\XeNpWinUsb.cs","$console\NpProbeManifest.cs","$console\USB512WinUsb.cs","$console\XeNpSdInfo.cs",
+ "$console\XeNpWinUsb.cs","$console\NpProbeManifest.cs","$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs","$console\XeNpSdInfo.cs",
  "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\NpLogger\NpV1Management.cs",
  "$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\RawBurst.cs"
 )

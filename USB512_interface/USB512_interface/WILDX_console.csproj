@@ -66,6 +66,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="USB512WinUsb.cs" />
+    <Compile Include="UsbHealth.cs" />
+    <Compile Include="UsbHealthNative.cs" />
+    <Compile Include="UsbQualityTest.cs" />
+    <Compile Include="mainForm.UsbQuality.cs" />
     <Compile Include="Ce64MscProtocol.cs" />
     <Compile Include="Ce64MscRawBlockDevice.cs" />
     <Compile Include="Ce64MscCompressedDecoder.cs" />

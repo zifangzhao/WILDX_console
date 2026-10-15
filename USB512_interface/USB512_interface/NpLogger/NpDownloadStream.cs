@@ -20,6 +20,7 @@ namespace CE32_console
         private uint epoch, sequence;
         private uint maxBlocks;
         private bool faulted;
+        private readonly bool qualityTestSession;
         internal string TransportDescription {get;private set;}
         internal bool IsSynthetic {get;private set;}
         internal Func<bool> Cancelled;
@@ -57,12 +58,15 @@ namespace CE32_console
             }
             while(offset<end)c=(c>>8)^t[(c^b[offset++])&255];return ~c;
         }
-        internal NpDownloadStream(string path,bool allowSynthetic=false) {
+        internal NpDownloadStream(string path,bool allowSynthetic=false):this(path,allowSynthetic,false) {}
+        internal NpDownloadStream(string path,bool allowSynthetic,bool qualityTest) {
+            qualityTestSession=qualityTest;
             if(path==null || path.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)<0)throw new IOException("Not an NP WinUSB device.");
-            file=NpDownloadNative.CreateFile(path,0xc0000000,3,IntPtr.Zero,3,0x40000080,IntPtr.Zero);
+            file=NpDownloadNative.CreateFile(path,0xc0000000,qualityTest?0U:3U,IntPtr.Zero,3,0x40000080,IntPtr.Zero);
             if(file.IsInvalid){file.Dispose();throw new Win32Exception(Marshal.GetLastWin32Error());}
             try {
-                if(!NpDownloadNative.WinUsbInitialize(file,out usb))throw new Win32Exception(Marshal.GetLastWin32Error());
+                if(!NpDownloadNative.WinUsbInitialize(file,out usb,path))throw new Win32Exception(Marshal.GetLastWin32Error());
+                if(qualityTest)USB512_interface.UsbHealth.Diagnostic(usb);
                 NpDownloadNative.USB_INTERFACE_DESCRIPTOR descriptor;
                 if(!NpDownloadNative.WinUsbQueryInterfaceSettings(usb,0,out descriptor))throw new Win32Exception(Marshal.GetLastWin32Error());
                 ushort packetSize=0;
@@ -75,24 +79,27 @@ namespace CE32_console
                 uint timeout=3000;
                 if(!NpDownloadNative.WinUsbSetPipePolicy(usb,0x81,3,4,ref timeout))throw new Win32Exception(Marshal.GetLastWin32Error());
                 byte autoSuspend=0;
-                if(!NpDownloadNative.WinUsbSetPowerPolicy(usb,0x81,1,ref autoSuspend))throw new Win32Exception(Marshal.GetLastWin32Error());
+                if(!qualityTest && !NpDownloadNative.WinUsbSetPowerPolicy(usb,0x81,1,ref autoSuspend))throw new Win32Exception(Marshal.GetLastWin32Error());
                 var info=Control(0xc0,0x60,0,0,32);
                 IsSynthetic=U(info,0)==0x3154504e && U(info,28)==3;
                 if((U(info,0)!=0x3144504e && !(allowSynthetic && IsSynthetic)) || U(info,4)!=1 || U(info,12)<1 || U(info,12)>1020 || (U(info,28)!=1 && !(allowSynthetic && IsSynthetic)))
-                    throw new IOException("Install the NP read-only USB download firmware; acquisition firmware does not serve SD recordings.");
+                    throw new IOException(qualityTest?"This firmware mode does not provide the USB transfer test. Select SD download mode or supported RAM diagnostic firmware first. No mode was changed.":"Install the NP read-only USB download firmware; acquisition firmware does not serve SD recordings.");
+                if(qualityTest && (U(info,8)==0 || U(info,16)!=0))throw new IOException("USB test requires an available, idle download device. No card reset or stream cancellation was attempted.");
                 if(U(info,8)==0 && !IsSynthetic)info=ResetSdDownloadOnce();
                 length=(long)U(info,8)*512;
                 if(length==0)throw new IOException("SD card remains unavailable after the bounded USB reset; the card was not modified.");
                 maxBlocks=U(info,12);
                 if(packetSize==64 && maxBlocks>120)throw new IOException("Full-speed device advertises an unsafe transfer size.");
                 TransportDescription=(packetSize==512?"High-speed USB":"Full-speed USB")+"; "+(maxBlocks*512/1024)+" KiB requests";
-                Control(0x40,0x62,0,0,0); // discard previous client's pending request
-                for(int i=0;i<100;i++){info=Control(0xc0,0x60,0,0,32);if(U(info,16)==0)break;Thread.Sleep(10);}
-                if(U(info,16)!=0)throw new IOException("NP USB download service is busy.");
-                // Reset only at a new, idle download session; never replay a
-                // failed read or alter the continuous recording path.
-                if(!NpDownloadNative.WinUsbResetPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
-                if(!NpDownloadNative.WinUsbFlushPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
+                if(!qualityTest) {
+                    Control(0x40,0x62,0,0,0); // discard previous client's pending request
+                    for(int i=0;i<100;i++){info=Control(0xc0,0x60,0,0,32);if(U(info,16)==0)break;Thread.Sleep(10);}
+                    if(U(info,16)!=0)throw new IOException("NP USB download service is busy.");
+                    // Reset only at a new, idle download session; never replay a
+                    // failed read or alter the continuous recording path.
+                    if(!NpDownloadNative.WinUsbResetPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
+                    if(!NpDownloadNative.WinUsbFlushPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
+                }
                 epoch=U(info,24);sequence=U(info,20);
             } catch {Dispose();throw;}
         }
@@ -149,6 +156,7 @@ namespace CE32_console
                 if(wireBuffer==null)wireBuffer=new byte[32+maxBlocks*512];
                 byte[] reply=wireBuffer;int got=0;
                 while(got<expected) {
+                    if(qualityTestSession && Cancelled!=null && Cancelled())throw new OperationCanceledException();
                     // Normal full replies read directly into one reusable array.
                     // A partial reply takes the bounded slow path, preserving
                     // the existing framing/error handling without unsafe pins.
@@ -158,7 +166,9 @@ namespace CE32_console
                     // Error response is deliberately a short header-only transfer.
                     if(got==32 && U(reply,16)!=0)break;
                 }
-                ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);sequence++;
+                try {ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);USB512_interface.UsbHealth.Integrity(usb,0x81,false,"download header/sequence/payload CRC");}
+                catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
+                sequence++;
                 cache=reply;cachePayloadCount=got-32;
                 cacheStart=(long)lba*512;
             } catch {faulted=true;cache=null;cachePayloadCount=0;throw;}

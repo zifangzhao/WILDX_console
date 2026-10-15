@@ -24,7 +24,7 @@ $sources = @(
     "$PSScriptRoot\SD\NpNeuroscopeXml.cs",
     "$PSScriptRoot\SD\NpMetadataFile.cs",
     "$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs", "$console\Np2ConfigurationClient.cs",
-    "$console\USB512WinUsb.cs", "$console\NeuropixelsPreviewForm.cs", "$console\XeNpStreamDecoder.cs",
+    "$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs", "$console\NeuropixelsPreviewForm.cs", "$console\XeNpStreamDecoder.cs",
     "$PSScriptRoot\Tests\TestNpV2SdDatExport.cs", "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",
     "$console\NpLogger\NpCe64Export.cs", "$console\NpLogger\NpCe64Decoder.cs", "$console\NpLogger\NpSdGeometry.cs",
     "$console\NpRecordingSettings.cs", "$console\NpProbeManifest.cs", "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",

@@ -18,7 +18,7 @@ $sources = @(
     "$console\XeNpWinUsb.cs", "$console\XeNpStreamDecoder.cs",
     "$console\NpCaptureModes.cs", "$console\NpProbeManifest.cs",
     "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",
-    "$console\USB512WinUsb.cs", "$console\XeNpSdInfo.cs"
+    "$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs", "$console\XeNpSdInfo.cs"
     "$console\NpLogger\NpV1Management.cs", "$console\NpLogger\NpDownloadNative.cs",
     "$console\NpLogger\NpDownloadStream.cs", "$console\NpLogger\RawBurst.cs"
 )
@@ -41,7 +41,7 @@ $sources = @(
     "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",
     "$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs",
     "$console\Np2ConfigurationClient.cs",
-    "$console\USB512WinUsb.cs", "$console\NeuropixelsPreviewForm.cs",
+    "$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs", "$console\NeuropixelsPreviewForm.cs",
     "$console\XeNpStreamDecoder.cs"
 )
 & $Compiler /nologo /optimize+ /define:NP2_CONSOLE_STANDALONE /target:exe /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$exe" @sources
