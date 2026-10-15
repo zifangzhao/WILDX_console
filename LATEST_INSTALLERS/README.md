@@ -1,9 +1,9 @@
-# WILDX 1.0.0.28
+# WILDX 1.0.0.29
 
-[Download installer](WILDX_console-Setup-1.0.0.28.exe).
+[Download installer](WILDX_console-Setup-1.0.0.29.exe).
 
-Environmental sensor errors remain in device health and recording reports without opening a warning popup. The USB 40 fps default, explicit rate selection and camera/IMU saving are retained.
+The final installer page offers **Run WILD-X**, checked by default. Uncheck it to finish without launching the app.
 
-Checked: 38 actual-GUI warning/panel checks, 42 GPIO checks, 8 camera UI checks and 12 focused warning checks. All 13 extracted runtime files match the package; 12 runtime dependencies match release 27.
+The application retains release 28 behavior, including environmental popup suppression, USB 40 fps and camera/IMU saving. Only its version number changed. The installer compiled successfully; all 13 extracted files match the checked payload, and 12 runtime dependencies match release 28.
 
-[Release notes](../Note/ENVIRONMENT_WARNING_RELEASE_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
+[Release notes](../Note/INSTALLER_LAUNCH_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).

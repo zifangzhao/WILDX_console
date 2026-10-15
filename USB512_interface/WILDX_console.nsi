@@ -21,6 +21,8 @@ VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright (c) 2025"
 !define MUI_UNICON "USB512_interface\Resources\Waveform.ico"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
+!define MUI_FINISHPAGE_RUN_TEXT "Run WILD-X"
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES

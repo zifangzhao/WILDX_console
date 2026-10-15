@@ -1,17 +1,17 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.28",
+  "version": "1.0.0.29",
   "releaseDate": "2026-10-14",
-  "status": "Environmental sensor warning popup disabled; device health and recording reports retain the error",
+  "status": "Installer finish page offers a checked Run WILD-X option",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.28.exe",
-    "sha256": "EF1BB89CAE192846DA6E7603F9E80916D4CCEBFC3B23A9B1F8E28C11367F1BAB",
-    "bytes": 2338812
+    "file": "WILDX_console-Setup-1.0.0.29.exe",
+    "sha256": "23CBE31BFA478C00D5CB95EC2EA078E41087C5472F9841791FA1595ED27D79C3",
+    "bytes": 2338907
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "F55E4E2AC680D60137FB3D1630E29A007D5CEE79F9C97FE96DDEB4DEDB4342DD",
+      "sha256": "C378C09FF3A83DDB56D512E6E2001699080D23E51D4E36C8D6C2B7AEF17D8E21",
       "bytes": 1354240
     },
     {
@@ -75,8 +75,8 @@
       "bytes": 340
     }
   ],
-  "baseRelease": "1.0.0.27",
-  "baseInstallerSha256": "DE59B90417B337B248F6824EEDC06E036B4E0FE505E235CAA1B4730124343530",
+  "baseRelease": "1.0.0.28",
+  "baseInstallerSha256": "EF1BB89CAE192846DA6E7603F9E80916D4CCEBFC3B23A9B1F8E28C11367F1BAB",
   "default_camera_hz": 40,
   "device_confirmed_rates_preserved": true,
   "usb_camera_imu_sidecars_preserved": true,
@@ -85,10 +85,9 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "actualGuiWarningAndPanelChecks": 38,
-    "gpioProtocolChecks": 42,
-    "cameraDefaultAndRateChecks": 8,
-    "sourceWarningChecks": 12,
+    "unchangedNonVersionAppSourceFiles": 80,
+    "inheritedAppValidationRelease": "1.0.0.28",
+    "nsisFinishPagePreprocessedChecks": 4,
     "extractedPayloadFilesVerified": 13,
     "unchangedRuntimeDependencyFiles": 12,
     "installerExecuted": false,
@@ -417,11 +416,17 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-      "sha256": "0127E55F5089D81E3CE9A6D5B121E647E9545D26C4D1DD5F9EBEA1D2F4A4F0D7"
+      "sha256": "1FD07CD2CF958D081E871B986665B913A218821EAF63B2F2D14C85C1D1D33302"
     }
   ],
   "limitations": [
-    "Native WILDX BLE media control remains incomplete; this release changes environmental sensor popup behavior only.",
-    "The new UI/firmware pair was not hardware retested. Existing V1 USB40 and IMU behavior is retained; no new hardware qualification is claimed."
-  ]
+    "Native WILDX BLE media control remains incomplete; this release adds the installer finish-page launch option.",
+    "No hardware retest or firmware update was performed. Existing application behavior is retained from release28."
+  ],
+  "installerFinishPage": {
+    "runCheckbox": "Run WILD-X",
+    "checkedByDefault": true,
+    "launchPath": "$INSTDIR\\WILDX_console.exe",
+    "launchOnCheckedFinishOnly": true
+  }
 }
