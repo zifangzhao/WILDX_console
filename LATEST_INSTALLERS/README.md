@@ -1,9 +1,13 @@
-# WILDX 1.0.0.26
+# WILDX1.0.0.27 camera40 candidate
 
-[Download the installer](WILDX_console-Setup-1.0.0.26.exe).
+[Download installer](WILDX_console-Setup-1.0.0.27.exe).
 
-The USB recording page is more compact. Action rows use their actual height, hidden recovery controls reserve no blank row, and device/folder/session/GPIO labels share a column. Reduced card and header spacing keeps the full recording page visible without page scrolling at the checked client sizes, including 1044×780 and 1180×820. Long recording diagnostics still expand so text remains accessible. GPIO keeps all four default rows, and the IMU retains space for every axis.
+V1 USB Media preview/capture defaults to40fps and retains explicit rate selection.
+Confirmed device settings are preserved; select/apply40 if the device still reports50.
 
-Compact-layout, recording-metrics, GPIO/warning, shared-workflow and local-time UI checks passed. All 13 extracted runtime files match the checked payload; all 12 non-GUI files remain identical to 1.0.0.25. No hardware or installer execution.
+This publishes the previously checked installer. 8 focused actual-form rate/default/no-auto-start checks passed. All13 extracted runtime files match the checked payload. Existing runtimes are reused.
 
-[Updated UI with sample values](../docs/screenshots/usb-recording-gpio.png), [validation](../Note/COMPACT_USB_LAYOUT_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
+[Manifest](release-manifest.json), [checksums](SHA256SUMS.txt), [candidate evidence](../Note/CAMERA40_RELEASE_20261014.md).
+APP121/USB83 and this UI were not hardware retested as a pair. The accepted40fps SD result has startup gaps. Installers contain no firmware and do not flash the device.
+
+This package-only publication preserves pending source work in its checkout.
