@@ -1,6 +1,6 @@
-# WILDX 1.0.0.32
+# WILDX 1.0.0.33
 
-[Download installer](WILDX_console-Setup-1.0.0.32.exe).
+[Download installer](WILDX_console-Setup-1.0.0.33.exe).
 
 Data Download now offers **Delete last recording…** and **Format card…**, with confirmation of the selected card. Delete retains earlier recordings; format clears the native recording catalog and retains settings.
 

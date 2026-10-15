@@ -1,17 +1,17 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.32",
+  "version": "1.0.0.33",
   "releaseDate": "2026-10-14",
   "status": "Delete last recording and native card format in Data Download; removable SD card readers only",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.32.exe",
-    "sha256": "500F4D3EC538D75BC220A02AAC1A8F67F238BF83B1A418D4C4DCDCF16B0D78F3",
-    "bytes": 2344759
+    "file": "WILDX_console-Setup-1.0.0.33.exe",
+    "sha256": "AEB75E7FFC49ACB0D3D69168E73BA4475B4785EFCD02BE3D91AFE5F6B36676C5",
+    "bytes": 2344695
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "AB4AE9967A6209D5721BEDD2136C5268B915F9BB278383214492D83E9F296C74",
+      "sha256": "2E9128E5C0B229887B4DDDBCC4F1E543A4063B9AEEF7AA3B6678F87D5D66B69F",
       "bytes": 1372672
     },
     {
@@ -75,8 +75,8 @@
       "bytes": 340
     }
   ],
-  "baseRelease": "1.0.0.31",
-  "baseInstallerSha256": "4271E0DA27A859723AD7C41E5EBD2081B2EC18CCBFE00DEC58EDBA0797B7CB2A",
+  "baseRelease": "1.0.0.32",
+  "baseInstallerSha256": "500F4D3EC538D75BC220A02AAC1A8F67F238BF83B1A418D4C4DCDCF16B0D78F3",
   "default_camera_hz": 40,
   "device_confirmed_rates_preserved": true,
   "usb_camera_imu_sidecars_preserved": true,
@@ -86,9 +86,9 @@
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
     "actualAppCardMaintenanceChecks": 6593,
-    "standaloneRegressionChecks": 312,
+    "standaloneRegressionChecks": 294,
     "actualAppSourceLabelChecks": 5,
-    "inheritedApplicationRelease": "1.0.0.31",
+    "inheritedApplicationRelease": "1.0.0.32",
     "extractedPayloadFilesVerified": 13,
     "unchangedRuntimeDependencyFiles": 12,
     "installerExecuted": false,
@@ -110,7 +110,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadCatalog.cs",
-      "sha256": "457C3DB5ECB69FD7618F3FAF838A47F75721734EEB9490A7970E56F854D57114"
+      "sha256": "86359967C150456FF74EBB2EF9E86A4D1C40F9DD22F4193ECC9E6DF0C81D65E7"
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Decoder.cs",
@@ -418,7 +418,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-      "sha256": "37B381948EA5CB91A754A1DF6E3693F9F494EA4D8582F018D0B0F01036078B08"
+      "sha256": "6F48EC719D71464C968175C348C851648E45BE3E253D091E3CCC3A2401CECBD6"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.Media.cs",

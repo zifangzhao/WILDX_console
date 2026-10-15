@@ -1,4 +1,4 @@
-# Data Download card maintenance — WILDX 1.0.0.32
+# Data Download card maintenance — WILDX 1.0.0.33
 
 Data Download now contains **Delete last recording…** and **Format card…**.
 The existing Format button had been reparented into Advanced; Advanced now
@@ -35,7 +35,7 @@ Validation:
   identities, empty catalogs, and injected write/flush/readback failures in
   every publication phase. Includes actual form placement and source/busy
   eligibility checks. No physical media writes or enumeration.
-- Existing standalone regression: 312 checks passed, including native format
+- Existing standalone regression: 294 checks passed, including native format
   byte preservation/refusal cases, BLE receipt parsing, shared catalogs,
   transport ownership, tab navigation, and real form renders.
 - V1/V2 USB source labels: five checks passed.
@@ -44,3 +44,7 @@ Validation:
 
 This is software validation. No physical card was deleted/formatted, and no
 USB/BLE/SWD hardware actions were performed.
+
+Version 33 supersedes version 32 to exclude concurrent V2 catalog display edits
+from this storage-maintenance release. The V2 candidate source remains in the
+local working tree; its new profiles and firmware are not part of this release.
