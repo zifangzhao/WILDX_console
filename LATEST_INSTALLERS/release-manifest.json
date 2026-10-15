@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.31",
+  "version": "1.0.0.32",
   "releaseDate": "2026-10-14",
-  "status": "Explicit Neuropixels V1/V2 USB storage source labels with MCU UID",
+  "status": "Delete last recording and native card format in Data Download; removable SD card readers only",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.31.exe",
-    "sha256": "4271E0DA27A859723AD7C41E5EBD2081B2EC18CCBFE00DEC58EDBA0797B7CB2A",
-    "bytes": 2342916
+    "file": "WILDX_console-Setup-1.0.0.32.exe",
+    "sha256": "500F4D3EC538D75BC220A02AAC1A8F67F238BF83B1A418D4C4DCDCF16B0D78F3",
+    "bytes": 2344759
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "C122886C1134AEBB33C9F0CEAC1C3DA4A614C2BB73E2E519A0618A88BDACA825",
-      "bytes": 1366528
+      "sha256": "AB4AE9967A6209D5721BEDD2136C5268B915F9BB278383214492D83E9F296C74",
+      "bytes": 1372672
     },
     {
       "path": "WILDX_console.exe.config",
@@ -75,8 +75,8 @@
       "bytes": 340
     }
   ],
-  "baseRelease": "1.0.0.30",
-  "baseInstallerSha256": "23E5449446C8AB960DC807A442D9803DD45FE02FE30848E313AD49F638CCEAAB",
+  "baseRelease": "1.0.0.31",
+  "baseInstallerSha256": "4271E0DA27A859723AD7C41E5EBD2081B2EC18CCBFE00DEC58EDBA0797B7CB2A",
   "default_camera_hz": 40,
   "device_confirmed_rates_preserved": true,
   "usb_camera_imu_sidecars_preserved": true,
@@ -85,12 +85,15 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
+    "actualAppCardMaintenanceChecks": 6593,
+    "standaloneRegressionChecks": 312,
     "actualAppSourceLabelChecks": 5,
-    "inheritedApplicationRegressionRelease": "1.0.0.30",
+    "inheritedApplicationRelease": "1.0.0.31",
     "extractedPayloadFilesVerified": 13,
     "unchangedRuntimeDependencyFiles": 12,
     "installerExecuted": false,
-    "hardwareAccess": false
+    "hardwareAccess": false,
+    "physicalCardWrites": false
   },
   "sourceInputs": [
     {
@@ -107,7 +110,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadCatalog.cs",
-      "sha256": "53A633E53F0A6DE3D1437B580146F261EA69AC89D7CB3477FCE0805E1F8687FB"
+      "sha256": "457C3DB5ECB69FD7618F3FAF838A47F75721734EEB9490A7970E56F854D57114"
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Decoder.cs",
@@ -155,7 +158,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
-      "sha256": "21D1FB2F2CD263841545FFB81C7C90B503945023FF613DED43A2E79EBB26B2DE"
+      "sha256": "11929092371246EC1E62CD084920A811DC53BB9556BA4BFE19C76BA4AF1A8DEA"
     },
     {
       "path": "Neuropixels/V1Capture/Configuration/NpConfigClient.cs",
@@ -219,7 +222,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
-      "sha256": "9CA43031BCC8F70F9198579CF7D72506C21385D266C6265D49AE9CF94F13A586"
+      "sha256": "EE532F799BAD408E855BEB0B58FDF8B8F089E2D628B48DB2B36B98250A95FB26"
     },
     {
       "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
@@ -415,7 +418,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-      "sha256": "0F66A92459CB9754E4197DC8FCA21F1810F400825DC2BEEE9CDF4737771C165E"
+      "sha256": "37B381948EA5CB91A754A1DF6E3693F9F494EA4D8582F018D0B0F01036078B08"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.Media.cs",
@@ -451,5 +454,13 @@
     "sdExportTimingRateAware": true,
     "statusRefreshDoesNotDisableControls": true
   },
-  "usbStorageGenerationLabels": true
+  "usbStorageGenerationLabels": true,
+  "cardMaintenance": {
+    "deleteLastRecording": true,
+    "nativeQuickFormat": true,
+    "requiresRemovableCardReader": true,
+    "usbStorageWrites": false,
+    "secureErase": false,
+    "firmwareChanged": false
+  }
 }

@@ -19,16 +19,17 @@ namespace CE32_console
         private readonly Button refresh=new Button{Text="Refresh sources",AutoSize=true},list=new Button{Text="List recordings",AutoSize=true},save=new Button{Text="Download selected…",AutoSize=true},cancel=new Button{Text="Cancel",AutoSize=true},play=new Button{Text="Play exported camera…",AutoSize=true};
         private readonly Button convert=new Button{Text="Convert exported media…",AutoSize=true};
         private readonly Button calibrationButton=new Button{Text="Calibration…",AutoSize=true};
-        private readonly Button format=new Button{Name="quickFormatNpSd",Text="Quick Format selected SD…",AutoSize=true};
+        private readonly Button format=new Button{Name="quickFormatNpSd",Text="Format card…",AutoSize=true};
+        private readonly Button deleteLast=new Button{Name="deleteLastNpRecording",Text="Delete last recording…",AutoSize=true};
+        private readonly Label cardHelp=new Label{AutoSize=true,Text="Delete and format require an SD card reader.",Margin=new Padding(8,9,0,0)};
         private readonly Button fast=new Button{Text="NP1 fast archive…",AutoSize=true};
         private readonly CheckBox convertAfterDownload=new CheckBox{Text="MP4 + WAV",Checked=true,AutoSize=true};
-        private bool busy,refreshing,usbBlocked;private volatile bool cancelled;private Source listedSource;
+        private bool busy,refreshing,usbBlocked,maintenanceActive;private volatile bool cancelled;private Source listedSource;
         private readonly string requestedSourcePath;
         private string boundSourcePath;
         private readonly Timer enumerationTimer=new Timer{Interval=1000};
         private string parentUsbPath;
         internal bool IsBusy{get{return busy;}}
-        internal Button FormatButton{get{return format;}}
         internal string SelectedSourceDescription{get{var source=sources.SelectedItem as Source;return source==null?null:source.Label;}}
         internal static string UsbSourceLabel(string path) {
             string uid=USB512_interface.NpV1Management.UidFromPath(path);
@@ -44,22 +45,24 @@ namespace CE32_console
             requestedSourcePath=sourcePath!=null && sourcePath.StartsWith("PhysicalDrive",StringComparison.OrdinalIgnoreCase)?@"\\.\"+sourcePath:sourcePath;
             boundSourcePath=requestedSourcePath;
             Text="WILD-X NP1 / NP2 / media — SD Download";Width=950;Height=500;
-            var actions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};actions.Controls.AddRange(new Control[]{refresh,list,save,cancel,play,convert,convertAfterDownload,format});
+            var actions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};actions.Controls.AddRange(new Control[]{refresh,list,save,cancel,play,convert,convertAfterDownload});
             actions.Controls.Add(calibrationButton);
             calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
             actions.Controls.Add(fast);
+            var cardActions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};cardActions.Controls.AddRange(new Control[]{deleteLast,format,cardHelp});
             fast.Click+=(s,e)=>{if(busy || usbBlocked)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null,sessionLabel.Text))form.ShowDialog(DialogOwner);};
-            Controls.Add(records);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
+            Controls.Add(records);Controls.Add(cardActions);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Top,Height=38,ColumnCount=2,Padding=new Padding(0,4,0,4)};
             nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
             nameRow.Controls.Add(new Label {Text="Session label",Dock=DockStyle.Fill,TextAlign=System.Drawing.ContentAlignment.MiddleLeft},0,0);nameRow.Controls.Add(sessionLabel,1,0);Controls.Add(nameRow);
-            Controls.SetChildIndex(nameRow,2);
+            Controls.SetChildIndex(nameRow,3);
             sessionLabel.TextChanged+=(s,e)=>{var changed=SessionLabelChanged;if(changed!=null)changed(sessionLabel.Text);};
             refresh.Click+=(s,e)=>{RefreshSources();enumerationTimer.Start();};list.Click+=async(s,e)=>await ListAsync();save.Click+=async(s,e)=>await SaveAsync();cancel.Click+=(s,e)=>cancelled=true;
             records.ItemCheck+=(s,e)=>{var r=records.Items[e.Index] as NpDownloadRecord;if(r!=null&&!r.Downloadable){e.NewValue=CheckState.Unchecked;status.Text="Session "+r.Session+" is not downloadable: "+r.ValidationError;}};
             play.Click+=(s,e)=>new NpMediaPlaybackForm().Show(DialogOwner);
             convert.Click+=async(s,e)=>await ConvertExistingAsync();
             format.Click+=async(s,e)=>await FormatSelectedAsync();
+            deleteLast.Click+=async(s,e)=>await DeleteLastAsync();
             sources.SelectedIndexChanged+=(s,e)=>{var source=sources.SelectedItem as Source;if(source!=null&&!refreshing)boundSourcePath=source.Path;UpdateControls();};
             FormClosing+=(s,e)=>{if(busy){cancelled=true;e.Cancel=true;status.Text="Wait for the current operation to finish before closing. A catalog reset cannot be interrupted.";}};
             Shown+=(s,e)=>{if(autoDiscover){RefreshSources();enumerationTimer.Start();}};
@@ -71,7 +74,7 @@ namespace CE32_console
             sources.Margin=new Padding(0,0,0,12);status.Padding=new Padding(0,10,0,0);status.Height=68;
             status.ForeColor=USB512_interface.WildXTheme.Muted;
             Controls.Add(new Label {Text="STORAGE SOURCE  /  USB device or card reader",Dock=DockStyle.Top,Height=26,ForeColor=USB512_interface.WildXTheme.Muted});
-            USB512_interface.WildXTheme.Button(save,true);USB512_interface.WildXTheme.Button(format,false,true);
+            USB512_interface.WildXTheme.Button(save,true);USB512_interface.WildXTheme.Button(format,false,true);USB512_interface.WildXTheme.Button(deleteLast,false,true);cardHelp.ForeColor=USB512_interface.WildXTheme.Muted;
             if(!autoDiscover)status.Text="Refresh sources to choose a USB device or card reader. List its recordings before downloading.";
         }
         internal void SetUsbSelection(string path){if(!busy && !string.Equals(path,parentUsbPath,StringComparison.OrdinalIgnoreCase)){parentUsbPath=path;if(!string.IsNullOrEmpty(path))boundSourcePath=path;}}
@@ -88,11 +91,11 @@ namespace CE32_console
             if(sources.SelectedIndex<0)SelectBoundSource();
             }finally{refreshing=false;}
         }
-        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;format.Enabled=!busy && source!=null && source.CanFormat;cancel.Enabled=busy;}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;deleteLast.Enabled=format.Enabled=!busy && source!=null && source.CanFormat;cardHelp.Visible=source==null || !source.CanFormat;cardHelp.Text=source!=null && source.Usb?"USB download is read-only. Use an SD card reader to delete or format.":"Delete and format require an SD card reader.";cancel.Enabled=busy && !maintenanceActive;}
         private void SetBusy(bool value){busy=value;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
         private async Task FormatSelectedAsync() {
             var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat){status.Text="Quick Format requires removable SD media. USB external disks/readers and logger USB endpoints remain read-only.";return;}
-            SetBusy(true);cancel.Enabled=false;
+            maintenanceActive=true;SetBusy(true);
             try {
                 var target=await Task.Run(()=>NpCardFormat.Inspect(source.Path));
                 if(MessageBox.Show(DialogOwner,"Quick Format this connected NP/media SD card:\r\n\r\n"+target.Description+"\r\n\r\nAll recordings will be removed from the catalog and can be overwritten. This is not a secure erase. Settings are retained.\r\nDo not swap cards until finished; the reader may not expose the card's own serial.\r\n\r\nFormat this selected SD card?","Destructive NP/media Quick Format",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes){status.Text="Format cancelled; nothing written.";return;}
@@ -100,7 +103,20 @@ namespace CE32_console
                 await Task.Run(()=>NpCardFormat.Format(target));records.Items.Clear();listedSource=null;
                 status.Text="Quick Format verified: empty NP/media catalog. Settings retained; old payload data is not securely erased.";
             }catch(Exception ex){status.Text="Format not confirmed: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"NP/media SD",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
-            finally{SetBusy(false);}
+            finally{maintenanceActive=false;SetBusy(false);}
+        }
+        private async Task DeleteLastAsync() {
+            var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat)return;
+            maintenanceActive=true;SetBusy(true);
+            try {
+                var target=await Task.Run(()=>NpCardFormat.Inspect(source.Path));
+                var latest=await Task.Run(()=>{using(var stream=NpDownloadStream.OpenDisk(target.Path))return NpCardFormat.Latest(stream);});
+                if(MessageBox.Show(DialogOwner,"Delete the last recording on this card:\r\n\r\n"+target.Description+"\r\n\r\n"+latest.Record+"\r\nLBA "+latest.Record.Start+"–"+latest.Record.End+"\r\n\r\nEarlier recordings and settings will be kept. The deleted space can be overwritten. This is not a secure erase.\r\nDo not swap cards until finished.\r\n\r\nDelete this recording?","Delete last recording",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes){status.Text="Delete cancelled; nothing written.";return;}
+                status.Text="Deleting and verifying the last recording…";
+                await Task.Run(()=>NpCardFormat.DeleteLast(target,latest));records.Items.Clear();listedSource=null;
+                status.Text="Last recording deleted. Earlier recordings and settings retained.";
+            }catch(Exception ex){status.Text="Delete not confirmed: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"NP/media SD",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
+            finally{maintenanceActive=false;SetBusy(false);}
         }
         private async Task ConvertExistingAsync() {
             string folder;using(var dialog=new FolderBrowserDialog{Description="Select a validated native V1 media export (recording.json, camera.raw, microphone.dat)."}){if(dialog.ShowDialog(DialogOwner)!=DialogResult.OK)return;folder=dialog.SelectedPath;}

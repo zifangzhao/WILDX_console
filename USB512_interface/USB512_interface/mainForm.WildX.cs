@@ -273,9 +273,10 @@ namespace USB512_interface
             tools.Controls.Add(Card("Firmware & USB modes",null,firmware),0,0);
             var storage=Stack(58,48,0);
             advancedStorageSource=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};storage.Controls.Add(advancedStorageSource,0,0);
-            storage.Controls.Add(ActionRow(downloadWorkspace.FormatButton),0,1);
+            var openStorage=new Button {Text="Open Data Download",AutoSize=true};openStorage.Click+=delegate {workspaceTabs.SelectedTab=downloadPage;};
+            storage.Controls.Add(ActionRow(openStorage),0,1);
             storage.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
-                Text="Choose an SD card in Data Download first. Quick Format resets that card's recording catalog.\r\n\r\nThe selected card is inspected and confirmed before any write. USB logger endpoints remain read-only."},0,2);
+                Text="Delete the last recording or format a card in Data Download.\r\n\r\nThese actions require an SD card reader and confirmation. USB download is read-only."},0,2);
             tools.Controls.Add(Card("Storage maintenance",null,storage),1,0);
             var bleMaintenance=Card("BLE firmware & recovery",null,bleWorkspace.MaintenanceControls);
             tools.Controls.Add(bleMaintenance,0,1);tools.SetColumnSpan(bleMaintenance,2);

@@ -9,14 +9,16 @@ using Microsoft.Win32.SafeHandles;
 namespace CE32_console
 {
     internal sealed class NpDownloadRecord {
-        internal long Start,End;internal uint Session,Chunks,ApHz,LfpHz,State,Fault,ProbeMask,LaneBytes;
+        internal long Start,End;internal uint Session,Chunks,ApHz,LfpHz,State,Fault,ProbeMask,LaneBytes,TicksPerBlock;
         internal uint FormatVersion,CameraHz,MicrophoneHz;
         internal string ValidationError;
         internal bool Downloadable{get{return string.IsNullOrEmpty(ValidationError);}}
         internal bool V2{get{return FormatVersion==11 || FormatVersion==12;}}
         internal bool Media{get{return (FormatVersion==7 || FormatVersion==8) && ProbeMask==0 && ApHz==0;}}
         internal bool Complete{get{return State==3 && Fault==0 && Chunks>0;}}
-        public override string ToString(){if(V2)return string.Format("Session {0} | NP2 probes 1 + 2 | {1:N0} samples/s | {2:N1} s | {3}",Session,ApHz,Chunks*61440.0/(ApHz*1600.0),Downloadable?"complete (payload not yet validated)":"NOT DOWNLOADABLE — "+ValidationError);if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,!Downloadable?"NOT DOWNLOADABLE — "+ValidationError:Complete?"complete (payload not yet validated)":"INCOMPLETE");return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),Complete?"complete (not yet decoded)":"INCOMPLETE — committed prefix only");}
+        internal string V2ProbeLabel{get{return ProbeMask==1?"probe 1":ProbeMask==3?"probes 1 + 2":ProbeMask==7?"probes 1 + 2 + 3":"mask "+ProbeMask;}}
+        internal double V2DurationSeconds{get{return ApHz==0||TicksPerBlock==0?0:Chunks*(double)TicksPerBlock/(ApHz*1600.0);}}
+        public override string ToString(){if(V2)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N1} s | {4}",Session,V2ProbeLabel,ApHz,V2DurationSeconds,Downloadable?"complete (payload not yet validated)":"NOT DOWNLOADABLE — "+ValidationError);if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,!Downloadable?"NOT DOWNLOADABLE — "+ValidationError:Complete?"complete (payload not yet validated)":"INCOMPLETE");return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),Complete?"complete (not yet decoded)":"INCOMPLETE — committed prefix only");}
     }
     internal static class NpDownloadCatalog {
         // Discovery is read-only; this wider USB policy must not admit formatting.
@@ -87,7 +89,7 @@ namespace CE32_console
                         try{USB512_interface.NpV2SdDatExport.ValidateMetadata(h,f,checked((uint)start),s.Length);
                             if(end<NpDownloadStream.U(f,116) || end>NpDownloadStream.U(h,68))throw new InvalidDataException("NP2 committed extent escapes the catalog entry.");}
                         catch(InvalidDataException ex){failure=ex.Message;}
-                        list.Add(new NpDownloadRecord{ValidationError=failure,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=3,LaneBytes=46592/4,Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)});
+                        list.Add(new NpDownloadRecord{ValidationError=failure,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)});
                         previous=end;continue;
                     }
                     Header(h,"NPSDLOG1");Header(f,"NPSDEND1");
@@ -147,7 +149,9 @@ namespace CE32_console
             }
             return target;
         }
-        internal static void Format(Target confirmed) {
+        internal static void Format(Target confirmed) {Edit(confirmed,stream=>QuickFormat(stream,confirmed.Bytes,confirmed.Identity));}
+        internal static void DeleteLast(Target confirmed,LastRecording latest) {Edit(confirmed,stream=>DeleteLast(stream,confirmed.Bytes,confirmed.Identity,latest));}
+        private static void Edit(Target confirmed,Action<Stream> edit) {
             var current=Inspect(confirmed.Path);
             if(current.Bytes!=confirmed.Bytes || current.Name!=confirmed.Name || current.Serial!=confirmed.Serial || !current.Identity.SequenceEqual(confirmed.Identity))throw new IOException("Selected disk changed after confirmation; nothing was written.");
             var locks=new List<SafeFileHandle>();
@@ -158,13 +162,51 @@ namespace CE32_console
                     locks.Add(handle);uint returned;
                     if(!DeviceIoControl(handle,0x00090018,IntPtr.Zero,0,IntPtr.Zero,0,out returned,IntPtr.Zero) || !DeviceIoControl(handle,0x00090020,IntPtr.Zero,0,IntPtr.Zero,0,out returned,IntPtr.Zero))throw new IOException("Cannot lock/dismount the card volume. Nothing was written.");
                 }
-                using(var stream=NpDownloadStream.OpenDiskForFormat(current.Path))QuickFormat(stream,confirmed.Bytes,confirmed.Identity);
+                using(var stream=NpDownloadStream.OpenDiskForFormat(current.Path))edit(stream);
             }finally{foreach(var handle in locks)handle.Dispose();}
         }
-        internal static void QuickFormat(Stream stream,long confirmedBytes,byte[] confirmedIdentity) {
+        private static byte[] ValidateCard(Stream stream,long confirmedBytes,byte[] confirmedIdentity) {
             if(!stream.CanRead || !stream.CanWrite || !stream.CanSeek || stream.Length!=confirmedBytes || confirmedBytes/512<=8192 || confirmedBytes%512!=0 || confirmedBytes/512>uint.MaxValue)throw new IOException("Invalid or changed SD capacity/access; nothing was written.");
             var identity=NpDownloadCatalog.Sector(stream,16);
             if(!NpDownloadCatalog.IsCatalogIdentity(identity) || confirmedIdentity==null || !identity.SequenceEqual(confirmedIdentity))throw new IOException("NP card identity changed; nothing was written.");
+            return identity;
+        }
+        internal sealed class LastRecording {
+            internal NpDownloadRecord Record;
+            internal int Count;
+            internal long Page;
+            internal byte[] Directory,Descriptor,Footer;
+        }
+        internal static LastRecording Latest(Stream stream) {
+            var records=NpDownloadCatalog.Read(stream);
+            if(records.Count==0)throw new IOException("The card has no recordings to delete.");
+            var record=records[records.Count-1];long page=128+(records.Count-1)/63;
+            return new LastRecording{Record=record,Count=records.Count,Page=page,Directory=NpDownloadCatalog.Sector(stream,page),Descriptor=NpDownloadCatalog.Sector(stream,record.Start+3),Footer=NpDownloadCatalog.Sector(stream,record.Start+4)};
+        }
+        internal static void DeleteLast(Stream stream,long confirmedBytes,byte[] confirmedIdentity,LastRecording confirmed) {
+            ValidateCard(stream,confirmedBytes,confirmedIdentity);
+            var latest=Latest(stream);
+            if(confirmed==null || latest.Count!=confirmed.Count || latest.Page!=confirmed.Page || latest.Record.Start!=confirmed.Record.Start ||
+               !latest.Directory.SequenceEqual(confirmed.Directory) || !latest.Descriptor.SequenceEqual(confirmed.Descriptor) || !latest.Footer.SequenceEqual(confirmed.Footer))throw new IOException("Recording catalog changed after confirmation; nothing was written. List the card again.");
+            byte[] directory=(byte[])latest.Directory.Clone();int index=(latest.Count-1)%63;
+            Buffer.BlockCopy(BitConverter.GetBytes((uint)index),0,directory,0,4);
+            Array.Clear(directory,4+4*index,4);Array.Clear(directory,256+4*index,4);
+            // Use the existing V1/V2 write-ahead catalog protocol. Flush and
+            // read back every phase before publishing or clearing its journal.
+            byte[] journal=new byte[512];Encoding.ASCII.GetBytes("NPC64TX1").CopyTo(journal,0);
+            Buffer.BlockCopy(BitConverter.GetBytes((uint)latest.Page),0,journal,8,4);
+            Buffer.BlockCopy(BitConverter.GetBytes(NpDownloadStream.Crc(directory,0,512)),0,journal,12,4);
+            Buffer.BlockCopy(BitConverter.GetBytes(NpDownloadStream.Crc(journal,0,508)),0,journal,508,4);
+            WriteVerified(stream,113,directory);WriteVerified(stream,112,journal);
+            WriteVerified(stream,latest.Page,directory);WriteVerified(stream,112,new byte[512]);
+            if(NpDownloadCatalog.Read(stream).Count!=latest.Count-1)throw new IOException("Delete verification failed; preserve the card and inspect its catalog before recording.");
+        }
+        private static void WriteVerified(Stream stream,long lba,byte[] bytes) {
+            WriteSector(stream,lba,bytes);FlushDisk(stream);
+            if(!NpDownloadCatalog.Sector(stream,lba).SequenceEqual(bytes))throw new IOException("Card write verification failed; preserve the card and inspect its catalog before recording. No automatic retry.");
+        }
+        internal static void QuickFormat(Stream stream,long confirmedBytes,byte[] confirmedIdentity) {
+            var identity=ValidateCard(stream,confirmedBytes,confirmedIdentity);
             var zero=new byte[512];
             // Match V1's catalog reset: invalidate first, publish identity last.
             // Existing system/DSP settings and payload sectors remain untouched.
