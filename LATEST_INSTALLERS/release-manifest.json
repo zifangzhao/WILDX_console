@@ -1,18 +1,18 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.29",
+  "version": "1.0.0.30",
   "releaseDate": "2026-10-14",
-  "status": "Installer finish page offers a checked Run WILD-X option",
+  "status": "V1 BLE camera/microphone SD recording controls and stable background status refresh",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.29.exe",
-    "sha256": "23CBE31BFA478C00D5CB95EC2EA078E41087C5472F9841791FA1595ED27D79C3",
-    "bytes": 2338907
+    "file": "WILDX_console-Setup-1.0.0.30.exe",
+    "sha256": "23E5449446C8AB960DC807A442D9803DD45FE02FE30848E313AD49F638CCEAAB",
+    "bytes": 2342833
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "C378C09FF3A83DDB56D512E6E2001699080D23E51D4E36C8D6C2B7AEF17D8E21",
-      "bytes": 1354240
+      "sha256": "2C8C03E0D4D81897487331217939DD29E0DBA2753243F1ECB19759D2AB8A00E9",
+      "bytes": 1366016
     },
     {
       "path": "WILDX_console.exe.config",
@@ -75,8 +75,8 @@
       "bytes": 340
     }
   ],
-  "baseRelease": "1.0.0.28",
-  "baseInstallerSha256": "EF1BB89CAE192846DA6E7603F9E80916D4CCEBFC3B23A9B1F8E28C11367F1BAB",
+  "baseRelease": "1.0.0.29",
+  "baseInstallerSha256": "23CBE31BFA478C00D5CB95EC2EA078E41087C5472F9841791FA1595ED27D79C3",
   "default_camera_hz": 40,
   "device_confirmed_rates_preserved": true,
   "usb_camera_imu_sidecars_preserved": true,
@@ -85,9 +85,13 @@
   "releaseValidation": {
     "guiBuildWarnings": 0,
     "guiBuildErrors": 0,
-    "unchangedNonVersionAppSourceFiles": 80,
-    "inheritedAppValidationRelease": "1.0.0.28",
-    "nsisFinishPagePreprocessedChecks": 4,
+    "mediaSourceFlowChecks": 40,
+    "mediaAssemblyChecks": 116,
+    "existingBleFeatureChecks": 1433,
+    "profileMenuChecks": 12,
+    "commandWriteChecks": 653,
+    "standaloneChecks": 294,
+    "actualFormRendered": true,
     "extractedPayloadFilesVerified": 13,
     "unchangedRuntimeDependencyFiles": 12,
     "installerExecuted": false,
@@ -128,7 +132,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpV1BleProtocol.cs",
-      "sha256": "662F089D08D93DC4643F5731CC7E4DDE6A3791850026484C0382DC863B98E369"
+      "sha256": "A11F2C8B594FB472F4833CED8D6A4EA82B8C24C0D84AC2359ED373734060F97C"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpV2SdControl.cs",
@@ -148,7 +152,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpMediaExport.cs",
-      "sha256": "3ADD9A862BCB6514F6C994DE4B2EBDBFBA3816E4AAA4D07A26F9417EE82AFE47"
+      "sha256": "90911866F74C52F8BC47232930B0F85BCE5C4C92193B70CA40799C1112CB7A13"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/WILD_VideoDecoder.cs",
@@ -368,15 +372,15 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleWire.cs",
-      "sha256": "BE43E020D31BFBCE5486DC8DD81259FA788B9ACDDB82B00418C5B93C2DBDF7E4"
+      "sha256": "07495C14E284E2CBA3889BFDBF8BE63DEBBA59A382544540A6ED03CC25D72484"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.cs",
-      "sha256": "27D9492FE5BAD7695F277AAEF7C7147F628548A03034B728520FBEE41D40D667"
+      "sha256": "44EBF3CD49AD9C265E418E23563E21223CFDE1E68709865E8682C9EDB87C5634"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
-      "sha256": "8AADCC022C3C0BD0C3D7C40294BA8DC16A086E598CA8CF793ACA5C0567634B18"
+      "sha256": "3BC355B179D5882E90314817F465D11C6A847F4A700DB72952EEC443F5905BE2"
     },
     {
       "path": "USB512_interface/USB512_interface/Ble/NpBleConfigurationReceipts.cs",
@@ -416,17 +420,40 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-      "sha256": "1FD07CD2CF958D081E871B986665B913A218821EAF63B2F2D14C85C1D1D33302"
+      "sha256": "1BAEFAC58AF419C5D5BA1174003404210FB2D1E3D913FA9B03841E8B3E179FE2"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.Media.cs",
+      "sha256": "971094726089793A1868F7E3020DDD937FBAA19C1177EDA33B401604586AD308"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleForm.Media.cs",
+      "sha256": "A7CCB21D895FBF28F6261DC11BC36FA4AEA013E2CEF0DA82A8F67ABC30757E14"
     }
   ],
   "limitations": [
-    "Native WILDX BLE media control remains incomplete; this release adds the installer finish-page launch option.",
-    "No hardware retest or firmware update was performed. Existing application behavior is retained from release28."
+    "The new WILDX BLE media workflow is software-tested with simulated transport; it has not been hardware-tested in this task.",
+    "V2 BLE media control and live BLE camera/audio preview are not added.",
+    "Existing unqualified-profile opt-in remains required when the firmware reports an unqualified profile."
   ],
   "installerFinishPage": {
     "runCheckbox": "Run WILD-X",
     "checkedByDefault": true,
     "launchPath": "$INSTDIR\\WILDX_console.exe",
     "launchOnCheckedFinishOnly": true
+  },
+  "bleMedia": {
+    "generation": 1,
+    "camera": true,
+    "microphone200kHz": true,
+    "defaultCameraHz": 40,
+    "deviceRateReadback": true,
+    "storage": "device SD",
+    "autoStartOnApply": false,
+    "firmwareUpgradePerformed": false,
+    "liveBleMediaPreview": false,
+    "v2MediaControl": false,
+    "sdExportTimingRateAware": true,
+    "statusRefreshDoesNotDisableControls": true
   }
 }

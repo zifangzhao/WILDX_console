@@ -113,12 +113,13 @@ namespace CE32_console
         {
             var reasons = new List<string>();
             ulong frames = Number(report, "camera_frames"), samples = Number(report, "microphone_samples");
+            uint cameraHz=U(h,112);decimal cameraPeriod=cameraHz==0?0:1000m/cameraHz;
             if ((string)report["status"] != "validated transport") reasons.Add("Transport export is incomplete");
             if (U(f, 60) != 3 || U(f, 64) != 0) reasons.Add("Footer reports an incomplete/failed recording");
             if (Number(report, "camera_frame_gaps") != 0) reasons.Add("Camera frame IDs have gaps");
             if (Number(report, "camera_timing_irregularities") != 0) reasons.Add("Camera timestamp interval exceeds the 1 ms quantization bound");
             if (Number(report, "camera_timing_phase_errors") != 0) reasons.Add("Camera timestamp phase drifts beyond 1 ms from the first frame");
-            if (frames > 0 && U(h, 112) != 50) reasons.Add("Camera rate is not the qualified 50 Hz profile");
+            if (frames > 0 && (cameraHz==0 || cameraHz>50)) reasons.Add("Unsupported SD camera rate");
             string qualification;
             if (initial == null && final == null)
             {
@@ -144,7 +145,7 @@ namespace CE32_console
                     report["capture_start_utc_us"] = startUtc; report["capture_stop_utc_us"] = stopUtc;
                     if ((flags & 8) != 0)
                     {
-                        if (frames == 0 || U(h, 112) != 50 || Number(final, "camera_hz") != 50) reasons.Add("Requested camera stream/rate is missing");
+                        if (frames == 0 || cameraHz==0 || Number(final, "camera_hz") != cameraHz) reasons.Add("Requested camera stream/rate is missing");
                         if (Number(final, "camera_source_completed") != frames || Number(final, "camera_saved") != frames) reasons.Add("Camera source/saved/exported frame counts differ");
                         if (Number(final, "camera_fault") != 0 || Number(final, "camera_spi_error") != 0 || Number(final, "camera_dma_error") != 0) reasons.Add("Camera capture fault is latched");
                         uint baseline = (uint)Number(final, "camera_baseline_misses");
@@ -155,15 +156,15 @@ namespace CE32_console
                             {
                                 string prefix = "camera_" + edge;
                                 if (Number(report, prefix + "_id") != Number(final, prefix + "_id") || Number(report, prefix + "_tick") != Number(final, prefix + "_tick")) reasons.Add("Camera first/last metadata does not match payload");
-                                if ((ulong)unchecked((uint)Number(report, prefix + "_tick") - start) > (ulong)span + 21) reasons.Add("Camera timestamp is outside capture bounds");
+                                if ((decimal)unchecked((uint)Number(report, prefix + "_tick") - start) > (decimal)span + cameraPeriod+1) reasons.Add("Camera timestamp is outside capture bounds");
                             }
                             uint first = unchecked((uint)Number(report, "camera_first_tick") - start), last = unchecked((uint)Number(report, "camera_last_tick") - start);
                             // Mirror firmware extract_media.py: warmup + first raster,
                             // one in-flight STOP raster, and 1-ms tick quantization.
-                            if (first > 41) reasons.Add("Camera does not cover capture startup");
-                            if (Math.Abs((decimal)last - span) > 21) reasons.Add("Camera does not cover capture STOP endpoint");
+                            if (first > cameraPeriod*2+1) reasons.Add("Camera does not cover capture startup");
+                            if (Math.Abs((decimal)last - span) > cameraPeriod+1) reasons.Add("Camera does not cover capture STOP endpoint");
                         }
-                        if (Math.Abs((decimal)frames * 20 - span) > 21) reasons.Add("Camera frame count does not cover the 50 Hz capture duration");
+                        if (Math.Abs((decimal)frames * cameraPeriod - span) > cameraPeriod+1) reasons.Add("Camera frame count does not cover the capture duration");
                     }
                     else if (frames > 0 || U(h, 112) != 0) reasons.Add("Unexpected camera data without requested-stream flag");
                     if ((flags & 16) != 0)
@@ -423,12 +424,12 @@ namespace CE32_console
                                 {
                                     uint interval = unchecked(frameTick - previousCameraTick); string key = interval.ToString(CultureInfo.InvariantCulture);
                                     if (!cameraIntervals.ContainsKey(key)) cameraIntervals[key] = 0; cameraIntervals[key]++;
-                                    if (frameRate == 50 && (interval < 19 || interval > 21)) irregularTiming++;
+                                    if (Math.Abs((decimal)interval-1000m/frameRate)>1) irregularTiming++;
                                 }
                                 else { firstFrameId = frameId; firstCameraTick = frameTick; }
                                 cameraMisses.Add(frameMissed);
                                 continuousCameraTick=previousFrame.HasValue?AdvanceCameraTick(continuousCameraTick,previousCameraTick,frameTick):frameTick;previousCameraTick=frameTick;
-                                if (frameRate == 50 && Math.Abs((decimal)continuousCameraTick - firstCameraTick.Value - (decimal)frames * 20) > 1) phaseErrors++;
+                                if (Math.Abs((decimal)continuousCameraTick - firstCameraTick.Value - (decimal)frames * 1000m/frameRate) > 1) phaseErrors++;
                                 ulong? utc = UtcAt(clockAnchor, frameTick, false);
                                 camTime.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3},{4},{5},{6},{7},{8}", frames, frameId, frameTick, frameRate, frameMissed, sequence,continuousCameraTick,utc,utc.HasValue ? clockSource : null));
                                 frames++; previousFrame = frameId; frameAt = 0;

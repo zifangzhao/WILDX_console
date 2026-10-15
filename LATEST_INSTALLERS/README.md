@@ -1,9 +1,16 @@
-# WILDX 1.0.0.29
+# WILDX 1.0.0.30
 
-[Download installer](WILDX_console-Setup-1.0.0.29.exe).
+[Download installer](WILDX_console-Setup-1.0.0.30.exe).
 
-The final installer page offers **Run WILD-X**, checked by default. Uncheck it to finish without launching the app.
+V1 BLE camera/microphone recording is now available in the shared BLE page:
 
-The application retains release 28 behavior, including environmental popup suppression, USB 40 fps and camera/IMU saving. Only its version number changed. The installer compiled successfully; all 13 extracted files match the checked payload, and 12 runtime dependencies match release 28.
+1. Connect the logger and select **Camera / Microphone** in Recording profile.
+2. Select Camera and its frame rate (default 40 fps), and optionally Microphone.
+3. Click **Apply profile** and wait for device confirmation.
+4. Use **Start recording** / **Stop recording**. Data are saved to SD for USB download.
 
-[Release notes](../Note/INSTALLER_LAUNCH_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).
+The existing bench checkbox is required if the firmware reports an unqualified profile. Device rates are read back. Status refresh no longer dims the controls or rebuilds an unchanged profile menu. The installer retains **Run WILD-X** on its final page.
+
+Software checks passed and all 13 extracted payload files were verified. This GUI workflow has not received a new hardware test; live BLE media preview and V2 media control are not included.
+
+[Release notes](../Note/BLE_MEDIA_RELEASE_20261014.md), [manifest](release-manifest.json), [checksums](SHA256SUMS.txt).

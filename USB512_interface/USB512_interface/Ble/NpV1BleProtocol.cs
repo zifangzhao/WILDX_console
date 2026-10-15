@@ -60,7 +60,7 @@ namespace CE32_console {
    if((s.Flags&16)==0)return s.Capacity==0?"SD unavailable":"SD catalog not mounted";
    return s.State==3?"Recording complete — ready":"Ready";
   }
-  internal static uint EndLba(NpSdStatus s,uint seconds){
+  internal static uint EndLba(NpSdStatus s,uint seconds,uint cameraHz=50,bool microphone=true){
    if(!CanStart(s))throw new IOException("V1 storage/recorder is not ready");
    if(seconds==0&&(s.Flags&Repeat)==0)throw new IOException("Firmware does not advertise continuous recording");
    ulong payload=(ulong)s.Start+8192+((0U-(s.Start+8192U))&16383U);
@@ -69,7 +69,8 @@ namespace CE32_console {
    // although the rolling writer transfers smaller CMD25 transactions.
    // Fixed media: three typed chunks/frame, seven audio chunks/second and
    // an eight-chunk tail. This reserves storage; it is not a precise timer.
-   ulong bytes=IsMedia(s)?(ulong)seconds*157U*65536U+8U*65536U:(ulong)seconds*s.Hz*832U*(uint)NpSdGeometry.Count(s.Mask);
+   if(IsMedia(s)&&(cameraHz>50||cameraHz==0&&!microphone))throw new IOException("Select a supported media stream.");
+   ulong bytes=IsMedia(s)?(ulong)seconds*(cameraHz*3U+(microphone?7U:0U))*65536U+8U*65536U:(ulong)seconds*s.Hz*832U*(uint)NpSdGeometry.Count(s.Mask);
    ulong end=seconds==0?((ulong)s.Capacity&~16383UL):payload+((bytes+8388607)/8388608)*16384;
    if(end<=payload||end>s.Capacity)throw new IOException("No complete allocation-unit extent remains");
    return (uint)end;
@@ -141,9 +142,10 @@ namespace CE32_console {
    var s=new NpV1MediaStatus{CameraHz=NpSdGeometry.U(b,12),MicrophoneHz=NpSdGeometry.U(b,16),Frames=NpSdGeometry.U(b,20),Missed=NpSdGeometry.U(b,24),CameraFault=NpSdGeometry.U(b,28),MicrophoneFault=NpSdGeometry.U(b,32),Samples=NpSdGeometry.U(b,36)|((ulong)NpSdGeometry.U(b,40)<<32),Overruns=NpSdGeometry.U(b,44),StartMs=NpSdGeometry.U(b,48),State=NpSdGeometry.U(b,56)};
    if(s.CameraHz>50||(s.MicrophoneHz!=0&&s.MicrophoneHz!=200000)||s.State>4)throw new IOException("Unsupported V1 media telemetry rates/state");return s;
   }
-  internal static byte[] ProfileCommand(bool camera=true,bool microphone=true){
+  internal static byte[] ProfileCommand(bool camera=true,bool microphone=true,uint cameraHz=40){
    if(!camera&&!microphone)throw new ArgumentException("Select camera or microphone");
-   var b=new byte[35];b[0]=0x3c;b[1]=0x33;b[34]=0x3e;Buffer.BlockCopy(BitConverter.GetBytes(camera?50U:0U),0,b,10,4);Buffer.BlockCopy(BitConverter.GetBytes(microphone?200000U:0U),0,b,18,4);return b;
+   if(camera&&(cameraHz<1||cameraHz>50))throw new ArgumentOutOfRangeException("cameraHz","Select 1 to 50 fps");
+   var b=new byte[35];b[0]=0x3c;b[1]=0x33;b[34]=0x3e;Buffer.BlockCopy(BitConverter.GetBytes(camera?cameraHz:0U),0,b,10,4);Buffer.BlockCopy(BitConverter.GetBytes(microphone?200000U:0U),0,b,18,4);return b;
   }
   internal static bool FixedRates(byte[] b,int rateOffset,int nchOffset){
    bool camera,microphone;return ReadRates(b,rateOffset,nchOffset,out camera,out microphone)&&camera&&microphone;
@@ -152,7 +154,7 @@ namespace CE32_console {
    camera=microphone=false;
    if(b==null||b.Length!=512||rateOffset<0||rateOffset>b.Length-32||nchOffset<0||nchOffset>b.Length-16)return false;
    uint cam=NpSdGeometry.U(b,rateOffset+8),mic=NpSdGeometry.U(b,rateOffset+16);
-   if((cam!=0&&cam!=50)||(mic!=0&&mic!=200000)||(cam==0&&mic==0))return false;
+   if(cam>50||(mic!=0&&mic!=200000)||(cam==0&&mic==0))return false;
    for(int i=0;i<8;i++)if(i!=2&&i!=4&&NpSdGeometry.U(b,rateOffset+i*4)!=0)return false;
    if(NpSdGeometry.U(b,0)!=0||BitConverter.ToUInt16(b,nchOffset)!=0||BitConverter.ToUInt16(b,nchOffset+2)!=0||BitConverter.ToUInt16(b,nchOffset+4)!=(cam==0?0:320)||BitConverter.ToUInt16(b,nchOffset+8)!=(mic==0?0:1))return false;
    camera=cam!=0;microphone=mic!=0;return true;

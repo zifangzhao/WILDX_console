@@ -16,7 +16,7 @@ using Windows.Storage.Streams;
 
 namespace USB512_interface
 {
-    internal sealed class NpBleConnection : IDisposable
+    internal sealed partial class NpBleConnection : IDisposable
     {
         static readonly Guid ServiceId = new Guid("0000fff0-0000-1000-8000-00805f9b34fb");
         static readonly Guid RxId = new Guid("0000fff1-0000-1000-8000-00805f9b34fb");
@@ -343,6 +343,9 @@ namespace USB512_interface
                 try { DeviceVersion(response,1);return true; }catch(IOException){return false;}
             }
             if (command != receivedCommand || request==null || request.Length!=64) return false;
+            if(command==0xb9 && NpV1MediaStatus.IsFrame(request)) {
+                try { NpV1MediaStatus.Parse(response);return true; }catch(IOException){return false;}
+            }
             uint magic = BitConverter.ToUInt32(request, 0);
             if (command == 0xb8) {
                 try {
