@@ -42,11 +42,12 @@ namespace USB512_interface
             ValidateMetadata(desc, end, startLba, card.Length);
             uint probeMask = U(desc, 24);
             if(calibration!=null)calibration.RequireModel(true,(int)probeMask);
-            int probes = probeMask == 3U ? 2 : 3, ticks = ProfileTicks(probeMask, U(desc, 16));
+            int probes = probeMask == 1U ? 1 : probeMask == 3U ? 2 : 3, ticks = ProfileTicks(probeMask, U(desc, 16));
             // Triple kind3 stores fingerprints, not the three full selection maps.
             // Validate/archive those exact bytes without inferring applied wiring.
-            byte[] configuration = probeMask == 7U ? ReadAt(card, ((long)startLba + 8) * Sector, 2048) : null;
-            if (configuration != null) ValidateTripleConfiguration(configuration, desc, U(end, 108));
+            byte[] configuration = probeMask != 3U ? ReadAt(card, ((long)startLba + 8) * Sector, 2048) : null;
+            if (probeMask == 1U) ValidateSingleConfiguration(configuration, desc, U(end, 108));
+            if (probeMask == 7U) ValidateTripleConfiguration(configuration, desc, U(end, 108));
             if (directoryEndLba != 0 && (directoryEndLba < U(end, 116) || directoryEndLba > U(desc, 68)))
                 throw new InvalidDataException("SD catalog entry does not contain this committed recording extent.");
             byte[] utc = ReadAt(card, ((long)startLba + 5) * Sector, Sector);
@@ -130,7 +131,10 @@ namespace USB512_interface
                 report.Append("Checks: descriptor/footer CRC32, exact immutable headers/sequence/ticks, native SuperSync in every block, exact row/file lengths\n");
                 report.Append("No ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.\n");
                 report.Append("Boundary policy: trim incomplete leading/trailing AP rows; do not pad. Probe rows have independent source-tick origins; use the offsets below for alignment.\n");
-                if (configuration != null) {
+                if (probeMask == 1U) {
+                    report.Append("Configuration: configuration.bin; N2IMRO1; planned/staged P1 request only, NOT applied-mapping proof. Physical electrode geometry unavailable.\n");
+                }
+                if (probeMask == 7U) {
                     report.AppendFormat(CultureInfo.InvariantCulture,
                         "Time base: source ticks / {0} Hz; AP step=1600/{0} seconds (exact rational).\n", result.SampleHz * 1600U);
                     report.AppendFormat(CultureInfo.InvariantCulture,
@@ -164,42 +168,75 @@ namespace USB512_interface
         {
             Seal(d, "N2SDLOG1"); Seal(f, "N2SDEND1");
             int ticks = ProfileTicks(U(d, 24), U(d, 16));
-            bool dual = U(d, 24) == 3U;
+            uint mask = U(d, 24);
             ulong payload = U(d, 60), limit = U(d, 64), end = U(d, 68);
-            uint version=U(d,8),au=version==12?U(d,128):0;
+            uint version=U(d,8);
+            bool unitGeometry=version==12 || version==13;
+            uint au=unitGeometry?U(d,128):0;
             ulong expectedPayload = ((ulong)start + 8192 + 16383) & ~16383UL;
             bool geometry=true;
-            if(version==12){
-                if(au<1024 || au%1024!=0)throw new InvalidDataException("Invalid SD v12 allocation unit.");
+            if(unitGeometry){
+                if(version==12?(au<1024 || au%1024!=0):!IsLegacyAu(au))
+                    throw new InvalidDataException("Invalid SD allocation unit for metadata version "+version+".");
                 expectedPayload=AlignUp(expectedPayload,au);
                 ulong auEnd=AlignUp(limit,au);
                 geometry=payload<limit && end==AlignUp(auEnd,16384) &&
-                    payload/1024<=0x3fffff && (auEnd-au)/1024<=0x3fffff;
+                    (version!=12 || (payload/1024<=0x3fffff && (auEnd-au)/1024<=0x3fffff));
             }
-            ulong recordingEnd=version==12?limit:end;
+            ulong recordingEnd=unitGeometry?limit:end;
             ulong rus = recordingEnd > payload ? (recordingEnd - payload) / RuSectors : 0;
-            if ((version!=11 && version!=12) || !geometry || U(d, 12) == 0 ||
-                U(d, 20) != U(d, 16) * 1600 || U(d, 28) != (dual?63U:511U) || U(d, 32) != (dual?4U:6U) ||
-                U(d, 36) != (dual?6U:9U) || U(d, 40) != Block || U(d, 44) != (uint)ticks || U(d, 48) != 91 || U(d, 52) != 4 ||
+            if ((version!=11 && !unitGeometry) || !geometry || U(d, 12) == 0 ||
+                U(d, 20) != U(d, 16) * 1600 || U(d, 28) != (mask==1U?7U:mask==3U?63U:511U) || U(d, 32) != (mask==7U?6U:4U) ||
+                U(d, 36) != (mask==1U?3U:mask==3U?6U:9U) || U(d, 40) != Block || U(d, 44) != (uint)ticks || U(d, 48) != 91 || U(d, 52) != 4 ||
                 U(d, 56) != start || start < 8192 || start % 8192 != 0 || payload != expectedPayload ||
                 end % 16384 != 0 || end > U(d, 72) || rus == 0 || limit != payload + rus * RuSectors ||
-                U(d, 96) != (version==12?31U:15U) || U(d, 100) != 1 || !Zero(d,104,24) ||
-                (version==12?!Zero(d,132,376):!Zero(d,128,380)))
-                throw new InvalidDataException("Unsupported SD v11/v12 NP2 profile/descriptor/geometry.");
+                U(d, 96) != (version==13?47U:version==12?31U:15U) || U(d, 100) != 1 || !Zero(d,104,24) ||
+                (unitGeometry?!Zero(d,132,376):!Zero(d,128,380)))
+                throw new InvalidDataException("Unsupported SD v11/v12/v13 NP2 profile/descriptor/geometry.");
             for (int n = 8; n < 100; n++) if (d[n] != f[n]) throw new InvalidDataException("SD descriptor/footer belong to different records.");
             ulong blocks = U(f, 108), committed = U(f, 112), writtenEnd = U(f, 116);
             if (U(f, 100) != 3 || U(f, 104) != 0 || blocks == 0 || blocks % 4 != 0 ||
                 committed != blocks / 4 || committed > rus || writtenEnd != payload + committed * RuSectors ||
                 Q(f, 120) != blocks * (uint)ticks || writtenEnd * Sector > (ulong)length ||
-                (version==12?U(f,128)!=au || !Zero(f,132,376):!Zero(f,128,380)))
+                (unitGeometry?U(f,128)!=au || !Zero(f,132,376):!Zero(f,128,380)))
                 throw new InvalidDataException("Incomplete, failed, torn or out-of-bounds SD recording; strict DAT export refused.");
+        }
+
+        private static bool IsLegacyAu(uint unit)
+        {
+            switch(unit){case 2048:case 4096:case 8192:case 16384:case 24576:case 32768:
+                case 49152:case 65536:case 131072:return true;default:return false;}
         }
 
         private static int ProfileTicks(uint mask, uint hz)
         {
-            if (mask == 3U && (hz == 20000U || hz == 30000U)) return 61440;
-            if (mask == 7U && (hz == 15000U || hz == 20000U)) return 40960;
+            if (hz == 7500U || hz == 15000U || hz == 20000U || hz == 30000U) {
+                if (mask == 1U) return 122880;
+                if (mask == 3U) return 61440;
+                if (mask == 7U) return 40960;
+            }
             throw new InvalidDataException("Unsupported SD NP2 probe/rate tuple.");
+        }
+
+        private static void ValidateSingleConfiguration(byte[] b, byte[] d, uint committed)
+        {
+            uint kind=U(b,12);
+            if (!Magic(b,"N2SDCFG1") || U(b,8)!=1U || (kind!=1U && kind!=2U) ||
+                Crc(b,b.Length)!=U(d,76) || U(b,16)!=U(d,16) || U(b,20)!=U(d,20) ||
+                U(b,24)!=1U || U(b,28)!=7U || U(b,32)!=4U || U(b,36)!=3U || U(b,40)!=Block ||
+                U(b,44)<committed || U(b,44)%4!=0 ||
+                (ulong)U(b,44)*91>(ulong)U(d,64)-U(d,60) ||
+                ((U(d,8)==12U || U(d,8)==13U) && (ulong)U(b,44)*91!=(ulong)U(d,64)-U(d,60)) ||
+                !Zero(b,71,1) || b[72]!=(kind==2U?1:0) || !Zero(b,73,55) || !Zero(b,1004,1044))
+                throw new InvalidDataException("Invalid single-probe SD configuration provenance.");
+            for(int n=0;n<16;n++)if(b[48+n]!=d[80+n])
+                throw new InvalidDataException("Single-probe configuration/card identity mismatch.");
+            for(int n=0;n<7;n++)if(b[64+n]!="N2IMRO1"[n])
+                throw new InvalidDataException("Unsupported single-probe SD selection provenance.");
+            if(kind==1U){
+                if(!Zero(b,128,876))throw new InvalidDataException("Planned profile contains an unexpected selection request.");
+            }else if(Encoding.ASCII.GetString(b,128,4)!="N2B1" || b[132]!=4 || !Zero(b,133,3))
+                throw new InvalidDataException("Single-probe staged selection is not an NP2013 P1 request.");
         }
 
         private static void ValidateTripleConfiguration(byte[] b, byte[] d, uint committed)
@@ -209,7 +246,7 @@ namespace USB512_interface
                 U(b, 24) != 7U || U(b, 28) != 511U || U(b, 32) != 6U || U(b, 36) != 9U || U(b, 40) != Block ||
                 U(b, 44) < committed || U(b, 44) % 4 != 0 ||
                 (ulong)U(b, 44) * 91 > (ulong)U(d, 64) - U(d, 60) ||
-                (U(d, 8) == 12U && (ulong)U(b, 44) * 91 != (ulong)U(d, 64) - U(d, 60)) ||
+                ((U(d, 8) == 12U || U(d, 8) == 13U) && (ulong)U(b, 44) * 91 != (ulong)U(d, 64) - U(d, 60)) ||
                 !Zero(b, 71, 1) || (b[72] & ~7) != 0 || !Zero(b, 73, 55) || !Zero(b, 236, 1812))
                 throw new InvalidDataException("Invalid triple SD configuration/fingerprint provenance.");
             for (int n = 0; n < 16; n++) if (b[48 + n] != d[80 + n])

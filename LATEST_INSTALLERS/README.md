@@ -1,5 +1,16 @@
 # WILDX 1.0.0.33
 
+**Latest V2 SD metadata/power pair:** [Install V2_SD_META13_20261016](WILDX_console-Setup-1.0.0.33-V2_SD_META13_20261016.exe).
+Checked GUI9B602181/exporterA04D630F read strict classicv13 and existingv12
+recordings. Actual F405 SD native/full-DAT checks passed for1p7.5/120s,
+2p15/10s,3p20/10s,2p30/10s; all11 modes also passed10s native checks.
+All13 extracted runtime files match the checked payload, with no rebuild during
+packaging. Still version1.0.0.33 and the same install directory; installer does
+not flash firmware. No new clean-install/rendered-UI or V1 hardware qualification.
+[Pair manifest](V2_SD_META13_20261016.release-manifest.json),
+[evidence and limits](../Note/V2_SD_META13_COMPATIBILITY_20261016.md).
+Existing USB-quality/general33 packages below are preserved, not overwritten.
+
 **USB quality fixes and capture-panel split:** [Download installer](WILDX_console-Setup-1.0.0.33-USB_QUALITY_FIX_20261015.exe).
 
 The original Capture activity area is split into recording information on the left and USB status/testing on its right. Device health, GPIO/RTC and Network time retain their existing right column. **Continuous** runs until Stop or the first transfer/integrity error; uncheck it for the short test.

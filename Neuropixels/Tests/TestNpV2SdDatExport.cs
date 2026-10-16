@@ -56,21 +56,37 @@ internal static class NpV2SdDatExportTests
             System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(e.InnerException ?? e).Throw(); throw;
         }
     }
-    private static void MakeImage(string path, uint hz, string fault,uint au=0,uint mask=3,uint rawD8Phase=uint.MaxValue)
+    private static void MakeImage(string path, uint hz, string fault,uint au=0,uint mask=3,uint rawD8Phase=uint.MaxValue,bool legacyAu=false)
     {
         const uint blocks = 8;
-        uint ticks=mask==3?61440U:40960U;
+        uint ticks=mask==1?122880U:mask==3?61440U:40960U;
         uint payload=au==0?Payload:(uint)RoundUp(Payload,au);
         uint payloadEnd=au==0?Payload+((ReservationEnd-Payload)/364)*364:payload+blocks*91;
         uint reservationEnd=au==0?ReservationEnd:(uint)RoundUp(RoundUp(payloadEnd,au),16384);
         byte[] d = new byte[512], f = new byte[512], u = new byte[512];
         Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes("N2SDLOG1"), 0, d, 0, 8);
-        uint[] fields = { au==0?11U:12U, 7, hz, hz * 1600, mask, mask==3?63U:511U, mask==3?4U:6U, mask==3?6U:9U, 46592, ticks, 91, 4, Start, payload,
+        uint[] fields = { au==0?11U:legacyAu?13U:12U, 7, hz, hz * 1600, mask, mask==1?7U:mask==3?63U:511U, mask==7?6U:4U, mask==1?3U:mask==3?6U:9U, 46592, ticks, 91, 4, Start, payload,
             payloadEnd, reservationEnd, 501301248, 0 };
         if(au==0)fields[16]=65536; // Retain every original v11 fixture byte.
         for (int n = 0; n < fields.Length; n++) Put(d, 8 + n * 4, fields[n]);
         byte[] configuration=null;
-        if(mask==7){
+        if(mask==1){
+            configuration=new byte[2048];
+            System.Text.Encoding.ASCII.GetBytes("N2SDCFG1").CopyTo(configuration,0);
+            foreach(var field in new[]{Tuple.Create(8,1U),Tuple.Create(12,2U),Tuple.Create(16,hz),Tuple.Create(20,hz*1600),Tuple.Create(24,1U),Tuple.Create(28,7U),Tuple.Create(32,4U),Tuple.Create(36,3U),Tuple.Create(40,46592U),Tuple.Create(44,blocks)})Put(configuration,field.Item1,field.Item2);
+            Buffer.BlockCopy(d,80,configuration,48,16);
+            System.Text.Encoding.ASCII.GetBytes("N2IMRO1").CopyTo(configuration,64);configuration[72]=1;
+            System.Text.Encoding.ASCII.GetBytes("N2B1").CopyTo(configuration,128);configuration[132]=4;
+            for(int n=0;n<32;n++)configuration[136+n]=(byte)(n+1);
+            if(fault=="config_planned"){Put(configuration,12,1);configuration[72]=0;Array.Clear(configuration,128,876);}
+            if(fault=="config_kind")Put(configuration,12,3);
+            if(fault=="config_reserved")configuration[1004]=1;
+            if(fault=="config_unselected")configuration[72]=3;
+            if(fault=="config_port")configuration[133]=1;
+            if(fault=="config_request")configuration[132]=3;
+            Put(d,76,Crc(configuration,configuration.Length));
+            if(fault=="config_crc")configuration[128]^=1;
+        }else if(mask==7){
             configuration=new byte[2048];
             System.Text.Encoding.ASCII.GetBytes("N2SDCFG1").CopyTo(configuration,0);
             foreach(var field in new[]{Tuple.Create(8,1U),Tuple.Create(12,3U),Tuple.Create(16,hz),Tuple.Create(20,hz*1600),Tuple.Create(24,7U),Tuple.Create(28,511U),Tuple.Create(32,6U),Tuple.Create(36,9U),Tuple.Create(40,46592U),Tuple.Create(44,blocks)})Put(configuration,field.Item1,field.Item2);
@@ -86,7 +102,7 @@ internal static class NpV2SdDatExportTests
             Put(d,76,Crc(configuration,configuration.Length));
             if(fault=="config_crc")configuration[128]^=1;
         }
-        Put(d, 96, au==0?15U:31U); Put(d, 100, 1);if(au!=0)Put(d,128,au); Seal(d);
+        Put(d, 96, au==0?15U:legacyAu?47U:31U); Put(d, 100, 1);if(au!=0)Put(d,128,au); Seal(d);
         Buffer.BlockCopy(d, 0, f, 0, d.Length); Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes("N2SDEND1"), 0, f, 0, 8);
         Put(f, 100, 3); Put(f, 104, 0); Put(f, 108, blocks); Put(f, 112, blocks / 4); Put(f, 116, payload + blocks * 91); PutQ(f, 120, blocks * (ulong)ticks); Seal(f);
         Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes("N2SDUTC1"), 0, u, 0, 8);
@@ -110,7 +126,8 @@ internal static class NpV2SdDatExportTests
                 if (seq == 4 && fault == "tick") PutQ(block, 32, (ulong)seq * ticks + 1600);
                 if (seq == 4 && fault == "profile") Put(block, 60, hz == 20000 ? 30000U : 20000U);
                 if (seq == 4 && fault == "sync") {
-                    if(mask==3)block[512 + 3 * 6 / 8] ^= 1 << ((3 * 6) % 8);
+                    if(mask==1){int bit=((1600-(int)(((ulong)seq*ticks+137)%1600))%1600)*3;block[512+bit/8]^=(byte)(1<<(bit%8));}
+                    else if(mask==3)block[512 + 3 * 6 / 8] ^= 1 << ((3 * 6) % 8);
                     else block[512+(1600-(int)(((ulong)seq*ticks+137)%1600))%1600]^=1;
                 }
                 if (seq == 4 && fault == "header") block[92] ^= 1;
@@ -124,6 +141,7 @@ internal static class NpV2SdDatExportTests
     private static byte[] SectorAt(Stream card,long lba){card.Position=lba*512;var bytes=new byte[512];int read=card.Read(bytes,0,bytes.Length);Check(read==512,"Fixture sector truncated");return bytes;}
     private static void WriteAt(Stream card,long lba,byte[] bytes){card.Position=lba*512;card.Write(bytes,0,bytes.Length);}
     private static System.Collections.IList Catalog(Stream card){
+        if(ExternalCatalog==null)return CE32_console.NpDownloadCatalog.Read(card);
         try{return (System.Collections.IList)ExternalCatalog.Invoke(null,new object[]{card});}
         catch(TargetInvocationException e){System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(e.InnerException??e).Throw();throw;}
     }
@@ -133,21 +151,21 @@ internal static class NpV2SdDatExportTests
     }
     private static void RefuseMetadata(byte[] d,byte[] f,long length,string reason,uint start=Start){
         bool refused=false;try{Metadata(d,f,start,length);}catch(InvalidDataException){refused=true;}
-        Check(refused,"Unsafe v11/v12 metadata accepted: "+reason);
+        Check(refused,"Unsafe v11/v12/v13 metadata accepted: "+reason);
     }
-    private static void CatalogEntry(Stream card,byte[] footer){
+    private static void CatalogEntry(Stream card,byte[] footer,uint end=0){
         var identity=new byte[512];System.Text.Encoding.ASCII.GetBytes("CE_FILESYSTEM_V1").CopyTo(identity,0);System.Text.Encoding.ASCII.GetBytes("NP_PSSI_7").CopyTo(identity,32);WriteAt(card,16,identity);
-        var directory=new byte[512];Put(directory,0,1);Put(directory,4,BitConverter.ToUInt32(footer,116));Put(directory,256,BitConverter.ToUInt32(footer,116));WriteAt(card,128,directory);
+        if(end==0)end=BitConverter.ToUInt32(footer,116);
+        var directory=new byte[512];Put(directory,0,1);Put(directory,4,end);Put(directory,256,end);WriteAt(card,128,directory);
     }
-    private static void SameDat(string first,string second){
-        for(int probe=1;probe<=2;probe++){
+    private static void SameDat(string first,string second,int probes=2){
+        for(int probe=1;probe<=probes;probe++){
             string name="neuropixels_probe"+probe+"_ap.dat";
             Check(Convert.ToBase64String(File.ReadAllBytes(Path.Combine(first,name)))==Convert.ToBase64String(File.ReadAllBytes(Path.Combine(second,name))),"v11/v12 DAT bytes changed: "+name);
         }
     }
     private static void MetadataVersions(string root,string baseline)
     {
-        if(ExternalCatalog==null || ExternalBridge==null)throw new ArgumentException("The focused v11/v12 check requires the actual console executable.");
         MethodInfo oldExport=baseline==null?null:Assembly.LoadFile(Path.GetFullPath(baseline)).GetType("USB512_interface.NpV2SdDatExport",true).GetMethod("Export");
         foreach(uint hz in new uint[]{20000,30000}){
             string legacy=Path.Combine(root,"v11_"+hz+".img"),legacyOutput=Path.Combine(root,"v11_dat_"+hz);MakeImage(legacy,hz,"");
@@ -214,6 +232,113 @@ internal static class NpV2SdDatExportTests
             }
         }
         Console.WriteLine("PASS {0} focused v11/v12 checks: actual catalog/bridge,20/30kHz,3072/86016-sector AUs, exact RU/padded reservation bounds, CID/CRC/zero tails, Failed/VERIFY_PENDING refusal and unchanged DAT bytes{1}; no hardware or live-VSC qualification.",checks,oldExport==null?"":" against frozen v11 exporter");
+    }
+
+    private static byte[] FooterFor(byte[] descriptor,byte[] template,uint blocks,uint state=3,uint error=0)
+    {
+        var footer=(byte[])template.Clone();Buffer.BlockCopy(descriptor,8,footer,8,92);
+        Put(footer,128,BitConverter.ToUInt32(descriptor,128));Put(footer,100,state);Put(footer,104,error);
+        Put(footer,108,blocks);Put(footer,112,blocks/4);Put(footer,116,BitConverter.ToUInt32(descriptor,60)+blocks/4*364);
+        PutQ(footer,120,(ulong)blocks*BitConverter.ToUInt32(descriptor,44));Seal(footer);return footer;
+    }
+    private static void LegacyAuMetadata(string root)
+    {
+        foreach(uint mask in new uint[]{1,3,7}){
+            uint hz=mask==7?15000U:20000U;
+            int probes=mask==1?1:mask==3?2:3;
+            string tag="v13_"+mask,image=Path.Combine(root,tag+".img"),output=Path.Combine(root,tag+"_dat");
+            MakeImage(image,hz,"",49152,mask,uint.MaxValue,true);
+            byte[] d,f;long length;
+            using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){
+                d=SectorAt(card,Start+3);f=SectorAt(card,Start+4);
+                Check(BitConverter.ToUInt32(d,8)==13 && BitConverter.ToUInt32(d,96)==47 &&
+                    BitConverter.ToUInt32(d,60)==49152 && BitConverter.ToUInt32(d,64)==49880 &&
+                    BitConverter.ToUInt32(d,68)==98304,"v13 24MiB unit geometry differs from native codec");
+                // Real unused allocation exists and contains poison, not samples.
+                card.SetLength((long)BitConverter.ToUInt32(d,68)*512);length=card.Length;
+                var poison=new byte[512];for(int n=0;n<poison.Length;n++)poison[n]=0xa5;
+                WriteAt(card,BitConverter.ToUInt32(f,116),poison);CatalogEntry(card,f);
+                var rows=Catalog(card);
+                Check(rows.Count==1 && (uint)RecordValue(rows[0],"FormatVersion")==13 &&
+                    (bool)RecordValue(rows[0],"V2",true) && (bool)RecordValue(rows[0],"Downloadable",true),"Catalog did not classify complete v13 as NP2");
+            }
+            Metadata(d,f,Start,length);
+            using(var card=File.OpenRead(image)){
+                Bridge(card,Start,BitConverter.ToUInt32(f,116),output,()=>false,null);
+            }
+            for(int p=0;p<probes;p++)Check(new FileInfo(Path.Combine(output,"neuropixels_probe"+(p+1)+"_ap.dat")).Length==
+                ((8L*BitConverter.ToUInt32(d,44)-(1600-137-p*311))/1600)*768,"v13 export credited unused AU padding as samples");
+            foreach(uint au in new uint[]{0,2048}){
+                string oldImage=Path.Combine(root,tag+"_old_"+au+".img"),oldOutput=Path.Combine(root,tag+"_old_dat_"+au);
+                MakeImage(oldImage,hz,"",au,mask);
+                using(var card=File.OpenRead(oldImage))Bridge(card,Start,0,oldOutput,()=>false,null);
+                SameDat(oldOutput,output,probes);
+            }
+            Check(Convert.ToBase64String(File.ReadAllBytes(Path.Combine(output,"descriptor.bin")))==Convert.ToBase64String(d) &&
+                Convert.ToBase64String(File.ReadAllBytes(Path.Combine(output,"footer.bin")))==Convert.ToBase64String(f),"Export relabeled v13 seals");
+
+            // Metadata-only admission of all nine units; these are not claims
+            // of exported payload at the other offsets or allocation sizes.
+            foreach(uint[] geometry in new[]{new uint[]{2048,16384,32768},new uint[]{4096,16384,32768},
+                new uint[]{8192,16384,32768},new uint[]{16384,16384,32768},new uint[]{24576,24576,49152},
+                new uint[]{32768,32768,65536},new uint[]{49152,49152,98304},new uint[]{65536,65536,131072},
+                new uint[]{131072,131072,262144}}){
+                var unit=(byte[])d.Clone();Put(unit,128,geometry[0]);Put(unit,60,geometry[1]);Put(unit,64,geometry[1]+728);Put(unit,68,geometry[2]);Seal(unit);
+                Metadata(unit,FooterFor(unit,f,8),Start,(long)geometry[2]*512);
+            }
+            foreach(uint au in new uint[]{1,1023,1024,1536,3072,86016,262144}){
+                var bad=(byte[])d.Clone();uint payload=(uint)RoundUp(Payload,au);
+                Put(bad,128,au);Put(bad,60,payload);Put(bad,64,payload+728);Put(bad,68,(uint)RoundUp(RoundUp(payload+728,au),16384));Seal(bad);
+                RefuseMetadata(bad,FooterFor(bad,f,8),(long)BitConverter.ToUInt32(bad,68)*512,"non-UHS unit with otherwise consistent geometry "+au);
+            }
+            foreach(var field in new[]{Tuple.Create(8,14U),Tuple.Create(96,15U),Tuple.Create(96,31U),Tuple.Create(96,63U),
+                Tuple.Create(128,0U),Tuple.Create(132,1U),Tuple.Create(504,1U),Tuple.Create(60,49153U),
+                Tuple.Create(64,49881U),Tuple.Create(68,114688U),Tuple.Create(72,98303U)}){
+                var bad=(byte[])d.Clone();Put(bad,field.Item1,field.Item2);Seal(bad);
+                RefuseMetadata(bad,FooterFor(bad,f,8),length,"v13 descriptor field "+field.Item1);
+            }
+            foreach(int at in new[]{128,132,504}){var bad=(byte[])f.Clone();bad[at]^=1;Seal(bad);RefuseMetadata(d,bad,length,"v13 footer unit/zero tail "+at);}
+            var crc=(byte[])d.Clone();crc[508]^=1;RefuseMetadata(crc,f,length,"v13 descriptor CRC");
+            crc=(byte[])f.Clone();crc[508]^=1;RefuseMetadata(d,crc,length,"v13 footer CRC");
+            RefuseMetadata(d,f,(long)BitConverter.ToUInt32(f,116)*512-1,"v13 truncated committed payload");
+            foreach(uint blocks in new uint[]{0,6,12})RefuseMetadata(d,FooterFor(d,f,blocks),length,"v13 Complete count versus exact limit/AU padding "+blocks);
+            RefuseMetadata(d,FooterFor(d,f,8,3,1),length,"v13 Complete with error");
+
+            byte[] shortFooter=FooterFor(d,f,4);Metadata(d,shortFooter,Start,length);
+            string shortOutput=Path.Combine(root,tag+"_short_dat");
+            using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){WriteAt(card,Start+4,shortFooter);CatalogEntry(card,shortFooter);}
+            using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(shortFooter,116),shortOutput,()=>false,null);
+            for(int p=1;p<=probes;p++){
+                string name="neuropixels_probe"+p+"_ap.dat";
+                byte[] partial=File.ReadAllBytes(Path.Combine(shortOutput,name)),full=File.ReadAllBytes(Path.Combine(output,name));
+                Check(partial.Length>0 && partial.Length<full.Length && Convert.ToBase64String(partial)==Convert.ToBase64String(full,0,partial.Length),"Valid short Complete changed the committed DAT prefix");
+            }
+            foreach(uint state in new uint[]{1,4}){
+                var bad=FooterFor(d,f,state==1?0U:4U,state,state==1?0x56455249U:5U);
+                RefuseMetadata(d,bad,length,"v13 Reserved/partial Failed");
+                using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){
+                    WriteAt(card,Start+4,bad);CatalogEntry(card,bad,BitConverter.ToUInt32(d,68));
+                    var rows=Catalog(card);Check(rows.Count==1 && (bool)RecordValue(rows[0],"V2",true) &&
+                        !(bool)RecordValue(rows[0],"Downloadable",true) && (long)RecordValue(rows[0],"End")==BitConverter.ToUInt32(d,68),"v13 incomplete allocation was promoted or its quarantine fence changed");
+                }
+                string refusedOutput=Path.Combine(root,tag+"_refused_"+state);bool refused=false;
+                try{using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(d,68),refusedOutput,()=>false,null);}catch(InvalidDataException){refused=true;}
+                Check(refused && !Directory.Exists(refusedOutput),"v13 incomplete export published output");
+            }
+            using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){WriteAt(card,Start+4,f);CatalogEntry(card,f);}
+            if(mask!=3){
+                using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){
+                    var config=new byte[2048];card.Position=(Start+8L)*512;Check(card.Read(config,0,config.Length)==config.Length,"v13 configuration truncated");
+                    Put(config,44,4);var bad=(byte[])d.Clone();Put(bad,76,Crc(config,config.Length));Seal(bad);
+                    var footer=FooterFor(bad,f,4);Metadata(bad,footer,Start,length);
+                    WriteAt(card,Start+3,bad);WriteAt(card,Start+4,footer);card.Position=(Start+8L)*512;card.Write(config,0,config.Length);
+                }
+                string refusedOutput=Path.Combine(root,tag+"_short_plan");bool refused=false;
+                try{using(var card=File.OpenRead(image))Bridge(card,Start,0,refusedOutput,()=>false,null);}catch(InvalidDataException){refused=true;}
+                Check(refused && !Directory.Exists(refusedOutput),"v13 single/triple configuration plan did not exactly match descriptor limit");
+            }
+        }
+        Console.WriteLine("PASS {0} focused v13 checks: all nine UHS units, mask1/3/7 catalog/bridge, v11/v12 DAT equivalence, exact plans/short Complete, padding/flags/unit/tail/CRC/count refusal and incomplete allocation quarantine; no hardware or transport qualification.",checks);
     }
 
     private static void Valid(string root, uint hz)
@@ -315,10 +440,9 @@ internal static class NpV2SdDatExportTests
     {
         // Call the maintained exporter and USB decoder, not a model exporter.
         // The independent scalar oracle checks every emitted ADC/channel bit.
-        foreach(var profile in new[]{Tuple.Create(3U,20000U),Tuple.Create(3U,30000U),
-                                     Tuple.Create(7U,15000U),Tuple.Create(7U,20000U)}){
-            uint mask=profile.Item1,hz=profile.Item2,ticks=mask==3?61440U:40960U;
-            int probes=mask==3?2:3;
+        foreach(uint mask in new uint[]{1,3,7})foreach(uint hz in new uint[]{7500,15000,20000,30000}){
+            uint ticks=mask==1?122880U:mask==3?61440U:40960U;
+            int probes=mask==1?1:mask==3?2:3;
             foreach(uint au in new uint[]{0,86016}){
                 string tag=mask+"_"+hz+"_"+au,image=Path.Combine(root,"runtime_"+tag+".img"),output=Path.Combine(root,"runtime_dat_"+tag);
                 // Test ordinary aligned codec6 plus its existing USB-qualified
@@ -343,7 +467,14 @@ internal static class NpV2SdDatExportTests
                 }
                 string report=File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt"));
                 Check(report.StartsWith("Export complete: True") && report.Contains("No ADC payload CRC") && report.Contains("first_source_tick="),"Runtime export claimed unchecked completeness/time");
-                if(mask==7){
+                if(mask==1){
+                    Check(report.Contains("N2IMRO1") && report.Contains("NOT applied-mapping proof") && !report.Contains("N2IMRO2"),"Single staged request provenance was relabeled");
+                    byte[] archived=File.ReadAllBytes(Path.Combine(output,"configuration.bin"));
+                    using(var card=File.OpenRead(image)){
+                        var original=new byte[2048];card.Position=(Start+8L)*512;
+                        Check(card.Read(original,0,original.Length)==original.Length && Convert.ToBase64String(original)==Convert.ToBase64String(archived) && Crc(archived,archived.Length)==BitConverter.ToUInt32(SectorAt(card,Start+3),76),"Single request archive/descriptor CRC changed");
+                    }
+                }else if(mask==7){
                     Check(report.Contains("N2IMRO2 kind3") && report.Contains("NOT full maps or applied-mapping proof") &&
                           report.Contains("Probe 3 staged configuration:") && report.Contains("AP step=1600/"+(hz*1600)+" seconds"),"Triple fingerprint/rational-time receipt changed");
                     byte[] archived=File.ReadAllBytes(Path.Combine(output,"configuration.bin"));
@@ -352,13 +483,14 @@ internal static class NpV2SdDatExportTests
                         Check(card.Read(original,0,original.Length)==original.Length && Convert.ToBase64String(original)==Convert.ToBase64String(archived),"Triple fingerprint archive changed bytes");
                         Check(Crc(archived,archived.Length)==BitConverter.ToUInt32(SectorAt(card,Start+3),76),"Triple archive lacks exact descriptor CRC proof");
                     }
-                }else if(au!=0)SameDat(Path.Combine(root,"runtime_dat_"+mask+"_"+hz+"_0"),output);
+                }
+                if(mask!=7 && au!=0)SameDat(Path.Combine(root,"runtime_dat_"+mask+"_"+hz+"_0"),output,probes);
 
                 // Re-seal BOTH records: tuple refusal must not merely depend on
                 // a CRC or descriptor/footer mismatch. Nothing past metadata
                 // may be read and no output directory may be created.
-                foreach(var field in new[]{Tuple.Create(16,mask==3?15000U:30000U),Tuple.Create(20,hz*1600+1),
-                    Tuple.Create(24,mask==3?7U:3U),Tuple.Create(28,mask==3?511U:63U),Tuple.Create(32,mask==3?6U:4U),
+                foreach(var field in new[]{Tuple.Create(16,25000U),Tuple.Create(20,hz*1600+1),
+                    Tuple.Create(24,mask==3?7U:3U),Tuple.Create(28,mask==3?511U:63U),Tuple.Create(32,mask==7?4U:6U),
                     Tuple.Create(36,mask==3?9U:6U),Tuple.Create(40,46591U),Tuple.Create(44,ticks+1),Tuple.Create(48,90U),Tuple.Create(52,3U)}){
                     byte[] data=File.ReadAllBytes(image);
                     using(var card=new MemoryStream(data,true)){
@@ -372,6 +504,19 @@ internal static class NpV2SdDatExportTests
                 }
             }
         }
+        // The new single format validates its stored configuration before
+        // output. A planned default has no staged request or applied claim.
+        string planned=Path.Combine(root,"single_planned.img"),plannedOutput=Path.Combine(root,"single_planned_dat");
+        MakeImage(planned,15000,"config_planned",0,1);
+        using(var card=File.OpenRead(planned))Check(NpV2SdDatExport.Export(card,Start,plannedOutput).Rows.Length==1,"Single planned kind1 refused");
+        foreach(string fault in new[]{"config_crc","config_kind","config_reserved","config_unselected","config_port","config_request","footer","gap","tick","profile","sync","header","utc","truncated"}){
+            string image=Path.Combine(root,"single_fault_"+fault+".img"),output=Path.Combine(root,"single_fault_dat_"+fault);
+            MakeImage(image,30000,fault,0,1);bool refused=false;
+            try{using(var card=File.OpenRead(image))NpV2SdDatExport.Export(card,Start,output);}catch(Exception e)when(e is IOException || e is InvalidDataException){refused=true;}
+            Check(refused,"Unsafe single provenance/payload accepted: "+fault);
+            Check(!Directory.Exists(output) || (Directory.GetFiles(output,"*.dat").Length==0 && File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt")).StartsWith("Export complete: False")),"Failed single export published DAT/success");
+            if(fault.StartsWith("config_"))Check(!Directory.Exists(output),"Invalid single provenance created output");
+        }
         foreach(string fault in new[]{"config_crc","config_kind","config_reserved","config_unselected", "metadata","footer","card","bounds","reserved","gap","tick","profile","sync","header","utc","truncated"}){
             string image=Path.Combine(root,"triple_fault_"+fault+".img"),output=Path.Combine(root,"triple_fault_dat_"+fault);
             MakeImage(image,15000,fault,0,7);bool refused=false;
@@ -381,14 +526,15 @@ internal static class NpV2SdDatExportTests
                 File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt")).StartsWith("Export complete: False")),"Failed triple export published DAT/success");
             if(fault.StartsWith("config_"))Check(!Directory.Exists(output),"Invalid fingerprint provenance created output");
         }
-        Console.WriteLine("PASS {0} focused runtime SD export checks: actual dual3/20/30 and triple7/15/20 v11/v12, every ADC bit/channel, codec6 aligned/raw-D8, closed tuples before payload/output, fingerprint CRC/kind3 and fail-closed files; no hardware qualification.",checks);
+        Console.WriteLine("PASS {0} focused runtime SD export checks: all twelve mask1/3/7 x7.5/15/20/30 v11/v12, every signed ADC bit/channel, packed3/6 and codec6 aligned/raw-D8, closed tuples before payload/output, N2IMRO1 single staged request and kind3 fingerprint provenance, fail-closed files; no hardware/throughput qualification.",checks);
     }
 
     private static int Main(string[] args)
     {
         try {
             bool runtimeOnly=args.Length>=2 && args[1]=="--runtime-only";
-            if(args.Length>=2 && !runtimeOnly){
+            bool sourceMetadataOnly=args.Length>=2 && args[1]=="--v12-only";
+            if(args.Length>=2 && !runtimeOnly && !sourceMetadataOnly){
                 var actual=Assembly.LoadFrom(Path.GetFullPath(args[1]));
                 ExternalBridge=actual.GetType("CE32_console.NpCe64Export",true).GetMethod("Export",BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic);
                 ExternalCatalog=actual.GetType("CE32_console.NpDownloadCatalog",true).GetMethod("Read",BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic);
@@ -398,7 +544,10 @@ internal static class NpV2SdDatExportTests
             }
             string root = Path.Combine(args[0], "export_tests_" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(root);
             if(runtimeOnly){RuntimeProfiles(root);return 0;}
-            if(args.Length>=3 && args[2]=="--v12-only"){MetadataVersions(root,args.Length>=4?args[3]:null);return 0;}
+            if(sourceMetadataOnly || (args.Length>=3 && args[2]=="--v12-only")){
+                int baselineAt=sourceMetadataOnly?2:3;
+                MetadataVersions(root,args.Length>baselineAt?args[baselineAt]:null);LegacyAuMetadata(root);return 0;
+            }
             Valid(root, 20000); Valid(root, 30000);
             checks += NpV2UsbConsoleTests.LargeCounterTests();
             LargeOffset(root, 20000); LargeOffset(root, 30000);
@@ -412,8 +561,9 @@ internal static class NpV2SdDatExportTests
                 }
             }
             if(ExternalBridge!=null)MetadataVersions(root,null);
+            LegacyAuMetadata(root);
             RuntimeProfiles(root);
-            Console.WriteLine("PASS {0} SD-to-classic-DAT checks: every sample/channel/row, 20/30 kHz, torn metadata, incomplete footer, truncation, profile/tick/sync corruption, UTC wrap, immutable headers, no-overwrite/fail-closed output; seeded source32 continuation, actual high-LBA export, large-footer/length helpers (no full >4GiB DAT write)", checks); return 0;
+            Console.WriteLine("PASS {0} SD-to-classic-DAT checks: every sample/channel/row, 7.5/15/20/30 kHz runtime profiles, torn metadata, incomplete footer, truncation, profile/tick/sync corruption, UTC wrap, immutable headers, no-overwrite/fail-closed output; seeded source32 continuation, actual high-LBA export, large-footer/length helpers (no full >4GiB DAT write)", checks); return 0;
         } catch (Exception e) { Console.Error.WriteLine(e); return 1; }
     }
 }

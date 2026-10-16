@@ -42,7 +42,6 @@ if($RuntimeProfiles){
 }
 if ($ConsoleExecutable) { $arguments += [IO.Path]::GetFullPath($ConsoleExecutable) }
 if($MetadataV12){
-    if(-not $ConsoleExecutable){throw 'The focused v11/v12 check requires -ConsoleExecutable.'}
     $arguments+='--v12-only'
     if($BaselineExporterPath){$arguments += [IO.Path]::GetFullPath($BaselineExporterPath)}
 }
