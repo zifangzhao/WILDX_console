@@ -76,7 +76,7 @@ namespace CE32_console {
   internal static string Describe(NpSdStatus s){
    if(!ValidStatus(s))throw new IOException("Unsupported V2 capability/status response");
    string[] names={"SD not mounted","Idle","Preparing probes","Recording","Draining / verifying SD","Complete","Armed for UTC start","Cancelled before capture"};
-   string state=s.State==255?"Failed":names[s.State];
+   string state=s.State==255?(StopAlreadySatisfied(s)?"Stopped after recording failure":"Failed — finalizing"):names[s.State];
    return "WILD-X V2 / NP2 — "+state+"\r\nDevice-selected: "+ProbePrefix(s.Mask)+", "+s.Hz.ToString("N0")+" samples/s (no separate LFP stream)"+
     "\r\nCommitted: "+s.Chunks.ToString("N0")+" blocks / "+(s.Chunks*46592.0/1e6).ToString("F2")+" MB"+
     "\r\nDevice fault: "+s.Fault+"; command error: "+s.Error+
@@ -88,8 +88,8 @@ namespace CE32_console {
     (s.State==1 || ((s.Flags&512)!=0 && (s.State==5 || s.State==7)));
   }
   internal static bool StopAlreadySatisfied(NpSdStatus s){
-   return s!=null&&(s.Flags&8)==0&&
-    (s.State==0||s.State==1||s.State==5||s.State==7);
+   return s!=null&&!s.Busy&&
+    (s.State==0||s.State==1||s.State==5||s.State==7||s.State==255);
   }
   internal static bool StopIsDraining(NpSdStatus s){return s!=null&&s.State==4;}
   internal static bool CanSwitchMode(NpSdStatus s){

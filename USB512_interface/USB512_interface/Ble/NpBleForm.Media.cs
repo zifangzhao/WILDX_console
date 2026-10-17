@@ -19,7 +19,6 @@ namespace USB512_interface
 
         void InitializeMediaControls(FlowLayoutPanel options)
         {
-            options.SetFlowBreak(poll,true);
             mediaControls.Controls.AddRange(new Control[]{mediaCamera,mediaRate,new Label{Text="fps",AutoSize=true,Margin=new Padding(0,7,12,0)},mediaMicrophone});
             options.Controls.Add(mediaControls);
             profiles.SelectedIndexChanged+=delegate {UpdateMediaControls();};
@@ -32,7 +31,6 @@ namespace USB512_interface
             mediaControls.Visible=media;
             mediaControls.Enabled=media && connection.Connected && !busy && !hostBusy && NpV1BleProtocol.CanConfigure(current);
             mediaRate.Enabled=mediaCamera.Checked;
-            if(channelConfiguration!=null)channelConfiguration.Visible=recorderVersion!=0 && !media;
         }
         void ResetMedia(){mediaConfirmed=mediaWasRecording=false;mediaStatus.Text="";}
         async Task RefreshStatusQuietly()
@@ -64,7 +62,7 @@ namespace USB512_interface
         async Task RefreshV1Media(NpSdStatus s)
         {
             if(!NpV1BleProtocol.IsMedia(s)){ResetMedia();return;}
-            if(!mediaConfirmed) {
+            if(!mediaConfirmed && !mediaSettingsChanged) {
                 try {AdoptMediaParameters(await ReadMediaParameters());}
                 catch(Exception ex) when(ex is IOException || ex is TimeoutException){mediaStatus.Text="Media settings unconfirmed: "+ex.Message;}
             }
@@ -90,6 +88,7 @@ namespace USB512_interface
             bool camera=mediaCamera.Checked,microphone=mediaMicrophone.Checked;uint rate=(uint)mediaRate.Value;
             var command=NpV1MediaStatus.ProfileCommand(camera,microphone,rate);
             var s=await ReadStatus();
+            RequireStartNotCanceled();
             if(!NpV1BleProtocol.CanConfigure(s) || !NpV1BleProtocol.CanSelect(s,0,0))throw new IOException("Stop recording before applying a supported V1 media profile.");
             mediaConfirmed=false;
             try {await connection.ExchangeParameters(command);}
@@ -98,6 +97,7 @@ namespace USB512_interface
             var wait=Stopwatch.StartNew();string detail="Waiting for the device profile.";
             while(wait.Elapsed.TotalSeconds<60) {
                 await Task.Delay(250);
+                RequireStartNotCanceled();
                 if(!connection.Connected || connection.Epoch!=generation)throw new IOException("Connection changed; reconnect and read the device profile.");
                 try {
                     s=await Send(NpSdControl.Request(0,Next()));
@@ -105,6 +105,7 @@ namespace USB512_interface
                     var data=await ReadMediaParameters();bool actualCamera,actualMicrophone;uint actualRate;
                     if(!MediaParameters(data,out actualCamera,out actualMicrophone,out actualRate) || actualCamera!=camera || actualMicrophone!=microphone || camera && actualRate!=rate){detail="Device settings differ from the requested media profile.";continue;}
                     AdoptMediaParameters(data);
+                    mediaSettingsChanged=false;
                     await SyncClock();
                     Profiles(s);Append("Camera/microphone profile and PC time confirmed. Ready for Start.");return;
                 }catch(Exception ex) when(ex is IOException || ex is TimeoutException){detail=ex.Message;}

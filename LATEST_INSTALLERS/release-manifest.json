@@ -1,19 +1,19 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.35",
+  "version": "1.0.0.36",
   "releaseDate": "2026-10-17",
-  "releaseTag": "V1_FIRMWARE_TARGET_SELECTOR_20261017",
-  "sourceBaseCommit": "75c01295dc26eca14ff40b9fa25933096ba5f603",
+  "releaseTag": "BLE_RECORDING_SETTINGS_STOP_CONFIRMATION_20261017",
+  "sourceBaseCommit": "2e57fba14dc5f1b001701b0f09d03c9a1790f601",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.35.exe",
-    "sha256": "3F92302140CAF243F21CBDEA0B37E6206F6A1B6683930E77F93C2C4529FA7DB8",
-    "bytes": 5972148
+    "file": "WILDX_console-Setup-1.0.0.36.exe",
+    "sha256": "37A546811A5BBB551A2B62BE12566F7A67907BFD0FDBE53978254425E1694005",
+    "bytes": 5977669
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "7CEBBDDDEEFDBDF0287E692657942DE3B73B3E7D6525C79E1D5EA48D89A0AD39",
-      "bytes": 1480192
+      "sha256": "0AF9CD0732D4EFC1FFECBA0136F473E84E3C680E832013E1D5FF82AE0500FA58",
+      "bytes": 1495552
     },
     {
       "path": "WILDX_console.exe.config",
@@ -867,15 +867,25 @@
     }
   ],
   "validation": {
-    "focusedActualControlHandlerChecks": 34,
     "incrementalGuiBuild": true,
-    "inheritedUnchangedPayloadFiles": 35,
+    "actualAppBleSettingsChecks": 23,
+    "actualSourceRecordingStartStopChecks": 38,
+    "actualSourceMediaFlowChecks": 41,
+    "actualAppMediaChecks": 116,
+    "actualAppLayoutChecks": 13,
+    "actualAppRuntimeProfileChecks": 27,
+    "actualAppBleWorkflowChecks": 4397,
+    "fakeGattNativeChecks": 17,
+    "simulatedV2CatalogChecks": 1945,
+    "actualAppV1ProfileCompatibilityChecks": 103,
+    "actualAppSharedWorkflowChecks": 106,
+    "inheritedUnchangedPayloadFiles": 36,
     "allExtractedPayloadFilesVerified": 37,
     "physicalHardwareActions": false,
-    "broadSuitesRepeated": false,
-    "priorCompatibilityEvidence": "1.0.0.34 at75c01295dc26eca14ff40b9fa25933096ba5f603",
-    "targetSelectionDoesNotFlash": true,
-    "staleTargetConfirmationRefused": true
+    "fullSuiteRepeated": false,
+    "firmwareUpgradeRequired": false,
+    "uncertainMutationsReplayed": false,
+    "reportedV1DeviceFaultReproduced": false
   },
   "excludedExperimentalDownloadReadiness": true,
   "knownLimits": [
@@ -885,6 +895,7 @@
     "Intermittent V1 BLE discovery/mode-readiness and USB-start reports remain; Windows31 is not established as a physical cable error or fixed by this release.",
     "V1 camera40 is a separate candidate; prior strict USB completeness failed with11 camera drops.",
     "Current firmware may not report exact installed image identities; unknown versions remain review-only.",
-    "Fused/service/recovery HEX images require the documented separate programming workflows; no implant-field-update qualification."
+    "Fused/service/recovery HEX images require the documented separate programming workflows; no implant-field-update qualification.",
+    "V1 recorder state4/fault2 is a capture-source failure. This release fixes stopped-state reporting and host control handling; the root cause on the two reported external loggers is not reproduced or established."
   ]
 }

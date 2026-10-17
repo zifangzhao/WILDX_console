@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace USB512_interface
@@ -17,6 +18,14 @@ namespace USB512_interface
         internal Func<int,int,string> Warning;
     }
 
+    internal sealed class NpSdRecordingOptions
+    {
+        internal bool AllowUnqualified, MediaAvailable, Media, Camera, Microphone;
+        internal int CameraHz;
+        internal Func<Task<NpUsbRecordingProfile>> Read;
+        internal Func<IWin32Window,Task> Configure;
+    }
+
     internal sealed class NpRecordingDialog : Form
     {
         readonly Func<NpUsbRecordingProfile> read;
@@ -28,6 +37,17 @@ namespace USB512_interface
         readonly CheckBox upsample = new CheckBox { Text="Resample 15 kHz AP output to 20 kHz", AutoSize=true };
         readonly CheckBox misc = new CheckBox { Text="Record misc signals (IMU, analog input and clock)", AutoSize=true };
         readonly Button accept = new Button { Text="Save settings", AutoSize=true, Enabled=false };
+        readonly Button refresh = new Button { Text="Read device status", AutoSize=true };
+        readonly ComboBox source = new ComboBox { DropDownStyle=ComboBoxStyle.DropDownList, Width=200 };
+        readonly CheckBox allowUnqualified = new CheckBox { Text="Allow unqualified card/profile (V1)", AutoSize=true };
+        readonly CheckBox camera = new CheckBox { Text="Camera", AutoSize=true };
+        readonly CheckBox microphone = new CheckBox { Text="Microphone (200 kHz)", AutoSize=true };
+        readonly NumericUpDown cameraRate = new NumericUpDown { Minimum=1, Maximum=50, Value=40, Width=64 };
+        readonly FlowLayoutPanel connectorRow,rateRow,mediaRow;
+        readonly Button configuration;
+        readonly Label channelInfo;
+        readonly NpSdRecordingOptions sd;
+        bool loading;
         NpUsbRecordingProfile profile;
         readonly int requestedMask, requestedHz;
         readonly bool np2;
@@ -36,52 +56,87 @@ namespace USB512_interface
         internal bool Merge { get { return merge.Checked; } }
         internal bool Upsample { get { return upsample.Checked; } }
         internal bool Misc { get { return misc.Checked; } }
+        internal bool Media { get { return sd!=null && source.SelectedIndex==1; } }
         sealed class Rate { internal int Hz; public override string ToString(){return Hz.ToString("N0",CultureInfo.InvariantCulture)+" Hz";} }
 
         internal NpRecordingDialog(bool np2,int mask,int hz,bool mergeProbes,bool resample,bool recordMisc,
             Func<NpUsbRecordingProfile> readProfile,Action<IWin32Window> configure)
+            :this(np2,mask,hz,mergeProbes,resample,recordMisc,readProfile,configure,null){}
+
+        internal NpRecordingDialog(bool np2,int mask,int hz,bool mergeProbes,bool resample,bool recordMisc,
+            Func<NpUsbRecordingProfile> readProfile,Action<IWin32Window> configure,NpSdRecordingOptions sd)
         {
-            this.np2=np2;read=readProfile;requestedMask=mask;requestedHz=hz;
+            this.np2=np2;this.sd=sd;read=readProfile;requestedMask=mask;requestedHz=hz;
             Text="Recording settings";ClientSize=new Size(660,530);MinimumSize=new Size(610,500);
             StartPosition=FormStartPosition.CenterParent;Icon=NpPreviewTheme.ApplicationIcon;
             var layout=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=1,RowCount=8,Padding=new Padding(18) };
-            foreach(int height in new[]{28,40,42,28,0,88,44,46})layout.RowStyles.Add(new RowStyle(height==0?SizeType.Percent:SizeType.Absolute,height==0?100:height));
+            foreach(int height in new[]{36,40,42,28,0,sd==null?88:40,44,46})layout.RowStyles.Add(new RowStyle(height==0?SizeType.Percent:SizeType.Absolute,height==0?100:height));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));Controls.Add(layout);
-            layout.Controls.Add(WildXTheme.Label("Connectors",true),0,0);
-            var connectorRow=new FlowLayoutPanel { Dock=DockStyle.Fill };
+            var heading=new FlowLayoutPanel {Dock=DockStyle.Fill};heading.Controls.Add(WildXTheme.Label(sd!=null&&sd.MediaAvailable?"Recording source":"Connectors",true));
+            source.Items.AddRange(new object[]{"Neuropixels","Camera / Microphone"});source.SelectedIndex=sd!=null&&sd.Media?1:0;
+            source.Visible=sd!=null&&sd.MediaAvailable;heading.Controls.Add(source);layout.Controls.Add(heading,0,0);
+            connectorRow=new FlowLayoutPanel { Dock=DockStyle.Fill };
             for(int i=0;i<3;i++){ports[i]=new CheckBox { Text="Probe "+(i+1), AutoSize=true };connectorRow.Controls.Add(ports[i]);ports[i].CheckedChanged+=delegate {UpdateSelection();};}
-            automatic.Visible=np2;automatic.Checked=np2 && mask==0;automatic.CheckedChanged+=delegate {UpdateSelection();};connectorRow.Controls.Add(automatic);layout.Controls.Add(connectorRow,0,1);
-            var rateRow=new FlowLayoutPanel { Dock=DockStyle.Fill };
-            rateRow.Controls.Add(WildXTheme.Label("AP sample rate"));rateRow.Controls.Add(rate);rateRow.Controls.Add(WildXTheme.Label("Continuous until Stop"));layout.Controls.Add(rateRow,0,2);
-            layout.Controls.Add(WildXTheme.Label(np2?"384 AP channels per probe":"384 AP + 384 LFP channels per probe"),0,3);
+            automatic.Visible=np2&&sd==null;automatic.Checked=np2 && mask==0 && sd==null;automatic.CheckedChanged+=delegate {UpdateSelection();};connectorRow.Controls.Add(automatic);layout.Controls.Add(connectorRow,0,1);
+            var streamRow=new Panel {Dock=DockStyle.Fill};layout.Controls.Add(streamRow,0,2);
+            rateRow=new FlowLayoutPanel { Dock=DockStyle.Fill };
+            rateRow.Controls.Add(WildXTheme.Label("AP sample rate"));rateRow.Controls.Add(rate);rateRow.Controls.Add(WildXTheme.Label("Continuous until Stop"));streamRow.Controls.Add(rateRow);
+            mediaRow=new FlowLayoutPanel {Dock=DockStyle.Fill};
+            camera.Checked=sd!=null&&sd.Camera;microphone.Checked=sd!=null&&sd.Microphone;if(sd!=null)cameraRate.Value=Math.Max(1,Math.Min(50,sd.CameraHz));
+            mediaRow.Controls.AddRange(new Control[]{camera,cameraRate,WildXTheme.Label("fps"),microphone});streamRow.Controls.Add(mediaRow);
+            channelInfo=WildXTheme.Label("");layout.Controls.Add(channelInfo,0,3);
             layout.Controls.Add(status,0,4);
             var options=new FlowLayoutPanel { Dock=DockStyle.Fill,FlowDirection=FlowDirection.TopDown,WrapContents=false };
             merge.Checked=mergeProbes;upsample.Checked=resample;upsample.Visible=!np2;misc.Checked=recordMisc;
-            options.Controls.AddRange(new Control[]{merge,upsample,misc});layout.Controls.Add(options,0,5);
-            var configuration=new Button { Text="Probe configuration…",AutoSize=true };
-            configuration.Click+=delegate {configure(this);};layout.Controls.Add(configuration,0,6);
+            if(sd==null)options.Controls.AddRange(new Control[]{merge,upsample,misc});
+            else {allowUnqualified.Checked=sd.AllowUnqualified;allowUnqualified.Visible=!np2;options.Controls.Add(allowUnqualified);}
+            layout.Controls.Add(options,0,5);
+            configuration=new Button { Text="Probe configuration…",AutoSize=true };
+            configuration.Click+=async delegate {
+                string error=null;
+                try {loading=true;accept.Enabled=refresh.Enabled=configuration.Enabled=false;if(sd!=null)await sd.Configure(this);else configure(this);}
+                catch(Exception ex){error=ex.Message;}
+                finally {loading=false;refresh.Enabled=configuration.Enabled=true;UpdateSelection();}
+                if(error!=null)status.Text=error;
+            };layout.Controls.Add(configuration,0,6);
             var buttons=new FlowLayoutPanel { Dock=DockStyle.Fill };
-            var refresh=new Button { Text="Read device status",AutoSize=true };refresh.Click+=delegate {ReadProfile();};
+            refresh.Click+=async delegate {await RefreshProfile();};
             var cancel=new Button { Text="Cancel",AutoSize=true,DialogResult=DialogResult.Cancel };
             accept.Click+=delegate {
-                if(profile==null || SampleHz==0)return;
+                if(profile==null || !Media && SampleHz==0)return;
+                if(Media){if(!camera.Checked&&!microphone.Checked)return;SaveSdOptions();DialogResult=DialogResult.OK;return;}
                 int effective=automatic.Checked?profile.SelectedMask:ProbeMask;
                 string problem=profile.Validate(effective,SampleHz);
                 if(problem!=null){status.Text=problem;return;}
                 string warning=profile.Warning(effective,SampleHz);
                 if(warning!=null && MessageBox.Show(this,warning,"Recording profile",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning)!=DialogResult.OK)return;
-                DialogResult=DialogResult.OK;
+                SaveSdOptions();DialogResult=DialogResult.OK;
             };
             buttons.Controls.AddRange(new Control[]{refresh,accept,cancel});layout.Controls.Add(buttons,0,7);
             rate.SelectedIndexChanged+=delegate {UpdateSelection();};
-            AcceptButton=accept;CancelButton=cancel;Shown+=delegate {ReadProfile();};
-            WildXTheme.Apply(this);WildXTheme.Button(accept,true);
+            source.SelectedIndexChanged+=delegate {UpdateSelection();};camera.CheckedChanged+=delegate {UpdateSelection();};microphone.CheckedChanged+=delegate {UpdateSelection();};
+            AcceptButton=accept;CancelButton=cancel;Shown+=async delegate {await RefreshProfile();};
+            FormClosing+=delegate(object sender,FormClosingEventArgs e){if(loading)e.Cancel=true;};
+            WildXTheme.Apply(this);WildXTheme.Button(accept,true);UpdateSelection();
         }
         internal void ReadProfile()
         {
-            try {
-                var next=read();profile=null;rate.Items.Clear();
-                if(!np2)automatic.Checked=next.AvailableMask==0;
+            try {AdoptProfile(read());}
+            catch(Exception ex){profile=null;status.Text="Device status unavailable: "+ex.Message;UpdateSelection();}
+        }
+        async Task RefreshProfile()
+        {
+            if(sd==null){ReadProfile();return;}
+            loading=true;profile=null;UpdateSelection();refresh.Enabled=configuration.Enabled=false;
+            try {AdoptProfile(await sd.Read());}
+            catch(Exception ex){profile=null;status.Text="Device status unavailable: "+ex.Message;UpdateSelection();}
+            finally {loading=false;refresh.Enabled=configuration.Enabled=true;UpdateSelection();}
+        }
+        void SaveSdOptions(){if(sd==null)return;sd.AllowUnqualified=allowUnqualified.Checked;sd.Media=Media;sd.Camera=camera.Checked;sd.Microphone=microphone.Checked;sd.CameraHz=(int)cameraRate.Value;}
+        void AdoptProfile(NpUsbRecordingProfile next)
+        {
+                profile=null;rate.Items.Clear();
+                if(!np2)automatic.Checked=sd==null&&next.AvailableMask==0;
                 int selected=requestedMask==0?next.SelectedMask:requestedMask;
                 for(int i=0;i<3;i++){ports[i].Checked=(selected&next.AvailableMask&(1<<i))!=0;ports[i].Enabled=(next.AvailableMask&(1<<i))!=0;}
                 foreach(int hz in next.Rates)rate.Items.Add(new Rate {Hz=hz});
@@ -89,17 +144,20 @@ namespace USB512_interface
                 rate.SelectedIndex=Array.IndexOf(next.Rates,wanted);
                 if(rate.SelectedIndex<0 && rate.Items.Count>0)rate.SelectedIndex=0;
                 profile=next;UpdateSelection();
-            } catch(Exception ex){profile=null;status.Text="Device status unavailable: "+ex.Message;UpdateSelection();}
         }
         void UpdateSelection()
         {
+            if(connectorRow==null||rateRow==null||mediaRow==null||configuration==null)return;
+            connectorRow.Visible=rateRow.Visible=configuration.Visible=!Media;mediaRow.Visible=Media;
+            channelInfo.Text=Media?"Continuous until Stop":np2?"384 AP channels per probe":"384 AP + 384 LFP channels per probe";
+            cameraRate.Enabled=camera.Checked;
             for(int i=0;i<3;i++)ports[i].Enabled=profile!=null && !automatic.Checked && (profile.AvailableMask&(1<<i))!=0;
             rate.Enabled=profile!=null && rate.Items.Count>0;
             int effective=profile==null?0:automatic.Checked?profile.SelectedMask:ProbeMask;
             merge.Enabled=NpCaptureMode.Count(effective)>1;
             upsample.Enabled=SampleHz==15000;
-            string problem=profile==null?null:profile.Validate(effective,SampleHz);
-            accept.Enabled=profile!=null && SampleHz!=0 && problem==null;
+            string problem=profile==null?null:Media?(!camera.Checked&&!microphone.Checked?"Select camera or microphone.":null):profile.Validate(effective,SampleHz);
+            accept.Enabled=!loading && profile!=null && (Media||SampleHz!=0) && problem==null;
             if(profile!=null)status.Text=profile.Status+(problem==null?"":"\r\n\r\n"+problem);
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,7 +25,7 @@ namespace USB512_interface
             internal uint Mask, Hz;
             public override string ToString() {
                 if(Mask==0)return "Camera / Microphone";
-                string label=Mask==1?"Probe 1":Mask==3?"Probes 1 + 2":Mask==7?"Probes 1 + 2 + 3":"Probe mask "+Mask;
+                string label=NpCaptureRequest.Ports((int)Mask);
                 return label+" | "+Hz.ToString("N0")+" samples/s"+(Mask==7&&Hz==30000?" — experimental; not sustained-qualified":"");
             }
         }
@@ -43,6 +44,7 @@ namespace USB512_interface
         readonly Dictionary<ulong,HashSet<int>> np2ApplyConfigurations = new Dictionary<ulong,HashSet<int>>();
         readonly ComboBox devices = new ComboBox { Width = 400, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly ComboBox profiles = new ComboBox { Width = 390, DropDownStyle = ComboBoxStyle.DropDownList };
+        readonly Label recordingSummary = new Label {AutoSize=true,Text="Connect to read recording settings."};
         readonly TextBox address = new TextBox { Width = 160 };
         readonly CheckBox unqualified = new CheckBox { Text = "Allow firmware-supported unqualified bench profile (NP1)", AutoSize = true };
         readonly CheckBox poll = new CheckBox { Text = "Refresh status every 2 seconds", Checked = true, AutoSize = true };
@@ -65,8 +67,8 @@ namespace USB512_interface
         NpSdStatus current;
         int recorderVersion;
         uint np2AvailableMask;
-        Button scan,stopScan,connect,disconnect,rescueReset,channelConfiguration,usbDownload,previewButton,startRecording,recordingsButton;
-        bool busy, closing, connecting, hostBusy;
+        Button scan,stopScan,connect,disconnect,rescueReset,recordingSettings,usbDownload,previewButton,startRecording,stopRecording,recordingsButton;
+        bool busy, closing, connecting, hostBusy, mediaSettingsChanged,stopRequested,stopping;
         internal bool IsBusy{get{return busy;}}
         internal bool SessionOwned{get{return busy || connection.Connected || watcher.Status==BluetoothLEAdvertisementWatcherStatus.Started;}}
         internal event Action StateChanged;
@@ -102,17 +104,23 @@ namespace USB512_interface
             };
             maintenanceActions.Controls.Add(maintenancePeer);maintenanceActions.SetFlowBreak(maintenancePeer,true);
             rescueReset=Add(maintenanceActions,"Rescue reset",RescueReset);
-            var options=new FlowLayoutPanel();options.Controls.AddRange(new Control[]{unqualified,poll});
+            var options=new FlowLayoutPanel {Visible=false};
             InitializeMediaControls(options);
-            var settings=FieldGrid("Recording profile",profiles,null,null,options);settings.Name="bleRecordingFields";
+            var settings=FieldGrid("Recording",recordingSummary,null,null,options);settings.Name="bleRecordingFields";
+            profiles.SelectedIndexChanged+=delegate {recordingSummary.Text=profiles.SelectedItem==null?"Connect to read recording settings.":profiles.SelectedItem+" · continuous until Stop";};
             Add(actions, "Read status", async () => { await ReadStatus(); });
-            Add(actions, "Apply profile", Apply);
             startRecording=Add(actions, "Start recording", StartRecording);
-            Add(actions, "Stop recording", StopRecording);
+            stopRecording=new Button {Text="Stop recording",AutoSize=true};actions.Controls.Add(stopRecording);
+            stopRecording.Click+=async delegate {
+                if(hostBusy || stopping || stopRequested || !connection.Connected)return;
+                stopRequested=true;UpdateControls();
+                if(busy){Append("Stop requested; waiting for the current transfer to finish. Pending capture start will be canceled.");return;}
+                await Run(StopRecording);
+            };
+            recordingSettings=Add(actions,"Recording settings",OpenRecordingSettings);
             Add(actions, "Sync PC time", SyncClock);
             previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
             recordingsButton=Add(actions,"Recordings…",OpenRecordings);
-            channelConfiguration=Add(actions, "Probe configuration…", ConfigureChannels);
             var reportButton=new Button {Text="Report…",AutoSize=true};
             reportButton.Click+=delegate {using(var report=new NpReportForm("BLE report","Device: "+(recorderVersion==0?"Unconfirmed":"Neuropixels V"+recorderVersion)+"\r\nBLE address: "+address.Text+"\r\n"+state.Text+"\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\n"+log.Text))report.ShowDialog(DialogOwner);};
             Add(actions,"Calibration…",()=>{NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2);return Task.CompletedTask;});
@@ -191,6 +199,7 @@ namespace USB512_interface
             if(advertisementToken!=null)watcher.GetType().GetMethod("remove_Received").Invoke(watcher,new[]{advertisementToken});
             if(watcherStoppedToken!=null)watcher.GetType().GetMethod("remove_Stopped").Invoke(watcher,new[]{watcherStoppedToken});
             if(watcher.Status==BluetoothLEAdvertisementWatcherStatus.Started)watcher.Stop();connection.Dispose();timer.Dispose();
+            profiles.Dispose();unqualified.Dispose();poll.Dispose();
         }
         protected override void Dispose(bool disposing){if(disposing){Shutdown();maintenanceActions.Dispose();}base.Dispose(disposing);}
         void Ui(Action action) { if (!closing && !IsDisposed && IsHandleCreated) try { BeginInvoke(action); } catch (InvalidOperationException) { } }
@@ -231,24 +240,29 @@ namespace USB512_interface
             maintenancePeer.Text=linked?"Connected · "+address.Text.Trim()+
                 (recorderVersion==0?"":"\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed((uint)recorderVersion,firmwareIdentity)+
                 "\r\nBundled: "+(NpFirmwareCatalog.Bundled.For((uint)recorderVersion)?.Versions??"Unavailable")):"Connect in BLE Mode";
-            profiles.Enabled=unqualified.Enabled=poll.Enabled=actions.Enabled=ready;
-            channelConfiguration.Visible=recorderVersion!=0 && !(profiles.SelectedItem is Profile && ((Profile)profiles.SelectedItem).Mask==0);
-            channelConfiguration.Text="Probe configuration…";
-            usbDownload.Visible=unqualified.Visible=recorderVersion==1;
+            profiles.Enabled=unqualified.Enabled=poll.Enabled=ready;
+            foreach(Control control in actions.Controls)control.Enabled=ready;
+            stopRecording.Enabled=linked && recorderVersion!=0 && !hostBusy && !stopping && !stopRequested;
+            recordingSettings.Enabled=ready && (V2?NpV2SdControl.CanConfigure(current):NpV1BleProtocol.CanManageStorage(current));
+            usbDownload.Visible=recorderVersion==1;
             previewButton.Visible=recorderVersion!=0;previewButton.Enabled=ready && (V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current));
             recordingsButton.Enabled=ready;
             startRecording.Enabled=ready && (V2?clock.Synchronized && NpV2SdControl.CanStart(current):NpV1BleProtocol.CanManualStart(current));
             UpdateMediaControls();
         }
         void ClosePreview(){if(preview!=null){preview.Close();preview.Dispose();preview=null;}}
-        void ResetDevice(){ClosePreview();ResetMedia();clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
+        void ResetDevice(){ClosePreview();ResetMedia();mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
         async Task Run(Func<Task> action)
         {
             if (busy || hostBusy) return; busy = true; UpdateControls();
             NotifyState();
             try { await refreshTask;await action(); }
             catch (Exception ex) { current = null; state.Text = ex.Message; Append(ex.Message); }
-            finally { busy = false; UpdateControls();NotifyState();OfferFirmwareReview(); }
+            finally {
+                busy = false; UpdateControls();NotifyState();
+                if(stopRequested && connection.Connected && !hostBusy)await Run(StopRecording);
+                else OfferFirmwareReview();
+            }
         }
         void OfferFirmwareReview()
         {
@@ -277,7 +291,9 @@ namespace USB512_interface
             }catch{connection.Disconnect();ResetDevice();throw;}
             finally{connecting=false;UpdateControls();}
         }
-        void ShowStatus(NpSdStatus s){current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s)+"\r\n"+s;
+        void ShowStatus(NpSdStatus s){
+            if(!V2 && s.Fault!=0 && (current==null || current.Fault!=s.Fault || current.Chunks!=s.Chunks))Append("V1 "+NpV1BleProtocol.StateText(s));
+            current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s)+"\r\n"+s;
             firmwareStatus.Visible=recorderVersion!=0;firmwareStatus.Text="Firmware: "+NpFirmwareCatalog.Bundled.Installed((uint)recorderVersion,firmwareIdentity);}
         async Task<NpSdStatus> Send(byte[] request)
         {
@@ -330,6 +346,35 @@ namespace USB512_interface
                 configurationReadError=ex.Message;
             }
         }
+        NpUsbRecordingProfile RecordingProfile()
+        {
+            var selected=profiles.SelectedItem as Profile;
+            var choices=profiles.Items.Cast<Profile>().Where(p=>p.Mask!=0).ToArray();
+            return new NpUsbRecordingProfile {
+                AvailableMask=choices.Aggregate(0,(mask,p)=>mask|(int)p.Mask),SelectedMask=selected==null?0:(int)selected.Mask,
+                SelectedHz=selected==null?0:(int)selected.Hz,Rates=choices.Select(p=>(int)p.Hz).Distinct().OrderBy(hz=>hz).ToArray(),
+                Status="Neuropixels V"+recorderVersion+" · SD recording\r\n"+(V2?NpV2SdControl.Describe(current):NpV1BleProtocol.StateText(current)),
+                Validate=(mask,hz)=>choices.Any(p=>p.Mask==(uint)mask && p.Hz==(uint)hz)?null:"This probe combination / sample rate is not supported by the device.",
+                Warning=(mask,hz)=>V2 && NpCaptureMode.Count(mask)>1 && hz==30000?"Multi-probe 30 kHz recording is experimental. Continue with this profile?":null
+            };
+        }
+        async Task OpenRecordingSettings()
+        {
+            await ReadStatus();var p=profiles.SelectedItem as Profile;
+            var options=new NpSdRecordingOptions {
+                AllowUnqualified=unqualified.Checked,MediaAvailable=!V2 && NpV1BleProtocol.CanSelect(current,0,0),Media=p!=null&&p.Mask==0,
+                Camera=mediaCamera.Checked,Microphone=mediaMicrophone.Checked,CameraHz=(int)mediaRate.Value,
+                Read=async()=>{await ReadStatus();return RecordingProfile();},Configure=ConfigureChannels
+            };
+            using(var dialog=new NpRecordingDialog(V2,p==null?0:(int)p.Mask,p==null?0:(int)p.Hz,false,false,false,RecordingProfile,null,options)) {
+                if(dialog.ShowDialog(DialogOwner)!=DialogResult.OK)return;
+                mediaSettingsChanged|=options.Camera!=mediaCamera.Checked || options.Microphone!=mediaMicrophone.Checked || options.CameraHz!=(int)mediaRate.Value;
+                unqualified.Checked=options.AllowUnqualified;mediaCamera.Checked=options.Camera;mediaMicrophone.Checked=options.Microphone;mediaRate.Value=options.CameraHz;
+                uint mask=options.Media?0U:(uint)dialog.ProbeMask,hz=options.Media?0U:(uint)dialog.SampleHz;
+                profiles.SelectedItem=profiles.Items.Cast<Profile>().Single(choice=>choice.Mask==mask && choice.Hz==hz);
+            }
+            Append("Recording settings saved. Start applies these settings before capture.");
+        }
         void Profiles(NpSdStatus s)
         {
             var previous = profiles.SelectedItem as Profile;var choices=new List<Profile>();
@@ -357,14 +402,29 @@ namespace USB512_interface
             var p = profiles.SelectedItem as Profile; if (p == null) throw new IOException("Select a profile.");
             if(!V2 && p.Mask==0){await ApplyV1Media();return;}
             var s = await ReadStatus();
+            RequireStartNotCanceled();
             if (V2 ? !NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz) : !NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz)) throw new IOException("Wait for the recorder to stop and confirm an advertised profile.");
             await Send(V2 ? NpV2SdControl.Request(1, NpV2SdControl.NextId(s), p.Hz, 0, 0, p.Mask) : NpSdControl.Request(1, NpSdControl.NextId(s), p.Mask, p.Hz));
-            Append("Selection acknowledged. Read status to confirm readiness before Start.");
+            // SELECT may only acknowledge a queued command. Wait using reads;
+            // never replay SELECT or START if a receipt or preparation is late.
+            int epoch=connection.Epoch;var wait=System.Diagnostics.Stopwatch.StartNew();
+            while(wait.Elapsed.TotalSeconds<60){
+                await Task.Delay(250);
+                RequireStartNotCanceled();
+                if(!connection.Connected || connection.Epoch!=epoch)throw new IOException("Connection changed while applying recording settings. Reconnect and read status.");
+                s=await ReadStatus();
+                if(s.Mask==p.Mask && s.Hz==p.Hz && (V2?NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz):NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz))){Append("Recording settings confirmed.");return;}
+            }
+            throw new IOException("Recording settings were not confirmed. Read status before retrying; recording was not started.");
         }
         async Task StartRecording()
         {
             var p = profiles.SelectedItem as Profile; var s = await ReadStatus();
-            if (p == null || p.Mask != s.Mask || p.Hz != s.Hz) throw new IOException("Apply the selected profile before Start.");
+            RequireStartNotCanceled();
+            if(p==null)throw new IOException("Select recording settings before Start.");
+            if(p.Mask!=s.Mask || p.Hz!=s.Hz || !V2 && p.Mask==0 && mediaSettingsChanged){await Apply();s=await ReadStatus();}
+            RequireStartNotCanceled();
+            if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");
             if(V2 && !clock.Synchronized)throw new IOException("Synchronize PC time while stopped before starting.");
             const uint duration=0;
             if (V2) {
@@ -387,26 +447,57 @@ namespace USB512_interface
                 }
                 configurationReceipts.Expect(staged);
                 if(staged.Count!=0){configurationStatus.Text="NP2 IMRO staged; probe application pending. Read status confirms it after preparation.";Append(configurationStatus.Text);}
+                RequireStartNotCanceled();
                 await Send(NpV2SdControl.Request(2, NpV2SdControl.NextId(s), p.Hz, blocks, 0, p.Mask));
             }
             else {
                 if(s.Mask==0)await VerifyV1Media();
-                if (!s.Qualified && !unqualified.Checked) throw new IOException("This NP1 card/profile is unqualified. The explicit bench option is required; firmware limits still apply.");
+                if (!s.Qualified && !unqualified.Checked) throw new IOException("This V1 card/profile is unqualified. Enable Allow unqualified card/profile in Recording settings to proceed; firmware limits still apply.");
                 uint end=s.Mask==0?NpV1BleProtocol.EndLba(s,duration,mediaCamera.Checked?(uint)mediaRate.Value:0U,mediaMicrophone.Checked):NpV1BleProtocol.EndLba(s,duration);
                 uint session=unchecked((uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 // Profile changes may reset staged selections; retain and stage
                 // each selected port's explicit host request before START.
                 if(s.Mask!=0)await new NpConfigClient(new ConfigTransport(connection)).StageForCaptureAsync(configurations.Values,(int)s.Mask,CancellationToken.None);
+                RequireStartNotCanceled();
                 await Send(NpSdControl.Request(2, NpSdControl.NextId(s), s.Mask, s.Hz, s.Start, end, session == 0 ? 1U : session, s.Qualified ? 0U : 1U));
             }
             Append("START acknowledged; wait for device-confirmed recording. Continuous until Stop or card full.");
         }
+        void RequireStartNotCanceled(){if(stopRequested)throw new OperationCanceledException("Recording start canceled by Stop.");}
         async Task StopRecording()
         {
-            // STOP must remain available when status polling is stale.
-            uint id = current == null ? Next() : V2 ? NpV2SdControl.NextId(current) : NpSdControl.NextId(current);
-            await Send(V2 ? NpV2SdControl.Request(3, id) : NpSdControl.Request(3, id));
-            Append("STOP acknowledged; wait for Complete before removing power or changing mode.");
+            stopping=true;stopRequested=false;UpdateControls();
+            try {
+                NpSdStatus s=null;
+                try{s=await ReadStatus();}catch(Exception ex) when(ex is IOException || ex is TimeoutException){Append("Status unavailable before Stop: "+ex.Message);}
+                int epoch=connection.Epoch;var wait=System.Diagnostics.Stopwatch.StartNew();
+                if(s!=null && (s.Flags&8)!=0)Append("Waiting for the previous device command before Stop.");
+                while(s!=null && (s.Flags&8)!=0 && wait.Elapsed.TotalSeconds<30){
+                    await Task.Delay(250);
+                    if(!connection.Connected || connection.Epoch!=epoch)throw new IOException("Connection changed before Stop; reconnect and read status.");
+                    s=await ReadStatus();
+                }
+                if(s!=null && (s.Flags&8)!=0)throw new IOException("The previous device command is still pending. Stop was not sent over it. Keep power connected and read status.");
+                if(s!=null && StopConfirmed(s)){ReportStopped(s);return;}
+                // A missing status must not prevent one explicit STOP. Never
+                // replay it after a missing ACK; later polls establish state.
+                uint id=s==null?Next():V2?NpV2SdControl.NextId(s):NpSdControl.NextId(s);
+                s=await Send(V2?NpV2SdControl.Request(3,id):NpSdControl.Request(3,id));
+                Append("Stop acknowledged; waiting for the recorder to finish.");
+                wait.Restart();
+                while(!StopConfirmed(s) && wait.Elapsed.TotalSeconds<30){
+                    await Task.Delay(250);
+                    if(!connection.Connected || connection.Epoch!=epoch)throw new IOException("Connection changed after Stop. Reconnect and read status to confirm the recorder stopped.");
+                    s=await ReadStatus();
+                }
+                if(!StopConfirmed(s))throw new IOException("Stop was acknowledged, but the recorder has not confirmed it is stopped. Keep power connected and read status; Stop was not replayed.");
+                ReportStopped(s);
+            } finally {stopping=false;}
+        }
+        bool StopConfirmed(NpSdStatus s){return V2?NpV2SdControl.StopAlreadySatisfied(s):NpV1BleProtocol.StopAlreadySatisfied(s);}
+        void ReportStopped(NpSdStatus s){
+            bool failed=s.Fault!=0 || s.State==(V2?255U:4U);
+            Append(failed?"Recording is stopped after a device failure. "+(V2?"Fault "+s.Fault:NpV1BleProtocol.FaultText(s))+"; saved data may be incomplete.":"Recording stopped; no capture is active.");
         }
         async Task SyncClock()
         {
@@ -440,7 +531,7 @@ namespace USB512_interface
             preview=V2?(Form)new NpBlePreviewForm(connection,()=>V2?current:null,()=>busy || hostBusy,calibration):new NpV1BlePreviewForm(connection,()=>recorderVersion==1?current:null,()=>busy || hostBusy,calibration);
             preview.Show();
         }
-        async Task ConfigureChannels()
+        async Task ConfigureChannels(IWin32Window owner)
         {
             var s=await ReadStatus();
             if(V2?!NpV2SdControl.CanConfigure(s):!NpV1BleProtocol.CanConfigure(s))throw new IOException("Stop recording before probe configuration.");
@@ -449,14 +540,14 @@ namespace USB512_interface
                 Dictionary<int,string> requests;
                 if(!np2HostConfigurations.TryGetValue(peer,out requests)){requests=new Dictionary<int,string>();np2HostConfigurations.Add(peer,requests);}
                 using(var dialog=new NpConfigurationDialog(null,np2:true,availableMask:(int)np2AvailableMask,retainedRequests:requests,applyConnectors:Np2ApplyRequests(peer,true),
-                    receipt:async(port,json)=>NpConfigurationDialog.Receipt(await new Np2ConfigClient(new ConfigTransport(connection)).StatusAsync((byte)(port-1),CancellationToken.None),json==null?null:NpConfigurationDialog.PrepareV2Request(json,port))))dialog.ShowDialog(DialogOwner);
+                    receipt:async(port,json)=>NpConfigurationDialog.Receipt(await new Np2ConfigClient(new ConfigTransport(connection)).StatusAsync((byte)(port-1),CancellationToken.None),json==null?null:NpConfigurationDialog.PrepareV2Request(json,port))))dialog.ShowDialog(owner);
                 Append("NP2 IMRO request retained. Apply-on-capture stages only after the final profile and blocks START unless the firmware returns the matching staged receipt.");
                 return;
             }
             var client = new NpConfigClient(new ConfigTransport(connection));
             using (var dialog = new NpConfigurationDialog(null,availableMask:(int)s.Mask,retainedV1Requests:configurations,
                 receipt:async(port,json)=>NpConfigurationDialog.Receipt(await client.StatusAsync((byte)(port-1),CancellationToken.None),json==null?null:NpConfigurationDialog.PrepareV1Request(json,port)))) {
-                WildXTheme.Apply(dialog);dialog.ShowDialog(DialogOwner);
+                WildXTheme.Apply(dialog);dialog.ShowDialog(owner);
             }
             current = null; Append("Read device status again after channel configuration.");
         }

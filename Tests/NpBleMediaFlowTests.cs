@@ -43,13 +43,15 @@ namespace USB512_interface {
   readonly NpBleConnection connection=new NpBleConnection();
   readonly ComboBox profiles=new ComboBox();readonly CheckBox poll=new CheckBox();
   readonly Label state=new Label();readonly List<string> messages=new List<string>();
-  Button channelConfiguration;int recorderVersion=1,clockSyncs,controlUpdates;uint np2AvailableMask;
-  bool busy,hostBusy,closing;bool V2 {get{return false;}}
+  int recorderVersion=1,clockSyncs,controlUpdates,stopCalls;uint np2AvailableMask;
+  bool busy,hostBusy,closing,mediaSettingsChanged,stopRequested;bool V2 {get{return false;}}
   NpSdStatus current;TaskCompletionSource<bool> heldStatus;
   void Append(string text){messages.Add(text);}
   void UpdateControls(){controlUpdates++;UpdateMediaControls();}
   void NotifyState(){}
   void OfferFirmwareReview(){} // Unrelated firmware UI service; media tests never display a form.
+  Task StopRecording(){stopRequested=false;stopCalls++;return Task.CompletedTask;}
+  void RequireStartNotCanceled(){if(stopRequested)throw new OperationCanceledException();}
   uint sequence;uint Next(){return ++sequence;}
   Task CheckClock(){return Task.CompletedTask;}
   async Task<NpSdStatus> ReadStatus(){if(heldStatus!=null)await heldStatus.Task;current=connection.Status();await RefreshV1Media(current);return current;}
@@ -98,6 +100,9 @@ ACTUAL_FORM_METHODS
     Need(!h.busy && h.controlUpdates==updates,"poll disabled UI while awaiting the device");
     bool ran=false;var action=h.Run(()=>{ran=true;return Task.CompletedTask;});Need(!ran,"foreground command overlapped status poll");
     h.heldStatus.SetResult(true);await action;Need(ran && !h.busy,"click during polling was dropped");
+    h.heldStatus=new TaskCompletionSource<bool>();h.refreshTask=h.RefreshStatusQuietly();
+    var pending=h.Run(()=>Task.CompletedTask);h.stopRequested=true;h.heldStatus.SetResult(true);await pending;
+    Need(h.stopCalls==1&&!h.stopRequested&&!h.busy,"Stop requested during another transfer was lost or repeated");
    }
    var s=new NpSdStatus{Mask=0,Hz=0,Flags=NpV1BleProtocol.MediaCapability|NpV1BleProtocol.MediaSelected|17,Start=8192,Capacity=5000000};
    Need(NpV1BleProtocol.EndLba(s,60,40,false)<NpV1BleProtocol.EndLba(s,60,50,true),"camera-only reservation still assumes50fps+microphone");

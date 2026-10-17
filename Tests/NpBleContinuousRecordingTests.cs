@@ -33,12 +33,13 @@ static class NpBleContinuousRecordingTests {
             Need(!Children(form).Any(c=>c.Text.Contains("Storage bound")||c.Text.Contains("Duration reserves")),"Bounded recording timer remains visible");
             var settings=(TableLayoutPanel)Children(form).Single(c=>c.Name=="bleRecordingFields");
             var profiles=(ComboBox)type.GetField("profiles",All).GetValue(form);
-            Need(settings.ColumnCount==1&&profiles.Parent==settings&&settings.GetColumn(profiles)==0,"Recording profile retains an empty timer column");
+            Need(settings.ColumnCount==1&&profiles.Parent==null,"Combined profile dropdown is still exposed on the BLE page");
+            Need(Children(form).Any(c=>c.Text=="Recording settings")&&!Children(form).Any(c=>c.Text=="Apply profile"||c.Text=="Probe configuration…"),"BLE settings still require separate profile/probe actions");
             var connection=(TableLayoutPanel)Children(form).Single(c=>c.Name=="bleConnectionFields");
             Need(connection.ColumnCount==2,"Removing the recording timer changed connection fields");
             using(var host=new Form{ClientSize=new Size(1050,650),ShowInTaskbar=false,StartPosition=FormStartPosition.Manual,Location=new Point(-20000,-20000),Font=form.Font,BackColor=form.BackColor}){
                 foreach(var child in form.Controls.Cast<Control>().ToArray())host.Controls.Add(child);host.Show();Application.DoEvents();
-                Need(profiles.Width>settings.Width/2,"Profile field did not expand into the removed timer space");
+                Need(Children(host).Any(c=>c.Text=="Connect to read recording settings."),"Recording summary is missing");
                 using(var bitmap=new Bitmap(host.Width,host.Height)){host.DrawToBitmap(bitmap,new Rectangle(Point.Empty,host.Size));bitmap.Save(args[1]);}
             }
         }

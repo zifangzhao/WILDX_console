@@ -51,6 +51,7 @@ namespace CE32_console {
   internal static bool CanManageStorage(NpSdStatus s){
    return s!=null&&(s.State==0||s.State==3||s.State==4)&&!s.Busy&&(s.Flags&(Waiting|Preparing))==0;
   }
+  internal static bool StopAlreadySatisfied(NpSdStatus s){return CanManageStorage(s);}
   internal static bool CanFormat(NpSdStatus s,uint expectedCapacity){
    return CanManageStorage(s)&&expectedCapacity>8192&&s.Capacity==expectedCapacity&&(s.Flags&1)!=0;
   }
@@ -66,7 +67,7 @@ namespace CE32_console {
   }
   internal static string StateText(NpSdStatus s){
    if(s==null)return "Reading V1 status...";
-   if(s.Fault!=0||s.State==4)return "Recording error — saved data may be incomplete (fault "+s.Fault+")";
+   if(s.Fault!=0||s.State==4)return (StopAlreadySatisfied(s)?"Stopped after recording error — ":"Recording error — finalizing — ")+FaultText(s)+" (state "+s.State+", fault "+s.Fault+"). Saved data may be incomplete.";
    if((s.Flags&Waiting)!=0)return "Waiting for scheduled start...";
    if((s.Flags&Preparing)!=0)return "Preparing probes / storage — capture has not started";
    if((s.Flags&8)!=0)return "Command queued — awaiting device confirmation...";
@@ -74,6 +75,18 @@ namespace CE32_console {
    if(s.State==2)return "Stopping — draining SD; keep power connected";
    if((s.Flags&16)==0)return s.Capacity==0?"SD unavailable":"SD catalog not mounted";
    return s.State==3?"Recording complete — ready":"Ready";
+  }
+  internal static string FaultText(NpSdStatus s){
+   switch(s.Fault){
+    case 1:return "Invalid recording configuration";
+    case 2:return s.Mask==0?"Camera/microphone capture source failed":"Probe capture source failed — probe startup or acquisition stream";
+    case 3:return "Data staging failed";
+    case 4:return "SD write failed";
+    case 5:return "Recording transfer timed out";
+    case 6:return "Recording storage range failed";
+    case 7:return "Recording protocol/integrity failure";
+    default:return "Device reported recording failure";
+   }
   }
   internal static uint EndLba(NpSdStatus s,uint seconds,uint cameraHz=50,bool microphone=true){
    if(!CanManualStart(s))throw new IOException("V1 storage/recorder is not ready");
