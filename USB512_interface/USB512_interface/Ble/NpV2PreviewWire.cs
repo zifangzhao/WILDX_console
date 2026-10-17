@@ -43,7 +43,7 @@ namespace CE32_console {
    if((kind&128)!=0)throw new NpV2PreviewUnavailableException(kind&127);
    bool marked=(kind&SixBitPayload)!=0;kind&=63;
    ulong first=NpSdGeometry.U(b,16)|((ulong)NpSdGeometry.U(b,20)<<32);
-   if(kind>2||probe<1||probe>2||channel>=384||session==0||(hz!=15000&&hz!=20000&&hz!=30000)||total!=(kind==0?3200:kind==1?3072:192))throw new IOException("Invalid preview metadata");
+   if(kind>2||probe<1||probe>2||channel>=384||session==0||(hz!=7500&&hz!=15000&&hz!=20000&&hz!=30000)||total!=(kind==0?3200:kind==1?3072:192))throw new IOException("Invalid preview metadata");
    if(kind==2){ValidMask=(uint)offset;if(ValidMask==0)throw new IOException("Empty rolling preview packet");offset=0;}
    if(Data==null){if(offset!=0)throw new NpV2PreviewUnavailableException(128);Data=new byte[total];Session=session;Hz=hz;Probe=probe;Kind=kind;Channel=channel;FirstTick=first;sixBitPayload=marked;}
    if(session!=Session||hz!=Hz||probe!=Probe||kind!=Kind||channel!=Channel||first!=FirstTick||total!=Data.Length||marked!=sixBitPayload)throw new IOException("Incomplete/mixed preview; discard burst");

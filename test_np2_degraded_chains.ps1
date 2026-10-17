@@ -9,7 +9,7 @@ New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $source=Join-Path $PSScriptRoot 'USB512_interface\USB512_interface'
 $exe=Join-Path $OutputDirectory 'Np2DegradedChainTests.exe'
 $inputs=@("$PSScriptRoot\Tests\Np2DegradedChainTests.cs","$source\Np2ConfigurationClient.cs","$source\Ble\NpBleConfigurationReceipts.cs",
-    "$PSScriptRoot\Neuropixels\USBConsoleV2\NpV2UsbConsole.cs","$source\USB512WinUsb.cs","$source\NeuropixelsPreviewForm.cs","$source\XeNpStreamDecoder.cs")
+    "$PSScriptRoot\Neuropixels\USBConsoleV2\NpV2UsbConsole.cs","$source\USB512WinUsb.cs","$source\UsbHealth.cs","$source\UsbHealthNative.cs","$source\NeuropixelsPreviewForm.cs","$source\XeNpStreamDecoder.cs")
 & $Compiler /nologo /optimize+ /define:NP2_CONSOLE_STANDALONE /target:exe /main:Np2DegradedChainTests /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$exe" @inputs
 if($LASTEXITCODE){throw 'Degraded-chain source fixture did not compile.'}
 & $exe

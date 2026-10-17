@@ -95,7 +95,7 @@ namespace USB512_interface {
   private readonly FileStream file;
   private readonly byte[] held=new byte[140],record=new byte[32];
   private bool started,disposed;
-  private uint lastTick,lastSequence,lastObservation,pcOriginMs,deviceOriginMs;
+  private uint lastTick,lastSourceTick,lastSequence,lastObservation,pcOriginMs,deviceOriginMs;
   private ulong sourceUs,nextUs;
   internal long Records;
   internal NpMisc1250(string folder) {
@@ -119,22 +119,33 @@ namespace USB512_interface {
   }
   internal void FeedSnapshot(byte[] b,int o,uint now) {
    uint seq=U(b,o+20),tick=U(b,o+32);
+   bool late=false;
    if(!started) {
     // Do not backfill before the first actual AG observation.
     if((U(b,o+12)&1)==0)return;
-    lastTick=tick;lastSequence=seq;started=true;deviceOriginMs=tick;
+    lastTick=lastSourceTick=tick;lastSequence=seq;started=true;deviceOriginMs=tick;
     pcOriginMs=(uint)DateTime.Now.TimeOfDay.TotalMilliseconds;
     Buffer.BlockCopy(b,o,held,0,140);
-   } else if(seq!=lastSequence && (U(b,o+12)&1)!=0) {
+   } else if((U(b,o+12)&1)!=0) {
+    bool fresh=seq!=lastSequence;
+    if(fresh && unchecked(tick-lastSourceTick)>60000)
+     throw new IOException("NP misc source clock discontinuity (>60 s); start a new segment.");
     uint delta=unchecked(tick-lastTick);
-    if(delta>60000)throw new IOException("NP misc source clock discontinuity (>60 s); start a new segment.");
-    ulong time=sourceUs+(ulong)delta*1000;
-    EmitBefore(time);sourceUs=time;lastTick=tick;lastSequence=seq;
-    Buffer.BlockCopy(b,o,held,0,140);
+    if(delta>60000) {
+     if(unchecked(lastTick-tick)>60000)throw new IOException("NP misc source clock discontinuity (>60 s); start a new segment.");
+     // A status watermark can run ahead of a queued valid source sample. Preserve
+     // its native observation, but never rewind/re-enable the held grid.
+     late=true;
+    } else if(fresh) {
+     ulong time=sourceUs+(ulong)delta*1000;
+     EmitBefore(time);sourceUs=time;lastTick=tick;
+     Buffer.BlockCopy(b,o,held,0,140);
+    }
+    if(fresh){lastSourceTick=tick;lastSequence=seq;}
    }
    // NP_OPTIONAL_SENSOR_VALIDITY: a failure/status transition is not a
    // new IMU sample, but it must end the previous held-value interval.
-   if(started && U(held,12)!=U(b,o+12)) {
+   if(started && !late && U(held,12)!=U(b,o+12)) {
     uint delta=unchecked(now-lastTick);
     if(delta>60000)throw new IOException("NP misc status clock discontinuity.");
     ulong time=sourceUs+(ulong)delta*1000;

@@ -105,6 +105,17 @@ namespace USB512_interface {
   }
   internal static bool NpV2TransportRetryable(string message) {
    if(message==null)return false;
+   // RunCore prefixes capture failures with this exact diagnostics envelope.
+   // Retry only its terminal Detail, rather than allowing an error code in a
+   // stage/probe/status field to broaden the transport policy.
+   if(message.StartsWith("Stage: ",StringComparison.Ordinal)){
+    const string probe=". Probe: ",selected=". Selected: ",detail=". Detail: ";
+    int atProbe=message.IndexOf(probe,StringComparison.Ordinal);
+    int atSelected=atProbe<0?-1:message.IndexOf(selected,atProbe+probe.Length,StringComparison.Ordinal);
+    int atDetail=atSelected<0?-1:message.IndexOf(detail,atSelected+selected.Length,StringComparison.Ordinal);
+    if(atProbe<="Stage: ".Length || atSelected<=atProbe+probe.Length || atDetail<=atSelected+selected.Length)return false;
+    message=message.Substring(atDetail+detail.Length);
+   }
    // Scope the numeric error to WinUSB open/read, not an equally numbered
    // disk error or a command whose application outcome is unknown.
    if(message.StartsWith("IOException: ",StringComparison.Ordinal))message=message.Substring(13);

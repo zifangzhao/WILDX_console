@@ -135,15 +135,19 @@ namespace USB512_interface {
   }
   void StartGpioRtcRecording() {
    recordingWarnings.Clear();
+   if(gpioRtcLogger!=null) {
+    // NP recovery owns new neural files; the independent RTC stream retains
+    // its open COM port, clock observations, counts and original output files.
+    try{SetGpioRtcRecordingContext();}catch(Exception ex){WarnRecordingOnce("gpio-link","GPIO/RTC continues, but its recording link could not be saved: "+ex.Message);}
+    RefreshGpioRtcInfo();return;
+   }
    gpioRtcLastInfo=null;
    ResetGpioChannelDisplay();
    gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=false;
    var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
    if(selected==null || selected.Port==null){gpioRtcStatus.Text="";RefreshGpioRtcInfo();return;}
-   if(npRecordingSettings!=null)npRecordingSettings.Context("gpio_rtc",NpRecordingSettings.Fields(
-    "requested",true,"port",selected.Port,"pnp_device_id",selected.Identity,"session_file","gpio_rtc_session.json",
-    "events_file","gpio_rtc_events.txt","clock_queries_file","gpio_rtc_sync.csv"));
    try {
+    SetGpioRtcRecordingContext();
     if(!gpioRtcDevicePresent(selected.Port,selected.Identity))throw new IOException("The selected GPIO/RTC board is unavailable. Refresh and select its COM port.");
     gpioRtcLogger=new NpGpioRtcLogger(runFolder,selected);gpioRtcLogger.Start();gpioRtcStatus.Text="Logging";
    }catch(Exception ex) {
@@ -156,6 +160,34 @@ namespace USB512_interface {
    }
    RefreshGpioRtcInfo();
   }
+  string GpioRtcFileReference(string name) {
+   string target=Path.GetFullPath(Path.Combine(gpioRtcLogger==null?runFolder:gpioRtcLogger.DirectoryPath,name));
+   var source=new Uri(Path.GetFullPath(runFolder).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar);
+   var relative=source.MakeRelativeUri(new Uri(target));
+   return relative.IsAbsoluteUri?target:Uri.UnescapeDataString(relative.ToString()).Replace('/',Path.DirectorySeparatorChar);
+  }
+  void SetGpioRtcRecordingContext() {
+   var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
+   if(selected==null || selected.Port==null)return;
+   var context=NpRecordingSettings.Fields("requested",true,"port",selected.Port,"pnp_device_id",selected.Identity,
+    "session_file",GpioRtcFileReference("gpio_rtc_session.json"),"events_file",GpioRtcFileReference("gpio_rtc_events.txt"),
+    "clock_queries_file",GpioRtcFileReference("gpio_rtc_sync.csv"),"continuous_across_neural_interruptions",true);
+   if(npRecordingSettings!=null)npRecordingSettings.Context("gpio_rtc",context);
+   if(gpioRtcLogger!=null && !String.Equals(Path.GetFullPath(runFolder).TrimEnd(Path.DirectorySeparatorChar),
+    Path.GetFullPath(gpioRtcLogger.DirectoryPath).TrimEnd(Path.DirectorySeparatorChar),StringComparison.OrdinalIgnoreCase))
+    NpMetadataFile.WriteText(Path.Combine(runFolder,"gpio_rtc_link.json"),
+     new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(context)+Environment.NewLine);
+  }
+  void RememberGpioRtcNeuralStart() {
+   if(gpioRtcLogger!=null && recordingSummaryStartUtc!=DateTime.MinValue &&
+    (!gpioRtcLogger.NeuralFirstReceiveUtc.HasValue || recordingSummaryStartUtc<gpioRtcLogger.NeuralFirstReceiveUtc.Value))
+    gpioRtcLogger.NeuralFirstReceiveUtc=recordingSummaryStartUtc;
+  }
+  void FinishGpioRtcCapture() {
+   RememberGpioRtcNeuralStart();
+   if(selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2)StopGpioRtcRecording();
+   else RefreshGpioRtcInfo();
+  }
   void PollGpioRtcRecording() {
    if(gpioRtcLogger==null)return;
    gpioRtcStatus.Text=gpioRtcLogger.Error!=null?"Error":!gpioRtcLogger.ClockSynchronized?"Syncing…":"Logging";
@@ -166,12 +198,16 @@ namespace USB512_interface {
   void StopGpioRtcRecording() {
    var logger=gpioRtcLogger;
    if(logger!=null) {
-    logger.NeuralFirstReceiveUtc=recordingSummaryStartUtc==DateTime.MinValue?(DateTime?)null:recordingSummaryStartUtc;
+    RememberGpioRtcNeuralStart();
     logger.Dispose();gpioRtcStatus.Text=logger.Error==null?"Stopped":"Error";
     gpioRtcLastInfo=logger.Describe(gpioRtcStatus.Text);
     var activity=logger.GetActivity();SetGpioChannelRows(activity.Ids,false);UpdateGpioPortActivity(activity.Counts,false,DateTime.UtcNow);
     if(logger.Warning!=null)WarnRecordingOnce(logger.WarningKey,logger.Warning+"\r\n\r\nSee gpio_rtc_session.json in the recording folder.");
     gpioRtcLogger=null;
+    // The first NP folder may already have finalized before a later restart.
+    if(captureThread==null || !String.Equals(logger.DirectoryPath,runFolder,StringComparison.OrdinalIgnoreCase))
+     try{NpRecordingSettings.RefreshBundle(logger.DirectoryPath);}
+     catch(Exception ex){WarnRecordingOnce("gpio-bundle","GPIO/RTC stopped, but its recording index could not be updated: "+ex.Message);}
    }
    gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=true;
    RefreshGpioRtcInfo();

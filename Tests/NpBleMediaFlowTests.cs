@@ -49,6 +49,7 @@ namespace USB512_interface {
   void Append(string text){messages.Add(text);}
   void UpdateControls(){controlUpdates++;UpdateMediaControls();}
   void NotifyState(){}
+  void OfferFirmwareReview(){} // Unrelated firmware UI service; media tests never display a form.
   uint sequence;uint Next(){return ++sequence;}
   Task CheckClock(){return Task.CompletedTask;}
   async Task<NpSdStatus> ReadStatus(){if(heldStatus!=null)await heldStatus.Task;current=connection.Status();await RefreshV1Media(current);return current;}

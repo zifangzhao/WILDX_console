@@ -1,11 +1,15 @@
+param(
+    [string]$ConsoleExecutable=(Join-Path $PSScriptRoot 'USB512_interface\USB512_interface\bin\Release\WILDX_console.exe'),
+    [string]$OutputDirectory=(Join-Path $PSScriptRoot '_artifacts\standalone-tests')
+)
 $ErrorActionPreference='Stop'
 $locator=Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
 $installation=& $locator -latest -products '*' -requires Microsoft.Component.MSBuild -property installationPath
 $compiler=Join-Path $installation 'MSBuild\Current\Bin\Roslyn\csc.exe'
-$output=Join-Path $PSScriptRoot '_artifacts\standalone-tests'
+$output=[IO.Path]::GetFullPath($OutputDirectory)
 New-Item -ItemType Directory -Path $output -Force | Out-Null
 $exe=Join-Path $output 'StandaloneTests.exe'
-$app=Join-Path $PSScriptRoot 'USB512_interface\USB512_interface\bin\Release\WILDX_console.exe'
+$app=[IO.Path]::GetFullPath($ConsoleExecutable)
 & $compiler /nologo /optimize+ /r:System.Drawing.dll /r:System.Windows.Forms.dll "/out:$exe" (Join-Path $PSScriptRoot 'Tests\StandaloneTests.cs')
 if($LASTEXITCODE){throw 'Standalone tests did not compile.'}
 & $exe $app $output
@@ -83,3 +87,7 @@ if($LASTEXITCODE){throw 'NP1 startup decoder regression failed.'}
 if($LASTEXITCODE){throw 'NP2 decoder/export regression failed.'}
 & (Join-Path $PSScriptRoot 'Neuropixels\test_np1_polarity.ps1') -Compiler $compiler -OutputDirectory (Join-Path $output 'np1-polarity')
 & (Join-Path $PSScriptRoot 'test_adc_calibration.ps1') -Compiler $compiler -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'adc-calibration')
+& (Join-Path $PSScriptRoot 'test_ble_workflow.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'ble-workflow')
+& (Join-Path $PSScriptRoot 'test_ble_media.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'ble-media')
+& (Join-Path $PSScriptRoot 'test_firmware_bundle.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'firmware-bundle')
+& (Join-Path $PSScriptRoot 'test_np2_ble_format_guard.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'np2-ble-format-guard')

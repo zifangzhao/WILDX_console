@@ -26,6 +26,8 @@ namespace CE32_console {
  }
  internal static class NpV1BleProtocol {
   internal const uint Schedule=1024, Preview=128, Clock=256, Modes=8192;
+  // NLD1 destination values differ from the resident boot target numbers.
+  internal const uint DestinationLoader=1,DestinationUsbStreaming=2,DestinationDfu=3,DestinationUsbDownload=4;
   internal const uint Repeat=512, Storage=16384, Waiting=131072, Preparing=262144;
   internal const uint Scaled20=524288, RateProfiles=1048576;
   internal const uint MediaCapability=0x200000, MediaSelected=0x400000;
@@ -43,12 +45,25 @@ namespace CE32_console {
    return s!=null&&((s.Flags&RateProfiles)!=0||(s.Flags&Scaled20)!=0&&mask==3);
   }
   internal static bool CanConfigure(NpSdStatus s){return s!=null&&!s.Busy&&(s.Flags&8)==0&&s.Fault==0&&(s.State==0||s.State==3);}
-  // FORMAT creates the catalog; requiring the mounted bit here deadlocks a blank card.
+  // Finalized FAILED recordings can still own a stopped, writable card. The
+  // firmware's active/pending flags fence storage; a stale recorder fault does
+  // not describe the current card operation or require a mounted catalog.
+  internal static bool CanManageStorage(NpSdStatus s){
+   return s!=null&&(s.State==0||s.State==3||s.State==4)&&!s.Busy&&(s.Flags&(Waiting|Preparing))==0;
+  }
   internal static bool CanFormat(NpSdStatus s,uint expectedCapacity){
-   return CanConfigure(s)&&expectedCapacity>8192&&s.Capacity==expectedCapacity&&(s.Flags&1)!=0;
+   return CanManageStorage(s)&&expectedCapacity>8192&&s.Capacity==expectedCapacity&&(s.Flags&1)!=0;
   }
   internal static bool CanStart(NpSdStatus s){return CanConfigure(s)&&CanSelect(s,s.Mask,s.Hz)&&(s.Mask!=0||IsMedia(s))&&(s.Flags&17)==17&&s.Start>=8192&&s.Capacity>s.Start;}
-  internal static bool CanMount(NpSdStatus s){return s!=null&&!s.Busy&&(s.Flags&Storage)!=0&&s.Capacity!=0&&(s.State==0||s.State==3);}
+  // Manual SELECT/START reinitialize a finalized capture in existing firmware.
+  // Scheduled START, MODE and MOUNT/RECOVER retain their fault-zero contracts.
+  internal static bool CanSelectProfile(NpSdStatus s,uint mask,uint hz){return CanManageStorage(s)&&(s.Flags&1)!=0&&CanSelect(s,mask,hz);}
+  internal static bool CanManualStart(NpSdStatus s){return CanManageStorage(s)&&CanSelect(s,s.Mask,s.Hz)&&(s.Mask!=0||IsMedia(s))&&(s.Flags&17)==17&&s.Start>=8192&&s.Capacity>s.Start;}
+  internal static bool CanMount(NpSdStatus s){return CanConfigure(s)&&CanManageStorage(s)&&(s.Flags&Storage)!=0&&s.Capacity>8192;}
+  internal static void RequireStorageCompleted(NpSdStatus s,uint capacity,uint mutationId,bool format){
+   if(mutationId==0||!CanManageStorage(s)||s.Capacity!=capacity||s.LastId!=mutationId||s.Error!=0||(s.Flags&16)==0||
+      (format&&s.Start!=8192))throw new IOException("V1 storage operation not confirmed by a stopped, mounted card. Read status; no command replayed.");
+  }
   internal static string StateText(NpSdStatus s){
    if(s==null)return "Reading V1 status...";
    if(s.Fault!=0||s.State==4)return "Recording error — saved data may be incomplete (fault "+s.Fault+")";
@@ -61,7 +76,7 @@ namespace CE32_console {
    return s.State==3?"Recording complete — ready":"Ready";
   }
   internal static uint EndLba(NpSdStatus s,uint seconds,uint cameraHz=50,bool microphone=true){
-   if(!CanStart(s))throw new IOException("V1 storage/recorder is not ready");
+   if(!CanManualStart(s))throw new IOException("V1 storage/recorder is not ready");
    if(seconds==0&&(s.Flags&Repeat)==0)throw new IOException("Firmware does not advertise continuous recording");
    ulong payload=(ulong)s.Start+8192+((0U-(s.Start+8192U))&16383U);
    if(payload>=s.Capacity)throw new IOException("SD card is full");
@@ -78,6 +93,10 @@ namespace CE32_console {
   internal static byte[] Mount(NpSdStatus s,uint id){
    if(!CanMount(s))throw new IOException("Stopped V1 with storage controls required");
    var b=NpSdControl.Request(0,id);Put(b,8,8);Put(b,60,NpSdControl.Crc(b,60));return b;
+  }
+  internal static byte[] Format(NpSdStatus s,uint expectedCapacity){
+   if(!CanFormat(s,expectedCapacity))throw new IOException("Stopped, writable V1 with the confirmed card capacity required.");
+   return NpSdControl.Request(5,NpSdControl.NextId(s),flags:0x46524d54U);
   }
   internal static byte[] Recover(NpSdStatus s,uint id){var b=Mount(s,id);Put(b,8,9);Put(b,60,NpSdControl.Crc(b,60));return b;}
   internal static uint RecordedSeconds(NpSdStatus s){return s==null||s.Hz==0||NpSdGeometry.Count(s.Mask)==0?0:(uint)((ulong)s.Chunks*61440/((ulong)s.Hz*780*(uint)NpSdGeometry.Count(s.Mask)));}

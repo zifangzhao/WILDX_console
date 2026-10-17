@@ -119,6 +119,7 @@ namespace CE32_console
             if (Number(report, "camera_frame_gaps") != 0) reasons.Add("Camera frame IDs have gaps");
             if (Number(report, "camera_timing_irregularities") != 0) reasons.Add("Camera timestamp interval exceeds the 1 ms quantization bound");
             if (Number(report, "camera_timing_phase_errors") != 0) reasons.Add("Camera timestamp phase drifts beyond 1 ms from the first frame");
+            if (report.ContainsKey("camera_invalid_frames") && Number(report, "camera_invalid_frames") != 0) reasons.Add("Camera contains explicitly invalid image slots");
             if (frames > 0 && (cameraHz==0 || cameraHz>50)) reasons.Add("Unsupported SD camera rate");
             string qualification;
             if (initial == null && final == null)
@@ -263,9 +264,14 @@ namespace CE32_console
             if (Number(native, "camera_frames") == 0) return null;
             bool irregular = new[] { "camera_frame_gaps", "camera_timing_irregularities", "camera_timing_phase_errors" }
                 .Any(key => native.ContainsKey(key) && Number(native, key) != 0);
-            if (!irregular && (!native.ContainsKey("camera_nominal_video_eligible") || Convert.ToBoolean(native["camera_nominal_video_eligible"]))) return null;
-            return "Timing warning: camera gaps or irregular timestamps are present. MP4 plays saved frames at nominal " +
-                Number(native, "camera_requested_or_effective_hz") + " fps, not the original timestamp timeline. Use camera.timestamps.csv; lossless qualification is unchanged.";
+            string warning = null;
+            if (irregular || (native.ContainsKey("camera_nominal_video_eligible") && !Convert.ToBoolean(native["camera_nominal_video_eligible"])))
+                warning = "Timing warning: camera gaps or irregular timestamps are present. MP4 plays saved frames at nominal " +
+                    Number(native, "camera_requested_or_effective_hz") + " fps, not the original timestamp timeline. Use camera.timestamps.csv; lossless qualification is unchanged.";
+            if (native.ContainsKey("camera_invalid_frames") && Number(native, "camera_invalid_frames") != 0)
+                warning = (warning == null ? "" : warning + " ") + "Image warning: best-effort held-image playback includes " +
+                    Number(native, "camera_invalid_frames") + " explicitly invalid camera slots. Native frames/timestamps are retained; lossless qualification is separate.";
+            return warning;
         }
 
         internal static string ConvertFiles(string directory, Func<bool> cancelled, Action<int, string> progress)
@@ -293,7 +299,7 @@ namespace CE32_console
             bool durationChecked = native.ContainsKey("source_stop_timing_assumption");
             report["capture_qualification"] = durationChecked && native.ContainsKey("capture_qualification") ? native["capture_qualification"] : "transport-only (legacy export; duration coverage unverified)";
             report["capture_lossless_qualified"] = durationChecked && native.ContainsKey("capture_lossless_qualified") && Convert.ToBoolean(native["capture_lossless_qualified"]);
-            foreach (string key in new[] { "qualification_reasons", "camera_frame_gaps", "camera_timing_irregularities", "camera_timing_phase_errors", "camera_nominal_video_eligible" })
+            foreach (string key in new[] { "qualification_reasons", "camera_invalid_frames", "camera_frame_gaps", "camera_timing_irregularities", "camera_timing_phase_errors", "camera_nominal_video_eligible" })
                 if (native.ContainsKey(key)) report[key] = native[key];
             try
             {
@@ -345,7 +351,7 @@ namespace CE32_console
                     { "start_clock_generation", oldClock["generation"] }, { "start_clock_utc_us", oldClock["utc_us"] }, { "start_uncertainty_us", oldClock["uncertainty_us"] } };
                 clockSource = "N1SDUTC1";
             }
-            ulong samples = 0; uint frames = 0, padding = 0, gaps = 0, processed = 0;
+            ulong samples = 0; uint frames = 0, invalidFrames = 0, padding = 0, gaps = 0, processed = 0;
             uint? firstFrameId = null, firstCameraTick = null; uint irregularTiming = 0, phaseErrors = 0;
             var cameraMisses = new HashSet<uint>(); var cameraIntervals = new Dictionary<string, uint>();
             uint? origin = null, previousFrame = null; uint frameId = 0, frameTick = 0, frameRate = 0, frameMissed = 0;
@@ -420,6 +426,8 @@ namespace CE32_console
                             if (frameAt == FrameBytes)
                             {
                                 cam.Write(raster, 0, raster.Length);
+                                // Exact CE64CAMGAP v1 marker; the existing player holds these slots.
+                                if (Magic(raster, 0) == "CE64CAMG" && U(raster, 8) == 0x00015041U && U(raster, 12) == 0x96695AA5U) invalidFrames++;
                                 if (previousFrame.HasValue)
                                 {
                                     uint interval = unchecked(frameTick - previousCameraTick); string key = interval.ToString(CultureInfo.InvariantCulture);
@@ -467,7 +475,7 @@ namespace CE32_console
                 var report = new Dictionary<string, object> {
                     { "status", complete ? "validated transport" : "INCOMPLETE" }, { "error", failure },
                     { "format_version", U(h, 8) }, { "session", session }, { "start_lba", start }, { "end_lba", end },
-                    { "committed_chunks", chunks }, { "chunks", processed }, { "camera_frames", frames }, { "camera_frame_gaps", gaps },
+                    { "committed_chunks", chunks }, { "chunks", processed }, { "camera_frames", frames }, { "camera_invalid_frames", invalidFrames }, { "camera_frame_gaps", gaps },
                     { "camera_first_id", firstFrameId }, { "camera_last_id", previousFrame }, { "camera_first_tick", firstCameraTick }, { "camera_last_tick", previousFrame.HasValue ? (uint?)previousCameraTick : null },
                     { "camera_intervals_ms", cameraIntervals }, { "camera_timing_irregularities", irregularTiming }, { "camera_timing_phase_errors", phaseErrors }, { "camera_timestamp_quantum_ms", 1 }, { "camera_cadence_misses", cameraMisses },
                     { "metadata_descriptor", initialMetadata }, { "metadata_footer", finalMetadata }, { "legacy_clock_metadata", oldClock },

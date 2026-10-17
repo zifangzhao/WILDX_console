@@ -37,7 +37,7 @@ internal static class NpBleWarmLinkTests
             string resolve=source.Substring(end,watcher-end);
             Need(resolve.Contains("lastObservedAddress==address && lastObservedType!=BluetoothAddressType.Unspecified"),"Observed type is not isolated to the same literal address.");
             Need(resolve.Contains("? (BluetoothAddressType?)lastObservedType : null"),"Different address can inherit an observed address type.");
-            Need(resolve.Contains("if(allowWarm && warmType.HasValue)") && resolve.Contains("lastResolvedWarm=true"),"Unknown cold peer can use the retained-type route.");
+            Need(resolve.Contains("if(allowWarm){") && !resolve.Contains("warmType.HasValue") && resolve.Contains("lastResolvedWarm=true"),"Untyped connected exact-peer cache reuse is blocked before the helper identity/link gate.");
             Need(source.Contains("if(!warm || freshFallback)") && source.Contains("ResolveAddress(address,timeout.Token,value=>{stage=value;TraceConnect(elapsed,value);},false)") && source.Contains("catch (OperationCanceledException error)"),"Warm failure lacks one bounded cancellable fresh-observation fallback.");
             Need(!warm.Contains("BluetoothAddressType.Random") && !warm.Contains("BluetoothAddressType.Public"),"Warm path infers an address type.");
             Need(source.Contains("internal Task ConnectAsync(ulong address) { return ConnectAsync(address,null); }") && source.Contains("ConnectAsync(ulong address,BluetoothAddressType? observedType)") && source.Contains("lastObservedAddress=address;lastObservedType=observedType.Value;"),"Connection does not accept an observed exact-peer type seed.");
@@ -67,7 +67,7 @@ internal static class NpBleWarmLinkTests
             string cancelPath=form.Substring(cancelStart,cancelEnd-cancelStart);
             Need(!cancelPath.Contains("Run(") && !cancelPath.Contains("Send(") && !cancelPath.Contains("RescueReset") && !cancelPath.Contains("StartRecording"),"Connect cancellation waits for a GUI lease or mutates the recorder.");
             folder=Path.Combine(Path.GetTempPath(),"NpBleWarmLink_"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(folder);
-            string program=Path.Combine(folder,"WarmHarness.cs"),exe=Path.Combine(folder,"WarmHarness.exe");File.WriteAllText(program,Harness(warm,connect,disconnect,connectionChanged));
+            string program=Path.Combine(folder,"WarmHarness.cs"),exe=Path.Combine(folder,"WarmHarness.exe");File.WriteAllText(program,Harness(warm,resolve,connect,disconnect,connectionChanged));
             var compile=new ProcessStartInfo(args[1],"/nologo /target:exe /r:System.Core.dll /out:"+Quote(exe)+" "+Quote(program)){UseShellExecute=false,RedirectStandardError=true,RedirectStandardOutput=true};
             using(var p=Process.Start(compile)){p.WaitForExit();string output=p.StandardOutput.ReadToEnd()+p.StandardError.ReadToEnd();if(p.ExitCode!=0)throw new Exception("Extracted helper failed to compile: "+output);}
             var run=new ProcessStartInfo(exe,args.Length==3?"--subscription-only":""){UseShellExecute=false,RedirectStandardError=true,RedirectStandardOutput=true};
@@ -77,7 +77,7 @@ internal static class NpBleWarmLinkTests
         finally { if(folder!=null)try{Directory.Delete(folder,true);}catch(IOException){} }
     }
 
-    static string Harness(string warm,string connect,string disconnect,string connectionChanged)
+    static string Harness(string warm,string resolve,string connect,string disconnect,string connectionChanged)
     {
         return @"using System;
 using System.Collections.Generic;
@@ -145,10 +145,36 @@ static class Harness {
  static async Task DifferentAddress(){BluetoothAddressType? seen=BluetoothAddressType.Random;var d=new BluetoothLEDevice{BluetoothAddress=8,ConnectionStatus=BluetoothConnectionStatus.Connected};open=(a,t,c)=>{seen=t;return Task.FromResult(d);};Need(Object.ReferenceEquals(await Run(8,null,CancellationToken.None),d)&&!seen.HasValue,""different address must use no observed type hint"");}
  static async Task LocalExpiry(){open=async (a,t,c)=>{await Task.Delay(1000,c);return null;};var w=Stopwatch.StartNew();Need(await Run(7,BluetoothAddressType.Random,CancellationToken.None)==null&&stages.Contains(""selected-address cache reuse expired"")&&w.ElapsedMilliseconds<800,""local expiry fallback"");}
  static async Task OuterCancel(){open=async (a,t,c)=>{await Task.Delay(1000,c);return null;};using(var c=new CancellationTokenSource()){c.CancelAfter(10);bool threw=false;try{await Run(7,BluetoothAddressType.Random,c.Token);}catch(OperationCanceledException){threw=true;}Need(threw,""outer cancellation propagation"");}}
+ // Execute the actual ResolveAddress prefix; only advertisement discovery is modeled.
+ sealed class FreshResolution {
+  readonly ulong lastObservedAddress=0;readonly BluetoothAddressType lastObservedType=BluetoothAddressType.Unspecified;
+  bool lastResolvedWarm;internal int AdvertisementStarts;readonly BluetoothLEDevice advertised;
+  internal FreshResolution(BluetoothLEDevice advertised){this.advertised=advertised;}
+  internal bool Warm{get{return lastResolvedWarm;}}
+  internal Task<BluetoothLEDevice> Run(bool allowWarm=true){stages.Clear();return ResolveAddress(7,CancellationToken.None,value=>stages.Add(value),allowWarm);}
+"+resolve+@"
+   AdvertisementStarts++;stage(""advertisement watcher started"");return advertised;
+  }
+ }
+ static async Task FreshConnectedCacheCases(){
+  var advertised=new BluetoothLEDevice{BluetoothAddress=7,ConnectionStatus=BluetoothConnectionStatus.Connected};
+  var connected=new BluetoothLEDevice{BluetoothAddress=7,ConnectionStatus=BluetoothConnectionStatus.Connected};
+  int opens=0;BluetoothAddressType? seen=BluetoothAddressType.Random;
+  open=(a,t,c)=>{Need(a==7,""fresh-object cache probe changed selected peer"");opens++;seen=t;return Task.FromResult(connected);};
+  var fresh=new FreshResolution(advertised);Need(Object.ReferenceEquals(await fresh.Run(),connected)&&opens==1&&!seen.HasValue&&fresh.Warm&&fresh.AdvertisementStarts==0&&!connected.Disposed,""fresh object without observedType missed connected exact-peer cache reuse"");
+  var disconnected=new BluetoothLEDevice{BluetoothAddress=7,ConnectionStatus=BluetoothConnectionStatus.Disconnected};
+  opens=0;open=(a,t,c)=>{opens++;Need(a==7&&!t.HasValue,""disconnected cache inferred address type"");return Task.FromResult(disconnected);};
+  fresh=new FreshResolution(advertised);Need(Object.ReferenceEquals(await fresh.Run(),advertised)&&opens==1&&disconnected.Disposals==1&&!fresh.Warm&&fresh.AdvertisementStarts==1&&stages.Contains(""advertisement watcher started""),""untyped disconnected cache was accepted instead of advertisement fallback"");
+  var mismatch=new BluetoothLEDevice{BluetoothAddress=8,ConnectionStatus=BluetoothConnectionStatus.Connected};
+  open=(a,t,c)=>Task.FromResult(mismatch);fresh=new FreshResolution(advertised);
+  Need(Object.ReferenceEquals(await fresh.Run(),advertised)&&mismatch.Disposals==1&&!fresh.Warm&&fresh.AdvertisementStarts==1,""fresh-object cache substituted a different peer"");
+  open=(a,t,c)=>{throw new Exception(""forced fresh observation tried warm cache"");};fresh=new FreshResolution(advertised);
+  Need(Object.ReferenceEquals(await fresh.Run(false),advertised)&&!fresh.Warm&&fresh.AdvertisementStarts==1,""allowWarm=false recovery no longer bypasses cache"");
+ }
 "+RecoveryHarness(connect,disconnect,connectionChanged)+@"
   static int Main(string[] args){try{
    if(args.Length==1 && args[0]==""--subscription-only"")SubscriptionCases().GetAwaiter().GetResult();
-   else{Exact().GetAwaiter().GetResult();RetainedPending().GetAwaiter().GetResult();Rejected().GetAwaiter().GetResult();Null().GetAwaiter().GetResult();DifferentAddress().GetAwaiter().GetResult();LocalExpiry().GetAwaiter().GetResult();OuterCancel().GetAwaiter().GetResult();RecoveryCases().GetAwaiter().GetResult();SubscriptionCases().GetAwaiter().GetResult();}
+   else{Exact().GetAwaiter().GetResult();RetainedPending().GetAwaiter().GetResult();Rejected().GetAwaiter().GetResult();Null().GetAwaiter().GetResult();DifferentAddress().GetAwaiter().GetResult();LocalExpiry().GetAwaiter().GetResult();OuterCancel().GetAwaiter().GetResult();FreshConnectedCacheCases().GetAwaiter().GetResult();RecoveryCases().GetAwaiter().GetResult();SubscriptionCases().GetAwaiter().GetResult();}
    Console.WriteLine((args.Length==1?""PASS extracted actual ConnectAsync subscription/deadline/cleanup sequence; checks="":""PASS extracted warm identity and actual ConnectAsync deadline/fallback/cleanup sequence; checks="")+checks+""; modeled GATT only, no radio used"");return 0;
   }catch(Exception e){Console.Error.WriteLine(e);return 1;}}
 }";

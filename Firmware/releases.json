@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "family": 1,
+      "boardIds": [
+        65537
+      ],
+      "board": "V1 old NP board, 91k/91k battery divider; not V2",
+      "release": "V1_USB91_APPBC6B506E_WILDX33_D127_BLE_USB_RELEASE",
+      "sourceCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+      "stage": "Published with recorded limits",
+      "appVersion": "1.0.121-idle-sleep-test",
+      "usbVersion": "1.0.91-usb20-paired-restore-test",
+      "recoveryVersion": "Included in fused HEX; version not reported",
+      "appCrc32": "BC6B506E",
+      "usbCrc32": "40D39075",
+      "recoveryCrc32": null,
+      "app": {
+        "path": "V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
+        "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9"
+      },
+      "files": [
+        {
+          "path": "V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
+          "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9"
+        },
+        {
+          "path": "V1/V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
+          "sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA"
+        },
+        {
+          "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.121-idle-sleep-test_20261016T211951Z.hex",
+          "sha256": "EC10D6D227BBFC5E2DA8F15CC4E4138E438FA68D8810015D7463EA0E51FCA2D6"
+        }
+      ],
+      "limits": "Old V1 NP board with 91k/91k battery divider only. Short USB/BLE checks passed; endurance and implant field updates are not qualified. APP update preserves USB/recovery. USB service HEX requires a separate service programming workflow. Matching fused HEX includes and reprograms recovery, excludes configuration, and requires SWD without mass erase; fused programming has not been hardware-qualified. Service/fused HEX cannot use the APP updater.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "baseAddress": 134348800,
+        "bytes": 272080,
+        "codeCrc32": "BC6B506E",
+        "buildIdHex": "6439626331393337336338666131343262623961613939316264313965623931",
+        "manifestFlags": 1,
+        "minimumLoaderAbi": 258,
+        "generation": 0
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "baseAddress": 135790592,
+        "bytes": 240488,
+        "codeCrc32": "40D39075",
+        "buildIdHex": "3934386332396537623530363963656166656433653063326162366635613962",
+        "manifestFlags": 1,
+        "minimumLoaderAbi": 258,
+        "generation": 0
+      },
+      "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 270512,
+          "codeCrc32": "BB1C7399",
+          "buildIdHex": "6633306230376638646337303461636636623963653161613536363632323066",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        }
+      ],
+      "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "681B6C2A",
+          "buildIdHex": "3035613735613038383534346236623564343433376566633166313730613163",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "2F1C6BD5",
+          "buildIdHex": "3061393165653230303761656666636534656235613166623361376265383935",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        }
+      ],
+      "historySources": [
+        "72c432b59002d394e4d396b1dd078e203547981a",
+        "a6f2f8054dfdf528038802092c34040cbd29ce48",
+        "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
+      ]
+    },
+    {
+      "family": 2,
+      "boardIds": [],
+      "board": "WILD-X V2 / NP2",
+      "release": "V2_POWER_PROFILES_DEV_20261016",
+      "sourceCommit": "e7b0d08cc3d24dc0776532d2a599462528301df7",
+      "stage": "Published development release",
+      "appVersion": "build 136172A5",
+      "usbVersion": "build 2E07799E",
+      "recoveryVersion": "build 6408DBB8",
+      "appCrc32": "136172A5",
+      "usbCrc32": "2E07799E",
+      "recoveryCrc32": "6408DBB8",
+      "app": {
+        "path": "V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
+        "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
+      },
+      "files": [
+        {
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex",
+          "sha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B"
+        },
+        {
+          "path": "V2/V2_logger_APP_only_136172A5_POWER_PROFILES_DEV_20261016.hex",
+          "sha256": "DDF218944CED454426A030F2B7EE3677152A10DA400797891B40AEDAD4EEBA2A"
+        },
+        {
+          "path": "V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
+          "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
+        },
+        {
+          "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
+          "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+        },
+        {
+          "path": "V2/V2_USB_only_2E07799E_AUTO_USB_20261013.hex",
+          "sha256": "D9F20946E67FA765AC691B127D64A053F78C79F49BFA584AC39B1C8931448782"
+        }
+      ],
+      "limits": "Not an all-mode lossless release. Exact APP short captures passed dual15/dual20/triple15; dual30 fails and triple20 is unresolved. The published fused USB/APP pair has not been newly cold-boot or endurance qualified. Only the APP .xenp uses the protected updater; other HEX images require a separate recovery/service workflow.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "baseAddress": 134348800,
+        "bytes": 172400,
+        "codeCrc32": "136172A5",
+        "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
+        "manifestFlags": 1,
+        "minimumLoaderAbi": 4,
+        "generation": 0
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "baseAddress": 135790592,
+        "bytes": 159296,
+        "codeCrc32": "2E07799E",
+        "buildIdHex": "6563333565636665343430343235373164376566303065616437393465323738",
+        "manifestFlags": 1,
+        "minimumLoaderAbi": 4,
+        "generation": 0
+      },
+      "previousApps": [],
+      "previousUsb": []
+    }
+  ]
+}

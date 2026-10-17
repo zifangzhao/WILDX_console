@@ -150,6 +150,8 @@ internal static class NpV2UsbConsoleTests
         Reject(delegate { new NpV2WireVerifier().Feed(badD8Tail, 0); }, "raw-D8 lookahead corruption accepted");
         var rate30 = new NpV2WireVerifier(); rate30.Feed(MakeV3Block(0, 0, 2, 2, 30000U), 0);
         Check(rate30.SampleHz == 30000U && rate30.MclkHz == 48000000U && rate30.Blocks == 1, "NP2USB03 30 kHz clock profile");
+        var rate7p5 = new NpV2WireVerifier(); rate7p5.Feed(MakeV3Block(0, 0, 2, 2, 7500U), 0);
+        Check(rate7p5.SampleHz == 7500U && rate7p5.MclkHz == 12000000U && rate7p5.Blocks == 1, "NP2USB03 7.5 kHz clock profile");
         var packed = new NpV2WireVerifier(); packed.Feed(MakeV3Block(0, 0, 3, 3, 30000U, true), 0);
         packed.Feed(MakeV3Block(1, 61440, 3, 3, 30000U, true), 0);
         Check(packed.StoredBits == 6 && packed.Codec == 4U && packed.TicksPerBlock == 61440 && packed.Blocks == 2, "packed-dual wire profile");

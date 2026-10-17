@@ -57,6 +57,14 @@ static class Np2MergeRecoveryTests {
  }
  static bool Retry(Exception e){return (bool)CallTyped(formType,null,"NpV2Retryable",new[]{typeof(Exception)},e);}
  static bool Retry(object r){return (bool)CallTyped(formType,null,"NpV2Retryable",new[]{r.GetType()},r);}
+ static string Explained(string cause){
+  Type diagnostics=gui.GetType("USB512_interface.NpV2RecordingDiagnostics",true),capture=gui.GetType("USB512_interface.NpV2CaptureStatus",true),source=gui.GetType("USB512_interface.NpV2SourceStatus",true);
+  object c=New("NpV2CaptureStatus"),s=New("NpV2SourceStatus");uint[] cw=new uint[32],sw=new uint[32];
+  cw[0]=0x3155324EU;cw[1]=1U;cw[2]=3U;cw[21]=3U;cw[24]=7U;cw[26]=20000U;
+  sw[0]=0x3153324EU;sw[1]=1U;sw[2]=11U;
+  Set(c,"Words",cw);Set(s,"Words",sw);
+  return (string)CallTyped(diagnostics,null,"Explain",new[]{typeof(string),capture,source,typeof(Exception),typeof(string)},"Bulk capture / USB receive",c,s,null,cause);
+ }
  static object Overrun(){
   object r=New("NpV2RecordingResult"),capture=New("NpV2CaptureStatus"),source=New("NpV2SourceStatus");
   var cw=new uint[32];cw[0]=827667022U;cw[1]=1;cw[2]=255;cw[3]=4;cw[12]=6;
@@ -102,6 +110,15 @@ static class Np2MergeRecoveryTests {
   var describe=gui.GetType("USB512_interface.NpV2Recording",true).GetMethod("DescribeError",All);
   string text=(string)describe.Invoke(null,new object[]{new Win32Exception(1167,"V2 queue bulk read failed")});
   Check((bool)CallTyped(formType,null,"NpV2TransportRetryable",new[]{typeof(string)},text),"Actual exception formatter loses native code");
+  foreach(int code in new[]{2,6,31,121,1167}){
+   string wrapped=Explained("IOException: V2 bulk completion failed (Win32 "+code+"; received=4) -> Win32Exception: V2 finish bulk read failed (Win32 error "+code+")");
+   Check((bool)CallTyped(formType,null,"NpV2TransportRetryable",new[]{typeof(string)},wrapped),"Actual diagnostics wrapper rejects known WinUSB read code");
+   object r=New("NpV2RecordingResult");Set(r,"Error",wrapped);Set(r,"VerifiedBlocks",4L);Set(r,"ReceivedBlocks",4U);Check(Retry(r),"Wrapped clean transport prefix rejected");
+  }
+  foreach(string cause in new[]{"IOException: Disk write failed (Win32 31; received=4)","IOException: V2 control OUT 0x7A failed (Win32 31; received=4)"}){
+   string wrapped=Explained(cause);Check(!(bool)CallTyped(formType,null,"NpV2TransportRetryable",new[]{typeof(string)},wrapped),"Diagnostics wrapper admitted non-read error");
+   object r=New("NpV2RecordingResult");Set(r,"Error",wrapped);Set(r,"VerifiedBlocks",4L);Set(r,"ReceivedBlocks",4U);Check(!Retry(r),"Wrapped non-read prefix restarted");
+  }
  }
  static object RecoveryForm(string root){
   // Allocate without the main constructor/Load; inject only policy state and

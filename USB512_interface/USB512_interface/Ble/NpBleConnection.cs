@@ -136,7 +136,7 @@ namespace USB512_interface
             BluetoothAddressType? warmType=lastObservedAddress==address && lastObservedType!=BluetoothAddressType.Unspecified
                 ? (BluetoothAddressType?)lastObservedType : null;
             BluetoothLEDevice device=null;
-            if(allowWarm && warmType.HasValue){
+            if(allowWarm){
                 device=await TryWarmAddress(address,warmType,cancel,stage);
                 if(device!=null){lastResolvedWarm=true;return device;}
             }
@@ -337,6 +337,8 @@ namespace USB512_interface
         }
         internal static bool Matches(byte command, byte[] request, byte receivedCommand, byte[] response)
         {
+            if(command==NpFirmwareIdentity.BleCommand)return request!=null && request.Length==0 && receivedCommand==command && response!=null &&
+                response.Length==NpFirmwareIdentity.WireBytes && BitConverter.ToUInt32(response,188)==NpSdControl.Crc(response,188);
             if (response==null || response.Length!=64 || BitConverter.ToUInt32(response,60)!=NpSdControl.Crc(response,60))return false;
             if(command==0x82){
                 if(!DiscoveryRequest(request) || receivedCommand!=0xb9)return false;
@@ -395,6 +397,9 @@ namespace USB512_interface
             if(command==0x82){
                 if(!DiscoveryRequest(request))throw new ArgumentException("Read-only discovery request required.");
                 frame=new byte[]{0x3c,0x82,0x81,0,0,0x3e};
+            }else if(command==NpFirmwareIdentity.BleCommand){
+                if(request==null || request.Length!=0)throw new ArgumentException("Firmware identity is a read-only short request.");
+                frame=new byte[]{0x3c,command,0x3e};
             }else frame=NpBleWire.Frame(command, request);
             await transaction.WaitAsync(cancel);
             TaskCompletionSource<byte[]> waiting = null;
@@ -420,6 +425,7 @@ namespace USB512_interface
                     ReadOnlyClockObservation(observationJournal,command,request,response,clockStart,clockEnd);
                 return response;
             }
+            catch {if(command==NpFirmwareIdentity.BleCommand)Disconnect();throw;}
             finally {
                 lock (receiveLock) { if (receipt == waiting) { receipt = null; matches = null; } }
                 transaction.Release();
@@ -459,7 +465,7 @@ namespace USB512_interface
         }
         internal async Task<bool> TryWritePreview(byte[] request,int expectedEpoch,CancellationToken cancel)
         {
-            if(request==null || request.Length!=64 || BitConverter.ToUInt32(request,0)!=NpV2PreviewBurst.Magic ||
+            if(request==null || request.Length!=64 || (BitConverter.ToUInt32(request,0)!=NpV2PreviewBurst.Magic && BitConverter.ToUInt32(request,0)!=NpV1PreviewBurst.Magic) ||
                 BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)>4 || BitConverter.ToUInt32(request,12)==0 ||
                 BitConverter.ToUInt32(request,60)!=NpSdControl.Crc(request,60))throw new ArgumentException("Valid preview request required.");
             if(!await transaction.WaitAsync(0,cancel))return false; // Recording/status/clock controls take priority.

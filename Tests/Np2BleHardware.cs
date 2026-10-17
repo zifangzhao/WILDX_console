@@ -19,13 +19,13 @@ using Windows.Foundation;
  * status/reconnect/observed-status: discovery + STATUS + NPC2 CAPS only (read-only).
  * latency also measures eight clock-op0 reads; no clock commit or synchronization claim.
  * sync: stopped-only production GUI Initialize (16 reads, one commit), then one Observe heartbeat.
- * record: sets a dual-20k/30k profile, stages two supplied maps,
- * record3: explicitly selects triple-15k/20k and stages three supplied maps.
+ * record1/record/record3: select P1, P1+P2, or P1+P2+P3 and stage exactly
+ * the supplied prefix maps at a requested 7.5/15/20/30k profile.
  * Disposable preview remains P1 only; this does not qualify P3 preview.
  * starts a caller-bounded reservation, normally stops about ten seconds after Recording,
  * or waits for exact automatic Complete with the explicit full-duration option.
  *
- * format: explicit, UID-guarded initialization of a detected but unmounted SD.
+ * format: explicit, UID-guarded initialization of a stopped detected SD.
  * rescue: explicit reset of this stopped MCU, followed by reconnect/status.
  * recover: explicit, UID-guarded preservation of an interrupted allocation.
  * Never switches mode, downloads data, or replays a mutating command.
@@ -47,6 +47,10 @@ internal static class Np2BleHardware
     static uint sequence;
     static bool sequenceSeeded;
     static string assemblyDirectory;
+    // Diagnostic-only fixed wall/monotonic correspondence for clock exchanges.
+    // It is never supplied to the production clock model.
+    static DateTime clockWallAnchor;
+    static long clockStopwatchAnchor;
 
     [MTAThread] // Headless WinRT callbacks must not wait for an absent UI message pump.
     static int Main(string[] args)
@@ -58,12 +62,12 @@ internal static class Np2BleHardware
     static async Task<int> Run(string[] args)
     {
         if (args == null || args.Length < 4)
-            throw new ArgumentException("<WILDX_console.exe> <BLE-12hex> <output-dir> <status|observed-status|latency|sync|reconnect [0..30 seconds]|format|recover|rescue|record|record3> [P1 P2 (P3 for record3) [20000|30000 for record; 15000|20000 for record3] [1..900 seconds; >60 requires full-duration] [no-preview] [full-duration] [record-reconnect]]");
+            throw new ArgumentException("<WILDX_console.exe> <BLE-12hex> <output-dir> <status|observed-status|latency|sync|reconnect [0..30 seconds]|format|recover|rescue|record1|record|record3> [P1 [P2 [P3]] [7500|15000|20000|30000] [1..900 seconds; >60 requires full-duration] [no-preview] [full-duration] [record-reconnect]]");
         string action = args[3].ToLowerInvariant();
-        if (action != "status" && action != "observed-status" && action != "latency" && action != "sync" && action != "reconnect" && action != "record" && action != "record3" && action != "format" && action != "recover" && action != "rescue") throw new ArgumentException("Action must be status, observed-status, latency, sync, reconnect, record, record3, format, recover or rescue.");
+        if (action != "status" && action != "observed-status" && action != "latency" && action != "sync" && action != "reconnect" && action != "record1" && action != "record" && action != "record3" && action != "format" && action != "recover" && action != "rescue") throw new ArgumentException("Action must be status, observed-status, latency, sync, reconnect, record1, record, record3, format, recover or rescue.");
         uint recordHz = DefaultRecordHz, reservationSeconds = DefaultReservationSeconds, reconnectDelay = 0;
-        uint recordMask=action=="record3"?7U:RequiredMask;
-        bool isRecord=action=="record" || action=="record3";
+        uint recordMask=action=="record1"?1U:action=="record3"?7U:RequiredMask;
+        bool isRecord=action=="record1" || action=="record" || action=="record3";
         bool requestPreview = true, fullDuration = false, recordReconnect = false;
         string[] maps;
         if (isRecord)
@@ -105,9 +109,11 @@ internal static class Np2BleHardware
         Directory.CreateDirectory(output);
 
         using (var writer = new StreamWriter(Path.Combine(output, "events.log"), false))
-        using (var budget = new CancellationTokenSource(TimeSpan.FromSeconds(RecordBudgetSeconds(recordReconnect,reservationSeconds))))
+        using (var budget = new CancellationTokenSource(TimeSpan.FromSeconds(isRecord?RecordBudgetSeconds(recordReconnect,reservationSeconds):OverallSeconds)))
         {
             log = TextWriter.Synchronized(writer);
+            clockWallAnchor = DateTime.UtcNow;
+            clockStopwatchAnchor = Stopwatch.GetTimestamp();
             Log("runner=NP2 BLE HIL; action=" + action + "; output=" + output);
             Log("assembly=" + exe + "; sha256=" + Hash(exe) + "; peer=" + addressText.ToUpperInvariant());
             assemblyDirectory = Path.GetDirectoryName(exe);
@@ -151,7 +157,8 @@ internal static class Np2BleHardware
     static int RecordMapCount(string[] args)
     {
         if(args==null || args.Length<4)throw new ArgumentException("Invalid record arguments.");
-        int count=String.Equals(args[3],"record",StringComparison.OrdinalIgnoreCase)?2:
+        int count=String.Equals(args[3],"record1",StringComparison.OrdinalIgnoreCase)?1:
+            String.Equals(args[3],"record",StringComparison.OrdinalIgnoreCase)?2:
             String.Equals(args[3],"record3",StringComparison.OrdinalIgnoreCase)?3:0;
         if(count==0 || args.Length<4+count || args.Length>9+count)throw new ArgumentException("Record requires exactly the selected P1/P2[/P3] inputs, optional rate/duration and unique final flags.");
         return count;
@@ -172,14 +179,14 @@ internal static class Np2BleHardware
 
     static bool RecordProfile(uint mask,uint hz)
     {
-        return (mask==3U && (hz==20000U || hz==30000U)) || (mask==7U && (hz==15000U || hz==20000U));
+        return (mask==1U || mask==3U || mask==7U) && (hz==7500U || hz==15000U || hz==20000U || hz==30000U);
     }
 
     static void RequireRecordDuration(uint recordHz,uint reservationSeconds,bool fullDuration,uint mask=RequiredMask)
     {
         if(!RecordProfile(mask,recordHz) || reservationSeconds<1U || reservationSeconds>900U ||
             (!fullDuration && reservationSeconds>DefaultReservationSeconds))
-            throw new ArgumentException("Closed record pairs are mask3 at20/30k or mask7 at15/20k; bounded duration is1..900 seconds and >60 requires full-duration.");
+            throw new ArgumentException("Supported prefix profiles are masks1/3/7 at7.5/15/20/30k; firmware acknowledgement remains authoritative. Bounded duration is1..900 seconds and >60 requires full-duration.");
     }
 
     static byte[] RecordRequest(Type control,uint operation,uint id,uint hz,uint blocks,uint mask)
@@ -198,7 +205,7 @@ internal static class Np2BleHardware
     {
         if(!RecordProfile(mask,hz))throw new ArgumentException("Unsupported record pair.");
         // Pure request construction before Connect: a legacy five-argument-only
-        // assembly must refuse record3, not quietly send a mask3 START.
+        // assembly must refuse non-dual prefixes, not quietly send a mask3 START.
         RecordRequest(control,1U,2U,hz,0U,mask);
         RecordRequest(control,2U,2U,hz,4U,mask);
     }
@@ -216,7 +223,7 @@ internal static class Np2BleHardware
 
     static int RecordBudgetSeconds(bool recordReconnect,uint reservationSeconds)
     {
-        return reservationSeconds>120U?2400:reservationSeconds>DefaultReservationSeconds?420:recordReconnect?240:OverallSeconds;
+        return reservationSeconds>120U?2400:reservationSeconds>=DefaultReservationSeconds?420:recordReconnect?240:OverallSeconds;
     }
 
     static bool RecordAutonomous(bool recordReconnect,bool fullDuration,uint reservationSeconds)
@@ -429,11 +436,15 @@ internal static class Np2BleHardware
             LogStatus("initial", lastStatus);
 
             object client = NewConfigClient(connection);
+            uint initialMask=U(Get(lastStatus,"Mask"));
             object caps0 = await Await(Invoke(client, "CapsAsync", (byte)0, cancel));
-            object caps1 = await Await(Invoke(client, "CapsAsync", (byte)1, cancel));
-            RequireCaps(caps0, 0); RequireCaps(caps1, 1);
-            LogCaps(0, caps0); LogCaps(1, caps1);
-            if(action=="record3" || U(Get(lastStatus,"Mask"))==7U){
+            RequireCaps(caps0, 0); LogCaps(0, caps0);
+            object caps1=null;
+            if((initialMask&2U)!=0){
+                caps1=await Await(Invoke(client,"CapsAsync",(byte)1,cancel));
+                RequireCaps(caps1,1);LogCaps(1,caps1);
+            }
+            if((initialMask&4U)!=0){
                 object caps2=await Await(Invoke(client,"CapsAsync",(byte)2,cancel));
                 RequireCaps(caps2,2);LogCaps(2,caps2);
             }
@@ -478,10 +489,14 @@ internal static class Np2BleHardware
                 LogConnectDiagnostic(connection,"reconnect");
                 lastStatus=await ReadDeviceWithRecovery(connection,cancel,"after-reconnect");
                 LogStatus("after-reconnect",lastStatus);
+                initialMask=U(Get(lastStatus,"Mask"));
                 caps0=await Await(Invoke(client,"CapsAsync",(byte)0,cancel));
-                caps1=await Await(Invoke(client,"CapsAsync",(byte)1,cancel));
-                RequireCaps(caps0,0);RequireCaps(caps1,1);LogCaps(0,caps0);LogCaps(1,caps1);
-                if(U(Get(lastStatus,"Mask"))==7U){
+                RequireCaps(caps0,0);LogCaps(0,caps0);
+                if((initialMask&2U)!=0){
+                    caps1=await Await(Invoke(client,"CapsAsync",(byte)1,cancel));
+                    RequireCaps(caps1,1);LogCaps(1,caps1);
+                }
+                if((initialMask&4U)!=0){
                     object caps2=await Await(Invoke(client,"CapsAsync",(byte)2,cancel));
                     RequireCaps(caps2,2);LogCaps(2,caps2);
                 }
@@ -535,9 +550,10 @@ internal static class Np2BleHardware
             if (action == "format")
             {
                 RequireHealthy(lastStatus);
-                if (U(Get(lastStatus,"State"))!=0 || U(Get(lastStatus,"Capacity"))==0 || (bool)Get(lastStatus,"Busy"))
-                    throw new IOException("Explicit formatting requires the identified, stopped, detected but unmounted card.");
-                uint id=NextId();
+                if (!(bool)InvokeStatic(T("CE32_console.NpV2SdControl"),"CanPrepareStorage",lastStatus) ||
+                    U(Get(lastStatus,"Capacity"))<=8192 || (U(Get(lastStatus,"Flags"))&1)==0)
+                    throw new IOException("Explicit formatting requires the identified, stopped, writable detected card.");
+                uint capacity=U(Get(lastStatus,"Capacity")),id=NextId();
                 byte[] request=(byte[])InvokeStatic(T("CE32_console.NpV2SdControl"),"StorageRequest",id,true);
                 byte[] reply=(byte[])await Await(Invoke(connection,"ExchangeAsync",(byte)0xb9,request,cancel));
                 Log("format.request="+Hex(request));Log("format.reply="+Hex(reply));
@@ -545,7 +561,8 @@ internal static class Np2BleHardware
                 for(int i=0;i<30;i++){
                     await Task.Delay(500,cancel);lastStatus=await ReadStatusWithRecovery(connection,cancel,"format-status");
                     LogStatus("format-poll",lastStatus);RequireHealthy(lastStatus);
-                    if(U(Get(lastStatus,"State"))==1 && !(bool)Get(lastStatus,"Busy")){Log("format=complete; card catalog initialized");return;}
+                    if(U(Get(lastStatus,"Capacity"))!=capacity)throw new IOException("Card capacity changed during format; no command replayed.");
+                    if(U(Get(lastStatus,"State"))==1 && !(bool)Get(lastStatus,"Busy") && U(Get(lastStatus,"LastId"))==id){Log("format=complete; card catalog initialized");return;}
                 }
                 throw new TimeoutException("Format not confirmed complete; do not replay it.");
             }
@@ -574,11 +591,14 @@ internal static class Np2BleHardware
             RequireRecordProfile(lastStatus,recordMask,recordHz);
 
             object p1 = PrepareRequest(mapInputs[0], 1, output);
-            object p2 = PrepareRequest(mapInputs[1], 2, output);
+            object p2 = (recordMask&2U)!=0?PrepareRequest(mapInputs[1], 2, output):null;
             object p3 = recordMask==7U?PrepareRequest(mapInputs[2],3,output):null;
             object staged1 = await Await(Invoke(client, "StageAsync", p1, cancel));
-            object staged2 = await Await(Invoke(client, "StageAsync", p2, cancel));
-            LogReceipt("staged-P1", staged1); LogReceipt("staged-P2", staged2);
+            LogReceipt("staged-P1", staged1);
+            if(p2!=null){
+                object staged2=await Await(Invoke(client,"StageAsync",p2,cancel));
+                LogReceipt("staged-P2",staged2);
+            }
             if(p3!=null){
                 object staged3=await Await(Invoke(client,"StageAsync",p3,cancel));
                 LogReceipt("staged-P3",staged3);
@@ -634,10 +654,13 @@ internal static class Np2BleHardware
                 if (state == 3 && !applied)
                 {
                     object applied1 = await Await(Invoke(client, "StatusAsync", (byte)0, cancel));
-                    object applied2 = await Await(Invoke(client, "StatusAsync", (byte)1, cancel));
                     InvokeStatic(T("USB512_interface.Np2ConfigClient"), "RequireApplied", applied1, p1);
-                    InvokeStatic(T("USB512_interface.Np2ConfigClient"), "RequireApplied", applied2, p2);
-                    LogReceipt("applied-P1", applied1); LogReceipt("applied-P2", applied2);
+                    LogReceipt("applied-P1", applied1);
+                    if(p2!=null){
+                        object applied2=await Await(Invoke(client,"StatusAsync",(byte)1,cancel));
+                        InvokeStatic(T("USB512_interface.Np2ConfigClient"),"RequireApplied",applied2,p2);
+                        LogReceipt("applied-P2",applied2);
+                    }
                     if(p3!=null){
                         object applied3=await Await(Invoke(client,"StatusAsync",(byte)2,cancel));
                         InvokeStatic(T("USB512_interface.Np2ConfigClient"),"RequireApplied",applied3,p3);
@@ -710,7 +733,7 @@ internal static class Np2BleHardware
     {
         RequireRecordConnection(connection,oldEpoch);
         uint[] snapshot=RecordReconnectSnapshot(before);
-        if((snapshot[0]==7U)!=(p3!=null))throw new IOException("Reconnect requires the retained requests for every selected port.");
+        if((snapshot[0]&1U)==0 || ((snapshot[0]&2U)!=0)!=(p2!=null) || ((snapshot[0]&4U)!=0)!=(p3!=null))throw new IOException("Reconnect requires the retained requests for every selected port.");
         Log("record-reconnect.begin; "+RecordReconnectSnapshotText(snapshot,oldEpoch)+"; one local disconnect, 2s wait, same-instance/exact-address connect; no recorder mutation.");
         var elapsed=Stopwatch.StartNew();
         bool validated=false;
@@ -724,17 +747,23 @@ internal static class Np2BleHardware
         object after=await SendV2(connection,0,0,0,cancel,"record-reconnect-status"); // First operation after connection.
         RequireRecordReconnectIdentity(snapshot,after,oldEpoch,newEpoch,(bool)Get(connection,"Connected"));
         object caps0=await Await(Invoke(client,"CapsAsync",(byte)0,cancel));
-        object caps1=await Await(Invoke(client,"CapsAsync",(byte)1,cancel));
-        RequireCaps(caps0,0);RequireCaps(caps1,1);LogCaps(0,caps0);LogCaps(1,caps1);
+        RequireCaps(caps0,0);LogCaps(0,caps0);
+        if(p2!=null){
+            object caps1=await Await(Invoke(client,"CapsAsync",(byte)1,cancel));
+            RequireCaps(caps1,1);LogCaps(1,caps1);
+        }
         if(p3!=null){
             object caps2=await Await(Invoke(client,"CapsAsync",(byte)2,cancel));
             RequireCaps(caps2,2);LogCaps(2,caps2);
         }
         object applied1=await Await(Invoke(client,"StatusAsync",(byte)0,cancel));
-        object applied2=await Await(Invoke(client,"StatusAsync",(byte)1,cancel));
         InvokeStatic(T("USB512_interface.Np2ConfigClient"),"RequireApplied",applied1,p1);
-        InvokeStatic(T("USB512_interface.Np2ConfigClient"),"RequireApplied",applied2,p2);
-        LogReceipt("record-reconnect-applied-P1",applied1);LogReceipt("record-reconnect-applied-P2",applied2);
+        LogReceipt("record-reconnect-applied-P1",applied1);
+        if(p2!=null){
+            object applied2=await Await(Invoke(client,"StatusAsync",(byte)1,cancel));
+            InvokeStatic(T("USB512_interface.Np2ConfigClient"),"RequireApplied",applied2,p2);
+            LogReceipt("record-reconnect-applied-P2",applied2);
+        }
         if(p3!=null){
             object applied3=await Await(Invoke(client,"StatusAsync",(byte)2,cancel));
             InvokeStatic(T("USB512_interface.Np2ConfigClient"),"RequireApplied",applied3,p3);
@@ -766,6 +795,7 @@ internal static class Np2BleHardware
         Type engine=T("CE32_console.NpV2OnlineClock");
         uint magic=U(engine.GetField("RequestMagic",All).GetValue(null));
         int reads=0,commits=0;
+        string clockPhase="sync-clock-initialize";
         Func<byte[],Task<byte[]>> exchange=async request=>{
             current();
             if(request==null || request.Length!=64 || BitConverter.ToUInt32(request,0)!=magic)
@@ -774,10 +804,19 @@ internal static class Np2BleHardware
             if(op==0)reads++;
             else if(op==1 && commits==0 && reads==16)commits++;
             else throw new IOException("Unexpected clock operation/count; no mutation replay allowed.");
+            LogClockBasis(clockPhase,"before");
             var elapsed=Stopwatch.StartNew();
             byte[] reply;
             try{reply=(byte[])await Await(Invoke(connection,"ExchangeAsync",(byte)0xb9,request,cancel));}
-            catch(TimeoutException error){throw new IOException("Sync receipt timed out; no retry or commit replay allowed.",error);}
+            catch(TimeoutException error){
+                LogClockBasis(clockPhase,"after");
+                throw new IOException("Sync receipt timed out; no retry or commit replay allowed.",error);
+            }
+            catch{
+                LogClockBasis(clockPhase,"after");
+                throw;
+            }
+            LogClockBasis(clockPhase,"after");
             current();
             object receipt=InvokeStatic(engine,"Parse",reply,op,id);
             if(U(Get(receipt,"State"))!=1U)throw new IOException("Recorder left Idle during synchronization.");
@@ -795,6 +834,7 @@ internal static class Np2BleHardware
         uint generation=U(Get(clock,"Generation"));
         Log("sync.initialize; elapsed_ms="+initialized.ElapsedMilliseconds+"; read_op0="+reads+"; commit_op1="+commits+
             "; generation="+generation+"; bound_ms="+Get(clock,"BoundMilliseconds")+"; offset_ms="+Get(clock,"OffsetMilliseconds"));
+        clockPhase="sync-clock-observe";
         await Await(Invoke(clock,"Observe",exchange,(Func<uint>)NextId));
         current();
         if(reads!=17 || commits!=1 || !(bool)Get(clock,"Synchronized") || U(Get(clock,"Generation"))!=generation)
@@ -857,6 +897,8 @@ internal static class Np2BleHardware
 
     static async Task<byte[]> ExchangeTimed(object connection,byte[] request,CancellationToken cancel,string label)
     {
+        bool clockDiagnostic = label == "record-clock-initialize" || label == "record-heartbeat";
+        if(clockDiagnostic) LogClockBasis(label, "before");
         // Start before reflection: ExchangeAsync may dispatch synchronously
         // before returning its already-running Task.
         var elapsed=Stopwatch.StartNew();
@@ -864,16 +906,29 @@ internal static class Np2BleHardware
         try {reply=(byte[])await Await(Invoke(connection,"ExchangeAsync",(byte)0xb9,request,cancel));}
         catch(Exception error){
             elapsed.Stop();
+            if(clockDiagnostic) LogClockBasis(label, "after");
             Log(label+".elapsed_us="+(long)(elapsed.ElapsedTicks*1000000.0/Stopwatch.Frequency)+
                 "; outcome=failed; type="+error.GetType().Name);
             Log(label+".request="+Hex(request));
             throw;
         }
         elapsed.Stop();
+        if(clockDiagnostic) LogClockBasis(label, "after");
         Log(label+".elapsed_us="+(long)(elapsed.ElapsedTicks*1000000.0/Stopwatch.Frequency)+"; outcome=reply");
         Log(label+".request="+Hex(request));
         Log(label+".reply="+Hex(reply));
         return reply;
+    }
+
+    static void LogClockBasis(string label,string edge)
+    {
+        DateTime wall = DateTime.UtcNow;
+        long elapsed = Stopwatch.GetTimestamp() - clockStopwatchAnchor;
+        DateTime monotonic = clockWallAnchor.AddTicks((long)(elapsed * (double)TimeSpan.TicksPerSecond / Stopwatch.Frequency));
+        double deltaMilliseconds = (wall - monotonic).TotalMilliseconds;
+        Log(label+".clock_"+edge+"; wall_utc="+wall.ToString("O",CultureInfo.InvariantCulture)+
+            "; monotonic_utc="+monotonic.ToString("O",CultureInfo.InvariantCulture)+
+            "; wall_minus_monotonic_ms="+deltaMilliseconds.ToString("F3",CultureInfo.InvariantCulture));
     }
 
     static async Task<object> SendV2(object connection, uint operation, uint hz, uint blocks, CancellationToken cancel, string label,uint mask=RequiredMask)
@@ -919,7 +974,7 @@ internal static class Np2BleHardware
     static void RequireCaps(object caps, int port)
     {
         uint available=U(Get(caps,"AvailableMask"));
-        if ((available!=3U && available!=7U) || U(Get(caps, "SupportedModel")) != 4U ||
+        if ((available==0U || (available&~7U)!=0) || U(Get(caps, "SupportedModel")) != 4U ||
             U(Get(caps, "Uid0")) != 0x001A0004U || U(Get(caps, "Uid1")) != 0x43425006U || U(Get(caps, "Uid2")) != 0x2039314EU)
             throw new IOException("NPC2 CAPS does not identify the exact authorized MCU/closed NP2013 capability; no mutation was sent.");
         if ((U(Get(caps, "AvailableMask")) & (1U << port)) == 0) throw new IOException("NPC2 CAPS omitted required port " + port + ".");

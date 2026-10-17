@@ -24,22 +24,26 @@ namespace USB512_interface
         readonly TextBox log = new TextBox { Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Dock = DockStyle.Fill };
         readonly FlowLayoutPanel actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top };
         string selectedUid;
+        NpFirmwareIdentity firmwareIdentity;
         bool working;
         internal NpV2FirmwareForm(string selectedPath)
         {
-            selectedUid = Uid(selectedPath); Text = "WILD-X — Firmware and USB Modes"; Icon = NpPreviewTheme.ApplicationIcon;
+            selectedUid = Uid(selectedPath); Text = "NP V2 — Firmware Update"; Icon = NpPreviewTheme.ApplicationIcon;
             ClientSize = new Size(900, 460); StartPosition = FormStartPosition.CenterParent;
             Add("Refresh", () => { Discover(); return Task.CompletedTask; });
-            Add("Read status", async () => { var target = Selected(); await Helper(target, target.Boot ? "--boot-info" : "--mode-info"); });
-            Add("Diagnostics & self-test…", () => { var target=Selected();if(target.Boot)throw new IOException("Select the USB streaming service for self-test.");using(var form=new NpDiagnosticsForm(target.Path,true))form.ShowDialog(this);return Task.CompletedTask; });
+            Add("Read status", async () => { var target = Selected(); await Helper(target, target.Boot ? "--boot-info" : "--mode-info");
+                firmwareIdentity=null;if(!target.Boot)try{firmwareIdentity=await Task.Run(()=>NpFirmwareIdentity.ReadUsb(target.Path,2));}catch(Exception ex){log.AppendText("Firmware identity unavailable: "+ex.Message+Environment.NewLine);}
+                status.Text+=FirmwareVersions(); });
             Add("Update NP2 APP…", UpdateApp);
-            Add("USB streaming", () => Mode("--stream")); Add("USB download", () => Mode("--download"));
-            Add("SD / BLE", () => Mode("--sd")); Add("Recovery loader", () => Mode("--recovery"));
+            Add("Use bundled APP…", async () => {Selected();string path=NpFirmwareNotice.AppPath(this,2);if(path!=null)await UpdateApp(path);});
+            Add("Bundled firmware files…", () => {NpFirmwareNotice.OpenFiles();return Task.CompletedTask;});
+            Add("Recovery loader", () => Mode("--recovery"));
+            Add("Exit recovery…", () => {if(!Selected().Boot)throw new IOException("Select the recovery loader to exit. Normal USB modes are in Advanced.");return Mode("--stream");});
             Add("ROM DFU…", () => Mode("--dfu"));
             Add("NP1 firmware manager…", () => { using (var form = new NpFirmwareForm(null)) form.ShowDialog(this); return Task.CompletedTask; });
-            var notice = new Panel { Dock = DockStyle.Top, Height = 50, Padding = new Padding(8) }; notice.Controls.Add(status);
+            var notice = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize=true,FlowDirection=FlowDirection.TopDown,WrapContents=false,Padding = new Padding(8) };status.MaximumSize=new Size(850,0);notice.Controls.Add(status);
             Controls.Add(log); Controls.Add(notice); Controls.Add(actions); Controls.Add(devices);
-            devices.SelectedIndexChanged += delegate { var target = devices.SelectedItem as Target; if (target != null) selectedUid = target.Uid; };
+            devices.SelectedIndexChanged += delegate { var target = devices.SelectedItem as Target; if (target != null) selectedUid = target.Uid;firmwareIdentity=null; };
             FormClosing += delegate(object sender, FormClosingEventArgs e) { if (working) e.Cancel = true; };
             Shown += delegate { Discover(); };
             WildXTheme.Apply(this);status.ForeColor=WildXTheme.Muted;
@@ -66,7 +70,9 @@ namespace USB512_interface
             if (selectedUid == null && devices.Items.Count == 1) devices.SelectedIndex = 0;
             status.Text = devices.Items.Count == 0 ? "No NP2 USB service/loader found. Use Advanced → BLE firmware / recovery → Firmware loader, then Refresh. NP1 uses the separate manager." :
                 devices.SelectedIndex < 0 ? "Select the exact NP2 MCU UID; the previous target was not substituted." : "Read status or select a mode. APP updates require a V2 .xenp package.";
+            status.Text+=FirmwareVersions();
         }
+        string FirmwareVersions(){return "\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed(2,firmwareIdentity)+"\r\nBundled: "+(NpFirmwareCatalog.Bundled.For(2)?.Versions??"Unavailable");}
         Target Selected() { var target = devices.SelectedItem as Target; if (target == null) throw new IOException("Select the exact NP2 MCU UID."); return target; }
         void Add(string title, Func<Task> action)
         {
@@ -89,36 +95,53 @@ namespace USB512_interface
                 "ROM DFU request acknowledged for UID " + target.Uid + ". Confirm STM32 BOOTLOADER in STM32CubeProgrammer; USB disconnect alone is not confirmation. No firmware was written." :
                 "Mode request acknowledged for UID " + target.Uid + ". Refresh after USB re-enumeration.";
         }
-        async Task UpdateApp()
+        Task UpdateApp() { return UpdateApp(null); }
+        async Task UpdateApp(string bundledPath)
         {
-            var target = Selected(); string file;
-            using (var dialog = new OpenFileDialog { Filter = "V2 APP package (*.xenp)|*.xenp", Title = "Select a V2 application package" }) { if (dialog.ShowDialog(this) != DialogResult.OK) return; file = dialog.FileName; }
+            var target = Selected(); string file=bundledPath;
+            if(file==null)using (var dialog = new OpenFileDialog { Filter = "V2 APP package (*.xenp)|*.xenp", Title = "Select a V2 application package" }) { if (dialog.ShowDialog(this) != DialogResult.OK) return; file = dialog.FileName; }
             if (MessageBox.Show(this, "Update NP2 APP on MCU UID " + target.Uid + "?\r\n\r\n" + file + "\r\n\r\nKeep USB and power connected until the loader confirms the CRC commit.", "Update selected NP2", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
             await Helper(target, file); status.Text = "APP CRC commit acknowledged and boot requested for UID " + target.Uid + ". Reconnect to confirm firmware operation.";
         }
         async Task Helper(Target target, string operation)
         {
+            status.Text = "Working on UID " + target.Uid + "...";
+            status.Text=await RunHelper(target.Uid,operation,line=>{
+                if (!IsDisposed && IsHandleCreated) try { BeginInvoke((Action)(() => log.AppendText(line + Environment.NewLine))); } catch (InvalidOperationException) { }
+            });
+        }
+        internal static string UsbModeOperation(ushort mode)
+        {
+            switch(mode){case 1:return "--sd";case 2:return "--stream";case 3:return "--download";default:throw new ArgumentOutOfRangeException("mode");}
+        }
+        internal static Task<string> SwitchUsbMode(string selectedPath,ushort mode)
+        {
+            string uid=Uid(selectedPath);
+            if(uid==null || NpV1Management.UidFromPath(selectedPath)!=null)throw new IOException("Select the exact V2 USB device before changing mode.");
+            return RunHelper(uid,UsbModeOperation(mode),null);
+        }
+        static async Task<string> RunHelper(string uid,string operation,Action<string> append)
+        {
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FirmwareUpdater", "XeNpFirmwareUpdater.exe");
             if (!File.Exists(executable)) throw new IOException("Bundled V2 firmware updater is missing; rebuild the WILDX application.");
-            var arguments = new[] { operation, "--uid", target.Uid };
+            var arguments = new[] { operation, "--uid", uid };
             string command = String.Join(" ", Array.ConvertAll(arguments, NpFirmwareFlash.Quote));
-            status.Text = "Working on UID " + target.Uid + "...";
             string output = await Task.Run(() => {
                 var text = new StringBuilder(); object sync = new object();
                 using (var process = new Process { StartInfo = new ProcessStartInfo(executable, command) { UseShellExecute = false, CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true } }) {
-                    DataReceivedEventHandler receive = (sender, e) => { if (e.Data == null) return; lock (sync) { if (text.Length < 4*1024*1024) text.AppendLine(e.Data); } if (!IsDisposed && IsHandleCreated) try { BeginInvoke((Action)(() => log.AppendText(e.Data + Environment.NewLine))); } catch (InvalidOperationException) { } };
+                    DataReceivedEventHandler receive = (sender, e) => { if (e.Data == null) return; lock (sync) { if (text.Length < 4*1024*1024) text.AppendLine(e.Data); } if(append!=null)append(e.Data); };
                     process.OutputDataReceived += receive; process.ErrorDataReceived += receive;
                     if (!process.Start()) throw new IOException("V2 updater could not start.");
                     process.BeginOutputReadLine(); process.BeginErrorReadLine();
                     if (!process.WaitForExit(300000)) { process.Kill(); process.WaitForExit(); throw new IOException("V2 updater timed out; outcome unknown. No retry sent."); }
                     process.WaitForExit();
                     string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WILDX firmware logs"); Directory.CreateDirectory(folder);
-                    string saved = Path.Combine(folder, DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ") + "_" + target.Uid + ".log"); File.WriteAllText(saved, command + Environment.NewLine + text);
+                    string saved = Path.Combine(folder, DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ") + "_" + uid + ".log"); File.WriteAllText(saved, command + Environment.NewLine + text);
                     if (process.ExitCode != 0) throw new IOException("V2 operation failed; no automatic retry. See " + saved);
                     return text.ToString();
                 }
             });
-            status.Text = output.Trim();
+            return output.Trim();
         }
     }
 }

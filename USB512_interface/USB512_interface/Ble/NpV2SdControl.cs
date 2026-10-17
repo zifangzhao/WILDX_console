@@ -3,17 +3,24 @@ using System.IO;
 namespace CE32_console {
  internal static class NpV2SdControl {
   internal const uint RequestMagic=0x32444c4e,ReplyMagic=0x32524c4e;
+  internal const uint Live7500=0x00100000U,Stored7500=0x00200000U;
   internal static uint NextId(NpSdStatus s){
    if(s.LastId!=0)return NpSdControl.NextId(s);
    uint id=BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(),0);return id==0?1:id;
   }
-  static uint Ticks(uint mask,uint hz){
-   if(mask==3 && (hz==20000 || hz==30000))return 61440;
-   if(mask==7 && (hz==15000 || hz==20000))return 40960;
+  internal static uint ProfileTicks(uint mask,uint hz){
+   if(hz!=7500 && hz!=15000 && hz!=20000 && hz!=30000)return 0;
+   if(mask==1)return 122880;
+   if(mask==3)return 61440;
+   if(mask==7)return 40960;
    return 0;
   }
+  internal static bool IsProfile(uint mask,uint hz){return ProfileTicks(mask,hz)!=0;}
+  internal static string ProbePrefix(uint mask){return mask==1?"probe 1":mask==3?"probes 1 + 2":mask==7?"probes 1 + 2 + 3":"invalid probe mask";}
+  static uint Ticks(uint mask,uint hz){return ProfileTicks(mask,hz);}
   static bool ValidStatus(NpSdStatus s){return s!=null && Ticks(s.Mask,s.Hz)!=0 && (s.State<=7 || s.State==255);}
-  // BLE still carries P1/P2's low six PSSI bits for either SD storage codec.
+  // The preview wire decodes P1/P2's PSSI lanes. A raw P3 stream remains
+  // recordable, but never creates a P3 preview selection.
   internal static bool CanPreview(NpSdStatus s){return ValidStatus(s) && s.State==3 && (s.Flags&128)!=0;}
   // Keep the five-argument reflection contract and all legacy call defaults.
   internal static byte[] Request(uint op,uint id,uint hz=0,uint blocks=0,ulong utc=0){
@@ -40,6 +47,12 @@ namespace CE32_console {
    return s!=null&&!s.Busy &&
     (s.State==1||s.State==5||s.State==7||(s.State==0&&(s.Flags&16384)!=0));
   }
+  internal static bool CanSelectProfile(NpSdStatus s,uint mask,uint hz){
+   return CanConfigure(s)&&IsProfile(mask,hz)&&(hz!=7500U||(s.Flags&Live7500)!=0);
+  }
+  internal static bool SupportsLive7500(NpSdStatus s){return s!=null&&(s.Flags&Live7500)!=0;}
+  internal static bool SupportsCurrentLiveProfile(NpSdStatus s){return ValidStatus(s)&&(s.Hz!=7500U||SupportsLive7500(s));}
+  internal static bool RecoveryRequiresUpgrade(NpSdStatus s){return NeedsRecovery(s)&&(s.Flags&Stored7500)==0;}
   internal static bool CanPrepareStorage(NpSdStatus s){
    // A previous mount/format command error must not prevent an explicit retry.
    return s!=null&&!s.Busy&&(s.Flags&16384)!=0&&s.Capacity!=0&&(s.State==0||s.State==1);
@@ -47,7 +60,7 @@ namespace CE32_console {
   internal static bool NeedsRecovery(NpSdStatus s){return s!=null&&(s.Flags&131072)!=0;}
   internal static bool IsFull(NpSdStatus s){return s!=null&&(s.Flags&65536)!=0;}
   internal static bool CanQuarantine(NpSdStatus s){return NeedsRecovery(s)&&(s.Flags&524288)!=0;}
-  internal static bool CanRecover(NpSdStatus s){return CanPrepareStorage(s)&&NeedsRecovery(s)&&(s.Flags&32768)!=0&&(s.Flags&(262144|524288))!=0;}
+  internal static bool CanRecover(NpSdStatus s){return CanPrepareStorage(s)&&!RecoveryRequiresUpgrade(s)&&(s.Flags&32768)!=0&&(s.Flags&(262144|524288))!=0;}
   internal static string RecoveryAction(NpSdStatus s){return CanQuarantine(s)?"Preserve interrupted allocation (keeps all data)":"Recover saved recording end (keeps data)";}
   internal static NpSdStatus Parse(byte[] b,uint op,uint id){
    if(b==null || b.Length!=64 || NpSdGeometry.U(b,0)!=ReplyMagic || NpSdGeometry.U(b,4)!=2 ||
@@ -64,15 +77,14 @@ namespace CE32_console {
    if(!ValidStatus(s))throw new IOException("Unsupported V2 capability/status response");
    string[] names={"SD not mounted","Idle","Preparing probes","Recording","Draining / verifying SD","Complete","Armed for UTC start","Cancelled before capture"};
    string state=s.State==255?"Failed":names[s.State];
-   return "WILD-X V2 / NP2 — "+state+"\r\nDevice-selected: "+(s.Mask==3?"probes 1 + 2":"probes 1 + 2 + 3")+", "+s.Hz.ToString("N0")+" samples/s (no separate LFP stream)"+
+   return "WILD-X V2 / NP2 — "+state+"\r\nDevice-selected: "+ProbePrefix(s.Mask)+", "+s.Hz.ToString("N0")+" samples/s (no separate LFP stream)"+
     "\r\nCommitted: "+s.Chunks.ToString("N0")+" blocks / "+(s.Chunks*46592.0/1e6).ToString("F2")+" MB"+
     "\r\nDevice fault: "+s.Fault+"; command error: "+s.Error+
     ((s.Flags&8)!=0?"\r\nCommand queued — not yet confirmed running/stopped.":"")+
-    ((s.Flags&64)!=0?"\r\nThis firmware requires a restart before another session.":"")+
-    "\r\nBLE is control only. The device must acknowledge the selected recording profile.";
+    ((s.Flags&64)!=0?"\r\nThis firmware requires a restart before another session.":"");
   }
   internal static bool CanStart(NpSdStatus s){
-   return s!=null && !s.Busy && s.Fault==0 && !IsFull(s) && !NeedsRecovery(s) &&
+   return s!=null && !s.Busy && s.Fault==0 && SupportsCurrentLiveProfile(s) && !IsFull(s) && !NeedsRecovery(s) &&
     (s.State==1 || ((s.Flags&512)!=0 && (s.State==5 || s.State==7)));
   }
   internal static bool StopAlreadySatisfied(NpSdStatus s){
@@ -109,7 +121,7 @@ namespace CE32_console {
    if(s==null)return "Reading device status...";
    if((s.Flags&8)!=0)return "Command sent — waiting for device confirmation...";
    if(s.State==1||s.State==5||s.State==7){
-    if(NeedsRecovery(s))return CanQuarantine(s)?"SD mounted — preserve interrupted allocation before Start; valid sample count unknown":(s.Flags&262144)!=0?"SD mounted — recover saved recording end before Start":"SD mounted — interrupted recording needs PC-side recovery; data preserved";
+    if(NeedsRecovery(s))return RecoveryRequiresUpgrade(s)?"SD mounted — firmware does not advertise stored 7.5-kHz catalog recovery; upgrade before recovery; raw download remains available":CanQuarantine(s)?"SD mounted — preserve interrupted allocation before Start; valid sample count unknown":(s.Flags&262144)!=0?"SD mounted — recover saved recording end before Start":"SD mounted — interrupted recording needs PC-side recovery; data preserved";
     if(IsFull(s))return "SD mounted — card full; existing recordings retained";
    }
    switch(s.State){

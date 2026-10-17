@@ -1,0 +1,24 @@
+{
+  "family": 1,
+  "target": "V1 camera board; explicit manual selection only",
+  "stage": "Published camera candidate",
+  "ownerConfirmed": "2026-10-17",
+  "publicationCommit": "31e1d51571f9ea0b80699c98b547a434f7c11c45",
+  "retainedPublicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+  "appVersion": "1.0.121-camera40-default-candidate",
+  "appCrc32": "99BA4F27",
+  "usbVersion": "83",
+  "usbCrc32": "82C6E21A",
+  "automaticCatalogSelection": false,
+  "files": [
+    {
+      "path": "V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
+    },
+    {
+      "path": "V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
+    }
+  ],
+  "limits": "Separate camera target, not an NP APP121/USB91 successor. BLE SD 40 fps + ADC200k + latest-value IMU short capture passed; strict USB completeness failed with 11 reported camera drops. 50 fps and 41..49 fps not qualified. No endurance, implant, seamless installer-pair or NP probe qualification. Saved rates are not migrated. Only APP HEX uses compatible protected APP update; fused rewrites recovery/USB and requires separate factory/recovery programming without mass erase."
+}

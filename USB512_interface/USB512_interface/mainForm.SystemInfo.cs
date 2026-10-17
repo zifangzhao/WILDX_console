@@ -38,6 +38,7 @@ namespace USB512_interface
                 catch { Interlocked.Exchange(ref idleNpSensorPosted, 0); }
             }, null, 250, 250);
             FormClosed += delegate { idleNpSensorTimer.Dispose(); };
+            Activated += delegate { OfferFirmwareUpdate(); };
         }
 
         private bool CanRefreshIdleNp2Sensor()
@@ -108,6 +109,15 @@ namespace USB512_interface
                 systemInfoSummary.Text = snapshot.Summary();
             }
             UpdateStartEnabled();
+            OfferFirmwareUpdate();
+        }
+        private void OfferFirmwareUpdate()
+        {
+            if (!Visible || !ContainsFocus || !NpControlsAvailable || systemInfo == null || !systemInfo.DeviceIdle || systemInfo.Protocol == "Unavailable" ||
+                !String.Equals(systemInfo.Path, devicePath, StringComparison.OrdinalIgnoreCase)) return;
+            uint family = selectedDeviceKind == DeviceKind.XeNp ? 1U : 2U;
+            if (NpFirmwareNotice.Offer(this, devicePath, NpFirmwareCatalog.Bundled.For(family), systemInfo.Firmware))
+                btnDfu_Click(this, EventArgs.Empty);
         }
         private void UpdateSystemInfoControls()
         {

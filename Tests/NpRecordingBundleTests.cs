@@ -75,7 +75,7 @@ internal static class NpRecordingBundleTests
         var fixture=Assembly.LoadFile(Path.GetFullPath(fixtureExe)).GetType("NpV2SdDatExportTests",true).GetMethod("MakeImage",All);
         foreach(uint mask in new uint[]{3,7}){
             string image=Path.Combine(root,"sd"+mask+".img"),output=Path.Combine(root,"sd"+mask);uint hz=mask==3?30000U:20000U;
-            fixture.Invoke(null,new object[]{image,hz,"",0U,mask,uint.MaxValue});
+            fixture.Invoke(null,new object[]{image,hz,"",0U,mask,uint.MaxValue,false});
             byte[] configuration;
             using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){
                 card.Position=(8192+8)*512L;configuration=new byte[2048];card.Read(configuration,0,configuration.Length);

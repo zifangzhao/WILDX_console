@@ -88,7 +88,7 @@ namespace USB512_interface
         bool Current(uint rate)
         {
             var s=status();return !closed && enabled.Checked && connection.Connected && connection.Epoch==epoch &&
-                NpV2SdControl.CanPreview(s) && (rate==0 || s.Hz==rate);
+                NpV2SdControl.CanPreview(s) && (s.Mask!=1 || probe.Value==1) && (rate==0 || s.Hz==rate);
         }
         void DropStream(){var old=stream;stream=null;session=hz=0;previousEnd=0;if(old!=null)old.Dispose();}
         protected override void OnFormClosing(FormClosingEventArgs e){closed=true;lifetime.Cancel();DropStream();base.OnFormClosing(e);}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "confirmedOn": "2026-10-17",
+  "provenance": "Artifact publication commits, not a claim of complete clean incremental firmware build sources",
+  "automaticFlashing": false,
+  "newHardwareQualification": false,
+  "targets": [
+    {
+      "target": "V1 Neuropixels old NP / 91k+91k",
+      "ownerConfirmed": "2026-10-17",
+      "publicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+      "appCrc32": "BC6B506E",
+      "usbCrc32": "40D39075",
+      "recovery": "Included in exact fused HEX",
+      "status": "Latest owner-approved published bundle; recorded limits retained"
+    },
+    {
+      "target": "V2 Neuropixels",
+      "ownerConfirmed": "2026-10-17",
+      "publicationCommit": "e7b0d08cc3d24dc0776532d2a599462528301df7",
+      "appCrc32": "136172A5",
+      "usbCrc32": "2E07799E",
+      "recoveryCrc32": "6408DBB8",
+      "status": "Latest owner-approved published development bundle; private power comparators excluded"
+    },
+    {
+      "target": "V1 camera board",
+      "ownerConfirmed": "2026-10-17",
+      "publicationCommit": "31e1d51571f9ea0b80699c98b547a434f7c11c45",
+      "retainedPublicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+      "appCrc32": "99BA4F27",
+      "usbCrc32": "82C6E21A",
+      "status": "Separate explicitly selected camera40 candidate; not a Neuropixels successor"
+    }
+  ]
+}

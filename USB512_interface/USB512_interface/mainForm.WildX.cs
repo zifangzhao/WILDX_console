@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace USB512_interface
@@ -13,8 +14,10 @@ namespace USB512_interface
         CE32_console.NpDownloadForm downloadWorkspace;
         NpBleForm bleWorkspace;
         Label workspaceStatus;
-        Label advancedTarget,advancedStorageSource;
+        Label advancedTarget,advancedStorageSource,advancedModeStatus;
         Button diagnosticsButton,captureReportButton;
+        readonly Button[] usbModeButtons=new Button[3];
+        bool usbModeChanging;
         string lastCaptureReport;
         Label recordingSummary,usbHealthSummary;
         string recordingSummaryFolder;
@@ -219,6 +222,7 @@ namespace USB512_interface
             healthAndGpio.Controls.Add(networkTimeCard,0,2);
 
             bleWorkspace=new NpBleForm() {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
+            bleWorkspace.FirmwareReviewRequested+=delegate {workspaceTabs.SelectedTab=advancedPage;};
             bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};
             blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
 
@@ -282,7 +286,7 @@ namespace USB512_interface
             var tools=new TableLayoutPanel {Dock=DockStyle.Top,Height=510,ColumnCount=2,RowCount=2,Margin=Padding.Empty,BackColor=WildXTheme.Canvas};
             tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
             tools.RowStyles.Add(new RowStyle(SizeType.Absolute,320));tools.RowStyles.Add(new RowStyle(SizeType.Percent,100));advancedPage.Controls.Add(tools);advancedPage.AutoScroll=true;
-            var firmware=Stack(58,92,0);
+            var firmware=Stack(88,96,0);
             advancedTarget=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};firmware.Controls.Add(advancedTarget,0,0);
             diagnosticsButton=new Button {Text="Diagnostics & self-test…",AutoSize=true};
             diagnosticsButton.Click+=delegate {
@@ -290,16 +294,21 @@ namespace USB512_interface
                 try{using(var dialog=new NpDiagnosticsForm(devicePath,selectedDeviceKind==DeviceKind.NpV2))dialog.ShowDialog(this);}
                 finally{firmwareManagementActive=false;UpdateStartEnabled();}
             };
-            WildXTheme.Button(btnDfu,true);firmware.Controls.Add(ActionRow(btnDfu,diagnosticsButton),0,1);
-            firmware.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
-                Text="NP1: validated APP / HEX firmware.\r\nNP2: transactional .xenp APP updates.\r\n\r\nThe manager also provides USB mode changes and recovery. Choose the exact device and firmware file before updating."},0,2);
+            string[] modeNames={"USB streaming","USB download","SD / BLE"};ushort[] modes={2,3,1};
+            for(int i=0;i<modes.Length;i++){
+                ushort mode=modes[i];var button=new Button {Text=modeNames[i],Name="usbMode"+mode,Tag=mode,AutoSize=true};
+                button.Click+=async delegate{await SwitchUsbMode(mode);};usbModeButtons[i]=button;
+            }
+            WildXTheme.Button(btnDfu,true);
+            firmware.Controls.Add(ActionRow(btnDfu,usbModeButtons[0],usbModeButtons[1],usbModeButtons[2],diagnosticsButton),0,1);
+            advancedModeStatus=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};firmware.Controls.Add(advancedModeStatus,0,2);
             tools.Controls.Add(Card("Firmware & USB modes",null,firmware),0,0);
             var storage=Stack(58,48,0);
             advancedStorageSource=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};storage.Controls.Add(advancedStorageSource,0,0);
             var openStorage=new Button {Text="Open Data Download",AutoSize=true};openStorage.Click+=delegate {workspaceTabs.SelectedTab=downloadPage;};
             storage.Controls.Add(ActionRow(openStorage),0,1);
             storage.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
-                Text="Delete the last recording or format a card in Data Download.\r\n\r\nThese actions require an SD card reader and confirmation. USB download is read-only."},0,2);
+                Text="Format the logger card in BLE Mode → Recordings. For a removable SD card reader, use Data Download to delete or format.\r\n\r\nUSB download is read-only. Formatting requires confirmation."},0,2);
             tools.Controls.Add(Card("Storage maintenance",null,storage),1,0);
             var bleMaintenance=Card("BLE firmware & recovery",null,bleWorkspace.MaintenanceControls);
             tools.Controls.Add(bleMaintenance,0,1);tools.SetColumnSpan(bleMaintenance,2);
@@ -319,7 +328,9 @@ namespace USB512_interface
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbSelection(devicePath);
             if(advancedTarget!=null)advancedTarget.Text=String.IsNullOrWhiteSpace(devicePath)?
                 "Select a device in USB Mode, or choose an exact device in the firmware manager.":
-                SystemInfoDeviceName()+" / UID "+(NpV2FirmwareForm.Uid(devicePath)??NpV1Management.UidFromPath(devicePath)??"unverified — confirm in manager");
+                SystemInfoDeviceName()+" / UID "+(NpV2FirmwareForm.Uid(devicePath)??NpV1Management.UidFromPath(devicePath)??"unverified — confirm in manager")+
+                "\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed(selectedDeviceKind==DeviceKind.XeNp?1U:2U,systemInfo==null?null:systemInfo.Firmware)+
+                "\r\nBundled: "+(NpFirmwareCatalog.Bundled.For(selectedDeviceKind==DeviceKind.XeNp?1U:2U)?.Versions??"Unavailable");
             if(advancedStorageSource!=null)advancedStorageSource.Text=downloadWorkspace.SelectedSourceDescription??"No storage source selected. Choose a card in Data Download.";
             if(DownloadBusy || BleInUse)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
             bool usbBusy=running || ztestRunning || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled;
@@ -328,9 +339,35 @@ namespace USB512_interface
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
             if(selectedDeviceKind==DeviceKind.XeNp)btnPreview.Enabled=NpControlsAvailable;
             if(diagnosticsButton!=null)diagnosticsButton.Enabled=NpControlsAvailable;
+            foreach(var button in usbModeButtons)if(button!=null)button.Enabled=NpControlsAvailable;
             if(usbQualityTestButton!=null)usbQualityTestButton.Enabled=usbQualityRunning || CanTestUsb;
             if(usbQualityContinuous!=null)usbQualityContinuous.Enabled=!usbQualityRunning && CanTestUsb;
             if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;
+        }
+        async Task SwitchUsbMode(ushort mode)
+        {
+            if(!NpControlsAvailable)return;
+            string path=devicePath;bool v2=selectedDeviceKind==DeviceKind.NpV2;
+            string uid=v2?NpV2FirmwareForm.Uid(path):NpV1Management.UidFromPath(path);
+            bool refresh=false;usbModeChanging=firmwareManagementActive=true;UpdateStartEnabled();
+            try{
+                if(uid==null)throw new IOException("Select a USB device with a verified MCU UID before changing mode.");
+                if(mode==1 && MessageBox.Show(this,"Enter SD / BLE mode on "+(v2?"V2 ":"V1 ")+uid+"?\r\n\r\nUSB disconnects. Reconnect through BLE to control recording. Returning to USB depends on the installed firmware; older V1 firmware may require SWD.",
+                    "Switch to SD / BLE",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes)return;
+                refresh=true;advancedModeStatus.Text="Changing USB mode for UID "+uid+"…";
+                if(v2){
+                    await NpV2FirmwareForm.SwitchUsbMode(path,mode);
+                    advancedModeStatus.Text="Mode request acknowledged for UID "+uid+". Device list refreshed after the request.";
+                }else{
+                    var target=new NpV1Target {Path=path,Uid=uid};
+                    advancedModeStatus.Text=await Task.Run(()=>NpV1Management.SwitchMode(target,mode));
+                }
+            }catch(Exception error){
+                advancedModeStatus.Text="Mode change stopped: "+error.Message;
+                MessageBox.Show(this,error.Message+"\r\n\r\nNo automatic retry was sent.","USB mode",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }finally{
+                usbModeChanging=firmwareManagementActive=false;if(refresh)RefreshDeviceList();UpdateStartEnabled();
+            }
         }
         void OpenV2Firmware()
         {

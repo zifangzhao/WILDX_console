@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Globalization;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,7 +18,7 @@ namespace USB512_interface
         readonly Button start=new Button {Text="Start preview",AutoSize=true};
         readonly Button stop=new Button {Text="Stop",AutoSize=true,Enabled=false};
         readonly CheckBox record=new CheckBox {Text="Save camera data",AutoSize=true};
-        readonly NumericUpDown rate=new NumericUpDown {Minimum=1,Maximum=58,Value=50,Width=70};
+        readonly NumericUpDown rate=new NumericUpDown {Minimum=1,Maximum=58,Value=40,Width=70};
         readonly Label status=new Label {Dock=DockStyle.Bottom,Height=48,AutoEllipsis=true};
         readonly Label audioStatus=new Label {Dock=DockStyle.Top,Height=46,Text="Live USB audio is unavailable in this V1 firmware. Open an exported WAV to listen."};
         readonly SoundPlayer audio=new SoundPlayer();
@@ -72,7 +73,7 @@ namespace USB512_interface
         }
         void RunCapture(int requested,bool save)
         {
-            XeNpWinUsbDevice usb=null;USB512WinUsbQueuedReader reader=null;NpCameraRecording recording=null;
+            XeNpWinUsbDevice usb=null;USB512WinUsbQueuedReader reader=null;NpCameraRecording recording=null;NpMediaUsbImu imu=null;
             byte[] frame=null;int frameBytes=0;bool frameValid=false,haveSequence=false,started=false;ushort expected=0;
             var parser=new XeNpPacketParser();DateTime began=DateTime.UtcNow;NpCameraStatus initial=null,final=null;
             Action<byte[],int,int> noNeural=delegate {throw new IOException("Unexpected neural payload in camera-only mode.");};
@@ -93,9 +94,10 @@ namespace USB512_interface
                 usb=XeNpWinUsbDevice.Open(path);lock(deviceGate)device=usb;
                 initial=usb.GetCameraStatus();
                 if(save){LastFolder=NpFolderNaming.CreateFresh(outputRoot,NpFolderNaming.Name(sessionLabel,DateTime.Now,"camera_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff")));recording=new NpCameraRecording(LastFolder);
+                    imu=new NpMediaUsbImu(LastFolder);
                     initial.Save(Path.Combine(LastFolder,"camera_initial_status.txt"));File.WriteAllBytes(Path.Combine(LastFolder,"camera_initial_status.bin"),initial.RawBytes);
                     lock(deviceGate){exposureLog=new StreamWriter(Path.Combine(LastFolder,"camera_exposure.csv"));exposureLog.WriteLine("host_utc,rows_in_reset,ramp_gain,receipt");}}
-                parser.OnMisc=delegate {};
+                NpMediaUsbImu.Attach(parser,imu);
                 parser.OnCamera=(data,offset,count,flags,sequence)=>{
                     bool valid=!haveSequence || sequence==expected;
                     if(!valid){SequenceGaps++;frameValid=false;}
@@ -129,6 +131,7 @@ namespace USB512_interface
                 if(frame!=null)camera.ReturnRawFrameBuffer(frame);
                 lock(deviceGate){device=null;if(usb!=null)usb.Dispose();if(exposureLog!=null){try{exposureLog.Dispose();}catch(Exception ex){LastError=(LastError==null?"":LastError+"; ")+"Exposure log flush failed: "+ex.Message;}exposureLog=null;}}
                 if(recording!=null)try{recording.Dispose();}catch(Exception ex){LastError=(LastError==null?"":LastError+"; ")+"Camera file flush failed: "+ex.Message;}
+                if(imu!=null){imu.Dispose();if(imu.Error!=null)LastError=(LastError==null?"":LastError+"; ")+"IMU sidecar failed: "+imu.Error;}
                 if(LastFolder!=null){
                     if(final!=null){final.Save(Path.Combine(LastFolder,"camera_final_status.txt"));File.WriteAllBytes(Path.Combine(LastFolder,"camera_final_status.bin"),final.RawBytes);}
                     File.WriteAllText(Path.Combine(LastFolder,"media_capture_status.txt"),"uid="+NpV1Management.UidFromPath(selectedPath)+"\r\nstarted_utc="+began.ToString("O")+"\r\nstopped_utc="+DateTime.UtcNow.ToString("O")+
@@ -137,6 +140,85 @@ namespace USB512_interface
                     NpRecordingSettings.RefreshBundle(LastFolder);
                 }
             }
+        }
+    }
+
+    // Optional stream-5 consumer. Canonical NpUsbSensors validates packets and
+    // writes the held grid; rejected sensors never invalidate camera packets.
+    internal sealed class NpMediaUsbImu : IDisposable
+    {
+        readonly string folder;
+        NpUsbSensors sensors;
+        FileStream raw;
+        StreamWriter index;
+        bool disposed,haveRecord;
+        uint lastRecord,firstOverflow,lastOverflow,imuError,environmentError,missed,valid;
+        uint? firstTick,lastTick,firstObservation,lastObservation;
+        long received,records,rejected,recordGaps;
+        string lastValidationError;
+        internal string Error {get;private set;}
+        internal NpMediaUsbImu(string folder)
+        {
+            this.folder=folder;
+            try {
+                sensors=new NpUsbSensors(folder);
+                raw=new FileStream(Path.Combine(folder,"imu_snapshots.bin"),FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);
+                index=new StreamWriter(new FileStream(Path.Combine(folder,"imu_snapshots.csv"),FileMode.CreateNew,FileAccess.Write,FileShare.Read,16384),new System.Text.UTF8Encoding(false));
+                index.WriteLine("snapshot_index,packet_record_sequence,observed_device_ms,imu_sequence,imu_device_ms,usable_valid_flags,firmware_queue_loss");
+            } catch(Exception ex){Error=ex.Message;}
+        }
+        internal static void Attach(XeNpPacketParser parser,NpMediaUsbImu sink)
+        {parser.OnMisc=(b,o,n)=>{if(sink!=null)sink.Feed(b,o,n);};}
+        internal void Feed(byte[] b,int o,int n)
+        {
+            if(disposed)return;
+            received++;
+            if(Error!=null)return;
+            // A fresh non-saving validator admits each optional packet through
+            // the existing ABI/CRC checks. A rejected packet must not poison
+            // later sensor record continuity or stop the camera stream.
+            using(var validator=new NpUsbSensors(folder,false)) {
+                try {validator.Feed(b,o,n);}
+                catch(Exception ex){rejected++;lastValidationError=ex.Message;return;}
+                try {
+                    uint record=BitConverter.ToUInt32(b,o+8),observed=BitConverter.ToUInt32(b,o+12);
+                    uint sequence=BitConverter.ToUInt32(b,o+40),tick=BitConverter.ToUInt32(b,o+52);
+                    if(haveRecord){uint delta=unchecked(record-lastRecord);if(delta>1 && delta<0x80000000U)recordGaps+=delta-1;else if(delta!=1)recordGaps++;}
+                    else firstOverflow=validator.Overflow;
+                    haveRecord=true;lastRecord=record;lastOverflow=validator.Overflow;
+                    valid=validator.Valid;imuError=validator.ImuError;environmentError=validator.EnvironmentError;missed=validator.MissedEstimate;
+                    raw.Write(b,o+20,140);records++;
+                    index.WriteLine(String.Format(CultureInfo.InvariantCulture,"{0},{1},{2},{3},{4},{5},{6}",records-1,record,observed,sequence,tick,valid,lastOverflow));
+                    if(!firstTick.HasValue){firstTick=tick;firstObservation=observed;}lastTick=tick;lastObservation=observed;
+                    sensors.FeedSnapshot(b,o+20,observed);
+                } catch(Exception ex){Error=ex.Message;}
+            }
+        }
+        public void Dispose()
+        {
+            if(disposed)return;disposed=true;
+            try{if(sensors!=null)sensors.Dispose();}catch(Exception ex){Error=ex.Message;}
+            try{if(index!=null){index.Flush();((FileStream)index.BaseStream).Flush(true);}}catch(Exception ex){Error=ex.Message;}
+            try{if(index!=null)index.Dispose();}catch(Exception ex){Error=ex.Message;}
+            try{if(raw!=null)raw.Flush(true);}catch(Exception ex){Error=ex.Message;}
+            try{if(raw!=null)raw.Dispose();}catch(Exception ex){Error=ex.Message;}
+            long samples=sensors==null?0:sensors.ImuSamples,rows=sensors==null?0:sensors.Misc1250Records;
+            string availability=Error!=null?"file_error":records==0?(received==0?"not_received":"invalid"):samples==0?"invalid":"available";
+            try {using(var status=new StreamWriter(new FileStream(Path.Combine(folder,"imu_capture_status.txt"),FileMode.CreateNew,FileAccess.Write,FileShare.Read),new System.Text.UTF8Encoding(false))) {
+                status.WriteLine("optional=true; sensor rejection never stops camera capture");
+                status.WriteLine("availability="+availability);status.WriteLine("records="+records);status.WriteLine("distinct_imu_samples="+samples);
+                status.WriteLine("error="+(Error??"none").Replace('\r',' ').Replace('\n',' '));
+                status.WriteLine("received_packets="+received);status.WriteLine("rejected_packets="+rejected);status.WriteLine("last_validation_error="+(lastValidationError??"none"));
+                status.WriteLine("record_sequence_gaps="+recordGaps);status.WriteLine("imu_sequence_gaps="+(sensors==null?0:sensors.ImuSequenceGaps));
+                status.WriteLine("snapshot_bytes=140");status.WriteLine("native_file=imu_snapshots.bin");status.WriteLine("timestamp_file=imu_snapshots.csv");
+                status.WriteLine("derived_1250_rows="+rows);status.WriteLine("analogin_sample_rate_hz=1250");status.WriteLine("analogin_timing=derived held-value grid from source ticks; not native IMU sample rate or a lossless FIFO");
+                status.WriteLine("analogin_pc_time=host-local compatibility anchor; not precision clock synchronization");
+                status.WriteLine("imu_error="+imuError);status.WriteLine("environment_error="+environmentError);status.WriteLine("usable_valid_flags="+valid);
+                status.WriteLine("queue_loss="+lastOverflow);status.WriteLine("queue_loss_first="+firstOverflow);status.WriteLine("missed_estimate="+missed);
+                status.WriteLine("first_imu_device_ms="+firstTick);status.WriteLine("last_imu_device_ms="+lastTick);
+                status.WriteLine("first_observed_device_ms="+firstObservation);status.WriteLine("last_observed_device_ms="+lastObservation);
+                status.WriteLine("source_timing=native device millisecond ticks/sequences in snapshots and CSV; no bulk-arrival clock fit or IMU EP0 polling");
+            }}catch(Exception ex){Error=ex.Message;}
         }
     }
 }

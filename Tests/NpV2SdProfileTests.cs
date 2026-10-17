@@ -68,7 +68,7 @@ internal static class NpV2SdProfileTests
             if(!profile)Need(U(NpV2SdControl.Request(op,91,0,0,0,7),16)==0,
                 "A non-profile command acquired a probe mask.");
         }
-        foreach(uint mask in new[]{3U,7U})foreach(uint hz in mask==3?new[]{20000U,30000U}:new[]{15000U,20000U}){
+        foreach(uint mask in new[]{1U,3U,7U})foreach(uint hz in new[]{7500U,15000U,20000U,30000U}){
             foreach(uint op in new[]{1U,2U,4U}){
                 ulong utc=op==4?123456UL:0UL;
                 Equal(NpV2SdControl.Request(op,91,hz,8,utc,mask),
@@ -76,12 +76,12 @@ internal static class NpV2SdProfileTests
             }
             Need(U(NpV2SdControl.Request(2,91,hz,0,0,mask),24)==0,"Continuous Start was changed.");
         }
-        uint[,] bad={{0,20000},{1,20000},{2,20000},{4,20000},{8,20000},{3,15000},{3,25000},{3,0},{7,30000},{7,25000}};
+        uint[,] bad={{0,20000},{2,20000},{4,20000},{8,20000},{1,25000},{3,0},{7,40000},{7,25000}};
         for(int i=0;i<bad.GetLength(0);i++)foreach(uint op in new[]{1U,2U,4U}){
             uint mask=bad[i,0],hz=bad[i,1];
             Refuse<ArgumentException>(()=>NpV2SdControl.Request(op,91,hz,8,0,mask),"Unsupported request pair admitted.");
         }
-        Refuse<ArgumentException>(()=>NpV2SdControl.Request(1,91,15000),"Legacy wrapper changed to triple.");
+        Equal(NpV2SdControl.Request(1,91,15000,8,0),ExpectedRequest(1,15000,8,0,3),"Legacy wrapper did not retain dual mask default.");
         Refuse<ArgumentException>(()=>NpV2SdControl.Request(0,0),"Zero request ID admitted.");
         Refuse<ArgumentException>(()=>NpV2SdControl.Request(9,91),"Unknown opcode admitted.");
         Refuse<ArgumentException>(()=>NpV2SdControl.Request(2,91,20000,8,1),"UTC accepted outside scheduled Start.");
@@ -99,7 +99,7 @@ internal static class NpV2SdProfileTests
             Need(parsed.Mask==mask && parsed.Hz==hz && parsed.State==state && parsed.LastId==90,
                 "Actual closed status tuple/identity was changed.");
             string description=NpV2SdControl.Describe(parsed);
-            Need(description.Contains(mask==3?"probes 1 + 2,":"probes 1 + 2 + 3,") &&
+            Need(description.Contains(NpV2SdControl.ProbePrefix(mask)+",") &&
                 !description.Contains("not supported by this firmware"),"Description invented a profile/capability.");
             var telemetry=NpV2SdControl.Telemetry(parsed);
             Need(telemetry.Length==28 && U(telemetry,0)==2 && U(telemetry,24)==mask,"Host telemetry v2 layout wrong.");
@@ -108,8 +108,9 @@ internal static class NpV2SdProfileTests
                 read.Flags==s.Flags && read.Fault==s.Fault,"Host telemetry v2 lost actual metadata.");
         }
         s.State=1;
+        if(hz==7500U)s.Flags|=NpV2SdControl.Live7500;
         Need(NpV2SdControl.Blocks(s,hz,60)==sixtySecondBlocks,"Wrong finite profile/RU rounding.");
-        Need(NpV2SdControl.RecordedSeconds(s)==59,"Wrong actual profile recorded duration.");
+        Need(NpV2SdControl.RecordedSeconds(s)==(uint)((ulong)sixtySecondBlocks*ticks/((ulong)hz*1600)),"Wrong actual profile recorded duration.");
         s.Chunks=UInt32.MaxValue;
         Need(NpV2SdControl.RecordedSeconds(s)==(uint)((ulong)UInt32.MaxValue*ticks/((ulong)hz*1600)),
             "Recorded source ticks narrowed or used a different profile.");
@@ -137,7 +138,7 @@ internal static class NpV2SdProfileTests
         Refuse<IOException>(()=>NpV2SdControl.Parse(null,0,91),"Missing reply admitted.");
         Refuse<IOException>(()=>NpV2SdControl.Parse(new byte[63],0,91),"Short reply admitted.");
         Refuse<IOException>(()=>NpV2SdControl.Parse(new byte[65],0,91),"Long reply admitted.");
-        uint[,] bad={{0,20000},{1,20000},{2,20000},{4,20000},{8,20000},{3,15000},{7,30000},{7,0}};
+        uint[,] bad={{0,20000},{2,20000},{4,20000},{8,20000},{1,25000},{3,0},{7,40000}};
         for(int i=0;i<bad.GetLength(0);i++){
             s=Status(bad[i,0],bad[i,1]);var body=Reply(s);
             Refuse<IOException>(()=>NpV2SdControl.Parse(body,0,91),"CRC-valid unsupported status admitted.");
@@ -155,14 +156,14 @@ internal static class NpV2SdProfileTests
         Refuse<IOException>(()=>NpV2SdControl.Telemetry(s),"Unknown telemetry state encoded.");
         var unknownState=NpV2SdControl.Telemetry(Status(7,20000));Put(unknownState,4,8);
         Refuse<IOException>(()=>NpV2SdControl.ReadTelemetry(unknownState),"Unknown telemetry state admitted.");
-        foreach(uint hz in new[]{20000U,30000U}){
+        foreach(uint hz in new[]{7500U,20000U,30000U}){
             s=Status(3,hz);s.State=255;s.Fault=5;var legacy=LegacyTelemetry(s);
             var read=NpV2SdControl.ReadTelemetry(legacy);
             Need(read.Mask==3 && read.Hz==hz && read.State==255 && read.Fault==5 && read.Chunks==8,
                 "Legacy 24-byte/v1 telemetry compatibility lost.");
             var modern=NpV2SdControl.Telemetry(read);
             Need(modern.Length==28 && U(modern,0)==2 && U(modern,24)==3,"Legacy telemetry did not upgrade truthfully.");
-            Put(legacy,8,15000);Refuse<IOException>(()=>NpV2SdControl.ReadTelemetry(legacy),"Legacy telemetry invented a triple mask.");
+            Put(legacy,8,40000);Refuse<IOException>(()=>NpV2SdControl.ReadTelemetry(legacy),"Legacy telemetry invented an unsupported rate.");
         }
         foreach(var shape in new[]{new byte[0],new byte[23],new byte[24],new byte[27],new byte[28],new byte[29]})
             Refuse<IOException>(()=>NpV2SdControl.ReadTelemetry(shape),"Malformed telemetry shape/version admitted.");
@@ -172,12 +173,32 @@ internal static class NpV2SdProfileTests
         var v2wrongLength=new byte[24];Put(v2wrongLength,0,2);
         Refuse<IOException>(()=>NpV2SdControl.ReadTelemetry(v2wrongLength),"Version2 accepted version1 length.");
     }
+    static void Advertised7500Gates()
+    {
+        var historical=Status(3,7500);
+        Need(NpV2SdControl.Parse(Reply(historical),0,91).Hz==7500,"Historical 7.5-kHz status parsing changed.");
+        Need(!NpV2SdControl.CanSelectProfile(historical,3,7500) && !NpV2SdControl.CanStart(historical),"Unadvertised live 7.5-kHz profile admitted.");
+        historical.Flags|=NpV2SdControl.Live7500;
+        Need(NpV2SdControl.CanSelectProfile(historical,3,7500) && NpV2SdControl.CanStart(historical),"Advertised live 7.5-kHz profile refused.");
+        var old=Status(3,20000);
+        Need(NpV2SdControl.CanSelectProfile(old,3,20000) && !NpV2SdControl.CanSelectProfile(old,3,7500),"Old firmware rate admission changed.");
+        old.Flags|=16384U|131072U|32768U|262144U;
+        Need(NpV2SdControl.RecoveryRequiresUpgrade(old) && !NpV2SdControl.CanRecover(old) && NpV2SdControl.OnlineState(old).Contains("upgrade before recovery"),"Unadvertised stored 7.5-kHz recovery admitted.");
+        old.Flags|=NpV2SdControl.Stored7500;
+        Need(!NpV2SdControl.RecoveryRequiresUpgrade(old) && NpV2SdControl.CanRecover(old),"Advertised stored 7.5-kHz recovery refused.");
+    }
     static int Main()
     {
         try{
-            Requests();Profiles(3,20000,61440,31248);Profiles(3,30000,61440,46872);
-            Profiles(7,15000,40960,35156);Profiles(7,20000,40960,46872);RefusalsAndLegacyTelemetry();
-            Console.WriteLine("PASS "+checks+" actual-source closed SD profiles, legacy requests/telemetry, CRC, geometry and refusal checks; no radio/hardware qualification.");return 0;
+            Requests();
+            foreach(uint mask in new[]{1U,3U,7U})foreach(uint hz in new[]{7500U,15000U,20000U,30000U}){
+                uint ticks=NpV2SdControl.ProfileTicks(mask,hz);
+                uint blocks=(uint)(((ulong)60*hz*1600/ticks)/4*4);
+                Profiles(mask,hz,ticks,blocks);
+            }
+            RefusalsAndLegacyTelemetry();
+            Advertised7500Gates();
+            Console.WriteLine("PASS "+checks+" actual-source twelve SD profiles, legacy requests/telemetry, CRC, geometry and refusal checks; no radio/hardware qualification.");return 0;
         }catch(Exception error){Console.Error.WriteLine(error);return 1;}
     }
 }

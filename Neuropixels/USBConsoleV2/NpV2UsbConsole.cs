@@ -1907,12 +1907,29 @@ namespace USB512_interface
                 );
         }
 
+        // Borrowed-device cleanup runs once for each successfully opened device,
+        // even if setup fails before confirmConfiguration. Retire only owned AUX
+        // reads here; do not dispose the shared device or cancel its EP81 pipe.
+        internal static NpV2RecordingResult RunContinuousInFolder(string devicePath, string folder, Func<bool> cancelled,
+            Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration
+#if !NP2_CONSOLE_STANDALONE
+            , Action<NpImuDisplay> sensorDisplay, bool saveSensors
+#endif
+            , bool mergeProbes, bool saveRaw, Action<NpV2UsbDevice> beforeDeviceDispose)
+        {
+            return RunCore(devicePath, folder, 0U, cancelled, progress, decodedApRow, confirmConfiguration
+#if !NP2_CONSOLE_STANDALONE
+                ,sensorDisplay,saveSensors
+#endif
+                ,mergeProbes,saveRaw,beforeDeviceDispose);
+        }
+
         private static NpV2RecordingResult RunCore(string devicePath, string folder, uint targetBlocks, Func<bool> cancelled,
             Action<NpV2RecordingProgress> progress, Action<int, short[]> decodedApRow, Action<NpV2UsbDevice> confirmConfiguration
 #if !NP2_CONSOLE_STANDALONE
             , Action<NpImuDisplay> sensorDisplay=null, bool saveSensors=false
 #endif
-            , bool mergeProbes=false, bool saveRaw=true
+            , bool mergeProbes=false, bool saveRaw=true, Action<NpV2UsbDevice> beforeDeviceDispose=null
             )
         {
             if (String.IsNullOrWhiteSpace(devicePath)) throw new ArgumentNullException("devicePath");
@@ -1937,7 +1954,7 @@ namespace USB512_interface
             var backlogFree = new BlockingCollection<Done>(buffers.ReadBuffers);
             var work = new BlockingCollection<Done>(buffers.ReadBuffers);
             var warnings = new ConcurrentQueue<string>();
-            Exception workerError = null, verificationWarning = null, error = null;
+            Exception workerError = null, verificationWarning = null, error = null, beforeDisposeError = null;
             bool started = false, protocolComplete = false, stopRequested = false, cancelSent = false, armRequested = false;
             NpV2CaptureStatus finalCapture = null;
             NpV2SourceStatus finalSource = null;
@@ -2284,19 +2301,29 @@ namespace USB512_interface
                     }
                     finally
                     {
-                        if (started && !protocolComplete)
+                        try
                         {
-                            try { device.Cancel(); } catch { }
-                            device.AbortAndRetire(slots);
-                            // Failure-only query AFTER native ownership retired.
-                            if(finalSource==null)try{finalSource=device.GetSourceStatus();}catch{}
-                        }
+                            if (started && !protocolComplete)
+                            {
+                                try { device.Cancel(); } catch { }
+                                device.AbortAndRetire(slots);
+                                // Failure-only query AFTER native ownership retired.
+                                if(finalSource==null)try{finalSource=device.GetSourceStatus();}catch{}
+                            }
 #if !NP2_CONSOLE_STANDALONE
-                        if(sensorMonitor!=null && !Array.Exists(slots,slot=>slot!=null && slot.Active))
-                            sensorMonitor.ObserveIdleClock(device);
+                            if(sensorMonitor!=null && !Array.Exists(slots,slot=>slot!=null && slot.Active))
+                                sensorMonitor.ObserveIdleClock(device);
 #endif
-                        // Optional sidecar files outlive all queued verifier
-                        // work; finalization belongs after the worker join.
+                            // Optional sidecar files outlive all queued verifier
+                            // work; finalization belongs after the worker join.
+                        }
+                        finally
+                        {
+                            // Also run if EP81 retirement itself throws, so AUX
+                            // can retire its own requests before WinUsbFree.
+                            try { if(beforeDeviceDispose!=null)beforeDeviceDispose(device); }
+                            catch(Exception ex) { beforeDisposeError=ex; }
+                        }
                     }
                 }
             }
@@ -2343,6 +2370,7 @@ namespace USB512_interface
             }
             clock.Stop();
             error = error ?? workerError;
+            if(beforeDisposeError!=null)error=error==null?beforeDisposeError:new AggregateException("Recording and before-device-dispose cleanup failed.",error,beforeDisposeError);
             result.Error = DescribeError(error);
             result.Warning = JoinWarnings(warnings);
             result.CancelledBeforeCapture = IsCancelledBeforeCapture(error, received, armRequested, finalCapture) &&
@@ -2536,7 +2564,7 @@ namespace USB512_interface
                                codec == 5U && blockProbeMask == 3U && bits == 8 ||
                                codec == 6U && blockProbeMask == 7U && bits == 9;
                 if (blockProbeMask == 0U || blockProbeMask > 7U || (blockLiveMask & ~blockProbeMask) != 0U ||
-                    (blockSample != NpV2CaptureStatus.Np2Usb03Sample15KHz && blockSample != NpV2CaptureStatus.Np2Usb03Sample20KHz && blockSample != NpV2CaptureStatus.Np2Usb03Sample30KHz) ||
+                    (blockSample != 7500U && blockSample != NpV2CaptureStatus.Np2Usb03Sample15KHz && blockSample != NpV2CaptureStatus.Np2Usb03Sample20KHz && blockSample != NpV2CaptureStatus.Np2Usb03Sample30KHz) ||
                     blockMclk != blockSample * 1600U || (blockIngress != 1U && blockIngress != 2U) ||
                     !profile || (blockIngress == 1U && (blockProbeMask & 4U) != 0U && codec != 6U) ||
                     (blockFlags & 1U) == 0U || (blockFlags & ~255U) != 0U ||

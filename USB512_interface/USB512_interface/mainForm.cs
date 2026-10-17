@@ -1235,6 +1235,18 @@ namespace USB512_interface
 
         private void StopCapture()
         {
+            try {StopNeuralCapture();}
+            finally {
+                StopGpioRtcRecording();
+                if(!running && captureThread==null) {
+                    UpdateStartEnabled();
+                    lblRecInfo.Text=lblRecInfo.Text.Replace("GPIO/RTC logging continues; press Stop to end it.","GPIO/RTC stopped.");
+                }
+            }
+        }
+
+        private void StopNeuralCapture()
+        {
             FreezeRecordingSummary(DateTime.UtcNow);
             NpCancelRecovery();
             if (!running && captureThread == null)
@@ -4113,7 +4125,7 @@ namespace USB512_interface
             if (btnNpLogger != null) btnNpLogger.Enabled = !running && !ztestRunning;
             if(btnSdInfo!=null)btnSdInfo.Enabled=!running && selectedDeviceKind==DeviceKind.XeNp && !String.IsNullOrWhiteSpace(devicePath);
             btnStart.Enabled = !running && npRecoveryCancelled && selectedDeviceKind != DeviceKind.NpUnavailable && !String.IsNullOrWhiteSpace(devicePath) && !String.IsNullOrWhiteSpace(saveFolder);
-            btnStop.Enabled = running && (selectedDeviceKind != DeviceKind.NpV2 || !ce64StopRequested);
+            btnStop.Enabled = (running && (selectedDeviceKind != DeviceKind.NpV2 || !ce64StopRequested)) || gpioRtcLogger!=null;
             btnDfu.Text="Firmware Update";
             btnDfu.Enabled = !running && !ztestRunning && !firmwareManagementActive && systemInfoActive==0 && deviceRefreshActive==0 && npRecoveryCancelled;
             if (btnImpedance != null) btnImpedance.Enabled = !running && !ztestRunning && selectedDeviceKind == DeviceKind.Ce64Msc && !String.IsNullOrWhiteSpace(devicePath);
@@ -4172,7 +4184,7 @@ namespace USB512_interface
         private void FinishCaptureOnUi(string message)
         {
             FreezeRecordingSummary(DateTime.UtcNow);
-            StopGpioRtcRecording();
+            FinishGpioRtcCapture();
             if(message.IndexOf("metadata warning:",StringComparison.OrdinalIgnoreCase)>=0)WarnRecordingOnce("metadata",message);
             if((selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && message.StartsWith("Capture error:",StringComparison.Ordinal))
                 WarnRecordingOnce("capture",message+"\r\n\r\nRecording stopped to protect continuity. Treat these files as incomplete; inspect the capture status in the recording folder.");
@@ -4191,7 +4203,8 @@ namespace USB512_interface
             btnRefresh.Enabled = true;
             comboDrives.Enabled = true;
             UpdateStartEnabled();
-            lblRecInfo.Text = message + (String.IsNullOrEmpty(runFolder) ? String.Empty : ". Files: " + runFolder);
+            lblRecInfo.Text = message + (String.IsNullOrEmpty(runFolder) ? String.Empty : ". Files: " + runFolder)+
+                (gpioRtcLogger!=null && gpioRtcLogger.IsLogging?"\r\nGPIO/RTC logging continues; press Stop to end it.":String.Empty);
             if(selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) {
                 lastCaptureReport=NpReportForm.CaptureText(SystemInfoDeviceName(),devicePath,message,runFolder);
                 captureReportButton.Enabled=true;
@@ -4270,6 +4283,7 @@ namespace USB512_interface
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if(usbModeChanging){e.Cancel=true;base.OnFormClosing(e);return;}
             StopCapture();
             if(captureThread!=null && (captureThread.IsAlive || selectedDeviceKind==DeviceKind.NpV2)) {
                 e.Cancel=true;

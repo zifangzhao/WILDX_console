@@ -126,6 +126,7 @@ namespace USB512_interface {
   internal NpGpioRtcActivity GetActivity() {lock(gate){var ids=channelEvents.Keys.ToArray();
    return new NpGpioRtcActivity(ids,channelEvents.Values.ToArray(),eventRate.Read(MonotonicMs(),ids));}}
   internal bool IsLogging {get{return running;}}
+  internal string DirectoryPath {get{return folder;}}
   internal long SyncReplies {get{lock(gate)return clock.Replies;}}
   internal bool ClockSynchronized {get{lock(gate)return clock.Best!=null && Now()>=clock.LastReply && Now()-clock.LastReply<=10000;}}
   internal NpGpioRtcLogger(string directory,NpGpioRtcDevice selected,INpGpioRtcPort transport=null) {

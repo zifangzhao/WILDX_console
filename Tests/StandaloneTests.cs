@@ -77,7 +77,9 @@ internal static class StandaloneTests
             var request=(byte[])Call(T("CE32_console.NpSdControl"),null,"Request",2U,91U,3U,20000U,0U,0U,0U,0U,0U);
             Reject(()=>((Task)Call(form.GetType(),form,"Send",request)).GetAwaiter().GetResult(),"Mutation admitted without confirmed protocol");
             form.GetType().GetField("recorderVersion",All).SetValue(form,2);Call(form.GetType(),form,"Profiles",new object[]{null});
-            Check(profiles.Items.Count==2,"Detected protocol did not populate matching profiles");
+            Check(profiles.Items.Count==0,"Profiles guessed before probe capabilities were read");
+            form.GetType().GetField("np2AvailableMask",All).SetValue(form,3U);Call(form.GetType(),form,"Profiles",new object[]{null});
+            Check(profiles.Items.Count==6,"Detected protocol did not populate the supported probe-prefix profiles");
             Call(form.GetType(),form,"ResetDevice");
             Check(profiles.Items.Count==0 && (int)form.GetType().GetField("recorderVersion",All).GetValue(form)==0,"Disconnect retained the previous device version");
         }
@@ -99,15 +101,17 @@ internal static class StandaloneTests
         Check(!(bool)Call(connection,null,"Matches",(byte)0xb9,request,(byte)0xb9,Reply(0x31524c4e,3,91)),"Wrong operation admitted");
         Check(!(bool)Call(connection,null,"Matches",(byte)0xb9,request,(byte)0xb8,Reply(0x31524c4e,2,91)),"Wrong command admitted");
     }
-    static MemoryStream Card(string tag,bool badFooter=false,bool shortExtent=false)
+    static MemoryStream Card(string tag,bool badFooter=false,bool shortExtent=false,uint mask=3,uint hz=20000)
     {
         const uint start=8192,payload=16384,end=32768,blocks=8;
+        uint ticks=mask==1?122880U:mask==3?61440U:mask==7?40960U:0U;
+        uint laneMask=mask==1?7U:mask==3?63U:511U,lanes=mask==7?6U:4U,channels=mask==1?3U:mask==3?6U:9U;
         var card=new MemoryStream(new byte[(payload+blocks*91)*512]);
         Action<uint,byte[]> write=(lba,sector)=>{card.Position=(long)lba*512;card.Write(sector,0,512);};
         var id=new byte[512];Encoding.ASCII.GetBytes("CE_FILESYSTEM_V1").CopyTo(id,0);Encoding.ASCII.GetBytes(tag).CopyTo(id,32);write(16,id);
         var directory=new byte[512];Put(directory,0,1);uint committed=payload+blocks*91;Put(directory,4,shortExtent?committed-1:committed);Put(directory,256,shortExtent?committed-1:committed);write(128,directory);
-        var d=new byte[512];Encoding.ASCII.GetBytes("N2SDLOG1").CopyTo(d,0);uint[] fields={11,7,20000,32000000,3,63,4,6,46592,61440,91,4,start,payload,payload+((end-payload)/364)*364,end,65536,0};for(int n=0;n<fields.Length;n++)Put(d,8+n*4,fields[n]);Put(d,96,15);Put(d,100,1);Seal(d);write(start+3,d);
-        var f=(byte[])d.Clone();Encoding.ASCII.GetBytes("N2SDEND1").CopyTo(f,0);Put(f,100,badFooter?4U:3U);Put(f,104,badFooter?1U:0U);Put(f,108,blocks);Put(f,112,blocks/4);Put(f,116,committed);Put(f,120,blocks*61440);Seal(f);write(start+4,f);card.Position=0;return card;
+        var d=new byte[512];Encoding.ASCII.GetBytes("N2SDLOG1").CopyTo(d,0);uint[] fields={11,7,hz,hz*1600,mask,laneMask,lanes,channels,46592,ticks,91,4,start,payload,payload+((end-payload)/364)*364,end,65536,0};for(int n=0;n<fields.Length;n++)Put(d,8+n*4,fields[n]);Put(d,96,15);Put(d,100,1);Seal(d);write(start+3,d);
+        var f=(byte[])d.Clone();Encoding.ASCII.GetBytes("N2SDEND1").CopyTo(f,0);Put(f,100,badFooter?4U:3U);Put(f,104,badFooter?1U:0U);Put(f,108,blocks);Put(f,112,blocks/4);Put(f,116,committed);Put(f,120,blocks*ticks);Seal(f);write(start+4,f);card.Position=0;return card;
     }
     static void Catalog()
     {
@@ -118,6 +122,12 @@ internal static class StandaloneTests
             Check((bool)row.GetType().GetProperty("V2",All).GetValue(row,null),"NP2 generation not preserved");Check(row.ToString().Contains("NP2 probes 1 + 2"),"NP2 shown as AP/LFP");
             Check((bool)row.GetType().GetProperty("Downloadable",All).GetValue(row,null),"Valid complete NP2 footer rejected");
             Check((long)Call(T("CE32_console.NpDownloadForm"),null,"RequiredBytes",row)==308L*1536,"NP2 free-space check used NP1 chunks");
+        }
+        foreach(uint mask in new uint[]{1,3,7})foreach(uint hz in new uint[]{15000,20000,30000})using(var card=Card("NP_PSSI_7",false,false,mask,hz)){
+            object row=((IList)Call(type,null,"Read",card))[0];uint ticks=mask==1?122880U:mask==3?61440U:40960U;
+            string label=mask==1?"probe 1":mask==3?"probes 1 + 2":"probes 1 + 2 + 3";
+            Check((uint)row.GetType().GetField("ProbeMask",All).GetValue(row)==mask && (uint)row.GetType().GetField("TicksPerBlock",All).GetValue(row)==ticks,"NP2 catalog mask/ticks were not read from descriptor");
+            Check(Math.Abs((double)row.GetType().GetProperty("V2DurationSeconds",All).GetValue(row,null)-8.0*ticks/(hz*1600.0))<1e-12 && row.ToString().Contains("NP2 "+label),"NP2 catalog duration/physical prefix label is not profile-specific");
         }
         foreach(bool shortExtent in new[]{false,true})using(var card=Card("NP_PSSI_7",!shortExtent,shortExtent)){
             var rows=(IList)Call(type,null,"Read",card);Check(rows.Count==1,"Invalid allocated entry hidden");Check(!(bool)rows[0].GetType().GetProperty("Downloadable",All).GetValue(rows[0],null),"Failed/out-of-bounds NP2 entry downloadable");
@@ -300,6 +310,9 @@ internal static class StandaloneTests
         try{app=Assembly.LoadFrom(Path.GetFullPath(args[0]));string output=Path.GetFullPath(args[1]);Directory.CreateDirectory(output);Application.EnableVisualStyles();
             if(args.Length==3 && args[2]=="--catalog-format-only"){
                 CatalogFormat();Console.WriteLine("PASS "+checks+" focused catalog-format checks: all three supported V1/V2 identities, exact identity preservation, common reset sequence, unchanged settings/payload/legacy writer policy, unknown or changed identity/capacity refusal before writes; memory streams only.");return 0;
+            }
+            if(args.Length==3 && args[2]=="--catalog-only"){
+                Catalog();Console.WriteLine("PASS "+checks+" focused catalog checks: NP2 descriptor mask/rate/tick labels and durations, legacy identity, failed extent and torn-journal refusals; memory streams only.");return 0;
             }
             Wire();BleDetection();Catalog();CatalogFormat();Controls();Workspace();Snapshot("USB512_interface.Form1",output,"main");Snapshot("CE32_console.NpDownloadForm",output,"download",new object[]{null});Snapshot("USB512_interface.NpV2FirmwareForm",output,"firmware",new object[]{null});Snapshot("USB512_interface.NpBleForm",output,"ble");Snapshot("USB512_interface.NpBleForm",output,"ble-advanced",true);
             Console.WriteLine("PASS "+checks+" standalone checks: fragmented/corrupt/stale BLE receipts, NP2 native/shared catalogs, failed extents, torn journal, exact generation/UID selection and offline UI rendering; no hardware scan or commands.");return 0;

@@ -11,3 +11,8 @@ $warnings=Join-Path $OutputDirectory 'NpRecordingWarningTests.exe'
 if($LASTEXITCODE){throw 'Recording warning tests did not compile.'}
 & $warnings $ConsoleExecutable $OutputDirectory
 if($LASTEXITCODE){throw 'Recording warning regression failed.'}
+$continuity=Join-Path $OutputDirectory 'NpGpioRtcContinuityTests.exe'
+& $Compiler /nologo /warnaserror /target:exe /r:System.Core.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll "/out:$continuity" (Join-Path $PSScriptRoot 'Tests\NpGpioRtcContinuityTests.cs')
+if($LASTEXITCODE){throw 'GPIO continuity tests did not compile.'}
+& $continuity $ConsoleExecutable $OutputDirectory
+if($LASTEXITCODE){throw 'GPIO continuity regression failed.'}

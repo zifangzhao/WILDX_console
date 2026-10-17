@@ -39,8 +39,9 @@ internal static class TestNpManagementForms
         Check(((Button)Field(form,"update")).Enabled==(idle && (recovery || inPlace)),"APP update gate changed");
         Check(((Button)Field(form,"abortUpdate")).Enabled==(!working && pending==0 && inPlace && role==4),"APP abort gate changed");
         Check(((Button)Field(form,"romDfu")).Enabled==(idle && !recovery && role!=4 && (capabilities&16)!=0),"ROM DFU idle/capability gate changed");
+        Check(((Button)Field(form,"exitRecovery")).Enabled==(idle && role==4),"Cannot exit recovery safely after moving USB modes");
         foreach(var button in (Button[])Field(form,"modeButtons"))Check(button.Enabled==idle,"Firmware mode busy gate changed");
-        Check(((Button[])Field(form,"modeButtons"))[2].Text==(inPlace?"APP update mode":"Recovery"),"Update mode label does not reflect capability");
+        Check(((Button[])Field(form,"modeButtons"))[0].Text==(inPlace?"APP update mode":"Recovery"),"Update mode label does not reflect capability");
     }
     static void Complete(Task task,TaskCompletionSource<object> operation)
     {
@@ -83,6 +84,63 @@ internal static class TestNpManagementForms
             host.Hide();form.Controls.Add(layout);
         }
     }
+    static void AdvancedModes(string path,string output)
+    {
+        var type=assembly.GetType("USB512_interface.Form1",true);
+        using(var form=(Form)Activator.CreateInstance(type)){
+            var buttons=(Button[])Field(form,"usbModeButtons");var firmware=(Button)Field(form,"btnDfu");
+            Check(buttons.Length==3,"USB operational modes missing from Advanced");
+            ushort[] modes={2,3,1};string[] names={"USB streaming","USB download","SD / BLE"};
+            for(int i=0;i<buttons.Length;i++){
+                Check(buttons[i].Parent==firmware.Parent && buttons[i].Text==names[i] && (ushort)buttons[i].Tag==modes[i],"USB mode is not beside Firmware Update or has wrong mode");
+            }
+            var page=firmware.Parent;while(page!=null && !(page is TabPage))page=page.Parent;
+            Check(page==Field(form,"advancedPage"),"USB modes are outside Advanced");
+            var kind=type.GetField("selectedDeviceKind",Instance);Set(form,"devicePath",path);
+            Action update=()=>type.GetMethod("UpdateStartEnabled",Instance).Invoke(form,null);
+            foreach(string family in new[]{"XeNp","NpV2"}){
+                kind.SetValue(form,Enum.Parse(kind.FieldType,family));update();
+                foreach(var button in buttons)Check(button.Enabled,"Idle "+family+" cannot select USB mode before reading recording settings");
+                foreach(string busy in new[]{"running","ztestRunning","systemInfoActive","deviceRefreshActive","firmwareManagementActive","npRecoveryCancelled"}){
+                    var field=type.GetField(busy,Instance);object old=field.GetValue(form);
+                    field.SetValue(form,field.FieldType==typeof(int)?(object)1:busy=="npRecoveryCancelled"?(object)false:true);update();
+                    foreach(var button in buttons)Check(!button.Enabled,"USB mode enabled during "+busy);
+                    var blocked=(Task)type.GetMethod("SwitchUsbMode",Instance).Invoke(form,new object[]{(ushort)2});
+                    Check(blocked.IsCompleted && !blocked.IsFaulted,"Blocked USB mode attempted work");
+                    field.SetValue(form,old);
+                }
+            }
+            update();
+            var download=Field(form,"downloadWorkspace");download.GetType().GetMethod("SetBusy",Instance).Invoke(download,new object[]{true});
+            foreach(var button in buttons)Check(!button.Enabled,"USB mode enabled during download");
+            download.GetType().GetMethod("SetBusy",Instance).Invoke(download,new object[]{false});
+            var ble=(Form)Field(form,"bleWorkspace");var done=new TaskCompletionSource<object>();
+            var bleTask=(Task)ble.GetType().GetMethod("Run",Instance).Invoke(ble,new object[]{(Func<Task>)(()=>done.Task)});
+            foreach(var button in buttons)Check(!button.Enabled,"USB mode enabled during BLE ownership");Complete(bleTask,done);
+            Set(form,"usbModeChanging",true);var closing=new FormClosingEventArgs(CloseReason.UserClosing,false);
+            typeof(Form).GetMethod("OnFormClosing",Instance).Invoke(form,new object[]{closing});
+            Check(closing.Cancel,"Main window can close during USB mode transition");Set(form,"usbModeChanging",false);
+            kind.SetValue(form,Enum.Parse(kind.FieldType,"NpUnavailable"));update();
+            foreach(var button in buttons)Check(!button.Enabled,"Unidentified USB device can select mode");
+            kind.SetValue(form,Enum.Parse(kind.FieldType,"XeNp"));update();
+            var advanced=(TabPage)page;var layout=advanced.Controls[0];
+            using(var host=new Form {ClientSize=new Size(1000,520),Font=form.Font,ShowInTaskbar=false,StartPosition=FormStartPosition.Manual,Location=new Point(-20000,-20000)}){
+                host.Controls.Add(layout);host.Show();Application.DoEvents();
+                foreach(var button in buttons)Check(button.Visible && button.Parent.ClientRectangle.Contains(button.Bounds),"USB mode clipped at minimum window width");
+                Check(firmware.Parent.ClientRectangle.Contains(((Button)Field(form,"diagnosticsButton")).Bounds),"Diagnostics clipped by moved USB modes");
+                using(var bitmap=new Bitmap(host.Width,host.Height)){host.DrawToBitmap(bitmap,new Rectangle(Point.Empty,host.Size));bitmap.Save(Path.Combine(output,"advanced-usb-modes.png"),ImageFormat.Png);}
+                host.Hide();advanced.Controls.Add(layout);
+            }
+        }
+        var v2=assembly.GetType("USB512_interface.NpV2FirmwareForm",true);var operation=v2.GetMethod("UsbModeOperation",Static);
+        Check((string)operation.Invoke(null,new object[]{(ushort)1})=="--sd" && (string)operation.Invoke(null,new object[]{(ushort)2})=="--stream" && (string)operation.Invoke(null,new object[]{(ushort)3})=="--download","V2 operational mode mapping changed");
+        bool rejected=false;try{operation.Invoke(null,new object[]{(ushort)4});}catch(TargetInvocationException error){rejected=error.InnerException is ArgumentOutOfRangeException;}Check(rejected,"Firmware recovery exposed as operational USB mode");
+        rejected=false;try{v2.GetMethod("SwitchUsbMode",Static).Invoke(null,new object[]{path,(ushort)2});}catch(TargetInvocationException error){rejected=error.InnerException is IOException;}Check(rejected,"V1 path passed to V2 mode helper");
+        using(var firmware=(Form)Activator.CreateInstance(v2,Instance,null,new object[]{null},null)){
+            foreach(var control in Descendants(firmware))if(control is Button)Check(control.Text!="USB streaming" && control.Text!="USB download" && control.Text!="SD / BLE" && control.Text!="Diagnostics & self-test…","Operational control remains in V2 Firmware Update");
+            Snapshot(firmware,output,"firmware-v2");
+        }
+    }
     [STAThread] static int Main(string[] args)
     {
         try{
@@ -101,11 +159,11 @@ internal static class TestNpManagementForms
                 Check(downloadButtons.Contains("Download session") && downloadButtons.Contains("Decode saved archive…") && downloadButtons.Contains("Enter USB download mode") && downloadButtons.Contains("Cancel"),"Download controls missing");
                 Check(!downloadButtons.Contains("Update SD app…") && !downloadButtons.Contains("Recovery") && !downloadButtons.Contains("Request ROM DFU…") && !downloadButtons.Contains("USB streaming") && !downloadButtons.Contains("SD app (USB disconnects)"),"Firmware controls leaked into Download");
                 Check(firmwareButtons.Contains("Update SD app…") && firmwareButtons.Contains("Recovery") && firmwareButtons.Contains("Request ROM DFU…"),"Firmware controls missing");
-                Check(!firmwareButtons.Contains("Download session") && !firmwareButtons.Contains("Decode saved archive…") && !firmwareButtons.Contains("Output folder…") && !firmwareButtons.Contains("Enter USB download mode") && !firmwareButtons.Contains("Cancel"),"Download controls leaked into Firmware Update");
+                Check(!firmwareButtons.Contains("Download session") && !firmwareButtons.Contains("Decode saved archive…") && !firmwareButtons.Contains("Output folder…") && !firmwareButtons.Contains("Enter USB download mode") && !firmwareButtons.Contains("Cancel") && !firmwareButtons.Contains("USB streaming") && !firmwareButtons.Contains("SD app (USB disconnects)"),"Operational controls leaked into Firmware Update");
                 foreach(string name in new[]{"UpdateApp","RequestRomDfu","SwitchMode"})Check(downloadType.GetMethod(name,Instance)==null,"Download retained firmware operation "+name);
                 foreach(string name in new[]{"Download","DecodeArchive","EnterDownloadMode"})Check(firmwareType.GetMethod(name,Instance)==null,"Firmware retained download operation "+name);
                 foreach(string name in new[]{"sessions","folder","method","catalogPath","cancelled"})Check(firmwareType.GetField(name,Instance)==null,"Firmware retained download state "+name);
-                Check(((Button[])Field(firmware,"modeButtons")).Length==3,"Firmware contains the download mode button");
+                Check(((Button[])Field(firmware,"modeButtons")).Length==1,"Firmware contains operational USB modes");
                 foreach(bool recovery in new[]{false,true})foreach(uint busy in new[]{0U,1U})foreach(uint pending in new[]{0U,3U})foreach(uint capabilities in new[]{0U,16U})foreach(bool working in new[]{false,true})FirmwareGates(firmware,recovery,busy,pending,capabilities,working);
                 foreach(uint role in new[]{2U,3U,4U})foreach(uint busy in new[]{0U,1U})foreach(uint pending in new[]{0U,4U})foreach(uint capabilities in new[]{64U,80U})foreach(bool working in new[]{false,true})FirmwareGates(firmware,false,busy,pending,capabilities,working,role);
                 FirmwareGates(firmware,true,0,0,0,false);
@@ -129,7 +187,8 @@ internal static class TestNpManagementForms
                 Snapshot(download,output,"download");Snapshot(firmware,output,"firmware");
                 Set(firmware,"deviceStatus",Status(false,0,0,79));RefreshControls(firmware);Snapshot(firmware,output,"firmware-inplace");
             }
-            Console.WriteLine("PASS actual Release management forms: "+checks+" separation, exact-UID, busy/capability, cancellation and operation-gate checks; device Shown handlers, USB discovery and hardware operations never invoked.");return 0;
+            AdvancedModes(path,output);
+            Console.WriteLine("PASS actual Release management forms: "+checks+" separation, exact-UID, busy/capability, cancellation, Advanced mode layout and operation-gate checks; device Shown handlers, USB discovery and hardware operations never invoked.");return 0;
         }catch(Exception error){Console.Error.WriteLine(error);return 1;}
     }
 }

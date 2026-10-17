@@ -22,7 +22,11 @@ namespace USB512_interface
         sealed class Profile
         {
             internal uint Mask, Hz;
-            public override string ToString() { return Mask==0?"Camera / Microphone":"Probe mask " + Mask + " | " + Hz.ToString("N0") + " samples/s"; }
+            public override string ToString() {
+                if(Mask==0)return "Camera / Microphone";
+                string label=Mask==1?"Probe 1":Mask==3?"Probes 1 + 2":Mask==7?"Probes 1 + 2 + 3":"Probe mask "+Mask;
+                return label+" | "+Hz.ToString("N0")+" samples/s"+(Mask==7&&Hz==30000?" — experimental; not sustained-qualified":"");
+            }
         }
         sealed class ConfigTransport : INpConfigTransport, INp2ConfigTransport
         {
@@ -40,11 +44,13 @@ namespace USB512_interface
         readonly ComboBox devices = new ComboBox { Width = 400, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly ComboBox profiles = new ComboBox { Width = 390, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly TextBox address = new TextBox { Width = 160 };
-        readonly NumericUpDown seconds = new NumericUpDown { Minimum = 0, Maximum = 3600, Value = 60, Width = 90 };
         readonly CheckBox unqualified = new CheckBox { Text = "Allow firmware-supported unqualified bench profile (NP1)", AutoSize = true };
         readonly CheckBox poll = new CheckBox { Text = "Refresh status every 2 seconds", Checked = true, AutoSize = true };
         readonly TextBox log = new TextBox { Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Dock = DockStyle.Fill };
         readonly Label state = new Label { Text = "Scan or enter a BLE address, then connect.", AutoSize = true, MaximumSize = new Size(850, 0) };
+        readonly Label firmwareStatus = new Label { AutoSize=true,Visible=false,MaximumSize=new Size(850,0) };
+        NpFirmwareIdentity firmwareIdentity;
+        internal event Action FirmwareReviewRequested;
         readonly FlowLayoutPanel actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, WrapContents = true };
         readonly FlowLayoutPanel maintenanceActions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, WrapContents = true };
         readonly Label maintenancePeer = new Label { AutoSize = true, Margin = new Padding(0,0,0,12) };
@@ -55,11 +61,11 @@ namespace USB512_interface
         readonly Label configurationStatus=new Label{AutoSize=true,MaximumSize=new Size(850,0)};
         readonly NpBleConfigurationReceipts configurationReceipts=new NpBleConfigurationReceipts();
         string configurationReadError;
-        NpBlePreviewForm preview;
+        Form preview;
         NpSdStatus current;
         int recorderVersion;
         uint np2AvailableMask;
-        Button scan,stopScan,connect,disconnect,rescueReset,channelConfiguration,usbDownload,previewButton,startRecording;
+        Button scan,stopScan,connect,disconnect,rescueReset,channelConfiguration,usbDownload,previewButton,startRecording,recordingsButton;
         bool busy, closing, connecting, hostBusy;
         internal bool IsBusy{get{return busy;}}
         internal bool SessionOwned{get{return busy || connection.Connected || watcher.Status==BluetoothLEAdvertisementWatcherStatus.Started;}}
@@ -98,36 +104,34 @@ namespace USB512_interface
             rescueReset=Add(maintenanceActions,"Rescue reset",RescueReset);
             var options=new FlowLayoutPanel();options.Controls.AddRange(new Control[]{unqualified,poll});
             InitializeMediaControls(options);
-            var settings=FieldGrid("Recording profile",profiles,"Storage bound (s; 0 = continuous)",seconds,options);settings.Name="bleRecordingFields";
+            var settings=FieldGrid("Recording profile",profiles,null,null,options);settings.Name="bleRecordingFields";
             Add(actions, "Read status", async () => { await ReadStatus(); });
             Add(actions, "Apply profile", Apply);
             startRecording=Add(actions, "Start recording", StartRecording);
             Add(actions, "Stop recording", StopRecording);
             Add(actions, "Sync PC time", SyncClock);
             previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
+            recordingsButton=Add(actions,"Recordings…",OpenRecordings);
             channelConfiguration=Add(actions, "Probe configuration…", ConfigureChannels);
             var reportButton=new Button {Text="Report…",AutoSize=true};
             reportButton.Click+=delegate {using(var report=new NpReportForm("BLE report","Device: "+(recorderVersion==0?"Unconfirmed":"Neuropixels V"+recorderVersion)+"\r\nBLE address: "+address.Text+"\r\n"+state.Text+"\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\n"+log.Text))report.ShowDialog(DialogOwner);};
             Add(actions,"Calibration…",()=>{NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2);return Task.CompletedTask;});
-            Add(actions, "Mount catalog", async () => {
-                var s = await ReadStatus();
-                if (V2 && !NpV2SdControl.CanPrepareStorage(s)) throw new IOException("A stopped recorder with storage controls is required.");
-                await Send(V2 ? NpV2SdControl.StorageRequest(NpV2SdControl.NextId(s), false) : NpV1BleProtocol.Mount(s, NpSdControl.NextId(s)));
-            });
             Add(maintenanceActions, "Recover interrupted catalog", async () => {
                 var s = await ReadStatus();
-                if (V2 && !NpV2SdControl.CanRecover(s)) throw new IOException("Firmware does not advertise a recoverable interrupted allocation.");
+                if (V2 && !NpV2SdControl.CanRecover(s)) throw new IOException(NpV2SdControl.RecoveryRequiresUpgrade(s)?"Firmware does not advertise stored 7.5-kHz catalog recovery. Upgrade before recovery; raw download remains available.":"Firmware does not advertise a recoverable interrupted allocation.");
                 await Send(V2 ? NpV2SdControl.Request(8, NpV2SdControl.NextId(s)) : NpV1BleProtocol.Recover(s, NpSdControl.NextId(s)));
             });
-            Add(actions, "USB streaming", () => SwitchMode(2, 2));
-            usbDownload=Add(actions, "USB download", () => { if (V2) throw new IOException("For NP2, enter USB service, then select Download in Firmware Update."); return SwitchMode(4, 2); });
-            Add(maintenanceActions, "Firmware loader", () => SwitchMode(1, 1));
-            Add(maintenanceActions, "ROM DFU", () => SwitchMode(3, 3));
+            Add(actions, "USB streaming", () => SwitchMode(NpV1BleProtocol.DestinationUsbStreaming, 2));
+            usbDownload=Add(actions, "USB download", () => { if (V2) throw new IOException("For NP2, enter USB service, then select Download in Firmware Update."); return SwitchMode(NpV1BleProtocol.DestinationUsbDownload, 2); });
+            Add(maintenanceActions, "Firmware loader", () => SwitchMode(NpV1BleProtocol.DestinationLoader, 1));
+            Add(maintenanceActions, "ROM DFU", () => SwitchMode(NpV1BleProtocol.DestinationDfu, 3));
+            Add(maintenanceActions,"Bundled firmware files…",()=>{NpFirmwareNotice.OpenFiles();return Task.CompletedTask;});
             maintenanceActions.SetFlowBreak(maintenanceActions.Controls[maintenanceActions.Controls.Count-1],true);
             maintenanceActions.Controls.Add(maintenanceResult);
             var statusPanel = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, FlowDirection=FlowDirection.TopDown,WrapContents=false,Padding=Padding.Empty };
-            statusPanel.Controls.Add(state);statusPanel.Controls.Add(mediaStatus);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
-            statusPanel.SizeChanged+=delegate {foreach(var label in new[]{state,mediaStatus,clockStatus,configurationStatus})label.MaximumSize=new Size(Math.Max(1,statusPanel.ClientSize.Width),0);};
+            statusPanel.Controls.Add(state);statusPanel.Controls.Add(firmwareStatus);statusPanel.Controls.Add(mediaStatus);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
+            statusPanel.SizeChanged+=delegate {foreach(var label in new[]{state,firmwareStatus,mediaStatus,clockStatus,configurationStatus})label.MaximumSize=new Size(Math.Max(1,statusPanel.ClientSize.Width),0);};
+            maintenanceActions.SizeChanged+=delegate {maintenancePeer.MaximumSize=new Size(Math.Max(1,maintenanceActions.ClientSize.Width),0);};
             foreach(var label in new[]{mediaStatus,clockStatus,configurationStatus}) {
                 label.Visible=false;label.TextChanged+=delegate {label.Visible=label.Text.Length!=0;};
             }
@@ -158,23 +162,23 @@ namespace USB512_interface
                 if(control is Button){control.MinimumSize=new Size(0,36);((Button)control).AutoSizeMode=AutoSizeMode.GrowAndShrink;}
                 if(row==options)control.Margin=new Padding(0,0,16,0);
             }
-            foreach(var label in new[]{state,clockStatus,configurationStatus})label.Margin=new Padding(0,0,0,6);
-            state.ForeColor=clockStatus.ForeColor=configurationStatus.ForeColor=WildXTheme.Muted;
+            foreach(var label in new[]{state,firmwareStatus,clockStatus,configurationStatus})label.Margin=new Padding(0,0,0,6);
+            state.ForeColor=firmwareStatus.ForeColor=clockStatus.ForeColor=configurationStatus.ForeColor=WildXTheme.Muted;
             UpdateControls();ResumeLayout(true);
         }
         static TableLayoutPanel FieldGrid(string leftTitle,Control left,string rightTitle,Control right,FlowLayoutPanel below)
         {
-            var grid=new TableLayoutPanel {AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,Dock=DockStyle.Top,ColumnCount=2,RowCount=3,
+            bool paired=right!=null;
+            var grid=new TableLayoutPanel {AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,Dock=DockStyle.Top,ColumnCount=paired?2:1,RowCount=3,
                 Margin=Padding.Empty,Padding=new Padding(0,0,0,12)};
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,250));
+            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));if(paired)grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,250));
             for(int row=0;row<3;row++)grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            grid.Controls.Add(WildXTheme.Label(leftTitle),0,0);grid.Controls.Add(WildXTheme.Label(rightTitle),1,0);
-            left.Anchor=right.Anchor=AnchorStyles.Left|AnchorStyles.Right;
-            left.Margin=new Padding(0,0,16,0);right.Margin=Padding.Empty;
-            grid.Controls.Add(left,0,1);grid.Controls.Add(right,1,1);
+            grid.Controls.Add(WildXTheme.Label(leftTitle),0,0);
+            left.Anchor=AnchorStyles.Left|AnchorStyles.Right;left.Margin=new Padding(0,0,paired?16:0,0);grid.Controls.Add(left,0,1);
+            if(paired){grid.Controls.Add(WildXTheme.Label(rightTitle),1,0);right.Anchor=AnchorStyles.Left|AnchorStyles.Right;right.Margin=Padding.Empty;grid.Controls.Add(right,1,1);}
             below.AutoSize=true;below.AutoSizeMode=AutoSizeMode.GrowAndShrink;below.Dock=DockStyle.Top;
             below.WrapContents=true;below.Margin=new Padding(0,12,0,0);below.Padding=Padding.Empty;
-            grid.Controls.Add(below,0,2);grid.SetColumnSpan(below,2);return grid;
+            grid.Controls.Add(below,0,2);grid.SetColumnSpan(below,paired?2:1);return grid;
         }
         void WatcherStopped(BluetoothLEAdvertisementWatcher sender,BluetoothLEAdvertisementWatcherStoppedEventArgs e)
         {
@@ -224,24 +228,34 @@ namespace USB512_interface
             disconnect.Enabled=connecting || (!busy && !hostBusy && linked);
             foreach(Control control in maintenanceActions.Controls)if(control is Button)control.Enabled=ready;
             rescueReset.Enabled=ready && V2;
-            maintenancePeer.Text=linked?"Connected · "+address.Text.Trim():"Connect in BLE Mode";
-            profiles.Enabled=seconds.Enabled=unqualified.Enabled=poll.Enabled=actions.Enabled=ready;
+            maintenancePeer.Text=linked?"Connected · "+address.Text.Trim()+
+                (recorderVersion==0?"":"\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed((uint)recorderVersion,firmwareIdentity)+
+                "\r\nBundled: "+(NpFirmwareCatalog.Bundled.For((uint)recorderVersion)?.Versions??"Unavailable")):"Connect in BLE Mode";
+            profiles.Enabled=unqualified.Enabled=poll.Enabled=actions.Enabled=ready;
             channelConfiguration.Visible=recorderVersion!=0 && !(profiles.SelectedItem is Profile && ((Profile)profiles.SelectedItem).Mask==0);
             channelConfiguration.Text="Probe configuration…";
             usbDownload.Visible=unqualified.Visible=recorderVersion==1;
-            previewButton.Visible=V2;previewButton.Enabled=ready && current!=null && (current.Flags&128)!=0;
-            startRecording.Enabled=ready && (V2?clock.Synchronized && NpV2SdControl.CanStart(current):NpV1BleProtocol.CanStart(current));
+            previewButton.Visible=recorderVersion!=0;previewButton.Enabled=ready && (V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current));
+            recordingsButton.Enabled=ready;
+            startRecording.Enabled=ready && (V2?clock.Synchronized && NpV2SdControl.CanStart(current):NpV1BleProtocol.CanManualStart(current));
             UpdateMediaControls();
         }
         void ClosePreview(){if(preview!=null){preview.Close();preview.Dispose();preview=null;}}
-        void ResetDevice(){ClosePreview();ResetMedia();clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;Profiles(null);UpdateControls();}
+        void ResetDevice(){ClosePreview();ResetMedia();clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
         async Task Run(Func<Task> action)
         {
             if (busy || hostBusy) return; busy = true; UpdateControls();
             NotifyState();
             try { await refreshTask;await action(); }
             catch (Exception ex) { current = null; state.Text = ex.Message; Append(ex.Message); }
-            finally { busy = false; UpdateControls();NotifyState(); }
+            finally { busy = false; UpdateControls();NotifyState();OfferFirmwareReview(); }
+        }
+        void OfferFirmwareReview()
+        {
+            if(!Visible || !ContainsFocus || busy || hostBusy || !connection.Connected || current==null || current.Busy || current.Fault!=0 ||
+                !(V2?(current.State==1 || current.State==5 || current.State==7):(current.State==0 || current.State==3)))return;
+            if(NpFirmwareNotice.Offer(DialogOwner,"ble:"+address.Text.Trim(),NpFirmwareCatalog.Bundled.For((uint)recorderVersion),firmwareIdentity))
+                FirmwareReviewRequested?.Invoke();
         }
         void Append(string message) { log.AppendText(DateTime.Now.ToString("HH:mm:ss") + " " + message + Environment.NewLine); }
         uint Next() { uint n = unchecked(++sequence); return n == 0 ? ++sequence : n; }
@@ -263,7 +277,8 @@ namespace USB512_interface
             }catch{connection.Disconnect();ResetDevice();throw;}
             finally{connecting=false;UpdateControls();}
         }
-        void ShowStatus(NpSdStatus s){current=s;state.Text=V2?NpV2SdControl.Describe(s):NpV1BleProtocol.StateText(s)+"\r\n"+s;}
+        void ShowStatus(NpSdStatus s){current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s)+"\r\n"+s;
+            firmwareStatus.Visible=recorderVersion!=0;firmwareStatus.Text="Firmware: "+NpFirmwareCatalog.Bundled.Installed((uint)recorderVersion,firmwareIdentity);}
         async Task<NpSdStatus> Send(byte[] request)
         {
             if(recorderVersion==0)throw new IOException("Connect and read the device status first.");
@@ -283,9 +298,13 @@ namespace USB512_interface
                     var caps=await new Np2ConfigClient(new ConfigTransport(connection)).CapsAsync(0,CancellationToken.None);
                     if(caps.AvailableMask!=3U && caps.AvailableMask!=7U)throw new IOException("Unsupported NP2 connector capability.");
                     np2AvailableMask=caps.AvailableMask;
-                    seconds.Value=0;configurationStatus.Text="NP2 IMRO application not verified in this connection.";
+                    configurationStatus.Text="NP2 IMRO application not verified in this connection.";
                 }
                 Profiles(current);if(!V2)await RefreshV1Media(current);UpdateControls();
+                if((current.Flags&NpFirmwareIdentity.BleCapability)!=0){
+                    firmwareIdentity=NpFirmwareIdentity.Parse(await connection.ExchangeAsync(NpFirmwareIdentity.BleCommand,new byte[0],CancellationToken.None),(uint)recorderVersion);
+                    ShowStatus(current);UpdateControls();
+                }
                 return current;
             }
             var s = await Send(V2 ? NpV2SdControl.Request(0, Next()) : NpSdControl.Request(0, Next()));
@@ -315,8 +334,8 @@ namespace USB512_interface
         {
             var previous = profiles.SelectedItem as Profile;var choices=new List<Profile>();
             if (V2) {
-                foreach (uint hz in new uint[] { 20000, 30000 }) choices.Add(new Profile { Mask = 3, Hz = hz });
-                if(np2AvailableMask==7U)foreach(uint hz in new uint[]{15000,20000})choices.Add(new Profile{Mask=7,Hz=hz});
+                foreach(uint mask in new uint[]{1U,3U,7U})if((np2AvailableMask&mask)==mask)
+                    foreach(uint hz in NpV2SdControl.SupportsLive7500(s)?new uint[]{7500,15000,20000,30000}:new uint[]{15000,20000,30000})choices.Add(new Profile{Mask=mask,Hz=hz});
             }
             else if(recorderVersion==1) {
                 foreach (uint hz in new uint[] { 7500, 15000, 20000, 30000 }) for (uint mask = 1; mask <= 7; mask++)
@@ -338,7 +357,7 @@ namespace USB512_interface
             var p = profiles.SelectedItem as Profile; if (p == null) throw new IOException("Select a profile.");
             if(!V2 && p.Mask==0){await ApplyV1Media();return;}
             var s = await ReadStatus();
-            if (V2 ? !NpV2SdControl.CanConfigure(s) : !NpV1BleProtocol.CanConfigure(s) || !NpV1BleProtocol.CanSelect(s, p.Mask, p.Hz)) throw new IOException("Wait for the recorder to stop and confirm a supported profile.");
+            if (V2 ? !NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz) : !NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz)) throw new IOException("Wait for the recorder to stop and confirm an advertised profile.");
             await Send(V2 ? NpV2SdControl.Request(1, NpV2SdControl.NextId(s), p.Hz, 0, 0, p.Mask) : NpSdControl.Request(1, NpSdControl.NextId(s), p.Mask, p.Hz));
             Append("Selection acknowledged. Read status to confirm readiness before Start.");
         }
@@ -347,7 +366,7 @@ namespace USB512_interface
             var p = profiles.SelectedItem as Profile; var s = await ReadStatus();
             if (p == null || p.Mask != s.Mask || p.Hz != s.Hz) throw new IOException("Apply the selected profile before Start.");
             if(V2 && !clock.Synchronized)throw new IOException("Synchronize PC time while stopped before starting.");
-            uint duration = (uint)seconds.Value;
+            const uint duration=0;
             if (V2) {
                 // Validate storage/readiness before changing any staged maps.
                 uint blocks = NpV2SdControl.Blocks(s, p.Hz, duration);
@@ -380,7 +399,7 @@ namespace USB512_interface
                 if(s.Mask!=0)await new NpConfigClient(new ConfigTransport(connection)).StageForCaptureAsync(configurations.Values,(int)s.Mask,CancellationToken.None);
                 await Send(NpSdControl.Request(2, NpSdControl.NextId(s), s.Mask, s.Hz, s.Start, end, session == 0 ? 1U : session, s.Qualified ? 0U : 1U));
             }
-            Append("START acknowledged; wait for device-confirmed recording. "+(duration==0?"Continuous until Stop or card full.":"Duration reserves storage and is not a precise timer."));
+            Append("START acknowledged; wait for device-confirmed recording. Continuous until Stop or card full.");
         }
         async Task StopRecording()
         {
@@ -415,10 +434,10 @@ namespace USB512_interface
         }
         void OpenPreview()
         {
-            if(!V2 || current==null || (current.Flags&128)==0)throw new IOException("Device does not advertise NP2 preview support.");
+            if(V2?!NpV2SdControl.CanPreview(current):!NpV1BlePreviewForm.CanPreview(current))throw new IOException("Start a probe recording with device preview support before opening Preview.");
             if(preview!=null && !preview.IsDisposed){preview.Activate();return;}
-            var calibration=NpCalibrationStore.Get("ble:"+address.Text.Trim().ToUpperInvariant());calibration.RequireModel(true,(int)current.Mask);
-            preview=new NpBlePreviewForm(connection,()=>V2?current:null,()=>busy,calibration);
+            var calibration=NpCalibrationStore.Get("ble:"+address.Text.Trim().ToUpperInvariant());calibration.RequireModel(V2,(int)current.Mask);
+            preview=V2?(Form)new NpBlePreviewForm(connection,()=>V2?current:null,()=>busy || hostBusy,calibration):new NpV1BlePreviewForm(connection,()=>recorderVersion==1?current:null,()=>busy || hostBusy,calibration);
             preview.Show();
         }
         async Task ConfigureChannels()

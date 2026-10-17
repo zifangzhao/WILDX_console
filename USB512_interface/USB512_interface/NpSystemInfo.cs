@@ -17,6 +17,9 @@ namespace USB512_interface
         internal string Protocol = "Unavailable", Mode = "Unavailable", Status = "Not queried";
         internal string Card = "Unavailable", Capacity = "Unavailable", Bus = "Unavailable", CardSource = "No cached card information";
         internal XeNpSdInfo Sd;
+        internal NpFirmwareIdentity Firmware;
+        internal bool DeviceIdle;
+        uint Family { get { return Device == "NP V1" ? 1U : Device == "NP V2" ? 2U : 0U; } }
         internal DateTime ReceivedAt;
 
         internal static NpSystemInfo Empty(string path, string device)
@@ -66,9 +69,8 @@ namespace USB512_interface
                     var state = NpV2ServiceStatus.Parse(service);
                     if (!state.Valid || state.Mode < 1 || state.Mode > 4 || state.Busy > 1 || state.Target > 4)
                         throw new InvalidDataException("Unsupported NP V2 service status");
-                    var uid = Regex.Match(path ?? "", @"#npv2-([0-9a-f]{24})#", RegexOptions.IgnoreCase);
-                    if (uid.Success) {
-                        string value = uid.Groups[1].Value;
+                    string value = NpV2FirmwareForm.Uid(path);
+                    if (value != null) {
                         if (state.Uid0 != Convert.ToUInt32(value.Substring(0, 8), 16) ||
                             state.UidXor != (Convert.ToUInt32(value.Substring(8, 8), 16) ^ Convert.ToUInt32(value.Substring(16, 8), 16)))
                             throw new InvalidDataException("NP V2 UID/status mismatch");
@@ -79,6 +81,14 @@ namespace USB512_interface
                 result.Mode = role == 2 ? "USB streaming service" : role == 3 ? "SD download service" : role == 4 ? "Recovery / update service" : "SD application";
                 result.Status = busy != 0 ? "Device busy; SD information not queried" : pending != 0 ? "Mode transition pending; SD information not queried" : "Idle snapshot";
                 if (busy != 0 || pending != 0) return result;
+                result.DeviceIdle = true;
+                if((BitConverter.ToUInt32(service,12)&NpFirmwareIdentity.UsbCapability)!=0) {
+                    try {result.Firmware=NpFirmwareIdentity.Parse(read(0xc0,NpFirmwareIdentity.UsbRequest,0,NpFirmwareIdentity.WireBytes),result.Family,
+                        result.Family==1?NpV1Management.UidFromPath(path):NpV2FirmwareForm.Uid(path));}
+                    catch(Exception ex) when(ex is IOException || ex is InvalidDataException || ex is Win32Exception || ex is ArgumentException || ex is TimeoutException) {
+                        result.Status+="; firmware identity unavailable: "+ex.Message;
+                    }
+                }
                 if (role == 3) {
                     byte[] capacity = read(0xc0, 0x60, 0, 32);
                     if (capacity == null || capacity.Length != 32 || BitConverter.ToUInt32(capacity, 0) != 0x3144504e ||
@@ -104,7 +114,7 @@ namespace USB512_interface
         }
         internal string Summary()
         {
-            return "Firmware release: " + NotReported + "\r\nUSB device release: " + UsbRelease + " | " + UsbId +
+            return "Firmware release: " + NpFirmwareCatalog.Bundled.Installed(Family, Firmware) + "\r\nUSB device release: " + UsbRelease + " | " + UsbId +
                 "\r\nUSB serial / UID: " + Serial + "\r\nSD card (cached): " + Card + "\r\nSD total capacity: " + Capacity +
                 " | Free recording space: Unavailable\r\nCached SD query bus: " + Bus + "\r\n" + Status;
         }
@@ -114,8 +124,12 @@ namespace USB512_interface
             text.AppendLine("DEVICE"); text.AppendLine("Device: " + Device); text.AppendLine("USB ID: " + UsbId);
             text.AppendLine("USB serial / UID: " + Serial); text.AppendLine("USB device release (bcdDevice): " + UsbRelease);
             text.AppendLine("Selected interface: " + Path); text.AppendLine();
-            text.AppendLine("FIRMWARE AND SOFTWARE"); text.AppendLine("Resident firmware release: " + NotReported);
-            text.AppendLine("SD/BLE application version: " + NotReported); text.AppendLine("Bootloader version: " + NotReported);
+            text.AppendLine("FIRMWARE AND SOFTWARE");
+            text.AppendLine("Installed image versions: " + NpFirmwareCatalog.Bundled.Installed(Family, Firmware));
+            text.AppendLine("Image identity source: " + (Firmware == null ? NotReported : "Firmware-reported cached manifest checks; NPF1 response CRC verified"));
+            if(Firmware!=null){text.AppendLine("APP code checked this boot: "+((Firmware.Flags&4)!=0));text.AppendLine("USB code checked this boot: "+((Firmware.Flags&8)!=0));}
+            var bundled = NpFirmwareCatalog.Bundled.For(Family);
+            if (bundled != null) { text.AppendLine("Bundled: " + bundled.Versions); text.AppendLine("Bundle: " + bundled.stage); }
             text.AppendLine("Console version (running executable): " + consoleVersion); text.AppendLine("Protocol: " + Protocol);
             text.AppendLine("USB device release and protocol ABI are not semantic firmware versions."); text.AppendLine();
             text.AppendLine("SD CARD"); text.AppendLine("Card identity: " + Card); text.AppendLine("Total capacity: " + Capacity);

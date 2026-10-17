@@ -140,13 +140,18 @@
     <Compile Include="Ble\NpBleWire.cs" />
     <Compile Include="Ble\NpBleConnection.cs" />
     <Compile Include="Ble\NpBleConnection.Media.cs" />
+    <Compile Include="Ble\NpBleConnection.Storage.cs" />
     <Compile Include="Ble\NpBleForm.cs" />
     <Compile Include="Ble\NpBleForm.Media.cs" />
+    <Compile Include="Ble\NpBleForm.Storage.cs" />
+    <Compile Include="Ble\NpBleStorage.cs" />
+    <Compile Include="Ble\NpV2BleCatalog.cs" />
     <Compile Include="Ble\NpBleConfigurationReceipts.cs" />
     <Compile Include="Ble\NpBleClock.cs" />
     <Compile Include="Ble\NpV2Preview.cs" />
     <Compile Include="Ble\NpV2PreviewWire.cs" />
     <Compile Include="Ble\NpBlePreviewForm.cs" />
+    <Compile Include="Ble\NpV1BlePreviewForm.cs" />
     <Compile Include="Ble\NpMediaExport.cs" />
     <Compile Include="Ble\WILD_VideoDecoder.cs" />
     <Compile Include="NpLogger\NpDownloadForm.cs" />
@@ -202,6 +207,13 @@
      <Private>True</Private>
      <GlobalPropertiesToRemove>BaseIntermediateOutputPath;MSBuildProjectExtensionsPath;IntermediateOutputPath;GeneratedVersionInfoFile</GlobalPropertiesToRemove>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="NpLogger\NpFirmwareCatalog.cs" />
+    <Content Include="..\..\Firmware\**\*">
+      <Link>Firmware\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <!-- Override with /p:NsisExe=&quot;path\to\makensis.exe&quot; when NSIS is installed elsewhere. -->

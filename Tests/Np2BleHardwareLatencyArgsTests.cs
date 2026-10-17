@@ -25,7 +25,7 @@ internal static class Np2BleHardwareLatencyArgsTests
             int method=source.IndexOf("static async Task RunLatency",StringComparison.Ordinal);
             int methodEnd=source.IndexOf("static async Task RunConnected",method,StringComparison.Ordinal);
             string latencyMethod=source.Substring(method,methodEnd-method);
-            Need(source.Contains("action != \"latency\"") && source.Contains("status|observed-status|latency|reconnect"),"Latency action is not advertised and validated.");
+            Need(source.Contains("action != \"latency\"") && source.Contains("status|observed-status|latency|sync|reconnect"),"Latency action is not advertised and validated.");
             Need(action>=0 && run>action && readonlyReturn>run,"Latency action is not routed to read-only measurement.");
             Need(latencyMethod.Contains("new long[LatencyStatusQueries]") && latencyMethod.Contains("new long[LatencyCapsQueries]") && latencyMethod.Contains("SendV2(connection,0,0,0") && latencyMethod.Contains("CapsAsync"),"Latency action lacks serialized STATUS/CAPS measurements.");
             Need(latencyMethod.Contains("Get(status,\"State\"))!=1U") && latencyMethod.Contains("latency.status-" ) && latencyMethod.Contains("LogCaps(port,caps)") && latencyMethod.Contains("latency.caps-"),"Measured STATUS/CAPS samples are not Idle-guarded and individually logged.");

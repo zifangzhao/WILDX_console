@@ -24,16 +24,19 @@ namespace USB512_interface
             int at = 0;
             while (at + 2 <= pending.Count) {
                 byte lead = pending[at], command = pending[at + 1];
-                if ((lead != 0x3c && lead != 0xad) || (command != 0xb9 && command != 0xb8 && command!=0xba && command!=0x90)) { at++; continue; }
+                if ((lead != 0x3c && lead != 0xad) || (command != 0xb9 && command != 0xb8 && command!=0xba && command!=0xbc && command!=0x90 && command!=0x94 && command!=0x95)) { at++; continue; }
                 bool preview=command==0xba;
-                bool parameters=command==0x90;
+                bool identity=command==0xbc;
+                bool native=command==0x90 || command==0x94 || command==0x95;
+                uint previewMagic=0;
                 if(preview){
                     if(pending.Count-at<6)break;
-                    if(BitConverter.ToUInt32(pending.GetRange(at+2,4).ToArray(),0)!=NpV2PreviewBurst.Magic){at++;continue;}
+                    previewMagic=BitConverter.ToUInt32(pending.GetRange(at+2,4).ToArray(),0);
+                    if(previewMagic!=NpV2PreviewBurst.Magic && previewMagic!=0x3156504eU){at++;continue;}
                 }
-                int bodyLength=parameters?512:preview?224:64;
+                int bodyLength=identity?192:command==0x95?4:native?512:preview?224:64;
                 int length = bodyLength+(lead == 0x3c ? 3 : 4);
-                if(preview && pending.Count-at>=34){
+                if(preview && previewMagic==NpV2PreviewBurst.Magic && pending.Count-at>=34){
                     byte kind=pending[at+31];
                     if((kind&128)==0 && (kind&64)!=0){
                         bool impossible=false;
@@ -48,7 +51,8 @@ namespace USB512_interface
                 var body = pending.GetRange(at + 2, bodyLength).ToArray();
                 // Preview has its own fixed metadata/body contract and no payload CRC.
                 // B8/B9 remain independent fixed 64-byte, CRC-checked controls.
-                if (!tail || (!preview && !parameters && BitConverter.ToUInt32(body, 60) != NpSdControl.Crc(body, 60))) { at++; continue; }
+                int crcAt=identity?188:60;
+                if (!tail || (!preview && !native && BitConverter.ToUInt32(body, crcAt) != NpSdControl.Crc(body, crcAt))) { at++; continue; }
                 frames.Add(Tuple.Create(command, body)); at += length;
             }
             if (at != 0) pending.RemoveRange(0, at);

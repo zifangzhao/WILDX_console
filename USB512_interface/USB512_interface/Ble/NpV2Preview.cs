@@ -18,7 +18,7 @@ namespace CE32_console
         {
             if (probe < 1 || probe > 2 || channel < 0 || channel >= 384 ||
                 phase < 0 || phase >= RowTicks || samples < 1 || samples > 256 ||
-                (sampleHz != 15000 && sampleHz != 20000 && sampleHz != 30000))
+                (sampleHz != 7500 && sampleHz != 15000 && sampleHz != 20000 && sampleHz != 30000))
                 throw new ArgumentOutOfRangeException();
             Probe = probe; Channel = channel; BaseChannel = channel % 128;
             Samples = samples; SampleHz = sampleHz;

@@ -30,7 +30,7 @@ provenance is not inferred from the current tree.
 
 Installer `WILDX_console-Setup-1.0.0.33-V2_SD_META13_20261016.exe`, SHA256
 `1B732353C7CCE6FE53CDBF975E6CB1C05411A2140C50E0576B29EEAC9052996C`.
-[Manifest](../LATEST_INSTALLERS/V2_SD_META13_20261016.release-manifest.json).
+[Manifest](../LATEST_INSTALLERS/release-manifest.json).
 Firmware/long-form evidence belongs to [XE_NP branchV2](https://github.com/zifangzhao/XE_NP/tree/V2/Note/V2_SD_LOWEST_CLASSIC_RELEASE_20261016.md).
 Only1p7500 uses classic, others retain VSC. Fresh~41mA versus warm~80mA is
 state-dependent; no guaranteed61% warm/battery saving. Camera removed and

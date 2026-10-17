@@ -238,7 +238,7 @@ namespace USB512_interface {
     local["parent_recording_settings"]="../recording_settings.json";local["folder_probe_mask"]=1<<(item.Key-1);
     if(local.ContainsKey("gpio_rtc")) {
      var gpio=(Dictionary<string,object>)local["gpio_rtc"];
-     foreach(string key in new[]{"session_file","events_file","clock_queries_file"})if(gpio.ContainsKey(key) && gpio[key]!=null)gpio[key]="../"+gpio[key];
+     foreach(string key in new[]{"session_file","events_file","clock_queries_file"})if(gpio.ContainsKey(key) && gpio[key]!=null && !Path.IsPathRooted((string)gpio[key]))gpio[key]="../"+gpio[key];
     }
     foreach(string kind in new[]{"misc_output","camera_output"}) {
      var shared=(Dictionary<string,object>)local[kind];

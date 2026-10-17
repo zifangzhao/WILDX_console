@@ -40,19 +40,19 @@ internal static class Np2BleHardwareRecordTests
             Need(source.Contains("int mapCount=RecordMapCount(args),rateIndex=4+mapCount") && source.Contains("fullDuration = RecordFlag(args,\"full-duration\")") &&
                 source.Contains("args.Length != 4") && source.Contains("RequireRecordDuration(recordHz,reservationSeconds,fullDuration,recordMask)") &&
                 source.Contains("const uint DefaultReservationSeconds = 60U;"),"Option/rate/duration admission missing before connection, or default changed.");
-            Need(source.Contains("uint recordMask=action==\"record3\"?7U:RequiredMask") &&
+            Need(source.Contains("uint recordMask=action==\"record1\"?1U:action==\"record3\"?7U:RequiredMask") &&
                 source.IndexOf("if(isRecord)RequireRecordHost",StringComparison.Ordinal)<source.IndexOf("await RunConnected",StringComparison.Ordinal),
-                "Triple host admission must use explicit mask7 and refuse before the connection/START path.");
+                "Prefix host admission must use explicit masks and refuse before the connection/START path.");
             Need(path.Contains("PrepareRequest(mapInputs[2],3,output)") && path.Contains("\"StageAsync\",p3,cancel") &&
                 path.Contains("\"StatusAsync\",(byte)2,cancel") && path.Contains("\"RequireApplied\",applied3,p3") &&
                 path.Contains("LogReceipt(\"staged-P3\"") && path.Contains("LogReceipt(\"applied-P3\""),
                 "Triple recording must stage/apply/read the real P3 request and receipt.");
-            Need(path.Contains("\"profile\",recordMask") && path.Contains("\"start\",recordMask") &&
+            Need(path.Contains("PrepareRequest(mapInputs[0], 1, output)") && path.Contains("(recordMask&2U)!=0?PrepareRequest(mapInputs[1], 2, output):null") && path.Contains("\"profile\",recordMask") && path.Contains("\"start\",recordMask") &&
                 path.Contains("RequireRecordProfile(lastStatus,recordMask,recordHz)") &&
                 path.Contains("\"CapturePreview\", NextId(), 1U, 0U, recordHz, cancel"),
                 "Selected profile is not explicit/pinned, or disposable preview was broadened to P3.");
             Need(source.Contains("RequireRecordReconnectOptions(recordReconnect,fullDuration,reservationSeconds)") &&
-                source.Contains("TimeSpan.FromSeconds(RecordBudgetSeconds(recordReconnect,reservationSeconds))"),"Reconnect restrictions/conditional budget are not wired.");
+                source.Contains("TimeSpan.FromSeconds(isRecord?RecordBudgetSeconds(recordReconnect,reservationSeconds):OverallSeconds)"),"Record-only conditional budget is not wired.");
             Need(path.Contains("\"Blocks\", lastStatus, recordHz, reservationSeconds") && path.Contains("blocks == 0") &&
                 path.Contains("RecordStopDue(fullDuration,reservationSeconds,recorded.Elapsed)"),"Finite reservation/default Stop policy bypassed.");
             int initialize=path.IndexOf("Invoke(clock, \"Initialize\"",StringComparison.Ordinal);
@@ -74,11 +74,11 @@ internal static class Np2BleHardwareRecordTests
                 connect>reconnect.IndexOf("Task.Delay(2000,cancel)",StringComparison.Ordinal) && status>connect && caps>status,
                 "Reconnect must connect exactly once, then STATUS before CAPS/other operations.");
             Need(reconnect.Contains("RequireRecordReconnectIdentity") && reconnect.Contains("RequireCaps(caps0,0)") &&
-                reconnect.Contains("RequireCaps(caps1,1)") && reconnect.Contains("\"StatusAsync\"") &&
+                reconnect.Contains("if(p2!=null)") && reconnect.Contains("\"StatusAsync\"") &&
                 reconnect.Contains("\"RequireApplied\",applied1,p1") && reconnect.Contains("\"RequireApplied\",applied2,p2") &&
                 reconnect.Contains("LogReceipt(\"record-reconnect-applied-P1\"") && reconnect.Contains("LogReceipt(\"record-reconnect-applied-P2\""),
                 "Reconnect identity/applied map CRC and IDs are not independently checked/logged.");
-            Need(reconnect.Contains("(snapshot[0]==7U)!=(p3!=null)") && reconnect.Contains("RequireCaps(caps2,2)") &&
+            Need(reconnect.Contains("((snapshot[0]&2U)!=0)!=(p2!=null)") && reconnect.Contains("((snapshot[0]&4U)!=0)!=(p3!=null)") && reconnect.Contains("RequireCaps(caps2,2)") &&
                 reconnect.Contains("\"RequireApplied\",applied3,p3") && reconnect.Contains("LogReceipt(\"record-reconnect-applied-P3\""),
                 "Reconnect can omit the third selected port or its real applied request proof.");
             Need(!reconnect.Contains("Initialize") && !reconnect.Contains("Synchronize") && !reconnect.Contains("StageAsync") &&
@@ -183,34 +183,36 @@ static class Harness {
 "+options+clock+reflection+@"
  static async Task Run(){
   string[] basic={""exe"",""peer"",""out"",""record"",""p1"",""p2""};
+  string[] single={""exe"",""peer"",""out"",""record1"",""p1""};
   string[] full=basic.Concat(new[]{""20000"",""60"",""full-duration""}).ToArray();
   Need(RecordPreview(basic) && !RecordFlag(basic,""full-duration""),""default changed"");
   Need(RecordMapCount(basic)==2,""legacy two-input indices changed"");
+  Need(RecordMapCount(single)==1 && RecordPreview(single),""single-probe parser requires an extra map or loses default preview policy"");
   string[] triple={""exe"",""peer"",""out"",""record3"",""p1"",""p2"",""p3""};
   Need(RecordMapCount(triple)==3 && RecordPreview(triple) && !RecordFlag(triple,""full-duration""),""triple requires real P3/default changed"");
   BadOption(basic.Take(4).Concat(new[]{""p1"",""p2""}).Select((v,i)=>i==3?""record3"":v).ToArray());
-  foreach(uint hz in new uint[]{15000,20000}){
+   foreach(uint hz in new uint[]{7500,15000,20000,30000}){
    RequireRecordDuration(hz,60,true,7);
    var flags=triple.Concat(new[]{hz.ToString(),""60"",""record-reconnect"",""no-preview"",""full-duration""}).ToArray();
    Need(RecordMapCount(flags)==3 && RecordFlag(flags,""record-reconnect"") && RecordFlag(flags,""full-duration"") && !RecordPreview(flags),""triple rate/duration/flag indices rejected"");
    BadOption(triple.Concat(new[]{hz.ToString(),""60"",""no-preview"",""no-preview""}).ToArray());
    BadOption(triple.Concat(new[]{hz.ToString(),""60"",""unknown""}).ToArray());
   }
-  foreach(uint mask in new uint[]{0,1,2,4,8,0x103}){
+  foreach(uint mask in new uint[]{0,2,4,8,0x103}){
    bool rejected=false;try{RequireRecordDuration(20000,60,true,mask);}catch(ArgumentException){rejected=true;}Need(rejected,""unsupported/narrowed mask admitted"");
   }
-  foreach(uint hz in new uint[]{0,30000,40000}){
+  foreach(uint hz in new uint[]{0,40000}){
    bool rejected=false;try{RequireRecordDuration(hz,60,true,7);}catch(ArgumentException){rejected=true;}Need(rejected,""unsupported triple rate admitted"");
   }
   Type control=typeof(CE32_console.NpV2SdControl);
   RequireRecordHost(typeof(LegacyControl),3,20000);
-  bool legacyRefused=false;try{RequireRecordHost(typeof(LegacyControl),7,20000);}catch(MissingMethodException){legacyRefused=true;}
-  Need(legacyRefused,""legacy host silently constructed a dual START for record3"");
-  RequireCaps(new Caps(),2);RequireCaps(new Caps{AvailableMask=3},0);RequireCaps(new Caps{AvailableMask=3},1);
+  bool legacyRefused=false;try{RequireRecordHost(typeof(LegacyControl),1,20000);}catch(MissingMethodException){legacyRefused=true;}
+  Need(legacyRefused,""legacy host silently constructed a dual START for record1"");
+  RequireCaps(new Caps(),2);RequireCaps(new Caps{AvailableMask=1},0);RequireCaps(new Caps{AvailableMask=3},1);
   Refuse(()=>RequireCaps(new Caps{AvailableMask=3},2));
   Refuse(()=>RequireCaps(new Caps{AvailableMask=15},2));
   Refuse(()=>RequireCaps(new Caps{Uid0=0x001A0020},2));
-  uint[,] pairs={{3,20000,31248},{3,30000,46872},{7,15000,35156},{7,20000,46872}};
+  uint[,] pairs={{1,7500,5856},{1,15000,11716},{1,20000,15624},{1,30000,23436},{3,7500,11716},{3,15000,23436},{3,20000,31248},{3,30000,46872},{7,7500,17576},{7,15000,35156},{7,20000,46872},{7,30000,70312}};
   for(int p=0;p<pairs.GetLength(0);p++){
    uint mask=pairs[p,0],hz=pairs[p,1];RequireRecordHost(control,mask,hz);
    foreach(uint op in new uint[]{1,2}){
@@ -223,12 +225,12 @@ static class Harness {
    var stopped=new CE32_console.NpSdStatus{State=1,Mask=mask,Hz=hz,Start=8192,Capacity=501301248,Flags=128|512};
    Need(CE32_console.NpV2SdControl.Blocks(stopped,hz,60)==pairs[p,2],""actual selected-profile finite block accounting wrong"");
    var status=new Status{Mask=mask,Hz=hz};RequireRecordProfile(status,mask,hz);
-   Refuse(()=>RequireRecordProfile(new Status{Mask=mask==3?7U:3U,Hz=20000},mask,hz));
+   Refuse(()=>RequireRecordProfile(new Status{Mask=mask==1?3U:1U,Hz=20000},mask,hz));
    Refuse(()=>RequireRecordProfile(new Status{Mask=mask+256U,Hz=hz},mask,hz));
    Refuse(()=>RequireRecordProfile(new Status{Mask=mask,Hz=hz==20000?30000U:20000U},mask,hz));
   }
   Need(RecordPreview(full) && RecordFlag(full,""full-duration""),""full option rejected"");
-  foreach(string hz in new[]{""20000"",""30000""})foreach(string[] flags in new[]{new[]{""no-preview"",""full-duration""},new[]{""full-duration"",""no-preview""}}){
+   foreach(string hz in new[]{""7500"",""15000"",""20000"",""30000""})foreach(string[] flags in new[]{new[]{""no-preview"",""full-duration""},new[]{""full-duration"",""no-preview""}}){
    var a=basic.Concat(new[]{hz,""60""}).Concat(flags).ToArray();
    Need(!RecordPreview(a) && RecordFlag(a,""full-duration""),""combined options rejected"");
   }
@@ -236,25 +238,25 @@ static class Harness {
   foreach(string[] flags in new[]{new[]{""full-duration"",""full-duration""},new[]{""no-preview"",""no-preview""},new[]{""FULL-DURATION""},new[]{""unknown""},new[]{""full-duration"",""no-preview"",""extra""}})
    BadOption(basic.Concat(new[]{""20000"",""60""}).Concat(flags).ToArray());
   BadOption(null);BadOption(new string[5]);
-  foreach(string hz in new[]{""20000"",""30000""}){
+   foreach(string hz in new[]{""7500"",""15000"",""20000"",""30000""}){
    var flags=basic.Concat(new[]{hz,""60"",""record-reconnect"",""no-preview"",""full-duration""}).ToArray();
    Need(RecordFlag(flags,""record-reconnect"") && RecordFlag(flags,""full-duration"") && !RecordPreview(flags),""reconnect option combination rejected"");
   }
   BadOption(basic.Concat(new[]{""20000"",""60"",""record-reconnect"",""record-reconnect""}).ToArray());
-  foreach(uint hz in new uint[]{20000,30000}){
-   foreach(uint seconds in new uint[]{1,10,60})RequireRecordDuration(hz,seconds,false);
-   foreach(uint seconds in new uint[]{1,60,120,121,900})RequireRecordDuration(hz,seconds,true);
+   foreach(uint mask in new uint[]{1,3,7})foreach(uint hz in new uint[]{7500,15000,20000,30000}){
+   foreach(uint seconds in new uint[]{1,10,60})RequireRecordDuration(hz,seconds,false,mask);
+   foreach(uint seconds in new uint[]{1,60,120,121,900})RequireRecordDuration(hz,seconds,true,mask);
    foreach(uint seconds in new uint[]{0,901,UInt32.MaxValue}){
-    bool refused=false;try{RequireRecordDuration(hz,seconds,true);}catch(ArgumentException){refused=true;}Need(refused,""invalid finite bound admitted"");
+    bool refused=false;try{RequireRecordDuration(hz,seconds,true,mask);}catch(ArgumentException){refused=true;}Need(refused,""invalid finite bound admitted"");
    }
-   bool rejected=false;try{RequireRecordDuration(hz,120,false);}catch(ArgumentException){rejected=true;}Need(rejected,""120 admitted without autonomous full duration"");
-   rejected=false;try{RequireRecordDuration(hz,900,false);}catch(ArgumentException){rejected=true;}Need(rejected,""900 admitted without autonomous full duration"");
+   bool rejected=false;try{RequireRecordDuration(hz,120,false,mask);}catch(ArgumentException){rejected=true;}Need(rejected,""120 admitted without autonomous full duration"");
+   rejected=false;try{RequireRecordDuration(hz,900,false,mask);}catch(ArgumentException){rejected=true;}Need(rejected,""900 admitted without autonomous full duration"");
    var flags=basic.Concat(new[]{hz.ToString(),""120"",""record-reconnect"",""no-preview"",""full-duration""}).ToArray();
    Need(RecordFlag(flags,""record-reconnect"") && RecordFlag(flags,""full-duration"") && !RecordPreview(flags),""120 reconnect options refused"");
    flags=basic.Concat(new[]{hz.ToString(),""900"",""record-reconnect"",""no-preview"",""full-duration""}).ToArray();
    Need(RecordFlag(flags,""record-reconnect"") && RecordFlag(flags,""full-duration"") && !RecordPreview(flags),""900 reconnect options refused"");
   }
-  foreach(uint hz in new uint[]{0,15000,40000}){
+  foreach(uint hz in new uint[]{0,40000}){
    bool rejected=false;try{RequireRecordDuration(hz,120,true);}catch(ArgumentException){rejected=true;}Need(rejected,""unsupported rate admitted"");
   }
   RequireRecordReconnectOptions(false,false,10);RequireRecordReconnectOptions(false,true,60);RequireRecordReconnectOptions(true,true,60);RequireRecordReconnectOptions(true,true,120);
@@ -264,7 +266,7 @@ static class Harness {
   foreach(uint seconds in new uint[]{0,1,10,59,61,119,121,899,901}){
    bad=false;try{RequireRecordReconnectOptions(true,true,seconds);}catch(ArgumentException){bad=true;}Need(bad,""reconnect admitted wrong bound"");
   }
-  Need(RecordBudgetSeconds(false,60)==180 && RecordBudgetSeconds(true,60)==240,""conditional reconnect budget changed legacy budget"");
+  Need(RecordBudgetSeconds(false,60)==420 && RecordBudgetSeconds(true,60)==420,""60 record budget is not bounded420"");
   Need(RecordBudgetSeconds(false,120)==420 && RecordBudgetSeconds(true,120)==420,""120 finite budget is not bounded420"");
   Need(RecordBudgetSeconds(false,121)==2400 && RecordBudgetSeconds(true,121)==2400 &&
    RecordBudgetSeconds(false,900)==2400 && RecordBudgetSeconds(true,900)==2400,"">120 finite budget is not bounded2400"");
@@ -276,7 +278,7 @@ static class Harness {
   Need(!RecordReconnectDue(true,false,true,3,9999) && !RecordReconnectDue(false,false,true,3,20000) &&
    !RecordReconnectDue(true,true,true,3,20000) && !RecordReconnectDue(true,false,false,3,20000),""reconnect repeated/early/unapplied"");
   foreach(uint state in new uint[]{0,1,2,4,5,6,7,255})Need(!RecordReconnectDue(true,false,true,state,20000),""reconnect outside Recording"");
-  foreach(uint mask in new uint[]{3,7})foreach(uint hz in mask==3?new uint[]{20000,30000}:new uint[]{15000,20000}){
+   foreach(uint mask in new uint[]{1,3,7})foreach(uint hz in new uint[]{7500,15000,20000,30000}){
    var beforeStatus=new Status{Mask=mask,Hz=hz};uint[] snapshot=RecordReconnectSnapshot(beforeStatus);var afterStatus=new Status{Mask=mask,Hz=hz,Chunks=500};
    RequireRecordReconnectIdentity(snapshot,afterStatus,7,11,true);
    beforeStatus.LastId++;Need(snapshot[5]==123,""snapshot retained mutable status reference"");

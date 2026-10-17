@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Microsoft.Win32.SafeHandles;
 using CE32_console;
 
@@ -80,6 +81,25 @@ namespace USB512_interface
                 }} catch(Win32Exception) { /* Device is detaching/re-enumerating. */ }
             }
             throw new IOException("Selected V1 did not return to idle USB streaming within 30 seconds. No capture START was sent.");
+        }
+        internal static string SwitchMode(NpV1Target target,ushort mode)
+        {
+            using(var manager=new NpV1Management(target)){
+                bool inPlace=UsesInPlaceTransition(manager.ReadStatus(),mode);
+                manager.SetMode(mode);
+                if(inPlace)return "Mode verified on the same USB interface: "+manager.WaitForInPlaceMode(mode).Description;
+            }
+            if(mode==1)return "SD / BLE mode acknowledged. USB disconnects; recording has not been verified.";
+            var watch=System.Diagnostics.Stopwatch.StartNew();
+            while(watch.Elapsed.TotalSeconds<20){
+                var matching=Enumerate().FindAll(device=>device.Uid==target.Uid && device.Recovery==(mode==4));
+                if(matching.Count==1)try{using(var manager=new NpV1Management(matching[0])){
+                    var state=manager.ReadStatus();
+                    if(state.Split && state.Role==mode && state.Busy==0 && state.PendingMode==0)return "Mode verified: "+state.Description;
+                }}catch(Win32Exception){}catch(IOException){}
+                Thread.Sleep(250);
+            }
+            throw new IOException("Mode acknowledged, but target role did not enumerate within 20 seconds. Refresh; do not assume entry succeeded.");
         }
         internal NpV1Management(NpV1Target selected)
         {
