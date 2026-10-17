@@ -70,6 +70,7 @@ namespace USB512_interface
             if(recording || mediaWasRecording) {
                 try {
                     var m=NpV1MediaStatus.Parse(await connection.ExchangeAsync(NpV1MediaStatus.Request()));
+                    recordingTime.Text=RecordingTimeText(m.MicrophoneHz!=0?m.Samples/m.MicrophoneHz:m.CameraHz!=0?m.Frames/m.CameraHz:0);
                     mediaStatus.Text="Camera "+m.CameraHz+" fps · "+m.Frames+" frames · "+m.Missed+" misses · microphone "+m.MicrophoneHz.ToString("N0")+" Hz / "+m.Samples.ToString("N0")+" samples · faults "+m.CameraFault+" / "+m.MicrophoneFault+" · overruns "+m.Overruns;
                 }catch(Exception ex) when(ex is IOException || ex is TimeoutException){mediaStatus.Text="Media counters delayed: "+ex.Message;}
             }

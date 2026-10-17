@@ -1,25 +1,21 @@
-# WILDX 1.0.0.36
+# WILDX 1.0.0.37
 
-[Download the installer](WILDX_console-Setup-1.0.0.36.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.37.exe).
 
-BLE Recording settings now uses the USB-style probe checkboxes and AP sample
-rate, with probe configuration inside the dialog. Start applies changed settings
-and waits for their device confirmation, removing the separate Apply step.
-Camera/microphone selection remains available where advertised by V1 firmware.
+BLE Mode now shows a bold **Recording time HH:MM:SS** line for V1/V2 neural
+recording and supported V1 camera/audio. It uses device recording progress,
+works after reconnecting and retains the final duration after Stop. USB keeps
+its existing elapsed-time, recorded-size and free-space display.
 
-Stop can be requested during startup work. It cancels a pending host start,
-waits for an existing device command, and confirms an inactive recorder using
-fresh status. A finalized V1 state4/fault2 is displayed as stopped after a
-capture-source failure, rather than waiting for Complete. Active/pending flags
-must clear before stopping is confirmed. Lost mutation replies are not replayed.
+The [1.0.0.36 BLE settings and Stop fixes](../Note/RELEASE_1.0.0.36_20261017.md)
+are included. No firmware upgrade is required. The underlying V1 capture-source
+fault on the two reported loggers remains unresolved; this display change does
+not establish hardware recording integrity.
 
-These console changes require no firmware upgrade. All 36 inherited runtime,
-helper and firmware files are unchanged; all 37 extracted payload files match
-the checked build. Run WILD-X remains available after installation.
-
-The underlying capture-source fault on the two reported V1 loggers has not been
-reproduced or fixed by this release. See [validation and limits](../Note/RELEASE_1.0.0.36_20261017.md),
+All 37 extracted files match the checked payload; the 36 inherited runtime,
+helper and firmware files are unchanged. The installer retains Run WILD-X.
+See [validation and timing semantics](../Note/RELEASE_1.0.0.37_20261017.md),
 the [manifest](release-manifest.json) and [checksums](SHA256SUMS.txt).
 
 This root contains one final installer. The preceding release and original
-metadata are [archived here](legacy/20261017_before_1.0.0.36/README.md).
+metadata are [archived here](legacy/20261017_before_1.0.0.37/README.md).

@@ -42,7 +42,8 @@ namespace USB512_interface {
   sealed class Profile {internal uint Mask,Hz;}
   readonly NpBleConnection connection=new NpBleConnection();
   readonly ComboBox profiles=new ComboBox();readonly CheckBox poll=new CheckBox();
-  readonly Label state=new Label();readonly List<string> messages=new List<string>();
+  readonly Label state=new Label(),recordingTime=new Label();readonly List<string> messages=new List<string>();
+  static string RecordingTimeText(ulong seconds){return seconds.ToString();}
   int recorderVersion=1,clockSyncs,controlUpdates,stopCalls;uint np2AvailableMask;
   bool busy,hostBusy,closing,mediaSettingsChanged,stopRequested;bool V2 {get{return false;}}
   NpSdStatus current;TaskCompletionSource<bool> heldStatus;
@@ -74,6 +75,8 @@ ACTUAL_FORM_METHODS
     Need(h.connection.Writes.FindAll(b=>b[1]==0x33).Count==1,"profile mutation was replayed");
     Need(h.mediaCamera.Checked==((streams&1)!=0) && h.mediaMicrophone.Checked==((streams&2)!=0),"independent media streams lost");
     await h.VerifyV1Media();
+    h.current.State=1;await h.RefreshV1Media(h.current);
+    Need(h.recordingTime.Text==((streams&2)!=0?"0":"10"),"Media frame/sample counters did not update recording time");
     if((streams&1)!=0){h.mediaRate.Value=25;await h.RefreshV1Media(h.current);Need(h.mediaRate.Value==25,"poll overwrote pending rate edit");await Refused(()=>h.VerifyV1Media(),"unapplied rate admitted for Start");}
    }
    using(var h=New()) {

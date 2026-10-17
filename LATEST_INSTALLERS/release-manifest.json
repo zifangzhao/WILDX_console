@@ -1,19 +1,19 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.36",
+  "version": "1.0.0.37",
   "releaseDate": "2026-10-17",
-  "releaseTag": "BLE_RECORDING_SETTINGS_STOP_CONFIRMATION_20261017",
-  "sourceBaseCommit": "2e57fba14dc5f1b001701b0f09d03c9a1790f601",
+  "releaseTag": "BLE_ONLINE_RECORDING_TIME_20261017",
+  "sourceBaseCommit": "45c36bd5cddf490e39e3a59126e22ac061310999",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.36.exe",
-    "sha256": "37A546811A5BBB551A2B62BE12566F7A67907BFD0FDBE53978254425E1694005",
-    "bytes": 5977669
+    "file": "WILDX_console-Setup-1.0.0.37.exe",
+    "sha256": "026BB8A64BAE62DE0C0DF587CFEA82ADAF9829276F9D3E70B6BDE9AF834D6622",
+    "bytes": 5977893
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "0AF9CD0732D4EFC1FFECBA0136F473E84E3C680E832013E1D5FF82AE0500FA58",
-      "bytes": 1495552
+      "sha256": "8A5558A467AB7EA69C95C0299CE7EC97A8B51FF226CF2A2889A2ADC2CE269BD7",
+      "bytes": 1496576
     },
     {
       "path": "WILDX_console.exe.config",
@@ -868,24 +868,17 @@
   ],
   "validation": {
     "incrementalGuiBuild": true,
-    "actualAppBleSettingsChecks": 23,
-    "actualSourceRecordingStartStopChecks": 38,
-    "actualSourceMediaFlowChecks": 41,
+    "actualAppBleTimeChecks": 28,
+    "actualAppUsbSummaryChecks": 16,
+    "actualSourceMediaFlowChecks": 44,
     "actualAppMediaChecks": 116,
-    "actualAppLayoutChecks": 13,
-    "actualAppRuntimeProfileChecks": 27,
-    "actualAppBleWorkflowChecks": 4397,
-    "fakeGattNativeChecks": 17,
-    "simulatedV2CatalogChecks": 1945,
-    "actualAppV1ProfileCompatibilityChecks": 103,
-    "actualAppSharedWorkflowChecks": 106,
     "inheritedUnchangedPayloadFiles": 36,
     "allExtractedPayloadFilesVerified": 37,
     "physicalHardwareActions": false,
     "fullSuiteRepeated": false,
     "firmwareUpgradeRequired": false,
-    "uncertainMutationsReplayed": false,
-    "reportedV1DeviceFaultReproduced": false
+    "priorControlValidation": "1.0.0.36 at45c36bd5cddf490e39e3a59126e22ac061310999",
+    "recordingTimeSource": "Neural: committed device data counters. V1 media: device microphone sample or camera frame counts. Whole seconds refreshed on status polling; buffered data and dropped frames can lag wall-clock time."
   },
   "excludedExperimentalDownloadReadiness": true,
   "knownLimits": [

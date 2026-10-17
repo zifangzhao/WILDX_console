@@ -45,6 +45,7 @@ namespace USB512_interface
         readonly ComboBox devices = new ComboBox { Width = 400, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly ComboBox profiles = new ComboBox { Width = 390, DropDownStyle = ComboBoxStyle.DropDownList };
         readonly Label recordingSummary = new Label {AutoSize=true,Text="Connect to read recording settings."};
+        readonly Label recordingTime = new Label {Name="bleRecordingTime",AutoSize=true,Text="Recording time 00:00:00",Font=WildXTheme.Strong};
         readonly TextBox address = new TextBox { Width = 160 };
         readonly CheckBox unqualified = new CheckBox { Text = "Allow firmware-supported unqualified bench profile (NP1)", AutoSize = true };
         readonly CheckBox poll = new CheckBox { Text = "Refresh status every 2 seconds", Checked = true, AutoSize = true };
@@ -122,7 +123,7 @@ namespace USB512_interface
             previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
             recordingsButton=Add(actions,"Recordings…",OpenRecordings);
             var reportButton=new Button {Text="Report…",AutoSize=true};
-            reportButton.Click+=delegate {using(var report=new NpReportForm("BLE report","Device: "+(recorderVersion==0?"Unconfirmed":"Neuropixels V"+recorderVersion)+"\r\nBLE address: "+address.Text+"\r\n"+state.Text+"\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\n"+log.Text))report.ShowDialog(DialogOwner);};
+            reportButton.Click+=delegate {using(var report=new NpReportForm("BLE report","Device: "+(recorderVersion==0?"Unconfirmed":"Neuropixels V"+recorderVersion)+"\r\nBLE address: "+address.Text+"\r\n"+recordingTime.Text+"\r\n"+state.Text+"\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\n"+log.Text))report.ShowDialog(DialogOwner);};
             Add(actions,"Calibration…",()=>{NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2);return Task.CompletedTask;});
             Add(maintenanceActions, "Recover interrupted catalog", async () => {
                 var s = await ReadStatus();
@@ -137,7 +138,7 @@ namespace USB512_interface
             maintenanceActions.SetFlowBreak(maintenanceActions.Controls[maintenanceActions.Controls.Count-1],true);
             maintenanceActions.Controls.Add(maintenanceResult);
             var statusPanel = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, FlowDirection=FlowDirection.TopDown,WrapContents=false,Padding=Padding.Empty };
-            statusPanel.Controls.Add(state);statusPanel.Controls.Add(firmwareStatus);statusPanel.Controls.Add(mediaStatus);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
+            statusPanel.Controls.Add(recordingTime);statusPanel.Controls.Add(state);statusPanel.Controls.Add(firmwareStatus);statusPanel.Controls.Add(mediaStatus);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
             statusPanel.SizeChanged+=delegate {foreach(var label in new[]{state,firmwareStatus,mediaStatus,clockStatus,configurationStatus})label.MaximumSize=new Size(Math.Max(1,statusPanel.ClientSize.Width),0);};
             maintenanceActions.SizeChanged+=delegate {maintenancePeer.MaximumSize=new Size(Math.Max(1,maintenanceActions.ClientSize.Width),0);};
             foreach(var label in new[]{mediaStatus,clockStatus,configurationStatus}) {
@@ -170,8 +171,9 @@ namespace USB512_interface
                 if(control is Button){control.MinimumSize=new Size(0,36);((Button)control).AutoSizeMode=AutoSizeMode.GrowAndShrink;}
                 if(row==options)control.Margin=new Padding(0,0,16,0);
             }
-            foreach(var label in new[]{state,firmwareStatus,clockStatus,configurationStatus})label.Margin=new Padding(0,0,0,6);
+            foreach(var label in new[]{recordingTime,state,firmwareStatus,clockStatus,configurationStatus})label.Margin=new Padding(0,0,0,6);
             state.ForeColor=firmwareStatus.ForeColor=clockStatus.ForeColor=configurationStatus.ForeColor=WildXTheme.Muted;
+            recordingTime.Font=WildXTheme.Strong;
             UpdateControls();ResumeLayout(true);
         }
         static TableLayoutPanel FieldGrid(string leftTitle,Control left,string rightTitle,Control right,FlowLayoutPanel below)
@@ -251,7 +253,7 @@ namespace USB512_interface
             UpdateMediaControls();
         }
         void ClosePreview(){if(preview!=null){preview.Close();preview.Dispose();preview=null;}}
-        void ResetDevice(){ClosePreview();ResetMedia();mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
+        void ResetDevice(){ClosePreview();ResetMedia();recordingTime.Text=RecordingTimeText(0);mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
         async Task Run(Func<Task> action)
         {
             if (busy || hostBusy) return; busy = true; UpdateControls();
@@ -294,7 +296,9 @@ namespace USB512_interface
         void ShowStatus(NpSdStatus s){
             if(!V2 && s.Fault!=0 && (current==null || current.Fault!=s.Fault || current.Chunks!=s.Chunks))Append("V1 "+NpV1BleProtocol.StateText(s));
             current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s)+"\r\n"+s;
+            if(V2 || s.Mask!=0 || s.Chunks==0)recordingTime.Text=RecordingTimeText(V2?NpV2SdControl.RecordedSeconds(s):NpV1BleProtocol.RecordedSeconds(s));
             firmwareStatus.Visible=recorderVersion!=0;firmwareStatus.Text="Firmware: "+NpFirmwareCatalog.Bundled.Installed((uint)recorderVersion,firmwareIdentity);}
+        static string RecordingTimeText(ulong seconds){return "Recording time "+(seconds/3600).ToString("00")+":"+(seconds/60%60).ToString("00")+":"+(seconds%60).ToString("00");}
         async Task<NpSdStatus> Send(byte[] request)
         {
             if(recorderVersion==0)throw new IOException("Connect and read the device status first.");
