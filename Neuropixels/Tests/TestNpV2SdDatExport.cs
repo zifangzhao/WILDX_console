@@ -11,6 +11,16 @@ internal static class NpV2SdDatExportTests
     private static MethodInfo ExternalBridge;
     private static MethodInfo ExternalCatalog;
     private static MethodInfo ExternalMetadata;
+    private sealed class CapacityImage:Stream {
+        readonly Stream source;readonly long capacity;
+        internal CapacityImage(Stream bytes,long length){source=bytes;capacity=length;}
+        public override bool CanRead{get{return true;}}public override bool CanSeek{get{return true;}}public override bool CanWrite{get{return false;}}
+        public override long Length{get{return capacity;}}public override long Position{get{return source.Position;}set{source.Position=value;}}
+        public override int Read(byte[] b,int at,int count){return source.Read(b,at,count);}
+        public override long Seek(long offset,SeekOrigin origin){Position=offset+(origin==SeekOrigin.Begin?0:origin==SeekOrigin.Current?Position:Length);return Position;}
+        public override void Flush(){}public override void SetLength(long value){throw new NotSupportedException();}public override void Write(byte[] b,int at,int count){throw new NotSupportedException();}
+        protected override void Dispose(bool disposing){if(disposing)source.Dispose();base.Dispose(disposing);}
+    }
     private static void Bridge(Stream card, long start, long end, string output, Func<bool> cancel, Action<int> progress)
     {
         if(ExternalBridge==null){CE32_console.NpCe64Export.Export(card,start,end,output,cancel,progress);return;}
@@ -141,9 +151,9 @@ internal static class NpV2SdDatExportTests
     private static ulong RoundUp(ulong value,uint unit){return (value+unit-1)/unit*unit;}
     private static byte[] SectorAt(Stream card,long lba){card.Position=lba*512;var bytes=new byte[512];int read=card.Read(bytes,0,bytes.Length);Check(read==512,"Fixture sector truncated");return bytes;}
     private static void WriteAt(Stream card,long lba,byte[] bytes){card.Position=lba*512;card.Write(bytes,0,bytes.Length);}
-    private static System.Collections.IList Catalog(Stream card){
-        if(ExternalCatalog==null)return CE32_console.NpDownloadCatalog.Read(card);
-        try{return (System.Collections.IList)ExternalCatalog.Invoke(null,new object[]{card});}
+    private static System.Collections.IList Catalog(Stream card,bool available=false){
+        if(ExternalCatalog==null)return available?CE32_console.NpDownloadCatalog.ReadAvailable(card):CE32_console.NpDownloadCatalog.Read(card);
+        try{var method=available?ExternalCatalog.DeclaringType.GetMethod("ReadAvailable",BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic):ExternalCatalog;return (System.Collections.IList)method.Invoke(null,new object[]{card});}
         catch(TargetInvocationException e){System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(e.InnerException??e).Throw();throw;}
     }
     private static object RecordValue(object record,string name,bool property=false){
@@ -228,8 +238,18 @@ internal static class NpV2SdDatExportTests
                     string partialOutput=Path.Combine(root,"incomplete_"+hz+"_"+au+"_"+state);
                     using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(f,116),partialOutput,()=>false,null);
                     IncompleteOutput(partialOutput,bad,state==1,output);
+                    if(state==4){
+                        using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite))CatalogEntry(card,bad,BitConverter.ToUInt32(d,60));
+                        string openOutput=Path.Combine(root,"open_tail_"+hz+"_"+au);
+                        using(var card=new CapacityImage(File.OpenRead(image),(long)BitConverter.ToUInt32(d,72)*512)){
+                            var rows=Catalog(card,true);Check(rows.Count==1&&(bool)RecordValue(rows[0],"Downloadable",true),"Valid open checkpoint not available");
+                            long committedEnd=(long)RecordValue(rows[0],"End");Check(committedEnd==BitConverter.ToUInt32(bad,116),"Open checkpoint read fence is not its committed footer");
+                            Bridge(card,Start,committedEnd,openOutput,()=>false,null);
+                        }
+                        IncompleteOutput(openOutput,bad,false,output);
+                    }
                 }
-                using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite))WriteAt(card,Start+4,f);
+                using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){WriteAt(card,Start+4,f);CatalogEntry(card,f);}
                 foreach(string fault in new[]{"gap","tick","profile","sync","header","utc","truncated"}){
                     string badImage=Path.Combine(root,"fault_"+hz+"_"+au+"_"+fault+".img"),badOutput=Path.Combine(root,"fault_dat_"+hz+"_"+au+"_"+fault);MakeImage(badImage,hz,fault,au);bool refused=false;
                     try{using(var card=File.OpenRead(badImage))Bridge(card,Start,BitConverter.ToUInt32(f,116),badOutput,()=>false,null);}catch(Exception e) when(e is IOException || e is InvalidDataException){refused=true;}

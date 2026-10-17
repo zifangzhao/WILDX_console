@@ -25,6 +25,19 @@ static class NpV1StartTransitionTests {
   Native.Reset(3);Native.Paths.Clear();Native.Paths.Add(Native.Path(false,"001E002A5942500B20313355"));Reject(()=>NpV1Management.EnsureStreaming(Native.Path(false,Native.Uid)),"Missing selected board substituted");
   Native.Reset(3);string legacy="usb#vid_1209&pid_b386#legacy-capture#{fixture}";
   Check(NpV1Management.EnsureStreaming(legacy)==legacy&&Native.Opened.Count==0&&Native.Modes.Count==0,"Legacy identity lost direct capture support");
+  foreach(uint role in new[]{2U,3U}){
+   Native.Reset(role);string selected=Native.Path(false,Native.Uid),path=NpV1Management.EnsureDownload(selected);
+   Check(path==selected&&Native.Role==3&&Native.Pending==0,"Download did not enter verified mode on the selected UID");
+   Check(Native.Modes.Count==(role==2?1:0)&&(role==3||Native.Modes[0]==3),"Unexpected download mode command or replay");
+   Check(Native.Operations.Count==0&&Native.BeginCalls==0&&!Native.Transaction,"Download preparation performed a firmware update");
+   Check(Native.Opened.TrueForAll(p=>p==selected),"Download substituted another logger");
+  }
+  Native.Reset(2);Native.Busy=1;Reject(()=>NpV1Management.EnsureDownload(Native.Path(false,Native.Uid)),"Busy capture switched to download");
+  Native.Reset(2);Native.Pending=1;Reject(()=>NpV1Management.EnsureDownload(Native.Path(false,Native.Uid)),"Pending device switched to download");
+  Native.Reset(2);Native.WrongUid=true;Reject(()=>NpV1Management.EnsureDownload(Native.Path(false,Native.Uid)),"Wrong UID switched to download");
+  Native.Reset(2);Reject(()=>NpV1Management.EnsureDownload(Native.Path(false,Native.Uid),()=>true),"Cancelled download sent a mode change");
+  Native.Reset(3);Native.StatusError=31;string standalone=NpV1Management.EnsureDownload(Native.Path(false,Native.Uid));
+  Check(standalone==Native.Path(false,Native.Uid)&&Native.InfoReads==1&&Native.Modes.Count==0,"Standalone V1 download firmware lost support");
   Console.WriteLine("PASS "+checks+" actual-source V1 Start transition checks; streaming/download/legacy modes, pinned UID, busy/pending/error refusal and no firmware-update operations. No hardware.");
  }
 }

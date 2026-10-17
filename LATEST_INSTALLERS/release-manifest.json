@@ -1,15 +1,15 @@
 {
-  "version": "1.0.0.39",
+  "version": "1.0.0.40",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.39.exe",
-    "sha256": "3348222B88A187B6A96F6D7B374C05DA561C7DDDD77E826BCBA2A44FE300A880",
-    "bytes": 5987784
+    "file": "WILDX_console-Setup-1.0.0.40.exe",
+    "sha256": "F5D9F1A3AE9323ABCF34466BC65F8D8C57730CD49DC371CE68837F33106649F6",
+    "bytes": 5990432
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "D9AE370BA36BB87C2991622577CE8860CD518DF37F3206DB70861D2DB6B24F98",
-      "bytes": 1515008
+      "sha256": "B55ED13A8940C5FE18B1316CF072F834FADCFA67886A7975E7831C5D652404BA",
+      "bytes": 1522688
     },
     {
       "path": "WILDX_console.exe.config",
@@ -212,8 +212,8 @@
   "runAfterInstallCheckbox": true,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-17",
-  "releaseTag": "INCOMPLETE_SD_PREVIEW_CATALOG_20261017",
-  "sourceBaseCommit": "1ea6dcce67525d9f03f605fdae2fa8a4e46042e1",
+  "releaseTag": "AUTOMATIC_USB_DOWNLOAD_OPEN_TAIL_20261017",
+  "sourceBaseCommit": "3e697be11e2573ba4647fc03d575404345075bcc",
   "compiledSources": {
     "gui": [
       {
@@ -423,7 +423,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadCatalog.cs",
-        "sha256": "392FDE3BE4E3DADAED9789615FC58BE83C94691351AB0BBA8C437DC744B41B78",
+        "sha256": "84617021179717DD05E6269783A67969AFD6F08D55F691C4A2DBAF3DA186B6FB",
         "committedOverride": false
       },
       {
@@ -453,7 +453,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpV1Management.cs",
-        "sha256": "7BF31B4C79C007E8DB58B06961E1118C7C65BB466641D80AC932C6213DDC0C7B",
+        "sha256": "89E6A40A6023D0C93979B98285CE62A22AE7136196CBFB964FBBA27BBD6EB2C1",
         "committedOverride": false
       },
       {
@@ -468,7 +468,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpLoggerForm.cs",
-        "sha256": "AB8B05667E06B9EEFDAFE31D9701C51D4D8F6DE0CAFB37E9459D3AAFEAE4C2FA",
+        "sha256": "4A3DF802B109E144E8C96BC916E1D22DAB20F19CC4E22C689FD80CB44DC30F5F",
         "committedOverride": false
       },
       {
@@ -638,17 +638,17 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
-        "sha256": "83D6577A50B271FD531073AB2718999353DC4019A45443A94A54BC06B0AD48F1",
+        "sha256": "5E334803A4FA38615309851085F1D63B69DD5C6B7AF6ADAA0C48DFCFD66A19BD",
         "committedOverride": false
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpV2FirmwareForm.cs",
-        "sha256": "41E7C7B8B91B9FCC0AD6F407BCE47A6CD98CD31F59D58FAE52B35F57F61D2742",
+        "sha256": "4CD97D1F3F7D3A80D18350F38CC788B748CA14B5636FFCFB67A3A534B3D5483C",
         "committedOverride": false
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "1630949A43D08DE01E99296FA9386FAE470BE93BBAD9D09AF520679CF2094FC4",
+        "sha256": "C01CB0B6CC3E168EB37855807157C0CC00A0B33ABE8D209A06F9AF82036B61DA",
         "committedOverride": false
       },
       {
@@ -735,17 +735,17 @@
       }
     ]
   },
+  "inheritedExporter": "Unchanged .39 DLL; all 11 source hashes match the previous release.",
+  "changedPayloadFiles": [
+    "WILDX_console.exe"
+  ],
   "validation": {
-    "catalogActualApp": 28,
-    "bleMetricsActualApp": 31,
-    "v1ReportActualApp": 23,
-    "np2SdActualApp": 372,
-    "mediaActualApp": 116,
-    "v2PreviewActualSource": 5505,
-    "mediaFlowActualSource": 44,
-    "firmwareBundleActualApp": 590,
+    "catalogActualApp": 40,
+    "np2SdActualApp": 396,
+    "v1ModeActualSource": 36,
+    "v2ModeActualSource": 19,
     "hardwareTested": false,
-    "additionalChecksDeferredAtUserRequest": true
+    "largeCardTest": "Virtual >100GB metadata only; byte-identical small open-tail payload export tested separately."
   },
   "firmwareLimits": "Corrected V1 APP122/USB91 identity candidate; no new hardware qualification. V2 compact-preview producer candidate not included. Firmware-level damaged-directory BLE mount behavior unchanged.",
   "usbReadinessExperimentIncluded": false

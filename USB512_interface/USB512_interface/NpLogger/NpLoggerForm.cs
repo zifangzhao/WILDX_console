@@ -110,7 +110,7 @@ namespace USB512_interface
             var t=devices.SelectedItem as NpV1Target;if(t==null)return;
             deviceStatus=null;catalogPath=null;sessions.Items.Clear();
             await Run(async ()=>{
-                var result=await Task.Run(()=>{using(var m=new NpV1Management(t))return m.ReadStatus();});
+                var result=await Task.Run(()=>{if(readSessions)t.Path=NpV1Management.EnsureDownload(t.Path,()=>cancelled);using(var m=new NpV1Management(t))return m.ReadStatus();});
                 deviceStatus=result;status.Text=result.Description;Append(t+": "+result.Description);
                 if(readSessions && result.Download) {
                     var records=await Task.Run(()=>{using(var s=new NpDownloadStream(t.Path)){s.Cancelled=()=>cancelled;Report(s.TransportDescription,0);return NpDownloadCatalog.Read(s);}});

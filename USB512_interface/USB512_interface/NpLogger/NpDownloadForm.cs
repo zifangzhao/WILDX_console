@@ -14,7 +14,7 @@ namespace CE32_console
         private readonly TextBox sessionLabel=new TextBox{Name="downloadSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
         internal string SessionLabel{get{return sessionLabel.Text;}set{sessionLabel.Text=value??"";}}
         internal event Action<string> SessionLabelChanged;
-        private readonly Label status=new Label{Dock=DockStyle.Bottom,Height=55,Text="Stop recording before download. USB requires the read-only NP download firmware."};
+        private readonly Label status=new Label{Dock=DockStyle.Bottom,Height=55,Text="Stop recording, then list recordings. The selected USB logger enters download mode automatically."};
         private readonly ProgressBar progress=new ProgressBar{Dock=DockStyle.Bottom};
         private readonly Button refresh=new Button{Text="Refresh sources",AutoSize=true},list=new Button{Text="List recordings",AutoSize=true},save=new Button{Text="Download selected…",AutoSize=true},cancel=new Button{Text="Cancel",AutoSize=true},play=new Button{Text="Play exported camera…",AutoSize=true};
         private readonly Button convert=new Button{Text="Convert exported media…",AutoSize=true};
@@ -162,9 +162,21 @@ namespace CE32_console
             if(source.Usb){if(usbBlocked)throw new IOException("Disconnect BLE and finish the USB operation before accessing this USB logger.");return new NpDownloadStream(source.Path){Cancelled=()=>cancelled};}
             return NpDownloadStream.OpenDisk(source.Path);
         }
+        private async Task PrepareSourceAsync(Source source){
+            if(!source.Usb)return;
+            if(usbBlocked)throw new IOException("Disconnect BLE and finish the USB operation before accessing this USB logger.");
+            status.Text="Preparing USB download mode for "+source.Label+"…";
+            string path=source.Path;
+            if(USB512_interface.NpV1Management.UidFromPath(path)!=null)
+                path=await Task.Run(()=>USB512_interface.NpV1Management.EnsureDownload(path,()=>cancelled));
+            else if(USB512_interface.NpV2FirmwareForm.Uid(path)!=null)
+                path=await USB512_interface.NpV2FirmwareForm.EnsureDownload(path,()=>cancelled);
+            source.Path=boundSourcePath=path;source.Label=UsbSourceLabel(path);
+            if(cancelled)throw new OperationCanceledException();
+        }
         private async Task ListAsync() {
             var source=sources.SelectedItem as Source;if(source==null)return;SetBusy(true);cancelled=false;records.Items.Clear();listedSource=null;
-            try {status.Text="Reading NP recording directory (read-only)…";
+            try {await PrepareSourceAsync(source);status.Text="Reading NP recording directory (read-only)…";
                 string transport="SD reader";
                 var found=await Task.Run(()=>{using(var stream=Open(source)){if(stream is NpDownloadStream)transport=((NpDownloadStream)stream).TransportDescription;return NpDownloadCatalog.ReadAvailable(stream);}});
                 foreach(var r in found)records.Items.Add(r,false);listedSource=source;
@@ -185,7 +197,7 @@ namespace CE32_console
             var calibration=USB512_interface.NpCalibrationStore.Get("offline");
             SetBusy(true);cancelled=false;progress.Value=0;var source=listedSource;
             var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=Math.Max(0,Math.Min(100,p.Item1));status.Text=p.Item2;});
-            try {await Task.Run(()=>{using(var stream=Open(source)) {
+            try {await PrepareSourceAsync(source);await Task.Run(()=>{using(var stream=Open(source)) {
                 // Revalidate directory on the new connection; never trust stale UI extents.
                 var current=NpDownloadCatalog.ReadAvailable(stream);
                 for(int i=0;i<chosen.Count;i++) {
@@ -199,6 +211,8 @@ namespace CE32_console
                         int local=r.Media&&makeMedia?p*75/100:p;
                         ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+": "+p+"% | native download "+(bytes/seconds/1e6).ToString("F1")+" MB/s — "+output));
                     },calibration.Count==0?null:calibration);
+                    if(r.RecoveryNotice!=null)File.WriteAllText(Path.Combine(output,"download_catalog.txt"),
+                        "published_catalog_end_lba="+r.CatalogEnd+"\ncommitted_download_end_lba="+r.End+"\nstored_state="+r.State+"\nstored_fault="+r.Fault+"\n"+r.RecoveryNotice+"\nThe card was not modified. Stored recording metadata is retained unchanged.\n");
                     if(r.Media&&makeMedia)try{
                         string warning=NpMediaExport.ConvertFiles(output,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+75+p*25/100)/chosen.Count,message)));
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);

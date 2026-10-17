@@ -26,13 +26,39 @@ static class NpAvailableCatalogTests {
   }
   Sector(card,128,directory);return card;
  }
- static IList Read(byte[] bytes,bool available=true){using(var s=new MemoryStream(bytes,false)){try{return (IList)catalog.GetMethod(available?"ReadAvailable":"Read",All).Invoke(null,new object[]{s});}catch(TargetInvocationException ex){System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex.InnerException).Throw();throw;}}}
+ sealed class VirtualCard:MemoryStream{readonly long length;internal VirtualCard(byte[] bytes,long size):base(bytes,false){length=size;}public override long Length{get{return length;}}}
+ static IList Read(byte[] bytes,bool available=true,long length=0){using(var s=new VirtualCard(bytes,length==0?bytes.LongLength:length)){try{return (IList)catalog.GetMethod(available?"ReadAvailable":"Read",All).Invoke(null,new object[]{s});}catch(TargetInvocationException ex){System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex.InnerException).Throw();throw;}}}
  static object Value(object row,string name,bool property=false){return property?row.GetType().GetProperty(name,All).GetValue(row,null):row.GetType().GetField(name,All).GetValue(row);}
  static bool Usable(object row){return (bool)Value(row,"Downloadable",true);}
  static void Sessions(IList rows,params uint[] expected){var actual=rows.Cast<object>().Where(Usable).Select(r=>(uint)Value(r,"Session")).ToArray();Need(actual.SequenceEqual(expected),"Readable sessions lost: "+String.Join(",",actual));Need(rows.Cast<object>().All(r=>!String.IsNullOrWhiteSpace(r.ToString())),"Catalog row could not be displayed");}
  static void StrictRefuses(byte[] card){bool refused=false;try{Read(card,false);}catch(InvalidDataException){refused=true;}Need(refused,"Strict mutation catalog admitted damaged metadata");}
+ static void OpenNp2Tail(){
+  const uint start=8192,payload=16384,reserved=268435456,blocks=2400000;
+  long capacity=((long)reserved+16384)*512;
+  var card=new byte[(start+16)*512];byte[] id=new byte[512],directory=new byte[512],h=new byte[512];
+  Encoding.ASCII.GetBytes("CE_FILESYSTEM_V1").CopyTo(id,0);Encoding.ASCII.GetBytes("NP_PSSI_7").CopyTo(id,32);Sector(card,16,id);
+  Encoding.ASCII.GetBytes("N2SDLOG1").CopyTo(h,0);
+  foreach(var pair in new[]{new uint[]{8,11},new uint[]{12,558295225},new uint[]{16,20000},new uint[]{20,32000000},new uint[]{24,3},new uint[]{28,63},new uint[]{32,4},new uint[]{36,6},new uint[]{40,46592},new uint[]{44,61440},new uint[]{48,91},new uint[]{52,4},new uint[]{56,start},new uint[]{60,payload},new uint[]{64,payload+(reserved-payload)/364*364},new uint[]{68,reserved},new uint[]{72,reserved+16384},new uint[]{96,15},new uint[]{100,1}})Put(h,(int)pair[0],pair[1]);
+  Seal(h);Sector(card,start+3,h);byte[] f=(byte[])h.Clone();Encoding.ASCII.GetBytes("N2SDEND1").CopyTo(f,0);
+  Put(f,100,4);Put(f,104,0x56455249);Put(f,108,blocks);Put(f,112,blocks/4);Put(f,116,payload+blocks*91);BitConverter.GetBytes(blocks*61440UL).CopyTo(f,120);Seal(f);Sector(card,start+4,f);
+  Put(directory,0,1);Put(directory,4,payload);Put(directory,256,payload);Sector(card,128,directory);
+  var rows=Read(card,true,capacity);Need(rows.Count==1&&Usable(rows[0]),"Open V2 checkpoint remains blocked by its published payload-start fence");
+  Need((long)Value(rows[0],"End")==payload+(long)blocks*91&&(long)Value(rows[0],"CatalogEnd")==payload,"Original fence lost or committed extent narrowed");
+  Need(!(bool)Value(rows[0],"Complete",true)&&rows[0].ToString().Contains("unfinalized catalog"),"Incomplete tail promoted to complete");
+  Need(blocks*46592UL>100000000000UL,"Large catalog case did not exceed100GB");Need(!Usable(Read(card,false,capacity)[0]),"Strict writer reader admitted open checkpoint");
+  Need(!Usable(Read(card,true,capacity-512)[0]),"Changed card capacity admitted open-tail recovery");
+  card[112*512]=1;Need(!Usable(Read(card,true,capacity)[1]),"Pending journal admitted unfinalized tail expansion");card[112*512]=0;
+  Put(directory,4,payload+512);Put(directory,256,payload+512);Sector(card,128,directory);Need(!Usable(Read(card,true,capacity)[0]),"Arbitrary shortened directory fence admitted");
+  Put(directory,4,reserved+1);Put(directory,256,reserved+1);Sector(card,128,directory);Need(!Usable(Read(card,true,capacity)[0]),"Fence beyond immutable reservation admitted");
+  Put(directory,4,payload);Put(directory,256,payload);Put(directory,0,2);Put(directory,8,payload+8192);Put(directory,260,payload+8192);Sector(card,128,directory);
+  Need(!Usable(Read(card,true,capacity)[0]),"Nonfinal checkpoint expanded across a following entry");
+  Put(directory,0,1);Sector(card,128,directory);Put(f,100,3);Put(f,104,0);Seal(f);Sector(card,start+4,f);
+  Need(Usable(Read(card,true,capacity)[0]),"Durable COMPLETE footer before directory publication was rejected");
+  card[(start+4)*512+508]^=1;Need(!Usable(Read(card,true,capacity)[0]),"Corrupt footer recovered as an open tail");
+ }
  [STAThread]static int Main(string[] args){try{
   catalog=Assembly.LoadFrom(Path.GetFullPath(args[0])).GetType("CE32_console.NpDownloadCatalog",true);
+  OpenNp2Tail();
   byte[] card=Card();Sessions(Read(card),1,2,3,4);Need(Read(card,false).Count==4,"Strict valid catalog regressed");
   card=Card();card[(Starts[1]+4)*512+508]^=1;Sessions(Read(card),1,3,4);Need(Read(card).Count==4,"Damaged footer not retained as an unavailable row");StrictRefuses(card);
   card=Card();card[(Starts[1]+3)*512]^=1;Sessions(Read(card),1,3,4);StrictRefuses(card);

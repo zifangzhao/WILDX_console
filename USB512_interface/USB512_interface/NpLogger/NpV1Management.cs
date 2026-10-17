@@ -65,11 +65,31 @@ namespace USB512_interface
             return WaitForStreaming(uid);
         }
         internal static string WaitForStreaming(string uid)
+        { return WaitForUsbMode(uid,2,null); }
+        internal static string EnsureDownload(string selectedPath,Func<bool> cancelled=null)
+        {
+            string uid=UidFromPath(selectedPath);if(uid==null)return selectedPath;
+            if(cancelled!=null && cancelled())throw new OperationCanceledException();
+            var selected=Enumerate().Find(t=>!t.Recovery && t.Path.Equals(selectedPath,StringComparison.OrdinalIgnoreCase));
+            if(selected==null)throw new IOException("Selected V1 is no longer connected. Refresh sources.");
+            using(var manager=new NpV1Management(selected)){
+                var state=manager.ReadStatus();
+                if(state.Busy!=0 || state.PendingMode!=0)throw new IOException("Stop recording and finish the active V1 operation before downloading.");
+                if(state.Download)return selectedPath;
+                if(!state.Split || state.Role!=2)throw new IOException("Selected V1 cannot enter USB download mode from its current mode.");
+                if(cancelled!=null && cancelled())throw new OperationCanceledException();
+                manager.SetMode(3);
+                Thread.Sleep(150); // Keep the acknowledged handle alive through deferred mode entry.
+            }
+            return WaitForUsbMode(uid,3,cancelled);
+        }
+        static string WaitForUsbMode(string uid,ushort mode,Func<bool> cancelled)
         {
             if(!Regex.IsMatch(uid??"",@"\A[0-9a-fA-F]{24}\z"))
-                throw new IOException("A selected V1 UID is required before waiting for USB streaming.");
+                throw new IOException("A selected V1 UID is required before waiting for its USB mode.");
             var elapsed=System.Diagnostics.Stopwatch.StartNew();
             while(elapsed.ElapsedMilliseconds<30000) {
+                if(cancelled!=null && cancelled())throw new OperationCanceledException();
                 // Allow the 50 ms ACK gate and 100 ms detach before reopening.
                 System.Threading.Thread.Sleep(250);
                 var found=Enumerate().FindAll(t=>!t.Recovery && t.Uid.Equals(uid,StringComparison.OrdinalIgnoreCase));
@@ -77,10 +97,10 @@ namespace USB512_interface
                 if(found.Count==0)continue;
                 try {using(var manager=new NpV1Management(found[0])) {
                     var state=manager.ReadStatus();
-                    if(state.Split && state.Role==2 && state.Busy==0 && state.PendingMode==0)return found[0].Path;
+                    if(state.Split && state.Role==mode && state.Busy==0 && state.PendingMode==0)return found[0].Path;
                 }} catch(Win32Exception) { /* Device is detaching/re-enumerating. */ }
             }
-            throw new IOException("Selected V1 did not return to idle USB streaming within 30 seconds. No capture START was sent.");
+            throw new IOException("Selected V1 did not return to idle USB "+(mode==2?"streaming":"download")+" within 30 seconds. No recording or download was started.");
         }
         internal static string SwitchMode(NpV1Target target,ushort mode)
         {
