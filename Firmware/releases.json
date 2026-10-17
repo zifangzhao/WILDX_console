@@ -30,8 +30,8 @@
           "sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA"
         },
         {
-          "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z.hex",
-          "sha256": "868D1DE03ACE85DCE09B799860173BBCA67D945EEF40E1C8C9DA4D3D9CD40982"
+          "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z_r2.hex",
+          "sha256": "BEC699EBE16981BAFEFD3FEB1AFA8790D5AF0839B74DC556E3A51E6B3146694C"
         }
       ],
       "limits": "V1 old NP board with 91k/91k battery divider only. Development candidate for parallel user validation. Accepts both exact NP1 cap-variant identities and retains confirmed EEPROM-absent NRIC support. Canonical identity/AUTO software checks and installed APP readback passed; BLE attempts ended before connection, no START was sent, and BLE recording/custom-map/saved-data integrity remain unvalidated. Incremental build from a dirty source tree; see source-build-receipt.json. APP update preserves USB/recovery. USB91 service is unchanged and requires a separate service workflow. Fused HEX includes/reprograms recovery, excludes configuration, and requires matching-target SWD without mass erase; fused programming is not hardware-qualified. Fused/service HEX cannot use the APP updater. Not endurance or implant qualified.",

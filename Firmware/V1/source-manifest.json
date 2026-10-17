@@ -2,44 +2,22 @@
   "stage": "candidate_for_parallel_user_validation",
   "board": "V1 NP only; not camera or V2",
   "version": "1.0.122-np1-identity-test",
-  "abi": 258,
+  "packaging_revision": 2,
   "app_crc32": "8FD89229",
   "usb_crc32": "40D39075",
-  "fused_image_included": true,
+  "file": "V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z_r2.hex",
+  "sha256": "BEC699EBE16981BAFEFD3FEB1AFA8790D5AF0839B74DC556E3A51E6B3146694C",
+  "bytes": 5745164,
+  "coverage_bytes": 2088960,
   "configuration_included": false,
-  "app_change": "Accept both exact official NP1 cap-variant part codes; EEPROM-absent NRIC path retained",
-  "boot_usb_source_sha256": "ec10d6d227bbfc5e2da8f15cc4e4138e438fa68d8810015d7463ea0e51fca2d6",
-  "hex_images": {
-    "sd_ble_app_only": {
-      "file": "V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex",
-      "sha256": "a70a35d70abb34d7d8f11d3bd9ac868c38c1bbb1ce847e3336b3c7491f230f3f",
-      "bytes": 765790
-    },
-    "usb_service_only": {
-      "file": "V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
-      "sha256": "29dc58de50d8089695f5fda07a6f56dba6bae7047d47dbd919d2b1f0aadef5ba",
-      "bytes": 676837
-    },
-    "fused_bootloader_usb_app": {
-      "file": "V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z.hex",
-      "sha256": "868d1de03ace85dce09b799860173bbca67d945eef40e1c8c9da4d3d9cd40982",
-      "bytes": 2528640
-    }
-  },
-  "evidence": {
-    "canonical_identity_auto_regression": "PASS; both NP1 identities and EEPROM-less NRIC map routing",
-    "app_build": "one probe object rebuilt; 74 checked parent objects reused",
-    "installed_app_readback": "PASS exact candidate APP and manifest; boot/config and USB byte-identical",
-    "ble_logging": "NOT VALIDATED: both live attempts ended before connection; no START sent",
-    "fused_programming_hardware_validated": false,
-    "saved_data_integrity_tested": false
-  },
-  "host_candidate": {
-    "version": "1.0.0.38",
-    "executable_sha256": "0FCCF0D7247AF0984AC66F4750306673A8299D0550DB79D41E2C52DE87DADFAF",
-    "software_checked": true,
-    "end_to_end_pair_validated": false
-  },
-  "publication_requested": true,
-  "published": false
+  "normalization": "LF",
+  "correction": "Explicit FF coverage for unused firmware addresses so WILDX accepts a complete fused image. Verified component bytes are unchanged.",
+  "supersedes_partial_fused_sha256": "868D1DE03ACE85DCE09B799860173BBCA67D945EEF40E1C8C9DA4D3D9CD40982",
+  "unchanged_app_sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F",
+  "unchanged_usb_sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA",
+  "merger_regression": "PASS complete coverage, verified-byte preservation, config exclusion, missing-manifest/vector and unsafe-input rejection",
+  "firmware_rebuilt": false,
+  "hardware_access": false,
+  "ble_logging_validated": false,
+  "fused_programming_hardware_validated": false
 }

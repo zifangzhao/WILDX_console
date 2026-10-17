@@ -15,8 +15,10 @@ packages on 2026-10-17. Their development limits remain in effect.
 The V1 candidate is published for parallel user validation. BLE recording and
 fused programming are not validated. Previous APP121 artifacts and source docs
 are preserved under `V1/legacy/app121_before_np1_identity_20261017/`.
-The original owner handoff remains `V1/source-manifest.json` (`published:false`
-records its pre-publication handoff state). Its source tree was dirty; the exact
+The corrected complete-fused packaging handoff is `V1/source-manifest.json`;
+the rejected sparse APP122 package and original APP handoff are preserved under
+`V1/legacy/rejected_sparse_fused122_20261017/`. The actual published .37 integrity
+checker accepts the corrected `_r2.hex`. The source tree was dirty; the exact
 recompiled unit, dependency hashes and parent image are recorded separately.
 The existing 1.0.0.37 installer still bundles APP121; this firmware-only refresh
 does not replace that installer or the frozen local 1.0.0.38 GUI candidate.

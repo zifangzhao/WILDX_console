@@ -15,7 +15,10 @@
       "previousPublicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
       "sourceBaseCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
       "sourceManifest": "V1/source-manifest.json",
-      "sourceBuildReceipt": "V1/source-build-receipt.json"
+      "sourceBuildReceipt": "V1/source-build-receipt.json",
+      "fusedPackagingRevision": 2,
+      "fusedSha256": "BEC699EBE16981BAFEFD3FEB1AFA8790D5AF0839B74DC556E3A51E6B3146694C",
+      "fusedIntegrityCheck": "Actual published WILDX 1.0.0.37 Load accepted Full=true; no hardware validation"
     },
     {
       "target": "V2 Neuropixels",
