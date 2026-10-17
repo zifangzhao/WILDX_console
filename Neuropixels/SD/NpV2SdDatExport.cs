@@ -16,6 +16,8 @@ namespace USB512_interface
         public sealed class Result
         {
             public uint SampleHz, Session, CommittedBlocks, ProbeMask;
+            public uint StoredState, StoredFault;
+            public bool RecordingComplete { get { return StoredState==3 && StoredFault==0 && CommittedBlocks>0; } }
             public ulong SourceTicks;
             public readonly long[] Rows;
             public readonly int[] Phases;
@@ -25,21 +27,27 @@ namespace USB512_interface
 
         public static Result Export(Stream card, uint startLba, string output,
             long directoryEndLba = 0, Func<bool> cancelled = null, Action<int> progress = null)
-        { return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,null); }
+        { return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,null,false); }
 
         public static Result ExportCalibrated(Stream card, uint startLba, string output, NpCalibrationSet calibration,
             long directoryEndLba = 0, Func<bool> cancelled = null, Action<int> progress = null)
-        { if(calibration==null)throw new ArgumentNullException("calibration");return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,calibration.Count==0?null:calibration.Copy()); }
+        { if(calibration==null)throw new ArgumentNullException("calibration");return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,calibration.Count==0?null:calibration.Copy(),false); }
+
+        // A stopped/interrupted recording can still contain a verifiable
+        // committed prefix. Preserve its stored status; never infer completion.
+        public static Result ExportCommitted(Stream card,uint startLba,string output,
+            long directoryEndLba=0,Func<bool> cancelled=null,Action<int> progress=null,NpCalibrationSet calibration=null)
+        { return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,calibration==null || calibration.Count==0?null:calibration.Copy(),true); }
 
         static Result ExportCore(Stream card, uint startLba, string output,
-            long directoryEndLba, Func<bool> cancelled, Action<int> progress, NpCalibrationSet calibration)
+            long directoryEndLba, Func<bool> cancelled, Action<int> progress, NpCalibrationSet calibration,bool allowIncomplete)
         {
             if (card == null || !card.CanRead || !card.CanSeek) throw new ArgumentException("Read-only seekable card/image required.");
             if (String.IsNullOrWhiteSpace(output) || Directory.Exists(output) || File.Exists(output))
                 throw new IOException("A fresh export directory is required; existing outputs are never overwritten.");
             byte[] desc = ReadAt(card, ((long)startLba + 3) * Sector, Sector);
             byte[] end = ReadAt(card, ((long)startLba + 4) * Sector, Sector);
-            ValidateMetadata(desc, end, startLba, card.Length);
+            ValidateMetadataCore(desc, end, startLba, card.Length,allowIncomplete);
             uint probeMask = U(desc, 24);
             if(calibration!=null)calibration.RequireModel(true,(int)probeMask);
             int probes = probeMask == 1U ? 1 : probeMask == 3U ? 2 : 3, ticks = ProfileTicks(probeMask, U(desc, 16));
@@ -54,7 +62,7 @@ namespace USB512_interface
             bool hasUtc = Magic(utc, "N2SDUTC1");
             if (hasUtc) ValidateUtc(utc, U(desc, 12), U(desc, 16));
             var result = new Result(probes) { ProbeMask = probeMask, SampleHz = U(desc, 16), Session = U(desc, 12),
-                CommittedBlocks = U(end, 108), SourceTicks = Q(end, 120) };
+                CommittedBlocks = U(end, 108), SourceTicks = Q(end, 120),StoredState=U(end,100),StoredFault=U(end,104) };
             Directory.CreateDirectory(output);
             string receipt = Path.Combine(output, "np2_sd_export_status.txt");
             using (var f = new FileStream(receipt, FileMode.CreateNew, FileAccess.Write))
@@ -67,6 +75,10 @@ namespace USB512_interface
                 if (configuration != null) File.WriteAllBytes(Path.Combine(output, "configuration.bin"), configuration);
                 if (hasUtc) File.WriteAllBytes(Path.Combine(output, "utc.bin"), utc);
                 if(calibration!=null)calibration.Save(output);
+                if(result.CommittedBlocks==0){
+                    File.WriteAllText(receipt,"Export complete: True\nRecording complete: False\nStored state: "+result.StoredState+"\nStored fault: "+result.StoredFault+"\nCommitted blocks: 0\nMetadata only; no committed samples and no DAT created.\n",Encoding.UTF8);
+                    if(progress!=null)progress(100);return result;
+                }
                 for (int p = 0; p < probes; p++) files[p] = new FileStream(Path.Combine(output, Name(p) + ".partial"),
                     FileMode.CreateNew, FileAccess.Write, FileShare.Read, 1024 * 1024, FileOptions.SequentialScan);
                 var rowBytes = new byte[384 * 2];
@@ -118,7 +130,8 @@ namespace USB512_interface
                 // Publish the success receipt LAST. No padding, resync, silent
                 // recovery, dropped rows or fabricated LFP stream is permitted.
                 for (int p = 0; p < probes; p++) File.Move(Path.Combine(output, Name(p) + ".partial"), Path.Combine(output, Name(p)));
-                var report = new StringBuilder("Export complete: True\nStored terminal state: Complete\n");
+                var report = new StringBuilder("Export complete: True\nStored terminal state: "+(result.RecordingComplete?"Complete":"Incomplete")+"\nRecording complete: "+result.RecordingComplete+"\nStored state: "+result.StoredState+"\nStored fault: "+result.StoredFault+"\n");
+                if(!result.RecordingComplete)report.Append("Only the verified committed prefix was exported; the recording remains incomplete.\n");
                 report.AppendFormat(CultureInfo.InvariantCulture,
                     "Session: {0}\nSample rate Hz: {1}\nCommitted blocks: {2}\nSource ticks: {3}\n", result.Session, result.SampleHz, result.CommittedBlocks, result.SourceTicks);
                 report.Append("Format: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts\n");
@@ -165,6 +178,12 @@ namespace USB512_interface
         }
 
         public static void ValidateMetadata(byte[] d, byte[] f, uint start, long length)
+        { ValidateMetadataCore(d,f,start,length,false); }
+
+        public static void ValidateCommittedMetadata(byte[] d,byte[] f,uint start,long length)
+        { ValidateMetadataCore(d,f,start,length,true); }
+
+        static void ValidateMetadataCore(byte[] d,byte[] f,uint start,long length,bool allowIncomplete)
         {
             Seal(d, "N2SDLOG1"); Seal(f, "N2SDEND1");
             int ticks = ProfileTicks(U(d, 24), U(d, 16));
@@ -195,7 +214,7 @@ namespace USB512_interface
                 throw new InvalidDataException("Unsupported SD v11/v12/v13 NP2 profile/descriptor/geometry.");
             for (int n = 8; n < 100; n++) if (d[n] != f[n]) throw new InvalidDataException("SD descriptor/footer belong to different records.");
             ulong blocks = U(f, 108), committed = U(f, 112), writtenEnd = U(f, 116);
-            if (U(f, 100) != 3 || U(f, 104) != 0 || blocks == 0 || blocks % 4 != 0 ||
+            if ((allowIncomplete ? U(f,100)<1 || U(f,100)>4 : U(f,100)!=3 || U(f,104)!=0 || blocks==0) || blocks % 4 != 0 ||
                 committed != blocks / 4 || committed > rus || writtenEnd != payload + committed * RuSectors ||
                 Q(f, 120) != blocks * (uint)ticks || writtenEnd * Sector > (ulong)length ||
                 (unitGeometry?U(f,128)!=au || !Zero(f,132,376):!Zero(f,128,380)))

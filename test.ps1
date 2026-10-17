@@ -94,3 +94,6 @@ if($LASTEXITCODE){throw 'NP2 decoder/export regression failed.'}
 & (Join-Path $PSScriptRoot 'test_firmware_targets.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'firmware-targets')
 & (Join-Path $PSScriptRoot 'test_ble_recording_settings.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'ble-recording-settings')
 & (Join-Path $PSScriptRoot 'test_ble_recording_time.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'ble-recording-time')
+& (Join-Path $PSScriptRoot 'test_v1_ble_failure_report.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'v1-ble-failure-report')
+& (Join-Path $PSScriptRoot 'test_ble_preview_display.ps1') -Compiler $compiler -OutputDirectory (Join-Path $output 'ble-preview-display')
+& (Join-Path $PSScriptRoot 'test_available_catalog.ps1') -ConsoleExecutable $app -OutputDirectory (Join-Path $output 'available-catalog')

@@ -18,7 +18,13 @@ namespace CE32_console
         internal bool Complete{get{return State==3 && Fault==0 && Chunks>0;}}
         internal string V2ProbeLabel{get{return ProbeMask==1?"probe 1":ProbeMask==3?"probes 1 + 2":ProbeMask==7?"probes 1 + 2 + 3":"mask "+ProbeMask;}}
         internal double V2DurationSeconds{get{return ApHz==0||TicksPerBlock==0?0:Chunks*(double)TicksPerBlock/(ApHz*1600.0);}}
-        public override string ToString(){if(V2)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N1} s | {4}",Session,V2ProbeLabel,ApHz,V2DurationSeconds,Downloadable?"complete (payload not yet validated)":"NOT DOWNLOADABLE — "+ValidationError);if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,!Downloadable?"NOT DOWNLOADABLE — "+ValidationError:Complete?"complete (payload not yet validated)":"INCOMPLETE");return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),Complete?"complete (not yet decoded)":"INCOMPLETE — committed prefix only");}
+        public override string ToString(){
+            if(!Downloadable)return (Start>0?"Recording at LBA "+Start:"Catalog")+" | UNAVAILABLE — "+ValidationError;
+            string state=Complete?"complete (payload not yet validated)":Chunks==0?"INCOMPLETE — metadata only":"INCOMPLETE — committed prefix only";
+            if(V2)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N1} s | {4}",Session,V2ProbeLabel,ApHz,V2DurationSeconds,state);
+            if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,state);
+            return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),state);
+        }
     }
     internal static class NpDownloadCatalog {
         // Discovery is read-only; this wider USB policy must not admit formatting.
@@ -72,39 +78,73 @@ namespace CE32_console
             for(int n=16;n<512;n++)if(id[n]!=(byte)'0')return 3;
             return 1;
         }
-        internal static List<NpDownloadRecord> Read(Stream s) {
+        internal static List<NpDownloadRecord> Read(Stream s) { return ReadCore(s,false); }
+        internal static List<NpDownloadRecord> ReadAvailable(Stream s) { return ReadCore(s,true); }
+        static NpDownloadRecord Unavailable(long start,long end,string error){return new NpDownloadRecord{Start=start,End=end,ValidationError=error};}
+        static bool HeaderAt(byte[] header,long start){
+            string magic=Encoding.ASCII.GetString(header,0,8);
+            return (magic=="NPSDLOG1" || magic=="N2SDLOG1") && NpDownloadStream.U(header,508)==NpDownloadStream.Crc(header,0,508) &&
+                NpDownloadStream.U(header,magic=="N2SDLOG1"?56:40)==start;
+        }
+        static List<NpDownloadRecord> ReadCore(Stream s,bool available) {
             var list=new List<NpDownloadRecord>();var id=Sector(s,16);
             if(!IsCatalogIdentity(id))throw new InvalidDataException("This is not a supported NP1 / NP2 SD catalog.");
-            var journal=Sector(s,112);foreach(byte b in journal)if(b!=0)throw new InvalidDataException("Pending/torn SD journal: recover using recorder firmware before downloading. Nothing was modified.");
-            long previous=8192;
+            var journal=Sector(s,112);
+            if(journal.Any(b=>b!=0)){
+                if(!available)throw new InvalidDataException("Pending/torn SD journal: recover using recorder firmware before downloading. Nothing was modified.");
+                list.Add(Unavailable(0,0,"Pending/torn journal; showing readable published entries only. The card was not modified."));
+            }
+            long[] previous={8192};long sectors=s.Length/512;
             for(int page=0;page<1024;page++) {
-                var log=Sector(s,128+page);uint count=NpDownloadStream.U(log,0);if(count>63)throw new InvalidDataException("Invalid SD directory count.");
+                byte[] log;
+                try{log=Sector(s,128+page);}catch(IOException ex){if(!available)throw;list.Add(Unavailable(0,0,"Directory page "+page+" unreadable: "+ex.Message));return list;}
+                uint storedCount=NpDownloadStream.U(log,0),count=storedCount;
+                if(count>63){if(!available)throw new InvalidDataException("Invalid SD directory count.");count=63;list.Add(Unavailable(0,0,"Directory page "+page+" has an invalid count; inspecting its mirrored entries."));}
                 for(int i=0;i<count;i++) {
-                    long end=NpDownloadStream.U(log,4+4*i),start=checked((previous+8191)/8192*8192);
-                    if(end<=start+4 || end>s.Length/512 || NpDownloadStream.U(log,256+4*i)!=end)throw new InvalidDataException("Invalid NP directory extent.");
-                    byte[] h=Sector(s,start+3),f=Sector(s,start+4);
+                    long end=NpDownloadStream.U(log,4+4*i),mirror=NpDownloadStream.U(log,256+4*i);
+                    var starts=previous.Select(value=>checked((value+8191)/8192*8192)).Distinct().Where(value=>value+4<end).ToArray();
+                    previous=new[]{end,mirror}.Where(value=>value>8192 && value<=sectors).Distinct().ToArray();
+                    if(available && storedCount>63 && end==0 && mirror==0)continue;
+                    if(end!=mirror || end>sectors || starts.Length==0){
+                        if(!available)throw new InvalidDataException("Invalid NP directory extent.");
+                        list.Add(Unavailable(starts.FirstOrDefault(),end,"Directory extent is invalid/ambiguous; later entries will still be inspected."));continue;
+                    }
+                    long start=starts[0];byte[] h=null;
+                    try{
+                        if(starts.Length>1){
+                            var matches=new List<Tuple<long,byte[]>>();
+                            foreach(long candidate in starts){var header=Sector(s,candidate+3);if(HeaderAt(header,candidate))matches.Add(Tuple.Create(candidate,header));}
+                            if(matches.Count!=1)throw new InvalidDataException("Cannot uniquely identify this recording after a damaged directory entry.");
+                            start=matches[0].Item1;h=matches[0].Item2;
+                        }
+                        list.Add(ReadRecord(s,start,end,h,available));
+                    }catch(Exception ex) when(ex is IOException || ex is InvalidDataException){if(!available)throw;list.Add(Unavailable(start,end,ex.Message));}
+                }
+                if(storedCount<63)return list;
+            }
+            if(available){list.Add(Unavailable(0,0,"Directory exceeds the supported page bound; readable prefix retained."));return list;}
+            throw new InvalidDataException("Directory exceeds supported page bound.");
+        }
+        static NpDownloadRecord ReadRecord(Stream s,long start,long end,byte[] h,bool available){
+                    h=h??Sector(s,start+3);byte[] f=Sector(s,start+4);
                     if(Encoding.ASCII.GetString(h,0,8)=="N2SDLOG1") {
                         Header(h,"N2SDLOG1");Header(f,"N2SDEND1");
                         string failure=null;
-                        try{USB512_interface.NpV2SdDatExport.ValidateMetadata(h,f,checked((uint)start),s.Length);
+                        try{if(available)USB512_interface.NpV2SdDatExport.ValidateCommittedMetadata(h,f,checked((uint)start),s.Length);else USB512_interface.NpV2SdDatExport.ValidateMetadata(h,f,checked((uint)start),s.Length);
                             if(end<NpDownloadStream.U(f,116) || end>NpDownloadStream.U(h,68))throw new InvalidDataException("NP2 committed extent escapes the catalog entry.");}
                         catch(InvalidDataException ex){failure=ex.Message;}
-                        list.Add(new NpDownloadRecord{ValidationError=failure,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)});
-                        previous=end;continue;
+                        return new NpDownloadRecord{ValidationError=failure,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)};
                     }
                     Header(h,"NPSDLOG1");Header(f,"NPSDEND1");
                     string validationError=null;
                     if(NpMediaExport.IsTyped(h)) {
                         // Failed/empty allocations remain in the directory. Keep
                         // them visible without hiding later valid recordings.
-                        try{NpMediaExport.Validate(h,f,start,end);}
+                        try{if(available)NpMediaExport.ValidateCommitted(h,f,start,end);else NpMediaExport.Validate(h,f,start,end);}
                         catch(InvalidDataException ex){validationError=ex.Message;}
                     }else NpSdGeometry.Validate(h,f,start,end);
                     uint chunks=NpDownloadStream.U(f,68),rate=NpDownloadStream.U(h,24);
-                    list.Add(new NpDownloadRecord{ValidationError=validationError,FormatVersion=NpDownloadStream.U(h,8),CameraHz=NpDownloadStream.U(h,112),MicrophoneHz=NpDownloadStream.U(h,116),ProbeMask=NpDownloadStream.U(h,16),LaneBytes=NpDownloadStream.U(h,32),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=chunks,ApHz=rate,LfpHz=rate/12,State=NpDownloadStream.U(f,60),Fault=NpDownloadStream.U(f,64)});previous=end;
-                }
-                if(count<63)return list;
-            }throw new InvalidDataException("Directory exceeds supported page bound.");
+                    return new NpDownloadRecord{ValidationError=validationError,FormatVersion=NpDownloadStream.U(h,8),CameraHz=NpDownloadStream.U(h,112),MicrophoneHz=NpDownloadStream.U(h,116),ProbeMask=NpDownloadStream.U(h,16),LaneBytes=NpDownloadStream.U(h,32),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=chunks,ApHz=rate,LfpHz=rate/12,State=NpDownloadStream.U(f,60),Fault=NpDownloadStream.U(f,64)};
         }
     }
     internal static class NpCardFormat {

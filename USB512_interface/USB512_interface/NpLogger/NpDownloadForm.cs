@@ -166,16 +166,16 @@ namespace CE32_console
             var source=sources.SelectedItem as Source;if(source==null)return;SetBusy(true);cancelled=false;records.Items.Clear();listedSource=null;
             try {status.Text="Reading NP recording directory (read-only)…";
                 string transport="SD reader";
-                var found=await Task.Run(()=>{using(var stream=Open(source)){if(stream is NpDownloadStream)transport=((NpDownloadStream)stream).TransportDescription;return NpDownloadCatalog.Read(stream);}});
+                var found=await Task.Run(()=>{using(var stream=Open(source)){if(stream is NpDownloadStream)transport=((NpDownloadStream)stream).TransportDescription;return NpDownloadCatalog.ReadAvailable(stream);}});
                 foreach(var r in found)records.Items.Add(r,false);listedSource=source;
-                status.Text=transport+". "+found.Count+" recording(s); "+found.Count(r=>r.Downloadable)+" downloadable, "+found.Count(r=>!r.Downloadable)+" failed/empty. Select the desired sessions; payload integrity is checked during download.";
+                status.Text=transport+". "+found.Count+" recording(s); "+found.Count(r=>r.Downloadable)+" downloadable, "+found.Count(r=>!r.Downloadable)+" unavailable. Incomplete recordings export committed data; payload integrity is checked during download.";
             }catch(Exception ex){status.Text=ex.Message;}finally{SetBusy(false);}
         }
         private async Task SaveAsync() {
             string label;try{label=USB512_interface.NpFolderNaming.Label(sessionLabel.Text);}catch(ArgumentException ex){status.Text=ex.Message;return;}
             if(listedSource==null || !ReferenceEquals(listedSource,sources.SelectedItem)){status.Text="List this source first.";return;}
             var chosen=records.CheckedItems.Cast<NpDownloadRecord>().ToList();if(chosen.Count==0){status.Text="Select at least one recording.";return;}
-            if(chosen.Any(r=>!r.Downloadable)){status.Text="Failed/empty recordings cannot be downloaded.";return;}
+            if(chosen.Any(r=>!r.Downloadable)){status.Text="A selected recording has invalid metadata or geometry. Read its listing details before downloading.";return;}
             string root;using(var dialog=new FolderBrowserDialog()){if(dialog.ShowDialog(DialogOwner)!=DialogResult.OK)return;root=dialog.SelectedPath;}
             try {long required=chosen.Sum(RequiredBytes)+16*1024*1024;
                 var drive=new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root)));
@@ -187,7 +187,7 @@ namespace CE32_console
             var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=Math.Max(0,Math.Min(100,p.Item1));status.Text=p.Item2;});
             try {await Task.Run(()=>{using(var stream=Open(source)) {
                 // Revalidate directory on the new connection; never trust stale UI extents.
-                var current=NpDownloadCatalog.Read(stream);
+                var current=NpDownloadCatalog.ReadAvailable(stream);
                 for(int i=0;i<chosen.Count;i++) {
                     var r=chosen[i];if(!current.Any(n=>n.Downloadable&&n.Start==r.Start&&n.End==r.End&&n.Session==r.Session&&n.Chunks==r.Chunks&&n.State==r.State&&n.Fault==r.Fault&&n.FormatVersion==r.FormatVersion&&n.CameraHz==r.CameraHz&&n.MicrophoneHz==r.MicrophoneHz&&n.ProbeMask==r.ProbeMask&&n.ApHz==r.ApHz))throw new IOException("Recording directory changed. Refresh before downloading.");
                     string name=USB512_interface.NpFolderNaming.Name(label,label.Length==0?null:NpDownloadCatalog.RecordingStartTime(stream,r),"NP_"+r.Session+"_LBA"+r.Start);
@@ -205,7 +205,7 @@ namespace CE32_console
                     }catch(OperationCanceledException){throw;}catch(Exception ex){conversionErrors.Add("Session "+r.Session+": "+ex.Message);}
                     }
                 }
-            }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Download complete. Native files and timestamps retained; MP4/WAV created when selected. NP: capture_status.txt.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+string.Join("; ",conversionWarnings);
+            }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Download complete. Native files and timestamps retained; MP4/WAV created when selected. NP: capture_status.txt.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+(chosen.Any(r=>!r.Complete)?"Incomplete recordings contain committed data only. ":"")+string.Join("; ",conversionWarnings);
             }catch(OperationCanceledException){status.Text="Cancelled. Partial files are retained and marked incomplete.";}
             catch(Exception ex){status.Text="Download stopped: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"NP download",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
             finally{SetBusy(false);}

@@ -3996,7 +3996,7 @@ namespace USB512_interface
                 neuropixelsPreview.KeepAliveWhileRecording=false;neuropixelsPreview.Close();neuropixelsPreview=null;
             }
             if(neuropixelsPreview==null || neuropixelsPreview.IsDisposed) {
-                neuropixelsPreview=new NeuropixelsPreviewForm(rate,mask,apOnly,adcBits);
+                neuropixelsPreview=new NeuropixelsPreviewForm(rate,mask,apOnly,adcBits){RecordingInfo=()=>recordingSummary==null?null:recordingSummary.Text};
                 neuropixelsPreview.StartPosition=FormStartPosition.Manual;
                 neuropixelsPreview.Location=new Point(Right+10,Top);
             }
@@ -4024,7 +4024,7 @@ namespace USB512_interface
                     // an AP-only 12-bit serial stream.
                     int rate=np2?(int)npV2RequestedSampleHz:xeNpPreviewRateHz;
                     int mask=np2?(int)(npV2RequestedProbeMask==0U?1U:npV2RequestedProbeMask):npPreviewMask;
-                    neuropixelsPreview = new NeuropixelsPreviewForm(rate,mask,np2,np2?12:10);
+                    neuropixelsPreview = new NeuropixelsPreviewForm(rate,mask,np2,np2?12:10){RecordingInfo=()=>recordingSummary==null?null:recordingSummary.Text};
                     neuropixelsPreview.StartPosition = FormStartPosition.Manual;
                     neuropixelsPreview.Location = new Point(Right + 10, Top);
                     neuropixelsPreview.Show();

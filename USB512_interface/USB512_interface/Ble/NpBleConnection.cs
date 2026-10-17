@@ -416,7 +416,8 @@ namespace USB512_interface
                 await WriteFrame(frame,generation,cancel);
                 if (await Task.WhenAny(waiting.Task, Task.Delay(5000, cancel)) != waiting.Task) {
                     cancel.ThrowIfCancellationRequested();
-                    throw new TimeoutException("No matching firmware receipt. Outcome unknown; read status before retrying. No command replayed.");
+                    if(!Connected || Epoch!=generation)throw new IOException("Connection changed while waiting for the firmware receipt.");
+                    throw MissingReceipt(command,request);
                 }
                 byte[] response = await waiting.Task;
                 long clockEnd=observationJournal==null?0:observationJournal.NowMicroseconds;
@@ -430,6 +431,16 @@ namespace USB512_interface
                 lock (receiveLock) { if (receipt == waiting) { receipt = null; matches = null; } }
                 transaction.Release();
             }
+        }
+        internal static TimeoutException MissingReceipt(byte command,byte[] request)
+        {
+            // Called only after WriteFrame completed. A partial/failed write
+            // never acquires this read-only continuation contract.
+            if(command==0xb9 && request!=null && request.Length==64 && BitConverter.ToUInt32(request,0)==0x31444c4eU &&
+                BitConverter.ToUInt32(request,4)==1 && BitConverter.ToUInt32(request,8)==0 && BitConverter.ToUInt32(request,12)!=0 &&
+                BitConverter.ToUInt32(request,60)==NpSdControl.Crc(request,60))
+                return new NpV1ReceiptTimeout(0,BitConverter.ToUInt32(request,12));
+            return new TimeoutException("No matching firmware receipt. Outcome unknown; read status before retrying. No command replayed.");
         }
         internal static int WriteChunkBytes(byte[] frame,int maxPdu,bool acknowledged)
         {
@@ -466,7 +477,7 @@ namespace USB512_interface
         internal async Task<bool> TryWritePreview(byte[] request,int expectedEpoch,CancellationToken cancel)
         {
             if(request==null || request.Length!=64 || (BitConverter.ToUInt32(request,0)!=NpV2PreviewBurst.Magic && BitConverter.ToUInt32(request,0)!=NpV1PreviewBurst.Magic) ||
-                BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)>4 || BitConverter.ToUInt32(request,12)==0 ||
+                BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)>(BitConverter.ToUInt32(request,0)==NpV2PreviewBurst.Magic?5U:4U) || BitConverter.ToUInt32(request,12)==0 ||
                 BitConverter.ToUInt32(request,60)!=NpSdControl.Crc(request,60))throw new ArgumentException("Valid preview request required.");
             if(!await transaction.WaitAsync(0,cancel))return false; // Recording/status/clock controls take priority.
             try{await WriteFrame(NpBleWire.Frame(0xb9,request),expectedEpoch,cancel);return true;}

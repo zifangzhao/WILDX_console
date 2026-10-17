@@ -44,6 +44,8 @@ namespace USB512_interface {
   readonly ComboBox profiles=new ComboBox();readonly CheckBox poll=new CheckBox();
   readonly Label state=new Label(),recordingTime=new Label();readonly List<string> messages=new List<string>();
   static string RecordingTimeText(ulong seconds){return seconds.ToString();}
+  static string RecordingStorageText(bool v2,NpSdStatus s){return "";}
+  ulong recordingSeconds;
   int recorderVersion=1,clockSyncs,controlUpdates,stopCalls;uint np2AvailableMask;
   bool busy,hostBusy,closing,mediaSettingsChanged,stopRequested;bool V2 {get{return false;}}
   NpSdStatus current;TaskCompletionSource<bool> heldStatus;

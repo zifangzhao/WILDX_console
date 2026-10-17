@@ -110,11 +110,11 @@ namespace CE32_console
                 if(start<0 || start>uint.MaxValue)throw new InvalidDataException("Invalid V2 SD start LBA");
                 if(String.IsNullOrWhiteSpace(output) || Directory.Exists(output) || File.Exists(output))
                     throw new IOException("A fresh NP export folder is required; existing outputs are never overwritten.");
-                bool success=false;string error=null;
+                bool success=false,exported=false;string error=null;
                 try {
-                    if(calibration==null)USB512_interface.NpV2SdDatExport.Export(card,(uint)start,output,directoryEnd,cancelled,progress);
-                    else USB512_interface.NpV2SdDatExport.ExportCalibrated(card,(uint)start,output,calibration,directoryEnd,cancelled,progress);
-                    success=true;
+                    var result=USB512_interface.NpV2SdDatExport.ExportCommitted(card,(uint)start,output,directoryEnd,cancelled,progress,calibration);
+                    exported=true;success=result.RecordingComplete;
+                    if(!success)error="Recording incomplete (stored state "+result.StoredState+", fault "+result.StoredFault+"); verified committed prefix exported.";
                 }
                 catch(Exception ex){error=ex.Message;throw;}
                 finally {
@@ -125,7 +125,7 @@ namespace CE32_console
                         var settings=USB512_interface.NpRecordingSettings.Saved(output,true,(int)U(d,16),(int)U(d,24),U(d,8),U(d,12),"sd_export");
                         settings.Context("dat_files","neuropixels_probeN_ap.dat in recorded physical probe order; .partial suffix until fully verified");
                         settings.Context("descriptor_file","descriptor.bin");
-                        bool nativeSuccess=success;Exception metadataError=null;
+                        bool nativeSuccess=exported;Exception metadataError=null;
                         // Retain the exact dual full requests or triple fingerprints
                         // with the DAT. These are recorded intents, not applied proof.
                         try {
@@ -247,7 +247,7 @@ namespace CE32_console
                     int percent=(int)((chunk+1)*100L/chunks);
                     if(progress!=null && percent!=lastProgress){lastProgress=percent;progress(percent);}
                 }
-                for(int p=0;p<3;p++)if(decoders[p]!=null){decoders[p].Complete();string name="np"+(p+1);
+                for(int p=0;p<3;p++)if(decoders[p]!=null && chunks>0){decoders[p].Complete();string name="np"+(p+1);
                     report.AppendLine(name+"_fixed_word="+decoders[p].ExpectedFixedWord).AppendLine(name+"_frames="+decoders[p].FramesChecked).AppendLine(name+"_ap_rows="+apRows[p]).AppendLine(name+"_lfp_rows="+lfpRows[p])
                         .AppendLine(name+"_frame_errors="+decoders[p].FrameErrors).AppendLine(name+"_counter_errors="+decoders[p].CounterErrors)
                         .AppendLine(name+"_relocks="+decoders[p].Resynchronizations).AppendLine(name+"_startup_discarded_bytes="+decoders[p].StartupDiscardedBytes)
@@ -259,7 +259,8 @@ namespace CE32_console
                     .AppendLine("valid_mag_snapshots="+validCounts[1]).AppendLine("valid_env_snapshots="+validCounts[2]);
                 foreach(var file in opened)file.Flush();
                 complete=chunks>0 && U(f,60)==3 && U(f,64)==0;
-                if(!complete)throw new InvalidDataException("Firmware marked this recording incomplete; only its committed prefix was exported.");
+                report.AppendLine("download_complete=True").AppendLine("stored_state="+U(f,60)).AppendLine("stored_fault="+U(f,64));
+                if(!complete)failure=chunks==0?"No committed samples; recording metadata retained.":"Firmware recording incomplete; only its verified committed prefix was exported.";
             } catch(Exception ex){failure=ex.Message;throw;}
             finally {
                 foreach(var file in opened)file.Dispose();

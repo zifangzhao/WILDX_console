@@ -28,6 +28,10 @@ namespace CE32_console
                 "Invalid media descriptor/footer signature or CRC.");
         }
         internal static void Validate(byte[] h, byte[] f, long start, long end)
+        { ValidateCore(h,f,start,end,false); }
+        internal static void ValidateCommitted(byte[] h,byte[] f,long start,long end)
+        { ValidateCore(h,f,start,end,true); }
+        static void ValidateCore(byte[] h,byte[] f,long start,long end,bool allowIncomplete)
         {
             Header(h, "NPSDLOG1"); Header(f, "NPSDEND1");
             Require(IsTyped(h) && U(h, 16) == 0 && U(h, 24) == 0,
@@ -38,13 +42,13 @@ namespace CE32_console
             Require(start >= 8192 && start % 8192 == 0 && U(h, 40) == start && U(h, 12) != 0 &&
                 U(h, 32) == 15360 && U(h, 36) == 128 && U(h, 80) == 2 && U(h, 96) == HeaderOffset &&
                 (hs == 8192 || hs == 16384) && (start + hs) % 16384 == 0 && end <= U(h, 44) &&
-                end == checked(start + hs + (long)chunks * 128) && chunks > 0 && chunks % 8 == 0,
+                (allowIncomplete?end>=checked(start+hs+(long)chunks*128):end==checked(start+hs+(long)chunks*128) && chunks>0) && chunks % 8 == 0,
                 "Invalid media committed extent/chunk geometry.");
             Require(U(h, 112) <= 58 &&
                 ((U(h, 8) == 7 && U(h, 112) > 0 && U(h, 116) == 0 && U(h, 120) == 0) ||
                  (U(h, 8) == 8 && U(h, 116) == 200000 && U(h, 120) == 1)),
                 "Unsupported media descriptor rates/channels.");
-            Require(U(f, 60) == 3 && U(f, 64) == 0, "Media recording is incomplete or firmware reported a fault.");
+            Require(allowIncomplete?U(f,60)>=1 && U(f,60)<=4:U(f,60)==3 && U(f,64)==0,"Unsupported media recording state or incomplete strict export.");
         }
         static void Exact(Stream s, byte[] b, int count = -1)
         {
@@ -337,11 +341,12 @@ namespace CE32_console
         internal static void Export(Stream card, long start, long end, string output, Func<bool> cancelled, Action<int> progress)
         {
             byte[] h = NpDownloadCatalog.Sector(card, start + 3), f = NpDownloadCatalog.Sector(card, start + 4);
-            Validate(h, f, start, end);
+            ValidateCommitted(h, f, start, end);
             if (end > card.Length / 512) throw new InvalidDataException("Media extent exceeds source capacity.");
             if (Directory.Exists(output)) throw new IOException("Media export folder exists; choose a new destination.");
             Directory.CreateDirectory(output);
             uint chunks = U(f, 68), session = U(h, 12), hs = U(h, 48);
+            bool recordingComplete=chunks>0 && U(f,60)==3 && U(f,64)==0;
             byte[] oldClockSector = NpDownloadCatalog.Sector(card, start + 5);
             var initialMetadata = Metadata(h); var finalMetadata = Metadata(f); var oldClock = ClockMetadata(oldClockSector, session);
             var clockAnchor = finalMetadata; string clockSource = finalMetadata == null ? null : "NPMEDX1.footer";
@@ -460,7 +465,8 @@ namespace CE32_console
                         int percent = (int)(processed * 100L / chunks);
                         if (progress != null && percent != lastProgress) { lastProgress = percent; progress(percent); }
                     }
-                    Require(frameAt == 0 && (U(h, 116) == 0 || samples > 0) && (U(h, 112) == 0 || frames > 0), "Incomplete final camera frame or empty requested stream.");
+                    if(recordingComplete)Require(frameAt==0 && (U(h,116)==0 || samples>0) && (U(h,112)==0 || frames>0),"Incomplete final camera frame or empty requested stream.");
+                    else if(frameAt>0)using(var tail=Create(output,"camera_tail.partial"))tail.Write(raster,0,frameAt);
                     // Physical chunk order interleaves producers. Shared mapping
                     // uses each sensor's native publication tick and validity.
                     if(finalMetadata!=null&&Number(finalMetadata,"version")==1&&(Number(finalMetadata,"flags")&4)!=0&&snapshots.Count>0)
@@ -474,6 +480,7 @@ namespace CE32_console
             {
                 var report = new Dictionary<string, object> {
                     { "status", complete ? "validated transport" : "INCOMPLETE" }, { "error", failure },
+                    { "recording_complete", recordingComplete }, { "incomplete_camera_frame_bytes", frameAt },
                     { "format_version", U(h, 8) }, { "session", session }, { "start_lba", start }, { "end_lba", end },
                     { "committed_chunks", chunks }, { "chunks", processed }, { "camera_frames", frames }, { "camera_invalid_frames", invalidFrames }, { "camera_frame_gaps", gaps },
                     { "camera_first_id", firstFrameId }, { "camera_last_id", previousFrame }, { "camera_first_tick", firstCameraTick }, { "camera_last_tick", previousFrame.HasValue ? (uint?)previousCameraTick : null },

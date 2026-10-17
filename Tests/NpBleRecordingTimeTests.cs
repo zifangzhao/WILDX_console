@@ -24,12 +24,18 @@ static class NpBleRecordingTimeTests {
    using(var time=new Label())using(var state=new Label())using(var firmware=new Label())using(var log=new TextBox()){
     Set(host,"recorderVersion",version);Set(host,"recordingTime",time);Set(host,"state",state);Set(host,"firmwareStatus",firmware);Set(host,"log",log);
     Call(host,"ShowStatus",s);string wanted="Recording time 00:"+(vector[4]/60).ToString("00")+":"+(vector[4]%60).ToString("00");
-    Need(time.Text==wanted,"Online recording time not displayed");
-    Set(s,"State",version==1?3U:5U);Call(host,"ShowStatus",s);Need(time.Text==wanted,"Stopped time changed without new recording data");
-    Set(s,"Chunks",0U);Call(host,"ShowStatus",s);Need(time.Text=="Recording time 00:00:00","New recording retained prior duration");
+    Need(time.Text.StartsWith(wanted+"   |   Recorded size "),"Online recording metrics not displayed");
+    string metrics=time.Text;Set(s,"State",version==1?3U:5U);Call(host,"ShowStatus",s);Need(time.Text==metrics,"Stopped metrics changed without new recording data");
+    Set(s,"Chunks",0U);Call(host,"ShowStatus",s);Need(time.Text=="Recording time 00:00:00   |   Recorded size 0 B","New recording retained prior metrics");
    }
   }
   Need((string)T("USB512_interface.NpBleForm").GetMethod("RecordingTimeText",All).Invoke(null,new object[]{108123UL})=="Recording time 30:02:03","Duration wrapped after24hours");
+  var sizeStatus=Status(1,20000,16,1);Set(sizeStatus,"Capacity",2097152U);
+  var storage=T("USB512_interface.NpBleForm").GetMethod("RecordingStorageText",All);
+  Need((string)storage.Invoke(null,new object[]{false,sizeStatus})=="   |   Recorded size 1.00 MiB   |   SD capacity 1.00 GiB","V1 size/capacity incorrect");
+  Need(((string)storage.Invoke(null,new object[]{true,sizeStatus})).Contains("Recorded size 728.00 KiB"),"V2 block size incorrect");
+  Set(sizeStatus,"Chunks",uint.MaxValue);Set(sizeStatus,"Capacity",uint.MaxValue);
+  Need(((string)storage.Invoke(null,new object[]{false,sizeStatus})).Contains("256.00 TiB"),"V1 size overflowed32-bit counters");
   Need(Seconds(1,null)==0,"Unknown V1 status fabricated a duration");
   bool refused=false;try{Seconds(2,null);}catch(TargetInvocationException ex) when(ex.InnerException is IOException){refused=true;}Need(refused,"Unknown V2 status fabricated a duration");
   using(var form=(Form)Activator.CreateInstance(T("USB512_interface.NpBleForm"),true)){

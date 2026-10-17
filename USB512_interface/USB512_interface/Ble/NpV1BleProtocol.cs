@@ -131,6 +131,8 @@ namespace CE32_console {
    Put(b,8,6);Put(b,44,(uint)utc);Put(b,48,(uint)(utc>>32));Put(b,60,NpSdControl.Crc(b,60));return b;
   }
   internal static byte[] Mode(NpSdStatus s,uint id,uint destination){
+   if(s!=null && s.Fault!=0 && CanManageStorage(s))
+    throw new IOException("V1 recording is already stopped with fault "+s.Fault+" ("+FaultText(s)+"). Firmware blocks mode switching while this fault is latched. Open Report for probe receipts; no mode command was sent.");
    if(!CanConfigure(s)||(s.Flags&Modes)==0||destination<1||destination>4)
     throw new IOException("Stop V1 and wait for completion before mode switching");
    byte[] b=NpSdControl.Request(0,id);Put(b,8,7);Put(b,16,destination);Put(b,60,NpSdControl.Crc(b,60));return b;

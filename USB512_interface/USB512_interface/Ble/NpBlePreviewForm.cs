@@ -14,7 +14,7 @@ namespace USB512_interface
     internal sealed class NpBlePreviewStream : IDisposable
     {
         readonly NpBleConnection connection;
-        readonly uint id,probe,channel,session,hz;
+        readonly uint id,probe,channel,session,hz,kind;
         readonly int epoch;
         readonly Queue<NpV2PreviewBurst> pending=new Queue<NpV2PreviewBurst>();
         readonly object gate=new object();
@@ -22,8 +22,10 @@ namespace USB512_interface
         internal int Dropped {get;private set;}
         internal readonly Stopwatch Silence=Stopwatch.StartNew();
         internal NpBlePreviewStream(NpBleConnection source,uint request,uint selectedProbe,uint selectedChannel,uint expectedSession,uint expectedHz)
+            : this(source,request,selectedProbe,selectedChannel,expectedSession,expectedHz,2) { }
+        internal NpBlePreviewStream(NpBleConnection source,uint request,uint selectedProbe,uint selectedChannel,uint expectedSession,uint expectedHz,uint expectedKind)
         {
-            connection=source;epoch=source.Epoch;id=request;probe=selectedProbe;channel=selectedChannel;session=expectedSession;hz=expectedHz;
+            connection=source;epoch=source.Epoch;id=request;probe=selectedProbe;channel=selectedChannel;session=expectedSession;hz=expectedHz;kind=expectedKind;
             connection.PreviewReceived+=Receive;
         }
         internal void Receive(int generation,byte[] body)
@@ -32,7 +34,7 @@ namespace USB512_interface
                 if(disposed || generation!=epoch)return;
                 try{
                     var burst=new NpV2PreviewBurst(id);if(!burst.Accept(body))return;
-                    if(burst.Kind!=2 || burst.Probe!=probe || burst.Channel!=channel || burst.Session!=session || burst.Hz!=hz)
+                    if(burst.Kind!=kind || burst.Probe!=probe || burst.Channel!=channel || burst.Session!=session || burst.Hz!=hz)
                         throw new IOException("Preview session/rate/selection changed; reopen preview.");
                     if(pending.Count==8){pending.Dequeue();Dropped++;}
                     pending.Enqueue(burst);Silence.Restart();
@@ -48,23 +50,31 @@ namespace USB512_interface
 
     internal sealed class NpBlePreviewForm : Form
     {
+        const int MaxWindowSeconds=10;
+        const int LeaseRetireMilliseconds=2250; // Firmware lease2s, plus host scheduling margin.
         readonly NpBleConnection connection;
         readonly Func<NpSdStatus> status;
         readonly Func<bool> controlsBusy;
         readonly NpCalibrationSet factoryCalibration;
+        internal Func<string> RecordingInfo;
+        readonly Label recordingInfo=new Label{Dock=DockStyle.Top,Height=24,Padding=new Padding(10,3,10,0),AutoEllipsis=true,Visible=false};
         readonly NumericUpDown probe=new NumericUpDown{Minimum=1,Maximum=2,Value=1,Width=55};
-        readonly NumericUpDown channel=new NumericUpDown{Minimum=0,Maximum=127,Width=65};
+        readonly NumericUpDown channel=new NumericUpDown{Minimum=0,Maximum=383,Width=65};
         readonly CheckBox enabled=new CheckBox{Text="Preview",AutoSize=true,Checked=true};
+        readonly NumericUpDown windowSeconds=new NumericUpDown{Minimum=0.1M,Maximum=MaxWindowSeconds,DecimalPlaces=1,Increment=0.1M,Value=4,Width=65,AccessibleName="BLE preview display window in seconds"};
         readonly NpHighPassControl highPass=new NpHighPassControl();
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
-        readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=50};
+        readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=16};
         readonly CancellationTokenSource lifetime=new CancellationTokenSource();
         readonly Stopwatch heartbeat=Stopwatch.StartNew(),retry=Stopwatch.StartNew();
+        readonly Stopwatch clock=Stopwatch.StartNew();
         readonly int epoch;
         NpBlePreviewStream stream;
-        int phase;uint session,hz,activeProbe,activeChannel,request;
-        bool busy,closed;
+        int phase;uint session,hz,activeProbe,activeChannel,request,previewHz;
+        bool busy,closed,legacyPreview;
+        int selectionGeneration;
+        long rearmAfter;
         ulong previousEnd;long gaps,skipped;int packets;
         static int sequence=Environment.TickCount;
         static uint Next(){uint value=unchecked((uint)Interlocked.Increment(ref sequence));return value==0?Next():value;}
@@ -77,12 +87,13 @@ namespace USB512_interface
             Text="WILD-X — BLE Preview";Icon=NpPreviewTheme.ApplicationIcon;ClientSize=new Size(850,550);MinimumSize=new Size(700,450);
             StartPosition=FormStartPosition.CenterParent;
             var controls=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,Padding=new Padding(10)};
-            highPass.SampleRate=500;highPass.CutoffBox.Text="100";
+            highPass.SampleRate=0;highPass.CutoffBox.Text="100";
             highPass.Changed+=delegate{plot.SetHighPass(highPass.CutoffHz);};
-            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Base channel",AutoSize=true},channel,enabled,highPass,info});
-            Controls.Add(plot);Controls.Add(controls);WildXTheme.Apply(this);info.ForeColor=WildXTheme.Muted;
-            probe.ValueChanged+=delegate{enabled.Checked=false;DropStream();};channel.ValueChanged+=delegate{enabled.Checked=false;DropStream();};
-            enabled.CheckedChanged+=delegate{DropStream();info.Text=enabled.Checked?"Waiting for recording…":"Paused";retry.Restart();};
+            windowSeconds.ValueChanged+=delegate{plot.SetWindowSeconds((double)windowSeconds.Value);};
+            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Channel",AutoSize=true},channel,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,highPass,info});
+            Controls.Add(plot);Controls.Add(controls);Controls.Add(recordingInfo);WildXTheme.Apply(this);info.ForeColor=recordingInfo.ForeColor=WildXTheme.Muted;
+            probe.ValueChanged+=delegate{RetirePreview();};channel.ValueChanged+=delegate{RetirePreview();};
+            enabled.CheckedChanged+=delegate{RetirePreview();};
             timer.Tick+=async delegate{await Tick();};Shown+=delegate{timer.Start();};
         }
         bool Current(uint rate)
@@ -90,7 +101,22 @@ namespace USB512_interface
             var s=status();return !closed && enabled.Checked && connection.Connected && connection.Epoch==epoch &&
                 NpV2SdControl.CanPreview(s) && (s.Mask!=1 || probe.Value==1) && (rate==0 || s.Hz==rate);
         }
-        void DropStream(){var old=stream;stream=null;session=hz=0;previousEnd=0;if(old!=null)old.Dispose();}
+        void ResetDisplayRate(){previewHz=0;plot.SetSampleRate(0);highPass.SampleRate=0;}
+        void DropStream(){var old=stream;stream=null;session=hz=previewHz=0;previousEnd=0;if(old!=null)old.Dispose();}
+        void RetirePreview(){
+            selectionGeneration++;
+            if(stream!=null || busy)rearmAfter=Math.Max(rearmAfter,clock.ElapsedMilliseconds+LeaseRetireMilliseconds);
+            DropStream();ResetDisplayRate();retry.Restart();
+            info.Text=enabled.Checked?"Waiting to preview the selected channel…":"Paused";
+        }
+        bool SelectionCurrent(int generation,uint rate){return generation==selectionGeneration && Current(rate) && probe.Value==activeProbe && channel.Value==activeChannel;}
+        void RefreshRecordingInfo(){
+            try{
+                string text=RecordingInfo==null?null:RecordingInfo();
+                recordingInfo.Text=String.IsNullOrWhiteSpace(text)?String.Empty:text;
+                recordingInfo.Visible=recordingInfo.Text.Length!=0;
+            }catch(Exception ex){recordingInfo.Text="Recording information unavailable: "+ex.Message;recordingInfo.Visible=true;}
+        }
         protected override void OnFormClosing(FormClosingEventArgs e){closed=true;lifetime.Cancel();DropStream();base.OnFormClosing(e);}
         protected override void Dispose(bool disposing)
         {
@@ -100,88 +126,137 @@ namespace USB512_interface
         }
         async Task Tick()
         {
-            if(busy || closed)return;
-            if(!Current(hz)){DropStream();info.Text=enabled.Checked?"Waiting for recording…":"Paused";return;}
-            if(controlsBusy())return; // Preview never queues in front of control/status/clock work.
+            if(closed)return;
+            RefreshRecordingInfo(); // Cached PC state only; never waits for BLE/control ownership.
+            if(!Current(hz)){if(stream!=null || busy || session!=0)RetirePreview();info.Text=enabled.Checked?"Waiting for recording…":"Paused";return;}
+            // Already-received display data never waits for a status/time RPC
+            // or an in-flight preview write. Only new wire work yields to controls.
+            try{DrainPreview();}
+            catch(NpV2PreviewUnavailableException ex){
+                // Only a matching compact request's explicit unsupported reply
+                // permits one legacy mode switch during this connection epoch.
+                if(ex.Reason==1 && !legacyPreview){
+                    var old=stream;stream=null;if(old!=null)old.Dispose();legacyPreview=true;previousEnd=0;
+                    ResetDisplayRate();retry.Restart();info.Text="Compact preview unsupported; waiting to request legacy preview…";return;
+                }
+                enabled.Checked=false;info.Text=ex.Message;return;
+            }
+            catch(Exception ex){enabled.Checked=false;info.Text=ex.Message;return;}
+            if(busy || controlsBusy())return;
             busy=true;
+            int generation=selectionGeneration;
             try{
                 var token=lifetime.Token;
                 if(stream==null){
-                    if(retry.ElapsedMilliseconds<1000)return;
-                    activeProbe=(uint)probe.Value;activeChannel=(uint)channel.Value;hz=status().Hz;
-                    info.Text="Reading probe framing…";
-                    var calibration=await connection.CapturePreview(Next(),activeProbe,activeChannel,hz,token);
-                    phase=await Task.Run(()=>calibration.FindPhase(),token);session=calibration.Session;
-                    await Task.Delay(550,token); // Firmware preview admission interval after calibration.
-                    if(!Current(hz) || controlsBusy() || probe.Value!=activeProbe || channel.Value!=activeChannel){DropStream();return;}
-                    request=Next();stream=new NpBlePreviewStream(connection,request,activeProbe,activeChannel,session,hz);
-                    if(!await connection.TryWritePreview(NpV2PreviewBurst.Request(request,2,activeProbe,activeChannel,(uint)phase,session),epoch,token)){DropStream();retry.Restart();return;}
-                    if(!Current(hz) || stream==null){DropStream();return;}
-                    plot.Clear((int)activeChannel);gaps=skipped=0;packets=0;heartbeat.Restart();
+                    if(clock.ElapsedMilliseconds<rearmAfter){info.Text="Waiting for the previous preview lease to expire…";return;}
+                    if(retry.ElapsedMilliseconds<(legacyPreview?550:1000))return;
+                    if(session==0){
+                        activeProbe=(uint)probe.Value;activeChannel=(uint)channel.Value;hz=status().Hz;
+                        info.Text="Reading probe framing…";
+                        var calibration=await connection.CapturePreview(Next(),activeProbe,activeChannel,hz,token);
+                        if(!SelectionCurrent(generation,hz))return;
+                        int capturedPhase=await Task.Run(()=>calibration.FindPhase(),token);
+                        if(!SelectionCurrent(generation,hz))return;
+                        phase=capturedPhase;session=calibration.Session;
+                        await Task.Delay(550,token); // Firmware preview admission interval after calibration.
+                    }
+                    if(!SelectionCurrent(generation,hz))return;
+                    if(controlsBusy()){DropStream();return;}
+                    plot.Clear((int)activeChannel);gaps=skipped=0;packets=0;
                     var profile=factoryCalibration==null?null:factoryCalibration.Get((int)activeProbe);
                     plot.CorrectSample=profile==null?null:(Func<int,short,short>)((ch,value)=>profile.Correct(value,ch));
+                    uint kind=legacyPreview?2U:5U;
+                    request=Next();stream=new NpBlePreviewStream(connection,request,activeProbe,activeChannel,session,hz,kind);
+                    bool sent=await connection.TryWritePreview(NpV2PreviewBurst.Request(request,kind,activeProbe,activeChannel,(uint)phase,session),epoch,token);
+                    if(!SelectionCurrent(generation,hz))return;
+                    if(!sent){DropStream();retry.Restart();return;}
+                    if(stream==null)return;
+                    heartbeat.Restart();
                 }
-                if(heartbeat.ElapsedMilliseconds>=750 && await connection.TryWritePreview(NpV2PreviewBurst.Request(request,4,activeProbe,activeChannel,(uint)phase,session),epoch,token))heartbeat.Restart();
-                if(!Current(hz) || stream==null){DropStream();return;}
-                var frames=stream.Drain();
-                var decoded=await Task.Run(()=>{var samples=new List<ushort[,]>();foreach(var frame in frames)samples.Add(frame.DecodeRolling(phase));return samples;},token);
+                if(heartbeat.ElapsedMilliseconds>=750){
+                    bool sent=await connection.TryWritePreview(NpV2PreviewBurst.Request(request,4,activeProbe,activeChannel,(uint)phase,session),epoch,token);
+                    if(!SelectionCurrent(generation,hz))return;
+                    if(sent)heartbeat.Restart();
+                }
+            }catch(OperationCanceledException){if(!closed && generation==selectionGeneration)enabled.Checked=false;}
+            catch(Exception ex){if(!closed && generation==selectionGeneration){enabled.Checked=false;info.Text=ex.Message;}}
+            finally{
+                // An already-submitted old request can finish after selection
+                // changes. Start the quiet lease window only after it retires.
+                if(generation!=selectionGeneration)rearmAfter=Math.Max(rearmAfter,clock.ElapsedMilliseconds+LeaseRetireMilliseconds);
+                busy=false;
+            }
+        }
+        void DrainPreview()
+        {
+            if(stream==null)return;
+            // At most eight disposable bursts: bounded PC-only work,
+            // avoiding a thread-pool round trip on every display timer tick.
+            foreach(var frame in stream.Drain()){
+                if(previousEnd!=0 && frame.FirstTick<previousEnd)continue;
+                var decoded=frame.DecodeRolling(phase);
                 if(!Current(hz) || probe.Value!=activeProbe || channel.Value!=activeChannel){DropStream();return;}
-                ulong stride=(ulong)(hz/500)*1600;
-                for(int i=0;i<frames.Count;i++){
-                    var frame=frames[i];
-                    if(previousEnd!=0 && frame.FirstTick<previousEnd)continue;
-                    if(previousEnd!=0 && frame.FirstTick!=previousEnd)gaps++;
-                    for(int n=0;n<16;n++)if((frame.ValidMask&(1U<<n))==0)skipped++;
-                    previousEnd=frame.FirstTick+16*stride;packets++;plot.Append(decoded[i],frame.FirstTick,stride,frame.ValidMask);
+                if(previewHz!=frame.PreviewHz){
+                    previewHz=frame.PreviewHz;plot.SetSampleRate(previewHz);highPass.SampleRate=previewHz;plot.SetHighPass(highPass.CutoffHz);
                 }
-                info.Text="500 samples/s · gaps "+gaps+" · skipped "+skipped+" · host drops "+stream.Dropped+" · packets "+packets;
-                if(stream.Silence.ElapsedMilliseconds>2500)throw new NpV2PreviewUnavailableException(128);
-            }catch(OperationCanceledException){if(!closed){DropStream();enabled.Checked=false;}}
-            catch(Exception ex){if(!closed){DropStream();enabled.Checked=false;info.Text=ex.Message;}}
-            finally{busy=false;}
+                ulong stride=frame.SourceStep;
+                if(previousEnd!=0 && frame.FirstTick!=previousEnd)gaps++;
+                for(int n=0;n<frame.Rows;n++)if((frame.ValidRows&(1UL<<n))==0)skipped++;
+                previousEnd=frame.FirstTick+(ulong)frame.Rows*stride;packets++;
+                plot.Append(decoded,frame.FirstTick,stride,frame.ValidRows);
+            }
+            info.Text=previewHz+" samples/s · subsampled, aliasing possible · gaps "+gaps+" · skipped "+skipped+" · host drops "+stream.Dropped+" · packets "+packets;
+            if(stream.Silence.ElapsedMilliseconds>2500)throw new NpV2PreviewUnavailableException(128);
         }
         // BLE wire stays raw. Convert only the disposable PC display samples.
         sealed class Plot : Control
         {
-            const int Capacity=2000;
-            readonly short[,] values=new short[Capacity,3];readonly ulong[] ticks=new ulong[Capacity];
-            readonly NpDisplayHighPass highPass=new NpDisplayHighPass(3);
-            readonly short[] displayRow=new short[3];
+            const int Capacity=500*MaxWindowSeconds; // Current wire profiles are bounded at 500 samples/s.
+            readonly short[] values=new short[Capacity];readonly ulong[] ticks=new ulong[Capacity];
+            readonly NpDisplayHighPass highPass=new NpDisplayHighPass(1);
+            readonly short[] displayRow=new short[1];
             internal Func<int,short,short> CorrectSample;
-            int count,write,baseChannel;ulong stride;
+            int count,write,selectedChannel;uint sampleHz;ulong stride;double windowSeconds=4;
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;ForeColor=Color.LightGreen;}
-            internal void SetHighPass(double cutoff){highPass.Configure(500,cutoff);Clear(baseChannel);}
-            internal void Clear(int channel){count=write=0;baseChannel=channel;highPass.Reset();Invalidate();}
-            internal void Append(ushort[,] data,ulong first,ulong step,uint valid)
+            internal void SetWindowSeconds(double seconds){
+                if(Double.IsNaN(seconds) || Double.IsInfinity(seconds) || seconds<0.1 || seconds>MaxWindowSeconds)throw new ArgumentOutOfRangeException("seconds");
+                windowSeconds=seconds;Invalidate(); // View only; retain history and the BLE lease.
+            }
+            internal void SetSampleRate(uint rate){sampleHz=rate;Clear(selectedChannel);}
+            internal void SetHighPass(double cutoff){if(sampleHz!=0)highPass.Configure(sampleHz,cutoff);Clear(selectedChannel);}
+            internal void Clear(int channel){count=write=0;selectedChannel=channel;highPass.Reset();Invalidate();}
+            internal void Append(ushort[,] data,ulong first,ulong step,ulong valid)
             {
                 stride=step;for(int i=0;i<data.GetLength(0);i++){
-                    if((valid&(1U<<i))==0)continue;ticks[write]=first+(ulong)i*step;
-                    for(int lane=0;lane<3;lane++){
-                        short value=NpV2SampleDecoder.NominalCount(data[i,lane]);
-                        displayRow[lane]=CorrectSample==null?value:CorrectSample(baseChannel+lane*128,value);
-                    }
+                    if((valid&(1UL<<i))==0)continue;ticks[write]=first+(ulong)i*step;
+                    short value=NpV2SampleDecoder.NominalCount(data[i,data.GetLength(1)==1?0:selectedChannel/128]);
+                    displayRow[0]=CorrectSample==null?value:CorrectSample(selectedChannel,value);
                     highPass.Apply(displayRow,0,displayRow,0,checked((long)(ticks[write]/step)));
-                    for(int lane=0;lane<3;lane++)values[write,lane]=displayRow[lane];write=(write+1)%Capacity;if(count<Capacity)count++;
+                    values[write]=displayRow[0];write=(write+1)%Capacity;if(count<Capacity)count++;
                 }Invalidate();
             }
             protected override void OnPaint(PaintEventArgs e)
             {
                 base.OnPaint(e);if(count<2)return;
-                int start=(write-count+Capacity)%Capacity;ulong latest=ticks[(write+Capacity-1)%Capacity];double window=(Capacity-1)*(double)stride;
-                Color[] colors={Color.LightGreen,Color.LightSkyBlue,Color.Orange};
-                for(int lane=0;lane<3;lane++){
-                    double sum=0;int min=short.MaxValue,max=short.MinValue;for(int i=0;i<count;i++){int v=values[(start+i)%Capacity,lane];sum+=v;min=Math.Min(min,v);max=Math.Max(max,v);}
-                    double mean=sum/count,range=Math.Max(32,max-min);float top=lane*Height/3f,band=Height/3f;var segment=new List<PointF>();ulong prev=0;
-                    using(var pen=new Pen(colors[lane])){
-                        for(int i=0;i<count;i++){
-                            int at=(start+i)%Capacity;ulong tick=ticks[at];if(latest-tick>window)continue;
-                            if(segment.Count>0 && tick-prev!=stride){if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());segment.Clear();}
-                            segment.Add(new PointF((float)(15+(1-(latest-tick)/window)*(Width-30)),(float)(top+band/2-(values[at,lane]-mean)*(band-50)/range)));prev=tick;
-                        }
-                        if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());
+                ulong latest=ticks[(write+Capacity-1)%Capacity];double window=windowSeconds*sampleHz*stride;
+                int first=FirstVisible(latest,window),shown=count-first,start=(write-count+first+Capacity)%Capacity;
+                if(shown<2)return;
+                double sum=0;int min=short.MaxValue,max=short.MinValue;for(int i=0;i<shown;i++){int v=values[(start+i)%Capacity];sum+=v;min=Math.Min(min,v);max=Math.Max(max,v);}
+                double mean=sum/shown,range=Math.Max(32,max-min);var segment=new List<PointF>();ulong prev=0;
+                using(var pen=new Pen(Color.LightGreen)){
+                    for(int i=0;i<shown;i++){
+                        int at=(start+i)%Capacity;ulong tick=ticks[at];if(latest-tick>window)continue;
+                        if(segment.Count>0 && tick-prev!=stride){if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());segment.Clear();}
+                        segment.Add(new PointF((float)(15+(1-(latest-tick)/window)*(Width-30)),(float)(Height/2f-(values[at]-mean)*(Height-50)/range)));prev=tick;
                     }
-                    e.Graphics.DrawString("Ch "+(baseChannel+lane*128)+(CorrectSample==null?" · nominal counts ":" · calibrated counts ")+min+"–"+max,Font,Brushes.LightGray,10,top+5);
+                    if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());
                 }
+                e.Graphics.DrawString("Ch "+selectedChannel+(CorrectSample==null?" · nominal counts ":" · calibrated counts ")+min+"–"+max,Font,Brushes.LightGray,10,5);
+            }
+            int FirstVisible(ulong latest,double window){
+                int first=0,start=(write-count+Capacity)%Capacity;
+                while(first<count && latest-ticks[(start+first)%Capacity]>window)first++;
+                return first;
             }
         }
     }

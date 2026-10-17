@@ -442,6 +442,8 @@ namespace USB512_interface
         private readonly NumericUpDown durationBox = new NumericUpDown();
         private readonly NumericUpDown gainBox = new NumericUpDown();
         private readonly Label report = new Label();
+        internal Func<string> RecordingInfo;
+        private readonly Label recordingInfo=new Label{AutoEllipsis=true,TextAlign=ContentAlignment.MiddleLeft,Visible=false};
         private readonly NpSweepPanel graph = new NpSweepPanel();
         private readonly System.Windows.Forms.Timer repaintTimer = new System.Windows.Forms.Timer();
         private readonly object renderLock = new object();
@@ -544,6 +546,10 @@ namespace USB512_interface
                 new Label { Text = "Gain", AutoSize = true, Location = new Point(450, 12) }
             });
             pageLabel.AutoSize=true;pageLabel.Location=new Point(150,12);
+            foreach(Control control in Controls)control.Top+=24;
+            graph.Height-=24;
+            recordingInfo.SetBounds(8,0,ClientSize.Width-16,24);recordingInfo.Anchor=AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;
+            Controls.Add(recordingInfo);
             UpdateView();
             // Large managed/native allocations and first-use rendering happen
             // before capture START, never when a recording preview is opened.
@@ -561,13 +567,15 @@ namespace USB512_interface
                 int version=frameVersion;
                 if(version!=paintedVersion) { paintedVersion=version;graph.Invalidate(); }
                 int now=Environment.TickCount;
-                if(unchecked(now-lastReportTick)>=250) { lastReportTick=now;UpdateReport(); }
+                if(unchecked(now-lastReportTick)>=250) { lastReportTick=now;UpdateReport();RefreshRecordingInfo(); }
             };
             repaintTimer.Start();
             renderRunning = true;
             renderThread = new Thread(RenderLoop) { IsBackground = true, Name = "WILDX scope renderer", Priority=ThreadPriority.BelowNormal };
             renderThread.Start();
         }
+
+        void RefreshRecordingInfo(){try{string text=RecordingInfo==null?null:RecordingInfo();recordingInfo.Text=String.IsNullOrWhiteSpace(text)?String.Empty:text;recordingInfo.Visible=recordingInfo.Text.Length!=0;}catch(Exception ex){recordingInfo.Text="Recording information unavailable: "+ex.Message;recordingInfo.Visible=true;}}
 
         internal void PushSamples(short[] apSamples, int apFrames, short[] lfpSamples, int lfpFrames)
         {PushSamples(1,apSamples,apFrames,lfpSamples,lfpFrames);}

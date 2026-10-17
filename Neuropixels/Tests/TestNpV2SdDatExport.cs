@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using USB512_interface;
 
@@ -164,6 +165,12 @@ internal static class NpV2SdDatExportTests
             Check(Convert.ToBase64String(File.ReadAllBytes(Path.Combine(first,name)))==Convert.ToBase64String(File.ReadAllBytes(Path.Combine(second,name))),"v11/v12 DAT bytes changed: "+name);
         }
     }
+    private static void IncompleteOutput(string output,byte[] footer,bool empty,string reference,int probes=2){
+        Check(File.Exists(Path.Combine(output,"descriptor.bin")) && File.ReadAllBytes(Path.Combine(output,"footer.bin")).SequenceEqual(footer),"Incomplete metadata not preserved exactly");
+        Check(File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt")).Contains("Recording complete: False"),"Incomplete source reported complete");
+        if(empty)Check(Directory.GetFiles(output,"*.dat").Length==0,"Metadata-only recording invented DAT samples");
+        else SameDat(reference,output,probes);
+    }
     private static void MetadataVersions(string root,string baseline)
     {
         MethodInfo oldExport=baseline==null?null:Assembly.LoadFile(Path.GetFullPath(baseline)).GetType("USB512_interface.NpV2SdDatExport",true).GetMethod("Export");
@@ -218,9 +225,9 @@ internal static class NpV2SdDatExportTests
                     if(state==1){Put(bad,108,0);Put(bad,112,0);Put(bad,116,BitConverter.ToUInt32(d,60));PutQ(bad,120,0);}
                     Seal(bad);RefuseMetadata(d,bad,length,"Failed/VERIFY_PENDING");
                     using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){WriteAt(card,Start+4,bad);var rows=Catalog(card);Check(rows.Count==1 && !(bool)RecordValue(rows[0],"Downloadable",true),"Actual catalog promoted incomplete v12");}
-                    string refusedOutput=Path.Combine(root,"refused_"+hz+"_"+au+"_"+state);bool refused=false;
-                    try{using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(f,116),refusedOutput,()=>false,null);}catch(InvalidDataException){refused=true;}
-                    Check(refused && !Directory.Exists(refusedOutput),"Actual bridge published incomplete v12 output");
+                    string partialOutput=Path.Combine(root,"incomplete_"+hz+"_"+au+"_"+state);
+                    using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(f,116),partialOutput,()=>false,null);
+                    IncompleteOutput(partialOutput,bad,state==1,output);
                 }
                 using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite))WriteAt(card,Start+4,f);
                 foreach(string fault in new[]{"gap","tick","profile","sync","header","utc","truncated"}){
@@ -231,7 +238,7 @@ internal static class NpV2SdDatExportTests
                 }
             }
         }
-        Console.WriteLine("PASS {0} focused v11/v12 checks: actual catalog/bridge,20/30kHz,3072/86016-sector AUs, exact RU/padded reservation bounds, CID/CRC/zero tails, Failed/VERIFY_PENDING refusal and unchanged DAT bytes{1}; no hardware or live-VSC qualification.",checks,oldExport==null?"":" against frozen v11 exporter");
+        Console.WriteLine("PASS {0} focused v11/v12 checks: actual catalog/bridge,20/30kHz,3072/86016-sector AUs, exact RU/padded reservation bounds, CRC/zero tails, incomplete committed-prefix export and unchanged DAT bytes{1}; no hardware or live-VSC qualification.",checks,oldExport==null?"":" against frozen v11 exporter");
     }
 
     private static byte[] FooterFor(byte[] descriptor,byte[] template,uint blocks,uint state=3,uint error=0)
@@ -321,9 +328,9 @@ internal static class NpV2SdDatExportTests
                     var rows=Catalog(card);Check(rows.Count==1 && (bool)RecordValue(rows[0],"V2",true) &&
                         !(bool)RecordValue(rows[0],"Downloadable",true) && (long)RecordValue(rows[0],"End")==BitConverter.ToUInt32(d,68),"v13 incomplete allocation was promoted or its quarantine fence changed");
                 }
-                string refusedOutput=Path.Combine(root,tag+"_refused_"+state);bool refused=false;
-                try{using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(d,68),refusedOutput,()=>false,null);}catch(InvalidDataException){refused=true;}
-                Check(refused && !Directory.Exists(refusedOutput),"v13 incomplete export published output");
+                string partialOutput=Path.Combine(root,tag+"_incomplete_"+state);
+                using(var card=File.OpenRead(image))Bridge(card,Start,BitConverter.ToUInt32(d,68),partialOutput,()=>false,null);
+                IncompleteOutput(partialOutput,bad,state==1,shortOutput,probes);
             }
             using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){WriteAt(card,Start+4,f);CatalogEntry(card,f);}
             if(mask!=3){

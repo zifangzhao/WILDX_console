@@ -10,11 +10,12 @@ using CE32_console;
 // The actual Apply/Start handlers are inserted by the runner. Only their
 // transport/configuration services are faked; the V1/V2 admission is real.
 namespace WildNpConfiguration {
- class NpConfigRequest {}
+ class NpConfigRequest {internal byte Port;internal string Identity;}
  class Np2ConfigRequest {}
  class NpConfigClient {
+  internal static readonly List<NpConfigRequest> Staged=new List<NpConfigRequest>();
   internal NpConfigClient(object transport){}
-  internal Task StageForCaptureAsync(IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel){return Task.CompletedTask;}
+  internal Task StageForCaptureAsync(IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel){foreach(var request in requests)if((mask&(1<<request.Port))!=0)Staged.Add(request);return Task.CompletedTask;}
  }
  class Np2ConfigClient {
   internal Np2ConfigClient(object transport){}
@@ -27,7 +28,7 @@ namespace USB512_interface {
  class NpBleConfigurationReceipts {internal void Reset(){}internal void Expect(IEnumerable<Np2ConfigRequest> requests){}}
  class NpBleForm {
   sealed class Profile {internal uint Mask,Hz;}
-  sealed class Connection {internal bool Connected=true;internal int Epoch {get{return 1;}}}
+  sealed class Connection {internal bool Connected=true;internal int Epoch=1;}
   sealed class ConfigTransport {internal ConfigTransport(Connection connection){}}
   sealed class Clock {internal bool Synchronized=true;}
   readonly ComboBox profiles=new ComboBox();readonly TextBox address=new TextBox{Text="123456789ABC"};
@@ -35,9 +36,11 @@ namespace USB512_interface {
   readonly Label configurationStatus=new Label();readonly Connection connection=new Connection();readonly Clock clock=new Clock();
   readonly NpBleConfigurationReceipts configurationReceipts=new NpBleConfigurationReceipts();
   readonly Dictionary<ulong,Dictionary<int,string>> np2HostConfigurations=new Dictionary<ulong,Dictionary<int,string>>();
-  readonly Dictionary<byte,NpConfigRequest> configurations=new Dictionary<byte,NpConfigRequest>();
+  readonly Dictionary<ulong,Dictionary<byte,NpConfigRequest>> v1HostConfigurations=new Dictionary<ulong,Dictionary<byte,NpConfigRequest>>();
+  ulong connectedAddress=0x123456789ABCUL;
+ACTUAL_V1_CONFIGURATIONS
   readonly List<byte[]> writes=new List<byte[]>();
-  NpSdStatus current;string configurationReadError;bool V2,loseSelectReceipt,failConfirmation,mediaSettingsChanged,stopRequested,stopping,loseStopReceipt,cancelDuringSelect;int pending;uint operation;
+  NpSdStatus current;string configurationReadError;bool V2,loseSelectReceipt,failConfirmation,mediaSettingsChanged,stopRequested,stopping,loseStopReceipt,cancelDuringSelect,wrongReceiptId,genericTimeout,changeEpochOnTimeout,cancelOnTimeout,changePeerOnTimeout;int pending,receiptTimeouts;uint operation,sequence;
   void UpdateControls(){}
   uint Next(){return current.LastId+1;}
   HashSet<int> Np2ApplyRequests(ulong peer){return null;}
@@ -46,6 +49,8 @@ namespace USB512_interface {
   Task ApplyV1Media(){throw new Exception("Unexpected media path");}
   async Task<NpSdStatus> ReadStatus(){
    await Task.CompletedTask;
+   sequence++;
+   if(pending>0 && receiptTimeouts>0){receiptTimeouts--;if(changeEpochOnTimeout)connection.Epoch++;if(cancelOnTimeout)stopRequested=true;if(changePeerOnTimeout)address.Text="FEDCBA987654";if(genericTimeout)throw new TimeoutException("simulated write timeout");throw new NpV1ReceiptTimeout(0,wrongReceiptId?sequence+1:sequence);}
    if(pending>0){if(failConfirmation)throw new IOException("simulated read failure");if(cancelDuringSelect){stopRequested=true;cancelDuringSelect=false;}if(--pending==0){current.Flags&=~8U;if(operation==3){current.Flags&=~4U;current.State=current.Fault!=0?(V2?255U:4U):(V2?5U:3U);}}}
    return current;
   }
@@ -92,6 +97,19 @@ ACTUAL_RECORDING_METHODS
    try{await canceled.StartRecording();}catch(OperationCanceledException){canceledStart=true;}
    Need(canceledStart&&canceled.writes.Count==1,"Stop during SELECT preparation released START");
    await canceled.StopRecording();Need(!canceled.stopRequested&&canceled.StopConfirmed(canceled.current)&&canceled.writes.Count==1,"Pending SELECT was overwritten or a canceled start remained active");
+   var delayed=New(false,true);delayed.receiptTimeouts=1;await delayed.StartRecording();Need(delayed.writes.Count==2&&delayed.writes.Count(b=>BitConverter.ToUInt32(b,8)==1)==1&&delayed.writes.Count(b=>BitConverter.ToUInt32(b,8)==2)==1,"Qualifying STATUS timeout replayed mutation or prevented confirmed start");
+   for(int mode=0;mode<7;mode++){
+    var rejected=New(mode==4,true);rejected.receiptTimeouts=mode==0?2:1;rejected.wrongReceiptId=mode==1;rejected.genericTimeout=mode==2;rejected.changeEpochOnTimeout=mode==3;rejected.cancelOnTimeout=mode==5;rejected.changePeerOnTimeout=mode==6;
+    bool failedRead=false;try{await rejected.StartRecording();}catch(Exception ex) when(ex is TimeoutException || mode==5 && ex is OperationCanceledException){failedRead=true;}
+    Need(failedRead&&rejected.writes.Count==1,"Unqualified timeout/epoch/V2 failure continued or replayed START");
+   }
+   var peers=New(false,false);var requestA=new NpConfigRequest{Port=0,Identity="A-map"};peers.V1Configurations().Add(0,requestA);
+   peers.connectedAddress=0xABCDEF123456UL;peers.address.Text="ABCDEF123456";NpConfigClient.Staged.Clear();await peers.StartRecording();
+   Need(NpConfigClient.Staged.Count==0,"Actual START on peerB staged peerA's map");await peers.StopRecording();
+   var requestB=new NpConfigRequest{Port=1,Identity="B-map"};peers.V1Configurations().Add(1,requestB);NpConfigClient.Staged.Clear();await peers.StartRecording();
+   Need(NpConfigClient.Staged.Count==1&&Object.ReferenceEquals(NpConfigClient.Staged[0],requestB),"Actual START did not stage only peerB's own map");await peers.StopRecording();
+   peers.connectedAddress=0x123456789ABCUL;peers.address.Text="123456789ABC";NpConfigClient.Staged.Clear();await peers.StartRecording();
+   Need(NpConfigClient.Staged.Count==1&&Object.ReferenceEquals(NpConfigClient.Staged[0],requestA),"Actual START after returning to peerA staged another peer's map");
   }
   [STAThread]static int Main(){try{var task=Tests();while(!task.IsCompleted){Application.DoEvents();Thread.Sleep(2);}task.GetAwaiter().GetResult();Console.WriteLine("PASS "+checks+" actual-source BLE Apply/Start checks; fake transport only.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
  }

@@ -1,21 +1,19 @@
-# WILDX 1.0.0.37
+# WILDX 1.0.0.39
 
-[Download the installer](WILDX_console-Setup-1.0.0.37.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.39.exe).
 
-BLE Mode now shows a bold **Recording time HH:MM:SS** line for V1/V2 neural
-recording and supported V1 camera/audio. It uses device recording progress,
-works after reconnecting and retains the final duration after Stop. USB keeps
-its existing elapsed-time, recorded-size and free-space display.
+Includes incomplete V1/V2 recording downloads, read-only best-effort SD catalog
+browsing, preview channel switching and duration controls, recording information
+above neural previews, and V1/V2 BLE recorded-size reporting.
 
-The [1.0.0.36 BLE settings and Stop fixes](../Note/RELEASE_1.0.0.36_20261017.md)
-are included. No firmware upgrade is required. The underlying V1 capture-source
-fault on the two reported loggers remains unresolved; this display change does
-not establish hardware recording integrity.
+Damaged entries are marked unavailable while readable entries remain accessible.
+Firmware-level BLE mounting of a damaged directory is still under investigation.
+Additional hardware checks follow this software release.
 
-All 37 extracted files match the checked payload; the 36 inherited runtime,
-helper and firmware files are unchanged. The installer retains Run WILD-X.
-See [validation and timing semantics](../Note/RELEASE_1.0.0.37_20261017.md),
-the [manifest](release-manifest.json) and [checksums](SHA256SUMS.txt).
+The corrected V1 APP122/USB91 firmware candidate is included; firmware installation
+remains explicit. Setup includes **Run WILD-X** after installation.
 
-This root contains one final installer. The preceding release and original
-metadata are [archived here](legacy/20261017_before_1.0.0.37/README.md).
+See [release details](../Note/RELEASE_1.0.0.39_20261017.md),
+[manifest](release-manifest.json), and [checksums](SHA256SUMS.txt).
+This root contains one final installer. The previous installer and exact original
+metadata are [archived here](legacy/20261017_before_1.0.0.39/README.md).

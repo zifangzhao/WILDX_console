@@ -38,11 +38,20 @@ namespace USB512_interface
                 int length = bodyLength+(lead == 0x3c ? 3 : 4);
                 if(preview && previewMagic==NpV2PreviewBurst.Magic && pending.Count-at>=34){
                     byte kind=pending[at+31];
-                    if((kind&128)==0 && (kind&64)!=0){
+                    if((kind&128)==0 && (kind&64)!=0 && (kind&63)<=2){
                         bool impossible=false;
                         for(int i=at+34;i<Math.Min(pending.Count,at+226);i++)if(pending[i]>=64){impossible=true;break;}
                         // Marked preview bytes cannot contain AD/B9 control leads.
                         // Discard a truncated preview before it holds a CRC-valid control.
+                        if(impossible){at++;continue;}
+                    }
+                    if(kind==(64|5)){
+                        bool impossible=false;
+                        // Compact words keep only12 serial bits. Their high
+                        // byte and fixed zero tail also expose truncated
+                        // previews before they can hold a valid control reply.
+                        for(int i=at+51;i<Math.Min(pending.Count,at+178);i+=2)if(pending[i]>=16){impossible=true;break;}
+                        for(int i=at+178;!impossible && i<Math.Min(pending.Count,at+226);i++)if(pending[i]!=0){impossible=true;break;}
                         if(impossible){at++;continue;}
                     }
                 }

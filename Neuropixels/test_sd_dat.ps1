@@ -2,6 +2,7 @@ param(
     [string]$Compiler,
     [string]$OutputDirectory = "$PSScriptRoot\_artifacts\sd-dat-tests",
     [string]$ConsoleExecutable,
+    [string]$DownloadStreamSource,
     [switch]$MetadataV12,
     [switch]$RuntimeProfiles,
     [string]$BaselineExporterPath,
@@ -16,6 +17,7 @@ if (-not $Compiler) {
 }
 if (-not (Test-Path -LiteralPath $Compiler)) { throw "C# compiler missing: $Compiler" }
 $console = Join-Path $PSScriptRoot '..\USB512_interface\USB512_interface'
+if(-not $DownloadStreamSource){$DownloadStreamSource="$console\NpLogger\NpDownloadStream.cs"}
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $exe = Join-Path $OutputDirectory 'NpV2SdDatExportTests.exe'
 $sources = @(
@@ -28,7 +30,7 @@ $sources = @(
     "$PSScriptRoot\Tests\TestNpV2SdDatExport.cs", "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",
     "$console\NpLogger\NpCe64Export.cs", "$console\NpLogger\NpCe64Decoder.cs", "$console\NpLogger\NpSdGeometry.cs",
     "$console\NpRecordingSettings.cs", "$console\NpProbeManifest.cs", "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",
-    "$console\NpLogger\NpDownloadCatalog.cs", "$console\NpLogger\NpDownloadStream.cs", "$console\NpLogger\NpDownloadNative.cs", "$console\NpLogger\RawBurst.cs",
+    "$console\NpLogger\NpDownloadCatalog.cs", $DownloadStreamSource, "$console\NpLogger\NpDownloadNative.cs", "$console\NpLogger\RawBurst.cs",
     "$console\Ble\NpMediaExport.cs", "$console\Ble\WILD_VideoDecoder.cs"
     "$console\WildXTheme.cs"
 )
