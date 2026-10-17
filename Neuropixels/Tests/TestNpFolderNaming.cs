@@ -27,6 +27,7 @@ static class NpFolderNamingTests {
  static void Times(){
   foreach(bool v2 in new[]{false,true}) {
    var clock=Clock(v2);Check(Time(clock,v2)==Expected(Anchor+26000),"Stored START bracket/tick wrap was not used");
+   Check(DownloadName("",Time(clock,v2),"NP_42_LBA8192")=="wild_"+Expected(Anchor+26000).ToString("yyyyMMdd_HHmmss.fff",System.Globalization.CultureInfo.InvariantCulture),"Unlabelled download did not use stored recording START");
    for(int error=0;error<11;error++) {
     var bad=Clock(v2);
     switch(error){case 0:Put(bad,12,43);break;case 1:Put(bad,16,1);break;case 2:Put(bad,20,0);break;case 3:Put(bad,24,0);break;case 4:Put(bad,72,30000);break;case 5:Put(bad,76,0);break;case 6:Put64(bad,32,0);break;case 7:Put64(bad,v2?56:48,Anchor);break;case 8:Put(bad,v2?48:64,0x7fffffff);break;case 9:Put(bad,v2?52:68,9);break;case 10:Put(bad,16,11);break;}
@@ -37,15 +38,25 @@ static class NpFolderNamingTests {
   var padding=Clock(true);padding[80]=1;Seal(padding);Check(Time(padding,true)==null,"V2 reserved padding accepted");
   var footer=new byte[512];Encoding.ASCII.GetBytes("NPSDEND1").CopyTo(footer,0);Put(footer,12,42);Encoding.ASCII.GetBytes("NPMEDX1\0").CopyTo(footer,128);Put(footer,136,1);Put(footer,140,1);Put(footer,144,36);Put(footer,152,10);Put(footer,156,1);Put64(footer,160,Anchor);Put(footer,288,1000);Seal(footer);
   Check(Time(new byte[512],false,footer)==Expected(Anchor+26000),"Media did not use recorded START clock");
+  Check(DownloadName("",Time(new byte[512],false,footer),"NP_42_LBA8192")=="wild_"+Expected(Anchor+26000).ToString("yyyyMMdd_HHmmss.fff",System.Globalization.CultureInfo.InvariantCulture),"Unlabelled media download did not use recorded START");
   Put(footer,156,0);Seal(footer);Check(Time(new byte[512],false,footer)==null,"Unanchored media received a date");
   var legacy=Clock(false);Put(legacy,72,0);Seal(legacy);Check(Time(legacy,false,footer)==Expected(Anchor+26000),"Media legacy START receipt fallback failed");
  }
  static string Name(string label,DateTime? time,string fallback){return (string)Call(naming,"Name",label,time,fallback);}
+ static string DownloadName(string label,DateTime? time,string fallback){return (string)Call(naming,"DownloadName",label,time,fallback);}
  static void Names(string root){
   var date=new DateTime(2026,10,13,14,30,25,123);
   string name=Name("RatID_sleep",date,"default");Check(name=="RatID_sleep_wild_20261013_143025.123","Yoshi's format mismatch");
   Check(Name("  RatID_sleep  ",date,"default")==name,"Whitespace not trimmed");Check(Name(" ",null,"NP_42_LBA8192")=="NP_42_LBA8192","Blank changed defaults");
   Check(Name("RatID_sleep",null,"NP_42_LBA8192")=="RatID_sleep_wild_time_unknown_NP_42_LBA8192","Missing date invented");
+  Check(DownloadName("",date,"NP_42_LBA8192")=="wild_20261013_143025.123","Blank download label hid recording date");
+  Check(DownloadName("  RatID_sleep  ",date,"default")==name,"Download label format changed");
+  Check(DownloadName(" ",null,"NP_42_LBA8192")=="wild_time_unknown_NP_42_LBA8192","Missing download time replaced with download clock");
+  Check(DownloadName("RatID_sleep",null,"NP_42_LBA8192")=="RatID_sleep_wild_time_unknown_NP_42_LBA8192","Labelled missing download time changed");
+  Check(DownloadName("",null,"NPV1_UID_session42_LBA8192")=="wild_time_unknown_NPV1_UID_session42_LBA8192","Fast archive fallback lost recording identity");
+  string download=(string)Call(naming,"CreateFresh",root,DownloadName("",date,"NP_42_LBA8192"));File.WriteAllText(Path.Combine(download,"keep.dat"),"KEEP");
+  string repeated=(string)Call(naming,"CreateFresh",root,DownloadName("",date,"NP_42_LBA8192"));
+  Check(repeated==download+"_2" && File.ReadAllText(Path.Combine(download,"keep.dat"))=="KEEP","Repeated timestamp download overwrote recording");
   foreach(string invalid in new[]{"..","rat/ID","rat\\ID","rat:ID","rat\"ID","rat.",new string('a',81)}){bool rejected=false;try{Name(invalid,date,"default");}catch(ArgumentException){rejected=true;}Check(rejected,"Unsafe label accepted: "+invalid);}
   string first=(string)Call(naming,"CreateFresh",root,name);File.WriteAllText(Path.Combine(first,"keep.dat"),"KEEP");
   string next=(string)Call(naming,"CreateFresh",root,name);Check(next==first+"_2" && File.ReadAllText(Path.Combine(first,"keep.dat"))=="KEEP","Collision overwrote existing recording");

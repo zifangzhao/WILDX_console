@@ -1,14 +1,14 @@
 {
-  "version": "1.0.0.41",
+  "version": "1.0.0.42",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.41.exe",
-    "sha256": "989060DCC449C5BF861963FCAB6401656FE0B8EA3CF145E9885436377C5D7104",
-    "bytes": 5990985
+    "file": "WILDX_console-Setup-1.0.0.42.exe",
+    "sha256": "CF861F09A80736F24E70C344B75D5505DED4DD4ADACB66C40A8917977729E3C5",
+    "bytes": 5990851
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "E439339A9D3CDF905E03EDA10CD1987F18CEB348C43093DDA4D3098D45A8C375",
+      "sha256": "6ECB52A5F217FE8FC282E821C4871FA9FA4814A9F453F0FE9BA2FCB031DE07E8",
       "bytes": 1524224
     },
     {
@@ -212,8 +212,8 @@
   "runAfterInstallCheckbox": true,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-17",
-  "releaseTag": "FIXED_PREVIEW_GAIN_20261017",
-  "sourceBaseCommit": "336c967d1f401f90a984bb32d3a9fcffd3eb9ab6",
+  "releaseTag": "SD_RECORDING_START_FOLDERS_20261017",
+  "sourceBaseCommit": "b147361a79c976d29a504166cc2b0b2bf13d36db",
   "compiledSources": {
     "gui": [
       {
@@ -313,7 +313,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpFolderNaming.cs",
-        "sha256": "BABEA5F224835D37B592E1C71501F7CAE42E5F51309F365820F8358147B25A83",
+        "sha256": "941DE53CD8C8A3282ACCB3D44F0B69712480838CA794A5BCD9C0631A7F9F2ABC",
         "committedOverride": false
       },
       {
@@ -468,7 +468,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpLoggerForm.cs",
-        "sha256": "4A3DF802B109E144E8C96BC916E1D22DAB20F19CC4E22C689FD80CB44DC30F5F",
+        "sha256": "AF1A1DCEF4052321C87A0AB096D48AEFA4FC552F19DB5A588AB76E850DB9DC9A",
         "committedOverride": false
       },
       {
@@ -638,7 +638,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
-        "sha256": "5E334803A4FA38615309851085F1D63B69DD5C6B7AF6ADAA0C48DFCFD66A19BD",
+        "sha256": "5EF4EB3FBB74C29AB49CE850394225D2C1D10784F97D66CDF1D49052DC7B3196",
         "committedOverride": false
       },
       {
@@ -648,7 +648,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "0CBB2FEE4635AF86E59DDEA4D6D863171379BE00557F0D5A5C103C9A6407B96E",
+        "sha256": "89F3E9F68002A72F8704A9CCD44454F89320CADBDD60DC56753583D21080928F",
         "committedOverride": false
       },
       {
@@ -739,12 +739,11 @@
     "WILDX_console.exe"
   ],
   "validation": {
-    "actualAppGainAndLayout": 36,
-    "actualAppBleWorkflow": 4397,
-    "actualSourcePreview": 5507,
+    "actualAppNamingTimeUi": 62,
+    "actualAppRecovery": 139,
     "hardwareTested": false
   },
-  "inheritedExporter": "Unchanged .40 DLL and 11 source inputs.",
+  "inheritedExporter": "Unchanged .41 DLL and 11 source inputs.",
   "firmwareLimits": "Corrected V1 APP122/USB91 identity candidate; no new hardware qualification. V2 compact-preview producer candidate not included. Firmware-level damaged-directory BLE mount behavior unchanged.",
   "experimentalV1RecoveryIncluded": false,
   "usbReadinessExperimentIncluded": false

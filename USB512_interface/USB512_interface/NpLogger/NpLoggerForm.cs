@@ -131,7 +131,6 @@ namespace USB512_interface
                 long archiveBytes=checked((selected.End-selected.Start)*512);
                 long needed=choice==1?archiveBytes:checked((long)selected.Chunks*65536*4+(choice==0?archiveBytes:0));
                 if(new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root))).AvailableFreeSpace<needed+67108864)throw new IOException("Insufficient disk space for archive and decoded outputs.");
-                string name="NPV1_"+t.Uid+"_session"+selected.Session+"_"+DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string recordingFolder=null,archive=null,output=null;
                 NpFolderNaming.Destination destination=null;
                 USB512_interface.NpRecordingSettings settings=null;bool finished=false,firmwareComplete=false;string failure=null;
@@ -140,8 +139,8 @@ namespace USB512_interface
                     s.Cancelled=()=>cancelled;
                     var current=NpDownloadCatalog.Read(s).Find(r=>r.Session==selected.Session && r.Start==selected.Start && r.End==selected.End && r.Chunks==selected.Chunks && r.State==selected.State && r.Fault==selected.Fault);
                     if(current==null)throw new IOException("SD catalog changed. Refresh before downloading.");
-                    name=NpFolderNaming.Name(label,label.Length==0?null:NpDownloadCatalog.RecordingStartTime(s,current),
-                        label.Length==0?name:"NPV1_"+t.Uid+"_session"+current.Session+"_LBA"+current.Start);
+                    string name=NpFolderNaming.DownloadName(label,NpDownloadCatalog.RecordingStartTime(s,current),
+                        "NPV1_"+t.Uid+"_session"+current.Session+"_LBA"+current.Start);
                     destination=NpFolderNaming.Reserve(root,name);destination.Create();recordingFolder=destination.Path;
                     archive=Path.Combine(recordingFolder,Path.GetFileName(recordingFolder)+".npraw");output=Path.Combine(recordingFolder,"decoded");
                     firmwareComplete=current.Complete;

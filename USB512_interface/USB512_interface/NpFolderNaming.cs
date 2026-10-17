@@ -19,7 +19,12 @@ namespace USB512_interface
         internal static string Name(string label,DateTime? start,string fallback)
         {
             label=Label(label);
-            return label.Length==0?fallback:label+"_wild_"+(start.HasValue?
+            return label.Length==0?fallback:DownloadName(label,start,fallback);
+        }
+        internal static string DownloadName(string label,DateTime? start,string fallback)
+        {
+            label=Label(label);
+            return (label.Length==0?"":label+"_")+"wild_"+(start.HasValue?
                 start.Value.ToString("yyyyMMdd_HHmmss.fff",CultureInfo.InvariantCulture):"time_unknown_"+fallback);
         }
         // A sidecar claim coordinates simultaneous exports without precreating

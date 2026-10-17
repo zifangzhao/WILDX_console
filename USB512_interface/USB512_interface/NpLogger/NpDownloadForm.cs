@@ -202,7 +202,7 @@ namespace CE32_console
                 var current=NpDownloadCatalog.ReadAvailable(stream);
                 for(int i=0;i<chosen.Count;i++) {
                     var r=chosen[i];if(!current.Any(n=>n.Downloadable&&n.Start==r.Start&&n.End==r.End&&n.Session==r.Session&&n.Chunks==r.Chunks&&n.State==r.State&&n.Fault==r.Fault&&n.FormatVersion==r.FormatVersion&&n.CameraHz==r.CameraHz&&n.MicrophoneHz==r.MicrophoneHz&&n.ProbeMask==r.ProbeMask&&n.ApHz==r.ApHz))throw new IOException("Recording directory changed. Refresh before downloading.");
-                    string name=USB512_interface.NpFolderNaming.Name(label,label.Length==0?null:NpDownloadCatalog.RecordingStartTime(stream,r),"NP_"+r.Session+"_LBA"+r.Start);
+                    string name=USB512_interface.NpFolderNaming.DownloadName(label,NpDownloadCatalog.RecordingStartTime(stream,r),"NP_"+r.Session+"_LBA"+r.Start);
                     using(var destination=USB512_interface.NpFolderNaming.Reserve(root,name)) {
                     string output=destination.Path;int index=i;
                     var watch=System.Diagnostics.Stopwatch.StartNew();

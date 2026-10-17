@@ -124,7 +124,8 @@ static class Np2MergeRecoveryTests {
   // Allocate without the main constructor/Load; inject only policy state and
   // detached controls. Timer ticks are not pumped, so no START/device access.
   object form=FormatterServices.GetUninitializedObject(formType);
-  foreach(string name in new[]{"btnStart","btnStop","btnRefresh","btnNpLogger","btnSdInfo","btnDfu","btnStreams","btnSystemInfoRefresh"})Set(form,name,new Button());
+  foreach(string name in new[]{"btnStart","btnStop","btnRefresh","btnNpLogger","btnSdInfo","btnDfu","btnStreams","btnSystemInfoRefresh","btnPreview"})Set(form,name,new Button());
+  Set(form,"usbModeButtons",new Button[3]);
   Set(form,"lblRecInfo",new Label());Set(form,"comboDrives",new ComboBox());Set(form,"npAutoRecover",new CheckBox{Checked=true});Set(form,"npRetryTimer",new System.Windows.Forms.Timer());
   Set(form,"npSessionLabel",new TextBox {Text="RatID_sleep"});
   foreach(string name in new[]{"npPortConfigurations","npV2HostConfigurations","npV2ApplyConfigurations","npV2PersistedConfigurations"}){var f=formType.GetField(name,All);f.SetValue(form,Activator.CreateInstance(f.FieldType));}
@@ -157,7 +158,7 @@ static class Np2MergeRecoveryTests {
   string v1Next=(string)Call(v1,"NpSegmentFolder","unused");Set(v1,"runFolder",v1Next);
   Check(v1Next!=v1First && Path.GetDirectoryName(v1Next)==root && File.ReadAllText(Path.Combine(v1First,"prefix.dat"))=="V1 KEEP" && File.Exists(Path.Combine(v1Next,"recovery_link.json")),"V1 restart lost separate files/linkage");
   Check(!(bool)Call(v1,"NpFinishRecovery","Stopped cleanly"),"V1 clean stop retried");
-  foreach(object form in new[]{f,g,bounded,v1}){((System.Windows.Forms.Timer)Get(form,"npRetryTimer")).Dispose();foreach(string name in new[]{"btnStart","btnStop","btnRefresh","btnNpLogger","btnSdInfo","btnDfu","btnStreams","btnSystemInfoRefresh","lblRecInfo","comboDrives","npAutoRecover","npSessionLabel"})((Control)Get(form,name)).Dispose();}
+  foreach(object form in new[]{f,g,bounded,v1}){((System.Windows.Forms.Timer)Get(form,"npRetryTimer")).Dispose();foreach(string name in new[]{"btnStart","btnStop","btnRefresh","btnNpLogger","btnSdInfo","btnDfu","btnStreams","btnSystemInfoRefresh","btnPreview","lblRecInfo","comboDrives","npAutoRecover","npSessionLabel"})((Control)Get(form,name)).Dispose();}
  }
  [STAThread]static int Main(string[] args){try{gui=Assembly.LoadFrom(Path.GetFullPath(args[0]));formType=gui.GetType("USB512_interface.Form1",true);mergeType=gui.GetType("USB512_interface.NpV2DatMerge",true);string root=Path.GetFullPath(args[1]);Directory.CreateDirectory(root);bool recoveryOnly=args.Length>=3 && args[2]=="--recovery-only";if(!recoveryOnly)Merges(root);Policies();Overruns();if(args.Length>=4)StoredOverrun(args[3]);Recovery(Path.Combine(root,"recovery"));Console.WriteLine("PASS "+checks+" actual GUI "+(recoveryOnly?"targeted recovery":"merge/recovery")+" checks; exact overrun/transport policy, fresh recordings/UID/options, gap journal, bounded retry and Stop; no hardware accessed.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }
