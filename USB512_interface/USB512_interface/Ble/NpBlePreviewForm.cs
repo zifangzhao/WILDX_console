@@ -62,6 +62,7 @@ namespace USB512_interface
         readonly NumericUpDown channel=new NumericUpDown{Minimum=0,Maximum=383,Width=65};
         readonly CheckBox enabled=new CheckBox{Text="Preview",AutoSize=true,Checked=true};
         readonly NumericUpDown windowSeconds=new NumericUpDown{Minimum=0.1M,Maximum=MaxWindowSeconds,DecimalPlaces=1,Increment=0.1M,Value=4,Width=65,AccessibleName="BLE preview display window in seconds"};
+        readonly NumericUpDown gainBox=new NumericUpDown{Minimum=0.1M,Maximum=100,DecimalPlaces=1,Increment=0.1M,Value=1,Width=65,AccessibleName="Preview display gain",AccessibleDescription="Display only; does not change probe gain or saved data."};
         readonly NpHighPassControl highPass=new NpHighPassControl();
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
@@ -90,7 +91,8 @@ namespace USB512_interface
             highPass.SampleRate=0;highPass.CutoffBox.Text="100";
             highPass.Changed+=delegate{plot.SetHighPass(highPass.CutoffHz);};
             windowSeconds.ValueChanged+=delegate{plot.SetWindowSeconds((double)windowSeconds.Value);};
-            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Channel",AutoSize=true},channel,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,highPass,info});
+            gainBox.ValueChanged+=delegate{plot.SetGain((double)gainBox.Value);};
+            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Channel",AutoSize=true},channel,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,new Label{Text="Gain (×)",AutoSize=true},gainBox,highPass,info});
             Controls.Add(plot);Controls.Add(controls);Controls.Add(recordingInfo);WildXTheme.Apply(this);info.ForeColor=recordingInfo.ForeColor=WildXTheme.Muted;
             probe.ValueChanged+=delegate{RetirePreview();};channel.ValueChanged+=delegate{RetirePreview();};
             enabled.CheckedChanged+=delegate{RetirePreview();};
@@ -216,8 +218,11 @@ namespace USB512_interface
             readonly NpDisplayHighPass highPass=new NpDisplayHighPass(1);
             readonly short[] displayRow=new short[1];
             internal Func<int,short,short> CorrectSample;
-            int count,write,selectedChannel;uint sampleHz;ulong stride;double windowSeconds=4;
+            int count,write,selectedChannel;uint sampleHz;ulong stride;double windowSeconds=4,gain=1;
+            const double ReferenceCounts=256; // Match the USB NP2 display at 1×.
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;ForeColor=Color.LightGreen;}
+            internal void SetGain(double value){if(Double.IsNaN(value)||Double.IsInfinity(value)||value<0.1||value>100)throw new ArgumentOutOfRangeException("value");gain=value;Invalidate();}
+            internal float ValueY(double value){return (float)(Height/2.0-value*Math.Max(1,Height-60)*gain/(2*ReferenceCounts));}
             internal void SetWindowSeconds(double seconds){
                 if(Double.IsNaN(seconds) || Double.IsInfinity(seconds) || seconds<0.1 || seconds>MaxWindowSeconds)throw new ArgumentOutOfRangeException("seconds");
                 windowSeconds=seconds;Invalidate(); // View only; retain history and the BLE lease.
@@ -237,21 +242,25 @@ namespace USB512_interface
             }
             protected override void OnPaint(PaintEventArgs e)
             {
-                base.OnPaint(e);if(count<2)return;
+                base.OnPaint(e);
+                e.Graphics.DrawString("Ch "+selectedChannel+(CorrectSample==null?" · nominal counts ±":" · calibrated counts ±")+(ReferenceCounts/gain).ToString("0.##")+" · "+gain.ToString("0.#")+"×",Font,Brushes.LightGray,10,5);
+                using(var zero=new Pen(Color.DimGray)){zero.DashStyle=System.Drawing.Drawing2D.DashStyle.Dot;e.Graphics.DrawLine(zero,15,Height/2,Math.Max(15,Width-15),Height/2);}
+                if(count<2)return;
                 ulong latest=ticks[(write+Capacity-1)%Capacity];double window=windowSeconds*sampleHz*stride;
                 int first=FirstVisible(latest,window),shown=count-first,start=(write-count+first+Capacity)%Capacity;
                 if(shown<2)return;
-                double sum=0;int min=short.MaxValue,max=short.MinValue;for(int i=0;i<shown;i++){int v=values[(start+i)%Capacity];sum+=v;min=Math.Min(min,v);max=Math.Max(max,v);}
-                double mean=sum/shown,range=Math.Max(32,max-min);var segment=new List<PointF>();ulong prev=0;
+                var segment=new List<PointF>();ulong prev=0;
+                var saved=e.Graphics.Save();e.Graphics.SetClip(new Rectangle(15,30,Math.Max(1,Width-30),Math.Max(1,Height-60)));
+                try{
                 using(var pen=new Pen(Color.LightGreen)){
                     for(int i=0;i<shown;i++){
                         int at=(start+i)%Capacity;ulong tick=ticks[at];if(latest-tick>window)continue;
                         if(segment.Count>0 && tick-prev!=stride){if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());segment.Clear();}
-                        segment.Add(new PointF((float)(15+(1-(latest-tick)/window)*(Width-30)),(float)(Height/2f-(values[at]-mean)*(Height-50)/range)));prev=tick;
+                        segment.Add(new PointF((float)(15+(1-(latest-tick)/window)*(Width-30)),ValueY(values[at])));prev=tick;
                     }
                     if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());
                 }
-                e.Graphics.DrawString("Ch "+selectedChannel+(CorrectSample==null?" · nominal counts ":" · calibrated counts ")+min+"–"+max,Font,Brushes.LightGray,10,5);
+                }finally{e.Graphics.Restore(saved);}
             }
             int FirstVisible(ulong latest,double window){
                 int first=0,start=(write-count+Capacity)%Capacity;

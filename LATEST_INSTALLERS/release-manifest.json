@@ -1,15 +1,15 @@
 {
-  "version": "1.0.0.40",
+  "version": "1.0.0.41",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.40.exe",
-    "sha256": "F5D9F1A3AE9323ABCF34466BC65F8D8C57730CD49DC371CE68837F33106649F6",
-    "bytes": 5990432
+    "file": "WILDX_console-Setup-1.0.0.41.exe",
+    "sha256": "989060DCC449C5BF861963FCAB6401656FE0B8EA3CF145E9885436377C5D7104",
+    "bytes": 5990985
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "B55ED13A8940C5FE18B1316CF072F834FADCFA67886A7975E7831C5D652404BA",
-      "bytes": 1522688
+      "sha256": "E439339A9D3CDF905E03EDA10CD1987F18CEB348C43093DDA4D3098D45A8C375",
+      "bytes": 1524224
     },
     {
       "path": "WILDX_console.exe.config",
@@ -212,8 +212,8 @@
   "runAfterInstallCheckbox": true,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-17",
-  "releaseTag": "AUTOMATIC_USB_DOWNLOAD_OPEN_TAIL_20261017",
-  "sourceBaseCommit": "3e697be11e2573ba4647fc03d575404345075bcc",
+  "releaseTag": "FIXED_PREVIEW_GAIN_20261017",
+  "sourceBaseCommit": "336c967d1f401f90a984bb32d3a9fcffd3eb9ab6",
   "compiledSources": {
     "gui": [
       {
@@ -539,7 +539,7 @@
       {
         "path": "USB512_interface/USB512_interface/Ble/NpV1BleProtocol.cs",
         "sha256": "74892A65216B35663061066A74F50BD313DB6DB6CEBAC58E69918072BE900FF5",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpV2SdControl.cs",
@@ -584,12 +584,12 @@
       {
         "path": "USB512_interface/USB512_interface/Ble/NpBleForm.Storage.cs",
         "sha256": "E44AE0047A6808A8E49758F97E45EF941F1C7BCE5553EA3369C8B52D9C7810F3",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpBleStorage.cs",
         "sha256": "0C2C6DCAD724C2BF268803F733848DA514FB072B6F4A97D90FDE8041641C4F05",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpV2BleCatalog.cs",
@@ -618,12 +618,12 @@
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpBlePreviewForm.cs",
-        "sha256": "66EE21FC0D3B727E64A1BE586A58E6D2C70467BCE36940DE4E171922C07165B9",
+        "sha256": "153EB26DD0C2AB9D5E7B8D6B63C67C9F10A9532B1C2B306A0514D9E266469617",
         "committedOverride": false
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpV1BlePreviewForm.cs",
-        "sha256": "4F5C41532CC83670B859D7D50B50A23FC2EDA475C0B354B42A5ED281B43F3C3B",
+        "sha256": "1C9A9E960B01214847636D96816E300A1A918D25D28F768FFB244C4E62442C62",
         "committedOverride": false
       },
       {
@@ -648,7 +648,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "C01CB0B6CC3E168EB37855807157C0CC00A0B33ABE8D209A06F9AF82036B61DA",
+        "sha256": "0CBB2FEE4635AF86E59DDEA4D6D863171379BE00557F0D5A5C103C9A6407B96E",
         "committedOverride": false
       },
       {
@@ -735,18 +735,17 @@
       }
     ]
   },
-  "inheritedExporter": "Unchanged .39 DLL; all 11 source hashes match the previous release.",
   "changedPayloadFiles": [
     "WILDX_console.exe"
   ],
   "validation": {
-    "catalogActualApp": 40,
-    "np2SdActualApp": 396,
-    "v1ModeActualSource": 36,
-    "v2ModeActualSource": 19,
-    "hardwareTested": false,
-    "largeCardTest": "Virtual >100GB metadata only; byte-identical small open-tail payload export tested separately."
+    "actualAppGainAndLayout": 36,
+    "actualAppBleWorkflow": 4397,
+    "actualSourcePreview": 5507,
+    "hardwareTested": false
   },
+  "inheritedExporter": "Unchanged .40 DLL and 11 source inputs.",
   "firmwareLimits": "Corrected V1 APP122/USB91 identity candidate; no new hardware qualification. V2 compact-preview producer candidate not included. Firmware-level damaged-directory BLE mount behavior unchanged.",
+  "experimentalV1RecoveryIncluded": false,
   "usbReadinessExperimentIncluded": false
 }

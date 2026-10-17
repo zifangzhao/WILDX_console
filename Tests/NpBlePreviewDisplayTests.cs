@@ -126,6 +126,9 @@ static class NpBlePreviewDisplayTests {
             seconds.Value=0.5M;Need((double)Get(plot,"windowSeconds")==0.5,"Window selector did not update the plot");
             seconds.Value=10;Need((int)Get(plot,"count")==175 && ReferenceEquals(Get(form,"stream"),stream),"Viewing window cleared history or restarted preview");
             Need(connection.Writes==0,"Viewing-window changes emitted BLE commands");
+            var gain=(NumericUpDown)Get(form,"gainBox");gain.Value=2;
+            Need((double)Get(plot,"gain")==2 && (int)Get(plot,"count")==175 && ReferenceEquals(Get(form,"stream"),stream),"Gain change restarted preview or lost samples");
+            Need(connection.Writes==0 && connection.Captures==0,"Display gain issued radio commands");
             Need(((System.Windows.Forms.Timer)Get(form,"timer")).Interval<=16,"Display still waits50ms for32ms packets");
             connection.Epoch++;Tick(form);Need(Get(form,"stream")==null,"Changed connection did not retire preview");
         }

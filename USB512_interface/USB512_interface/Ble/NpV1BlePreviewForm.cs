@@ -25,6 +25,7 @@ namespace USB512_interface
         readonly ComboBox band=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=75};
         readonly CheckBox enabled=new CheckBox{Text="Preview",AutoSize=true,Checked=true};
         readonly NumericUpDown windowSeconds=new NumericUpDown{Minimum=0.1M,Maximum=MaxWindowSeconds,DecimalPlaces=1,Increment=0.1M,Value=4,Width=65,AccessibleName="BLE preview display window in seconds"};
+        readonly NumericUpDown gainBox=new NumericUpDown{Minimum=0.1M,Maximum=100,DecimalPlaces=1,Increment=0.1M,Value=1,Width=65,AccessibleName="Preview display gain",AccessibleDescription="Display only; does not change probe gain or saved data."};
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
         readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=50};
@@ -46,10 +47,11 @@ namespace USB512_interface
             var active=readStatus==null?null:readStatus();
             if(active!=null)for(int port=1;port<=3;port++)if((active.Mask&(1U<<(port-1)))!=0){probe.Value=port;break;}
             var controls=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,Padding=new Padding(10)};
-            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Channel",AutoSize=true},channel,band,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,info});
+            controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Channel",AutoSize=true},channel,band,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,new Label{Text="Gain (×)",AutoSize=true},gainBox,info});
             Controls.Add(plot);Controls.Add(controls);Controls.Add(recordingInfo);WildXTheme.Apply(this);info.ForeColor=recordingInfo.ForeColor=WildXTheme.Muted;
             probe.ValueChanged+=delegate{SelectionChanged();};channel.ValueChanged+=delegate{SelectionChanged();};band.SelectedIndexChanged+=delegate{SelectionChanged();};
             windowSeconds.ValueChanged+=delegate{plot.SetWindowSeconds((double)windowSeconds.Value);};
+            gainBox.ValueChanged+=delegate{plot.SetGain((double)gainBox.Value);};
             connection.PreviewReceived+=Receive;timer.Tick+=async delegate{await Tick();};Shown+=delegate{timer.Start();};
         }
         void SelectionChanged(){selectionVersion++;plot.Clear(0);info.Text=enabled.Checked?"Switching preview…":"Paused";}
@@ -132,22 +134,29 @@ namespace USB512_interface
         sealed class Plot : Control
         {
             const int Capacity=500*MaxWindowSeconds;readonly double[] values=new double[Capacity];readonly ulong[] ticks=new ulong[Capacity];
-            int count,write;double ticksPerSecond,windowSeconds=4;ulong stride;
+            int count,write;double ticksPerSecond,windowSeconds=4,gain=1;ulong stride;
+            const double ReferenceCounts=64; // Match the USB NP1 AP display at 1×.
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;}
+            internal void SetGain(double value){if(Double.IsNaN(value)||Double.IsInfinity(value)||value<0.1||value>100)throw new ArgumentOutOfRangeException("value");gain=value;Invalidate();}
+            internal float ValueY(double value){return (float)(Height/2.0-value*Math.Max(1,Height-60)*gain/(2*ReferenceCounts));}
             internal void SetWindowSeconds(double seconds){if(Double.IsNaN(seconds) || Double.IsInfinity(seconds) || seconds<0.1 || seconds>MaxWindowSeconds)throw new ArgumentOutOfRangeException("seconds");windowSeconds=seconds;Invalidate();}
             internal void Clear(double rate){count=write=0;ticksPerSecond=rate;Invalidate();}
             internal void Append(double[] data,ulong first,ulong step){stride=step;for(int i=0;i<data.Length;i++){values[write]=data[i];ticks[write]=first+(ulong)i*step;write=(write+1)%Capacity;if(count<Capacity)count++;}Invalidate();}
             protected override void OnPaint(PaintEventArgs e){
-                base.OnPaint(e);if(count<2 || ticksPerSecond<=0)return;
-                int start=(write-count+Capacity)%Capacity;ulong latest=ticks[(write+Capacity-1)%Capacity];double window=ticksPerSecond*windowSeconds,min=Double.MaxValue,max=Double.MinValue;
-                for(int i=0;i<count;i++){int at=(start+i)%Capacity;double v=values[at];if(latest-ticks[at]>window || Double.IsNaN(v))continue;min=Math.Min(min,v);max=Math.Max(max,v);}
-                if(min==Double.MaxValue)return;double center=(min+max)/2,range=Math.Max(4,max-min);PointF previous=new PointF();bool have=false;ulong previousTick=0;
+                base.OnPaint(e);
+                e.Graphics.DrawString("Counts ±"+(ReferenceCounts/gain).ToString("0.##")+" · "+gain.ToString("0.#")+"× · "+windowSeconds.ToString("0.0")+" seconds",Font,Brushes.LightGray,10,5);
+                using(var zero=new Pen(Color.DimGray)){zero.DashStyle=System.Drawing.Drawing2D.DashStyle.Dot;e.Graphics.DrawLine(zero,10,Height/2,Math.Max(10,Width-10),Height/2);}
+                if(count<2 || ticksPerSecond<=0)return;
+                int start=(write-count+Capacity)%Capacity;ulong latest=ticks[(write+Capacity-1)%Capacity];double window=ticksPerSecond*windowSeconds;
+                PointF previous=new PointF();bool have=false;ulong previousTick=0;
+                var saved=e.Graphics.Save();e.Graphics.SetClip(new Rectangle(10,30,Math.Max(1,Width-20),Math.Max(1,Height-60)));
+                try{
                 using(var pen=new Pen(Color.LightGreen))for(int i=0;i<count;i++){
                     int at=(start+i)%Capacity;double v=values[at];ulong tick=ticks[at];if(latest-tick>window)continue;if(Double.IsNaN(v)){have=false;continue;}
-                    var point=new PointF((float)(10+(1-(latest-tick)/window)*Math.Max(1,Width-20)),(float)(Height/2.0-(v-center)*Math.Max(1,Height-60)/range));
+                    var point=new PointF((float)(10+(1-(latest-tick)/window)*Math.Max(1,Width-20)),ValueY(v));
                     if(have && tick-previousTick==stride)e.Graphics.DrawLine(pen,previous,point);previous=point;previousTick=tick;have=true;
                 }
-                e.Graphics.DrawString("Counts "+min.ToString("F0")+"–"+max.ToString("F0")+" · "+windowSeconds.ToString("0.0")+" seconds",Font,Brushes.LightGray,10,5);
+                }finally{e.Graphics.Restore(saved);}
             }
         }
     }
