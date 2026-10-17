@@ -10,10 +10,10 @@ the Neuropixels APP121 / USB91 bundle, despite sharing version 1.0.121 and ABI25
 - Exact artifacts retained at `e831a5f10c28c1df596766b195d4a48aeb38991d`
   under `LATEST_FIRMWARE/legacy/camera40_20261014` in XE_NP.
 
-Open **Advanced → Firmware Update → Bundled firmware files…**, then select the
-camera APP explicitly through the V1 APP updater after confirming the physical
-camera target. **Use bundled APP…** selects the separate Neuropixels target;
-it does not select these camera files automatically. Only the APP-only HEX
+In WILDX 1.0.0.35 or later, open **Advanced → Firmware Update**, select
+**V1 Camera40 — candidate** under **Firmware target**, then **Use bundled APP…**
+after confirming the physical camera target. **V1 NP (91k/91k)** remains the
+default; shared versions/ABI never select a target automatically. Only the APP-only HEX
 belongs in the compatible protected APP updater. Fused programming uses the
 documented separate factory/recovery workflow without mass erase.
 

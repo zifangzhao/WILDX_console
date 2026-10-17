@@ -1,19 +1,19 @@
 {
   "application": "WILD-X Neuropixels Console",
-  "version": "1.0.0.34",
+  "version": "1.0.0.35",
   "releaseDate": "2026-10-17",
-  "releaseTag": "BLE_STORAGE_GPIO_USB_MODES_FIRMWARE_20261017",
-  "sourceBaseCommit": "c0844e3cb380f183e6936840ee05b116627ceb2a",
+  "releaseTag": "V1_FIRMWARE_TARGET_SELECTOR_20261017",
+  "sourceBaseCommit": "75c01295dc26eca14ff40b9fa25933096ba5f603",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.34.exe",
-    "sha256": "0393C1A10B970FC3977FA1DDB6E251E0EBD94C04F9E990D5DD9FBBAA794A8ED8",
-    "bytes": 5970755
+    "file": "WILDX_console-Setup-1.0.0.35.exe",
+    "sha256": "3F92302140CAF243F21CBDEA0B37E6206F6A1B6683930E77F93C2C4529FA7DB8",
+    "bytes": 5972148
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "AB45EFC4776482E5094E86047AD74321B3D4D7D3B382ED0D21BE930842F4678F",
-      "bytes": 1476608
+      "sha256": "7CEBBDDDEEFDBDF0287E692657942DE3B73B3E7D6525C79E1D5EA48D89A0AD39",
+      "bytes": 1480192
     },
     {
       "path": "WILDX_console.exe.config",
@@ -117,8 +117,8 @@
     },
     {
       "path": "Firmware/V1Camera/README.md",
-      "sha256": "D846390A783CA4CBBB1AE25F4AC8ED273E115AAB29512EA8F235A591761857EC",
-      "bytes": 1634
+      "sha256": "3EF6FAFBC2C2F24F03BDB879B8C8F95B774C9A8576B7B702B6AC3C91220C8B9C",
+      "bytes": 1640
     },
     {
       "path": "Firmware/V1Camera/release.json",
@@ -199,7 +199,7 @@
   "extractedPayloadFilesVerified": 37,
   "installerExecuted": false,
   "runAfterInstallCheckbox": true,
-  "compiledConsoleSha256": "AB45EFC4776482E5094E86047AD74321B3D4D7D3B382ED0D21BE930842F4678F",
+  "compiledConsoleSha256": "7CEBBDDDEEFDBDF0287E692657942DE3B73B3E7D6525C79E1D5EA48D89A0AD39",
   "exporterSha256": "A04D630F1EA716FD3EC4D3DE54C3875479315B6647F4B4A3F4C60C26BB519070",
   "compiledSources": [
     {
@@ -459,7 +459,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareForm.cs",
-      "sha256": "F26F5A676CA3E868FBD27650A303026516E11FF5A374D48D6A755C78B01FB412",
+      "sha256": "520EFAC04C044E328F827AFF2D72904DDA3BD5A6CCB582EEEFC80BB6A18D3551",
       "checkedSourceOverride": false
     },
     {
@@ -634,7 +634,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-      "sha256": "B2CA0A223BCD03ECEF53E51E1C020810EC9CDBFD41B99046ABB2EE5754F9EC29",
+      "sha256": "BE1D38E8809654A08889E78EF1F8CF6B4DE140C74C90273906C7F484B539F228",
       "checkedSourceOverride": false
     },
     {
@@ -659,7 +659,7 @@
     },
     {
       "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareCatalog.cs",
-      "sha256": "D1B738F031BB9D09CAF49A5D813059DC08B559AD3F6766DC0391CF69F53FAEFF",
+      "sha256": "1335DC54A55724A6F31869B10FB1C0B19B81B50F1404F384B719E30FC177F76D",
       "checkedSourceOverride": false
     }
   ],
@@ -851,21 +851,31 @@
   },
   "firmwareProvenance": "Owner-confirmed artifact publication commits; not a complete clean incremental firmware source-build assertion",
   "automaticFlashing": false,
+  "targets": [
+    {
+      "label": "V1 NP (91k/91k)",
+      "default": true,
+      "appCrc32": "BC6B506E",
+      "usbCrc32": "40D39075"
+    },
+    {
+      "label": "V1 Camera40 — candidate",
+      "default": false,
+      "appCrc32": "99BA4F27",
+      "usbCrc32": "82C6E21A",
+      "explicitSelectionRequired": true
+    }
+  ],
   "validation": {
-    "offlineReleaseGates": "All passed; resumed after correcting stale fixture expectations/dependencies",
-    "managementFormsChecks": 639,
-    "bleWorkflowChecks": 4397,
-    "fakeGattStorageChecks": 17,
-    "simulatedV2CatalogChecks": 1945,
-    "firmwareCatalogChecks": 590,
-    "usbHealthQualityChecks": 69,
-    "runtimeBleProfileChecks": 27,
-    "auxCleanupChecks": 25,
-    "formatAdmissionChecks": 20,
-    "liveDatSampleLayoutChecks": 20511105,
-    "recordingBundleChecks": 203,
-    "gpioContinuityChecks": 54,
-    "physicalHardwareActionsThisRelease": false
+    "focusedActualControlHandlerChecks": 34,
+    "incrementalGuiBuild": true,
+    "inheritedUnchangedPayloadFiles": 35,
+    "allExtractedPayloadFilesVerified": 37,
+    "physicalHardwareActions": false,
+    "broadSuitesRepeated": false,
+    "priorCompatibilityEvidence": "1.0.0.34 at75c01295dc26eca14ff40b9fa25933096ba5f603",
+    "targetSelectionDoesNotFlash": true,
+    "staleTargetConfirmationRefused": true
   },
   "excludedExperimentalDownloadReadiness": true,
   "knownLimits": [

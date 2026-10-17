@@ -1,0 +1,880 @@
+{
+  "application": "WILD-X Neuropixels Console",
+  "version": "1.0.0.34",
+  "releaseDate": "2026-10-17",
+  "releaseTag": "BLE_STORAGE_GPIO_USB_MODES_FIRMWARE_20261017",
+  "sourceBaseCommit": "c0844e3cb380f183e6936840ee05b116627ceb2a",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.34.exe",
+    "sha256": "0393C1A10B970FC3977FA1DDB6E251E0EBD94C04F9E990D5DD9FBBAA794A8ED8",
+    "bytes": 5970755
+  },
+  "payload": [
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "AB45EFC4776482E5094E86047AD74321B3D4D7D3B382ED0D21BE930842F4678F",
+      "bytes": 1476608
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2",
+      "bytes": 532
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "A04D630F1EA716FD3EC4D3DE54C3875479315B6647F4B4A3F4C60C26BB519070",
+      "bytes": 237568
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA",
+      "bytes": 5757952
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B",
+      "bytes": 24576
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "sha256": "8F4A438EE4A1AF6C05F52256564669041A77F2F5EAC945CD681C6F68621DD2DD",
+      "bytes": 151552
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "sha256": "548FDAFDEFD53891134F0DF5414143A2A9D495A3D6D198E0571BEBA2484A9C52",
+      "bytes": 364544
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9",
+      "bytes": 434
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782",
+      "bytes": 458
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "sha256": "F6D31C088D09D760F6279CE44152D51233646E08C534B2E6709D82862B4E2297",
+      "bytes": 152064
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "sha256": "24AA1EF7F27FB900FD6A69077A335BEF3491F17757E2598FB0BB773E9B3097DF",
+      "bytes": 55808
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01",
+      "bytes": 449
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306",
+      "bytes": 340
+    },
+    {
+      "path": "Firmware/owner-confirmation-20261017.json",
+      "sha256": "413BE6283B0C48C89E8C705ECD433F47CD76B978564EBF4323DA8FE50262F7FB",
+      "bytes": 1404
+    },
+    {
+      "path": "Firmware/README.md",
+      "sha256": "54739944F406A8274F7E05F16AAA159F1C0FF1585045539FD8B63CF19566BAE7",
+      "bytes": 3514
+    },
+    {
+      "path": "Firmware/releases.json",
+      "sha256": "8596F5AAE68CC894C6DA20F48014E165328931B835D30968D13D22723A64F552",
+      "bytes": 6710
+    },
+    {
+      "path": "Firmware/V1/README.md",
+      "sha256": "488C902152F1B807EA380D76FA9A3AD7E7E3D8684349AEF8D934D267A37D1D15",
+      "bytes": 3852
+    },
+    {
+      "path": "Firmware/V1/source-manifest.json",
+      "sha256": "195A2709A897749CA660BC55ACBF5EEFDA10A260DF2D289580E1DCBA310A9031",
+      "bytes": 4526
+    },
+    {
+      "path": "Firmware/V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.121-idle-sleep-test_20261016T211951Z.hex",
+      "sha256": "EC10D6D227BBFC5E2DA8F15CC4E4138E438FA68D8810015D7463EA0E51FCA2D6",
+      "bytes": 5875757
+    },
+    {
+      "path": "Firmware/V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
+      "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9",
+      "bytes": 765700
+    },
+    {
+      "path": "Firmware/V1/V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
+      "sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA",
+      "bytes": 676837
+    },
+    {
+      "path": "Firmware/V1Camera/README.md",
+      "sha256": "D846390A783CA4CBBB1AE25F4AC8ED273E115AAB29512EA8F235A591761857EC",
+      "bytes": 1634
+    },
+    {
+      "path": "Firmware/V1Camera/release.json",
+      "sha256": "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC",
+      "bytes": 1386
+    },
+    {
+      "path": "Firmware/V1Camera/source-manifest.json",
+      "sha256": "7C5AB9585FCF62376EC72B39A4A163EC20B280A4E1379B504CF3BD43F339E056",
+      "bytes": 12122
+    },
+    {
+      "path": "Firmware/V1Camera/source-README.md",
+      "sha256": "6DD320D9D98CB82781720FE84A60D93EB7FE4B4B20223EA433DDE0F3AE13056F",
+      "bytes": 3601
+    },
+    {
+      "path": "Firmware/V1Camera/source-validation.md",
+      "sha256": "EFCEF24060A7D22BD831E751F681E992EE00D962B8D2D3B4ED20E1034BADAFB8",
+      "bytes": 5338
+    },
+    {
+      "path": "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3",
+      "bytes": 5875757
+    },
+    {
+      "path": "Firmware/V1Camera/V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16",
+      "bytes": 755800
+    },
+    {
+      "path": "Firmware/V2/README.md",
+      "sha256": "8CAB9159B87EABBBB1F47320137C7DFE8D2ADFD4B15630558C457D1C5E0F2209",
+      "bytes": 2300
+    },
+    {
+      "path": "Firmware/V2/source-manifest.json",
+      "sha256": "1CF63EE60D085F45404ED2FD37CF2B0300AB5A5DFFD5D0B09D454A108C3C5C7C",
+      "bytes": 2350
+    },
+    {
+      "path": "Firmware/V2/source-SHA256SUMS.txt",
+      "sha256": "C96559A21A8A38EDA8377D4B2CA9AD7255FEC6D94DFA87480659E6BEAB5AC381",
+      "bytes": 620
+    },
+    {
+      "path": "Firmware/V2/source-validation.md",
+      "sha256": "9A95D7595035575868E33306DF80D2FF1767EEB59A3CC32FC525E32B472C7612",
+      "bytes": 2682
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex",
+      "sha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B",
+      "bytes": 1017841
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_only_136172A5_POWER_PROFILES_DEV_20261016.hex",
+      "sha256": "DDF218944CED454426A030F2B7EE3677152A10DA400797891B40AEDAD4EEBA2A",
+      "bytes": 485316
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
+      "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6",
+      "bytes": 172528
+    },
+    {
+      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
+      "bytes": 84090
+    },
+    {
+      "path": "Firmware/V2/V2_USB_only_2E07799E_AUTO_USB_20261013.hex",
+      "sha256": "D9F20946E67FA765AC691B127D64A053F78C79F49BFA584AC39B1C8931448782",
+      "bytes": 448461
+    }
+  ],
+  "extractedPayloadFilesVerified": 37,
+  "installerExecuted": false,
+  "runAfterInstallCheckbox": true,
+  "compiledConsoleSha256": "AB45EFC4776482E5094E86047AD74321B3D4D7D3B382ED0D21BE930842F4678F",
+  "exporterSha256": "A04D630F1EA716FD3EC4D3DE54C3875479315B6647F4B4A3F4C60C26BB519070",
+  "compiledSources": [
+    {
+      "path": "USB512_interface/USB512_interface/CameraPreviewForm.cs",
+      "sha256": "DF5C45F735967356F9F3373EFA92894A71D2B42F299733484DA62372A5A06994",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/USB512WinUsb.cs",
+      "sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/UsbHealth.cs",
+      "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/UsbHealthNative.cs",
+      "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/UsbQualityTest.cs",
+      "sha256": "537B02EF089A6D8BD3B925FF43198009501AC2F9FD1057BDCE4B9D78CCECBE89",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.UsbQuality.cs",
+      "sha256": "1BF3BEB4EC0D6D6849AA3299BB0FE839F3D30334F5B141F6BB6FA531D92A413F",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ce64MscProtocol.cs",
+      "sha256": "D567DB81EC1C737875F6AE0DE285BF845A4DCEBE3569FCF4BD6C447843D5E7FF",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ce64MscRawBlockDevice.cs",
+      "sha256": "6CF145013AE5DA8FE44236DFF110D11EFB384E5083921B6640EBEA3DAB73C82B",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ce64MscCompressedDecoder.cs",
+      "sha256": "1B9CE3BEC6085A0E403D783175FF78A082225696247249B8E655D26CE8682484",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ce64MscDiscovery.cs",
+      "sha256": "6872C79E23F44AA84F2639E7358AE47337ADED6AD43CAD273BDDE20EF708C402",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/ImpedanceReportForm.cs",
+      "sha256": "5D978CCB484462BF88BCA9D9C834ECC3CA786B3578A3285294A8131C27C9334E",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/EisSpectrumForm.cs",
+      "sha256": "6D7B596640960860CB81E236C7A2FEF910D58C1D5D97986E31BEB6831906ABFF",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/XeNpWinUsb.cs",
+      "sha256": "764B2513F9A2DD9EEAF54CA446B3040D992A830BDC7B8BD0504473680B74A020",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "Neuropixels/USBConsoleV2/NpV2UsbConsole.cs",
+      "sha256": "633ADD3C6AB89E1055BF0DE8EEE61EF114400F0C4A82ABCFFAB854A6ADA4EE4D",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/XeNpStreamDecoder.cs",
+      "sha256": "81C1081CE8F5B210238BA8D77D56EFC1873A0D622A1B28277B6BD165FDD5D625",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpCaptureModes.cs",
+      "sha256": "95236D6938F7538833C0AA9CF23E6E76699ED70C970D177271462785A177FE2A",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpModeDialog.cs",
+      "sha256": "5A9ADB1338CC64A8853A0DDC29A07661FC60F2A6239F322C19430FAA6025F98D",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRecovery.cs",
+      "sha256": "C7BF47FBE734E65CA42D72E86E770C59A56E9A47B6D839A721A7AE956FE31371",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpGpioRtcLogger.cs",
+      "sha256": "0504DA4849AE3513BACAB9D9C5124E7019DC1E54EF0E2887D19C7CD2A4915E92",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFolderNaming.cs",
+      "sha256": "BABEA5F224835D37B592E1C71501F7CAE42E5F51309F365820F8358147B25A83",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpUsbSensors.cs",
+      "sha256": "987616D2E60B433577B6A8C79E8F305954C7B919A91122CD36EC524E6B4B1F47",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpUsbSensorMonitor.cs",
+      "sha256": "4DED31C00F4FBEBF234C49D606B4285475F3C8430527D285E137DFA6A2967070",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpClockFit.cs",
+      "sha256": "E6A0ED0CA88AB92012557B6CBF305C911942F92B06C432BF470DD06AA489D724",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpClockJournal.cs",
+      "sha256": "9550523DEDF579F710C8AC33DFD2DB47B0A64A51C8D4FD924B5B0B06C5766F63",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpConfigurationDialog.cs",
+      "sha256": "C52CD41EE0105BA12F0425CC9D767EF4246A14AC1A52987E868F0CC1663CF3E1",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpConfigurationUsb.cs",
+      "sha256": "DA22C2CEDB30AE6874D340BFE460E586A9C79A86F797BD06B9524292E1288F55",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Np2ConfigurationClient.cs",
+      "sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Np2ConfigurationPreferences.cs",
+      "sha256": "374EA02A2691E22C6F984C2BA9FB9F8822CE020A268167A5F5002F4998F2230D",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Np2ConfigurationUsb.cs",
+      "sha256": "378634A808E2C8C9109DF13ABBD8018A668B60CAFBFE873061EEBCABEE2FD08F",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpProbeManifest.cs",
+      "sha256": "BCF39B04FD3DF61D0F5B3C9DBF0796CD4207C0E4B9298071586EE625DBFFDDAE",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRecordingSettings.cs",
+      "sha256": "2AE42788BBE7AF08B6AEB30C57E2C41A9E08FF3F902B7105C2DE4D886B14B4AA",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRecordingDialog.cs",
+      "sha256": "0A50311A831DA308030FAD36435A1A6F17194A3B4B7E6C5F56DD86FAA68E5A32",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpMediaUsbForm.cs",
+      "sha256": "23203AAAFB819546ED66D398BA6827DDBC7BA8EC18588346C1E441D9D4193231",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpAudioPreview.cs",
+      "sha256": "AE2D6F2596F372772EE9F46AB16107428B9D6E1A745038303E070D01A0AD75A0",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpDiagnosticsForm.cs",
+      "sha256": "0706C3B52551831B81FC8AA254CBF43C65AF8DA740D98EB9F8C227A6B363814D",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpCalibrationForm.cs",
+      "sha256": "A6983C0D809AB2363E08563A2BA874785A3EC5BA08EDB47F49BE9D49C475CA7E",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "Neuropixels/V1Capture/Configuration/NpConfigClient.cs",
+      "sha256": "025105EAD2405DAA08846B3389E1FE64CD288630CB59EDEBE643700323DB1E92",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "Neuropixels/V1Capture/Configuration/NpDeviceConfigForm.cs",
+      "sha256": "D1F4CE6A4E6D7C0CBC8BBAE5733A407C739069A5DE1A5436D87C292AE697EFF7",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/XeNpSdInfo.cs",
+      "sha256": "6B96264278AA5449AE5575ECABD80AD1813999F3A9367EF3F4695757231349CF",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadNative.cs",
+      "sha256": "272FDE1CE6F87B7E62D4C4FCC28116A6102142830630ACE83A2665737446AE7F",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadStream.cs",
+      "sha256": "5744F85625AB227421278E8B99C7D8ECAB18E57DF42397483E58EACAC8F48066",
+      "checkedSourceOverride": true
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadCatalog.cs",
+      "sha256": "9F0661EA60070EBF6B548556DEC74CC43ECFA87D5108ACAEBE423E994FF14905",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Decoder.cs",
+      "sha256": "737C353CDB04C446F1540B1E8EE430F260CEF838528DE751102FDBE3194802EA",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Export.cs",
+      "sha256": "8E22CACFF7B4BA725C904C0EDA2E1CFF26E169522F8E4A7348FE25F7CF83AE88",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpSdGeometry.cs",
+      "sha256": "0FC004D87DA8C1971576272E0E2F933833248FF0D8FD5EB74ECDD21F9C58723E",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/RawBurst.cs",
+      "sha256": "A5F5DFAB8C10343F69525C0697FBAC4703A1FEC2072453CFAB59741F6AA64734",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpArchive.cs",
+      "sha256": "B7934764590869E603199FDC51CE5BFEE104332FD100A0FFD97231D4DBB663D6",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpV1Management.cs",
+      "sha256": "7BF31B4C79C007E8DB58B06961E1118C7C65BB466641D80AC932C6213DDC0C7B",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareImage.cs",
+      "sha256": "B0A393E0698C68A23BD95F50D7BA3A5406367625689D10174170BD5743CF5A61",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareFlash.cs",
+      "sha256": "53A5C33158CE1DD456F5C005532F100B83E8B11BCEA901E64FC11963FDE868E2",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpLoggerForm.cs",
+      "sha256": "AB8B05667E06B9EEFDAFE31D9701C51D4D8F6DE0CAFB37E9459D3AAFEAE4C2FA",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareForm.cs",
+      "sha256": "F26F5A676CA3E868FBD27650A303026516E11FF5A374D48D6A755C78B01FB412",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NeuropixelsPreviewForm.cs",
+      "sha256": "9A6C8F256FC11B5A4C1370CBA4964BF981E741752B189A15511E8F1BC6320472",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.cs",
+      "sha256": "EB848EC13ED696B7AA44E5A9C87F6571851C53E7470CDFB565E5E35A73519CB6",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.SystemInfo.cs",
+      "sha256": "E7F90AB565137FAE7ACD629C896E44E8D5B628EDC238F5574C9F1197131476F0",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.NetworkTime.cs",
+      "sha256": "B3650DB2F53CE6A1F18F23953DE99704A8145B561957B3A37A9B21F40208289B",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NetworkTimeClock.cs",
+      "sha256": "27AF992021B83A3F565A96A6F6B8B8EB60241CD05B194B8729E86EAF958189E2",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpSystemInfo.cs",
+      "sha256": "2BEF3A9ABB7D7834AE463987653CC2882EA6E389D4F2C013FB7A0FF1607112B9",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.Designer.cs",
+      "sha256": "741064CA784848D10B105D32F7A8C790FD18D277A49B930BE53C6C741136C207",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Program.cs",
+      "sha256": "79269F2B2DA151C212B1846B7627B29501365573E4FE91891871176B09F2D1C0",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
+      "sha256": "C795C10C53C4EE9D6C423A8D25889D880409C797F9AD6CEEE383AAB5E2F82008",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.GpioRtc.cs",
+      "sha256": "01C918BF96C1988F2FD7E9ADD48A7555C8C6D000D3A8CEC81E938A223519874A",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/WildXTheme.cs",
+      "sha256": "ABDAE77C0C6DA0B46135AACA15992B69F8658754A823DA0606AA44CF9A6D4026",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpSdControl.cs",
+      "sha256": "FE8F6D35EE521EB366E5E6F2AB392CD24B00F846C0DA84A54BC832F7292175C2",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV1BleProtocol.cs",
+      "sha256": "E532BE02B5407CFC4D358CBBE91D05D790078617281FF5E5674D8DFD2F2808C7",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV2SdControl.cs",
+      "sha256": "E2387E67C70862E20D013D773543924D20339434C3BEDA0CA3D701DD715E33E1",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV2OnlineClock.cs",
+      "sha256": "D69BC693B27D4FE6E353983A00C70E0F4CC52B66D1665E4D41B2A17C602DC3D1",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleWire.cs",
+      "sha256": "8FA95DDCE295070C4EFBDD7E60CD3602AFCF81F894E20CF657394910E1B77275",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.cs",
+      "sha256": "78A1622E5D062016A61F9DDA39352EA0B408A8F21373E7DF42B66E153B6F975D",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.Media.cs",
+      "sha256": "971094726089793A1868F7E3020DDD937FBAA19C1177EDA33B401604586AD308",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.Storage.cs",
+      "sha256": "9BE44D64FF999D76EE6768369203AAD84850826EBB788A63E92BE09BDAA29CCB",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+      "sha256": "9F9D6AA91B3A7B3196ACCA7D70B8C28F694DE802E9AEEABBC686F03F7083537D",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleForm.Media.cs",
+      "sha256": "A7CCB21D895FBF28F6261DC11BC36FA4AEA013E2CEF0DA82A8F67ABC30757E14",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleForm.Storage.cs",
+      "sha256": "E44AE0047A6808A8E49758F97E45EF941F1C7BCE5553EA3369C8B52D9C7810F3",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleStorage.cs",
+      "sha256": "0C2C6DCAD724C2BF268803F733848DA514FB072B6F4A97D90FDE8041641C4F05",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV2BleCatalog.cs",
+      "sha256": "AD1371EF7F06A2ED5F402F84167453B18C2BCA4CA8AF63BF1BD8971CDCF6BB5C",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleConfigurationReceipts.cs",
+      "sha256": "E6915BB7AFED12D2FCC330240FF2E80147BEA22B4EDFDE1B26BF64BD090CE0E9",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleClock.cs",
+      "sha256": "2C3D5C5D0967E0B1B89F2B55657B000B0D0EA065DCB5282B9CC33DBC770AFE3A",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV2Preview.cs",
+      "sha256": "C02E8F94C90E1164D2DF44BDAD6985F7DF99F831948490F3BA6DCA03D58670DF",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV2PreviewWire.cs",
+      "sha256": "550D3A6A578B7E75F347C2AD616E10D5D489D621A2C9847268F8FA4F686F349F",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBlePreviewForm.cs",
+      "sha256": "E6FF035C60ECA113795A0F1E1D372A94A99613A81C54A565792AEC096F03B0A5",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpV1BlePreviewForm.cs",
+      "sha256": "38CD24DC61D53D1C733FD6E946D5C0435AB2C46AE3702EE2C06A786D9779D56E",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpMediaExport.cs",
+      "sha256": "90911866F74C52F8BC47232930B0F85BCE5C4C92193B70CA40799C1112CB7A13",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/WILD_VideoDecoder.cs",
+      "sha256": "B81CBA8B5352C2AF9F0C8306E0ECEF16C0007B734F7C46AB75D830F70FB0ACD4",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
+      "sha256": "57AA49736C35A3F888D62D1E75E3B808F3298C6E4BF00DDBEC7B5260A0370571",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpV2FirmwareForm.cs",
+      "sha256": "41E7C7B8B91B9FCC0AD6F407BCE47A6CD98CD31F59D58FAE52B35F57F61D2742",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+      "sha256": "B2CA0A223BCD03ECEF53E51E1C020810EC9CDBFD41B99046ABB2EE5754F9EC29",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/ScopeForm_drawbank.cs",
+      "sha256": "44CAF0DC3060D37E1D76C0C2F3D6E1E37DC4A71F779F729C6F5BAFAB22C3E82A",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/ScopeForm_drawbank.Designer.cs",
+      "sha256": "7BDCD59E9B2FDE6B5B2DC9F949CDF68AAAB53793F966B4771BDD8B048A4D4F7C",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Properties/Resources.Designer.cs",
+      "sha256": "84C340F1D30687745D308757A8C44E558A23AAA083D1728358F2F97BF6E46F94",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Properties/Settings.Designer.cs",
+      "sha256": "ECC3AB3000932187615666D0BEC50864CABF220A0970267F24F58C86F0A28096",
+      "checkedSourceOverride": false
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareCatalog.cs",
+      "sha256": "D1B738F031BB9D09CAF49A5D813059DC08B559AD3F6766DC0391CF69F53FAEFF",
+      "checkedSourceOverride": false
+    }
+  ],
+  "firmwareCatalog": {
+    "schemaVersion": 1,
+    "releases": [
+      {
+        "family": 1,
+        "boardIds": [
+          65537
+        ],
+        "board": "V1 old NP board, 91k/91k battery divider; not V2",
+        "release": "V1_USB91_APPBC6B506E_WILDX33_D127_BLE_USB_RELEASE",
+        "sourceCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+        "stage": "Published with recorded limits",
+        "appVersion": "1.0.121-idle-sleep-test",
+        "usbVersion": "1.0.91-usb20-paired-restore-test",
+        "recoveryVersion": "Included in fused HEX; version not reported",
+        "appCrc32": "BC6B506E",
+        "usbCrc32": "40D39075",
+        "recoveryCrc32": null,
+        "app": {
+          "path": "V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
+          "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9"
+        },
+        "files": [
+          {
+            "path": "V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
+            "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9"
+          },
+          {
+            "path": "V1/V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
+            "sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA"
+          },
+          {
+            "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.121-idle-sleep-test_20261016T211951Z.hex",
+            "sha256": "EC10D6D227BBFC5E2DA8F15CC4E4138E438FA68D8810015D7463EA0E51FCA2D6"
+          }
+        ],
+        "limits": "Old V1 NP board with 91k/91k battery divider only. Short USB/BLE checks passed; endurance and implant field updates are not qualified. APP update preserves USB/recovery. USB service HEX requires a separate service programming workflow. Matching fused HEX includes and reprograms recovery, excludes configuration, and requires SWD without mass erase; fused programming has not been hardware-qualified. Service/fused HEX cannot use the APP updater.",
+        "appIdentity": {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272080,
+          "codeCrc32": "BC6B506E",
+          "buildIdHex": "6439626331393337336338666131343262623961613939316264313965623931",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        "usbIdentity": {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "40D39075",
+          "buildIdHex": "3934386332396537623530363963656166656433653063326162366635613962",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        "previousApps": [
+          {
+            "imageId": 1095782449,
+            "baseAddress": 134348800,
+            "bytes": 270512,
+            "codeCrc32": "BB1C7399",
+            "buildIdHex": "6633306230376638646337303461636636623963653161613536363632323066",
+            "manifestFlags": 0,
+            "minimumLoaderAbi": 258,
+            "generation": 1
+          }
+        ],
+        "previousUsb": [
+          {
+            "imageId": 1431519793,
+            "baseAddress": 135790592,
+            "bytes": 240488,
+            "codeCrc32": "681B6C2A",
+            "buildIdHex": "3035613735613038383534346236623564343433376566633166313730613163",
+            "manifestFlags": 1,
+            "minimumLoaderAbi": 258,
+            "generation": 1
+          },
+          {
+            "imageId": 1431519793,
+            "baseAddress": 135790592,
+            "bytes": 240488,
+            "codeCrc32": "2F1C6BD5",
+            "buildIdHex": "3061393165653230303761656666636534656235613166623361376265383935",
+            "manifestFlags": 1,
+            "minimumLoaderAbi": 258,
+            "generation": 1
+          }
+        ],
+        "historySources": [
+          "72c432b59002d394e4d396b1dd078e203547981a",
+          "a6f2f8054dfdf528038802092c34040cbd29ce48",
+          "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
+        ]
+      },
+      {
+        "family": 2,
+        "boardIds": [],
+        "board": "WILD-X V2 / NP2",
+        "release": "V2_POWER_PROFILES_DEV_20261016",
+        "sourceCommit": "e7b0d08cc3d24dc0776532d2a599462528301df7",
+        "stage": "Published development release",
+        "appVersion": "build 136172A5",
+        "usbVersion": "build 2E07799E",
+        "recoveryVersion": "build 6408DBB8",
+        "appCrc32": "136172A5",
+        "usbCrc32": "2E07799E",
+        "recoveryCrc32": "6408DBB8",
+        "app": {
+          "path": "V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
+          "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
+        },
+        "files": [
+          {
+            "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex",
+            "sha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B"
+          },
+          {
+            "path": "V2/V2_logger_APP_only_136172A5_POWER_PROFILES_DEV_20261016.hex",
+            "sha256": "DDF218944CED454426A030F2B7EE3677152A10DA400797891B40AEDAD4EEBA2A"
+          },
+          {
+            "path": "V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
+            "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
+          },
+          {
+            "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
+            "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+          },
+          {
+            "path": "V2/V2_USB_only_2E07799E_AUTO_USB_20261013.hex",
+            "sha256": "D9F20946E67FA765AC691B127D64A053F78C79F49BFA584AC39B1C8931448782"
+          }
+        ],
+        "limits": "Not an all-mode lossless release. Exact APP short captures passed dual15/dual20/triple15; dual30 fails and triple20 is unresolved. The published fused USB/APP pair has not been newly cold-boot or endurance qualified. Only the APP .xenp uses the protected updater; other HEX images require a separate recovery/service workflow.",
+        "appIdentity": {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 172400,
+          "codeCrc32": "136172A5",
+          "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        },
+        "usbIdentity": {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 159296,
+          "codeCrc32": "2E07799E",
+          "buildIdHex": "6563333565636665343430343235373164376566303065616437393465323738",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        },
+        "previousApps": [],
+        "previousUsb": []
+      }
+    ]
+  },
+  "separateCameraFirmware": {
+    "family": 1,
+    "target": "V1 camera board; explicit manual selection only",
+    "stage": "Published camera candidate",
+    "ownerConfirmed": "2026-10-17",
+    "publicationCommit": "31e1d51571f9ea0b80699c98b547a434f7c11c45",
+    "retainedPublicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+    "appVersion": "1.0.121-camera40-default-candidate",
+    "appCrc32": "99BA4F27",
+    "usbVersion": "83",
+    "usbCrc32": "82C6E21A",
+    "automaticCatalogSelection": false,
+    "files": [
+      {
+        "path": "V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+        "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
+      },
+      {
+        "path": "V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+        "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
+      }
+    ],
+    "limits": "Separate camera target, not an NP APP121/USB91 successor. BLE SD 40 fps + ADC200k + latest-value IMU short capture passed; strict USB completeness failed with 11 reported camera drops. 50 fps and 41..49 fps not qualified. No endurance, implant, seamless installer-pair or NP probe qualification. Saved rates are not migrated. Only APP HEX uses compatible protected APP update; fused rewrites recovery/USB and requires separate factory/recovery programming without mass erase."
+  },
+  "firmwareProvenance": "Owner-confirmed artifact publication commits; not a complete clean incremental firmware source-build assertion",
+  "automaticFlashing": false,
+  "validation": {
+    "offlineReleaseGates": "All passed; resumed after correcting stale fixture expectations/dependencies",
+    "managementFormsChecks": 639,
+    "bleWorkflowChecks": 4397,
+    "fakeGattStorageChecks": 17,
+    "simulatedV2CatalogChecks": 1945,
+    "firmwareCatalogChecks": 590,
+    "usbHealthQualityChecks": 69,
+    "runtimeBleProfileChecks": 27,
+    "auxCleanupChecks": 25,
+    "formatAdmissionChecks": 20,
+    "liveDatSampleLayoutChecks": 20511105,
+    "recordingBundleChecks": 203,
+    "gpioContinuityChecks": 54,
+    "physicalHardwareActionsThisRelease": false
+  },
+  "excludedExperimentalDownloadReadiness": true,
+  "knownLimits": [
+    "New installer/firmware combination has no complete hardware or endurance qualification.",
+    "Bundled V2 firmware does not advertise BLE catalog/delete capability22; probe3 BLE waveform preview remains unsupported.",
+    "V2 dual30 fails prior integrity qualification; triple20 remains unqualified. Runtime choices do not establish lossless throughput.",
+    "Intermittent V1 BLE discovery/mode-readiness and USB-start reports remain; Windows31 is not established as a physical cable error or fixed by this release.",
+    "V1 camera40 is a separate candidate; prior strict USB completeness failed with11 camera drops.",
+    "Current firmware may not report exact installed image identities; unknown versions remain review-only.",
+    "Fused/service/recovery HEX images require the documented separate programming workflows; no implant-field-update qualification."
+  ]
+}

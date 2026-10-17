@@ -1,6 +1,6 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.34**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.35**. Complete hardware qualification is pending.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -61,7 +61,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX 1.0.0.34](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.34.exe), packaged on 2026-10-17, with the BLE preview/storage workflow, V1 format recovery, GPIO continuity, direct Advanced USB-mode controls, and bundled firmware. V2 classic v13 / existing v12 SD export support is retained. The [latest-release root](LATEST_INSTALLERS/README.md) holds one final installer; superseded packages and metadata are archived under `LATEST_INSTALLERS/legacy`. See [release validation](Note/RELEASE_1.0.0.34_20261017.md). Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders, each with its own DAT, probe files, settings and error linkage. USB saves decoded neural DAT without an extra RAW copy.
+The current installer is [WILDX 1.0.0.35](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.35.exe), packaged on 2026-10-17. Firmware Update now offers **V1 NP (91k/91k)** and **V1 Camera40 — candidate**; NP remains the default, and Use bundled APP selects the explicitly chosen target's matching image with its own CRCs and limits. This UI-only update retains the BLE preview/storage workflow, V1 format recovery, GPIO continuity, direct Advanced USB-mode controls, bundled firmware and V2 classic v13 / existing v12 SD export. The [latest-release root](LATEST_INSTALLERS/README.md) holds one final installer; prior packages and metadata are archived under `LATEST_INSTALLERS/legacy`. See [focused validation](Note/RELEASE_1.0.0.35_20261017.md). Enter an optional Session label in USB Mode or Data Download to name recordings like `RatID_sleep_wild_20261013_143025.123`. Downloads use validated stored START times. Automatic restarts create independent timestamped recording folders with their own DAT, probe files, settings and error linkage. USB saves decoded neural DAT without an extra RAW copy.
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. It bundles the [approved firmware artifacts and their limits](Firmware/README.md); firmware programming requires an explicit device and image selection.
 

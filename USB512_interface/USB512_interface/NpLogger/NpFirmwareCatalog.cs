@@ -226,9 +226,13 @@ namespace USB512_interface
         internal static string AppPath(IWin32Window owner, uint family)
         {
             var release = NpFirmwareCatalog.Bundled.For(family);
+            return SelectAppPath(owner,release);
+        }
+        internal static string SelectAppPath(IWin32Window owner,NpFirmwareRelease release)
+        {
             if (release == null) throw new IOException("Bundled firmware unavailable: " + NpFirmwareCatalog.Bundled.Error);
             string path = NpFirmwareCatalog.Bundled.CheckedPath(release.app);
-            if (MessageBox.Show(owner, "Use bundled WILD-X V" + family + " APP " + release.appVersion + "?\r\n\r\n" +
+            if (MessageBox.Show(owner, "Use bundled WILD-X V" + release.family + " APP " + release.appVersion + " (CRC " + release.appCrc32 + ")?\r\n\r\n" +
                 release.board + "\r\n" + release.stage + "\r\n\r\n" + release.limits +
                 "\r\n\r\nConfirm that this is the matching board. Only the APP is selected; USB service and recovery images are not sent through the APP updater.",
                 "Select bundled APP", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.OK) return null;
