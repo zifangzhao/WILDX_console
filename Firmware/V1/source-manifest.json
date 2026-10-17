@@ -1,100 +1,45 @@
 {
-  "pair_id": "V1_USB91_APPBC6B506E_WILDX33_D127_BLE_USB_RELEASE",
-  "stage": "release_with_recorded_limits",
-  "publication_date": "2026-10-16",
-  "publication_branch": "release/v1-installers-2026-09-29-candidate",
-  "board": "V1 old NP board, 91k/91k battery divider; not V2",
+  "stage": "candidate_for_parallel_user_validation",
+  "board": "V1 NP only; not camera or V2",
+  "version": "1.0.122-np1-identity-test",
   "abi": 258,
-  "app_crc32": "BC6B506E",
-  "app_unchanged": true,
+  "app_crc32": "8FD89229",
   "usb_crc32": "40D39075",
-  "usb_version": "1.0.91-usb20-paired-restore-test",
-  "hex_only_delivery": true,
-  "delivery_image_count": 3,
+  "fused_image_included": true,
+  "configuration_included": false,
+  "app_change": "Accept both exact official NP1 cap-variant part codes; EEPROM-absent NRIC path retained",
+  "boot_usb_source_sha256": "ec10d6d227bbfc5e2da8f15cc4e4138e438fa68d8810015d7463ea0e51fca2d6",
   "hex_images": {
     "sd_ble_app_only": {
-      "file": "V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
-      "sha256": "bfb87536861c385268935a8aa992daa04054414e6b38ff0b9fb57359e8548fd9",
-      "crc32": "BC6B506E",
-      "configuration_included": false,
-      "includes_recovery": false
+      "file": "V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex",
+      "sha256": "a70a35d70abb34d7d8f11d3bd9ac868c38c1bbb1ce847e3336b3c7491f230f3f",
+      "bytes": 765790
     },
     "usb_service_only": {
       "file": "V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
       "sha256": "29dc58de50d8089695f5fda07a6f56dba6bae7047d47dbd919d2b1f0aadef5ba",
-      "crc32": "40D39075",
-      "address_range": "0x0817E000..0x081FFFFF",
-      "loader_included": false,
-      "app_included": false,
-      "configuration_included": false,
-      "use": "SWD/service-only programming without mass erase; not APP updater"
+      "bytes": 676837
     },
     "fused_bootloader_usb_app": {
-      "file": "V1_fused_bootloader_USB91_SD_BLE_v1.0.121-idle-sleep-test_20261016T211951Z.hex",
-      "sha256": "ec10d6d227bbfc5e2da8f15cc4e4138e438fa68d8810015d7463ea0e51fca2d6",
-      "bytes": 5875757,
-      "app_crc32": "BC6B506E",
-      "usb_crc32": "40D39075",
-      "configuration_included": false,
-      "includes_recovery": true,
-      "loader_and_app_bytes_unchanged": true,
-      "firmware_recompiled": false,
-      "hardware_programmed": false,
-      "fused_programming_hardware_validated": false,
-      "use": "Full V1 stack via SWD without mass erase; includes recovery; not APP updater or implant-qualified"
+      "file": "V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z.hex",
+      "sha256": "868d1de03ace85dce09b799860173bbca67d945eef40e1c8c9da4d3d9cd40982",
+      "bytes": 2528640
     }
   },
-  "console": {
-    "repository": "https://github.com/zifangzhao/WILDX_console",
-    "publication_commit": "593ef164",
-    "file": "LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.33-USB_QUALITY_FIX_20261015.exe",
-    "installer_sha256": "75f9e4e14caa8c30b5b757af90ac7cf7fa2291370348d9818101e5fb06233d0c",
-    "executable_sha256": "d1271ec76df47fea84ba83395121832d861f7ac6c56132f369d0525529a11cf7",
-    "version": "1.0.0.33",
-    "firmware_bundled": false,
-    "ble_scope": "Recording control/profiles/time/probe configuration; new V1 waveform/file UI and continuous-duration changes not included",
-    "package_evidence": "Owner-confirmed existing software checks and 13 exact extracted payload files"
+  "evidence": {
+    "canonical_identity_auto_regression": "PASS; both NP1 identities and EEPROM-less NRIC map routing",
+    "app_build": "one probe object rebuilt; 74 checked parent objects reused",
+    "installed_app_readback": "PASS exact candidate APP and manifest; boot/config and USB byte-identical",
+    "ble_logging": "NOT VALIDATED: both live attempts ended before connection; no START sent",
+    "fused_programming_hardware_validated": false,
+    "saved_data_integrity_tested": false
   },
-  "usb_hardware_evidence": {
-    "uid": "001D00065942500B20313354",
-    "modes": "P1+P2 native 20000; wire0x77; no resampling",
-    "durations_seconds": [
-      5.0035792,
-      30.0057076
-    ],
-    "longer_run_wire_bytes": 956825600,
-    "ap_rows_per_probe": 600170,
-    "validated_frames": [
-      7802222,
-      7802221
-    ],
-    "frame_counter_lfp_phase_relock_usb_sequence_errors": 0,
-    "imu_samples": 5984,
-    "imu_sequence_gaps_and_final_error": 0,
-    "stop_completed": true,
-    "production_apis_strict_decoder": true,
-    "source": "_artifacts/v1_usb_integrity_20261016/p12_20k_usb91_30s"
+  "host_candidate": {
+    "version": "1.0.0.38",
+    "executable_sha256": "0FCCF0D7247AF0984AC66F4750306673A8299D0550DB79D41E2C52DE87DADFAF",
+    "software_checked": true,
+    "end_to_end_pair_validated": false
   },
-  "ble_evidence": "Unchanged APP BC6B506E: prior WILD3.4.2.204 short P12/20k and P123/15k full committed-chunk readback and reconnect; not WILDX33 BLE+USB91 HIL",
-  "whole_ble_usb_pair_hil_validated": false,
-  "endurance_qualified": false,
-  "implant_qualified": false,
-  "fused_image_included": true,
-  "publication_builds": 0,
-  "publication_repackages": 1,
-  "publication_hardware_access": false,
-  "source_integrated_during_publication": false,
-  "recordings_changed": false,
-  "legacy_usb89": "LATEST_FIRMWARE/legacy/usb89_before_paired_restore",
-  "fused_packaging": {
-    "source_commit": "cd9500b1db09bd1e60d67ef327caa1f065a1fc6a",
-    "parent_fused": "LATEST_FIRMWARE/legacy/usb89_before_paired_restore/V1_fused_bootloader_USB89_SD_BLE_v1.0.121-idle-sleep-test_20261016T203838Z.hex",
-    "created_utc": "2026-10-17T15:34:35.712518+00:00",
-    "offline_checks": "Component SHA256, manifests/code CRC/vectors, unchanged loader+APP, config exclusion, corrupt-input rejection, HEX round-trip",
-    "app_manifest_source": "Exact published standalone APP manifest",
-    "parent_app_generation": 2,
-    "app_generation": 1,
-    "builds": 0,
-    "hardware_access": false
-  }
+  "publication_requested": true,
+  "published": false
 }

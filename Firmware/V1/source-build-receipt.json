@@ -1,0 +1,320 @@
+{
+  "built": 1,
+  "reused": 74,
+  "changed_unit": "Core/Src/xe_np_nric.c",
+  "changed_header": "Core/Inc/probe_identity.h",
+  "parent_app_crc": "BC6B506E",
+  "parent_axf_sha256": "211A1D7F4EBA4D7B5B4309AAE0357DD62A185ECBA8FF0076A2D7387CC83C5EDA",
+  "source_dependencies": [
+    {
+      "sha256": "313D728FEED40E444E4EC57B0C68AD36980023672C0A7090E1B4E5D7BE390B8E",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\xe_np_nric.c"
+    },
+    {
+      "sha256": "B312633BFF1EBF0E4BF6C8FA18CCC2E5A9B8EA0E339FC14F7C0E150DDFF66626",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\xe_np_nric.h"
+    },
+    {
+      "sha256": "B3C0ED26281459DA51F089C5355D6DF08B205DA018F04458FBD116CDFE92034F",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\xe_np_board.h"
+    },
+    {
+      "sha256": "53F8785B90B4F178183FEA3A384D41E946BA533C8655993C8F4CD3C73FFD5EA3",
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stddef.h"
+    },
+    {
+      "sha256": "ECB59E04B0703AB780391D6DB7ECF339E24F9B1641EE4DB2932FF80656558E24",
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stdint.h"
+    },
+    {
+      "sha256": "A8658EF8F7C42B6BFB2828AFFDB7158E6BB018801FDB171A9F25DC05ECAC8234",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\xe_np_hal.h"
+    },
+    {
+      "sha256": "57F0F46E41327D504CCB51DEA2DD20AB4E3A64E7C6C9C1C54B31A85AC4EED217",
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\string.h"
+    },
+    {
+      "sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal.h"
+    },
+    {
+      "sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\stm32u5xx_hal_conf.h"
+    },
+    {
+      "sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc.h"
+    },
+    {
+      "sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_def.h"
+    },
+    {
+      "sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5xx.h"
+    },
+    {
+      "sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u595xx.h"
+    },
+    {
+      "sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\core_cm33.h"
+    },
+    {
+      "sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_version.h"
+    },
+    {
+      "sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_compiler.h"
+    },
+    {
+      "sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_armclang.h"
+    },
+    {
+      "sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\mpu_armv8.h"
+    },
+    {
+      "sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\system_stm32u5xx.h"
+    },
+    {
+      "sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h"
+    },
+    {
+      "sha256": "E0FFC7783AAE749727B446C500C7E6C45D39193A90251AF5D147892278DA30B3",
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\math.h"
+    },
+    {
+      "sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc_ex.h"
+    },
+    {
+      "sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio.h"
+    },
+    {
+      "sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio_ex.h"
+    },
+    {
+      "sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_icache.h"
+    },
+    {
+      "sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcache.h"
+    },
+    {
+      "sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma.h"
+    },
+    {
+      "sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma_ex.h"
+    },
+    {
+      "sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cortex.h"
+    },
+    {
+      "sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc.h"
+    },
+    {
+      "sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_adc.h"
+    },
+    {
+      "sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc_ex.h"
+    },
+    {
+      "sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac.h"
+    },
+    {
+      "sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac_ex.h"
+    },
+    {
+      "sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash.h"
+    },
+    {
+      "sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash_ex.h"
+    },
+    {
+      "sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c.h"
+    },
+    {
+      "sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c_ex.h"
+    },
+    {
+      "sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp.h"
+    },
+    {
+      "sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp_ex.h"
+    },
+    {
+      "sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr.h"
+    },
+    {
+      "sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr_ex.h"
+    },
+    {
+      "sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ospi.h"
+    },
+    {
+      "sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_dlyb.h"
+    },
+    {
+      "sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd.h"
+    },
+    {
+      "sha256": "75C802F6E7ABE6F17C38F6D7B03B4074D6EAE4FCD3938306AAA2BCF6723D1595",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_sdmmc.h"
+    },
+    {
+      "sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd_ex.h"
+    },
+    {
+      "sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi.h"
+    },
+    {
+      "sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi_ex.h"
+    },
+    {
+      "sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim.h"
+    },
+    {
+      "sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim_ex.h"
+    },
+    {
+      "sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart.h"
+    },
+    {
+      "sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart_ex.h"
+    },
+    {
+      "sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd.h"
+    },
+    {
+      "sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_usb.h"
+    },
+    {
+      "sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd_ex.h"
+    },
+    {
+      "sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525",
+      "path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_exti.h"
+    },
+    {
+      "sha256": "1C22724D15A9FAA4735036EBE84B1225A7BCAB88399FB7B189DE46B70CC5B9BA",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\auto_model.inc"
+    },
+    {
+      "sha256": "F72C660D9B51751DD265744C0DAA4959D465855C4E9A201C4C27147ADC228140",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_config_port.h"
+    },
+    {
+      "sha256": "C1A59CB9384CCA7382A9B2188D4FA5E42247C6295F643C274F15DA6180A1E25B",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_config.h"
+    },
+    {
+      "sha256": "13E869B1F12C47685014B3AA1B7D513D652D2D1C21C0E4F726BE36D8661B2361",
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\probe_identity.h"
+    }
+  ],
+  "compile_flags": [
+    "-xc",
+    "-std=c11",
+    "--target=arm-arm-none-eabi",
+    "-mcpu=cortex-m33",
+    "-mfpu=fpv5-sp-d16",
+    "-mfloat-abi=hard",
+    "-c",
+    "-fno-rtti",
+    "-funsigned-char",
+    "-fshort-enums",
+    "-fshort-wchar",
+    "-gdwarf-4",
+    "-O3",
+    "-ffunction-sections",
+    "-Wno-packed",
+    "-Wno-nonportable-include-path",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP\\Firmware\\V1/Core/Inc",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP\\Firmware\\V1/Drivers/STM32U5xx_HAL_Driver/Inc",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP/Drivers/STM32U5xx_HAL_Driver/Inc",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP/Drivers/STM32U5xx_HAL_Driver/Inc/Legacy",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP/Drivers/CMSIS/Device/ST/STM32U5xx/Include",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP/Drivers/CMSIS/Include",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP\\Firmware\\V1/MDK-ARM/RTE/_USB384_NP_BGA_MMC",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP/Middlewares/Bosch/BME280_SensorAPI",
+    "-I",
+    "C:\\Frank\\Code\\XE_NP/Middlewares/Bosch/BMM150_SensorAPI",
+    "-D__UVISION_VERSION=537",
+    "-D_RTE_",
+    "-DSTM32U595xx",
+    "-DUSE_HAL_DRIVER",
+    "-DNP_SD_APP=1U",
+    "-DNP_SD_SLOTS=128U",
+    "-DNP_SD_VSC=1U",
+    "-DNP_SD_VSC_ERASE=0U",
+    "-DNP_SD_CE64=1U",
+    "-DNP_SD_SENSORS=1U",
+    "-DNP_SD_BME_WIRING_CONFIRMED=0U",
+    "-DNP_SD_ALLOW_WRITES=1U",
+    "-DNP_SD_PROBE_MASK=2U",
+    "-DNP_SD_AP_HZ=15000U",
+    "-DXE_NP_BOARD_EXPERIMENT_DISABLE_SD_INIT=0U",
+    "-DXE_NP_APP_QUAD_USB_PACED=1U",
+    "-DXE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+    "-DXE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+    "-DXE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+    "-DXE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+    "-DXE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+    "-DXE_NP_CAPTURE_DMA_NODE_BYTES=7680UL",
+    "-DXE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+    "-DXE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+    "-DXE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+    "-DXE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+    "-DXE_NP_NRIC_DIAG_SKIP_CHAIN2_PROGRAM=0U"
+  ],
+  "hex_sha256": "CA26D96AB1B616F2696709A8AE52E81C3625C8D34DC9F4D5FE98EA22915DFFDC",
+  "hardware_access": false,
+  "release_published": false
+}

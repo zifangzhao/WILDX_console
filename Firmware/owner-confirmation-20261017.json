@@ -1,18 +1,21 @@
 {
   "schemaVersion": 1,
   "confirmedOn": "2026-10-17",
-  "provenance": "Artifact publication commits, not a claim of complete clean incremental firmware build sources",
+  "provenance": "Owner artifact handoffs and publication commits; incremental source inputs are recorded separately and do not imply a clean full firmware build",
   "automaticFlashing": false,
   "newHardwareQualification": false,
   "targets": [
     {
       "target": "V1 Neuropixels old NP / 91k+91k",
       "ownerConfirmed": "2026-10-17",
-      "publicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
-      "appCrc32": "BC6B506E",
+      "appCrc32": "8FD89229",
       "usbCrc32": "40D39075",
       "recovery": "Included in exact fused HEX",
-      "status": "Latest owner-approved published bundle; recorded limits retained"
+      "status": "Owner-approved development candidate for parallel user validation; software/build and APP readback checked, BLE recording and fused programming unvalidated",
+      "previousPublicationCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
+      "sourceBaseCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+      "sourceManifest": "V1/source-manifest.json",
+      "sourceBuildReceipt": "V1/source-build-receipt.json"
     },
     {
       "target": "V2 Neuropixels",

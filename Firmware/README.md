@@ -7,10 +7,19 @@ versions are displayed separately. Merely connecting never flashes a device.
 Both firmware owners reconfirmed these as the latest approved distribution
 packages on 2026-10-17. Their development limits remain in effect.
 
-| Family | Published components | Artifact publication commit |
+| Family | Published components | Source / publication provenance |
 | --- | --- | --- |
-| V1 old NP / 91k+91k target | APP1.0.121-idle-sleep-test / BC6B506E; USB1.0.91-usb20-paired-restore-test / 40D39075; matching fused recovery/APP/USB HEX | e831a5f10c28c1df596766b195d4a48aeb38991d |
+| V1 old NP / 91k+91k candidate | APP1.0.122-np1-identity-test / 8FD89229; unchanged USB91 / 40D39075; matching fused HEX | Incremental base e92b8cbb9dabdc99ce7a140d09e7c822b1da7150; [input receipt](V1/source-build-receipt.json) |
 | V2 NP2 development | APP136172A5; USB2E07799E; recovery6408DBB8 | e7b0d08cc3d24dc0776532d2a599462528301df7 |
+
+The V1 candidate is published for parallel user validation. BLE recording and
+fused programming are not validated. Previous APP121 artifacts and source docs
+are preserved under `V1/legacy/app121_before_np1_identity_20261017/`.
+The original owner handoff remains `V1/source-manifest.json` (`published:false`
+records its pre-publication handoff state). Its source tree was dirty; the exact
+recompiled unit, dependency hashes and parent image are recorded separately.
+The existing 1.0.0.37 installer still bundles APP121; this firmware-only refresh
+does not replace that installer or the frozen local 1.0.0.38 GUI candidate.
 
 The original manifests, READMEs and filenames remain under each family folder.
 Publication commits identify the distributed artifacts; they do not establish
@@ -18,7 +27,7 @@ a clean, complete source snapshot of every incremental firmware build input.
 The V2 source validation note and checksum list are included unchanged.
 The separate published V1 camera40 candidate is under `V1Camera/`, with its own
 manifest and hashes. It requires explicit manual target selection and is never
-substituted for the Neuropixels APP121 / USB91 bundle.
+substituted for the Neuropixels APP122 candidate / USB91 bundle.
 V1 camera firmware is a separate target and is not an automatic predecessor of
 the old-NP package, even when both filenames contain `1.0.121`. V2 has no enabled
 target ID in this catalog until its firmware owner freezes that identity.

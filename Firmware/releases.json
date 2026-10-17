@@ -7,40 +7,40 @@
         65537
       ],
       "board": "V1 old NP board, 91k/91k battery divider; not V2",
-      "release": "V1_USB91_APPBC6B506E_WILDX33_D127_BLE_USB_RELEASE",
-      "sourceCommit": "e831a5f10c28c1df596766b195d4a48aeb38991d",
-      "stage": "Published with recorded limits",
-      "appVersion": "1.0.121-idle-sleep-test",
+      "release": "V1_USB91_APP8FD89229_NP1_IDENTITY_CANDIDATE_20261017",
+      "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+      "stage": "Development candidate; software checked, BLE recording not validated",
+      "appVersion": "1.0.122-np1-identity-test",
       "usbVersion": "1.0.91-usb20-paired-restore-test",
       "recoveryVersion": "Included in fused HEX; version not reported",
-      "appCrc32": "BC6B506E",
+      "appCrc32": "8FD89229",
       "usbCrc32": "40D39075",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
-        "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9"
+        "path": "V1/V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex",
+        "sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F"
       },
       "files": [
         {
-          "path": "V1/V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex",
-          "sha256": "BFB87536861C385268935A8AA992DAA04054414E6B38FF0B9FB57359E8548FD9"
+          "path": "V1/V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex",
+          "sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F"
         },
         {
           "path": "V1/V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
           "sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA"
         },
         {
-          "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.121-idle-sleep-test_20261016T211951Z.hex",
-          "sha256": "EC10D6D227BBFC5E2DA8F15CC4E4138E438FA68D8810015D7463EA0E51FCA2D6"
+          "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z.hex",
+          "sha256": "868D1DE03ACE85DCE09B799860173BBCA67D945EEF40E1C8C9DA4D3D9CD40982"
         }
       ],
-      "limits": "Old V1 NP board with 91k/91k battery divider only. Short USB/BLE checks passed; endurance and implant field updates are not qualified. APP update preserves USB/recovery. USB service HEX requires a separate service programming workflow. Matching fused HEX includes and reprograms recovery, excludes configuration, and requires SWD without mass erase; fused programming has not been hardware-qualified. Service/fused HEX cannot use the APP updater.",
+      "limits": "V1 old NP board with 91k/91k battery divider only. Development candidate for parallel user validation. Accepts both exact NP1 cap-variant identities and retains confirmed EEPROM-absent NRIC support. Canonical identity/AUTO software checks and installed APP readback passed; BLE attempts ended before connection, no START was sent, and BLE recording/custom-map/saved-data integrity remain unvalidated. Incremental build from a dirty source tree; see source-build-receipt.json. APP update preserves USB/recovery. USB91 service is unchanged and requires a separate service workflow. Fused HEX includes/reprograms recovery, excludes configuration, and requires matching-target SWD without mass erase; fused programming is not hardware-qualified. Fused/service HEX cannot use the APP updater. Not endurance or implant qualified.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 272080,
-        "codeCrc32": "BC6B506E",
-        "buildIdHex": "6439626331393337336338666131343262623961613939316264313965623931",
+        "bytes": 272112,
+        "codeCrc32": "8FD89229",
+        "buildIdHex": "3466663135343162613266386430633239373231363634636261306232353839",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 0
@@ -56,6 +56,16 @@
         "generation": 0
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272080,
+          "codeCrc32": "BC6B506E",
+          "buildIdHex": "6439626331393337336338666131343262623961613939316264313965623931",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -90,6 +100,7 @@
         }
       ],
       "historySources": [
+        "e831a5f10c28c1df596766b195d4a48aeb38991d",
         "72c432b59002d394e4d396b1dd078e203547981a",
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"

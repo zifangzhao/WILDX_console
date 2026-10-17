@@ -1,54 +1,62 @@
-# V1 USB91 + SD/BLE APP release — 2026-10-16
+# V1 NP identity-parity candidate — 2026-10-17
 
-Use these firmware components with the already-published
-[WILDX 1.0.0.33 installer](https://github.com/zifangzhao/WILDX_console/raw/refs/heads/main/LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.33-USB_QUALITY_FIX_20261015.exe).
-The installer contains no firmware and never flashes automatically.
+APP **1.0.122-np1-identity-test / 8FD89229**, unchanged USB91 **40D39075**.
+For the V1 old NP board with 91k/91k battery divider. Not for V2 or the camera target.
 
-- [USB91 service-only HEX](V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex): fixes native 20 kHz two-probe USB capture and retains the USB89 configuration-start fix.
-- [Unchanged SD/BLE APP HEX](V1_SD_BLE_app_only_v1.0.121-idle-sleep-test_20261016T150611Z.hex): APP CRC BC6B506E, ABI258, old NP V1 91k/91k battery-divider configuration.
-- [Latest fused bootloader + USB91 + SD/BLE APP HEX](V1_fused_bootloader_USB91_SD_BLE_v1.0.121-idle-sleep-test_20261016T211951Z.hex): the same published bootloader and exact checked APP/USB91 components, with retained configuration excluded. SHA256 `ec10d6d227bbfc5e2da8f15cc4e4138e438fa68d8810015d7463ea0e51fca2d6`.
+- [Fused bootloader + USB91 + SD/BLE APP HEX](V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z.hex) — SHA256 `868D1DE03ACE85DCE09B799860173BBCA67D945EEF40E1C8C9DA4D3D9CD40982`.
+- [APP-only HEX](V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex) — SHA256 `A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F`.
+- [Unchanged USB91 service HEX](V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex) — SHA256 `29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA`.
 
-For a provisioned V1 already running APP BC6B506E, program only USB91 with
-STM32CubeProgrammer/SWD, **without mass erase**. Its range is
-0x0817E000..0x081FFFFF; the loader, SD/BLE APP, retained configuration and card
-remain untouched. An APP-only updater cannot install the USB service.
-Never use these images on V2. The fused image includes/reprograms recovery:
-use STM32CubeProgrammer/SWD **without mass erase** on the matching V1 target.
-It is not accepted by the protected APP-only updater and is not an
-implant/power-loss-qualified update method. Excluding configuration addresses
-does not make a mass erase safe. For an already-provisioned unit, a component
-update remains the smallest change.
-Do not overwrite USB91 with firmware bundled in an older WILD installer.
+This corrects NP1 identity admission parity with USB: both exact
+`PRB_1_4_0480_1_C` and `PRB_1_4_0480_1` use the NP1 configuration path.
+Confirmed EEPROM absence still selects NRIC, including its custom-map path.
+Capture clocks, DMA/rings, SD scheduling and UART are unchanged.
 
-## Existing evidence and limits
+The fused image includes/reprograms recovery and requires matching-target SWD
+programming **without mass erase**. It excludes retained configuration; that
+exclusion does not protect configuration against a mass erase. Do not send the
+fused or service HEX through an APP-only updater. The APP-only HEX preserves
+resident USB/recovery; with USB91, enter Recovery for the protected APP updater.
 
-The exact WILDX33 executable (SHA256 D1271EC76DF47FEA84BA83395121832D861F7AC6C56132F369D0525529A11CF7)
-passed production-API/strict-decoder tests with USB91 on the mapped V1:
-5 seconds, then a restarted 30.0057 seconds, P1+P2 native 20 kHz, actual wire0x77,
-600170 AP rows per probe. Frame, counter, LFP-phase, relock and USB sequence
-errors were zero. IMU:5984 samples, zero sequence gaps/error; normal Stop.
-Initial startup alignment discard remains explicit. This is not an endurance
-or unknown analog-payload-bit fidelity qualification.
+## Evidence and limits
 
-The unchanged APP previously passed short BLE-controlled P12/20k and P123/15k
-recordings with full committed-chunk readback and reconnect using WILD3.4.2.204.
-Those BLE hardware results do not constitute a WILDX33 BLE+USB91 whole-pair HIL
-test. The published WILDX installer has software/package checks and supports
-BLE recording control, profiles, time and probe configuration. New WILDX V1
-waveform/file-management controls and removal of its duration input are separate
-unfinished development and are not included here.
+The firmware owner reports passing canonical identity and maintained AUTO/map
+admission software checks. The incremental APP build recompiled one capture
+object and reused 74 checked parent objects. After APP-only installation on
+local V1 UID 001D00065942500B20313354, independent APP/manifest readback matched,
+and protected boot/configuration and USB were byte-identical.
 
-The original component publication made no builds or hardware accesses. On
-2026-10-17 the matching fused HEX was packaged from those same published
-components: component SHA256, manifest/code CRCs/vectors, exact loader/APP
-preservation, configuration exclusion, corrupt-input rejection and HEX
-round-trip passed. The standalone APP manifest is copied exactly; no firmware
-was recompiled and no hardware was flashed or tested for this packaging change.
-Existing acquisition evidence and limits above are unchanged.
+**BLE recording remains unvalidated.** Two local attempts ended before
+connection; no START was sent. They do not demonstrate a new recording, Stop,
+custom-map application on the reported failing recorder, saved-data integrity,
+or resolution of state 4 / fault 2. Fused-image programming has not been
+hardware validated. This is a development candidate published at the user's
+request for parallel validation, not an endurance or implant-qualified release.
 
-Every future latest V1 firmware delivery must include a matching fused HEX
-alongside component HEX files. A USB-service-only release must refresh the
-fused image too; an obsolete fused image must never be presented as latest.
-Superseded USB89 service/fused images are retained under
-[legacy/usb89_before_paired_restore](legacy/usb89_before_paired_restore/).
-See [manifest.json](manifest.json) for exact artifact identities and scope.
+The matching fused image was mechanically merged from the current published
+APP121 fused image's exact boot/USB-owned bytes and the sealed APP122 image.
+No new firmware compilation or hardware action was performed during fusion or
+WILDX artifact publication. The owner had already built and APP-only installed
+the candidate during the preceding investigation.
+
+[Original owner handoff](source-manifest.json) and [owner README](source-README.md)
+are retained exactly. `published:false` in the original handoff records its
+state before this repository publication. Source base
+`e92b8cbb9dabdc99ce7a140d09e7c822b1da7150` had uncommitted changes; it is not a
+clean source commit for this binary. The [build/input receipt](source-build-receipt.json)
+records the exact parent image, rebuilt unit, dependency hashes and flags;
+the [canonical identity header](source-probe_identity.h) has SHA256
+`13E869B1F12C47685014B3AA1B7D513D652D2D1C21C0E4F726BE36D8661B2361`.
+
+Previous APP121 artifacts and exact source docs are preserved in
+[legacy/app121_before_np1_identity_20261017](legacy/app121_before_np1_identity_20261017/README.md).
+The existing WILDX 1.0.0.37 installer still contains APP121. This firmware-only
+publication does not rebuild an installer or modify the frozen local .38 GUI.
+
+Publication integrity checks passed exact payload hashes/lengths, HEX checksums,
+configuration exclusion, sealed APP manifest/code CRC, fused APP bytes and
+unchanged boot/USB address bytes. The existing catalog/identity/prompt fixture
+passed 590 offline checks using the frozen 1.0.0.37 GUI with this repository's
+new catalog. Prior V1 archive bytes, installer files, V2/camera payloads and the
+frozen .38 executable were checked unchanged. These are packaging/catalog
+checks; no firmware or GUI rebuild and no hardware action occurred here.
