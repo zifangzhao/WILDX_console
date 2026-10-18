@@ -7,3 +7,4 @@ $taskExe=Join-Path $OutputDirectory 'NpFirmwareBundleTests.exe'
 if($LASTEXITCODE){throw 'Firmware bundle tests did not compile'}
 & $taskExe ([IO.Path]::GetFullPath($ConsoleExecutable)) "$PSScriptRoot/Firmware" ([IO.Path]::GetFullPath($OutputDirectory))
 if($LASTEXITCODE){throw 'Firmware bundle tests failed'}
+& (Join-Path $PSScriptRoot 'test_firmware_notice.ps1') -OutputDirectory (Join-Path $OutputDirectory 'automatic-notice')

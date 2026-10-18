@@ -218,9 +218,9 @@ namespace USB512_interface
         internal static bool Offer(IWin32Window owner, string device, NpFirmwareRelease release, NpFirmwareIdentity identity)
         {
             if (release == null || String.IsNullOrEmpty(device) || IsCurrent(release, identity) ||
-                (identity != null && !release.Matches(identity)) || !seen.Add(device + "|" + release.sourceCommit)) return false;
+                !release.HasUpdate(identity) || !seen.Add(device + "|" + release.sourceCommit)) return false;
             return MessageBox.Show(owner, ReviewText(release, identity),
-                release.HasUpdate(identity) ? "Firmware update available" : "Bundled firmware", MessageBoxButtons.YesNo,
+                "Firmware update available", MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
         }
         internal static string AppPath(IWin32Window owner, uint family)

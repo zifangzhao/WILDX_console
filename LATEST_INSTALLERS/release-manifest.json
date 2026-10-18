@@ -1,14 +1,14 @@
 {
-  "version": "1.0.0.42",
+  "version": "1.0.0.43",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.42.exe",
-    "sha256": "CF861F09A80736F24E70C344B75D5505DED4DD4ADACB66C40A8917977729E3C5",
-    "bytes": 5990851
+    "file": "WILDX_console-Setup-1.0.0.43.exe",
+    "sha256": "4E4569C2C80EC56408BC4A64403AD01959015EDCAB9391DAEE72EE9D539B3972",
+    "bytes": 5990731
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "6ECB52A5F217FE8FC282E821C4871FA9FA4814A9F453F0FE9BA2FCB031DE07E8",
+      "sha256": "443F9D9FB307BC4427E5E1AA31D3AF3370DB9274D8CE702B12F177D01063F28C",
       "bytes": 1524224
     },
     {
@@ -211,9 +211,9 @@
   "installerExecuted": false,
   "runAfterInstallCheckbox": true,
   "application": "WILD-X Neuropixels Console",
-  "releaseDate": "2026-10-17",
-  "releaseTag": "SD_RECORDING_START_FOLDERS_20261017",
-  "sourceBaseCommit": "b147361a79c976d29a504166cc2b0b2bf13d36db",
+  "releaseDate": "2026-10-18",
+  "releaseTag": "VERIFIED_FIRMWARE_UPDATE_NOTICE_20261018",
+  "sourceBaseCommit": "78dad36e656e9c786065ac54a655df09adfb2c48",
   "compiledSources": {
     "gui": [
       {
@@ -424,7 +424,7 @@
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadCatalog.cs",
         "sha256": "84617021179717DD05E6269783A67969AFD6F08D55F691C4A2DBAF3DA186B6FB",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Decoder.cs",
@@ -434,7 +434,7 @@
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Export.cs",
         "sha256": "6ABB173180562FBBA527DDF952BE6A53EA2AF303C1EAB5D144651661D5EE3C69",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpSdGeometry.cs",
@@ -454,7 +454,7 @@
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpV1Management.cs",
         "sha256": "89E6A40A6023D0C93979B98285CE62A22AE7136196CBFB964FBBA27BBD6EB2C1",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareImage.cs",
@@ -544,7 +544,7 @@
       {
         "path": "USB512_interface/USB512_interface/Ble/NpV2SdControl.cs",
         "sha256": "B9C48553C09D597FC69D16A4C08A14639FBC960AE200BDD3EB93416335D259AF",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpV2OnlineClock.cs",
@@ -574,7 +574,7 @@
       {
         "path": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
         "sha256": "A76B6C5E7173F528CFF9145BE8A6EFB76B751344311B27F345C7723261083A10",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/NpBleForm.Media.cs",
@@ -629,7 +629,7 @@
       {
         "path": "USB512_interface/USB512_interface/Ble/NpMediaExport.cs",
         "sha256": "33950EF99466E3A7F3C46F55A9775A9DD83CD4CC757C600C0BDC997E529C1AB1",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/Ble/WILD_VideoDecoder.cs",
@@ -639,7 +639,7 @@
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
         "sha256": "5EF4EB3FBB74C29AB49CE850394225D2C1D10784F97D66CDF1D49052DC7B3196",
-        "committedOverride": false
+        "committedOverride": true
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpV2FirmwareForm.cs",
@@ -648,7 +648,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
-        "sha256": "89F3E9F68002A72F8704A9CCD44454F89320CADBDD60DC56753583D21080928F",
+        "sha256": "9BADFEAFAD30C3A6587C07A0250897E9B28E29DDB498AFBEADA33E07DBED63A4",
         "committedOverride": false
       },
       {
@@ -673,7 +673,7 @@
       },
       {
         "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareCatalog.cs",
-        "sha256": "1335DC54A55724A6F31869B10FB1C0B19B81B50F1404F384B719E30FC177F76D",
+        "sha256": "64EF5DA8EBE1F25391E9178748122C3B4A0D47928EAF3D0C0239993B5BAE1ED9",
         "committedOverride": false
       }
     ],
@@ -739,12 +739,14 @@
     "WILDX_console.exe"
   ],
   "validation": {
-    "actualAppNamingTimeUi": 62,
-    "actualAppRecovery": 139,
+    "actualSourceFirmwareNotice": 70,
+    "actualAppFirmwareBundle": 590,
+    "previousFalsePromptReproduced": true,
     "hardwareTested": false
   },
-  "inheritedExporter": "Unchanged .41 DLL and 11 source inputs.",
+  "inheritedExporter": "Unchanged .42 DLL and 11 source inputs.",
   "firmwareLimits": "Corrected V1 APP122/USB91 identity candidate; no new hardware qualification. V2 compact-preview producer candidate not included. Firmware-level damaged-directory BLE mount behavior unchanged.",
   "experimentalV1RecoveryIncluded": false,
-  "usbReadinessExperimentIncluded": false
+  "usbReadinessExperimentIncluded": false,
+  "experimentalV2OverwriteIncluded": false
 }
