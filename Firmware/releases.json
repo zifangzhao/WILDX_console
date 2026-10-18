@@ -6,56 +6,70 @@
       "boardIds": [
         65537
       ],
-      "board": "V1 old NP board, 91k/91k battery divider; not V2",
-      "release": "V1_USB91_APP8FD89229_NP1_IDENTITY_CANDIDATE_20261017",
+      "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
+      "release": "V1_SD_BLE_STORAGE_HARDENING_FA2016E7_USB02FF93A9_20261018",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "Development candidate; software checked, BLE recording not validated",
-      "appVersion": "1.0.122-np1-identity-test",
-      "usbVersion": "1.0.91-usb20-paired-restore-test",
+      "stage": "Operational SD/BLE development candidate; bounded validation, not all-mode or implant qualified",
+      "appVersion": "1.0.122-storage-hardening",
+      "usbVersion": "1.0.91-checked-download",
       "recoveryVersion": "Included in fused HEX; version not reported",
-      "appCrc32": "8FD89229",
-      "usbCrc32": "40D39075",
+      "appCrc32": "FA2016E7",
+      "usbCrc32": "02FF93A9",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex",
-        "sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F"
+        "path": "V1/V1_SD_BLE_APP_FA2016E7_20261018.hex",
+        "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C"
       },
       "files": [
         {
-          "path": "V1/V1_SD_BLE_app_only_v1.0.122-np1-identity-test_20261017T202533Z.hex",
-          "sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F"
+          "path": "V1/V1_SD_BLE_APP_FA2016E7_20261018.hex",
+          "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C"
         },
         {
-          "path": "V1/V1_USB_service_candidate_v1.0.91-usb20-paired-restore-test_20261016T211951Z.hex",
-          "sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA"
+          "path": "V1/V1_USB_service_02FF93A9_20261018.hex",
+          "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F"
         },
         {
-          "path": "V1/V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z_r2.hex",
-          "sha256": "BEC699EBE16981BAFEFD3FEB1AFA8790D5AF0839B74DC556E3A51E6B3146694C"
+          "path": "V1/V1_DFU_boot_USB02FF93A9_20261018.hex",
+          "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B"
+        },
+        {
+          "path": "V1/V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex",
+          "sha256": "33A7A04B53BDDFA4FEBC8F0A4BC5B4E5C079174663951EDE89C38282313BAFF2"
         }
       ],
-      "limits": "V1 old NP board with 91k/91k battery divider only. Development candidate for parallel user validation. Accepts both exact NP1 cap-variant identities and retains confirmed EEPROM-absent NRIC support. Canonical identity/AUTO software checks and installed APP readback passed; BLE attempts ended before connection, no START was sent, and BLE recording/custom-map/saved-data integrity remain unvalidated. Incremental build from a dirty source tree; see source-build-receipt.json. APP update preserves USB/recovery. USB91 service is unchanged and requires a separate service workflow. Fused HEX includes/reprograms recovery, excludes configuration, and requires matching-target SWD without mass erase; fused programming is not hardware-qualified. Fused/service HEX cannot use the APP updater. Not endurance or implant qualified.",
+      "limits": "V1 NP91k/91k development candidate, not camera or V2. Operational SD/BLE evidence is limited to P12/15k endurance and shortP12/20k plus two bounded saved-data windows. Not complete18.84GiB readback, all NP modes, custom maps, physical power-cut, continuous50fps/camera or implant qualification. Current hubbed large USB download remains unresolved; no failed bytes accepted and no silent repair/relock. Recovery is read-only and uncertain extents remain protected; no silent new-format migration or universal broken-catalog write admission. USB Format is software-checked but not physically executed in this cycle. Fused loader acceptance passed offline; fused programming not hardware-tested. Do not describe as flawless or all-mode fully validated.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 272112,
-        "codeCrc32": "8FD89229",
-        "buildIdHex": "3466663135343162613266386430633239373231363634636261306232353839",
-        "manifestFlags": 1,
+        "bytes": 272336,
+        "codeCrc32": "FA2016E7",
+        "buildIdHex": "6630396433303531666335636535363665303138636633636665316461663264",
+        "manifestFlags": 0,
         "minimumLoaderAbi": 258,
-        "generation": 0
+        "generation": 1
       },
       "usbIdentity": {
         "imageId": 1431519793,
         "baseAddress": 135790592,
-        "bytes": 240488,
-        "codeCrc32": "40D39075",
-        "buildIdHex": "3934386332396537623530363963656166656433653063326162366635613962",
+        "bytes": 248552,
+        "codeCrc32": "02FF93A9",
+        "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
-        "generation": 0
+        "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272112,
+          "codeCrc32": "8FD89229",
+          "buildIdHex": "3466663135343162613266386430633239373231363634636261306232353839",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -78,6 +92,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "40D39075",
+          "buildIdHex": "3934386332396537623530363963656166656433653063326162366635613962",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,

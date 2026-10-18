@@ -1,23 +1,83 @@
 {
-  "stage": "candidate_for_parallel_user_validation",
-  "board": "V1 NP only; not camera or V2",
-  "version": "1.0.122-np1-identity-test",
-  "packaging_revision": 2,
-  "app_crc32": "8FD89229",
-  "usb_crc32": "40D39075",
-  "file": "V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z_r2.hex",
-  "sha256": "BEC699EBE16981BAFEFD3FEB1AFA8790D5AF0839B74DC556E3A51E6B3146694C",
-  "bytes": 5745164,
-  "coverage_bytes": 2088960,
-  "configuration_included": false,
-  "normalization": "LF",
-  "correction": "Explicit FF coverage for unused firmware addresses so WILDX accepts a complete fused image. Verified component bytes are unchanged.",
-  "supersedes_partial_fused_sha256": "868D1DE03ACE85DCE09B799860173BBCA67D945EEF40E1C8C9DA4D3D9CD40982",
-  "unchanged_app_sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F",
-  "unchanged_usb_sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA",
-  "merger_regression": "PASS complete coverage, verified-byte preservation, config exclusion, missing-manifest/vector and unsafe-input rejection",
-  "firmware_rebuilt": false,
-  "hardware_access": false,
-  "ble_logging_validated": false,
-  "fused_programming_hardware_validated": false
+  "release": "V1_SD_BLE_STORAGE_HARDENING_FA2016E7_USB02FF93A9_20261018",
+  "stage": "Operational SD/BLE development candidate; bounded validation, not all-mode or implant qualified",
+  "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
+  "family": 1,
+  "boardIds": [65537],
+  "version_labels": {
+    "app": "APP122 storage hardening (FA2016E7)",
+    "usb": "USB91 checked download retirement + guarded format (02FF93A9)",
+    "console": "1.0.0.44"
+  },
+  "appIdentity": {
+    "imageId": 1095782449,
+    "baseAddress": 134348800,
+    "bytes": 272336,
+    "codeCrc32": "FA2016E7",
+    "buildIdHex": "6630396433303531666335636535363665303138636633636665316461663264",
+    "manifestFlags": 0,
+    "minimumLoaderAbi": 258,
+    "generation": 1
+  },
+  "usbIdentity": {
+    "imageId": 1431519793,
+    "baseAddress": 135790592,
+    "bytes": 248552,
+    "codeCrc32": "02FF93A9",
+    "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+    "manifestFlags": 1,
+    "minimumLoaderAbi": 258,
+    "generation": 1
+  },
+  "files": [
+    {
+      "role": "APP only; preserves recovery/USB/configuration",
+      "path": "Firmware/V1_SD_BLE_APP_FA2016E7_20261018.hex",
+      "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C"
+    },
+    {
+      "role": "USB service only; not accepted by APP updater",
+      "path": "Firmware/V1_USB_service_02FF93A9_20261018.hex",
+      "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F"
+    },
+    {
+      "role": "Current verified recovery/boot + USB; direct fused input, not APP updater input",
+      "path": "Firmware/V1_DFU_boot_USB02FF93A9_20261018.hex",
+      "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B"
+    },
+    {
+      "role": "Complete fused recovery + USB + APP; retained configuration excluded",
+      "path": "Firmware/V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex",
+      "sha256": "33A7A04B53BDDFA4FEBC8F0A4BC5B4E5C079174663951EDE89C38282313BAFF2",
+      "coverage_bytes": 2088960,
+      "bytes": 5745164,
+      "normalization": "LF"
+    },
+    {
+      "role": "Exact checked WILDX44 executable; owning developer packages without Compile",
+      "path": "console_input/WILDX_console.exe",
+      "sha256": "1F987A79F441D95E99DEB4E815F0C8768A2D4AE67FC342D2E90A7F83892E0F17"
+    }
+  ],
+  "packaging": {
+    "merger": "Tools/V1Capture/UnifiedUsb/merge_verified_hex.py",
+    "recovery_source": "Current installed boot dump, independently verified unchanged before/after USB install",
+    "recovery_sha256": "03CBCA29117EA3C54F797F5CD9698E786BC5D0FFA73853FEBAD3431B425E3A7F",
+    "configuration_included": false,
+    "checked_components_rebuilt_or_resealed": false,
+    "actual_wildx44_fused_and_app_loader_acceptance": true,
+    "fused_programming_tested": false
+  },
+  "evidence_root": "C:/Frank/Code/XE_NP/_artifacts/v1_sd_reliability_20261017",
+  "validation": {
+    "sd_ble_endurance": "P1+P2 at15kHz,810.105s/18.84GiB,clean DONE/fault0,status and preview traffic,BLE reconnect while chunks advanced,prior4 extents preserved,20k profile restored",
+    "short_sd": "P1+P2 at20kHz,5408chunks,clean Start/progress/Stop/catalog",
+    "saved_data_windows": "Independently read SD through stopped foreground READ mailbox without halt/reset/card writes. First128chunks of20k recording and last128chunks of15k endurance: each65535frames/probe,zero sync,heartbeat,fill,fixed,counter,cadence errors; full_extent=false",
+    "usb": "Small CRC-bound544-byte wire reply passed. Large522272-byte reply still fails Windows31 over current hub after2 bounded checked retries. SD/backend error count0. Checked cancellation/idle and normal APP return passed",
+    "software": "495 read-recovery source/native-seam/delivered-IL checks; canonical checked-retirement fixture; inherited canonical storage fault matrix and recovery/format/profile targeted checks",
+    "component_installation": "Fresh independent attachment verified complete installed APP and USB body+manifest. Boot and retained configuration unchanged after USB-only installation"
+  },
+  "limits": "V1 NP91k/91k development candidate, not camera or V2. Operational SD/BLE evidence is limited to P12/15k endurance and shortP12/20k plus two bounded saved-data windows. Not complete18.84GiB readback, all NP modes, custom maps, physical power-cut, continuous50fps/camera or implant qualification. Current hubbed large USB download remains unresolved; no failed bytes accepted and no silent repair/relock. Recovery is read-only and uncertain extents remain protected; no silent new-format migration or universal broken-catalog write admission. USB Format is software-checked but not physically executed in this cycle. Fused loader acceptance passed offline; fused programming not hardware-tested. Do not describe as flawless or all-mode fully validated.",
+  "installer_built": false,
+  "published": false
 }

@@ -1,0 +1,23 @@
+{
+  "stage": "candidate_for_parallel_user_validation",
+  "board": "V1 NP only; not camera or V2",
+  "version": "1.0.122-np1-identity-test",
+  "packaging_revision": 2,
+  "app_crc32": "8FD89229",
+  "usb_crc32": "40D39075",
+  "file": "V1_fused_bootloader_USB91_SD_BLE_v1.0.122-np1-identity-test_20261017T202533Z_r2.hex",
+  "sha256": "BEC699EBE16981BAFEFD3FEB1AFA8790D5AF0839B74DC556E3A51E6B3146694C",
+  "bytes": 5745164,
+  "coverage_bytes": 2088960,
+  "configuration_included": false,
+  "normalization": "LF",
+  "correction": "Explicit FF coverage for unused firmware addresses so WILDX accepts a complete fused image. Verified component bytes are unchanged.",
+  "supersedes_partial_fused_sha256": "868D1DE03ACE85DCE09B799860173BBCA67D945EEF40E1C8C9DA4D3D9CD40982",
+  "unchanged_app_sha256": "A70A35D70ABB34D7D8F11D3BD9AC868C38C1BBB1CE847E3336B3C7491F230F3F",
+  "unchanged_usb_sha256": "29DC58DE50D8089695F5FDA07A6F56DBA6BAE7047D47DBD919D2B1F0AADEF5BA",
+  "merger_regression": "PASS complete coverage, verified-byte preservation, config exclusion, missing-manifest/vector and unsafe-input rejection",
+  "firmware_rebuilt": false,
+  "hardware_access": false,
+  "ble_logging_validated": false,
+  "fused_programming_hardware_validated": false
+}
