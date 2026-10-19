@@ -1,0 +1,32 @@
+{
+  "app_crc32": "B60291EE",
+  "recovery_crc32": "6408DBB8",
+  "usb_crc32": "2E07799E",
+  "files": {
+    "V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex": {
+      "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145",
+      "bytes": 474528
+    },
+    "V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_B60291EE_CATALOG_START_FIX_20261019.hex": {
+      "sha256": "57F3ED4F0404832AF7EEEC6533206D50CBDFCB3B3BAF1773EA5E92D7B2717751",
+      "bytes": 995216
+    },
+    "V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp": {
+      "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636",
+      "bytes": 172528
+    }
+  },
+  "generation": 2,
+  "loader_abi": 4,
+  "settings_omitted": true,
+  "all_non_app_bytes_preserved": true,
+  "compiled_units": [],
+  "reused_control_native_test": "v2_catalog_available_20261017/control/test_np2_sd_control.exe",
+  "all_14_ram_regions_identical": true,
+  "semantic_vectors": 148,
+  "hardware_access": false,
+  "scope": "Control-only software/ABI regression; parent recording limits inherited, no new physical recording qualification",
+  "all_modes_lossless_qualified": false,
+  "power_improvement_claimed": false,
+  "published": false
+}

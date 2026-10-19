@@ -15,7 +15,7 @@ namespace USB512_interface
         NpBleForm bleWorkspace;
         Label workspaceStatus;
         Label advancedTarget,advancedStorageSource,advancedModeStatus;
-        Button diagnosticsButton,captureReportButton;
+        Button diagnosticsButton,captureReportButton,repairUsbCatalogButton;
         readonly Button[] usbModeButtons=new Button[3];
         bool usbModeChanging;
         string lastCaptureReport;
@@ -161,7 +161,13 @@ namespace USB512_interface
             lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=Padding.Empty;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
             llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=Padding.Empty;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
             var usbInfo=Stack(36,24,0);usbInfo.RowStyles[2].SizeType=SizeType.Absolute;
-            usbInfo.Controls.Add(ActionRow(usbQualityTestButton,usbDetails),0,0);
+            repairUsbCatalogButton=new Button {Name="repairUsbCatalog",Text="Repair SD catalog…",AutoSize=true};
+            repairUsbCatalogButton.Click+=async delegate {
+                if(!NpControlsAvailable)return;
+                await downloadWorkspace.RepairUsbCatalogAsync(devicePath);
+                UpdateStartEnabled();
+            };
+            usbInfo.Controls.Add(ActionRow(usbQualityTestButton,usbDetails,repairUsbCatalogButton),0,0);
             usbQualityContinuous.Margin=Padding.Empty;usbInfo.Controls.Add(usbQualityContinuous,0,1);
             usbHealthSummary=new Label {Name="usbHealthSummary",Dock=DockStyle.Fill,UseMnemonic=false,Margin=Padding.Empty,ForeColor=WildXTheme.Muted};usbInfo.Controls.Add(usbHealthSummary,0,2);
             var usbCard=Card("USB",null,usbInfo,true);usbCard.Name="usbHealthCard";
@@ -342,6 +348,7 @@ namespace USB512_interface
             foreach(var button in usbModeButtons)if(button!=null)button.Enabled=NpControlsAvailable;
             if(usbQualityTestButton!=null)usbQualityTestButton.Enabled=usbQualityRunning || CanTestUsb;
             if(usbQualityContinuous!=null)usbQualityContinuous.Enabled=!usbQualityRunning && CanTestUsb;
+            if(repairUsbCatalogButton!=null)repairUsbCatalogButton.Enabled=NpControlsAvailable && (mediaPreview==null || mediaPreview.IsDisposed);
             if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;
         }
         async Task SwitchUsbMode(ushort mode)

@@ -1,0 +1,36 @@
+{
+  "baseCommit": "6a4532222f25dafe1c70e395ccda1f55c68c501f",
+  "scope": "Shared USB repair and automatic compiler versioning only",
+  "workingSourceOrIndexMutated": false,
+  "compiled": false,
+  "canonicalSourceBinaryEquivalenceClaimed": false,
+  "privateFeaturesExcluded": [
+    "V1 USB Format",
+    "read-only Recover recordings",
+    "V1 StoreV2 binding",
+    "catalog/export private changes"
+  ],
+  "files": [
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
+      "sha256": "876519562F4ED90C3CAB33D4FE6F58CCDEC4A3A35C1F22D9B7EE507DCD309703"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/mainForm.WildX.cs",
+      "sha256": "308BC2C42C86918EEAC8BA599C0431BABE38E2BFFAB8478152D69FB616894B8E"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/WILDX_console.csproj",
+      "sha256": "41234C72706108B49A910639719668C852A8F6F13DB54691A5DC3E1AFC22C150"
+    },
+    {
+      "path": "build.ps1",
+      "sha256": "F73AAE06E9225A472C86C4B99C6D80B9B1CEA21B0CF603EB04F3FD39A3E707B8"
+    },
+    {
+      "path": "BuildVersion.targets",
+      "sha256": "B2F203FA614010C59D510E4AE7E101D421EF96A0B3D85074209A0DE5FE791A81"
+    }
+  ],
+  "patchSha256": "68834D5164F7B6E5CE8EB5BAF2071F57184844B00D49C08AA988B5C618688BE2"
+}

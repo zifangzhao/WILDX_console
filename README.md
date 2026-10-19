@@ -1,6 +1,8 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.37**. Complete hardware qualification is pending.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.47**. Complete hardware qualification is pending.
+
+[Latest installer](LATEST_INSTALLERS/README.md) adds **Repair SD catalog…** in USB Mode and Data Download. V2 requires the included USB **E323A06A** update, not an APP-only update. Confirmed metadata-only repair; no formatting or payload rewriting. Targeted software checks passed; no new physical repair/recording qualification. [Release scope](Note/USB_CATALOG_REPAIR_RELEASE_47_20261019.md).
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 

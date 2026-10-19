@@ -1,32 +1,34 @@
 {
-  "app_crc32": "B60291EE",
+  "usb_crc32": "E323A06A",
   "recovery_crc32": "6408DBB8",
-  "usb_crc32": "2E07799E",
+  "app_crc32": "B60291EE",
   "files": {
-    "V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex": {
-      "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145",
-      "bytes": 474528
+    "V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex": {
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9",
+      "bytes": 474836
     },
-    "V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_B60291EE_CATALOG_START_FIX_20261019.hex": {
-      "sha256": "57F3ED4F0404832AF7EEEC6533206D50CBDFCB3B3BAF1773EA5E92D7B2717751",
-      "bytes": 995216
+    "V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_B60291EE_CATALOG_REPAIR_20261019.hex": {
+      "sha256": "9DAB56E0BFBF03B48BE289F436F01A4F4A13E6F0EC503DFC69D51384D1118FDF",
+      "bytes": 1031560
     },
-    "V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp": {
-      "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636",
-      "bytes": 172528
+    "V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp": {
+      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA",
+      "bytes": 172640
     }
   },
-  "generation": 2,
+  "generation": 3,
   "loader_abi": 4,
+  "usb_flags": 3,
   "settings_omitted": true,
-  "all_non_app_bytes_preserved": true,
-  "compiled_units": [],
-  "reused_control_native_test": "v2_catalog_available_20261017/control/test_np2_sd_control.exe",
-  "all_14_ram_regions_identical": true,
-  "semantic_vectors": 148,
-  "hardware_access": false,
-  "scope": "Control-only software/ABI regression; parent recording limits inherited, no new physical recording qualification",
+  "all_non_usb_bytes_preserved": true,
+  "native_adapter_evidence": {
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_native_20261019/r2/actual_adapter.inc": "0F7DC96202019F447FAECA58AA2DD280058F43CDA751EDAB93927D5574D15849",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_native_20261019/r2/adapter.run.log": "4B060BC3B1C940B76A809E1170225C58924B7AA08E1BC1DA932C0F5C4925EF4F",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_native_20261019/r2/adapter.exe": "83851D41F03BC713EE116FA33ECA9C4BF6AD00E9C414C66471DEC56DC78633CC"
+  },
+  "integration_receipt_sha256": "A5A866B9AC8CAB398D554A2EF9850205B6AFB137E14C3B98E5A7AEEE57C2C1D7",
+  "scope": "Targeted actual-adapter metadata/EP0 software checks; recording limits inherited, no new capture qualification",
+  "hardware_validated": false,
   "all_modes_lossless_qualified": false,
-  "power_improvement_claimed": false,
   "published": false
 }

@@ -1,4 +1,24 @@
-# V2 catalog Start firmware hotfix — 2026-10-19
+# V2 USB catalog repair — 2026-10-19
+
+WILDX **1.0.0.47** adds **Repair SD catalog…** in USB Mode and Data Download.
+Install USB **E323A06A** (not an APP-only update). Choose the logger, click
+Repair, and confirm the freshly inspected card. Keep power connected.
+
+- `V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex`: USB service only.
+- `V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp`: USB update container.
+- `V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_B60291EE_CATALOG_REPAIR_20261019.hex`: matching fused HEX; retained settings omitted.
+
+Repair writes only catalog/journal metadata, not recorded payload. It does not
+format, rewind or reclaim an unknown allocation. Interrupted recordings may
+remain incomplete. Full/unknown-boundary errors remain protected.
+
+Targeted native metadata/EP0,105 actual helper and11 compiled-control checks
+passed. No new installed-pair, physical repair, recording or endurance test.
+APPB60291EE/recovery6408DBB8 and earlier recording limits are unchanged. V1
+repair firmware is not included. See `source-validation.md` for actual scope.
+Superseded USB2E/fused files are retained under `legacy/20261019_before_USB_E323A06A`.
+
+## Retained APP catalog Start fix
 
 APP **B60291EE** replaces the stale control object in published APP136172A5 with
 the checked control. It permits manual START for a harmless DEGRADED-only

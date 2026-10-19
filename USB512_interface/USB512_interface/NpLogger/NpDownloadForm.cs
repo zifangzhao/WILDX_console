@@ -21,6 +21,7 @@ namespace CE32_console
         private readonly Button calibrationButton=new Button{Text="Calibration…",AutoSize=true};
         private readonly Button format=new Button{Name="quickFormatNpSd",Text="Format card…",AutoSize=true};
         private readonly Button deleteLast=new Button{Name="deleteLastNpRecording",Text="Delete last recording…",AutoSize=true};
+        private readonly Button repairCatalog=new Button{Name="repairUsbCatalog",Text="Repair SD catalog…",AutoSize=true};
         private readonly Label cardHelp=new Label{AutoSize=true,Text="Delete and format require an SD card reader.",Margin=new Padding(8,9,0,0)};
         private readonly Button fast=new Button{Text="NP1 fast archive…",AutoSize=true};
         private readonly CheckBox convertAfterDownload=new CheckBox{Text="MP4 + WAV",Checked=true,AutoSize=true};
@@ -49,7 +50,7 @@ namespace CE32_console
             actions.Controls.Add(calibrationButton);
             calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
             actions.Controls.Add(fast);
-            var cardActions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};cardActions.Controls.AddRange(new Control[]{deleteLast,format,cardHelp});
+            var cardActions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};cardActions.Controls.AddRange(new Control[]{deleteLast,format,repairCatalog,cardHelp});
             fast.Click+=(s,e)=>{if(busy || usbBlocked)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null,sessionLabel.Text))form.ShowDialog(DialogOwner);};
             Controls.Add(records);Controls.Add(cardActions);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Top,Height=38,ColumnCount=2,Padding=new Padding(0,4,0,4)};
@@ -63,6 +64,7 @@ namespace CE32_console
             convert.Click+=async(s,e)=>await ConvertExistingAsync();
             format.Click+=async(s,e)=>await FormatSelectedAsync();
             deleteLast.Click+=async(s,e)=>await DeleteLastAsync();
+            repairCatalog.Click+=async(s,e)=>await RepairSelectedCatalogAsync();
             sources.SelectedIndexChanged+=(s,e)=>{var source=sources.SelectedItem as Source;if(source!=null&&!refreshing)boundSourcePath=source.Path;UpdateControls();};
             FormClosing+=(s,e)=>{if(busy){cancelled=true;e.Cancel=true;status.Text="Wait for the current operation to finish before closing. A catalog reset cannot be interrupted.";}};
             Shown+=(s,e)=>{if(autoDiscover){RefreshSources();enumerationTimer.Start();}};
@@ -91,8 +93,37 @@ namespace CE32_console
             if(sources.SelectedIndex<0)SelectBoundSource();
             }finally{refreshing=false;}
         }
-        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;deleteLast.Enabled=format.Enabled=!busy && source!=null && source.CanFormat;cardHelp.Visible=source==null || !source.CanFormat;cardHelp.Text=source!=null && source.Usb?"USB download is read-only. Format in BLE Mode → Recordings, or use an SD card reader.":"Delete and format require an SD card reader.";cancel.Enabled=busy && !maintenanceActive;}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;deleteLast.Enabled=format.Enabled=!busy && source!=null && source.CanFormat;repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=source==null || !source.CanFormat;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. Catalog repair requires supported USB firmware and confirmation; it does not format the card.":"Delete and format require an SD card reader.";cancel.Enabled=busy && !maintenanceActive;}
         private void SetBusy(bool value){busy=value;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
+        internal async Task RepairUsbCatalogAsync(string path) {
+            if(busy || usbBlocked || !USB512_interface.NpUsbCatalogRepair.IsEligiblePath(path))return;
+            var source=sources.Items.Cast<Source>().FirstOrDefault(s=>s.Usb && SameSource(s.Path,path));
+            if(source==null){source=new Source{Usb=true,Path=path,Label=UsbSourceLabel(path)};sources.Items.Insert(0,source);}
+            sources.SelectedItem=source;
+            await RepairSelectedCatalogAsync();
+        }
+        private async Task RepairSelectedCatalogAsync() {
+            var source=sources.SelectedItem as Source;
+            if(busy || usbBlocked || source==null || !source.Usb || !USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path))return;
+            maintenanceActive=true;cancelled=false;SetBusy(true);
+            USB512_interface.NpUsbCatalogRepair.Receipt completed=null;
+            try {
+                await PrepareSourceAsync(source);
+                using(var manager=USB512_interface.NpUsbCatalogRepair.Open(source.Path,()=>!usbBlocked && !IsDisposed,()=>cancelled)){
+                    completed=await manager.ConfirmAndRepairAsync(card=>MessageBox.Show(DialogOwner,
+                        "Repair the SD catalog on V"+manager.Generation+" "+manager.Uid+"?\r\n\r\n"+card.Description+
+                        "\r\n\r\nThis repairs catalog metadata without formatting the card. Recorded payload is not validated; interrupted recordings may remain incomplete. Keep USB and power connected until finished.",
+                        "Repair SD catalog",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)==DialogResult.Yes,
+                        message=>status.Text=message,()=>{records.Items.Clear();listedSource=null;progress.Value=0;});
+                }
+                if(completed==null)status.Text="Repair cancelled; card unchanged.";
+            }catch(Exception ex){status.Text="USB catalog repair not confirmed: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"SD catalog",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
+            finally{maintenanceActive=false;SetBusy(false);}
+            if(completed!=null){
+                await ListAsync();
+                status.Text="V"+completed.Generation+" catalog repair confirmed (metadata only), flags 0x"+completed.Flags.ToString("X8")+(completed.IsFull?" (full)":"")+". "+status.Text;
+            }
+        }
         private async Task FormatSelectedAsync() {
             var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat){status.Text="Quick Format requires removable SD media. USB external disks/readers and logger USB endpoints remain read-only.";return;}
             maintenanceActive=true;SetBusy(true);
