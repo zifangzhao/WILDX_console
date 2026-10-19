@@ -1,29 +1,25 @@
-# WILDX 1.0.0.44
+# WILDX V1 store2 rc1
 
-[Download the installer](WILDX_console-Setup-1.0.0.44.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.44-V1-store2-rc1.exe).
 
-Includes the checked V1 NP SD/BLE APP **FA2016E7**, USB **02FF93A9** and matching
-complete fused firmware. V1Camera and V2 firmware remain unchanged.
+Exact checked console **1.0.0.44**, APP **654824DE**, USB **FACEA0D2**, ABI **258**.
+The executable's embedded version is preserved; **V1 store2 rc1** identifies this
+distinct package. No application/firmware rebuild or source integration.
+V1Camera and V2 firmware/targets remain unchanged.
 
-**Large USB downloads remain unresolved:** large replies on the current hubbed
-bench still fail Windows 31 after two bounded retries. Small CRC-bound reads,
-checked cleanup and APP return pass. This is not full USB/all-mode qualification.
+FS2 needs explicit fresh format/epoch; no silent legacy migration. Older writers
+must refuse FS2. Download uses checked role3 full-speed compatibility at about
+**0.83 MiB/s**; capture roles retain high speed. Normal high-speed download is
+unqualified. Five-minute P1+P2/20 kHz with reconnect and sampled72MiB passed,
+along with shorter full strict NP/IMU exports, transient descriptor unavailability
+through Mount and START-remount/safe append, and production USB download/export.
+This is not full10GB, physical-removal, camera, implant or all-mode endurance
+qualification. P1+P2/30 kHz sustained remains failed on the tested card.
 
-P1+P2/15 kHz completed 810.105 seconds/18.84 GiB with BLE preview/status/reconnect
-and clean Stop/catalog; short P1+P2/20 kHz also passed. Two saved-data windows
-passed, not full-extent readback. Physical Format/power-cut, other profiles,
-camera and fused programming were not qualified in this cycle.
+One NSIS pass; all **44 extracted payload files** matched. Setup includes
+**Run WILD-X**. This root contains one installer. Previous package and original
+metadata are [archived](legacy/20261019_before_V1_store2_rc1/README.md).
 
-Exact checked owner EXE packaged without Compile. The owner reports 495 targeted
-software checks; main GUI construction passed and all 40 installer files matched
-after extraction. Default preview icons are an accepted cosmetic limitation.
-Dirty-tree/selected-input provenance is documented; no exact all-source
-reproduction claim is made.
-
-See [release details](../Note/RELEASE_1.0.0.44_20261018.md),
-[V1 firmware and limits](../Firmware/V1/README.md),
-[manifest](release-manifest.json) and [checksums](SHA256SUMS.txt).
-
-Setup includes **Run WILD-X**. This root contains one final installer.
-The previous release and original metadata are
-[archived here](legacy/20261018_before_1.0.0.44/README.md).
+See [release details](../Note/RELEASE_V1_STORE2_RC1_20261019.md),
+[V1 files/evidence](../Firmware/V1/README.md), [manifest](release-manifest.json)
+and [checksums](SHA256SUMS.txt).

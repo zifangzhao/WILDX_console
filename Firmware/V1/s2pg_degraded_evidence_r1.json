@@ -1,0 +1,88 @@
+{
+  "result": "actual_degraded_mount_and_start_remount_pre_capture_cache_zero_full_append_strict_export_pass",
+  "bench_uid": "001D00065942500B20313354",
+  "card_cid": "1B534D4A453259373010B35487A1A300",
+  "app_crc": "654824DE",
+  "usb_crc": "FACEA0D2",
+  "console_sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+  "fault": {
+    "kind": "Nonpersistent HAL_SD_ReadBlocks error for paired record0 descriptor sectors128/129",
+    "hal_entry": "0802BE1C",
+    "begin_entry": "08055648",
+    "stages": "One actual Mount, then actual START remount; exact pair failed once in each stage",
+    "hits128": 2,
+    "hits129": 2,
+    "begin_seen": 1,
+    "at_begin": {"cache_count":27,"first_end":0,"frontier":42565632,"before_capture":1},
+    "all_breakpoints_removed_before_capture": true,
+    "persisted_descriptor_bytes_changed": false,
+    "pure_hook_abi_state_owner_regression": "PASS before hardware; no target/probe configured"
+  },
+  "record": {
+    "index": 27,
+    "session": 1792379723,
+    "profile": "P1+P2/20kHz",
+    "start": 42565632,
+    "payload_start": 42582016,
+    "end": 42598400,
+    "state": 3,
+    "fault": 0,
+    "chunks": 128,
+    "mount_sent_once": true,
+    "start_sent_once": true,
+    "all_prior27_extents_preserved": true
+  },
+  "metadata": {
+    "range": "LBA112..183,36864bytes",
+    "changed_sectors_only": [112,113,182,183],
+    "old114_through181_byte_identical": true,
+    "before_sha256": "19DC50DFE30BC02321B7C11A846D868E88F5CDDF1B37BC0A81FDB0DE322E9631",
+    "after_sha256": "CEB24E5077A04F915EB9AA9BAA338E43833E69F8A119667DD5724EE53E4C65C7"
+  },
+  "readback": {
+    "transport": "Existing stopped SD READ mailbox/SWD, not USB",
+    "bytes": 16777216,
+    "milliseconds": 29969,
+    "sha256": "31FF0BEC2F10B14441116C26A9021113E2FE7C0CE597F7449B927800C6E25F1A",
+    "actual_r7_strict_export_checks": 30236,
+    "all8MiB_payload_consumed_sequentially": true,
+    "frames_per_probe": 65525,
+    "frame_counter_lfp_relock_errors": 0,
+    "valid_imu_mag_env_snapshots": [128,128,0],
+    "missing_saved_imu_publications": 0,
+    "startup_discarded_bytes_p1_p2": [642,614],
+    "prior27_exporter_checks_metadata_only": true,
+    "record0_descriptor_copies_unchanged": true
+  },
+  "final": {
+    "epoch": "000D47F00A459C8D",
+    "generation": 372,
+    "count": 28,
+    "frontier": 42598400,
+    "state": 3,
+    "fault": 0,
+    "ready": 1,
+    "live": 0,
+    "no_halt_observer_pass": true,
+    "all_owned_debug_ble_reader_observer_processes_terminal": true
+  },
+  "sources": {
+    "fault_hil": "source_snapshot_s2pg_degraded_r1/TestStoreV2Hil.cs",
+    "server_fence": "source_snapshot_s2pg_degraded_r1/fence_s2pg_degraded_r1.cfg",
+    "hook": "source_snapshot_s2pg_degraded_r1/s2pg_degraded_hook.tcl",
+    "pure_hook_test": "source_snapshot_s2pg_degraded_r1/test_s2pg_degraded_hook.cfg",
+    "saved_reader": "source_snapshot_s2pg_degraded_r1/read_fs2_record_used.py",
+    "reader_observer": "source_snapshot_s2pg_degraded_r1/read_maintenance_used.cfg",
+    "strict_export_helper": "TestDegradedCapture.cs"
+  },
+  "sha256": {
+    "bench_hil/s2pg_degraded_append_r1/result.json": "C127879EEE0616CCA76684969B771211D6CABC9AB61D94B9217D83600F46183A",
+    "bench_hil/s2pg_degraded_saved_r1/result.json": "8F57B9EE56D7C7F702219B7EE835AB8D3BC55F94180F6F5090DEF8593B0605B2",
+    "s2pg_degraded_export_r1/validation.json": "20549B8C9ABC1676B03B0DD5BE4C2DC6A4FC45884CF25DE41E7441313CBF130C",
+    "TestDegradedCapture.cs": "A12664E794F28F6A72C71270F5EFDB6E0CF5A8C72CAFD9656CDCE81508216580",
+    "host_full_tests_r3/TestDegradedCapture.exe": "0BA3EAAF23D38AED4927BB4A66E5A9A524DFAAEA1ED2CBA2C764B004F279E92F"
+  },
+  "limits": "Actual transient read-unavailability during both Mount and START remount, not persisted CRC damage or physical removal. Prior27 payloads are not wholly re-read. IMU is latest-value snapshots, not lossless FIFO; NP ADC-bit integrity unknown. No new product build, flash/reset/format, USB transfer test, endurance, camera, packaging or publication this turn. Already packaged component/fused/console bytes remain unchanged.",
+  "goal_complete": false,
+  "published": false
+}

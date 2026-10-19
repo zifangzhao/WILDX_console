@@ -1,36 +1,46 @@
-# V1 NP SD/BLE release — 2026-10-18
+# WILDX V1 store2 rc1 — 2026-10-19
 
-Old V1 Neuropixels board, 91k/91k divider. APP **FA2016E7**, USB **02FF93A9**,
-WILDX **1.0.0.44**. V1Camera and V2 are separate targets.
+Frozen checked console **1.0.0.44**, APP **654824DE**, USB **FACEA0D2**, ABI **258**.
+This is a distinct NP/store2 candidate with the executable's embedded version
+preserved. No application or firmware rebuild, version bump, re-merge or reseal.
+V1Camera and V2 firmware/targets remain unchanged.
 
-- [APP-only](V1_SD_BLE_APP_FA2016E7_20261018.hex): preserves USB, recovery and settings.
-- [USB service](V1_USB_service_02FF93A9_20261018.hex): separate service programming workflow.
-- [Recovery + USB](V1_DFU_boot_USB02FF93A9_20261018.hex): separate service programming workflow.
-- [Complete fused image](V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex): checked recovery/USB/APP; configuration excluded.
+FS2 requires an **explicit fresh format and epoch**. It does not silently migrate
+legacy recordings; older writers must refuse FS2 media. Formatting erases data.
+USB download uses the checked role3 **full-speed compatibility mode**, about
+**0.83 MiB/s**. Capture roles retain high speed. Normal high-speed download remains
+unqualified; this is not an electrical USB diagnosis.
 
-**Large USB downloads remain unresolved:** 522,272-byte replies on the current
-hubbed bench still fail with Windows 31 after two bounded retries. Small CRC-bound
-reads, checked cleanup and APP return pass; failed/partial bytes are rejected.
-This is a bounded operational SD/BLE development release, not complete USB,
-all-probe-mode, camera or implant qualification.
+The exact current pair passed five minutes of P1+P2/20 kHz, live BLE reconnect,
+and three saved-data windows totaling 72 MiB. The roughly 10 GB capture was not
+fully read back. Shorter strict NP/IMU exports and production USB download/export
+passed. Actual transient descriptor-read unavailability was exercised through
+Mount and START remount, followed by safe append and full new-extent readback.
+This is not physical-removal, camera, implant or all-mode endurance qualification.
+P1+P2/30 kHz sustained recording failed on this card. IMU uses latest-value
+snapshots; independent ADC-bit integrity is not established. Earlier tests of
+other modes retain their original binary scope. APP60EC609E is excluded.
 
-P1+P2/15 kHz ran 810.105 seconds/18.84 GiB with BLE status/preview, reconnect and
-clean Stop/catalog. Short P1+P2/20 kHz also passed. Independent readback checked
-two windows of 128 chunks each: 65,535 frames/probe/window with zero known
-protocol-field/counter/cadence errors. Full-extent readback remains unverified.
-APP/USB installation was independently read back; boot/configuration were unchanged.
-Physical Format, power-cut, other profiles/custom maps and fused programming were
-not qualified in this cycle. Recovery is explicit/read-only; uncertain extents remain protected.
+The four firmware files, checked EXE and companion DLL are copied byte-for-byte
+from the owner's frozen delivery. Fused firmware was already accepted by the
+actual r7 loader; configuration is excluded. Use the APP-only file with the APP
+updater. APP-only updates do not install USB/recovery. Service/recovery/fused
+images require their separate programming workflow; do not mass-erase.
 
-Use only APP-only files through the APP updater. This does not install the USB
-service. Fused/service files require their separate documented workflow; never
-mass-erase or use V1 files on V2. Fused coverage is 2,088,960 bytes, excluding
-configuration; mass erase would still erase configuration.
+Owner evidence is preserved under Firmware/V1. Original candidate flags report
+its pre-installer state; the new release manifest and publication receipt record
+this publication separately. No hardware access, application execution, new
+qualification cycle or source integration is performed by this packaging step.
+The console build input hash ledger is retained; clean source reproducibility
+and inclusion of subsequent dirty edits are not claimed.
 
-[Exact owner handoff](source-manifest.json), [owner evidence/limits](source-README.md)
-and [console build receipt](source-console-build-receipt.json) are retained. The
-console comes from a dirty tree with two frozen overrides, without a complete
-precompile snapshot. Exact source reproducibility is not claimed. Main GUI
-construction passed; optional resource/icon loss was accepted by the owner.
 
-Superseded artifacts are [archived](legacy/app122_before_sd_hardening_20261018/README.md).
+- [APP-only](V1_SD_BLE_app_only_store2_rc1.hex)
+- [USB service](V1_USB_service_role3_FS_store2_rc1.hex)
+- [Recovery + USB](V1_recovery_USB_role3_FS_store2_rc1.hex)
+- [Complete fused image](V1_fused_bootloader_USB_SD_BLE_store2_rc1.hex)
+- [Frozen owner handoff](source-candidate.json)
+- [Exact-pair five-minute evidence](current_endurance20_evidence_r1.json)
+- [Production USB download evidence](usb_fs_current_evidence_r1.json)
+- [Degraded Mount/START-remount evidence](s2pg_degraded_evidence_r1.json)
+- [Previous V1 release](legacy/20261019_before_store2_rc1/README.md)

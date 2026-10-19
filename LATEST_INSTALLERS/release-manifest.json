@@ -1,15 +1,16 @@
 {
   "version": "1.0.0.44",
+  "releaseId": "V1_NP_STORE2_RC1_APP654824DE_USBFACEA0D2_20261019",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.44.exe",
-    "sha256": "7C41A9D8546D75A244496CF5C7CBAE08E84163CE18F005952EC6597770346F8C",
-    "bytes": 6338025
+    "file": "WILDX_console-Setup-1.0.0.44-V1-store2-rc1.exe",
+    "sha256": "DEB62E76325CF13F5839D0C64EF1ECE87176F59117A126668A27DABCD8C30FB8",
+    "bytes": 6464355
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "1F987A79F441D95E99DEB4E815F0C8768A2D4AE67FC342D2E90A7F83892E0F17",
-      "bytes": 1458176
+      "sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+      "bytes": 1485312
     },
     {
       "path": "WILDX_console.exe.config",
@@ -78,52 +79,72 @@
     },
     {
       "path": "Firmware/README.md",
-      "sha256": "5B758DE3FEB52A0C3535BEC77B6E99AE268233844DF3D62F389C0549C7A7C985",
-      "bytes": 1870
+      "sha256": "ACB606B5E16572C93EC8B1AF032DE5E8D5D26AAA6E1E416AE811441B1DC9E1ED",
+      "bytes": 636
     },
     {
       "path": "Firmware/releases.json",
-      "sha256": "4265039C0BB20AC4C1E055E4370F1CD17B17912255CFD9888175DC0D2DA5A827",
-      "bytes": 8031
+      "sha256": "A789659D611DCF4036AAA5C72B28D0C5924930A0D16320A62E61155DD9013AA7",
+      "bytes": 8691
+    },
+    {
+      "path": "Firmware/V1/component_acceptance.json",
+      "sha256": "7931DDE4B9545C6B19F6F4AF0B7E6261D0199AF6C61155802BD86995EEA93D84",
+      "bytes": 23098
+    },
+    {
+      "path": "Firmware/V1/current_endurance20_evidence_r1.json",
+      "sha256": "867A0811F1F9082A364C2FA29FB12FE8AA0197B42771A1956FBBD7F62F0F12E8",
+      "bytes": 4071
+    },
+    {
+      "path": "Firmware/V1/delivery_candidate_r1_loader.json",
+      "sha256": "C44182606FCFB87C3B026C8FCAD62E8C57BF95D613AD823573FFC0BE074A4898",
+      "bytes": 528
     },
     {
       "path": "Firmware/V1/README.md",
-      "sha256": "6C076FA90E4F694C509A4F72DD35CA65988BEE4F152B329A298653D15EDAA6C8",
-      "bytes": 2322
+      "sha256": "7FB77055B01CA3CBEAEF6EA5071A5DBE155001BD39C21B1319F381729D31C2F1",
+      "bytes": 2833
+    },
+    {
+      "path": "Firmware/V1/s2pg_degraded_evidence_r1.json",
+      "sha256": "042E30921C6FFA787D254D990AF3B0EA78EEC20F8491A580FD583FB54835AE01",
+      "bytes": 4138
+    },
+    {
+      "path": "Firmware/V1/source-candidate.json",
+      "sha256": "38771AD2F932DE11689E160EF110B1F454297A1FC9CD17A71D6BE787095380FB",
+      "bytes": 3954
     },
     {
       "path": "Firmware/V1/source-console-build-receipt.json",
-      "sha256": "FE8FDC34C3549336A2DD65E16957886D430D43BBA5F515AE97E02BD6CA243D7D",
-      "bytes": 2166
+      "sha256": "E2317EA683E99FA8D792003F74890317551441ACF80F38F9909F1CA7BCAE27EA",
+      "bytes": 21294
     },
     {
-      "path": "Firmware/V1/source-manifest.json",
-      "sha256": "5CDEF6A9268F2E0D65056ECE94A055E403114A51C7CC95D1D45C20BD138C4CB8",
-      "bytes": 4927
+      "path": "Firmware/V1/usb_fs_current_evidence_r1.json",
+      "sha256": "475AA5F58D04E067134BDC6A621218F75E1FF56A572939119579299EA6776065",
+      "bytes": 5023
     },
     {
-      "path": "Firmware/V1/source-README.md",
-      "sha256": "21A42CA6EECF199907BCDC6EAE9B6F7E92AB09723F44303B3B15B8502C52A86D",
-      "bytes": 2618
-    },
-    {
-      "path": "Firmware/V1/V1_DFU_boot_USB02FF93A9_20261018.hex",
-      "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B",
-      "bytes": 999392
-    },
-    {
-      "path": "Firmware/V1/V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex",
-      "sha256": "33A7A04B53BDDFA4FEBC8F0A4BC5B4E5C079174663951EDE89C38282313BAFF2",
+      "path": "Firmware/V1/V1_fused_bootloader_USB_SD_BLE_store2_rc1.hex",
+      "sha256": "F454BE0498596845817685A0284F5D2DF4749E67488EDFFED5B89F134BED2FC8",
       "bytes": 5745164
     },
     {
-      "path": "Firmware/V1/V1_SD_BLE_APP_FA2016E7_20261018.hex",
-      "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C",
-      "bytes": 766420
+      "path": "Firmware/V1/V1_recovery_USB_role3_FS_store2_rc1.hex",
+      "sha256": "1F4761EB461B2C8C7B6EF3227813EA2BFE6AD9F96C1935B13608C1FC9F0DD9D1",
+      "bytes": 1820360
     },
     {
-      "path": "Firmware/V1/V1_USB_service_02FF93A9_20261018.hex",
-      "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F",
+      "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF",
+      "bytes": 804887
+    },
+    {
+      "path": "Firmware/V1/V1_USB_service_role3_FS_store2_rc1.hex",
+      "sha256": "27EB78D0321B7C82DD752462B4CADD8FA4FC7EA53FE880CCE6C3E216492C43E7",
       "bytes": 699517
     },
     {
@@ -207,16 +228,25 @@
       "bytes": 448461
     }
   ],
-  "extractedPayloadFilesVerified": 40,
+  "extractedPayloadFilesVerified": 44,
   "installerExecuted": false,
   "runAfterInstallCheckbox": true,
-  "application": "WILD-X Neuropixels Console",
-  "releaseDate": "2026-10-18",
-  "releaseTag": "V1_SD_BLE_STORAGE_HARDENING_FA2016E7_USB02FF93A9_20261018",
-  "publicationBaseCommit": "7e71bc617813dca46756d6ea18b9006dea4772e3",
+  "nsisPackagingPasses": 1,
   "applicationCompiledByPackager": false,
   "firmwareRebuiltOrResealedByPackager": false,
-  "nsisPackagingPasses": 1,
+  "application": "WILD-X Neuropixels Console",
+  "releaseDate": "2026-10-19",
+  "releaseLabel": "V1 NP store2 rc1",
+  "embeddedApplicationVersionPreserved": true,
+  "publicationBaseCommit": "183b124d61f4344a669a2512e04c0b8791410442",
+  "sourceIntegration": false,
+  "firmware": {
+    "appCrc32": "654824DE",
+    "usbCrc32": "FACEA0D2",
+    "loaderAbi": 258,
+    "fusedSha256": "F454BE0498596845817685A0284F5D2DF4749E67488EDFFED5B89F134BED2FC8",
+    "configurationIncluded": false
+  },
   "compiledSources": {
     "gui": null,
     "export": [
@@ -278,27 +308,39 @@
     ]
   },
   "guiSourceProvenance": {
-    "completePrecompileLedgerAvailable": false,
+    "ownerBuildReceipt": "Firmware/V1/source-console-build-receipt.json",
+    "inputHashLedgerAvailable": true,
     "canonicalSourceEquivalenceClaimed": false,
-    "description": "Owner Compile from dirty canonical tree plus two frozen overrides. Exact checked binary distributed; selected input hashes and known snapshot gap are documented.",
-    "ownerReceipt": "Firmware/V1/source-console-build-receipt.json",
-    "ownerExecutableSha256": "1F987A79F441D95E99DEB4E815F0C8768A2D4AE67FC342D2E90A7F83892E0F17"
+    "owningBuild": "console_build_r7",
+    "subsequentDirtyWorkIntegrated": false,
+    "firmwareNoticeSourceMatchesFrozenInput": true
   },
   "validation": {
-    "ownerReportedTargetedSoftwareChecks": 495,
-    "ownerReportedEvidence": {
-      "sd_ble_endurance": "P1+P2 at15kHz,810.105s/18.84GiB,clean DONE/fault0,status and preview traffic,BLE reconnect while chunks advanced,prior4 extents preserved,20k profile restored",
-      "short_sd": "P1+P2 at20kHz,5408chunks,clean Start/progress/Stop/catalog",
-      "saved_data_windows": "Independently read SD through stopped foreground READ mailbox without halt/reset/card writes. First128chunks of20k recording and last128chunks of15k endurance: each65535frames/probe,zero sync,heartbeat,fill,fixed,counter,cadence errors; full_extent=false",
-      "usb": "Small CRC-bound544-byte wire reply passed. Large522272-byte reply still fails Windows31 over current hub after2 bounded checked retries. SD/backend error count0. Checked cancellation/idle and normal APP return passed",
-      "software": "495 read-recovery source/native-seam/delivered-IL checks; canonical checked-retirement fixture; inherited canonical storage fault matrix and recovery/format/profile targeted checks",
-      "component_installation": "Fresh independent attachment verified complete installed APP and USB body+manifest. Boot and retained configuration unchanged after USB-only installation"
-    },
-    "packagerMainGuiConstructorPassed": true,
+    "extractedPayloadFilesMatched": 44,
+    "nsisPackagingPasses": 1,
     "packagerHardwareAccess": false,
-    "allExtractedPayloadFilesMatched": 40
+    "newQualificationCycle": false,
+    "installerExecuted": false,
+    "ownerEvidence": "Firmware/V1/source-candidate.json",
+    "frozenOwnerLoaderReceipt": "Firmware/V1/delivery_candidate_r1_loader.json",
+    "exactPairFiveMinuteEvidence": "Firmware/V1/current_endurance20_evidence_r1.json"
   },
-  "firmwareLimits": "V1 NP91k/91k development candidate, not camera or V2. Operational SD/BLE evidence is limited to P12/15k endurance and shortP12/20k plus two bounded saved-data windows. Not complete18.84GiB readback, all NP modes, custom maps, physical power-cut, continuous50fps/camera or implant qualification. Current hubbed large USB download remains unresolved; no failed bytes accepted and no silent repair/relock. Recovery is read-only and uncertain extents remain protected; no silent new-format migration or universal broken-catalog write admission. USB Format is software-checked but not physically executed in this cycle. Fused loader acceptance passed offline; fused programming not hardware-tested. Do not describe as flawless or all-mode fully validated.",
-  "knownGuiResourceLimit": "Compile-only output omits the three empty/generated resx resource sets and optional Waveform.ico. Owning source audit confirms icon has SystemIcons.Application fallback. Main accepts cosmetic default-icon limitation for this urgent scoped release; no rebuild or binary graft.",
-  "experimentalV2OverwriteIncluded": false
+  "firmwareLimits": [
+    "Development/NP target only; no new camera qualification",
+    "FS2 format initializes a new versioned layout; no automatic legacy migration; older writers must refuse it",
+    "Transient read-fault and controlled MCU reset are not physical battery/card-removal qualification",
+    "P12/30 sustained backlog on this card remains a failed mode; not released as passed",
+    "Latest-value IMU snapshots, not lossless FIFO; NP source has no ADC-bit payload checksum",
+    "Five-minute endurance payloads were sampled, not fully read back",
+    "Normal high-speed download unqualified; compatibility mode is about0.83MiB/s",
+    "Portable checked console, not an installed/visual or installer qualification",
+    "Fused recovery rewrite is not implant-update qualified"
+  ],
+  "firmwareTestedScope": "Current r7/APP6548 finite P12/20k NP+IMU full export, actual transient descriptor unavailability during Mount AND START-remount with observed cache-zero Begin before capture and full new append/export, full84MiB USB reference and direct record26 strict USB export, exact prior extent preservation/APP return. Exact current pair subsequently passed one five-minute P12/20k run/152448chunks/fault0/liveBLEreconnect and three384-chunk saved windows/72MiB with actual r7 validators, not full10GB. Earlier B845/r5 other NP-mode/P123-15k evidence retains its actual binary scope. Additional acceptance changed no packaged binary bytes.",
+  "usbPolicy": "Role3-only full-speed compatibility download; capture roles stay high-speed. Exact checked compile flag NP_USB_DOWNLOAD_FS_DIAGNOSTIC=1; default0 is not this candidate.",
+  "v1CameraAndV2AssetsAndTargetsUnchanged": true,
+  "excludedFirmware": [
+    "APP60EC609E power trial"
+  ],
+  "sourceCandidateFlagsAreHistorical": true
 }

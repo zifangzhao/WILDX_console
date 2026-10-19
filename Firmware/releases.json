@@ -7,44 +7,44 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_SD_BLE_STORAGE_HARDENING_FA2016E7_USB02FF93A9_20261018",
+      "release": "V1_NP_STORE2_RC1_APP654824DE_USBFACEA0D2_20261019",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "Operational SD/BLE development candidate; bounded validation, not all-mode or implant qualified",
-      "appVersion": "1.0.122-storage-hardening",
-      "usbVersion": "1.0.91-checked-download",
+      "stage": "V1 NP store2 rc1 development candidate; bounded checked pair",
+      "appVersion": "build 654824DE (store2 rc1)",
+      "usbVersion": "build FACEA0D2 (role3 full-speed)",
       "recoveryVersion": "Included in fused HEX; version not reported",
-      "appCrc32": "FA2016E7",
-      "usbCrc32": "02FF93A9",
+      "appCrc32": "654824DE",
+      "usbCrc32": "FACEA0D2",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_SD_BLE_APP_FA2016E7_20261018.hex",
-        "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C"
+        "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
+        "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
       },
       "files": [
         {
-          "path": "V1/V1_SD_BLE_APP_FA2016E7_20261018.hex",
-          "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C"
+          "path": "V1/V1_fused_bootloader_USB_SD_BLE_store2_rc1.hex",
+          "sha256": "F454BE0498596845817685A0284F5D2DF4749E67488EDFFED5B89F134BED2FC8"
         },
         {
-          "path": "V1/V1_USB_service_02FF93A9_20261018.hex",
-          "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F"
+          "path": "V1/V1_recovery_USB_role3_FS_store2_rc1.hex",
+          "sha256": "1F4761EB461B2C8C7B6EF3227813EA2BFE6AD9F96C1935B13608C1FC9F0DD9D1"
         },
         {
-          "path": "V1/V1_DFU_boot_USB02FF93A9_20261018.hex",
-          "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B"
+          "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
+          "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
         },
         {
-          "path": "V1/V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex",
-          "sha256": "33A7A04B53BDDFA4FEBC8F0A4BC5B4E5C079174663951EDE89C38282313BAFF2"
+          "path": "V1/V1_USB_service_role3_FS_store2_rc1.hex",
+          "sha256": "27EB78D0321B7C82DD752462B4CADD8FA4FC7EA53FE880CCE6C3E216492C43E7"
         }
       ],
-      "limits": "V1 NP91k/91k development candidate, not camera or V2. Operational SD/BLE evidence is limited to P12/15k endurance and shortP12/20k plus two bounded saved-data windows. Not complete18.84GiB readback, all NP modes, custom maps, physical power-cut, continuous50fps/camera or implant qualification. Current hubbed large USB download remains unresolved; no failed bytes accepted and no silent repair/relock. Recovery is read-only and uncertain extents remain protected; no silent new-format migration or universal broken-catalog write admission. USB Format is software-checked but not physically executed in this cycle. Fused loader acceptance passed offline; fused programming not hardware-tested. Do not describe as flawless or all-mode fully validated.",
+      "limits": "V1 NP/91k+91k development candidate only. FS2 requires explicit fresh format/epoch; no silent legacy migration, and old writers must refuse FS2. Role3 USB download uses checked slower full-speed compatibility (~0.83 MiB/s); capture roles retain high speed; normal high-speed download unqualified. Exact pair passed five-minute P12/20k with reconnect and sampled72MiB, shorter full strict NP/IMU exports, transient descriptor-read unavailability through Mount and START-remount with safe append/full readback, and production FS USB download/export. Not full10GB, physical-removal, camera, implant or all-mode endurance qualification; P12/30 sustained failed on this card. IMU is latest-value snapshots; no independent ADC-bit integrity claim. APP60EC609E power trial excluded.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 272336,
-        "codeCrc32": "FA2016E7",
-        "buildIdHex": "6630396433303531666335636535363665303138636633636665316461663264",
+        "bytes": 286012,
+        "codeCrc32": "654824DE",
+        "buildIdHex": "3833643434356263626333396334323666363332623962633832356333656265",
         "manifestFlags": 0,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -53,13 +53,23 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 248552,
-        "codeCrc32": "02FF93A9",
-        "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+        "codeCrc32": "FACEA0D2",
+        "buildIdHex": "6666353238346363613264333438373864656132336166386564333135313662",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272336,
+          "codeCrc32": "FA2016E7",
+          "buildIdHex": "6630396433303531666335636535363665303138636633636665316461663264",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -92,6 +102,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "02FF93A9",
+          "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,

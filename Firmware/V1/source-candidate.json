@@ -1,0 +1,74 @@
+{
+  "result": "checked_np_sd_ble_fs_usb_portable_candidate_packaged_not_published",
+  "app_crc": "654824DE",
+  "usb_crc": "FACEA0D2",
+  "abi": 258,
+  "component_payloads_rebuilt": false,
+  "component_payloads_changed": false,
+  "configuration_included": false,
+  "firmware_files": [
+    "V1_SD_BLE_app_only_store2_rc1.hex",
+    "V1_USB_service_role3_FS_store2_rc1.hex",
+    "V1_recovery_USB_role3_FS_store2_rc1.hex",
+    "V1_fused_bootloader_USB_SD_BLE_store2_rc1.hex"
+  ],
+  "usb_policy": "Role3-only full-speed compatibility download; capture roles stay high-speed. Exact checked compile flag NP_USB_DOWNLOAD_FS_DIAGNOSTIC=1; default0 is not this candidate.",
+  "ram_evidence": {
+    "app": "app_build_r5 inherited general0x17eb0/0x18000, stack8192, capture banks unchanged",
+    "usb": "usb_fs_build_r1/scope_receipt.json general100048/114688, fixed banks unchanged"
+  },
+  "validation_evidence": [
+    "s2pg_evidence_r1.json",
+    "s2pg_fault_capture_evidence_r1.json",
+    "usb_fs_current_evidence_r1.json",
+    "s2pg_degraded_evidence_r1.json",
+    "current_endurance20_evidence_r1.json",
+    "component_acceptance.json"
+  ],
+  "evidence_root": "..",
+  "tested_scope": "Current r7/APP6548 finite P12/20k NP+IMU full export, actual transient descriptor unavailability during Mount AND START-remount with observed cache-zero Begin before capture and full new append/export, full84MiB USB reference and direct record26 strict USB export, exact prior extent preservation/APP return. Exact current pair subsequently passed one five-minute P12/20k run/152448chunks/fault0/liveBLEreconnect and three384-chunk saved windows/72MiB with actual r7 validators, not full10GB. Earlier B845/r5 other NP-mode/P123-15k evidence retains its actual binary scope. Additional acceptance changed no packaged binary bytes.",
+  "limits": [
+    "Development/NP target only; no new camera qualification",
+    "FS2 format initializes a new versioned layout; no automatic legacy migration; older writers must refuse it",
+    "Transient read-fault and controlled MCU reset are not physical battery/card-removal qualification",
+    "P12/30 sustained backlog on this card remains a failed mode; not released as passed",
+    "Latest-value IMU snapshots, not lossless FIFO; NP source has no ADC-bit payload checksum",
+    "Five-minute endurance payloads were sampled, not fully read back",
+    "Normal high-speed download unqualified; compatibility mode is about0.83MiB/s",
+    "Portable checked console, not an installed/visual or installer qualification",
+    "Fused recovery rewrite is not implant-update qualified"
+  ],
+  "files": {
+    "Console/NpV2SdDatExport.dll": {
+      "bytes": 239616,
+      "sha256": "A396530AAD81A5C8BA6FDC8086FC1FB2642A2E4E34C52E50392AE8763FE32A2F"
+    },
+    "Console/WILDX_console.exe": {
+      "bytes": 1485312,
+      "sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA"
+    },
+    "Firmware/V1/V1_fused_bootloader_USB_SD_BLE_store2_rc1.hex": {
+      "bytes": 5745164,
+      "sha256": "F454BE0498596845817685A0284F5D2DF4749E67488EDFFED5B89F134BED2FC8"
+    },
+    "Firmware/V1/V1_recovery_USB_role3_FS_store2_rc1.hex": {
+      "bytes": 1820360,
+      "sha256": "1F4761EB461B2C8C7B6EF3227813EA2BFE6AD9F96C1935B13608C1FC9F0DD9D1"
+    },
+    "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex": {
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    "Firmware/V1/V1_USB_service_role3_FS_store2_rc1.hex": {
+      "bytes": 699517,
+      "sha256": "27EB78D0321B7C82DD752462B4CADD8FA4FC7EA53FE880CCE6C3E216492C43E7"
+    }
+  },
+  "firmware_version_metadata_unchanged": true,
+  "actual_packaged_console_fused_and_app_loader_accepted": true,
+  "loader_receipt": "../delivery_candidate_r1_loader.json",
+  "loader_receipt_sha256": "C44182606FCFB87C3B026C8FCAD62E8C57BF95D613AD823573FFC0BE074A4898",
+  "latest_promoted": false,
+  "published": false,
+  "push_eligible": false
+}
