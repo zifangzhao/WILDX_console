@@ -1,0 +1,8 @@
+BASELINE REPRO: fresh Ready + V1 FS2 ->0xbc timeout -> disconnect/reset
+FIXED: V1 Ready/FS2/selected flags remain connected; no0xbc
+FIXED: reconnect replaces stale Recording with fresh Ready
+CONTROL: optional media timeout stays local/unconfirmed
+V2: advertised identity request retained
+V2: existing identity timeout failure behavior retained
+MANDATORY: timeout/protocol mismatch fail closed, unknown state, Start disabled
+PASS 28 isolated actual-handler/control checks; simulated GATT only; no hardware or recorder mutations.

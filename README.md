@@ -61,7 +61,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX high-speed FS2 r7](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.44-V1-HS-FS2-r7.exe), published at the user’s request as an **unverified matched stack**, with the frozen r7 GUI (embedded1.0.0.44), APP654824DE, high-speed USB02FF93A9, recovery and matching fused/component HEX. The matching BLE/FS2 GUI is included. The same HS service/r7 passed84MiB at41.17MiB/s on the corrected direct path using a separate private APP; complete exact bundled-pair acceptance remains pending. See [scope and limits](Note/RELEASE_V1_HS_FS2_R7_20261019.md). V1Camera/V2 remain unchanged, and the latest root contains one installer.
+The current installer is [WILDX BLE connection fix](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.44-V1-HS-FS2-BLE-fix.exe), embedded version 1.0.0.44. It fixes the V1 FS2 connection timeout after Ready; 28 focused checks and all 45 extracted payload files passed. The high-speed firmware bundle is unchanged and the complete matched stack remains unverified. See [fix and validation](Note/BLE_V1_FS2_CONNECTION_FIX_20261019.md) and [firmware scope](Firmware/V1/README.md). The latest root contains one final installer.
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 

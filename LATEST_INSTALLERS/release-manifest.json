@@ -1,15 +1,15 @@
 {
   "version": "1.0.0.44",
-  "releaseId": "V1_HS_FS2_R7_APP654824DE_USB02FF93A9_UNVERIFIED_20261019",
+  "releaseId": "V1_HS_FS2_BLE_FIX_APP654824DE_USB02FF93A9_UNVERIFIED_20261019",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.44-V1-HS-FS2-r7.exe",
-    "sha256": "E95383F57E1AA3C1E76BC45C1960586F9ACE9A4CD3F275AB802935D3FFC32B0B",
-    "bytes": 6387852
+    "file": "WILDX_console-Setup-1.0.0.44-V1-HS-FS2-BLE-fix.exe",
+    "sha256": "F80503E9A9A2BC1F695AD3CBF60D7278E382DC75F5699F79A3F2EC15FE1D4056",
+    "bytes": 6387850
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+      "sha256": "03228EC8E7D5B2C41847C86318DCCE9FC8CECE76ADC08A600B6921C54D60AB41",
       "bytes": 1485312
     },
     {
@@ -241,14 +241,14 @@
   "firmwareRebuiltOrResealedByPackager": false,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-19",
-  "releaseLabel": "V1 high-speed FS2 r7",
+  "releaseLabel": "V1 high-speed FS2 BLE connection fix",
   "stage": "USER_REQUESTED_UNVERIFIED_MATCHED_STACK_BUNDLE",
   "stable": false,
   "matchedStackValidated": false,
   "userExplicitlyRequestedPublication": true,
   "embeddedApplicationVersionPreserved": true,
-  "publicationBaseCommit": "5d15df743e8c5b10ed476548d65d75fa8a088f47",
-  "sourceIntegration": false,
+  "publicationBaseCommit": "a82655dd4e1bb8048ab0304cccc6f6b138042b78",
+  "sourceIntegration": "Focused V2-only identity-capability guard; all other existing private source changes excluded from source commit",
   "firmware": {
     "appCrc32": "654824DE",
     "usbCrc32": "02FF93A9",
@@ -319,12 +319,15 @@
     ]
   },
   "guiSourceProvenance": {
-    "ownerBuild": "console_build_r7",
-    "ownerReceipt": "Firmware/V1/source-console-build-receipt.json",
-    "frozenExecutableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+    "ownerBuild": "ble_v1_capability_fix_20261019",
+    "ownerReceipt": "Note/evidence/ble_v1_fs2_fix_20261019/build-receipt.json",
+    "frozenExecutableSha256": "03228EC8E7D5B2C41847C86318DCCE9FC8CECE76ADC08A600B6921C54D60AB41",
     "inputHashLedgerAvailable": true,
     "canonicalSourceEquivalenceClaimed": false,
-    "subsequentDirtyEditsIntegrated": false
+    "sourceInputsComparedToR7": 95,
+    "onlyChangedInput": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+    "baselineExecutableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+    "unrelatedDirtySourceChangesIntegrated": false
   },
   "qualification": {
     "shortBundledPairSdBle": "APP654824DE/HS02FF93A9/r7 shortP12-20k,128chunks,full16MiB new-extent SWD readback/strict8MiB export",
@@ -346,7 +349,9 @@
     "usbProbeStreamingForCurrentExactTuple": "No mode acceptance receipt recorded",
     "interruptedTailTargetSeconds": 30,
     "physicalPowerRemovalTailBoundVerified": false,
-    "noNewHardwareOrQualificationByPackager": true
+    "noNewHardwareOrQualificationByPackager": true,
+    "historicalEvidenceHostExecutableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+    "currentGuiHardwareRetested": false
   },
   "currentGuiIncludesFs2BleSupport": true,
   "latestRootContainsOneInstaller": true,
@@ -356,5 +361,15 @@
     "APP60EC609E private power trial"
   ],
   "originalSourceReceiptsRetainTheirHistoricalStatus": true,
-  "deliveryNotes": "Note/RELEASE_V1_HS_FS2_R7_20261019.md"
+  "deliveryNotes": "Note/BLE_V1_FS2_CONNECTION_FIX_20261019.md",
+  "hostFix": {
+    "problem": "V1 FS2 storage capability bit collided with V2-only firmware identity capability; unsupported 0xbc request timed out and disconnected GATT",
+    "change": "Gate optional firmware identity query on detected V2",
+    "checksPassed": 28,
+    "regression": "Note/evidence/ble_v1_fs2_fix_20261019/regression.json",
+    "scope": "Actual handler/control fixture with simulated transport, watcher, configuration/clock, profile and enabling services; no physical logger test",
+    "hardwareAccess": false,
+    "firmwareRebuilt": false
+  },
+  "hardwareQualificationOfCurrentGui": false
 }

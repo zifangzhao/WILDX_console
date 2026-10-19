@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "harnessSha256": "75D8DA93F974F4195C0B296A98FC9821A4442281DFBA181252170B5F60D1D0BD",
+  "productionSourceHashes": {
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble_v1_capability_fix_20261019\\ConnectCapabilityHarness.cs": "75D8DA93F974F4195C0B296A98FC9821A4442281DFBA181252170B5F60D1D0BD",
+    "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV1BleProtocol.cs": "5C1F3F5A0122D7B38044A090B5598CFF998BDCF20467AC42CC66FAF7FA09069C",
+    "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2SdControl.cs": "396F36B1B03E2F6DA94E6C19547B72C784DEFD445D0126570632EF499E522AF9",
+    "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpSdControl.cs": "FE8F6D35EE521EB366E5E6F2AB392CD24B00F846C0DA84A54BC832F7292175C2",
+    "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpSdGeometry.cs": "7303E533911AEA509CE7737C1ABB5FD955659FFD10B633B500EABE271AFBE843"
+  },
+  "baselineReadStatusSha256": "41655CBF2F0833F6A848C5B68EBEAF39ED7508B4F827F3BFED40ECC4C66D1ECE",
+  "fixedReadStatusSha256": "C966AD3760179124934448475BE541FA3A988A6410AC339BE26B1B3302A5706B",
+  "actualHandlers": "Connect/ReadStatus/Run/ShowStatus/ResetDevice/Send/ReadDevice/ParseStatus/RefreshV1Media; unchanged method bodies, fixture-only visibility/virtual dispatch",
+  "fakedBoundaries": "GATT transport (identity timeout models source-confirmed ExchangeAsync disconnect), watcher, config/clock services, profile menu and control enabling service; real WinForms labels/buttons",
+  "identityParserSimulated": true,
+  "hardwareAccess": false,
+  "applicationBuild": false,
+  "recorderMutations": false
+}

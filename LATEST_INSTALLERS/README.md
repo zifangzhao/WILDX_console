@@ -1,25 +1,19 @@
-# WILDX high-speed FS2 r7 bundle
+# WILDX BLE connection fix
 
-[Download the latest installer](WILDX_console-Setup-1.0.0.44-V1-HS-FS2-r7.exe).
+[Download the fixed installer](WILDX_console-Setup-1.0.0.44-V1-HS-FS2-BLE-fix.exe) (embedded version **1.0.0.44**).
 
-Includes the **r7 GUI**, embedded version **1.0.0.44**, APP **654824DE**,
-high-speed USB **02FF93A9**, recovery and the exact matching fused/component HEX.
-The matching GUI's BLE/FS2 workflow is included. Setup retains **Run WILD-X**.
-No application or firmware rebuild; the existing frozen fuse is reused unchanged.
-V1Camera and V2 remain unchanged. Forced full-speed and the power trial are excluded.
+Fixes V1 FS2 devices disconnecting after a successful status read. The console
+now restricts the optional firmware identity query to V2, preserving V2 behavior.
+The focused regression passed **28 checks**; all **45 extracted installer files**
+matched the prepared payload. Setup includes **Run WILD-X**.
 
-**Published as an unverified matched stack at the user's request.** The bundled
-APP/HS/r7 pair has shortP12-20k SD/BLE and full new-extent SWD export evidence.
-The same HS service/r7 passed84MiB at41.17MiB/s with0 errors/retries on a corrected
-direct connection, while private APP60EC609E was preserved; that APP is not bundled.
-This does not establish the exact bundled pair's full acceptance or a meter-only
-cause. Current exact-tuple USB streaming and <=30s physical interruption-tail
-acceptance are incomplete. Preserve existing FS2 data; do not routinely format
-or downgrade it for recovery. Fused HEX excludes configuration; do not mass erase.
+Only the GUI executable changed from r7. The high-speed firmware remains APP
+**654824DE**, USB **02FF93A9**, recovery and matching fused/component HEX.
+The complete matched stack remains **unverified**; this host fix has no new
+physical-device test. Earlier scoped evidence and limits remain in the manifest
+and [firmware notes](../Firmware/V1/README.md). Full-speed firmware is excluded.
 
-All **45 extracted payload files** matched in one packaging pass. This root holds
-one installer; [the previous package is archived](legacy/20261019_before_HS_FS2_r7/README.md).
+This root contains one final installer. [Previous package](legacy/20261019_before_BLE_connection_fix/README.md).
 
-[Release details](../Note/RELEASE_V1_HS_FS2_R7_20261019.md) ·
-[Firmware/components/evidence](../Firmware/V1/README.md) ·
+[Fix and validation](../Note/BLE_V1_FS2_CONNECTION_FIX_20261019.md) ·
 [Manifest](release-manifest.json) · [Checksums](SHA256SUMS.txt).

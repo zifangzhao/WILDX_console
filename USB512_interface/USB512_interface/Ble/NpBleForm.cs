@@ -396,7 +396,8 @@ namespace USB512_interface
                     configurationStatus.Text="NP2 IMRO application not verified in this connection.";
                 }
                 Profiles(current);if(!V2)await RefreshV1Media(current);UpdateControls();
-                if((current.Flags&NpFirmwareIdentity.BleCapability)!=0){
+                // This identity capability is V2-only; V1 uses the same bit for FS2 storage.
+                if(V2 && (current.Flags&NpFirmwareIdentity.BleCapability)!=0){
                     firmwareIdentity=NpFirmwareIdentity.Parse(await connection.ExchangeAsync(NpFirmwareIdentity.BleCommand,new byte[0],CancellationToken.None),(uint)recorderVersion);
                     ShowStatus(current);UpdateControls();
                 }
