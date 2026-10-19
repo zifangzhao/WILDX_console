@@ -1,15 +1,16 @@
 {
   "version": "1.0.0.44",
+  "releaseId": "V1_HS_FS2_R7_APP654824DE_USB02FF93A9_UNVERIFIED_20261019",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.44.exe",
-    "sha256": "7C41A9D8546D75A244496CF5C7CBAE08E84163CE18F005952EC6597770346F8C",
-    "bytes": 6338025
+    "file": "WILDX_console-Setup-1.0.0.44-V1-HS-FS2-r7.exe",
+    "sha256": "E95383F57E1AA3C1E76BC45C1960586F9ACE9A4CD3F275AB802935D3FFC32B0B",
+    "bytes": 6387852
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "1F987A79F441D95E99DEB4E815F0C8768A2D4AE67FC342D2E90A7F83892E0F17",
-      "bytes": 1458176
+      "sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+      "bytes": 1485312
     },
     {
       "path": "WILDX_console.exe.config",
@@ -78,33 +79,38 @@
     },
     {
       "path": "Firmware/README.md",
-      "sha256": "5B758DE3FEB52A0C3535BEC77B6E99AE268233844DF3D62F389C0549C7A7C985",
-      "bytes": 1870
+      "sha256": "410C657D6E3ACF7C992B22A259571C032C58E4C368983AB22555B91C76B6313B",
+      "bytes": 525
     },
     {
       "path": "Firmware/releases.json",
-      "sha256": "4265039C0BB20AC4C1E055E4370F1CD17B17912255CFD9888175DC0D2DA5A827",
-      "bytes": 8031
+      "sha256": "ECBF11E0C2F090A344DEF1DB1D7A80FB354A9023143F1EFB328678CCB2462C5C",
+      "bytes": 8436
     },
     {
       "path": "Firmware/V1/README.md",
-      "sha256": "6C076FA90E4F694C509A4F72DD35CA65988BEE4F152B329A298653D15EDAA6C8",
-      "bytes": 2322
+      "sha256": "D4749AB4D42EA2ECABD5B5C4EDAF2FD1FF18F6A4554F2267629D68B1C645F595",
+      "bytes": 2474
+    },
+    {
+      "path": "Firmware/V1/short_hs_sd_ble_evidence.json",
+      "sha256": "CAA829DA14BDDCFFA3215F7D5D72126FE9F48D316F3D7F7575529EECB1B75EDD",
+      "bytes": 4283
     },
     {
       "path": "Firmware/V1/source-console-build-receipt.json",
-      "sha256": "FE8FDC34C3549336A2DD65E16957886D430D43BBA5F515AE97E02BD6CA243D7D",
-      "bytes": 2166
+      "sha256": "E2317EA683E99FA8D792003F74890317551441ACF80F38F9909F1CA7BCAE27EA",
+      "bytes": 21294
     },
     {
-      "path": "Firmware/V1/source-manifest.json",
-      "sha256": "5CDEF6A9268F2E0D65056ECE94A055E403114A51C7CC95D1D45C20BD138C4CB8",
-      "bytes": 4927
+      "path": "Firmware/V1/source-fused-manifest.json",
+      "sha256": "25B0960E474D54C5DA0C22B18AE0F1728D1565DE8A8C3C3907C705B4288323EC",
+      "bytes": 3612
     },
     {
-      "path": "Firmware/V1/source-README.md",
-      "sha256": "21A42CA6EECF199907BCDC6EAE9B6F7E92AB09723F44303B3B15B8502C52A86D",
-      "bytes": 2618
+      "path": "Firmware/V1/source-readiness.json",
+      "sha256": "03A5F58FD07F290C7E40819941AA001AA93BCE8B9CC80AEDA6C79EBE7499903B",
+      "bytes": 19559
     },
     {
       "path": "Firmware/V1/V1_DFU_boot_USB02FF93A9_20261018.hex",
@@ -112,19 +118,39 @@
       "bytes": 999392
     },
     {
-      "path": "Firmware/V1/V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex",
-      "sha256": "33A7A04B53BDDFA4FEBC8F0A4BC5B4E5C079174663951EDE89C38282313BAFF2",
+      "path": "Firmware/V1/V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
+      "sha256": "98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3",
       "bytes": 5745164
     },
     {
-      "path": "Firmware/V1/V1_SD_BLE_APP_FA2016E7_20261018.hex",
-      "sha256": "D4CBDF869C80CF78D866DAFFA5BAA4ECEFCE0642A501EFD3E9093FB017E2746C",
-      "bytes": 766420
+      "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF",
+      "bytes": 804887
     },
     {
       "path": "Firmware/V1/V1_USB_service_02FF93A9_20261018.hex",
       "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F",
       "bytes": 699517
+    },
+    {
+      "path": "Firmware/V1/evidence/hs_direct_20261019/acceptance.json",
+      "sha256": "E293C91D5E0F55D439173093A797AB950D6116E0526F0B74CA3B3CCF9CB8A40E",
+      "bytes": 2862
+    },
+    {
+      "path": "Firmware/V1/evidence/hs_direct_20261019/install-verification.json",
+      "sha256": "D382D559AF24FD236FC2A5C3819D12ABA95EB2285ECD8E105BA97CB6460822F3",
+      "bytes": 443
+    },
+    {
+      "path": "Firmware/V1/evidence/hs_direct_20261019/read.json",
+      "sha256": "F5D59648100860FABFEDB3E6FD1977CD1E7ECC5C9E31C780F79ECCE71883D4F2",
+      "bytes": 3098
+    },
+    {
+      "path": "Firmware/V1/evidence/hs_direct_20261019/return-app.json",
+      "sha256": "5CCE40DE6FA61EDDE6967DC6251FB9B59008E395F2E6F6C2302BDA8B2EF04716",
+      "bytes": 1443
     },
     {
       "path": "Firmware/V1Camera/README.md",
@@ -207,16 +233,31 @@
       "bytes": 448461
     }
   ],
-  "extractedPayloadFilesVerified": 40,
+  "extractedPayloadFilesVerified": 45,
   "installerExecuted": false,
   "runAfterInstallCheckbox": true,
-  "application": "WILD-X Neuropixels Console",
-  "releaseDate": "2026-10-18",
-  "releaseTag": "V1_SD_BLE_STORAGE_HARDENING_FA2016E7_USB02FF93A9_20261018",
-  "publicationBaseCommit": "a2bfdaa96c41f0924df6984667abf84bbace953f",
+  "nsisPackagingPasses": 1,
   "applicationCompiledByPackager": false,
   "firmwareRebuiltOrResealedByPackager": false,
-  "nsisPackagingPasses": 1,
+  "application": "WILD-X Neuropixels Console",
+  "releaseDate": "2026-10-19",
+  "releaseLabel": "V1 high-speed FS2 r7",
+  "stage": "USER_REQUESTED_UNVERIFIED_MATCHED_STACK_BUNDLE",
+  "stable": false,
+  "matchedStackValidated": false,
+  "userExplicitlyRequestedPublication": true,
+  "embeddedApplicationVersionPreserved": true,
+  "publicationBaseCommit": "5d15df743e8c5b10ed476548d65d75fa8a088f47",
+  "sourceIntegration": false,
+  "firmware": {
+    "appCrc32": "654824DE",
+    "usbCrc32": "02FF93A9",
+    "usbSpeed": "high-speed",
+    "forcedFullSpeed": false,
+    "loaderAbi": 258,
+    "fusedSha256": "98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3",
+    "configurationIncluded": false
+  },
   "compiledSources": {
     "gui": null,
     "export": [
@@ -278,45 +319,42 @@
     ]
   },
   "guiSourceProvenance": {
-    "completePrecompileLedgerAvailable": false,
-    "canonicalSourceEquivalenceClaimed": false,
-    "description": "Owner Compile from dirty canonical tree plus two frozen overrides. Exact checked binary distributed; selected input hashes and known snapshot gap are documented.",
+    "ownerBuild": "console_build_r7",
     "ownerReceipt": "Firmware/V1/source-console-build-receipt.json",
-    "ownerExecutableSha256": "1F987A79F441D95E99DEB4E815F0C8768A2D4AE67FC342D2E90A7F83892E0F17"
+    "frozenExecutableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+    "inputHashLedgerAvailable": true,
+    "canonicalSourceEquivalenceClaimed": false,
+    "subsequentDirtyEditsIntegrated": false
   },
-  "validation": {
-    "ownerReportedTargetedSoftwareChecks": 495,
-    "ownerReportedEvidence": {
-      "sd_ble_endurance": "P1+P2 at15kHz,810.105s/18.84GiB,clean DONE/fault0,status and preview traffic,BLE reconnect while chunks advanced,prior4 extents preserved,20k profile restored",
-      "short_sd": "P1+P2 at20kHz,5408chunks,clean Start/progress/Stop/catalog",
-      "saved_data_windows": "Independently read SD through stopped foreground READ mailbox without halt/reset/card writes. First128chunks of20k recording and last128chunks of15k endurance: each65535frames/probe,zero sync,heartbeat,fill,fixed,counter,cadence errors; full_extent=false",
-      "usb": "Small CRC-bound544-byte wire reply passed. Large522272-byte reply still fails Windows31 over current hub after2 bounded checked retries. SD/backend error count0. Checked cancellation/idle and normal APP return passed",
-      "software": "495 read-recovery source/native-seam/delivered-IL checks; canonical checked-retirement fixture; inherited canonical storage fault matrix and recovery/format/profile targeted checks",
-      "component_installation": "Fresh independent attachment verified complete installed APP and USB body+manifest. Boot and retained configuration unchanged after USB-only installation"
+  "qualification": {
+    "shortBundledPairSdBle": "APP654824DE/HS02FF93A9/r7 shortP12-20k,128chunks,full16MiB new-extent SWD readback/strict8MiB export",
+    "highSpeedServiceRetest": {
+      "usbCrc32": "02FF93A9",
+      "sameR7Console": true,
+      "preservedAppCrc32": "60EC609E",
+      "powerTrialBundled": false,
+      "referenceBytes": 88080384,
+      "milliseconds": 2040,
+      "MiBPerSecond": 41.16967153806806,
+      "errors": 0,
+      "retries": 0,
+      "requests": 170,
+      "completions": 170,
+      "exactBundledAppPairAccepted": false,
+      "connection": "corrected direct USB path with meter removed; factors changed together, meter-only cause unproven"
     },
-    "packagerMainGuiConstructorPassed": true,
-    "packagerHardwareAccess": false,
-    "allExtractedPayloadFilesMatched": 40
+    "usbProbeStreamingForCurrentExactTuple": "No mode acceptance receipt recorded",
+    "interruptedTailTargetSeconds": 30,
+    "physicalPowerRemovalTailBoundVerified": false,
+    "noNewHardwareOrQualificationByPackager": true
   },
-  "firmwareLimits": "V1 NP91k/91k development candidate, not camera or V2. Operational SD/BLE evidence is limited to P12/15k endurance and shortP12/20k plus two bounded saved-data windows. Not complete18.84GiB readback, all NP modes, custom maps, physical power-cut, continuous50fps/camera or implant qualification. Current hubbed large USB download remains unresolved; no failed bytes accepted and no silent repair/relock. Recovery is read-only and uncertain extents remain protected; no silent new-format migration or universal broken-catalog write admission. USB Format is software-checked but not physically executed in this cycle. Fused loader acceptance passed offline; fused programming not hardware-tested. Do not describe as flawless or all-mode fully validated.",
-  "knownGuiResourceLimit": "Compile-only output omits the three empty/generated resx resource sets and optional Waveform.ico. Owning source audit confirms icon has SystemIcons.Application fallback. Main accepts cosmetic default-icon limitation for this urgent scoped release; no rebuild or binary graft.",
-  "experimentalV2OverwriteIncluded": false,
-  "deliveryPolicy": {
-    "requiredUsbSpeed": "high-speed",
-    "forcedFullSpeedAllowed": false,
-    "withdrawnRelease": "V1_NP_STORE2_RC1_APP654824DE_USBFACEA0D2_20261019",
-    "withdrawnCommit": "a2bfdaa96c41f0924df6984667abf84bbace953f",
-    "withdrawnUsbCrc32": "FACEA0D2",
-    "restoredReleaseCommit": "183b124d61f4344a669a2512e04c0b8791410442",
-    "restoredApplicationCrc32": "FA2016E7",
-    "restoredUsbCrc32": "02FF93A9",
-    "matchingHighSpeedStore2ReplacementAvailable": false,
-    "currentHardwareDownloadQualification": "Large high-speed downloads remain unresolved; no claim of repaired Windows31",
-    "fs2MediaPolicy": "Do not downgrade firmware or format existing FS2 media to use this previous legacy package; preserve recordings until a matching HS store2 replacement is available",
-    "automaticDeviceChanges": false,
-    "hardwareAccess": false,
-    "applicationOrFirmwareRebuild": false
-  },
-  "restoredOn": "2026-10-19",
-  "restoredOriginalInstallerUnchanged": true
+  "currentGuiIncludesFs2BleSupport": true,
+  "latestRootContainsOneInstaller": true,
+  "v1CameraAndV2AssetsAndTargetsUnchanged": true,
+  "excludedFirmware": [
+    "FACEA0D2 forced full-speed",
+    "APP60EC609E private power trial"
+  ],
+  "originalSourceReceiptsRetainTheirHistoricalStatus": true,
+  "deliveryNotes": "Note/RELEASE_V1_HS_FS2_R7_20261019.md"
 }

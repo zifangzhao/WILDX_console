@@ -1,0 +1,55 @@
+{
+  "result": "direct_usb_hs_84MiB_reference_and_fs2_metadata_pass_app_return_confirmed",
+  "uid": "001D00065942500B20313354",
+  "cid": "1B534D4A453259373010B35487A1A300",
+  "app_crc_preserved": "60EC609E",
+  "usb_crc_installed": "02FF93A9",
+  "host_sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+  "physical_path": "Human reseated USB directly and confirmed the USB power meter is no longer connected",
+  "transfer": {
+    "transport": "High-speed USB; 510 KiB requests",
+    "reference_bytes_identical": 88080384,
+    "milliseconds": 2040,
+    "MiB_per_second_including_host_reference_comparison": 41.16967153806806,
+    "firmware_reported_errors": 0,
+    "recovered_reads": 0,
+    "retry_attempts": 0,
+    "actual_production_header_and_payload_crc_path": true,
+    "read_requests": 170,
+    "read_completions": 170,
+    "read_scope": "Full original84MiB reference plus allocation/descriptor metadata for31 records; not all31 payloads"
+  },
+  "fs2": {
+    "epoch": "000D47F00A459C8D",
+    "generation": 534,
+    "count": 31,
+    "frontier": 63471616,
+    "all31_explicit_extents_equal_prior_ble_catalog": true
+  },
+  "final_app": {"state": 0,"fault": 0,"mask": 3,"hz": 15000,"count": 31,"frontier": 63471616},
+  "usb_only_programming": {
+    "both_full2MiB_readbacks_match_exact_page_erase_model": true,
+    "boot_app_retained_configuration_preserved": true,
+    "corrective_reprogramming": false,
+    "first_same_session_verifier_stale8_manifest_bytes_preserved_in_log": true
+  },
+  "recording_started": false,
+  "profile_reapplied": false,
+  "sd_format_delete_payload_write_sent": false,
+  "new_product_build": false,
+  "fused_packaged_or_published": false,
+  "complete_latest_release_pair_qualified": false,
+  "limits": [
+    "The changed connection path passed; cable versus hub/power-meter contribution is not individually isolated",
+    "Initial descriptor failure persisted after the first reconnect; one later SWD attempt found target reference0.056V; after direct reseat Windows enumeration and HS download passed",
+    "DSTS speed0 alone was not treated as enumeration proof; production exact-UID WinUSB status and HS512-byte endpoint negotiation also passed",
+    "No new USB streaming, SD recording, endurance, camera or physical power-removal test in this turn",
+    "APP60EC609E is the preserved private power trial, not promoted APP654824DE; this is bounded HS-service evidence, not complete latest-pair acceptance"
+  ],
+  "evidence_sha256": {
+    "read.json": "F5D59648100860FABFEDB3E6FD1977CD1E7ECC5C9E31C780F79ECCE71883D4F2",
+    "return-app.json": "5CCE40DE6FA61EDDE6967DC6251FB9B59008E395F2E6F6C2302BDA8B2EF04716",
+    "install-verification.json": "D382D559AF24FD236FC2A5C3819D12ABA95EB2285ECD8E105BA97CB6460822F3",
+    "TestCable.exe": "596C788C03DA16868E96F4EB575EF9D1013C31E013D8731378EA0BCD95BF4F9A"
+  }
+}

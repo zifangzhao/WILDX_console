@@ -1,0 +1,10 @@
+{
+  "usb_crc": "02FF93A9",
+  "app_crc": "60EC609E",
+  "image_sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F",
+  "backup_sha256": "A26A7D8F1E0917EDC00B5CC1A0585238AA23C052C57906517F9C2071B15ED634",
+  "expected_flash_sha256": "CEF48833B2077B50ADB6A3BE104237E274D8F7997538F11D042B1CBFC3499B4B",
+  "boot_app_configuration_preserved": true,
+  "programmed_pages": 32,
+  "both_full_2MiB_readbacks_match": true
+}

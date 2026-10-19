@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "status": "HOLD_EXACT_FROZEN_PAIR_BINDING_HS_SERVICE_PASS_RECORDED",
+  "repositoryCommitAudited": "5d15df743e8c5b10ed476548d65d75fa8a088f47",
+  "stableMatchedStackAvailable": false,
+  "packagingEligible": false,
+  "pushEligible": false,
+  "humanRequirement": {
+    "usbProbeStreaming": true,
+    "sdBleRecording": true,
+    "usbDownloadSpeed": "high-speed",
+    "forcedFullSpeedAllowed": false,
+    "interruptedTailLossTargetSeconds": 30,
+    "physicalPowerRemovalGuaranteeVerified": false,
+    "priorValidRecordingsMustRemainRecoverableWithoutRoutineFormat": true
+  },
+  "requiredBaseline": {
+    "app": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\delivery_candidate_r1\\Firmware\\V1\\V1_SD_BLE_app_only_store2_rc1.hex",
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF",
+      "bytes": 804887,
+      "existingFileIdentityChecked": true,
+      "crc32": "654824DE",
+      "abi": 258,
+      "status": "frozen_NP_FS2_baseline_not_complete_stable_HS_pair"
+    },
+    "existingHighSpeedUsb": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Firmware\\V1\\V1_USB_service_02FF93A9_20261018.hex",
+      "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F",
+      "bytes": 699517,
+      "existingFileIdentityChecked": true,
+      "crc32": "02FF93A9",
+      "abi": 258,
+      "status": "Bounded production HS service/host pass on corrected direct path; exact frozen APP654824DE pair binding pending"
+    },
+    "existingBootUsb": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Firmware\\V1\\V1_DFU_boot_USB02FF93A9_20261018.hex",
+      "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B",
+      "bytes": 999392,
+      "existingFileIdentityChecked": true,
+      "status": "existing_HS_boot_USB_component_not_a_new_FS2_release"
+    },
+    "console": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\delivery_candidate_r1\\Console\\WILDX_console.exe",
+      "sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+      "bytes": 1485312,
+      "existingFileIdentityChecked": true,
+      "embeddedVersion": "1.0.0.44",
+      "ownerBuild": "console_build_r7"
+    },
+    "companionDll": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\delivery_candidate_r1\\Console\\NpV2SdDatExport.dll",
+      "sha256": "A396530AAD81A5C8BA6FDC8086FC1FB2642A2E4E34C52E50392AE8763FE32A2F",
+      "bytes": 239616,
+      "existingFileIdentityChecked": true
+    }
+  },
+  "bootRecovery": {
+    "abi": 258,
+    "ownerRecordedBootAnchorSha256": "03CBCA29117EA3C54F797F5CD9698E786BC5D0FFA73853FEBAD3431B425E3A7F",
+    "range": "0x08000000..0x0801BFFF",
+    "bytes": 114688,
+    "independentVersionNotReported": true,
+    "provenance": "Existing owner installation/packaging evidence; no boot re-read or revalidation in this audit"
+  },
+  "matchingHighSpeedFs2FusedHex": {
+    "path": "Firmware/V1/unverified/20261019_APP654824DE_USB02FF93A9_HS/V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
+    "sha256": "98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3",
+    "bytes": 5745164,
+    "publicationCommit": "5d15df743e8c5b10ed476548d65d75fa8a088f47",
+    "url": "https://raw.githubusercontent.com/zifangzhao/WILDX_console/5d15df743e8c5b10ed476548d65d75fa8a088f47/Firmware/V1/unverified/20261019_APP654824DE_USB02FF93A9_HS/V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
+    "stable": false,
+    "inputTuple": "APP654824DE + USB02FF93A9 + ABI258 recovery",
+    "configurationIncluded": false,
+    "disposition": "Exact matching fused and components already published at explicit human request as unverified; reuse exact bytes if inputs stay unchanged"
+  },
+  "matchingHighSpeedFs2Installer": null,
+  "currentPublishedFallback": {
+    "installer": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\LATEST_INSTALLERS\\WILDX_console-Setup-1.0.0.44.exe",
+      "sha256": "7C41A9D8546D75A244496CF5C7CBAE08E84163CE18F005952EC6597770346F8C",
+      "bytes": 6338025,
+      "existingFileIdentityChecked": true,
+      "embeddedVersion": "1.0.0.44",
+      "status": "legacy_fallback_only_not_FS2_downgrade",
+      "packagedConsoleSha256": "1F987A79F441D95E99DEB4E815F0C8768A2D4AE67FC342D2E90A7F83892E0F17",
+      "appCrc32": "FA2016E7",
+      "usbCrc32": "02FF93A9",
+      "containsRequestedR7Console": false
+    },
+    "fusedHex": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Firmware\\V1\\V1_fused_boot_USB02FF93A9_APPFA2016E7_20261018.hex",
+      "sha256": "33A7A04B53BDDFA4FEBC8F0A4BC5B4E5C079174663951EDE89C38282313BAFF2",
+      "bytes": 5745164,
+      "existingFileIdentityChecked": true,
+      "appCrc32": "FA2016E7",
+      "usbCrc32": "02FF93A9",
+      "configurationIncluded": false,
+      "matchesRequestedFs2Baseline": false
+    },
+    "fs2DowngradeAllowed": false,
+    "rootPolicyExplicitlyHoldsHighSpeedFs2Target": true
+  },
+  "rejectedAlternatives": {
+    "fullSpeedUsbCrc32": "FACEA0D2",
+    "fullSpeedFusedSha256": "F454BE0498596845817685A0284F5D2DF4749E67488EDFFED5B89F134BED2FC8",
+    "fullSpeedInstallerSha256": "DEB62E76325CF13F5839D0C64EF1ECE87176F59117A126668A27DABCD8C30FB8",
+    "withdrawn": true,
+    "powerTrialAppCrc32": "60EC609E",
+    "powerTrialExcluded": true,
+    "shortHsTrialCrc32": "C8674915",
+    "shortHsTrialPassed": false
+  },
+  "matchedEvidence": {
+    "usbProbeStreaming": {
+      "fullyMatchedBaselinePassedModes": [],
+      "status": "No actual probe-streaming mode receipt found for APP654824DE/USB02FF93A9/r7 in the checked handoff; source admission is not qualification",
+      "historicalOnly": {
+        "appCrc32": "BC6B506E",
+        "usbCrc32": "40D39075",
+        "consoleSha256": "D1271EC76DF47FEA84BA83395121832D861F7AC6C56132F369D0525529A11CF7",
+        "modes": "P1+P2 native20kHz, wire0x77",
+        "durationsSeconds": [
+          5.0035792,
+          30.0057076
+        ],
+        "longerRunWireBytes": 956825600,
+        "errors": 0,
+        "scope": "Prior exact tuple only; not transferred to current matched baseline",
+        "evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\publication\\tree\\LATEST_FIRMWARE\\manifest.json"
+      }
+    },
+    "sdBleWithExistingHsService": {
+      "appCrc32": "654824DE",
+      "usbCrc32": "02FF93A9",
+      "consoleSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+      "profile": "P1+P2/20kHz",
+      "chunks": 128,
+      "wholeExtentReadBytes": 16777216,
+      "wholePayloadBytes": 8388608,
+      "completeFramesPerProbe": 65525,
+      "npFrameCounterLfpRelockErrors": 0,
+      "validImuAndMagSnapshotsEach": 128,
+      "savedImuPublicationGaps": 0,
+      "all26PriorAllocationExtentsPreserved": true,
+      "descriptorReadUnavailability": "Catalog/Mount/catalog fail-read stages preserve frontier and later25 stable IDs; appending occurs after read hook removal/cache recovery",
+      "transport": "Full new-extent stopped-mailbox/SWD readback, not USB download",
+      "evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\s2pg_fault_capture_evidence_r1.json",
+      "limits": "No sustained matched-HS capture, active-degraded-cache START-remount or physical removal guarantee established by this receipt"
+    },
+    "differentFullSpeedTuple": {
+      "appCrc32": "654824DE",
+      "usbCrc32": "FACEA0D2",
+      "withdrawn": true,
+      "passed": "Five-minute P12/20k, BLE reconnect, sampled72MiB; production FS reference/direct strict USB exports; actual degraded Mount AND START-remount with safe append/full new readback",
+      "transferableAsMatchedHsQualification": false,
+      "whole10GbPayloadVerified": false
+    },
+    "sustainedNegotiatedHighSpeedDownload": {
+      "passedForRequiredMatchedTuple": false,
+      "evidence": "New direct-path84MiB production HS PASS on USB02FF93A9/r7 with preserved private APP60EC609E; not the frozen APP654824DE tuple",
+      "existing02ffFailure": "Earlier exact legacy pair:544-byte CRC-bound reply passed;522272-byte/1020-sector reply Windows31 after two bounded retries,backend errors0",
+      "privateHsShortTrial": {
+        "appCrc32": "B84574CE",
+        "usbCrc32": "C8674915",
+        "negotiatedHs": true,
+        "enumspdMasked": 0,
+        "successfulComparedBytes": 4239360,
+        "nativeError": 31,
+        "recoveredReads": 0,
+        "productionRetryAttempts": 2,
+        "evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\usb_short_evidence_r1.json",
+        "acceptedReplacement": false
+      },
+      "hostCleanup": "Same frozen r7 production stream passed with zero retries/recoveries. This does not isolate a software fix or meter-only cause.",
+      "rootCauseNotEstablished": true,
+      "passedForSameHsServiceAndR7WithPowerTrialApp": true,
+      "boundedServicePass": {
+        "status": "PASS_BOUNDED_HS_SERVICE_AND_HOST_ON_CORRECTED_DIRECT_PATH",
+        "acceptancePath": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_hs_cable_retest_20261019_r1\\acceptance.json",
+        "acceptanceSha256": "E293C91D5E0F55D439173093A797AB950D6116E0526F0B74CA3B3CCF9CB8A40E",
+        "readEvidenceSha256": "F5D59648100860FABFEDB3E6FD1977CD1E7ECC5C9E31C780F79ECCE71883D4F2",
+        "appCrc32": "60EC609E",
+        "appIsPrivatePowerTrial": true,
+        "appPromotedOrSubstituted": false,
+        "usbCrc32": "02FF93A9",
+        "consoleSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+        "uid": "001D00065942500B20313354",
+        "cid": "1B534D4A453259373010B35487A1A300",
+        "negotiatedSpeed": "high-speed",
+        "endpointMaxPacketBytes": 512,
+        "requestSectors": 1020,
+        "referenceBytesIdentical": 88080384,
+        "milliseconds": 2040,
+        "MiBPerSecondIncludingHostComparison": 41.16967153806806,
+        "recoveredReads": 0,
+        "retryAttempts": 0,
+        "firmwareRequests": 170,
+        "firmwareCompletions": 170,
+        "firmwareErrors": 0,
+        "productionHeaderAndPayloadCrcPath": true,
+        "fs2PairedDescriptorCount": 31,
+        "fs2AllExplicitExtentsPreserved": true,
+        "fs2Epoch": "000D47F00A459C8D",
+        "fs2Generation": 534,
+        "fs2Frontier": 63471616,
+        "finalBleState": 0,
+        "finalBleFault": 0,
+        "finalBleProfile": "P1+P2/15kHz",
+        "installIndependentTwoFull2MiBDumpsMatched": true,
+        "bootAppSettingsPreserved": true,
+        "sdRecordingStarted": false,
+        "sdFormatDeleteOrPayloadWrite": false,
+        "path": "Human direct USB connection/reseat with inline power meter removed",
+        "changedFactorsNotIndividuallyIsolated": [
+          "cable/connection",
+          "direct path",
+          "meter removal"
+        ],
+        "meterOnlyRootCauseProven": false,
+        "completeLatestFrozenPairAccepted": false,
+        "scope": "All84MiB reference payload; metadata for31 records, not all31 payloads; no new USB streaming or SD capture in this retest"
+      },
+      "earlierFailuresScope": "Retain earlier measured failures as old-path evidence. They no longer support a universal current-HS-failure claim."
+    },
+    "interruptionRecovery": {
+      "targetTailSeconds": 30,
+      "targetVerified": false,
+      "existingScope": "Native persisted-prefix cuts, prior-image controlled MCU reset and current nonpersistent descriptor-read failures",
+      "physicalBatteryOrCardRemovalValidated": false,
+      "earlierValidDataMustBeRecoverableWithoutRoutineFormat": true
+    }
+  },
+  "minimalBlockingDevelopmentItem": "No new development change is established as necessary by the corrected-path HS pass. The remaining gap is acceptance bound to frozen APP654824DE with the same HS02FF93A9/r7 tuple and declared USB streaming workflow.",
+  "remainingReleaseGates": [
+    "Main-owned exact-pair acceptance is the remaining binding gap: frozen APP654824DE + HS USB02FF93A9 + r7 on the corrected direct path. Existing short SD/BLE evidence is retained; do not repeat unchanged broad suites or infer a new build is required. Current exact-tuple probe-streaming mode evidence is also not recorded.",
+    "The <=30s interrupted-tail tolerance remains an acceptance target, not a physical battery/card-removal guarantee. This HS retest does not change that recovery scope.",
+    "Matching fused98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3 and component HEX already exist from one direct verified-input merge with configuration excluded. Do not re-merge unchanged inputs. Any future component change requires a refreshed exact matching fused image.",
+    "The checked r7 console still lacks a matching current installer. Main owns a separate packaging/publication decision; this evidence update does not authorize it. Do not restore FS, substitute APP60EC609E or offer an FS2 downgrade."
+  ],
+  "evidence": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\s2pg_evidence_r1.json",
+      "sha256": "78417C169423352C87271F772CE2F68FBB28FCD8C60F4282716566603FE4BC0E"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\s2pg_fault_capture_evidence_r1.json",
+      "sha256": "CAA829DA14BDDCFFA3215F7D5D72126FE9F48D316F3D7F7575529EECB1B75EDD"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\s2pg_degraded_evidence_r1.json",
+      "sha256": "042E30921C6FFA787D254D990AF3B0EA78EEC20F8491A580FD583FB54835AE01"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\usb_fs_current_evidence_r1.json",
+      "sha256": "475AA5F58D04E067134BDC6A621218F75E1FF56A572939119579299EA6776065"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\current_endurance20_evidence_r1.json",
+      "sha256": "867A0811F1F9082A364C2FA29FB12FE8AA0197B42771A1956FBBD7F62F0F12E8"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\usb_short_evidence_r1.json",
+      "sha256": "D705EBBCA889AEC28AD626D6E85F27274C96FC8009DC1AACD89127DE00273C96"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\component_acceptance.json",
+      "sha256": "7931DDE4B9545C6B19F6F4AF0B7E6261D0199AF6C61155802BD86995EEA93D84"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_robust_v2_20261018\\delivery_candidate_r1_loader.json",
+      "sha256": "C44182606FCFB87C3B026C8FCAD62E8C57BF95D613AD823573FFC0BE074A4898"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_hs_cable_retest_20261019_r1\\acceptance.json",
+      "sha256": "E293C91D5E0F55D439173093A797AB950D6116E0526F0B74CA3B3CCF9CB8A40E"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_hs_cable_retest_20261019_r1\\read.json",
+      "sha256": "F5D59648100860FABFEDB3E6FD1977CD1E7ECC5C9E31C780F79ECCE71883D4F2"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_hs_cable_retest_20261019_r1\\return-app.json",
+      "sha256": "5CCE40DE6FA61EDDE6967DC6251FB9B59008E395F2E6F6C2302BDA8B2EF04716"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_hs_cable_retest_20261019_r1\\install-verification.json",
+      "sha256": "D382D559AF24FD236FC2A5C3819D12ABA95EB2285ECD8E105BA97CB6460822F3"
+    }
+  ],
+  "sourcePolicy": {
+    "path": "C:/Frank/Code/XE_NP/Firmware/V1/Core/Inc/np_usb_download_link.h",
+    "defaultFsDiagnosticFlag": 0,
+    "diagnosticFsOnlyInDownloadRole": true,
+    "sourceInspectionNotBinaryOrHardwareQualification": true
+  },
+  "performed": {
+    "existingIdentityReadsOnly": true,
+    "applicationExecution": false,
+    "testsExecuted": 0,
+    "hardwareAccess": false,
+    "builds": 0,
+    "merges": 0,
+    "installerPackaging": 0,
+    "sourceIntegration": false,
+    "publication": false
+  },
+  "separateTargets": {
+    "v1CameraUnchanged": true,
+    "v2AssetsAndTargetsUnchanged": true
+  },
+  "userRequestedUnverifiedPublication": {
+    "commit": "5d15df743e8c5b10ed476548d65d75fa8a088f47",
+    "fused": {
+      "path": "Firmware/V1/unverified/20261019_APP654824DE_USB02FF93A9_HS/V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
+      "url": "https://raw.githubusercontent.com/zifangzhao/WILDX_console/5d15df743e8c5b10ed476548d65d75fa8a088f47/Firmware/V1/unverified/20261019_APP654824DE_USB02FF93A9_HS/V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
+      "sha256": "98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3",
+      "bytes": 5745164,
+      "remoteBytesVerified": true
+    },
+    "stable": false,
+    "qualifiedMatchedTargetStillPending": true,
+    "configurationIncluded": false,
+    "publicationReceipt": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1_unverified_hs_fused_20261019\\handoff.json"
+  },
+  "highSpeedServiceAndR7PassOnCorrectedPath": true,
+  "genericHighSpeedFailureStillAsserted": false,
+  "fullSpeedFallbackAllowed": false,
+  "powerTrialPromoted": false,
+  "minimalRemainingMatchedPairGap": "The new HS transfer PASS preserved APP60EC609E. Frozen APP654824DE already has short SD/BLE acceptance with HS02FF93A9/r7, but lacks that corrected-path production HS read/return receipt and a current exact-tuple USB probe-streaming mode receipt. No broad requalification or rebuild is implied.",
+  "highSpeedCableRetest": {
+    "status": "PASS_BOUNDED_HS_SERVICE_AND_HOST_ON_CORRECTED_DIRECT_PATH",
+    "acceptancePath": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_hs_cable_retest_20261019_r1\\acceptance.json",
+    "acceptanceSha256": "E293C91D5E0F55D439173093A797AB950D6116E0526F0B74CA3B3CCF9CB8A40E",
+    "readEvidenceSha256": "F5D59648100860FABFEDB3E6FD1977CD1E7ECC5C9E31C780F79ECCE71883D4F2",
+    "appCrc32": "60EC609E",
+    "appIsPrivatePowerTrial": true,
+    "appPromotedOrSubstituted": false,
+    "usbCrc32": "02FF93A9",
+    "consoleSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+    "uid": "001D00065942500B20313354",
+    "cid": "1B534D4A453259373010B35487A1A300",
+    "negotiatedSpeed": "high-speed",
+    "endpointMaxPacketBytes": 512,
+    "requestSectors": 1020,
+    "referenceBytesIdentical": 88080384,
+    "milliseconds": 2040,
+    "MiBPerSecondIncludingHostComparison": 41.16967153806806,
+    "recoveredReads": 0,
+    "retryAttempts": 0,
+    "firmwareRequests": 170,
+    "firmwareCompletions": 170,
+    "firmwareErrors": 0,
+    "productionHeaderAndPayloadCrcPath": true,
+    "fs2PairedDescriptorCount": 31,
+    "fs2AllExplicitExtentsPreserved": true,
+    "fs2Epoch": "000D47F00A459C8D",
+    "fs2Generation": 534,
+    "fs2Frontier": 63471616,
+    "finalBleState": 0,
+    "finalBleFault": 0,
+    "finalBleProfile": "P1+P2/15kHz",
+    "installIndependentTwoFull2MiBDumpsMatched": true,
+    "bootAppSettingsPreserved": true,
+    "sdRecordingStarted": false,
+    "sdFormatDeleteOrPayloadWrite": false,
+    "path": "Human direct USB connection/reseat with inline power meter removed",
+    "changedFactorsNotIndividuallyIsolated": [
+      "cable/connection",
+      "direct path",
+      "meter removal"
+    ],
+    "meterOnlyRootCauseProven": false,
+    "completeLatestFrozenPairAccepted": false,
+    "scope": "All84MiB reference payload; metadata for31 records, not all31 payloads; no new USB streaming or SD capture in this retest"
+  },
+  "latestEvidenceUpdatePerformed": {
+    "existingReceiptReadsOnly": true,
+    "builds": 0,
+    "testsExecuted": 0,
+    "hardwareAccess": false,
+    "merges": 0,
+    "packaging": 0,
+    "publication": false
+  }
+}

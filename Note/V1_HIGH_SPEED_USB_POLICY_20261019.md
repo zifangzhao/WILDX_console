@@ -1,24 +1,17 @@
-# V1 USB delivery policy — 2026-10-19
+# V1 USB policy — updated 2026-10-19
 
-The human requires **high-speed USB**. Do not force role3 downloads to full-speed
-as a compatibility workaround. This supersedes the prior FACEA0D2 delivery choice.
+Use high-speed USB; do not restore forced full-speed FACEA0D2. The human has
+requested publication of the latest **unverified** bundle: frozen r7 GUI,
+APP654824DE, HSUSB02FF93A9, ABI258 recovery and existing matching fused98B08774….
+This supersedes the interim legacy fallback as the current bundle. V1Camera
+and V2 remain separate. APP60EC609E is not a replacement release component.
 
-The store2 rc1 full-speed installer, APP/USB/recovery/fused images and original
-receipts are archived as withdrawn historical evidence. Current root links and
-the bundled firmware catalog are restored to the previous exact release:
-installer1.0.0.44, APPFA2016E7, USB02FF93A9. No installer or firmware was rebuilt.
-Historical pinned Git commits remain accessible; they are not current releases.
+The authorized corrected direct-path HS test passed84MiB at41.17MiB/s with no
+errors/retries, using the same HS service/r7 but preserving the private power
+trial APP60EC609E. Meter-only causation is not established. Frozen APP654824DE
+already has short matched HS-service SD/BLE acceptance; current exact-tuple
+USB streaming and HS-download acceptance still have gaps. The <=30s tail-loss
+tolerance is a target, not a verified physical power-removal guarantee.
 
-The previous package is not an FS2/store2 replacement. Existing FS2 recordings
-must be preserved; do not downgrade device firmware or format that card to use
-the legacy package. The already-checked r7 console/APP654824DE need a matching
-high-speed-only delivery. No mixed binary pair is being silently promoted.
-
-Previous high-speed large-download Windows31 failures remain unresolved. Short
-high-speed reply trials also failed and are not a release candidate. The V1
-developer has been asked for an existing compatible high-speed artifact and
-its source/evidence limits. No new hardware access, flash/reset/format, tests,
-builds or publication by that developer are authorized by the coordination note.
-
-V1Camera, V2 and unrelated dirty source remain unchanged. This withdrawal does
-not claim a repaired USB electrical path or an end-to-end store2 replacement.
+See [current bundle and limits](RELEASE_V1_HS_FS2_R7_20261019.md).
+No new hardware/build/qualification cycle is part of this publication.

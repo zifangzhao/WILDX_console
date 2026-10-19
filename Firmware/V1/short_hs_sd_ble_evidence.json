@@ -1,0 +1,71 @@
+{
+  "result": "actual_descriptor_unavailability_mount_later_access_and_post_recovery_full_append_strict_export_pass_not_release_qualified",
+  "bench_uid": "001D00065942500B20313354",
+  "card_cid": "1B534D4A453259373010B35487A1A300",
+  "app_crc": "654824DE",
+  "usb_crc": "02FF93A9",
+  "host_sha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
+  "fault_scope": "Exact HAL_SD_ReadBlocks entry hardware breakpoint returns HAL_ERROR before prologue for stopped hsd0x20005908/LBAs128,129/one block/caller in current APP; six failures across three stages. Breakpoint self-removes after each pair. No flash, stack or card bytes changed; not physical removal or persisted corruption.",
+  "fault_result": "Actual r7 catalog returns25 later stable IDs/extents, warning and unchanged allocation frontier/count; one actual Mount, no mutation replay; restored catalog26 after hook removed.",
+  "fault_metadata_range": "LBA112..179,34816bytes before/after identical",
+  "fault_metadata_sha256": "F725F95EC6080B844D817C88BB0A5FB4EFFED92A2D4B494105E88DE2B8D71FD5",
+  "preserved_fixture_failures": [
+    "r1 wrapper breakpoint bypassed by inlining: zero fault hits; no product failure; metadata unchanged",
+    "r2 HAL breakpoint left armed on later reads: debug overhead exceeded native94 timeout; poll-based guarded cleanup resumed held idle APP; metadata unchanged",
+    "r3 correct shared HAL entry and per-stage automatic removal passed; no product rebuild for fixture repairs"
+  ],
+  "capture": {
+    "session": 1792378032,
+    "index": 26,
+    "profile": "P1+P2/20kHz",
+    "chunks": 128,
+    "fault": 0,
+    "start": 42532864,
+    "payload_start": 42549248,
+    "end": 42565632,
+    "extent_bytes": 16777216,
+    "payload_bytes": 8388608,
+    "raw_sha256": "0269BBBAD59D27C000C313AC1CA9556A8CA54F49310F88D1D4C74650C6BED935",
+    "start_sent_once": true,
+    "all_prior26_ble_extents_preserved": true,
+    "strict_actual_r7_checks": 531,
+    "frames_per_probe": 65525,
+    "frame_counter_lfp_relock_errors": 0,
+    "valid_imu_mag_env_snapshots": [128,128,0],
+    "missing_saved_imu_publications": 0,
+    "startup_discarded_bytes_p1_p2": [625,607]
+  },
+  "final": {
+    "count": 27,
+    "frontier": 42565632,
+    "generation": 370,
+    "epoch": "000D47F00A459C8D",
+    "state": 3,
+    "fault": 0,
+    "ready": 1,
+    "live": 0,
+    "cache_first_end": 180224,
+    "cache_last_end": 42565632,
+    "all_owned_processes_terminal": true
+  },
+  "limits": "Fault stage does not mutate persisted descriptors. Append occurs after read hook removal and cache recovery, not with proven degraded internal cache. Full new extent read via stopped mailbox/SWD, not USB. Prior26 exporter checks are paired metadata only, no whole-prior payload reread. Latest-value IMU snapshots not lossless FIFO. Earlier B845/r5 endurance scope unchanged. No new product build, flash/reset, format, physical removal, camera, installer, fused/latest promotion or publication.",
+  "sources": {
+    "fault_hil": "host_full_tests_r3/TestS2pgFaultHil_r3.cs",
+    "fault_hook": "source_snapshot_s2pg_fault_r3/s2pg_fault_hook.tcl",
+    "export_helper": "TestS2pgCapture.cs"
+  },
+  "sha256": {
+    "bench_hil/s2pg_fault_read_r3/result.json": "ECC21D044312CA319E6A58E756CE2FAE189F6AAFC2CBDB95215BF232014102EC",
+    "bench_hil/s2pg_append_r1/result.json": "A0E25FFBC0AB7F3BF1C61D054C7BF864BC56061EA8ABD806896D92B1BCDEC73D",
+    "bench_hil/s2pg_saved_r1/result.json": "6E7FB8D98769BAC74F3B47D3ABDEB20300B19B59F068A41174B9EC4BEFAC8025",
+    "s2pg_capture_export_r1/validation.json": "AB87FBEBA8BD297EAD0CACB502AEE374D662FE338725E47F2641E158320D75A0",
+    "bench_hil/s2pg_hil_r1/s2pg_final27_after_readback.log": "82EFE547F3A8BAA8752A6FF4DAF2841DF14B4ECF434EE4F99C5EE6B7A39802BF",
+    "TestS2pgCapture.cs": "00C9E1275810CE3C53A5D660B8883945710F49550F448BA04DE7DEE8AA686F07",
+    "host_full_tests_r3/TestS2pgCapture.exe": "DFC173E4AD8750F55005D6A40B2013208AE63AE2936899D012BBD4301784FE85",
+    "host_full_tests_r3/TestS2pgFaultHil_r3.cs": "E88C481BED84AF3275CBC4FBF8B6BF6FA5CDA7D37FDEA34644CD33AA937D2CF3",
+    "source_snapshot_s2pg_fault_r3/s2pg_fault_hook.tcl": "EFCC2AB041E11C362563A044ADEAB289FF61A872E4C66F57BB3CD8BA187F8D1E"
+  },
+  "release_packaged": false,
+  "published": false,
+  "push_eligible": false
+}
