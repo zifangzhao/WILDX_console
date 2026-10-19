@@ -34,3 +34,8 @@ precompile snapshot. Exact source reproducibility is not claimed. Main GUI
 construction passed; optional resource/icon loss was accepted by the owner.
 
 Superseded artifacts are [archived](legacy/app122_before_sd_hardening_20261018/README.md).
+
+
+## User-requested unverified high-speed image
+
+[APP654824DE + HS USB02FF93A9 fused image and exact component files](unverified/20261019_APP654824DE_USB02FF93A9_HS/README.md) are published as **unverified**. High-speed download Windows31 remains unresolved. This candidate is separate from the current stable catalog and installer.
