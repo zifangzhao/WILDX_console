@@ -1,0 +1,30 @@
+{
+  "result": "startup_fix_reproduced_in_actual_body_software_and_checked_on_local_V1",
+  "usb_crc32": "0E542BBD",
+  "local_app_crc32_preserved": "60EC609E",
+  "release_app_crc32_unchanged": "654824DE",
+  "hardware_uid": "001D00065942500B20313354",
+  "stlink": "001A00423235510D37333439",
+  "ble_address": "F6D598CA53BA",
+  "software_old_failure": "software/frozen/result.json",
+  "software_fixed_pass": "software/fixed/result.json",
+  "flash_installation": "install-verification.json",
+  "normal_usb_pass": "fixed-normal-usb-usb.json",
+  "no_host_boot_passes": ["no_host_boot.log", "no_host_boot_repeat.log"],
+  "ble_status_pass": "fixed-nohost-ble.json",
+  "ble_repeat_status_catalog_pass": "fixed-repeat-ble-catalog-observed.json",
+  "catalog_count_preserved": 31,
+  "next_free_lba_preserved": 63471616,
+  "profile_preserved": "P12/15000",
+  "recording_or_sd_write": false,
+  "failed_attempts_retained": ["baseline-return-app.json", "fixed-repeat-ble-catalog.json"],
+  "limitations": [
+    "Failing remote B34D50 was not accessible or observed",
+    "No-host HIL skips exactly USB_DevConnect through SWD, not a physical battery-only power cycle",
+    "Windows BLE endpoint lookup/discovery remains intermittent: one post-reset timeout, then advertisement observed and successful reconnect on a fresh attempt",
+    "Normal USB idle status only; streaming, download throughput and recordings were not requalified",
+    "Local USB test used existing private APP60EC609E, not newly device-tested release APP654824DE"
+  ],
+  "delivery_manifest": "delivery/battery-ble-handoff-manifest.json",
+  "publication": "pending WILDX owning developer handoff"
+}

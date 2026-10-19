@@ -7,14 +7,14 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_BATTERY_BLE_STARTUP_FIX_APP654824DE_USB76E544AB_SOFTWARE_VALIDATED_20261019",
+      "release": "V1_BLE_AUTO_SD_HANDOFF_USB0E542BBD_APP654824DE_20261019",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "SOFTWARE-VALIDATED, NOT DEVICE-TESTED",
+      "stage": "SOFTWARE_VALIDATED_SCOPED_LOCAL_USB_HIL_EXACT_RELEASE_PAIR_NOT_DEVICE_TESTED",
       "appVersion": "build 654824DE (FS2)",
-      "usbVersion": "build 76E544AB (high-speed; battery BLE startup fix)",
+      "usbVersion": "build 0E542BBD (high-speed; BLE startup handoff fix)",
       "recoveryVersion": "Included in fused HEX; version not reported",
       "appCrc32": "654824DE",
-      "usbCrc32": "76E544AB",
+      "usbCrc32": "0E542BBD",
       "recoveryCrc32": null,
       "app": {
         "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -22,23 +22,23 @@
       },
       "files": [
         {
-          "path": "V1/V1_DFU_boot_USB76E544AB_battery_ble_fix_20261019.hex",
-          "sha256": "A0236BC11AF97D2AD5E188CAF0A6DB39D5F26EA2EFC300A69C3F9D23070DED09"
+          "path": "V1/V1_DFU_boot_USB0E542BBD_battery_ble_handoff_fix_20261019.hex",
+          "sha256": "CF17A28344CE316C023F9F9A4F17BAF74D20217D084E00F17A894616E8B96375"
         },
         {
-          "path": "V1/V1_fused_BOOT_USB76E544AB_APP654824DE_battery_ble_fix_20261019.hex",
-          "sha256": "7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D"
+          "path": "V1/V1_fused_BOOT_USB0E542BBD_APP654824DE_battery_ble_handoff_fix_20261019.hex",
+          "sha256": "CB6F2989B94FE890A6096C8FA8B26C186C6609FE6BD9A3C45CFC4EA2604CA630"
         },
         {
           "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
           "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
         },
         {
-          "path": "V1/V1_USB_service_76E544AB_battery_ble_fix_20261019.hex",
-          "sha256": "DF6C38009D5D78D37EF183936B923FFE7931F9C2EBF3F9367436C710A8A41DF4"
+          "path": "V1/V1_USB_service_0E542BBD_battery_ble_handoff_fix_20261019.hex",
+          "sha256": "F2E8C2415C7212D936FA5CB4F9DADEBFF1746BCB63E7742C1EC1C13224A2940C"
         }
       ],
-      "limits": "Software-validated battery-only virgin USB cancel deadlock fix; no device test at the human request. USB76E544AB; unchanged APP654824DE/boot/ABI258; high-speed only. Strict virgin/unconfigured idle stays state0, epoch still advances, active/dirty sessions retain checked cancellation. Actual canonical include regression and one cached USB-unit build passed. No new on-device boot/BLE/USB/recording or B34D50 end-to-end acceptance. Historical USB02FF93A9/APP evidence does not qualify this new service. Fused excludes retained configuration; preserve FS2 data. V1Camera/V2 unchanged.",
+      "limits": "Actual full-callback software regression and scoped local USB/no-host-boundary HIL passed using private APP60EC609E. Release APP654824DE and boot are unchanged; exact release pair not newly device-tested. Not a physical battery-only power cycle; remote B34D50 unavailable. Windows discovery/endpoint lookup remained intermittent, including retained timeout then successful advertisement/reconnect. No recording/streaming/throughput/endurance or in-animal qualification. Preserve configuration and SD data; high-speed USB only.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -53,8 +53,8 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 248552,
-        "codeCrc32": "76E544AB",
-        "buildIdHex": "3062313861643431373365653131346131663262323562363133346465316436",
+        "codeCrc32": "0E542BBD",
+        "buildIdHex": "3562376436356661333739636538623534336465653464646566316134326637",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -102,6 +102,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "76E544AB",
+          "buildIdHex": "3062313861643431373365653131346131663262323562363133346465316436",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,

@@ -1,10 +1,10 @@
 {
   "version": "1.0.0.44",
-  "releaseId": "V1_BATTERY_BLE_STARTUP_FIX_APP654824DE_USB76E544AB_SOFTWARE_VALIDATED_20261019",
+  "releaseId": "V1_BLE_AUTO_SD_HANDOFF_USB0E542BBD_APP654824DE_20261019",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.44-V1-battery-BLE-fix.exe",
-    "sha256": "596140718F82FF6C12642E530F1378FF6073BFCAF5F49108D4023702EB7D6404",
-    "bytes": 6386916
+    "file": "WILDX_console-Setup-1.0.0.44-V1-BLE-handoff-fix.exe",
+    "sha256": "8EDA74167190E7D805756FBD90439F720099C8A414D12E3AD5D457BB12A74697",
+    "bytes": 6389696
   },
   "payload": [
     {
@@ -79,23 +79,23 @@
     },
     {
       "path": "Firmware/README.md",
-      "sha256": "6E9FA8F32AA554622CE0414473EAFE95E3ACC117D4204FD5847879A5E8500138",
-      "bytes": 421
+      "sha256": "8C8A5DA1947A76A6EDF1B5C911C2FF3C1C56B84AE34D91F599A56210F9C1BBAF",
+      "bytes": 344
     },
     {
       "path": "Firmware/releases.json",
-      "sha256": "9492F9DE6C0C74B29B783310447554534C8A4AC0186EC41932BC4E140044D403",
-      "bytes": 8565
+      "sha256": "C0850F1DF9C4B8B4FF2DA6CFB32BA3714DA2AC17C86286E77C48B1600C3ACB65",
+      "bytes": 8883
     },
     {
-      "path": "Firmware/V1/battery-ble-fix-manifest.json",
-      "sha256": "E61D922CFE7E598E3FB1069DBC344E161E62439F6AAC25409B13A10928717E15",
-      "bytes": 1576
+      "path": "Firmware/V1/battery-ble-handoff-manifest.json",
+      "sha256": "D3680F30D3D58D93DB416BCDBA23351744514EADC02818B413257BF12604962A",
+      "bytes": 2346
     },
     {
       "path": "Firmware/V1/README.md",
-      "sha256": "3022E34FA9DDAAD2B5F476BBECD7DAE53D1C0724B6A283A2B3CE518FF1785896",
-      "bytes": 2101
+      "sha256": "8B553B60F5CCDE3409BD54D02C7F199447304730E085C5C5584CB6446590DEB7",
+      "bytes": 1463
     },
     {
       "path": "Firmware/V1/short_hs_sd_ble_evidence.json",
@@ -109,8 +109,8 @@
     },
     {
       "path": "Firmware/V1/source-fused-manifest.json",
-      "sha256": "116DA33BDBE4972D9372535A7819E6A3DDA9177AB9E758CD11105C69BCE948E2",
-      "bytes": 1605
+      "sha256": "A94EC7E36390C4941C32D2BC04B3971C4A25A0C946BB01DB750F4F41E322F284",
+      "bytes": 1195
     },
     {
       "path": "Firmware/V1/source-readiness.json",
@@ -118,13 +118,18 @@
       "bytes": 19559
     },
     {
-      "path": "Firmware/V1/V1_DFU_boot_USB76E544AB_battery_ble_fix_20261019.hex",
-      "sha256": "A0236BC11AF97D2AD5E188CAF0A6DB39D5F26EA2EFC300A69C3F9D23070DED09",
+      "path": "Firmware/V1/startup-handoff-acceptance.json",
+      "sha256": "849493AC6C75F062612579420161A1111055EF78B81B2BBC08872FC292C53431",
+      "bytes": 1650
+    },
+    {
+      "path": "Firmware/V1/V1_DFU_boot_USB0E542BBD_battery_ble_handoff_fix_20261019.hex",
+      "sha256": "CF17A28344CE316C023F9F9A4F17BAF74D20217D084E00F17A894616E8B96375",
       "bytes": 999392
     },
     {
-      "path": "Firmware/V1/V1_fused_BOOT_USB76E544AB_APP654824DE_battery_ble_fix_20261019.hex",
-      "sha256": "7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D",
+      "path": "Firmware/V1/V1_fused_BOOT_USB0E542BBD_APP654824DE_battery_ble_handoff_fix_20261019.hex",
+      "sha256": "CB6F2989B94FE890A6096C8FA8B26C186C6609FE6BD9A3C45CFC4EA2604CA630",
       "bytes": 5745164
     },
     {
@@ -133,9 +138,9 @@
       "bytes": 804887
     },
     {
-      "path": "Firmware/V1/V1_USB_service_76E544AB_battery_ble_fix_20261019.hex",
-      "sha256": "DF6C38009D5D78D37EF183936B923FFE7931F9C2EBF3F9367436C710A8A41DF4",
-      "bytes": 683968
+      "path": "Firmware/V1/V1_USB_service_0E542BBD_battery_ble_handoff_fix_20261019.hex",
+      "sha256": "F2E8C2415C7212D936FA5CB4F9DADEBFF1746BCB63E7742C1EC1C13224A2940C",
+      "bytes": 699517
     },
     {
       "path": "Firmware/V1/evidence/hs_direct_20261019/acceptance.json",
@@ -238,7 +243,7 @@
       "bytes": 448461
     }
   ],
-  "extractedPayloadFilesVerified": 46,
+  "extractedPayloadFilesVerified": 47,
   "installerExecuted": false,
   "runAfterInstallCheckbox": true,
   "nsisPackagingPasses": 1,
@@ -246,21 +251,21 @@
   "firmwareRebuiltOrResealedByPackager": false,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-19",
-  "releaseLabel": "V1 battery-only BLE startup fix",
-  "stage": "SOFTWARE_VALIDATED_NOT_DEVICE_TESTED",
+  "releaseLabel": "V1 BLE startup handoff fix",
+  "stage": "SOFTWARE_VALIDATED_SCOPED_LOCAL_USB_HIL_EXACT_RELEASE_PAIR_NOT_DEVICE_TESTED",
   "stable": false,
   "matchedStackValidated": false,
   "userExplicitlyRequestedPublication": true,
   "embeddedApplicationVersionPreserved": true,
-  "publicationBaseCommit": "f52005098c3ec6159b7baaa8c40b0c933a552e7b",
+  "publicationBaseCommit": "21f13e1577229031589ac958ab2ae8ca9dd34b7f",
   "sourceIntegration": false,
   "firmware": {
     "appCrc32": "654824DE",
-    "usbCrc32": "76E544AB",
+    "usbCrc32": "0E542BBD",
     "usbSpeed": "high-speed",
     "forcedFullSpeed": false,
     "loaderAbi": 258,
-    "fusedSha256": "7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D",
+    "fusedSha256": "CB6F2989B94FE890A6096C8FA8B26C186C6609FE6BD9A3C45CFC4EA2604CA630",
     "configurationIncluded": false
   },
   "compiledSources": {
@@ -357,7 +362,7 @@
     "noNewHardwareOrQualificationByPackager": true,
     "historicalEvidenceHostExecutableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
     "currentGuiHardwareRetested": false,
-    "currentUsbServiceHardwareRetested": false,
+    "currentUsbServiceHardwareRetested": "Scoped local USB/no-host-boundary HIL with private APP60EC609E; see acceptance; exact release pair not newly tested",
     "historicalUsbServiceCrc32": "02FF93A9"
   },
   "currentGuiIncludesFs2BleSupport": true,
@@ -368,7 +373,7 @@
     "APP60EC609E private power trial"
   ],
   "originalSourceReceiptsRetainTheirHistoricalStatus": true,
-  "deliveryNotes": "Note/V1_BATTERY_BLE_STARTUP_FIX_20261019.md",
+  "deliveryNotes": "Note/V1_BLE_STARTUP_HANDOFF_FIX_20261019.md",
   "hostFix": {
     "problem": "V1 FS2 storage capability bit collided with V2-only firmware identity capability; unsupported 0xbc request timed out and disconnected GATT",
     "change": "Gate optional firmware identity query on detected V2",
@@ -385,17 +390,18 @@
   "newFuseByPackager": false,
   "userExplicitlyProhibitedDeviceTests": true,
   "firmwareFix": {
-    "description": "Strict virgin/unconfigured cancel preserves idle for battery SD/BLE fallback; epoch advances; all real/dirty sessions retain checked retirement",
-    "ownerManifest": "Firmware/V1/battery-ble-fix-manifest.json",
-    "ownerManifestSha256": "E61D922CFE7E598E3FB1069DBC344E161E62439F6AAC25409B13A10928717E15",
-    "canonicalIncludeSoftwareRegressionPassed": true,
-    "ownerIncrementalUsbUnitsBuilt": 1,
-    "deviceTested": false,
-    "physicalSymptomVerified": false,
+    "description": "Preserve/reconcile automatic SD/BLE handoff through full USB callbacks",
+    "ownerManifest": "Firmware/V1/battery-ble-handoff-manifest.json",
+    "ownerAcceptance": "Firmware/V1/startup-handoff-acceptance.json",
+    "guiUnchanged": true,
     "appUnchanged": true,
     "bootUnchanged": true,
-    "guiUnchanged": true,
-    "v2AndCameraUnchanged": true
+    "hardwareTestedApp": "60EC609E",
+    "releaseApp": "654824DE",
+    "exactReleasePairNewlyDeviceTested": false,
+    "remoteB34D50Tested": false,
+    "physicalBatteryPowerCycleTested": false,
+    "newTestsByPackager": false
   },
   "v2BleCatalogCandidateIncluded": false
 }

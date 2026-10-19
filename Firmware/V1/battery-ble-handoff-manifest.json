@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "usbCrc32": "0E542BBD",
+  "appCrc32": "654824DE",
+  "loaderAbi": 258,
+  "fix": "Preserve quiescent internal auto-SD handoff across bus events and reconcile cancelled/expired latch",
+  "usbSpeed": "high-speed",
+  "appUnchanged": true,
+  "bootUnchanged": true,
+  "configurationIncluded": false,
+  "hardwareTestedUsbCrc32": "0E542BBD",
+  "hardwareTestedAppCrc32": "60EC609E",
+  "softwareRegression": "Frozen full callbacks reproduce stranded target; corrected actual-body callbacks/mode guards pass",
+  "hardwareEvidence": [
+    "Two complete 2MiB USB-only readbacks match erase/overlay model",
+    "Normal host USB enumeration: role3 busy0 pending0",
+    "Two injected USB-connect suppressions: no enumeration, automatic APP entry, fresh BLE state0 fault0",
+    "Final BLE catalog read preserved31 entries, next-free63471616 and P12/15k; three additional status requests passed"
+  ],
+  "limits": [
+    "Remote failing B34D50 remains unavailable; its physical advertising failure was not observed",
+    "Windows BLE endpoint lookup/discovery remains intermittent: one post-reset timeout retained, then advertisement and fresh reconnect passed",
+    "No-host HIL suppresses one USB physical-connect boundary through SWD, not a physical battery-only power cycle",
+    "USB HIL used preserved private APP60EC609E; release APP654824DE is unchanged but this exact pair was not newly device-tested",
+    "No recording, SD write, streaming, throughput or endurance requalification"
+  ],
+  "files": [
+    {
+      "path": "V1_DFU_boot_USB0E542BBD_battery_ble_handoff_fix_20261019.hex",
+      "bytes": 999392,
+      "sha256": "CF17A28344CE316C023F9F9A4F17BAF74D20217D084E00F17A894616E8B96375"
+    },
+    {
+      "path": "V1_fused_BOOT_USB0E542BBD_APP654824DE_battery_ble_handoff_fix_20261019.hex",
+      "bytes": 5745164,
+      "sha256": "CB6F2989B94FE890A6096C8FA8B26C186C6609FE6BD9A3C45CFC4EA2604CA630"
+    },
+    {
+      "path": "V1_SD_BLE_app_only_store2_rc1.hex",
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "V1_USB_service_0E542BBD_battery_ble_handoff_fix_20261019.hex",
+      "bytes": 699517,
+      "sha256": "F2E8C2415C7212D936FA5CB4F9DADEBFF1746BCB63E7742C1EC1C13224A2940C"
+    }
+  ]
+}
