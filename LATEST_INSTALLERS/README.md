@@ -1,7 +1,7 @@
-# WILDX V2 manual Start fix
+# WILDX V2 catalog Start firmware hotfix
 
-[Download installer](WILDX_console-Setup-1.0.0.45-V2-manual-start-fix.exe) — version **1.0.0.45**.
+[Download installer](WILDX_console-Setup-1.0.0.45-V2-catalog-start-fix.exe) — GUI **1.0.0.45**, unchanged.
 
-V2 manual Start now relies on firmware acceptance; PC-time and cached readiness no longer disable it in the GUI. One START request, no automatic overwrite/recovery. V1 behavior and all bundled firmware are unchanged. Focused software checks passed; no hardware test for this GUI fix. All **47 extracted files** matched. Setup includes **Run WILD-X**.
+V2 APP **B60291EE** permits Start for a harmless DEGRADED-only catalog; FULL/recovery/unknown-allocation protections remain. Native control checks passed; no new physical recording qualification. Parent capture limits remain. V1/camera and V2 USB/recovery are unchanged. APP update .xenp and matching fused HEX are included in Advanced/Firmware. No GUI compile or new hardware tests. All **47 extracted files** matched.
 
-One current installer; [previous package](legacy/20261019_before_v2_manual_start_fix/README.md). [Fix and limits](../Note/V2_MANUAL_START_FIX_20261019.md) · [Manifest](release-manifest.json) · [Checksums](SHA256SUMS.txt).
+One latest installer; [previous package](legacy/20261019_before_B60291EE/README.md). [Firmware and limits](../Firmware/V2/README.md) · [Manifest](release-manifest.json).

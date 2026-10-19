@@ -61,7 +61,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX V2 manual Start fix](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.45-V2-manual-start-fix.exe), embedded version 1.0.0.45. V2 manual Start uses firmware acceptance rather than PC-time/cached GUI gates. V1 behavior and all firmware remain unchanged, including V1USB0E542BBD. [Fix and validation](Note/V2_MANUAL_START_FIX_20261019.md).
+The current installer is [WILDX V2 catalog Start firmware hotfix](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.45-V2-catalog-start-fix.exe), with unchanged GUI1.0.0.45 and V2APPB60291EE. Harmless DEGRADED-only Start is permitted; full/recovery protections remain. V1/camera and V2 USB/recovery are unchanged. [Scope and limits](Note/V2_CATALOG_START_HOTFIX_20261019.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 

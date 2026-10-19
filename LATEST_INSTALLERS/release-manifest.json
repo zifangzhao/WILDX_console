@@ -1,10 +1,10 @@
 {
   "version": "1.0.0.45",
-  "releaseId": "V2_MANUAL_START_GUI_FIX_20261019",
+  "releaseId": "V2_CATALOG_START_CONTROL_HOTFIX_B60291EE_20261019",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.45-V2-manual-start-fix.exe",
-    "sha256": "A045EFACA76E600C55D1DBD63580D3C26B8277C4DD7C038A312C3B946668FDEC",
-    "bytes": 6389687
+    "file": "WILDX_console-Setup-1.0.0.45-V2-catalog-start-fix.exe",
+    "sha256": "A939679FDF0473091FAB047FDEC3203AF54B88F3B611403216B4F7DB908AB727",
+    "bytes": 6386138
   },
   "payload": [
     {
@@ -79,13 +79,13 @@
     },
     {
       "path": "Firmware/README.md",
-      "sha256": "8C8A5DA1947A76A6EDF1B5C911C2FF3C1C56B84AE34D91F599A56210F9C1BBAF",
+      "sha256": "869FC25C4C7F543B63984B00482661D485A837128DB4FA92A0B7F6B493828602",
       "bytes": 344
     },
     {
       "path": "Firmware/releases.json",
-      "sha256": "C0850F1DF9C4B8B4FF2DA6CFB32BA3714DA2AC17C86286E77C48B1600C3ACB65",
-      "bytes": 8883
+      "sha256": "6B9B14EE864EDAA89C5B6F8B4C13E7EADEE2B08FCF11F71423930B22583ECCC5",
+      "bytes": 10107
     },
     {
       "path": "Firmware/V1/battery-ble-handoff-manifest.json",
@@ -199,37 +199,37 @@
     },
     {
       "path": "Firmware/V2/README.md",
-      "sha256": "8CAB9159B87EABBBB1F47320137C7DFE8D2ADFD4B15630558C457D1C5E0F2209",
-      "bytes": 2300
+      "sha256": "03FC12C1E4307E268CF7560D5E4AE838F17C98296C74BE2905239294ABFDA6A4",
+      "bytes": 1336
     },
     {
       "path": "Firmware/V2/source-manifest.json",
-      "sha256": "1CF63EE60D085F45404ED2FD37CF2B0300AB5A5DFFD5D0B09D454A108C3C5C7C",
-      "bytes": 2350
+      "sha256": "C2848B6F2BA38AC821DBC2DA7D4486E0E74364D55F993DE8D498EBDDAD461216",
+      "bytes": 1258
     },
     {
       "path": "Firmware/V2/source-SHA256SUMS.txt",
-      "sha256": "C96559A21A8A38EDA8377D4B2CA9AD7255FEC6D94DFA87480659E6BEAB5AC381",
-      "bytes": 620
+      "sha256": "8EC0D48BCA5D9DCEE88B5682EA42777ED201C46DE21A0AA103BA760A7080C910",
+      "bytes": 617
     },
     {
       "path": "Firmware/V2/source-validation.md",
-      "sha256": "9A95D7595035575868E33306DF80D2FF1767EEB59A3CC32FC525E32B472C7612",
-      "bytes": 2682
+      "sha256": "54BA8B4551A6B34D251F80E7E973C8C4AF897419621AC386264E2308986023DA",
+      "bytes": 1258
     },
     {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex",
-      "sha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B",
-      "bytes": 1017841
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_B60291EE_CATALOG_START_FIX_20261019.hex",
+      "sha256": "57F3ED4F0404832AF7EEEC6533206D50CBDFCB3B3BAF1773EA5E92D7B2717751",
+      "bytes": 995216
     },
     {
-      "path": "Firmware/V2/V2_logger_APP_only_136172A5_POWER_PROFILES_DEV_20261016.hex",
-      "sha256": "DDF218944CED454426A030F2B7EE3677152A10DA400797891B40AEDAD4EEBA2A",
-      "bytes": 485316
+      "path": "Firmware/V2/V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex",
+      "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145",
+      "bytes": 474528
     },
     {
-      "path": "Firmware/V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
-      "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6",
+      "path": "Firmware/V2/V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp",
+      "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636",
       "bytes": 172528
     },
     {
@@ -251,13 +251,13 @@
   "firmwareRebuiltOrResealedByPackager": false,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-19",
-  "releaseLabel": "V2 manual Start GUI fix",
-  "stage": "GUI_SOFTWARE_VALIDATED_FIRMWARE_UNCHANGED",
+  "releaseLabel": "V2 catalog Start firmware hotfix",
+  "stage": "FIRMWARE_CONTROL_SOFTWARE_VALIDATED_NO_NEW_DEVICE_TEST",
   "stable": false,
   "matchedStackValidated": false,
   "userExplicitlyRequestedPublication": true,
   "embeddedApplicationVersionPreserved": true,
-  "publicationBaseCommit": "ca55be12691f37f79d7716cdb050fa61898ebc72",
+  "publicationBaseCommit": "d651091a8a7467e845564e6d2f6d53f53044c543",
   "sourceIntegration": false,
   "firmware": {
     "appCrc32": "654824DE",
@@ -369,13 +369,13 @@
   },
   "currentGuiIncludesFs2BleSupport": true,
   "latestRootContainsOneInstaller": true,
-  "v1CameraAndV2AssetsAndTargetsUnchanged": true,
+  "v1CameraAndV2AssetsAndTargetsUnchanged": false,
   "excludedFirmware": [
     "FACEA0D2 forced full-speed",
     "APP60EC609E private power trial"
   ],
   "originalSourceReceiptsRetainTheirHistoricalStatus": true,
-  "deliveryNotes": "Note/V2_MANUAL_START_FIX_20261019.md",
+  "deliveryNotes": "Note/V2_CATALOG_START_HOTFIX_20261019.md",
   "hostFix": {
     "problem": "V1 FS2 storage capability bit collided with V2-only firmware identity capability; unsupported 0xbc request timed out and disconnected GATT",
     "change": "Gate optional firmware identity query on detected V2",
@@ -387,7 +387,7 @@
   },
   "hardwareQualificationOfCurrentGui": false,
   "hardwareQualificationOfCurrentFirmware": false,
-  "guiRebuilt": true,
+  "guiRebuilt": false,
   "firmwareRebuiltByPackager": false,
   "newFuseByPackager": false,
   "userExplicitlyProhibitedDeviceTests": true,
@@ -406,8 +406,8 @@
     "newTestsByPackager": false
   },
   "v2BleCatalogCandidateIncluded": false,
-  "guiRebuiltByOwner": true,
-  "firmwareUnchanged": true,
+  "guiRebuiltByOwner": false,
+  "firmwareUnchanged": false,
   "manualStartFix": {
     "generation": 2,
     "buttonRequires": "usable connection and no host command in progress",
@@ -429,5 +429,23 @@
     "compileInvocations": 1,
     "onlyChangedInput": "Properties/AssemblyInfo.cs",
     "functionalRegressionReused": true
-  }
+  },
+  "v2Firmware": {
+    "appCrc32": "B60291EE",
+    "usbCrc32": "2E07799E",
+    "recoveryCrc32": "6408DBB8",
+    "generation": 2,
+    "loaderAbi": 4,
+    "settingsIncluded": false,
+    "fusedSha256": "57F3ED4F0404832AF7EEEC6533206D50CBDFCB3B3BAF1773EA5E92D7B2717751"
+  },
+  "v2FirmwareFix": {
+    "degradedOnlyStartPermitted": true,
+    "fullRecoveryUnknownAllocationProtected": true,
+    "automaticFormatOrOverwrite": false,
+    "ownerManifest": "Firmware/V2/source-manifest.json",
+    "newPhysicalQualification": false,
+    "parentCaptureLimitsInherited": true
+  },
+  "v1AndCameraAssetsAndTargetsUnchanged": true
 }

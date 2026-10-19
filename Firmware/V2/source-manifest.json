@@ -1,56 +1,32 @@
 {
-  "components": {
-    "repository": "https://github.com/zifangzhao/XE_NP",
-    "branch": "V2",
-    "directory": "LATEST_FIRMWARE/V2_NP2",
-    "loaderCrc32": "6408DBB8",
-    "usbCrc32": "2E07799E",
-    "appCrc32": "136172A5",
-    "usbManifestFlags": 3,
-    "usbMinimumLoaderAbi": 4,
-    "fusedHexFile": "V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex",
-    "fusedHexSha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B"
-  },
-  "publication": {
-    "status": "development candidate; user-directed firmware-only publication",
-    "explicitCandidatePublicationRequested": true,
-    "desktopSoftwareManagedSeparately": true,
-    "newBuildsDuringPublication": 0,
-    "newHardwareTestsDuringPublication": 0,
-    "exactExistingArtifactsCopied": true
-  },
-  "validation": {
-    "releaseReady": false,
-    "allRecordingModesLossless": false,
-    "fusedBootRetested": false,
-    "fullEndToEndPairQualified": false,
-    "allNonAppAddressBytesPreserved": true,
-    "appSealPreserved": true,
-    "settingsOmitted": true,
-    "hardwareAppCrc32": "136172A5",
-    "hardwareUsbCrc32": "5AD122A7",
-    "scope": "Exact APP short10s capture/native verification: dual15=3904,dual20=5208,triple15=5856 blocks; BLE rescue/idle passed. Dual30 source-overrun failure persists; triple20 unresolved. No exact candidate all-mode full-DAT/endurance/analog or new fused cold-boot qualification."
-  },
+  "app_crc32": "B60291EE",
+  "recovery_crc32": "6408DBB8",
+  "usb_crc32": "2E07799E",
   "files": {
-    "V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex": {
-      "bytes": 1017841,
-      "sha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B"
+    "V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex": {
+      "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145",
+      "bytes": 474528
     },
-    "V2_logger_APP_only_136172A5_POWER_PROFILES_DEV_20261016.hex": {
-      "bytes": 485316,
-      "sha256": "DDF218944CED454426A030F2B7EE3677152A10DA400797891B40AEDAD4EEBA2A"
+    "V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_B60291EE_CATALOG_START_FIX_20261019.hex": {
+      "sha256": "57F3ED4F0404832AF7EEEC6533206D50CBDFCB3B3BAF1773EA5E92D7B2717751",
+      "bytes": 995216
     },
-    "V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp": {
-      "bytes": 172528,
-      "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
-    },
-    "V2_recovery_only_6408DBB8_20261012.hex": {
-      "bytes": 84090,
-      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-    },
-    "V2_USB_only_2E07799E_AUTO_USB_20261013.hex": {
-      "bytes": 448461,
-      "sha256": "D9F20946E67FA765AC691B127D64A053F78C79F49BFA584AC39B1C8931448782"
+    "V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp": {
+      "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636",
+      "bytes": 172528
     }
-  }
+  },
+  "generation": 2,
+  "loader_abi": 4,
+  "settings_omitted": true,
+  "all_non_app_bytes_preserved": true,
+  "compiled_units": [],
+  "reused_control_native_test": "v2_catalog_available_20261017/control/test_np2_sd_control.exe",
+  "all_14_ram_regions_identical": true,
+  "semantic_vectors": 148,
+  "hardware_access": false,
+  "scope": "Control-only software/ABI regression; parent recording limits inherited, no new physical recording qualification",
+  "all_modes_lossless_qualified": false,
+  "power_improvement_claimed": false,
+  "published": false
 }

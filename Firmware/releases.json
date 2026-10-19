@@ -164,31 +164,31 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_POWER_PROFILES_DEV_20261016",
-      "sourceCommit": "e7b0d08cc3d24dc0776532d2a599462528301df7",
-      "stage": "Published development release",
-      "appVersion": "build 136172A5",
+      "release": "V2_CATALOG_START_CONTROL_HOTFIX_B60291EE_20261019",
+      "sourceCommit": "74147ae0f7ab1f19c810981a2d10047c55f72ab8",
+      "stage": "Control-only software-validated hotfix; no new physical recording qualification",
+      "appVersion": "build B60291EE (catalog Start fix)",
       "usbVersion": "build 2E07799E",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "136172A5",
+      "appCrc32": "B60291EE",
       "usbCrc32": "2E07799E",
       "recoveryCrc32": "6408DBB8",
       "app": {
-        "path": "V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
-        "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
+        "path": "V2/V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp",
+        "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636"
       },
       "files": [
         {
-          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_136172A5_POWER_PROFILES_DEV_20261016.hex",
-          "sha256": "9EAA0D82519961C2D9B865672DBF00B3E17DC4E518D76FF4F773E3975033D34B"
+          "path": "V2/V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex",
+          "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145"
         },
         {
-          "path": "V2/V2_logger_APP_only_136172A5_POWER_PROFILES_DEV_20261016.hex",
-          "sha256": "DDF218944CED454426A030F2B7EE3677152A10DA400797891B40AEDAD4EEBA2A"
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_2E07799E_APP_B60291EE_CATALOG_START_FIX_20261019.hex",
+          "sha256": "57F3ED4F0404832AF7EEEC6533206D50CBDFCB3B3BAF1773EA5E92D7B2717751"
         },
         {
-          "path": "V2/V2_logger_APP_update_136172A5_POWER_PROFILES_DEV_20261016.xenp",
-          "sha256": "F2DF4F56CE5ED216795593B75EA82B0DD2849138DC2505E859EC23D747AC64A6"
+          "path": "V2/V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp",
+          "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -199,16 +199,16 @@
           "sha256": "D9F20946E67FA765AC691B127D64A053F78C79F49BFA584AC39B1C8931448782"
         }
       ],
-      "limits": "Not an all-mode lossless release. Exact APP short captures passed dual15/dual20/triple15; dual30 fails and triple20 is unresolved. The published fused USB/APP pair has not been newly cold-boot or endurance qualified. Only the APP .xenp uses the protected updater; other HEX images require a separate recovery/service workflow.",
+      "limits": "Control-only cache relink of published APP136172A5 with checked control. Harmless DEGRADED-only catalog no longer rejects manual START; FULL/recovery/unknown allocation remains protected. Actual user radio APP/flags not captured, so error8 is not universally resolved. Native control regression passed; no new device/recording/streaming/endurance qualification. Parent dual30 failure/triple20 unresolved and other recording limits inherited. Recovery6408DBB8/USB2E07799E unchanged. Use protected APP .xenp or matching fused HEX; settings omitted.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
         "bytes": 172400,
-        "codeCrc32": "136172A5",
-        "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
-        "manifestFlags": 1,
+        "codeCrc32": "B60291EE",
+        "buildIdHex": "3935343863363038383263383531373731646136666161323639323265363636",
+        "manifestFlags": 0,
         "minimumLoaderAbi": 4,
-        "generation": 0
+        "generation": 2
       },
       "usbIdentity": {
         "imageId": 1431519793,
@@ -220,8 +220,26 @@
         "minimumLoaderAbi": 4,
         "generation": 0
       },
-      "previousApps": [],
-      "previousUsb": []
+      "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 172400,
+          "codeCrc32": "136172A5",
+          "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        }
+      ],
+      "previousUsb": [],
+      "sourceProvenance": {
+        "parentReleaseSourceCommit": "e7b0d08cc3d24dc0776532d2a599462528301df7",
+        "cacheOnlyRelink": true,
+        "ownerManifest": "V2/source-manifest.json",
+        "canonicalSourceEquivalenceClaimed": false,
+        "firmwarePublicationCommit": "74147ae0f7ab1f19c810981a2d10047c55f72ab8"
+      }
     }
   ]
 }
