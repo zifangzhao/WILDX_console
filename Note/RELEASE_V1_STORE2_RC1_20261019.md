@@ -1,3 +1,5 @@
+> **Withdrawn 2026-10-19:** forced full-speed USB is rejected. See [current policy](V1_HIGH_SPEED_USB_POLICY_20261019.md). Historical scope below does not describe the current release.
+
 # WILDX V1 store2 rc1 — 2026-10-19
 
 Frozen checked console **1.0.0.44**, APP **654824DE**, USB **FACEA0D2**, ABI **258**.

@@ -1,25 +1,20 @@
-# WILDX V1 store2 rc1
+# WILDX — high-speed USB only
 
-[Download the installer](WILDX_console-Setup-1.0.0.44-V1-store2-rc1.exe).
+The forced full-speed **V1 store2 rc1 / USB FACEA0D2** package is withdrawn.
+Full-speed USB is not an accepted workaround for the current hardware.
 
-Exact checked console **1.0.0.44**, APP **654824DE**, USB **FACEA0D2**, ABI **258**.
-The executable's embedded version is preserved; **V1 store2 rc1** identifies this
-distinct package. No application/firmware rebuild or source integration.
-V1Camera and V2 firmware/targets remain unchanged.
+The [previous exact 1.0.0.44 installer](WILDX_console-Setup-1.0.0.44.exe) is restored
+without rebuilding. It bundles APP **FA2016E7**, high-speed USB **02FF93A9** and
+its original matching fused image. It is **not a high-speed replacement for the
+new FS2/store2 recording pipeline**. Do not downgrade firmware or format existing
+FS2 media to use this older package; preserve those recordings.
 
-FS2 needs explicit fresh format/epoch; no silent legacy migration. Older writers
-must refuse FS2. Download uses checked role3 full-speed compatibility at about
-**0.83 MiB/s**; capture roles retain high speed. Normal high-speed download is
-unqualified. Five-minute P1+P2/20 kHz with reconnect and sampled72MiB passed,
-along with shorter full strict NP/IMU exports, transient descriptor unavailability
-through Mount and START-remount/safe append, and production USB download/export.
-This is not full10GB, physical-removal, camera, implant or all-mode endurance
-qualification. P1+P2/30 kHz sustained remains failed on the tested card.
+Large high-speed downloads still have documented Windows31 failures. The speed
+policy change does not establish a fix or new qualification. A matching
+high-speed store2 replacement is pending coordination with the V1 developer.
+V1Camera and V2 remain unchanged. No device was flashed, reset or formatted.
 
-One NSIS pass; all **44 extracted payload files** matched. Setup includes
-**Run WILD-X**. This root contains one installer. Previous package and original
-metadata are [archived](legacy/20261019_before_V1_store2_rc1/README.md).
-
-See [release details](../Note/RELEASE_V1_STORE2_RC1_20261019.md),
-[V1 files/evidence](../Firmware/V1/README.md), [manifest](release-manifest.json)
-and [checksums](SHA256SUMS.txt).
+See [USB policy and withdrawal](../Note/V1_HIGH_SPEED_USB_POLICY_20261019.md),
+[manifest](release-manifest.json), [checksums](SHA256SUMS.txt), and the
+[withdrawn package history](legacy/20261019_withdrawn_full_speed_store2_rc1/WITHDRAWN.md).
+This root contains one installer. Setup retains **Run WILD-X**.
