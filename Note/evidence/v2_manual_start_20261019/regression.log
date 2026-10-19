@@ -1,0 +1,3 @@
+PASS 23 actual-app BLE settings/capability/fault checks; no hardware.
+USB512_interface\USB512_interface\NpLogger\NpSdGeometry.cs(11,4): error CS0103: The name 'NpV1StoreBinding' does not exist in the current context
+USB512_interface\USB512_interface\NpLogger\NpSdGeometry.cs(21,4): error CS0103: The name 'NpV1StoreBinding' does not exist in the current context

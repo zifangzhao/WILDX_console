@@ -6,5 +6,6 @@ if(-not $installation){throw 'Visual Studio MSBuild is required.'}
 $msbuild=Join-Path $installation 'MSBuild\Current\Bin\MSBuild.exe'
 $project=Join-Path $PSScriptRoot 'USB512_interface\USB512_interface\WILDX_console.csproj'
 $generate=if($Installer){'true'}else{'false'}
+& (Join-Path $PSScriptRoot 'bump_version.ps1')
 & $msbuild $project /restore /nologo /v:minimal /p:Configuration=Release "/p:GenerateNsisInstaller=$generate"
 if($LASTEXITCODE){throw 'WILDX build failed.'}

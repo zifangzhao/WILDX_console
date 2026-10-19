@@ -1,0 +1,50 @@
+--- a/USB512_interface/USB512_interface/Ble/NpBleForm.cs
++++ b/USB512_interface/USB512_interface/Ble/NpBleForm.cs
+@@ -261,7 +261,9 @@
+             usbDownload.Visible=recorderVersion==1;
+             previewButton.Visible=recorderVersion!=0;previewButton.Enabled=ready && (V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current));
+             recordingsButton.Enabled=ready;
+-            startRecording.Enabled=ready && (V2?clock.Synchronized && NpV2SdControl.CanStart(current):NpV1BleProtocol.CanManualStart(current));
++            // Manual V2 START is a request, not a cached host admission decision.
++            // Firmware owns storage/profile acceptance and returns its rejection.
++            startRecording.Enabled=ready && (V2 || NpV1BleProtocol.CanManualStart(current));
+             UpdateOverwriteControl(ready);
+             UpdateMediaControls();
+         }
+@@ -490,7 +492,7 @@
+             if(!V2 && p.Mask==0){await ApplyV1Media();return;}
+             var s = await ReadStatus();
+             RequireStartNotCanceled();
+-            if (V2 ? !NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz) : !NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz)) throw new IOException("Wait for the recorder to stop and confirm an advertised profile.");
++            if (V2 ? !NpV2SdControl.IsProfile(p.Mask,p.Hz) : !NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz)) throw new IOException("Wait for the recorder to stop and confirm an advertised profile.");
+             uint selectId=V2?NpV2SdControl.NextId(s):NpSdControl.NextId(s);
+             var selected=await Send(V2 ? NpV2SdControl.Request(1, selectId, p.Hz, 0, 0, p.Mask) : NpSdControl.Request(1, selectId, p.Mask, p.Hz));
+             // SELECT may only acknowledge a queued command. Wait using reads;
+@@ -518,7 +520,7 @@
+                 if(!connection.Connected || connection.Epoch!=epoch || address.Text!=peer)throw new IOException("Connection changed while applying recording settings. Reconnect and read status.");
+                 if(wait.Elapsed.TotalSeconds>=60)break;
+                 if((s.Flags&8)==0)pendingSelect=false;
+-                if(s.Mask==p.Mask && s.Hz==p.Hz && (V2?NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz):NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz))){Append("Recording settings confirmed.");return;}
++                if(s.Mask==p.Mask && s.Hz==p.Hz && (V2?!s.Busy:NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz))){Append("Recording settings confirmed.");return;}
+             }
+             throw new IOException("Recording settings were not confirmed. Read status before retrying; recording was not started.");
+         }
+@@ -527,14 +529,15 @@
+             var p = profiles.SelectedItem as Profile; var s = await ReadStatus();
+             RequireStartNotCanceled();
+             if(p==null)throw new IOException("Select recording settings before Start.");
++            if(V2 && !NpV2SdControl.IsProfile(p.Mask,p.Hz))throw new IOException("Invalid V2 recording profile.");
+             if(p.Mask!=s.Mask || p.Hz!=s.Hz || !V2 && p.Mask==0 && mediaSettingsChanged){await Apply();s=await ReadStatus();}
+             RequireStartNotCanceled();
+             if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");
+-            if(V2 && !clock.Synchronized)throw new IOException("Synchronize PC time while stopped before starting.");
+             const uint duration=0;
+             if (V2) {
+-                // Validate storage/readiness before changing any staged maps.
+-                uint blocks = NpV2SdControl.Blocks(s, p.Hz, duration);
++                // Immediate continuous recording: no scheduled UTC or cached
++                // readiness/clock gate. Firmware validates the ordinary START.
++                const uint blocks=0;
+                 configurationReceipts.Reset();configurationReadError=null;
+                 configurationStatus.Text="No new NP2 IMRO requested.";
+                 var staged=new List<Np2ConfigRequest>();

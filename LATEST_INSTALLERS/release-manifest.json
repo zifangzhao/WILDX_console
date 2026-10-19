@@ -1,15 +1,15 @@
 {
-  "version": "1.0.0.44",
-  "releaseId": "V1_BLE_AUTO_SD_HANDOFF_USB0E542BBD_APP654824DE_20261019",
+  "version": "1.0.0.45",
+  "releaseId": "V2_MANUAL_START_GUI_FIX_20261019",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.44-V1-BLE-handoff-fix.exe",
-    "sha256": "8EDA74167190E7D805756FBD90439F720099C8A414D12E3AD5D457BB12A74697",
-    "bytes": 6389696
+    "file": "WILDX_console-Setup-1.0.0.45-V2-manual-start-fix.exe",
+    "sha256": "A045EFACA76E600C55D1DBD63580D3C26B8277C4DD7C038A312C3B946668FDEC",
+    "bytes": 6389687
   },
   "payload": [
     {
       "path": "WILDX_console.exe",
-      "sha256": "03228EC8E7D5B2C41847C86318DCCE9FC8CECE76ADC08A600B6921C54D60AB41",
+      "sha256": "C60F1FFEC3737238C476375167284CF58EF4B93823724DB52BAFFFAB0F312F1A",
       "bytes": 1485312
     },
     {
@@ -251,13 +251,13 @@
   "firmwareRebuiltOrResealedByPackager": false,
   "application": "WILD-X Neuropixels Console",
   "releaseDate": "2026-10-19",
-  "releaseLabel": "V1 BLE startup handoff fix",
-  "stage": "SOFTWARE_VALIDATED_SCOPED_LOCAL_USB_HIL_EXACT_RELEASE_PAIR_NOT_DEVICE_TESTED",
+  "releaseLabel": "V2 manual Start GUI fix",
+  "stage": "GUI_SOFTWARE_VALIDATED_FIRMWARE_UNCHANGED",
   "stable": false,
   "matchedStackValidated": false,
   "userExplicitlyRequestedPublication": true,
   "embeddedApplicationVersionPreserved": true,
-  "publicationBaseCommit": "21f13e1577229031589ac958ab2ae8ca9dd34b7f",
+  "publicationBaseCommit": "ca55be12691f37f79d7716cdb050fa61898ebc72",
   "sourceIntegration": false,
   "firmware": {
     "appCrc32": "654824DE",
@@ -329,15 +329,17 @@
     ]
   },
   "guiSourceProvenance": {
-    "ownerBuild": "ble_v1_capability_fix_20261019",
-    "ownerReceipt": "Note/evidence/ble_v1_fs2_fix_20261019/build-receipt.json",
-    "frozenExecutableSha256": "03228EC8E7D5B2C41847C86318DCCE9FC8CECE76ADC08A600B6921C54D60AB41",
+    "ownerBuild": "v2_manual_start_20261019",
+    "ownerReceipt": "Note/evidence/v2_manual_start_20261019/versioned-build-receipt.json",
+    "checkedFunctionalReceipt": "Note/evidence/v2_manual_start_20261019/build-receipt.json",
+    "frozenExecutableSha256": "C60F1FFEC3737238C476375167284CF58EF4B93823724DB52BAFFFAB0F312F1A",
     "inputHashLedgerAvailable": true,
     "canonicalSourceEquivalenceClaimed": false,
-    "sourceInputsComparedToR7": 95,
-    "onlyChangedInput": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
-    "baselineExecutableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
-    "unrelatedDirtySourceChangesIntegrated": false
+    "changedInputs": [
+      "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+      "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    ],
+    "baselineExecutableSha256": "03228EC8E7D5B2C41847C86318DCCE9FC8CECE76ADC08A600B6921C54D60AB41"
   },
   "qualification": {
     "shortBundledPairSdBle": "APP654824DE/HS02FF93A9/r7 shortP12-20k,128chunks,full16MiB new-extent SWD readback/strict8MiB export",
@@ -373,7 +375,7 @@
     "APP60EC609E private power trial"
   ],
   "originalSourceReceiptsRetainTheirHistoricalStatus": true,
-  "deliveryNotes": "Note/V1_BLE_STARTUP_HANDOFF_FIX_20261019.md",
+  "deliveryNotes": "Note/V2_MANUAL_START_FIX_20261019.md",
   "hostFix": {
     "problem": "V1 FS2 storage capability bit collided with V2-only firmware identity capability; unsupported 0xbc request timed out and disconnected GATT",
     "change": "Gate optional firmware identity query on detected V2",
@@ -385,7 +387,7 @@
   },
   "hardwareQualificationOfCurrentGui": false,
   "hardwareQualificationOfCurrentFirmware": false,
-  "guiRebuilt": false,
+  "guiRebuilt": true,
   "firmwareRebuiltByPackager": false,
   "newFuseByPackager": false,
   "userExplicitlyProhibitedDeviceTests": true,
@@ -403,5 +405,29 @@
     "physicalBatteryPowerCycleTested": false,
     "newTestsByPackager": false
   },
-  "v2BleCatalogCandidateIncluded": false
+  "v2BleCatalogCandidateIncluded": false,
+  "guiRebuiltByOwner": true,
+  "firmwareUnchanged": true,
+  "manualStartFix": {
+    "generation": 2,
+    "buttonRequires": "usable connection and no host command in progress",
+    "clockAndCachedReadinessGateRemoved": true,
+    "continuousBlocks": 0,
+    "utc": 0,
+    "startCommands": 1,
+    "firmwareAuthoritative": true,
+    "automaticRecoveryOrOverwrite": false,
+    "v1BehaviorUnchanged": true,
+    "hardwareTested": false,
+    "actualAppChecks": 23,
+    "actualSourceHandlerChecks": 75,
+    "regression": "Note/evidence/v2_manual_start_20261019/flow-result.log"
+  },
+  "versionIncrementPerCompilation": true,
+  "versionOnlyRecompile": {
+    "version": "1.0.0.45",
+    "compileInvocations": 1,
+    "onlyChangedInput": "Properties/AssemblyInfo.cs",
+    "functionalRegressionReused": true
+  }
 }
