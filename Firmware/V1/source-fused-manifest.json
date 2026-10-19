@@ -1,82 +1,49 @@
 {
   "schemaVersion": 1,
-  "release": "V1_HS_FS2_APP654824DE_USB02FF93A9_UNVERIFIED_20261019",
-  "stage": "UNVERIFIED_USER_REQUESTED_FUSED_IMAGE",
-  "stable": false,
+  "release": "V1_BATTERY_BLE_STARTUP_FIX_APP654824DE_USB76E544AB_SOFTWARE_VALIDATED_20261019",
+  "stage": "SOFTWARE_VALIDATED_NOT_DEVICE_TESTED",
   "matchedStackValidated": false,
-  "userExplicitlyAuthorizedUnverifiedPublication": true,
-  "date": "2026-10-19",
   "appCrc32": "654824DE",
-  "usbCrc32": "02FF93A9",
+  "usbCrc32": "76E544AB",
   "loaderAbi": 258,
   "usbSpeed": "high-speed",
   "forcedFullSpeed": false,
-  "bootRecoveryAnchorSha256": "03CBCA29117EA3C54F797F5CD9698E786BC5D0FFA73853FEBAD3431B425E3A7F",
   "configurationIncluded": false,
-  "excludedConfigurationRange": "0x0801C000..0x0801DFFF",
   "fusedCoverageBytes": 2088960,
-  "normalization": "Fused LF; component files copied byte-for-byte",
   "files": [
     {
+      "path": "V1_DFU_boot_USB76E544AB_battery_ble_fix_20261019.hex",
+      "bytes": 999392,
+      "sha256": "A0236BC11AF97D2AD5E188CAF0A6DB39D5F26EA2EFC300A69C3F9D23070DED09"
+    },
+    {
+      "path": "V1_fused_BOOT_USB76E544AB_APP654824DE_battery_ble_fix_20261019.hex",
+      "bytes": 5745164,
+      "sha256": "7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D"
+    },
+    {
       "path": "V1_SD_BLE_app_only_store2_rc1.hex",
-      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF",
-      "bytes": 804887
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
     },
     {
-      "path": "V1_USB_service_02FF93A9_20261018.hex",
-      "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F",
-      "bytes": 699517
-    },
-    {
-      "path": "V1_DFU_boot_USB02FF93A9_20261018.hex",
-      "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B",
-      "bytes": 999392
-    },
-    {
-      "path": "V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
-      "sha256": "98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3",
-      "bytes": 5745164
+      "path": "V1_USB_service_76E544AB_battery_ble_fix_20261019.hex",
+      "bytes": 683968,
+      "sha256": "DF6C38009D5D78D37EF183936B923FFE7931F9C2EBF3F9367436C710A8A41DF4"
     }
   ],
-  "directMerge": {
-    "tool": "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\merge_verified_hex.py",
-    "toolSha256": "8893A47ED9D6048C00914942D6789F966051D470AF1A04007A9D941EF40AD43E",
-    "bootUsbInput": "V1_DFU_boot_USB02FF93A9_20261018.hex",
-    "appInput": "V1_SD_BLE_app_only_store2_rc1.hex",
-    "mergeInvocations": 1,
-    "checks": "Input partition/address ownership, overlap, required manifests, entry vectors, flash/stack bounds",
-    "componentBytesPreserved": true,
-    "firmwareRebuilt": false,
-    "componentManifestResealed": false
+  "usbIdentity": {
+    "imageId": 1431519793,
+    "baseAddress": 135790592,
+    "bytes": 248552,
+    "codeCrc32": "76E544AB",
+    "buildIdHex": "3062313861643431373365653131346131663262323562363133346465316436",
+    "manifestFlags": 1,
+    "minimumLoaderAbi": 258,
+    "generation": 1
   },
-  "console": {
-    "expectedOwnerBuild": "console_build_r7",
-    "embeddedVersion": "1.0.0.44",
-    "executableSha256": "0BF2DBDC3A9D2407620EF1DB1D7C7270A33793FCA67CF8C9655048358B126DAA",
-    "installerBuiltOrPublishedWithThisImage": false
-  },
-  "existingEvidence": {
-    "shortSdBle": "APP654824DE/USB02FF93A9/r7: P12/20k,128chunks,full16MiB new-extent SWD readback/strict8MiB payload export,zero known NP continuity errors; stopped descriptor-unavailability/Mount with stable IDs and preserved frontier,append after read hook removed",
-    "usbProbeStreaming": "No current matched-tuple mode qualification recorded",
-    "sustainedHsDownload": "Unverified; existing HS large downloads have Windows31 failures. This merge does not fix the transport failure.",
-    "source": "C:/Frank/Code/XE_NP/_artifacts/v1_sd_robust_v2_20261018/s2pg_fault_capture_evidence_r1.json"
-  },
-  "limits": [
-    "Not a stable or fully verified matched stack",
-    "High-speed large-download Windows31 remains unresolved",
-    "No matched USB probe-streaming/endurance qualification established by packaging",
-    "Physical power-removal recovery and <=30s lost-tail target remain unverified",
-    "No camera, all-mode or implant qualification",
-    "Do not mass erase; retained configuration is omitted"
-  ],
-  "excluded": [
-    "FACEA0D2 forced full-speed service",
-    "APP60EC609E private power trial"
-  ],
-  "hardwareAccess": false,
-  "flashed": false,
-  "newTestsExecuted": false,
-  "currentStableCatalogChanged": false,
-  "currentInstallerChanged": false,
-  "publicationBaseCommit": "c722cac053c426baed1e327cdbefc7a4ebbc29d2"
+  "sourceManifest": "battery-ble-fix-manifest.json",
+  "existingOwnerFuseReused": true,
+  "newMergeByPackager": false,
+  "hardwareAccess": false
 }

@@ -1,41 +1,31 @@
-# WILDX high-speed FS2 r7 bundle — 2026-10-19
+# V1 battery-only BLE startup fix — 2026-10-19
 
-Includes the exact checked **r7 / 1.0.0.44 GUI**, NP/FS2 APP **654824DE**,
-high-speed USB **02FF93A9**, ABI258 recovery and matching fused/component HEX.
-The embedded app version is preserved. No application/firmware rebuild or new
-fused merge. Forced full-speed FACEA0D2 and private APP60EC609E are not bundled.
-V1Camera and V2 firmware/targets remain unchanged.
+USB service **76E544AB** fixes a source-proven deadlock before the first host
+configuration: USB bus cancel events changed virgin download state0 to state4,
+which blocked automatic SD/BLE fallback on battery power. The strict virgin
+idle case now remains state0 while the epoch still advances. Configured,
+active or dirty sessions retain the existing checked cancellation behavior.
 
-**The matched stack remains unverified.** APP654824DE + HS02FF93A9 + r7 passed
-short P1+P2/20k SD/BLE capture, missing-descriptor/Mount handling and a strict
-full new-extent SWD export. No current exact-tuple USB probe-streaming receipt
-is recorded. The matching r7 GUI is now included rather than the older GUI.
+**SOFTWARE-VALIDATED, NOT DEVICE-TESTED.** The actual canonical include regression
+passed the battery-only case and retirement/epoch safety cases. One incremental
+USB-unit compile used cached dependencies; no hardware test was performed, as
+requested by the human. B34D50's end-to-end symptom has not been verified fixed.
 
-The same HS service/r7 passed all88,080,384 reference bytes in2040ms
-(~41.17MiB/s including host comparison),170requests/170completions,zero errors,
-retries or recovered reads, with all31 FS2 paired descriptors preserved and
-clean BLE APP return. That authorized retest preserved **private APP60EC609E**;
-it does not establish the exact bundled APP654824DE pair's full acceptance.
-Cable/reseat/direct connection/meter removal changed together; a meter-only
-cause is not proven. Earlier failures belong to the previous connection path.
+APP **654824DE**, recovery/boot and ABI258 are unchanged. The exact current fixed
+GUI (1.0.0.44, SHA256
+03228EC8E7D5B2C41847C86318DCCE9FC8CECE76ADC08A600B6921C54D60AB41)
+and exporter DLL are reused without an application build. V1Camera/V2 are
+unchanged. This bundle does not include the separate V2 BLE-listing candidate.
 
-The <=30s interrupted-tail target and physical power-removal recovery remain
-unverified. No all-mode, camera or implant qualification is claimed. Initial
-FS2 formatting creates a fresh epoch and erases data; there is no automatic
-legacy migration. Do not downgrade or routinely format existing FS2 recordings
-for recovery. APP-only updates preserve USB/recovery and do not install them.
+The owner-provided component/fused HEX files are copied byte-for-byte. Fused
+SHA256 7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D
+covers firmware flash and excludes retained configuration0x0801C000..0x0801DFFF.
+No mass erase is required. APP-only updates do not replace this USB service.
+Existing FS2 recordings and configuration must be retained.
 
-The fused HEX is unchanged from commit5d15df7, SHA256
-98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3.
-It excludes configuration0x0801C000..0x0801DFFF. Do not mass erase. Component
-files, original build/fused receipts and scoped HS/SD evidence are retained.
-No hardware test, flash, reset or format is part of this publication.
+Earlier raw-transfer and SD/BLE receipts refer to USB02FF93A9 and their recorded
+APP/host combinations. They remain historical evidence, not validation of this
+new service. The full matched stack and physical interruption-tail bound remain
+unverified. High-speed USB is retained; forced full-speed is excluded.
 
-
-- [APP-only](V1_SD_BLE_app_only_store2_rc1.hex)
-- [High-speed USB service](V1_USB_service_02FF93A9_20261018.hex)
-- [Recovery + USB](V1_DFU_boot_USB02FF93A9_20261018.hex)
-- [Matching unverified fused image](V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex)
-- [HS retest, actual scope](evidence/hs_direct_20261019/acceptance.json)
-- [Frozen-APP short SD/BLE evidence](short_hs_sd_ble_evidence.json)
-- [Prior release](legacy/20261019_before_HS_FS2_r7/README.md)
+[USB service](V1_USB_service_76E544AB_battery_ble_fix_20261019.hex) · [Recovery + USB](V1_DFU_boot_USB76E544AB_battery_ble_fix_20261019.hex) · [Matching fused image](V1_fused_BOOT_USB76E544AB_APP654824DE_battery_ble_fix_20261019.hex) · [APP unchanged](V1_SD_BLE_app_only_store2_rc1.hex) · [Owner manifest](battery-ble-fix-manifest.json)

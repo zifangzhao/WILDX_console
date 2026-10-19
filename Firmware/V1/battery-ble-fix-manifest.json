@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "fix": "V1 battery-only virgin USB cancel deadlock",
+  "usbCrc32": "76E544AB",
+  "appCrc32": "654824DE",
+  "loaderAbi": 258,
+  "usbSpeed": "high-speed",
+  "appUnchanged": true,
+  "bootUnchanged": true,
+  "configurationIncluded": false,
+  "changedFirmwareUnits": 1,
+  "hardwareAccess": false,
+  "flashed": false,
+  "softwareRegression": "Actual canonical cancel/retirement include: virgin preconfiguration bus events plus all existing dirty-transfer retirement/epoch/CRC tests passed",
+  "limits": [
+    "No on-device boot, BLE, USB streaming/download or recording test for this new service",
+    "Source-proven deadlock fixed; B34D50 entering it was not observed",
+    "Prior APP/USB evidence is not new matched-stack qualification"
+  ],
+  "files": [
+    {
+      "path": "V1_DFU_boot_USB76E544AB_battery_ble_fix_20261019.hex",
+      "bytes": 999392,
+      "sha256": "A0236BC11AF97D2AD5E188CAF0A6DB39D5F26EA2EFC300A69C3F9D23070DED09"
+    },
+    {
+      "path": "V1_fused_BOOT_USB76E544AB_APP654824DE_battery_ble_fix_20261019.hex",
+      "bytes": 5745164,
+      "sha256": "7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D"
+    },
+    {
+      "path": "V1_SD_BLE_app_only_store2_rc1.hex",
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "V1_USB_service_76E544AB_battery_ble_fix_20261019.hex",
+      "bytes": 683968,
+      "sha256": "DF6C38009D5D78D37EF183936B923FFE7931F9C2EBF3F9367436C710A8A41DF4"
+    }
+  ]
+}

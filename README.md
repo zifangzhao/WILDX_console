@@ -61,7 +61,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX BLE connection fix](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.44-V1-HS-FS2-BLE-fix.exe), embedded version 1.0.0.44. It fixes the V1 FS2 connection timeout after Ready; 28 focused checks and all 45 extracted payload files passed. The high-speed firmware bundle is unchanged and the complete matched stack remains unverified. See [fix and validation](Note/BLE_V1_FS2_CONNECTION_FIX_20261019.md) and [firmware scope](Firmware/V1/README.md). The latest root contains one final installer.
+The current installer is [WILDX V1 battery-only BLE startup fix](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.44-V1-battery-BLE-fix.exe), embedded version 1.0.0.44. It includes high-speed USB76E544AB with the unchanged fixed GUI, APP654824DE and recovery. **Software-validated, not device-tested**, published at the user’s request. V2/camera firmware is unchanged; the separate V2 BLE-listing candidate is not included. See [scope and limits](Note/V1_BATTERY_BLE_STARTUP_FIX_20261019.md). The latest root contains one final installer.
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 

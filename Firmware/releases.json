@@ -7,14 +7,14 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_HS_FS2_R7_APP654824DE_USB02FF93A9_UNVERIFIED_20261019",
+      "release": "V1_BATTERY_BLE_STARTUP_FIX_APP654824DE_USB76E544AB_SOFTWARE_VALIDATED_20261019",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "User-requested high-speed FS2 bundle; matched stack not fully verified",
+      "stage": "SOFTWARE-VALIDATED, NOT DEVICE-TESTED",
       "appVersion": "build 654824DE (FS2)",
-      "usbVersion": "build 02FF93A9 (high-speed)",
+      "usbVersion": "build 76E544AB (high-speed; battery BLE startup fix)",
       "recoveryVersion": "Included in fused HEX; version not reported",
       "appCrc32": "654824DE",
-      "usbCrc32": "02FF93A9",
+      "usbCrc32": "76E544AB",
       "recoveryCrc32": null,
       "app": {
         "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -22,23 +22,23 @@
       },
       "files": [
         {
+          "path": "V1/V1_DFU_boot_USB76E544AB_battery_ble_fix_20261019.hex",
+          "sha256": "A0236BC11AF97D2AD5E188CAF0A6DB39D5F26EA2EFC300A69C3F9D23070DED09"
+        },
+        {
+          "path": "V1/V1_fused_BOOT_USB76E544AB_APP654824DE_battery_ble_fix_20261019.hex",
+          "sha256": "7C637268412F031E9DA6BA6A7306B7389A32593C0DAF68FF0EF2A11E2205D44D"
+        },
+        {
           "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
           "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
         },
         {
-          "path": "V1/V1_USB_service_02FF93A9_20261018.hex",
-          "sha256": "D35FB5091317F3AA085A3A75CDD3B8ABCD8918247519BBAC8A3EE4627A1DC58F"
-        },
-        {
-          "path": "V1/V1_DFU_boot_USB02FF93A9_20261018.hex",
-          "sha256": "E75A83531F38B6AE6049245865FD2D1E66621E0A9512538A1D2F5C05AACBA60B"
-        },
-        {
-          "path": "V1/V1_fused_BOOT_USB02FF93A9_APP654824DE_HS_UNVERIFIED_20261019.hex",
-          "sha256": "98B0877430452323D8A21F9A219A431A4992860F87D667D78EE3D0D00175ABC3"
+          "path": "V1/V1_USB_service_76E544AB_battery_ble_fix_20261019.hex",
+          "sha256": "DF6C38009D5D78D37EF183936B923FFE7931F9C2EBF3F9367436C710A8A41DF4"
         }
       ],
-      "limits": "V1 NP/91k+91k high-speed FS2 development bundle, not fully qualified as a matched stack. Frozen APP654824DE/r7 plus HS02FF93A9 passed shortP12/20k SD/BLE capture and strict full new-extent SWD export. The same HS service/r7 passed84MiB production download in2.04s(~41.17MiB/s),zero errors/retries,on a corrected direct USB path while private APP60EC609E was preserved; that APP is not bundled. Earlier connection-path failures remain evidence; a meter-only cause is not established. Current exact frozen-tuple USB-streaming/HS-download acceptance is incomplete. <=30s interrupted-tail and physical-removal recovery remain unverified. No camera, all-mode or implant qualification. FS2 initialization requires explicit format/epoch; no silent migration or routine-format recovery. Preserve existing FS2 data. No forced full-speed firmware.",
+      "limits": "Software-validated battery-only virgin USB cancel deadlock fix; no device test at the human request. USB76E544AB; unchanged APP654824DE/boot/ABI258; high-speed only. Strict virgin/unconfigured idle stays state0, epoch still advances, active/dirty sessions retain checked cancellation. Actual canonical include regression and one cached USB-unit build passed. No new on-device boot/BLE/USB/recording or B34D50 end-to-end acceptance. Historical USB02FF93A9/APP evidence does not qualify this new service. Fused excludes retained configuration; preserve FS2 data. V1Camera/V2 unchanged.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -53,8 +53,8 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 248552,
-        "codeCrc32": "02FF93A9",
-        "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+        "codeCrc32": "76E544AB",
+        "buildIdHex": "3062313861643431373365653131346131663262323562363133346465316436",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -102,6 +102,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "02FF93A9",
+          "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
