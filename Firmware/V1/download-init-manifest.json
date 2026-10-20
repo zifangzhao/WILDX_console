@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "V1_APP_SD_INIT_USB22D0792B_APP654824DE_20261019",
+  "usbVersion": "1.0.94-app-sd-init",
+  "usbCrc32": "22D0792B",
+  "appCrc32": "654824DE",
+  "loaderAbi": 258,
+  "bootUnchanged": true,
+  "appUnchanged": true,
+  "configurationIncluded": false,
+  "sdKernelHz": 120000000,
+  "localNegotiatedMode": "SDR104",
+  "consoleSha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
+  "rawMBs": 36.442028961522546,
+  "exportMBs": 32.78099843418381,
+  "largeReads": [
+    {
+      "bytes": 1073741824,
+      "seconds": 29.1904489,
+      "MB_per_second": 36.78401192115956,
+      "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+      "recovered": 0,
+      "retries": 0,
+      "diagnostics": "firmware requests=2390 SD_ms=33797 CRC_ms=4 USB_ms=25682 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+    },
+    {
+      "bytes": 1073741824,
+      "seconds": 29.2037123,
+      "MB_per_second": 36.76730591541953,
+      "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+      "recovered": 0,
+      "retries": 0,
+      "diagnostics": "firmware requests=4447 SD_ms=62858 CRC_ms=6 USB_ms=47810 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+    }
+  ],
+  "softwareRegression": "Actual canonical FIFO/CRC reader: exact byte count, DATAEND, data faults, bounded STOP/status, DAT0 busy retirement, sticky failure/no replay",
+  "testedAppCrc32": "60EC609E",
+  "releasePairNewlyDeviceTested": false,
+  "limits": [
+    "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
+    "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
+    "No new recording, streaming, camera, card-removal or endurance qualification",
+    "New raw36.4MB/s is below prior local44.0MB/s; no same-device speedup claim"
+  ],
+  "files": [
+    {
+      "path": "V1_DFU_boot_USB22D0792B_app_sd_init_20261019.hex",
+      "bytes": 999392,
+      "sha256": "0DB7E683B7F600E0347C04F774ADA01F3323DAE93F05D783CB6535A342A5C2DA"
+    },
+    {
+      "path": "V1_fused_BOOT_USB22D0792B_APP654824DE_app_sd_init_20261019.hex",
+      "bytes": 5745164,
+      "sha256": "384EB564A77A638ECF8F3C73997373EDD7DC27337B43C34015FF1CC13A7B2AC5"
+    },
+    {
+      "path": "V1_SD_BLE_app_only_store2_rc1.hex",
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "V1_USB_service_22D0792B_app_sd_init_20261019.hex",
+      "bytes": 699517,
+      "sha256": "B92949C9F4D0E77E566531AC84B3F4B3862FEB52A9F0AE4A18B846F87D939117"
+    }
+  ]
+}

@@ -1,21 +1,18 @@
-# WILDX 1.0.0.48 — V1 download/export
+# WILDX48 — V1 SD download firmware refresh
 
-[Download installer](WILDX_console-Setup-1.0.0.48-V1-download-export.exe) — **1.0.0.48**.
+[Download installer](WILDX_console-Setup-1.0.0.48-V1-SD-download-USB22D0792B.exe).
+Same checked WILDX1.0.0.48 runtime; new V1 USB1.0.94 / CRC22D0792B with matching
+fused boot+USB+APP654824DE. This firmware update is needed to use the new SD
+initialization/read-retirement path; an APP-only update does not change USB.
 
-V1's PC-side SD export decoder is faster, with the same framing, continuity
-and corruption checks. Existing file-only validation passed 3,101 cases and
-retained 21 byte-identical output files. Saved-record full export was 2.78x
-faster; this is **not a verified fix for the live 11 MB/s download rate**.
+Connected V1:84MiB exact comparison36.44MB/s; two matching1GiB reads36.78/36.77MB/s;
+full export32.78MB/s,21 identical data files,0errors/retries. All31 recordings
+unchanged and SD/BLE restored. No SD writes, recording or streaming tests.
+Local HIL preserved privateAPP60EC609E; unchanged releaseAPP654824DE pair was not
+newly device-tested. Remote11.2MB/s/0xFFFFFFFE not proven resolved; prior local
+44MB/s means no demonstrated same-device speedup. V2/camera/runtime unchanged.
 
-The exact checked 48 executable is packaged without rebuilding. All other
-47 runtime/firmware files match release 47, including V1 HS/SD/BLE component
-and fused images, V1 camera, V2 and the checked exporter DLL. No firmware
-update is required for this PC decoder change. Existing USB catalog-repair
-support and firmware requirements are unchanged.
-
-Finish → Run uses Windows shell launch so the app's administrator prompt can
-appear. Three isolated callback/launch cases passed; real WILD-X/UAC was not
-run during packaging. All 48 extracted payload files match the frozen inputs.
-
-No new device, streaming, SD-recording, endurance or installed-pair qualification.
-New unbuilt timing diagnostics are excluded. [Scope and limits](../Note/RELEASE_1.0.0.48_V1_DOWNLOAD_EXPORT_20261019.md) · [Manifest](release-manifest.json) · [Previous installer](legacy/20261019_before_download_export_48/README.md).
+All40 independently extracted payload files match frozen inputs. Installer not
+executed as a new installed-pair test. Unbuilt private host changes excluded.
+[Full scope](../Note/V1_APP_SD_DOWNLOAD_20261019.md) · [Manifest](release-manifest.json)
+· [Previous48](legacy/20261019_before_app_sd_init/README.md).

@@ -1,18 +1,6 @@
 {
-  "validation": {
-    "decoderMedianSpeedup": 5.233205177500587,
-    "savedFileExportSpeedup": 2.7798089523870866,
-    "newInstalledPairQualification": false,
-    "scope": "File-only P12/20k full export and old/new decoder differential checks; not live USB/download speed qualification",
-    "byteIdenticalExportFiles": 21,
-    "live11MBIssueResolved": false,
-    "decoderDifferentialChecks": 3101
-  },
-  "hardwareAccess": false,
-  "firmwareSourceCommit": "1a73610f87794c58c6c50fe942827a3086caa4fb",
-  "unchanged47payloadFiles": 47,
-  "firmwareChanged": false,
-  "exporterChanged": false,
+  "version": "1.0.0.48",
+  "releaseId": "V1_APP_SD_INIT_USB22D0792B_APP654824DE_20261019",
   "payload": [
     {
       "path": "Firmware/owner-confirmation-20261017.json",
@@ -26,73 +14,33 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 10185,
-      "sha256": "08DD44BF542C58096D374A92F4D4D1DCDBB8B3F8486291174A566C193DB9A006"
+      "bytes": 11746,
+      "sha256": "EBB531C48276A0D1DD91CD6BFA6092B57E382F6A1BCCC268C5E9D72ED1EAC19D"
     },
     {
-      "path": "Firmware/V1/battery-ble-handoff-manifest.json",
-      "bytes": 2346,
-      "sha256": "D3680F30D3D58D93DB416BCDBA23351744514EADC02818B413257BF12604962A"
+      "path": "Firmware/V1/download-acceptance.json",
+      "bytes": 2152,
+      "sha256": "96B66533A4F80075A2CE34DF24A65D794F2B9469994033A261C96E6CEE8EE035"
     },
     {
-      "path": "Firmware/V1/evidence/hs_direct_20261019/acceptance.json",
-      "bytes": 2862,
-      "sha256": "E293C91D5E0F55D439173093A797AB950D6116E0526F0B74CA3B3CCF9CB8A40E"
-    },
-    {
-      "path": "Firmware/V1/evidence/hs_direct_20261019/install-verification.json",
-      "bytes": 443,
-      "sha256": "D382D559AF24FD236FC2A5C3819D12ABA95EB2285ECD8E105BA97CB6460822F3"
-    },
-    {
-      "path": "Firmware/V1/evidence/hs_direct_20261019/read.json",
-      "bytes": 3098,
-      "sha256": "F5D59648100860FABFEDB3E6FD1977CD1E7ECC5C9E31C780F79ECCE71883D4F2"
-    },
-    {
-      "path": "Firmware/V1/evidence/hs_direct_20261019/return-app.json",
-      "bytes": 1443,
-      "sha256": "5CCE40DE6FA61EDDE6967DC6251FB9B59008E395F2E6F6C2302BDA8B2EF04716"
+      "path": "Firmware/V1/download-init-manifest.json",
+      "bytes": 2783,
+      "sha256": "341C721B93C1BE9E5A090700CCCD6F8ED03573814A4B7337D53178AD4F3F3848"
     },
     {
       "path": "Firmware/V1/README.md",
-      "bytes": 1463,
-      "sha256": "8B553B60F5CCDE3409BD54D02C7F199447304730E085C5C5584CB6446590DEB7"
+      "bytes": 1025,
+      "sha256": "CD0BFB60E72AF9BB41A9180957476870AB58384D39CEB60BB19B4FFC7D0BD1EB"
     },
     {
-      "path": "Firmware/V1/short_hs_sd_ble_evidence.json",
-      "bytes": 4283,
-      "sha256": "CAA829DA14BDDCFFA3215F7D5D72126FE9F48D316F3D7F7575529EECB1B75EDD"
-    },
-    {
-      "path": "Firmware/V1/source-console-build-receipt.json",
-      "bytes": 21294,
-      "sha256": "E2317EA683E99FA8D792003F74890317551441ACF80F38F9909F1CA7BCAE27EA"
-    },
-    {
-      "path": "Firmware/V1/source-fused-manifest.json",
-      "bytes": 1195,
-      "sha256": "A94EC7E36390C4941C32D2BC04B3971C4A25A0C946BB01DB750F4F41E322F284"
-    },
-    {
-      "path": "Firmware/V1/source-readiness.json",
-      "bytes": 19559,
-      "sha256": "03A5F58FD07F290C7E40819941AA001AA93BCE8B9CC80AEDA6C79EBE7499903B"
-    },
-    {
-      "path": "Firmware/V1/startup-handoff-acceptance.json",
-      "bytes": 1650,
-      "sha256": "849493AC6C75F062612579420161A1111055EF78B81B2BBC08872FC292C53431"
-    },
-    {
-      "path": "Firmware/V1/V1_DFU_boot_USB0E542BBD_battery_ble_handoff_fix_20261019.hex",
+      "path": "Firmware/V1/V1_DFU_boot_USB22D0792B_app_sd_init_20261019.hex",
       "bytes": 999392,
-      "sha256": "CF17A28344CE316C023F9F9A4F17BAF74D20217D084E00F17A894616E8B96375"
+      "sha256": "0DB7E683B7F600E0347C04F774ADA01F3323DAE93F05D783CB6535A342A5C2DA"
     },
     {
-      "path": "Firmware/V1/V1_fused_BOOT_USB0E542BBD_APP654824DE_battery_ble_handoff_fix_20261019.hex",
+      "path": "Firmware/V1/V1_fused_BOOT_USB22D0792B_APP654824DE_app_sd_init_20261019.hex",
       "bytes": 5745164,
-      "sha256": "CB6F2989B94FE890A6096C8FA8B26C186C6609FE6BD9A3C45CFC4EA2604CA630"
+      "sha256": "384EB564A77A638ECF8F3C73997373EDD7DC27337B43C34015FF1CC13A7B2AC5"
     },
     {
       "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -100,9 +48,9 @@
       "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
     },
     {
-      "path": "Firmware/V1/V1_USB_service_0E542BBD_battery_ble_handoff_fix_20261019.hex",
+      "path": "Firmware/V1/V1_USB_service_22D0792B_app_sd_init_20261019.hex",
       "bytes": 699517,
-      "sha256": "F2E8C2415C7212D936FA5CB4F9DADEBFF1746BCB63E7742C1EC1C13224A2940C"
+      "sha256": "B92949C9F4D0E77E566531AC84B3F4B3862FEB52A9F0AE4A18B846F87D939117"
     },
     {
       "path": "Firmware/V1Camera/README.md",
@@ -255,22 +203,80 @@
       "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
     }
   ],
-  "sourceIntegration": "Checked decoder/version/tests only; pre-existing private build context retained, clean-public-HEAD reconstruction not claimed. Unbuilt Stream/Form timing edits excluded.",
+  "unchanged48payloadFiles": 32,
+  "firmwareChanged": true,
   "applicationRebuilt": false,
-  "releaseId": "V1_DOWNLOAD_EXPORT_DECODER_48_20261019",
-  "version": "1.0.0.48",
+  "exporterChanged": false,
+  "firmwareSourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+  "sourceIntegration": "Current APP SD functions composed into frozen USB source; exact source hashes in build/prepare receipts. No incidental WILDX private edits.",
+  "validation": {
+    "result": "bounded_connected_V1_SD_download_pass",
+    "uid": "001D00065942500B20313354",
+    "stlink": "001A00423235510D37333439",
+    "usb_crc": "22D0792B",
+    "tested_app_crc": "60EC609E",
+    "release_app_crc": "654824DE",
+    "console_sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
+    "raw_bytes": 88080384,
+    "raw_seconds": 2.417,
+    "raw_MB_s": 36.442028961522546,
+    "export_MB_s": 32.78099843418381,
+    "byte_identical_export_files": 21,
+    "allowed_metadata_differences": [
+      "software_version",
+      "metadata_created_time_utc"
+    ],
+    "large_read_passes": [
+      {
+        "bytes": 1073741824,
+        "seconds": 29.1904489,
+        "MB_per_second": 36.78401192115956,
+        "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+        "recovered": 0,
+        "retries": 0,
+        "diagnostics": "firmware requests=2390 SD_ms=33797 CRC_ms=4 USB_ms=25682 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+      },
+      {
+        "bytes": 1073741824,
+        "seconds": 29.2037123,
+        "MB_per_second": 36.76730591541953,
+        "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+        "recovered": 0,
+        "retries": 0,
+        "diagnostics": "firmware requests=4447 SD_ms=62858 CRC_ms=6 USB_ms=47810 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+      }
+    ],
+    "sd_writes": 0,
+    "new_recordings": 0,
+    "catalog_count": 31,
+    "frontier": 63471616,
+    "restored_SD_BLE": true,
+    "initial_candidate_failure": "A0B4AF8C faulted at SDMMC_PowerState_OFF(NULL); guarded reset fixed in22D0792B before acceptance",
+    "limits": [
+      "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
+      "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
+      "No new recording, streaming, camera, card-removal or endurance qualification",
+      "New raw36.4MB/s is below prior local44.0MB/s; no same-device speedup claim"
+    ]
+  },
   "installerLaunch": {
     "evidence": "Note/INSTALLER_FINISH_LAUNCH_FIX_20261019.md",
     "isolatedCasesPassed": 3,
     "scope": "Actual preprocessed MUI callback/dummy payload; checked/unchecked/path-with-spaces and missing executable handling; real WILDX/UAC not executed",
     "scriptSha256": "CB43535C91EB63740853553E4C76D0E40E66E282EBD66F202973DF767DC738CB"
   },
-  "installer": {
+  "previousInstaller": {
     "bytes": 6524869,
     "file": "WILDX_console-Setup-1.0.0.48-V1-download-export.exe",
     "sha256": "33B335DB99E83A601FCAD2B97F2131DA7048BB9FE03D804C6732EE217704AD78"
   },
-  "extractedPayloadFilesVerified": 48,
-  "nsisPackagingPasses": 1,
-  "installerExecuted": false
+  "sourceCommitScope": "Existing source base anchor only; new USB composed from hashed local inputs, not a clean-public-HEAD reconstruction.",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB22D0792B.exe",
+    "sha256": "63BA3EBA92AD14A2DA77A4B64F08974DA67977A65ACCB1E2DB7B091869BC9713",
+    "bytes": 6506195
+  },
+  "extractedPayloadFilesVerified": 40,
+  "installerExecuted": false,
+  "nsisPackagingPasses": 1
 }
