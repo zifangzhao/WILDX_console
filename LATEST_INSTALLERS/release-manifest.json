@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "version": "1.0.0.51",
-  "releaseId": "V1_UHS200_USBF8E721C2_APP654824DE_20261020",
-  "stage": "USB_DOWNLOAD_UHS_AND_FORCED_FALLBACK_DEVICE_CHECKED_OTHER_MODES_INHERITED",
-  "baselineRelease": "V1_SD_POWER200_USBB5FC4876_APP654824DE_20261020",
+  "releaseId": "V1_USB30K_USBF2D80C4F_APP654824DE_20261020",
+  "stage": "USB30K_CAPTURE_CHECKED_DOWNLOAD_AND_BLE_SD_INHERITED",
+  "baselineRelease": "V1_UHS200_USBF8E721C2_APP654824DE_20261020",
   "firmwareChanged": true,
   "applicationRebuilt": false,
   "unchanged51payloadFiles": 32,
@@ -20,33 +20,38 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 13520,
-      "sha256": "125A6847C59494E6CD0B2275110E1F6F0C37BA0CC920D5AFB6DC4052D1E07EC1"
+      "bytes": 13840,
+      "sha256": "45D937E286395E686AEFAEB48EAA8FFE837EA0EB074BD8ECAD9FE58BA08D5B8D"
     },
     {
       "path": "Firmware/V1/download-acceptance.json",
-      "bytes": 8080,
-      "sha256": "62E2E2DD1750A23A9EC78C4E66723A594A920BCEECE5066EF604E616994D4E31"
+      "bytes": 32034,
+      "sha256": "2D341DBEC1B32362FE44B1DC0C462022532EC369EC603361C7E42CB5B4C310E5"
     },
     {
       "path": "Firmware/V1/download-init-manifest.json",
-      "bytes": 17739,
-      "sha256": "45FC46616C45C4806A0DBCE1FC8FA9C4B67D6A9A8D1487B57C4EBFE1DC3E5D08"
+      "bytes": 55253,
+      "sha256": "A7DA54B154A64713DFCF0F6059ED62907314FA06F86DF20B5C7D93357D0296E8"
     },
     {
       "path": "Firmware/V1/README.md",
-      "bytes": 1044,
-      "sha256": "39B0AF209E34AF8CB3051D472A3261913532B8CE0BBD8B2660808F28B6C1D5F4"
+      "bytes": 903,
+      "sha256": "6816953D1C3DFA0464225B0AB2AE6181985C4485B70E8284F3969B79CD7D06CB"
     },
     {
-      "path": "Firmware/V1/V1_DFU_boot_USBF8E721C2_uhs200_20261020.hex",
+      "path": "Firmware/V1/usb30-source-delta.patch",
+      "bytes": 2605,
+      "sha256": "3EF8E797651D700502F1B9C7C5C550082B4BE3FB1B9BF590194C3C2322874C8E"
+    },
+    {
+      "path": "Firmware/V1/V1_DFU_boot_USBF2D80C4F_usb30_startup_20261020.hex",
       "bytes": 999392,
-      "sha256": "AE3AFDC454455B5E868607C8727D262F9E2B248E2425BF9ED6C4A7941D2019F8"
+      "sha256": "BE9122F07CDA4169A7E8C49B0D40A6B033FB4648D362A5F3A299DE752C8C7E3B"
     },
     {
-      "path": "Firmware/V1/V1_fused_BOOT_USBF8E721C2_APP654824DE_uhs200_20261020.hex",
+      "path": "Firmware/V1/V1_fused_BOOT_USBF2D80C4F_APP654824DE_usb30_startup_20261020.hex",
       "bytes": 5745164,
-      "sha256": "61A8F66F7E5CDF9CD8C45881C17328C09DA3B65AFBCD599220865C3CD64C8D76"
+      "sha256": "0B38F0ECF60A7D9B99DEF8C6DE3C430063627636ACD770D0579A3EC9BE78F995"
     },
     {
       "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -54,9 +59,9 @@
       "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
     },
     {
-      "path": "Firmware/V1/V1_USB_service_F8E721C2_uhs200_20261020.hex",
+      "path": "Firmware/V1/V1_USB_service_F2D80C4F_usb30_startup_20261020.hex",
       "bytes": 683968,
-      "sha256": "BFF2398ED5CC25733DCEA100AE597CFA7AA143FA8463CEB79F632B6FD3B464D9"
+      "sha256": "141B8E99DE4FC13E955C601008F9E7F5869EBEFFF62F15A259CB7717AC7057A5"
     },
     {
       "path": "Firmware/V1Camera/README.md",
@@ -210,177 +215,633 @@
     }
   ],
   "validation": {
-    "status": "usb_uhs200_download_and_forced_fallback_pass",
-    "usbCrc32": "F8E721C2",
-    "tests": {
-      "results": [
-        "PASS: 196 actual USB tier-policy assertions",
-        "PASS actual CMD6 shared transfer/retained1v8 predicate/mode checker: exact argument and64-byte output, support/receipt mutation masks, speed/power matrices, freshDEFAULT, two positiveHALF bursts, realDATAEND/RXFIFOE0, no speculative FIFO reads, realistic short/extra/noend, errors/deadline/wrap, command/config/CMD16 failures and DDR rejection",
-        "PASS actual retained1.8V recovery: fresh UHS query,200mA-before-selector, unchanged access, full sector equality, native TRANSFER, all evidence/error mutations fail closed; native/3.3V/legacy untouched",
-        "PASS: prepared ACMD41 clears reserved31, preserves window, sets HCS/S18R/XPC"
+    "status": "usb30k_capture_checked_other_paths_inherited",
+    "capture": {
+      "status": "bounded_usb30k_candidate_capture_pass",
+      "candidate_crc32": "F2D80C4F",
+      "published_firmware_unchanged": true,
+      "restored_crc32": "F8E721C2",
+      "private_app_crc32": "60EC609E",
+      "target_uid": "001D00065942500B20313354",
+      "host_version": "1.0.0.51",
+      "host_sha256": "4057008015E449A01A2EFE5A094A66D91B2B54106DC52E4880F1526AC4FA5C72",
+      "captures": [
+        {
+          "test": "p1_30k_start1",
+          "mask": 1,
+          "ap_hz": 30000,
+          "seconds": 5.004570999999999,
+          "first_data_after_admission_ms": 66.2933,
+          "wire_bytes": 119668736,
+          "usb_sequence_gaps": 0,
+          "imu_samples": 999,
+          "imu_sequence_gaps": 0,
+          "max_read_wait_ms": 7.1185,
+          "max_reader_service_gap_ms": 7.0936,
+          "peak_host_queue_blocks": 6,
+          "probes": [
+            {
+              "probe": 1,
+              "ap_rows": 150489,
+              "lfp_rows": 12540,
+              "validated_frames": 1956359,
+              "frame_errors": 0,
+              "counter_errors": 0,
+              "relocks": 0,
+              "lfp_phase_errors": 0
+            }
+          ],
+          "result_sha256": "8A9D544A406E16605E625BE2C2EFCEBD758AD1D53E45479A4A3FBAA34DBC7E01"
+        },
+        {
+          "test": "p1_30k_start2",
+          "mask": 1,
+          "ap_hz": 30000,
+          "seconds": 5.0026000999999995,
+          "first_data_after_admission_ms": 58.4658,
+          "wire_bytes": 119472128,
+          "usb_sequence_gaps": 0,
+          "imu_samples": 999,
+          "imu_sequence_gaps": 0,
+          "max_read_wait_ms": 7.6127,
+          "max_reader_service_gap_ms": 0.4743,
+          "peak_host_queue_blocks": 5,
+          "probes": [
+            {
+              "probe": 1,
+              "ap_rows": 150239,
+              "lfp_rows": 12519,
+              "validated_frames": 1953119,
+              "frame_errors": 0,
+              "counter_errors": 0,
+              "relocks": 0,
+              "lfp_phase_errors": 0
+            }
+          ],
+          "result_sha256": "C6EE695B68C8F0481392BEB09CDCEF93A73BF458CFCBF1FE4F6CC5343B1D57D0"
+        },
+        {
+          "test": "p12_20k_control",
+          "mask": 3,
+          "ap_hz": 20000,
+          "seconds": 5.0033141,
+          "first_data_after_admission_ms": 63.361200000000004,
+          "wire_bytes": 159645696,
+          "usb_sequence_gaps": 0,
+          "imu_samples": 997,
+          "imu_sequence_gaps": 0,
+          "max_read_wait_ms": 4.6655,
+          "max_reader_service_gap_ms": 0.3854,
+          "peak_host_queue_blocks": 6,
+          "probes": [
+            {
+              "probe": 1,
+              "ap_rows": 100138,
+              "lfp_rows": 8344,
+              "validated_frames": 1301796,
+              "frame_errors": 0,
+              "counter_errors": 0,
+              "relocks": 0,
+              "lfp_phase_errors": 0
+            },
+            {
+              "probe": 2,
+              "ap_rows": 100138,
+              "lfp_rows": 8344,
+              "validated_frames": 1301796,
+              "frame_errors": 0,
+              "counter_errors": 0,
+              "relocks": 0,
+              "lfp_phase_errors": 0
+            }
+          ],
+          "result_sha256": "7B40A65EC9DA42CE4677ACD9928B129A82B27C821061F323B336184221531DFF"
+        },
+        {
+          "test": "p1_30k_60s",
+          "mask": 1,
+          "ap_hz": 30000,
+          "seconds": 60.003396499999994,
+          "first_data_after_admission_ms": 59.0414,
+          "wire_bytes": 1431568384,
+          "usb_sequence_gaps": 0,
+          "imu_samples": 11965,
+          "imu_sequence_gaps": 0,
+          "max_read_wait_ms": 7.3474,
+          "max_reader_service_gap_ms": 0.5864,
+          "peak_host_queue_blocks": 6,
+          "probes": [
+            {
+              "probe": 1,
+              "ap_rows": 1800272,
+              "lfp_rows": 150022,
+              "validated_frames": 23403541,
+              "frame_errors": 0,
+              "counter_errors": 0,
+              "relocks": 0,
+              "lfp_phase_errors": 0
+            }
+          ],
+          "result_sha256": "A4756A31E9B22BE9E9DFF8815E9851E84ADED9BB906E63AD6EC05F248FEB3BBA"
+        }
       ],
-      "app_policy_unchanged": true,
-      "hardware_access": false,
+      "full_flash_install_matches_model": true,
+      "full_flash_rollback_identical": true,
+      "protected_app_boot_configuration_unchanged": true,
+      "options_unchanged": true,
+      "flash_backup_sha256": "3CEFFCB38CCA51632CBD0FAE2A4D3DA8F33AF60BF77EDDF8F6371C175C59F9B5",
+      "options_sha256": "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+      "sd_card_writes": false,
+      "packaged": false,
       "published": false,
-      "inputs": {
-        "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\main.c": "A01994D776FD71CF27B4B247C86C9C99229334FF1D5AF4F848711CAE8BF24D27",
-        "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_mode_check.h": "B75750A380FAF8B97A30E6ADDA1033FA1DCB646DE81116E3871983A63B6DE069",
-        "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_retained_1v8.h": "D5ACFE5B9D162376A0E282CED9E04787E2E93726F76DA61229355444FF3C44CB",
-        "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_tiers.c": "1D9AFC071FE246AADC6F73DA61A05652695B0D6E7F6AABE2377414605A87DB38",
-        "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_mode_check.c": "9803DB7134F67595F63862BF357A0B5C2AA7978C895785AA7969A7CECC92A614",
-        "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_retained_1v8.c": "69499C23CB7485BB36FD1F00E6B9E3FDE2DDBFF415246F0477A9BDFC850BD6C2",
-        "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\stm32u5xx_hal_sd.c": "5A1E33DB79811388627BAF730CD9CA5458EEED0D450108318C2365410B5A5B33"
+      "limits": [
+        "One connected V1, default NP1 map, preview off, production WILDX51 APIs; not laptop/installed-GUI or custom-map qualification.",
+        "Combined30k PA8 low-voltage drive and pre-DMA run verification candidate passed; individual initiating cause not isolated.",
+        "USB service only; SD/BLE APP, camera, other probe/rate combinations and endurance not newly tested.",
+        "New download regression and release packaging remain pending; existing F8 UHS/power/fallback evidence is not a new candidate measurement.",
+        "Candidate source is frozen from exact linked F8 input; unrelated maintained-source private changes were not overwritten."
+      ]
+    },
+    "inheritedDownload": {
+      "status": "usb_uhs200_download_and_forced_fallback_pass",
+      "usbCrc32": "F8E721C2",
+      "tests": {
+        "results": [
+          "PASS: 196 actual USB tier-policy assertions",
+          "PASS actual CMD6 shared transfer/retained1v8 predicate/mode checker: exact argument and64-byte output, support/receipt mutation masks, speed/power matrices, freshDEFAULT, two positiveHALF bursts, realDATAEND/RXFIFOE0, no speculative FIFO reads, realistic short/extra/noend, errors/deadline/wrap, command/config/CMD16 failures and DDR rejection",
+          "PASS actual retained1.8V recovery: fresh UHS query,200mA-before-selector, unchanged access, full sector equality, native TRANSFER, all evidence/error mutations fail closed; native/3.3V/legacy untouched",
+          "PASS: prepared ACMD41 clears reserved31, preserves window, sets HCS/S18R/XPC"
+        ],
+        "app_policy_unchanged": true,
+        "hardware_access": false,
+        "published": false,
+        "inputs": {
+          "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\main.c": "A01994D776FD71CF27B4B247C86C9C99229334FF1D5AF4F848711CAE8BF24D27",
+          "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_mode_check.h": "B75750A380FAF8B97A30E6ADDA1033FA1DCB646DE81116E3871983A63B6DE069",
+          "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_retained_1v8.h": "D5ACFE5B9D162376A0E282CED9E04787E2E93726F76DA61229355444FF3C44CB",
+          "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_tiers.c": "1D9AFC071FE246AADC6F73DA61A05652695B0D6E7F6AABE2377414605A87DB38",
+          "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_mode_check.c": "9803DB7134F67595F63862BF357A0B5C2AA7978C895785AA7969A7CECC92A614",
+          "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_retained_1v8.c": "69499C23CB7485BB36FD1F00E6B9E3FDE2DDBFF415246F0477A9BDFC850BD6C2",
+          "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\stm32u5xx_hal_sd.c": "5A1E33DB79811388627BAF730CD9CA5458EEED0D450108318C2365410B5A5B33"
+        }
+      },
+      "build": {
+        "changed_units": 1,
+        "compiled_units": [
+          "main"
+        ],
+        "resumed_stream_compile": false,
+        "inputs": {
+          "main": "4E6C4744ECF90478B1927C83E1A85F4E82BB2D41C9C868DDE9604420E5BC303D",
+          "stm32u5xx_hal_msp": "C478B9F5D7F95E32B4122E5EB76C45DBBD5DCFB70DCBA39DC70ACF3256212461",
+          "xe_np_usb_stream": "1E39B02D3733762055E3558D22B3A9EB1E92CED5651D43992CD3D791F4C54015",
+          "stm32u5xx_hal_sd": "5A1E33DB79811388627BAF730CD9CA5458EEED0D450108318C2365410B5A5B33"
+        },
+        "main_usb_internal_dma": true,
+        "main_only_defines": [
+          "XE_NP_BOARD_USB_OTG_HS_INTERNAL_DMA=1U",
+          "XE_NP_SD_USB_READ_TIERS=1U"
+        ],
+        "sd_power_function": 0,
+        "sd_power_allowance_ma": 200,
+        "app_binary_changed": false,
+        "boot_changed": false,
+        "usb_profile": "Maintained APP SD PLL2Q120MHz/power/tuning; USB-only200mA card allowance; unchanged system/capture clock",
+        "hex_sha256": "EDAD7A0F817619F68B20569D8E92395DF6FB69F32B976318B77A3AF238A6894D",
+        "sealed": false,
+        "hardware_access": false,
+        "published": false
+      },
+      "live": {
+        "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+        "card": {
+          "uid": "001D00065942500B20313354",
+          "cid": "1B534D4A453259373010B35487A1A300",
+          "capacity": 500695040
+        },
+        "reset_ms": 1298,
+        "transport": "High-speed USB; 510 KiB requests",
+        "store": {
+          "epoch": 3738270987295885,
+          "count": 31,
+          "frontier": 63471616
+        },
+        "reference_identical_bytes": 88080384,
+        "reference_MB_s": 41.36529292351315,
+        "long_reads": [
+          {
+            "bytes": 1073741824,
+            "sha256": "8EE3854B452C02DA1DC9CE2D2760F5066CE36B824CD9E71EB82C7AD6BC3C301F",
+            "MB_s": 42.572904964852114
+          }
+        ],
+        "recovered_reads": 0,
+        "recovery_attempts": 0,
+        "diagnostics": "firmware requests=4624 SD_ms=50431 CRC_ms=2 USB_ms=49905 sectors=4716480 CRC_selftest=1 errors=0 completions=4624; guarded read recovery available; recovered=0 retries=0",
+        "result": "pass"
+      },
+      "firstResetRead": {
+        "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+        "card": {
+          "uid": "001D00065942500B20313354",
+          "cid": "1B534D4A453259373010B35487A1A300",
+          "capacity": 500695040
+        },
+        "reset_ms": 1292,
+        "transport": "High-speed USB; 510 KiB requests",
+        "store": {
+          "epoch": 3738270987295885,
+          "count": 31,
+          "frontier": 63471616
+        },
+        "reference_identical_bytes": 88080384,
+        "reference_MB_s": 41.95929223252473,
+        "long_reads": [
+          {
+            "bytes": 1073741824,
+            "sha256": "8EE3854B452C02DA1DC9CE2D2760F5066CE36B824CD9E71EB82C7AD6BC3C301F",
+            "MB_s": 42.573286451227055
+          }
+        ],
+        "recovered_reads": 0,
+        "recovery_attempts": 0,
+        "diagnostics": "firmware requests=2227 SD_ms=22102 CRC_ms=2 USB_ms=24027 sectors=2271540 CRC_selftest=1 errors=0 completions=2227; guarded read recovery available; recovered=0 retries=0",
+        "result": "pass"
+      },
+      "fallbackReset": {
+        "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+        "card": {
+          "uid": "001D00065942500B20313354",
+          "cid": "1B534D4A453259373010B35487A1A300",
+          "capacity": 500695040
+        },
+        "reset_ms": 16939,
+        "result": "pass"
+      },
+      "fallbackRead": {
+        "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+        "card": {
+          "uid": "001D00065942500B20313354",
+          "cid": "1B534D4A453259373010B35487A1A300",
+          "capacity": 500695040
+        },
+        "transport": "High-speed USB; 510 KiB requests",
+        "store": {
+          "epoch": 3738270987295885,
+          "count": 31,
+          "frontier": 63471616
+        },
+        "reference_identical_bytes": 88080384,
+        "reference_MB_s": 14.458583086702959,
+        "long_reads": [],
+        "recovered_reads": 0,
+        "recovery_attempts": 0,
+        "diagnostics": "firmware requests=2397 SD_ms=28247 CRC_ms=2 USB_ms=25852 sectors=2444940 CRC_selftest=1 errors=0 completions=2397; guarded read recovery available; recovered=0 retries=0",
+        "result": "pass"
+      },
+      "forcedSdr104Rejections": 12,
+      "programmedServiceReadbackExact": true,
+      "appManifestUnchanged": true,
+      "sdCardWrites": false,
+      "knownMaximumStackBytes": 3016,
+      "allocatedStackBytes": 4096,
+      "stackUncertainty": "Existing linker cycles/untraceable function pointers",
+      "voltageProvenance": "Fresh same-session CMD6 group1bits2..4 prove retained1.8V under SDspec Table4-11;200mA actual selection and sector equality before/after host alignment; no fabricated S18A/CMD11.",
+      "priorFailure": "S18A0 was wrongly treated as unavailable1.8V despite fresh retained-UHS CMD6 support; redundant first-candidate reset discarded initialized state.",
+      "limits": [
+        "Bounded local V1 USB download validation: two normal resets,each84MiB exact reference and1GiB known SHA256 at42.57MB/s; unchanged31-record catalog,zero errors/retries.",
+        "Forced12SDR104 admission rejections reached30MHz SDR50;84MiB reference matched at14.46MB/s. Normal reset then restored120MHz SDR104. Other cards and genuine cold CMD11 electrical switching are not newly qualified.",
+        "200mA is the requested/checked UHS power allowance,not a measured current clamp or rail-droop qualification.",
+        "Boot and APP654824DE unchanged. Bench private APP60EC609E preserved; exact bundled APP/USB pair not newly device-tested.",
+        "No new streaming capture,SD/BLE recording,camera,endurance,card-removal or installed-GUI qualification. V2/camera/runtime unchanged."
+      ]
+    },
+    "unchangedObjects": [
+      {
+        "sha256": "D4861E737A9D2101FC98EE0037010002ACAD30A5F5063B005BAC39E74A6201EF",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\startup_stm32u595xx.o"
+      },
+      {
+        "sha256": "0209B4F7939D3EA23A43FB44EB831703EFEA65BFE640BB30844FE3A3A06AB2B9",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\build\\main.o"
+      },
+      {
+        "sha256": "887647963BC499287168896C5EEC7A464A19940355EA2A45CBD1EAC3C29A5837",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\stm32u5xx_it_syncbench.o"
+      },
+      {
+        "sha256": "71D4655D6DB9F6585921E41B4F0D6CE5196FB31FF787F95D489457169618ACA2",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\build\\stm32u5xx_hal_msp.o"
+      },
+      {
+        "sha256": "4A6EEF5026A9AF26B7E0BCD5371F8FA82A6EEE1CB6E5EA4B18334FB7834D3C42",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\base_string.o"
+      },
+      {
+        "sha256": "73B1D3089D8FF14E1857C5D3EB4AAF424177ABBDA328BF3C916EA2CC3A30F7EC",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_command.o"
+      },
+      {
+        "sha256": "A99378FF5F8D792EC9D4D3B61DCB5BBC2C2C9FC63B51C9866BBA4627C80EA022",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_adc.o"
+      },
+      {
+        "sha256": "26165597826DB5DB809730BA2223D03A74824CE1273EBAF622ECEE284B801DAA",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\CE32_UART_INTERCOM_npconfig.o"
+      },
+      {
+        "sha256": "43E0C82356AEBBBE84B9AE87FFA0CBAB3D5AE8981400DBCA9220CD56512F7745",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_hj580.o"
+      },
+      {
+        "sha256": "1371038795789E2390B3FD5423501CBEE11F6B399E83DB7FDEF9D9782AAB24F4",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\CE32_BMX160_usb_sensors.o"
+      },
+      {
+        "sha256": "E123EEE8B09C1566946C587A673BBA3363EFACB41E7F4C274A0DB14C21D25242",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_filesystem.o"
+      },
+      {
+        "sha256": "D8F89561566C5F394CB55486BB3ECB6CD37C18477BD90AA70F165F04B12C6455",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_submod.o"
+      },
+      {
+        "sha256": "253CCA21EF3BB0A889F13DC758F192E241EE90A1354F77FB3BA0320D1BA47D2A",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_sync.o"
+      },
+      {
+        "sha256": "BBA9743326A8269FCF07B1DB9629CF17203D4ADDC851C52FAAAFCBAF64D29FA7",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_macro.o"
+      },
+      {
+        "sha256": "237ED4D336B9550296366AEDDF3216F3900EEC21904DA89C653C3C8AD8FDB35E",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\CE32_system_compat_usb_sensors.o"
+      },
+      {
+        "sha256": "C6CAA272C7DC3D8818661BC5F71331C1AFFF970598AB50D571B7DAFBB1D2949E",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\ce32_wire.o"
+      },
+      {
+        "sha256": "313E5DA1CC72B53DFFB6614347A0A82F843752A9827132AC24448289CF949112",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\datamgr.o"
+      },
+      {
+        "sha256": "11E845A64D953046466A0B9041AD9904B46245CF642A9644A0F6120966FE15E9",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\hd32_sd_driver.o"
+      },
+      {
+        "sha256": "D64180FF5B54B76B65F08738B2C4F795ADD8031B527ECA1AE8221284EB5B97BA",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\xe_np_legacy_fs.o"
+      },
+      {
+        "sha256": "979409E9B2ED76AF3754FCA6856037C427ED9F077D7EFCBB89D850EA6C1F9311",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_capture_syncbench.o"
+      },
+      {
+        "sha256": "029BB8B03E2F83E891AFF90DE720B9CD1651D2141E2B99CD97F53CB23F740AEA",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_nric_syncbench.o"
+      },
+      {
+        "sha256": "5AEF28C875183F2609017945FD72B34D464E873E9CEA1A83B8260340F00DCB19",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_board_syncbench.o"
+      },
+      {
+        "sha256": "F00B6DA8B3AE3FEF16F0D0FB2A9FBF4ACB4E2869E4C6487F54A5E6630026EA4E",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\xe_np_psram.o"
+      },
+      {
+        "sha256": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\build\\xe_np_usb_stream.o"
+      },
+      {
+        "sha256": "ABFD03A1B3A6518E7866DE538AA914992DC49577A56450081DEE24463840A870",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_runtime_syncbench.o"
+      },
+      {
+        "sha256": "FFED544019045D390575FC604163637B311A1C23BECF974FAD32C40DF39F3278",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_adc.o"
+      },
+      {
+        "sha256": "D0B49A86D600296A4D361F71E0072CC5AFD57ECBA7540C775A8C2198FACDC78A",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_adc_ex.o"
+      },
+      {
+        "sha256": "3F8C61A1B6228BF128196CD31DA4B3B11D22AD929E776A400BD40DF845A23940",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_dma.o"
+      },
+      {
+        "sha256": "308AC4C955D27BD6A4E96985755C06E9D9C8F3304F0CE57E4B993E73B5281854",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_dma_ex.o"
+      },
+      {
+        "sha256": "7649C8C07FC3A4F750196094CE656CC5C4025733E6016D97C991C1E62CEA38A4",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal.o"
+      },
+      {
+        "sha256": "C576CF24EB861C2BE49F8DE0D865F9A6662D63614964B528296EB5A83CF63792",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_i2c.o"
+      },
+      {
+        "sha256": "1BA6ACB2266E3A5AF4592B79C7DBEDFC612EAC6E078FA8F080018216834AE5BA",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_i2c_ex.o"
+      },
+      {
+        "sha256": "A7679F55ACBEA7ABF916E3B383F6E61DE344D1A315E57D6FCB1CBD9BF553C0B6",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_rcc.o"
+      },
+      {
+        "sha256": "0344F345BDECDD6F4CFA24CF042270A9550CF02CF03ED2F323E19B6B0CC71B0F",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_rcc_ex.o"
+      },
+      {
+        "sha256": "CF132B7C94D4EE0B9F3EC7E136E1D7F288A2D35D2AA25C0881B0139013CB8617",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_cortex.o"
+      },
+      {
+        "sha256": "A3FABB4110A73046F889C6E4766A1EFBA422DC184E723764651526EE265A5306",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_flash.o"
+      },
+      {
+        "sha256": "C05D820EA158AEF7AB2E76B1FB9C64B95F88F2B7704B6D3EA8299062DFA6202D",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_flash_ex.o"
+      },
+      {
+        "sha256": "9EBC97888512F13D3C2F20C8C7318706D67CDEC9361B3F0591C610E1C522D063",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_gpio.o"
+      },
+      {
+        "sha256": "3D66FBF0854B584BDE5E79973C78383DBE4321457E77CFEC310F5371567574F1",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_exti.o"
+      },
+      {
+        "sha256": "8F323E9A7321365D9A065F92CE17479C26EB13149EB9FBF5FEF751A68C483DFD",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_pwr.o"
+      },
+      {
+        "sha256": "AC5323645060B71ED9ADC0DECB86B63A0252F8525163B248ACF0BCD5894C91C8",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_pwr_ex.o"
+      },
+      {
+        "sha256": "4BDB043DF7B4A40E39930C43E198BFD4F7D36CC6C28ED5A3FBEABEA1560C9AF5",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_gtzc.o"
+      },
+      {
+        "sha256": "EF36C8189E63B9BAD6814FBB79CAA188431712D8137E4886F73A1EB7809BDCE3",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_icache.o"
+      },
+      {
+        "sha256": "7BB337089E65D4543D1A0C4F688057D60D0E71469BB006CE3FD12E57E4359DEA",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_dac.o"
+      },
+      {
+        "sha256": "0FD4B8255CAA208FE611C1080E0373EE4E721CAD06EF8C8E9422B197008ECB0F",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_dac_ex.o"
+      },
+      {
+        "sha256": "D1F5A3E9137E418E594F1B9D5CB401143ED76FC81F68A10BA84D19FBAB4E8C48",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_dcache.o"
+      },
+      {
+        "sha256": "F55128A659293C4D02AFFC200E9F3E73DFEDE2BD356F47E87F825463A36622B6",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_uart.o"
+      },
+      {
+        "sha256": "9CD3E43DFF6AAE0E1A40B95E8C95DDBE03AC9A5367C92E4B32138E68E50C34CA",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_uart_ex.o"
+      },
+      {
+        "sha256": "1CEF8F07A98E8896A8ADC18657C9E51061C9CEB0A087E71D72E936B91E333668",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_ospi.o"
+      },
+      {
+        "sha256": "5DBFA6ED6393179F9ADC832C99A3CEB271518C2FACBE1BF443B290D97CE91634",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_ll_dlyb.o"
+      },
+      {
+        "sha256": "9AD2EEC96AA4EA6D3CEBECE13090CAB0AD42285687F1E3B7CB97639D57B06529",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_opamp.o"
+      },
+      {
+        "sha256": "50E804DC9090578C2BFC8CCA0ABC3075EDB523C83C9FB77C537B6078AA48FB0A",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_opamp_ex.o"
+      },
+      {
+        "sha256": "F5EF06F9F7BFFBD14A45E31D761BD08B384176FB784B9FA22A48157AC7311F59",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_ll_sdmmc.o"
+      },
+      {
+        "sha256": "F0072EEA4C201F7CED1734CB2A8B7FD90865C6051DE2459C14E4A6592E99F3F0",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\build\\stm32u5xx_hal_sd.o"
+      },
+      {
+        "sha256": "ADAAD0979E69EF3ED748FE0E151DBB1034A838EA8A745195952E0E56D12EA52E",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_sd_ex.o"
+      },
+      {
+        "sha256": "58863109E35CD398021275580C4EF18342506FC538AFE9BCEBCA903B8703647B",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_mmc.o"
+      },
+      {
+        "sha256": "5E6F9AB150AC59FD086450491DCE7C0911BC5AF80C73BE5B5D10B43D98641640",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_mmc_ex.o"
+      },
+      {
+        "sha256": "B96D899F79D7E880C1EBCA9112AC6728429494E32DD828CA794BA183A43D52BC",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_sdio.o"
+      },
+      {
+        "sha256": "859FFAAA800D9E23D2FB7740600EC956AAE3AC9A6780B5F2DD8B132A204AA84B",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_spi.o"
+      },
+      {
+        "sha256": "03892B48CF56B2CB86910E0FD5F047CAD9D8459E0F25E4FD349E0FCF825188F6",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_spi_ex.o"
+      },
+      {
+        "sha256": "5568BE0BC13F075150263481045F324C91F164BA98CE67CC34895850EA29A4AC",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_tim.o"
+      },
+      {
+        "sha256": "670C3372633E7E99DA18B576F7E91E33865635794487AEA3C112A02CC61D79ED",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_tim_ex.o"
+      },
+      {
+        "sha256": "4785D622E267A528E4E70E91982C6A7B3688F35584E4FBFEEA6357BA98FDCCE1",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_pcd.o"
+      },
+      {
+        "sha256": "05C3A89DFB6887EBA299486AADB6E0C70FF469A6B953AD00AC3982A2EEEEAE74",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_hal_pcd_ex.o"
+      },
+      {
+        "sha256": "E038753B246397786097FEDB1EEE0CCDBA7A80BB0323B3E2A7B1F68EE0821481",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\MDK-ARM\\usb384_np_bga_mmc\\stm32u5xx_ll_usb.o"
+      },
+      {
+        "sha256": "A86D7CDF2C2F49F3B283A806DF20A0A99A28C265EB47D955784B79A0EEEA10AC",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\system_split.o"
+      },
+      {
+        "sha256": "079D496DEF025C39D73BCA95F638B5526BFD086F63FF94900DF15C76A8798DE3",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_sensors_usb_sensors.o"
+      },
+      {
+        "sha256": "6B19241AD14A32E1229BA99742A53386856E09C15F5DDFC101A2D36EE3B36B1C",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_sensors_port_usb_sensors.o"
+      },
+      {
+        "sha256": "0F3F6087E7B9D26C5A0FD89E92163E4EA27963634A7209F7FA0CED354436EBD8",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_bme_compensation_usb_sensors.o"
+      },
+      {
+        "sha256": "6CBE021A656926B687D6C82A37D9942B5430A70814EA2DCF8884BC1BDDF42A23",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\xe_np_bmm_compensation_usb_sensors.o"
+      },
+      {
+        "sha256": "42CBAE81DF8A9FF63BACF432239AEFA73BE7FBA7E5A31EFD14EFCE44F7B96575",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\boot_contract_split.o"
+      },
+      {
+        "sha256": "B62E2465EC92DDEA3AAAC12F206E264722F2C2CA5C474D01B6F72158D5E4C9AD",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\np_config_npconfig.o"
+      },
+      {
+        "sha256": "67764FAB085CB1E0C1AF91E1AE588F80E70643112F974605B107E2F787D837A6",
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_receive_policy_r80_20261007\\image\\_build\\np_config_port_npconfig.o"
       }
-    },
-    "build": {
-      "changed_units": 1,
-      "compiled_units": [
-        "main"
-      ],
-      "resumed_stream_compile": false,
-      "inputs": {
-        "main": "4E6C4744ECF90478B1927C83E1A85F4E82BB2D41C9C868DDE9604420E5BC303D",
-        "stm32u5xx_hal_msp": "C478B9F5D7F95E32B4122E5EB76C45DBBD5DCFB70DCBA39DC70ACF3256212461",
-        "xe_np_usb_stream": "1E39B02D3733762055E3558D22B3A9EB1E92CED5651D43992CD3D791F4C54015",
-        "stm32u5xx_hal_sd": "5A1E33DB79811388627BAF730CD9CA5458EEED0D450108318C2365410B5A5B33"
-      },
-      "main_usb_internal_dma": true,
-      "main_only_defines": [
-        "XE_NP_BOARD_USB_OTG_HS_INTERNAL_DMA=1U",
-        "XE_NP_SD_USB_READ_TIERS=1U"
-      ],
-      "sd_power_function": 0,
-      "sd_power_allowance_ma": 200,
-      "app_binary_changed": false,
-      "boot_changed": false,
-      "usb_profile": "Maintained APP SD PLL2Q120MHz/power/tuning; USB-only200mA card allowance; unchanged system/capture clock",
-      "hex_sha256": "EDAD7A0F817619F68B20569D8E92395DF6FB69F32B976318B77A3AF238A6894D",
-      "sealed": false,
-      "hardware_access": false,
-      "published": false
-    },
-    "live": {
-      "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
-      "card": {
-        "uid": "001D00065942500B20313354",
-        "cid": "1B534D4A453259373010B35487A1A300",
-        "capacity": 500695040
-      },
-      "reset_ms": 1298,
-      "transport": "High-speed USB; 510 KiB requests",
-      "store": {
-        "epoch": 3738270987295885,
-        "count": 31,
-        "frontier": 63471616
-      },
-      "reference_identical_bytes": 88080384,
-      "reference_MB_s": 41.36529292351315,
-      "long_reads": [
-        {
-          "bytes": 1073741824,
-          "sha256": "8EE3854B452C02DA1DC9CE2D2760F5066CE36B824CD9E71EB82C7AD6BC3C301F",
-          "MB_s": 42.572904964852114
-        }
-      ],
-      "recovered_reads": 0,
-      "recovery_attempts": 0,
-      "diagnostics": "firmware requests=4624 SD_ms=50431 CRC_ms=2 USB_ms=49905 sectors=4716480 CRC_selftest=1 errors=0 completions=4624; guarded read recovery available; recovered=0 retries=0",
-      "result": "pass"
-    },
-    "firstResetRead": {
-      "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
-      "card": {
-        "uid": "001D00065942500B20313354",
-        "cid": "1B534D4A453259373010B35487A1A300",
-        "capacity": 500695040
-      },
-      "reset_ms": 1292,
-      "transport": "High-speed USB; 510 KiB requests",
-      "store": {
-        "epoch": 3738270987295885,
-        "count": 31,
-        "frontier": 63471616
-      },
-      "reference_identical_bytes": 88080384,
-      "reference_MB_s": 41.95929223252473,
-      "long_reads": [
-        {
-          "bytes": 1073741824,
-          "sha256": "8EE3854B452C02DA1DC9CE2D2760F5066CE36B824CD9E71EB82C7AD6BC3C301F",
-          "MB_s": 42.573286451227055
-        }
-      ],
-      "recovered_reads": 0,
-      "recovery_attempts": 0,
-      "diagnostics": "firmware requests=2227 SD_ms=22102 CRC_ms=2 USB_ms=24027 sectors=2271540 CRC_selftest=1 errors=0 completions=2227; guarded read recovery available; recovered=0 retries=0",
-      "result": "pass"
-    },
-    "fallbackReset": {
-      "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
-      "card": {
-        "uid": "001D00065942500B20313354",
-        "cid": "1B534D4A453259373010B35487A1A300",
-        "capacity": 500695040
-      },
-      "reset_ms": 16939,
-      "result": "pass"
-    },
-    "fallbackRead": {
-      "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
-      "card": {
-        "uid": "001D00065942500B20313354",
-        "cid": "1B534D4A453259373010B35487A1A300",
-        "capacity": 500695040
-      },
-      "transport": "High-speed USB; 510 KiB requests",
-      "store": {
-        "epoch": 3738270987295885,
-        "count": 31,
-        "frontier": 63471616
-      },
-      "reference_identical_bytes": 88080384,
-      "reference_MB_s": 14.458583086702959,
-      "long_reads": [],
-      "recovered_reads": 0,
-      "recovery_attempts": 0,
-      "diagnostics": "firmware requests=2397 SD_ms=28247 CRC_ms=2 USB_ms=25852 sectors=2444940 CRC_selftest=1 errors=0 completions=2397; guarded read recovery available; recovered=0 retries=0",
-      "result": "pass"
-    },
-    "forcedSdr104Rejections": 12,
-    "programmedServiceReadbackExact": true,
-    "appManifestUnchanged": true,
-    "sdCardWrites": false,
-    "knownMaximumStackBytes": 3016,
-    "allocatedStackBytes": 4096,
-    "stackUncertainty": "Existing linker cycles/untraceable function pointers",
-    "voltageProvenance": "Fresh same-session CMD6 group1bits2..4 prove retained1.8V under SDspec Table4-11;200mA actual selection and sector equality before/after host alignment; no fabricated S18A/CMD11.",
-    "priorFailure": "S18A0 was wrongly treated as unavailable1.8V despite fresh retained-UHS CMD6 support; redundant first-candidate reset discarded initialized state.",
+    ],
+    "downloadImplementationChanged": false,
+    "appChanged": false,
+    "bootChanged": false,
+    "noAdditionalHardwareDuringPackaging": true,
     "limits": [
-      "Bounded local V1 USB download validation: two normal resets,each84MiB exact reference and1GiB known SHA256 at42.57MB/s; unchanged31-record catalog,zero errors/retries.",
-      "Forced12SDR104 admission rejections reached30MHz SDR50;84MiB reference matched at14.46MB/s. Normal reset then restored120MHz SDR104. Other cards and genuine cold CMD11 electrical switching are not newly qualified.",
-      "200mA is the requested/checked UHS power allowance,not a measured current clamp or rail-droop qualification.",
-      "Boot and APP654824DE unchanged. Bench private APP60EC609E preserved; exact bundled APP/USB pair not newly device-tested.",
-      "No new streaming capture,SD/BLE recording,camera,endurance,card-removal or installed-GUI qualification. V2/camera/runtime unchanged."
+      "Fresh bounded USB capture: P1/native30k two5s starts plus60s and P12/native20k5s control; zero frame/counter/LFP-phase/relock/USB-sequence errors and IMU gaps.",
+      "Default NP1 map, preview off, actual unchanged WILDX51 APIs on one V1; not laptop/custom-map/other-probe/endurance or installed-GUI qualification.",
+      "Download/MSP/HAL/transport source and objects unchanged from F8; inherited F8 evidence42.57MB/s and forced SDR50 fallback. No new F2 download measurement or new full bundled APP/USB pair device test.",
+      "Boot and public SD/BLE APP654824DE unchanged; bench private APP60EC609E was preserved. No new BLE/SD recording, camera, card-removal or power qualification.",
+      "UHS200mA allowance, fallback tiers, USB internal DMA and SD initialization unchanged.200mA is not a measured physical current clamp.",
+      "Exact already-tested sealed USB bytes promoted without rebuild/resealing. Configuration excluded. Combined30k clock-drive/startup-order fix, individual causal contribution not isolated."
     ]
   },
   "limits": [
-    "Bounded local V1 USB download validation: two normal resets,each84MiB exact reference and1GiB known SHA256 at42.57MB/s; unchanged31-record catalog,zero errors/retries.",
-    "Forced12SDR104 admission rejections reached30MHz SDR50;84MiB reference matched at14.46MB/s. Normal reset then restored120MHz SDR104. Other cards and genuine cold CMD11 electrical switching are not newly qualified.",
-    "200mA is the requested/checked UHS power allowance,not a measured current clamp or rail-droop qualification.",
-    "Boot and APP654824DE unchanged. Bench private APP60EC609E preserved; exact bundled APP/USB pair not newly device-tested.",
-    "No new streaming capture,SD/BLE recording,camera,endurance,card-removal or installed-GUI qualification. V2/camera/runtime unchanged."
+    "Fresh bounded USB capture: P1/native30k two5s starts plus60s and P12/native20k5s control; zero frame/counter/LFP-phase/relock/USB-sequence errors and IMU gaps.",
+    "Default NP1 map, preview off, actual unchanged WILDX51 APIs on one V1; not laptop/custom-map/other-probe/endurance or installed-GUI qualification.",
+    "Download/MSP/HAL/transport source and objects unchanged from F8; inherited F8 evidence42.57MB/s and forced SDR50 fallback. No new F2 download measurement or new full bundled APP/USB pair device test.",
+    "Boot and public SD/BLE APP654824DE unchanged; bench private APP60EC609E was preserved. No new BLE/SD recording, camera, card-removal or power qualification.",
+    "UHS200mA allowance, fallback tiers, USB internal DMA and SD initialization unchanged.200mA is not a measured physical current clamp.",
+    "Exact already-tested sealed USB bytes promoted without rebuild/resealing. Configuration excluded. Combined30k clock-drive/startup-order fix, individual causal contribution not isolated."
   ],
   "previousInstaller": {
-    "file": "WILDX_console-Setup-1.0.0.51-V1-SD-power200-USBB5FC4876.exe",
-    "sha256": "84C1B053AFF0ABA7F297E1F68245F31FEF83D88A4FACD749D210908985F3E1AB",
-    "bytes": 6512463
-  },
-  "installer": {
     "bytes": 6515251,
     "sha256": "BF5B6797F75BE7BF132090686DE40897499E8935473A346F7C6A76A0310ABCAB",
     "file": "WILDX_console-Setup-1.0.0.51-V1-UHS200-USBF8E721C2.exe"
   },
-  "extractedPayloadFilesVerified": 40,
+  "installer": {
+    "sha256": "84A5D828F5AE54E6AE23A639A5ED63B637941E1AD848C82DBEAFE8933F4952E5",
+    "bytes": 6528518,
+    "file": "WILDX_console-Setup-1.0.0.51-V1-USB30k-USBF2D80C4F.exe"
+  },
+  "extractedPayloadFilesVerified": 41,
   "installerExecuted": false,
   "nsisPackagingPasses": 1
 }

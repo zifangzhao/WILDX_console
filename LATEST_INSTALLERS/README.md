@@ -1,16 +1,17 @@
-# Latest WILDX51 — V1 UHS200 firmware refresh
+# Latest WILDX installer — V1 USB30k firmware update
 
-Installer:`WILDX_console-Setup-1.0.0.51-V1-UHS200-USBF8E721C2.exe`.
-GUI51 unchanged. V1 NP USB serviceF8E721C2 +unchanged APP654824DE/boot.
-Matching fused and component HEX files are in`Firmware/V1`; V1Camera/V2 unchanged.
+Use `WILDX_console-Setup-1.0.0.51-V1-USB30k-USBF2D80C4F.exe`.
+Console remains1.0.0.51; this package updates V1 NP firmware only.
+In Advanced firmware update select V1 and the matching full fused image:
+`V1_fused_BOOT_USBF2D80C4F_APP654824DE_usb30_startup_20261020.hex`.
+APP-only flashing does not install the USB30k fix. Not for V1Camera or V2.
 
-Connected V1 actual production-API download:two normal resets (~1.3s),each84MiB
-exact reference and1GiB known hash at42.57MB/s,zero errors/retries. Forced all
-SDR104 attempts to fail; SDR50 fallback read84MiB exactly, then normal reset
-restored full speed.31-record catalog unchanged; no card writes.
+USB F2D80C4F: two short P1/30k starts and60s capture passed, plus P12/20k
+control, zero frame/sequence errors and IMU gaps. Boot and APP654824DE stay
+unchanged. Download/200mA/fallback implementation and evidence are inherited
+from F8; no new download-speed/full-bundled-pair qualification is claimed.
+No console rebuild, GUI59 preview changes or directory-retry candidate.
 
-Fresh CMD6 evidence now recovers retained1.8V sessions even when ACMD41S18A=0.
-Actual200mA function0, sector equality and native status/CRC remain required.
-200mA is a card setting,not a measured current clamp. Other cards/modes and exact
-bundled APP/USB pair are not newly device-qualified; existing evidence retained.
-See`Note/V1_USB_UHS200_RESTORE_20261020.md` and the firmware manifests for limits.
+Matching fused, DFU/USB, USB-only and APP-only HEX files are in `Firmware/V1`.
+See `release-manifest.json` and `Note/V1_USB30K_RELEASE_20261020.md` for exact
+hashes, measured scope and limits. Superseded package is retained in `legacy`.

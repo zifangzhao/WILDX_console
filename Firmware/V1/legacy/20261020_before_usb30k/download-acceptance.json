@@ -1,0 +1,154 @@
+{
+  "status": "usb_uhs200_download_and_forced_fallback_pass",
+  "usbCrc32": "F8E721C2",
+  "tests": {
+    "results": [
+      "PASS: 196 actual USB tier-policy assertions",
+      "PASS actual CMD6 shared transfer/retained1v8 predicate/mode checker: exact argument and64-byte output, support/receipt mutation masks, speed/power matrices, freshDEFAULT, two positiveHALF bursts, realDATAEND/RXFIFOE0, no speculative FIFO reads, realistic short/extra/noend, errors/deadline/wrap, command/config/CMD16 failures and DDR rejection",
+      "PASS actual retained1.8V recovery: fresh UHS query,200mA-before-selector, unchanged access, full sector equality, native TRANSFER, all evidence/error mutations fail closed; native/3.3V/legacy untouched",
+      "PASS: prepared ACMD41 clears reserved31, preserves window, sets HCS/S18R/XPC"
+    ],
+    "app_policy_unchanged": true,
+    "hardware_access": false,
+    "published": false,
+    "inputs": {
+      "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\main.c": "A01994D776FD71CF27B4B247C86C9C99229334FF1D5AF4F848711CAE8BF24D27",
+      "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_mode_check.h": "B75750A380FAF8B97A30E6ADDA1033FA1DCB646DE81116E3871983A63B6DE069",
+      "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_retained_1v8.h": "D5ACFE5B9D162376A0E282CED9E04787E2E93726F76DA61229355444FF3C44CB",
+      "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_tiers.c": "1D9AFC071FE246AADC6F73DA61A05652695B0D6E7F6AABE2377414605A87DB38",
+      "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_mode_check.c": "9803DB7134F67595F63862BF357A0B5C2AA7978C895785AA7969A7CECC92A614",
+      "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\test_usb_sd_retained_1v8.c": "69499C23CB7485BB36FD1F00E6B9E3FDE2DDBFF415246F0477A9BDFC850BD6C2",
+      "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\stm32u5xx_hal_sd.c": "5A1E33DB79811388627BAF730CD9CA5458EEED0D450108318C2365410B5A5B33"
+    }
+  },
+  "build": {
+    "changed_units": 1,
+    "compiled_units": [
+      "main"
+    ],
+    "resumed_stream_compile": false,
+    "inputs": {
+      "main": "4E6C4744ECF90478B1927C83E1A85F4E82BB2D41C9C868DDE9604420E5BC303D",
+      "stm32u5xx_hal_msp": "C478B9F5D7F95E32B4122E5EB76C45DBBD5DCFB70DCBA39DC70ACF3256212461",
+      "xe_np_usb_stream": "1E39B02D3733762055E3558D22B3A9EB1E92CED5651D43992CD3D791F4C54015",
+      "stm32u5xx_hal_sd": "5A1E33DB79811388627BAF730CD9CA5458EEED0D450108318C2365410B5A5B33"
+    },
+    "main_usb_internal_dma": true,
+    "main_only_defines": [
+      "XE_NP_BOARD_USB_OTG_HS_INTERNAL_DMA=1U",
+      "XE_NP_SD_USB_READ_TIERS=1U"
+    ],
+    "sd_power_function": 0,
+    "sd_power_allowance_ma": 200,
+    "app_binary_changed": false,
+    "boot_changed": false,
+    "usb_profile": "Maintained APP SD PLL2Q120MHz/power/tuning; USB-only200mA card allowance; unchanged system/capture clock",
+    "hex_sha256": "EDAD7A0F817619F68B20569D8E92395DF6FB69F32B976318B77A3AF238A6894D",
+    "sealed": false,
+    "hardware_access": false,
+    "published": false
+  },
+  "live": {
+    "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+    "card": {
+      "uid": "001D00065942500B20313354",
+      "cid": "1B534D4A453259373010B35487A1A300",
+      "capacity": 500695040
+    },
+    "reset_ms": 1298,
+    "transport": "High-speed USB; 510 KiB requests",
+    "store": {
+      "epoch": 3738270987295885,
+      "count": 31,
+      "frontier": 63471616
+    },
+    "reference_identical_bytes": 88080384,
+    "reference_MB_s": 41.36529292351315,
+    "long_reads": [
+      {
+        "bytes": 1073741824,
+        "sha256": "8EE3854B452C02DA1DC9CE2D2760F5066CE36B824CD9E71EB82C7AD6BC3C301F",
+        "MB_s": 42.572904964852114
+      }
+    ],
+    "recovered_reads": 0,
+    "recovery_attempts": 0,
+    "diagnostics": "firmware requests=4624 SD_ms=50431 CRC_ms=2 USB_ms=49905 sectors=4716480 CRC_selftest=1 errors=0 completions=4624; guarded read recovery available; recovered=0 retries=0",
+    "result": "pass"
+  },
+  "firstResetRead": {
+    "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+    "card": {
+      "uid": "001D00065942500B20313354",
+      "cid": "1B534D4A453259373010B35487A1A300",
+      "capacity": 500695040
+    },
+    "reset_ms": 1292,
+    "transport": "High-speed USB; 510 KiB requests",
+    "store": {
+      "epoch": 3738270987295885,
+      "count": 31,
+      "frontier": 63471616
+    },
+    "reference_identical_bytes": 88080384,
+    "reference_MB_s": 41.95929223252473,
+    "long_reads": [
+      {
+        "bytes": 1073741824,
+        "sha256": "8EE3854B452C02DA1DC9CE2D2760F5066CE36B824CD9E71EB82C7AD6BC3C301F",
+        "MB_s": 42.573286451227055
+      }
+    ],
+    "recovered_reads": 0,
+    "recovery_attempts": 0,
+    "diagnostics": "firmware requests=2227 SD_ms=22102 CRC_ms=2 USB_ms=24027 sectors=2271540 CRC_selftest=1 errors=0 completions=2227; guarded read recovery available; recovered=0 retries=0",
+    "result": "pass"
+  },
+  "fallbackReset": {
+    "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+    "card": {
+      "uid": "001D00065942500B20313354",
+      "cid": "1B534D4A453259373010B35487A1A300",
+      "capacity": 500695040
+    },
+    "reset_ms": 16939,
+    "result": "pass"
+  },
+  "fallbackRead": {
+    "format_reply_hex": "4E-46-53-31-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-D8-1D-06-00-1D-00-0B-50-42-59-54-33-31-20-4A-4D-53-1B-37-59-32-45-54-B3-10-30-00-A3-A1-87-00-00-00-00-03-00-00-00-49-1E-6E-6B",
+    "card": {
+      "uid": "001D00065942500B20313354",
+      "cid": "1B534D4A453259373010B35487A1A300",
+      "capacity": 500695040
+    },
+    "transport": "High-speed USB; 510 KiB requests",
+    "store": {
+      "epoch": 3738270987295885,
+      "count": 31,
+      "frontier": 63471616
+    },
+    "reference_identical_bytes": 88080384,
+    "reference_MB_s": 14.458583086702959,
+    "long_reads": [],
+    "recovered_reads": 0,
+    "recovery_attempts": 0,
+    "diagnostics": "firmware requests=2397 SD_ms=28247 CRC_ms=2 USB_ms=25852 sectors=2444940 CRC_selftest=1 errors=0 completions=2397; guarded read recovery available; recovered=0 retries=0",
+    "result": "pass"
+  },
+  "forcedSdr104Rejections": 12,
+  "programmedServiceReadbackExact": true,
+  "appManifestUnchanged": true,
+  "sdCardWrites": false,
+  "knownMaximumStackBytes": 3016,
+  "allocatedStackBytes": 4096,
+  "stackUncertainty": "Existing linker cycles/untraceable function pointers",
+  "voltageProvenance": "Fresh same-session CMD6 group1bits2..4 prove retained1.8V under SDspec Table4-11;200mA actual selection and sector equality before/after host alignment; no fabricated S18A/CMD11.",
+  "priorFailure": "S18A0 was wrongly treated as unavailable1.8V despite fresh retained-UHS CMD6 support; redundant first-candidate reset discarded initialized state.",
+  "limits": [
+    "Bounded local V1 USB download validation: two normal resets,each84MiB exact reference and1GiB known SHA256 at42.57MB/s; unchanged31-record catalog,zero errors/retries.",
+    "Forced12SDR104 admission rejections reached30MHz SDR50;84MiB reference matched at14.46MB/s. Normal reset then restored120MHz SDR104. Other cards and genuine cold CMD11 electrical switching are not newly qualified.",
+    "200mA is the requested/checked UHS power allowance,not a measured current clamp or rail-droop qualification.",
+    "Boot and APP654824DE unchanged. Bench private APP60EC609E preserved; exact bundled APP/USB pair not newly device-tested.",
+    "No new streaming capture,SD/BLE recording,camera,endurance,card-removal or installed-GUI qualification. V2/camera/runtime unchanged."
+  ]
+}

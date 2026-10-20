@@ -1,0 +1,63 @@
+--- linked_F8E721C2/xe_np_app.c
++++ USB30k_candidate/xe_np_app.c
+@@ -2432,6 +2432,12 @@
+     GPIO_InitStruct.Speed = XE_NP_BOARD_EXPERIMENT_MCO_GPIO_SPEED;
+     GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
+     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
++    /* Honor the board's existing low-VDD declaration. This is the PA8
++     * drive mode used by the clean 30-kHz test, not a clock/phase change.
++     * Never program option bytes here or enable HSLV on an unprovisioned board. */
++    MODIFY_REG(GPIOA->HSLVR, GPIO_PIN_8,
++        ((FLASH->OPTR & FLASH_OPTR_IO_VDD_HSLV) != 0U && np_mode_hz == 30000U) ? GPIO_PIN_8 : 0U);
++
+ 
+     /*
+      * PF4 is tied onto the Neuropixels MCLK net in the board schematic, but
+@@ -2559,6 +2565,11 @@
+         mclk_ok = 0U;
+     }
+     if((GPIOA->AFR[1] & GPIO_AFRH_AFSEL8) != 0U)
++    {
++        mclk_ok = 0U;
++    }
++    if(((GPIOA->HSLVR & GPIO_PIN_8) != 0U) !=
++       (((FLASH->OPTR & FLASH_OPTR_IO_VDD_HSLV) != 0U && np_mode_hz == 30000U)))
+     {
+         mclk_ok = 0U;
+     }
+@@ -13580,6 +13591,23 @@
+             XE_NP_App_RunPsbClockProbe(runtime);
+ #endif
+ 
++            /* Keep blocking USB startup I2C transactions out of active GPIO
++             * capture. Verify the same
++             * programmed run registers at final MCLK, with recording reset
++             * held and all capture channels still disabled. No check is waived. */
++            if((XE_NP_App_UsbCaptureStorageBypassActive(runtime) != 0) &&
++               (np_mode_hz == 30000U) &&
++               (XE_NP_App_VerifyActiveProbeRunStatus(runtime) == 0))
++            {
++                XE_NP_App_UpdateProbeDiag(runtime, NULL,
++                    XE_NP_APP_PROBE_STAGE_START_CAPTURE, 0U,
++                    XE_NP_APP_PROBE_DIAG_FAILURE_VERIFY_RUN_FAIL, HAL_ERROR);
++                XE_NP_App_SetProbeStartupFailureState(runtime,
++                    xe_np_probe_state.i2c_ready, xe_np_probe_state.base_configured);
++                break;
++            }
++
++
+             if(XE_NP_App_StartCaptureDma(runtime) != HAL_OK)
+             {
+                 xe_np_dma_start_error_seen = 1U;
+@@ -13679,7 +13707,10 @@
+                 break;
+             }
+ 
+-            if(XE_NP_App_VerifyActiveProbeRunStatus(runtime) == 0)
++            /* Only USB30k verified before DMA; preserve all other startup paths. */
++            if(((XE_NP_App_UsbCaptureStorageBypassActive(runtime) == 0) ||
++                (np_mode_hz != 30000U)) &&
++               (XE_NP_App_VerifyActiveProbeRunStatus(runtime) == 0))
+             {
+                 XE_NP_App_UpdateProbeDiag(
+                     runtime,
