@@ -1,0 +1,54 @@
+{
+  "result": "bounded_connected_V1_SD_download_pass",
+  "uid": "001D00065942500B20313354",
+  "stlink": "001A00423235510D37333439",
+  "usb_crc": "6CD1917C",
+  "tested_app_crc": "60EC609E",
+  "release_app_crc": "654824DE",
+  "console_sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
+  "raw_bytes": 88080384,
+  "raw_seconds": 2.08,
+  "raw_MB_s": 42.346338461538465,
+  "export_MB_s": 33.69023734674473,
+  "byte_identical_export_files": 21,
+  "allowed_metadata_differences": [
+    "software_version",
+    "metadata_created_time_utc"
+  ],
+  "large_read_passes": [
+    {
+      "bytes": 1073741824,
+      "seconds": 24.9079868,
+      "MB_per_second": 43.10833439176224,
+      "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+      "recovered": 0,
+      "retries": 0,
+      "diagnostics": "firmware requests=2390 SD_ms=23763 CRC_ms=3 USB_ms=25782 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+    },
+    {
+      "bytes": 1073741824,
+      "seconds": 24.7293034,
+      "MB_per_second": 43.419816655976575,
+      "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+      "recovered": 0,
+      "retries": 0,
+      "diagnostics": "firmware requests=4447 SD_ms=44214 CRC_ms=6 USB_ms=47970 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+    }
+  ],
+  "sd_writes": 0,
+  "new_recordings": 0,
+  "catalog_count": 31,
+  "frontier": 63471616,
+  "restored_SD_BLE": true,
+  "software_regression": "Actual canonical reader passed exact length/DATAEND/CRC, bounded STOP/status, delayed/stuck/wrapped DAT0 retirement and sticky no-replay failures",
+  "initializer": "Maintained APP SD120MHz/power/tuning; corrected main-only USB internal DMA build flag",
+  "live_usb_dma": true,
+  "live_GAHBCFG": "0x27",
+  "limits": [
+    "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
+    "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
+    "No new recording, streaming, camera, card-removal or endurance qualification",
+    "Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s",
+    "Frozen composed sources and reused matching MSP/reader objects; not a clean-public-HEAD whole-tree build"
+  ]
+}

@@ -1,9 +1,14 @@
 {
   "schemaVersion": 1,
   "version": "1.0.0.51",
-  "releaseId": "BLE_PREVIEW_FIXED_PACED_SWEEP_20261020",
-  "baselineRelease": "V1_SD_DMA_USB6CD1917C_APP654824DE_20261019",
-  "firmwareUnchanged": true,
+  "releaseId": "V1_SD_TIERS_USBD75CA6F9_APP654824DE_20261020",
+  "stage": "USER_APPROVED_SOFTWARE_CHECKED_CANDIDATE_HARDWARE_VALIDATION_PENDING",
+  "baselineRelease": "BLE_PREVIEW_FIXED_PACED_SWEEP_20261020",
+  "firmwareChanged": true,
+  "applicationRebuilt": false,
+  "usbBinaryRebuilt": false,
+  "releaseBeforeHardwareValidationUserApproved": true,
+  "unchanged51payloadFiles": 32,
   "payload": [
     {
       "path": "Firmware/owner-confirmation-20261017.json",
@@ -17,33 +22,33 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 13417,
-      "sha256": "D922A1876C16EB1049224D93FCB73A9863D651635EC406906A97E6D739047728"
+      "bytes": 12588,
+      "sha256": "30547154C09865A27952FB5166C9C1CEEDD5C98E01B01838FAFDE89CB15377FB"
     },
     {
       "path": "Firmware/V1/download-acceptance.json",
-      "bytes": 2507,
-      "sha256": "BAA05B700809F62D954D5BFB12981EECA4DA4C01965CE0FCB999559D2B92B6BE"
+      "bytes": 1317,
+      "sha256": "31F31A6C05B330AFCEAF73E1BCAA2313BA9280323690278480F8416A75527C45"
     },
     {
       "path": "Firmware/V1/download-init-manifest.json",
-      "bytes": 5350,
-      "sha256": "78B746F5C37D577C364032A3DB3B5D8D88450A4E5EF2BD0D87FA9AFB46EED138"
+      "bytes": 9514,
+      "sha256": "24D6B813385900FF91609CEC5AC400F7F856FDA993A33F8CF76DF3F3C31B8C19"
     },
     {
       "path": "Firmware/V1/README.md",
-      "bytes": 1302,
-      "sha256": "27A1D08567EA57D44333ECEB6B7A22CE8D9E79577C05225195DF30CDC4E4E5F4"
+      "bytes": 979,
+      "sha256": "6EE2D40425B489D307CF213B5AABCD637853CC15C19EE6998F6B7F24B6D78913"
     },
     {
-      "path": "Firmware/V1/V1_DFU_boot_USB6CD1917C_sd_dma_20261019.hex",
+      "path": "Firmware/V1/V1_DFU_boot_USBD75CA6F9_sd_tiers_candidate_20261020.hex",
       "bytes": 999392,
-      "sha256": "7D46EF17962F6D39A2DD943FC2805B168EAA7F3EFFE90CABBC4B3EC21D2EADDB"
+      "sha256": "EC72CDFEC324E42FC5509DD5E2855EF56E05F745216E7F000066396A9BA1690A"
     },
     {
-      "path": "Firmware/V1/V1_fused_BOOT_USB6CD1917C_APP654824DE_sd_dma_20261019.hex",
+      "path": "Firmware/V1/V1_fused_BOOT_USBD75CA6F9_APP654824DE_sd_tiers_candidate_20261020.hex",
       "bytes": 5745164,
-      "sha256": "ABA47C1154B246BEF5F0289C5B0D88C1CD308B5E097C5B65A0652E144F48F209"
+      "sha256": "AF0E83618771FD20F3BF484F8BDA9A6DA17D580D102B95E13D315D34D52E0AAE"
     },
     {
       "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -51,9 +56,9 @@
       "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
     },
     {
-      "path": "Firmware/V1/V1_USB_service_6CD1917C_sd_dma_20261019.hex",
+      "path": "Firmware/V1/V1_USB_service_D75CA6F9_sd_tiers_candidate_20261020.hex",
       "bytes": 699517,
-      "sha256": "1B3CDBD36D46B9D569E9FBC94984B1B599DB7F324D67E2FDDEA7E71EF050BF3A"
+      "sha256": "529F0CCB117BD2762D390388584B5E19F5FA15BB181D39F9F734AB82A5ED5288"
     },
     {
       "path": "Firmware/V1Camera/README.md",
@@ -206,31 +211,61 @@
       "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
     }
   ],
-  "installer": {
+  "validation": {
+    "status": "software_checked_usb_candidate_not_live_qualified",
+    "tests": "tests/tests.json",
+    "build": "checked/build/build_receipt.json",
+    "only_two_usb_functions_changed": true,
+    "unchanged_msp_transport_backend": true,
+    "maintained_vs_frozen_executable_tokens_match": true,
+    "app_functions_preprocess_identically_with_usb_tiers_disabled": true,
+    "policy_assertions": 196,
+    "mode_checker_fault_injection": "passed actual header",
+    "usb_internal_dma": true,
+    "sd_kernel_hz": 120000000,
+    "candidate_bus_hz": [
+      120000000,
+      60000000,
+      30000000,
+      20000000
+    ],
+    "ddr_enabled": false,
+    "known_maximum_stack_bytes": 2464,
+    "allocated_stack_bytes": 4096,
+    "stack_uncertainty": "existing linker cycles and untraceable function pointers",
+    "reused_objects": {
+      "stm32u5xx_hal_msp.o": "71D4655D6DB9F6585921E41B4F0D6CE5196FB31FF787F95D489457169618ACA2",
+      "xe_np_usb_stream.o": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A"
+    },
+    "candidate_hex_sha256": "59E8BAE60067DE03E5AF1FE8A9F3B4AAB7FF76F0CE6CF47A3D745B94F85205A5",
+    "passive_inventory": "ST-Link present; no V1 USB1209:B386 interface",
+    "remote_9_5_mb_per_second_reproduced": false,
+    "measured_speed_improvement": null,
+    "hardware_access": false,
+    "packaged": false,
+    "published": false,
+    "published_pair_changed": false
+  },
+  "limits": [
+    "User explicitly approved publication before on-device validation; software-checked candidate, not hardware-qualified.",
+    "No measured speed improvement; remote9.5MB/s report is not reproduced or proven resolved.",
+    "No new USB streaming, SD/BLE recording, camera, endurance, card-removal or installed-pair qualification.",
+    "Boot and APP654824DE unchanged. V2, camera target and all WILDX51 runtime bytes unchanged.",
+    "120/60/30/20MHz are bus clock candidates, not measured MB/s. DDR excluded.",
+    "Frozen maintained source composition and reused matching MSP/transport objects; not a clean-public-HEAD whole-tree rebuild."
+  ],
+  "previousInstaller": {
     "file": "WILDX_console-Setup-1.0.0.51-BLE-preview-20261020.exe",
     "sha256": "D4E124F6D55027726B71D3D613C3030356419CA19CD0B910824289FF7E5B4264",
     "bytes": 6509455
   },
-  "previewValidation": {
-    "radio": "doubled",
-    "sampleValuesAndTicksUnchanged": true,
-    "evidence": "Note/V2_BLE_PREVIEW_DISPLAY_20261017.md",
-    "sourceSha256": "9B61A9E503023C72C6B90228DCF72039A6516B7B1E88D1CDA00BE0193CFED1D7",
-    "actualSourceChecks": 5916,
-    "fixtureSha256": "00B52272B26E524787C73D6D883A364819E0641E3743403000F13395DD8D4BB0",
-    "resampling": false,
-    "managedResourcesMatch48": true,
-    "cachedExporterUnchanged": true,
-    "extraMcuOrBleWork": false
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.51-V1-SD-tiers-USBD75CA6F9-candidate.exe",
+    "sha256": "4E020E54667602AF20EAB27A5FB4B8ECBE999E3B72FF98D57C7CF61856BEBE0A",
+    "bytes": 6510615
   },
   "extractedPayloadFilesVerified": 40,
   "installerExecuted": false,
   "nsisPackagingPasses": 1,
-  "hardwareAccess": false,
-  "limits": [
-    "Display/software checks only; live RF waveform and user installed version are not confirmed.",
-    "Real missing samples remain gaps; simple500Hz subsampling can alias and is not qualified LFP reconstruction.",
-    "All firmware and39 non-GUI payload files are unchanged from the recorded48 package; no new recording, power, firmware or installed-pair qualification.",
-    "Composed frozen98-source-input baseline plus preview overlay/version, using exact recovered download sources and cached dependencies; not a clean-public-HEAD rebuild."
-  ]
+  "hardwareAccess": false
 }
