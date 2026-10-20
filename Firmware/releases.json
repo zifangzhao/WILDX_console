@@ -7,14 +7,14 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_SD_TIERS_USBD75CA6F9_APP654824DE_20261020",
+      "release": "V1_SD_POWER200_USBB5FC4876_APP654824DE_20261020",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "USER_APPROVED_SOFTWARE_CHECKED_CANDIDATE_HARDWARE_VALIDATION_PENDING",
+      "stage": "USB_DOWNLOAD_BOUNDED_DEVICE_CHECKED_OTHER_MODES_INHERITED",
       "appVersion": "build 654824DE (FS2)",
-      "usbVersion": "1.0.97-sd-tiers-candidate / buildD75CA6F9 (USB HS DMA; read tiers candidate)",
+      "usbVersion": "1.0.98-sd-power200 / buildB5FC4876",
       "recoveryVersion": "Included in fused HEX; version not reported",
       "appCrc32": "654824DE",
-      "usbCrc32": "D75CA6F9",
+      "usbCrc32": "B5FC4876",
       "recoveryCrc32": null,
       "app": {
         "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -22,23 +22,23 @@
       },
       "files": [
         {
-          "path": "V1/V1_DFU_boot_USBD75CA6F9_sd_tiers_candidate_20261020.hex",
-          "sha256": "EC72CDFEC324E42FC5509DD5E2855EF56E05F745216E7F000066396A9BA1690A"
+          "path": "V1/V1_DFU_boot_USBB5FC4876_sd_power200_20261020.hex",
+          "sha256": "E051DCA54A5FF45FDA91392E238DD4B32ECD9897C5B5ADC7F27FEFEAEBDA9D72"
         },
         {
-          "path": "V1/V1_fused_BOOT_USBD75CA6F9_APP654824DE_sd_tiers_candidate_20261020.hex",
-          "sha256": "AF0E83618771FD20F3BF484F8BDA9A6DA17D580D102B95E13D315D34D52E0AAE"
+          "path": "V1/V1_fused_BOOT_USBB5FC4876_APP654824DE_sd_power200_20261020.hex",
+          "sha256": "117D1D58BA4F085313B140A7B46327BDA364E006EA166DF039C7643F8482E7C5"
         },
         {
           "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
           "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
         },
         {
-          "path": "V1/V1_USB_service_D75CA6F9_sd_tiers_candidate_20261020.hex",
-          "sha256": "529F0CCB117BD2762D390388584B5E19F5FA15BB181D39F9F734AB82A5ED5288"
+          "path": "V1/V1_USB_service_B5FC4876_sd_power200_20261020.hex",
+          "sha256": "88549071702E54BCF1D9C90FF1C6183EB3E957FC98C9489B11E77787FD771D05"
         }
       ],
-      "limits": "User explicitly approved publication before on-device validation; software-checked candidate, not hardware-qualified. No measured speed improvement; remote9.5MB/s report is not reproduced or proven resolved. No new USB streaming, SD/BLE recording, camera, endurance, card-removal or installed-pair qualification. Boot and APP654824DE unchanged. V2, camera target and all WILDX51 runtime bytes unchanged. 120/60/30/20MHz are bus clock candidates, not measured MB/s. DDR excluded. Frozen maintained source composition and reused matching MSP/transport objects; not a clean-public-HEAD whole-tree rebuild. See V1/download-init-manifest.json for exact software scope. Device validation follows publication.",
+      "limits": "Bounded local V1 USB download validation only: one explicit reset,84MiB exact reference,1GiB known SHA256,unchanged31-record catalog,zero errors/retries. This card selected the30MHz SDR25 fallback; measured speed is recorded,not the previous43MB/s UHS rate. Remote reported card not tested. 200mA is the requested/checked UHS power allowance,not a measured current clamp or rail-droop qualification. Boot and APP654824DE unchanged. Bench private APP60EC609E preserved; exact bundled APP/USB pair not newly device-tested. No new streaming capture,SD/BLE recording,camera,endurance,card-removal or installed-GUI qualification. V2/camera/runtime unchanged.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -53,8 +53,8 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 248552,
-        "codeCrc32": "D75CA6F9",
-        "buildIdHex": "6635363336646238343734306535316532336432616362613363343630663135",
+        "codeCrc32": "B5FC4876",
+        "buildIdHex": "6637613863326236303266633134623663643238393962393031633637343863",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -102,6 +102,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "D75CA6F9",
+          "buildIdHex": "6635363336646238343734306535316532336432616362613363343630663135",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -199,11 +209,11 @@
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
-      "sourceCommitScope": "Existing source-base anchor only; exact frozen source/build hashes in V1/download-init-manifest.json.",
+      "sourceCommitScope": "Source-base anchor only; exact USB source/build hashes in V1/download-init-manifest.json.",
       "sourceInputs": [
         {
           "path": "main.c",
-          "sha256": "F6272E62F67E71C9CDB0A0B1380F13D62B3B06DBDEF85357B36154D54EB4C654"
+          "sha256": "81E0870399109B2D77C3644741A4B589F1F6B779A68439CDDE65C63BE531926C"
         },
         {
           "path": "stm32u5xx_hal_msp.c",
@@ -211,15 +221,19 @@
         },
         {
           "path": "xe_np_usb_stream.c",
-          "sha256": "3366C804B8F26951A2E0DA3B87577974F3ACAA42FC2A4F0A5D7312E7ADE21911"
+          "sha256": "EC5E6E19C8919C3E55566AB5579DC880504143B7E331279547AFB42A42089561"
         },
         {
           "path": "np_usb_backend.inc",
           "sha256": "CCAC4D17D64FBF3FA6C6E77EC5FD0D073B3BD9F2E91EBFFB3441049B92E70BD3"
         },
         {
+          "path": "stm32u5xx_hal_sd.c",
+          "sha256": "F9A42EE61FDB67569881DEBFDC122FFB8DFD3F1FA7791A72D707163412F6F150"
+        },
+        {
           "path": "np_usb_sd_mode_check.h",
-          "sha256": "F852252236242470332AC7E472C31945A24E187B6556A95FBC3CD62A27B685E9"
+          "sha256": "3BE0F102E0D7D323D760380F8DCA34126F1082CA43B7829D4B0C88214622D595"
         }
       ]
     },

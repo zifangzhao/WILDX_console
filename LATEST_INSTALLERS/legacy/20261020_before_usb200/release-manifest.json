@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0.51",
+  "releaseId": "V1_SD_TIERS_USBD75CA6F9_APP654824DE_20261020",
+  "stage": "USER_APPROVED_SOFTWARE_CHECKED_CANDIDATE_HARDWARE_VALIDATION_PENDING",
+  "baselineRelease": "BLE_PREVIEW_FIXED_PACED_SWEEP_20261020",
+  "firmwareChanged": true,
+  "applicationRebuilt": false,
+  "usbBinaryRebuilt": false,
+  "releaseBeforeHardwareValidationUserApproved": true,
+  "unchanged51payloadFiles": 32,
+  "payload": [
+    {
+      "path": "Firmware/owner-confirmation-20261017.json",
+      "bytes": 1975,
+      "sha256": "1375EB0416FEF31E6B65CB305868CA15A32D22A5E7D2A50E277BDDAD24A78EB3"
+    },
+    {
+      "path": "Firmware/README.md",
+      "bytes": 344,
+      "sha256": "869FC25C4C7F543B63984B00482661D485A837128DB4FA92A0B7F6B493828602"
+    },
+    {
+      "path": "Firmware/releases.json",
+      "bytes": 12588,
+      "sha256": "30547154C09865A27952FB5166C9C1CEEDD5C98E01B01838FAFDE89CB15377FB"
+    },
+    {
+      "path": "Firmware/V1/download-acceptance.json",
+      "bytes": 1317,
+      "sha256": "31F31A6C05B330AFCEAF73E1BCAA2313BA9280323690278480F8416A75527C45"
+    },
+    {
+      "path": "Firmware/V1/download-init-manifest.json",
+      "bytes": 9514,
+      "sha256": "24D6B813385900FF91609CEC5AC400F7F856FDA993A33F8CF76DF3F3C31B8C19"
+    },
+    {
+      "path": "Firmware/V1/README.md",
+      "bytes": 979,
+      "sha256": "6EE2D40425B489D307CF213B5AABCD637853CC15C19EE6998F6B7F24B6D78913"
+    },
+    {
+      "path": "Firmware/V1/V1_DFU_boot_USBD75CA6F9_sd_tiers_candidate_20261020.hex",
+      "bytes": 999392,
+      "sha256": "EC72CDFEC324E42FC5509DD5E2855EF56E05F745216E7F000066396A9BA1690A"
+    },
+    {
+      "path": "Firmware/V1/V1_fused_BOOT_USBD75CA6F9_APP654824DE_sd_tiers_candidate_20261020.hex",
+      "bytes": 5745164,
+      "sha256": "AF0E83618771FD20F3BF484F8BDA9A6DA17D580D102B95E13D315D34D52E0AAE"
+    },
+    {
+      "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "Firmware/V1/V1_USB_service_D75CA6F9_sd_tiers_candidate_20261020.hex",
+      "bytes": 699517,
+      "sha256": "529F0CCB117BD2762D390388584B5E19F5FA15BB181D39F9F734AB82A5ED5288"
+    },
+    {
+      "path": "Firmware/V1Camera/README.md",
+      "bytes": 1640,
+      "sha256": "3EF6FAFBC2C2F24F03BDB879B8C8F95B774C9A8576B7B702B6AC3C91220C8B9C"
+    },
+    {
+      "path": "Firmware/V1Camera/release.json",
+      "bytes": 1386,
+      "sha256": "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC"
+    },
+    {
+      "path": "Firmware/V1Camera/source-manifest.json",
+      "bytes": 12122,
+      "sha256": "7C5AB9585FCF62376EC72B39A4A163EC20B280A4E1379B504CF3BD43F339E056"
+    },
+    {
+      "path": "Firmware/V1Camera/source-README.md",
+      "bytes": 3601,
+      "sha256": "6DD320D9D98CB82781720FE84A60D93EB7FE4B4B20223EA433DDE0F3AE13056F"
+    },
+    {
+      "path": "Firmware/V1Camera/source-validation.md",
+      "bytes": 5338,
+      "sha256": "EFCEF24060A7D22BD831E751F681E992EE00D962B8D2D3B4ED20E1034BADAFB8"
+    },
+    {
+      "path": "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "bytes": 5875757,
+      "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
+    },
+    {
+      "path": "Firmware/V1Camera/V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "bytes": 755800,
+      "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
+    },
+    {
+      "path": "Firmware/V2/README.md",
+      "bytes": 2490,
+      "sha256": "D3C80725930CCAC4965B584D54C3F60732813A04D2FFC664746D13943E03E37F"
+    },
+    {
+      "path": "Firmware/V2/source-manifest.json",
+      "bytes": 1645,
+      "sha256": "D6210BFCFD0F939C5474740A07BE1D68CB2413D4BC5A138507D4FE944A7BE906"
+    },
+    {
+      "path": "Firmware/V2/source-SHA256SUMS.txt",
+      "bytes": 380,
+      "sha256": "F39E449ADDFCBA312C3B74A776DF4CB101A570769ED7AD22C94389D89D5E2D42"
+    },
+    {
+      "path": "Firmware/V2/source-validation.md",
+      "bytes": 4442,
+      "sha256": "46802F79483A68CE442C151CF5458B3A9899D26C115C5D390DF9867DFC80A92D"
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_B60291EE_CATALOG_REPAIR_20261019.hex",
+      "bytes": 1031560,
+      "sha256": "9DAB56E0BFBF03B48BE289F436F01A4F4A13E6F0EC503DFC69D51384D1118FDF"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex",
+      "bytes": 474528,
+      "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp",
+      "bytes": 172528,
+      "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636"
+    },
+    {
+      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex",
+      "bytes": 474836,
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp",
+      "bytes": 172640,
+      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "bytes": 449,
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "bytes": 55808,
+      "sha256": "24AA1EF7F27FB900FD6A69077A335BEF3491F17757E2598FB0BB773E9B3097DF"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "bytes": 152064,
+      "sha256": "F6D31C088D09D760F6279CE44152D51233646E08C534B2E6709D82862B4E2297"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "bytes": 340,
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "bytes": 434,
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "bytes": 364544,
+      "sha256": "548FDAFDEFD53891134F0DF5414143A2A9D495A3D6D198E0571BEBA2484A9C52"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "bytes": 151552,
+      "sha256": "8F4A438EE4A1AF6C05F52256564669041A77F2F5EAC945CD681C6F68621DD2DD"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "bytes": 458,
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "bytes": 239616,
+      "sha256": "A396530AAD81A5C8BA6FDC8086FC1FB2642A2E4E34C52E50392AE8763FE32A2F"
+    },
+    {
+      "path": "OpenTK.dll",
+      "bytes": 5757952,
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "bytes": 24576,
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "WILDX_console.exe",
+      "bytes": 1503232,
+      "sha256": "4057008015E449A01A2EFE5A094A66D91B2B54106DC52E4880F1526AC4FA5C72"
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "bytes": 532,
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    }
+  ],
+  "validation": {
+    "status": "software_checked_usb_candidate_not_live_qualified",
+    "tests": "tests/tests.json",
+    "build": "checked/build/build_receipt.json",
+    "only_two_usb_functions_changed": true,
+    "unchanged_msp_transport_backend": true,
+    "maintained_vs_frozen_executable_tokens_match": true,
+    "app_functions_preprocess_identically_with_usb_tiers_disabled": true,
+    "policy_assertions": 196,
+    "mode_checker_fault_injection": "passed actual header",
+    "usb_internal_dma": true,
+    "sd_kernel_hz": 120000000,
+    "candidate_bus_hz": [
+      120000000,
+      60000000,
+      30000000,
+      20000000
+    ],
+    "ddr_enabled": false,
+    "known_maximum_stack_bytes": 2464,
+    "allocated_stack_bytes": 4096,
+    "stack_uncertainty": "existing linker cycles and untraceable function pointers",
+    "reused_objects": {
+      "stm32u5xx_hal_msp.o": "71D4655D6DB9F6585921E41B4F0D6CE5196FB31FF787F95D489457169618ACA2",
+      "xe_np_usb_stream.o": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A"
+    },
+    "candidate_hex_sha256": "59E8BAE60067DE03E5AF1FE8A9F3B4AAB7FF76F0CE6CF47A3D745B94F85205A5",
+    "passive_inventory": "ST-Link present; no V1 USB1209:B386 interface",
+    "remote_9_5_mb_per_second_reproduced": false,
+    "measured_speed_improvement": null,
+    "hardware_access": false,
+    "packaged": false,
+    "published": false,
+    "published_pair_changed": false
+  },
+  "limits": [
+    "User explicitly approved publication before on-device validation; software-checked candidate, not hardware-qualified.",
+    "No measured speed improvement; remote9.5MB/s report is not reproduced or proven resolved.",
+    "No new USB streaming, SD/BLE recording, camera, endurance, card-removal or installed-pair qualification.",
+    "Boot and APP654824DE unchanged. V2, camera target and all WILDX51 runtime bytes unchanged.",
+    "120/60/30/20MHz are bus clock candidates, not measured MB/s. DDR excluded.",
+    "Frozen maintained source composition and reused matching MSP/transport objects; not a clean-public-HEAD whole-tree rebuild."
+  ],
+  "previousInstaller": {
+    "file": "WILDX_console-Setup-1.0.0.51-BLE-preview-20261020.exe",
+    "sha256": "D4E124F6D55027726B71D3D613C3030356419CA19CD0B910824289FF7E5B4264",
+    "bytes": 6509455
+  },
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.51-V1-SD-tiers-USBD75CA6F9-candidate.exe",
+    "sha256": "4E020E54667602AF20EAB27A5FB4B8ECBE999E3B72FF98D57C7CF61856BEBE0A",
+    "bytes": 6510615
+  },
+  "extractedPayloadFilesVerified": 40,
+  "installerExecuted": false,
+  "nsisPackagingPasses": 1,
+  "hardwareAccess": false
+}

@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "V1_SD_TIERS_USBD75CA6F9_APP654824DE_20261020",
+  "stage": "USER_APPROVED_SOFTWARE_CHECKED_CANDIDATE_HARDWARE_VALIDATION_PENDING",
+  "usbVersion": "1.0.97-sd-tiers-candidate",
+  "usbCrc32": "D75CA6F9",
+  "appCrc32": "654824DE",
+  "loaderAbi": 258,
+  "bootUnchanged": true,
+  "appUnchanged": true,
+  "configurationIncluded": false,
+  "sdKernelHz": 120000000,
+  "usbInternalDma": true,
+  "candidateBusHz": [
+    120000000,
+    60000000,
+    30000000,
+    20000000
+  ],
+  "ddrEnabled": false,
+  "releaseBeforeHardwareValidationUserApproved": true,
+  "releasePairNewlyDeviceTested": false,
+  "measuredRawMBs": null,
+  "softwareRegression": {
+    "status": "software_checked_usb_candidate_not_live_qualified",
+    "tests": "tests/tests.json",
+    "build": "checked/build/build_receipt.json",
+    "only_two_usb_functions_changed": true,
+    "unchanged_msp_transport_backend": true,
+    "maintained_vs_frozen_executable_tokens_match": true,
+    "app_functions_preprocess_identically_with_usb_tiers_disabled": true,
+    "policy_assertions": 196,
+    "mode_checker_fault_injection": "passed actual header",
+    "usb_internal_dma": true,
+    "sd_kernel_hz": 120000000,
+    "candidate_bus_hz": [
+      120000000,
+      60000000,
+      30000000,
+      20000000
+    ],
+    "ddr_enabled": false,
+    "known_maximum_stack_bytes": 2464,
+    "allocated_stack_bytes": 4096,
+    "stack_uncertainty": "existing linker cycles and untraceable function pointers",
+    "reused_objects": {
+      "stm32u5xx_hal_msp.o": "71D4655D6DB9F6585921E41B4F0D6CE5196FB31FF787F95D489457169618ACA2",
+      "xe_np_usb_stream.o": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A"
+    },
+    "candidate_hex_sha256": "59E8BAE60067DE03E5AF1FE8A9F3B4AAB7FF76F0CE6CF47A3D745B94F85205A5",
+    "passive_inventory": "ST-Link present; no V1 USB1209:B386 interface",
+    "remote_9_5_mb_per_second_reproduced": false,
+    "measured_speed_improvement": null,
+    "hardware_access": false,
+    "packaged": false,
+    "published": false,
+    "published_pair_changed": false
+  },
+  "limits": [
+    "User explicitly approved publication before on-device validation; software-checked candidate, not hardware-qualified.",
+    "No measured speed improvement; remote9.5MB/s report is not reproduced or proven resolved.",
+    "No new USB streaming, SD/BLE recording, camera, endurance, card-removal or installed-pair qualification.",
+    "Boot and APP654824DE unchanged. V2, camera target and all WILDX51 runtime bytes unchanged.",
+    "120/60/30/20MHz are bus clock candidates, not measured MB/s. DDR excluded.",
+    "Frozen maintained source composition and reused matching MSP/transport objects; not a clean-public-HEAD whole-tree rebuild."
+  ],
+  "frozenInputs": {
+    "shared_init_source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\main.c",
+    "shared_msp_source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\stm32u5xx_hal_msp.c",
+    "shared_functions": [
+      "XE_NP_Board_SetSdHighSpeedLowVoltage",
+      "XE_NP_Board_SdUhsReadyForNpRaw",
+      "XE_NP_Board_SdNegotiatedSpeedMode",
+      "XE_NP_Board_SdEstimatedWriteBudgetBytesPerSec",
+      "XE_NP_Board_SdDiag",
+      "XE_NP_Board_SdBenchDiag",
+      "XE_NP_Board_SetSdInitFailed",
+      "XE_NP_Board_NormalizeSdCardSpeed",
+      "XE_NP_Board_ComputeSdBusHz",
+      "XE_NP_Board_RecordSdBenchSetupMs",
+      "XE_NP_Board_GetSdModeTargetBusHz",
+      "XE_NP_Board_RecordSdSpeedAttemptParams",
+      "XE_NP_Board_RecordSdSpeedAttemptClockRate",
+      "XE_NP_Board_ClearSdSpeedAttemptError",
+      "XE_NP_Board_ConfigureSdmmcClockSources",
+      "XE_NP_Board_ResetSdPowerRail",
+      "XE_NP_Board_ProbeSdMetadataReadWithTimeout",
+      "XE_NP_Board_ProbeSdMetadataRead",
+      "XE_NP_Board_AddUniqueDlybUnitCandidate",
+      "XE_NP_Board_SelectDlybPassWindow",
+      "XE_NP_Board_ConfirmSdDelayPhase",
+      "XE_NP_Board_TuneSdDelayBlock",
+      "XE_NP_Board_ComputeClockDivForTargetHz",
+      "NP_SD_PrepareInitialClock",
+      "XE_NP_Board_InitSdHostBase",
+      "XE_NP_Board_ResetSdHostBase",
+      "XE_NP_Board_PrepareSdClockDivForSpeedMode",
+      "XE_NP_Board_TrySdSpeedMode",
+      "XE_NP_Board_TrySdSpeedModeWithSweep",
+      "XE_NP_Board_PostInitSdTuning",
+      "XE_NP_Board_EnsureSdPowerRail"
+    ],
+    "shared_macros": [
+      "XE_NP_SD_WRITE_BUDGET_DEFAULT_BYTES_PER_SEC",
+      "XE_NP_SD_WRITE_BUDGET_HIGH_BYTES_PER_SEC",
+      "XE_NP_SD_WRITE_BUDGET_SDR50_BYTES_PER_SEC",
+      "XE_NP_SD_WRITE_BUDGET_SDR104_BYTES_PER_SEC",
+      "XE_NP_SD_WRITE_BUDGET_DDR_BYTES_PER_SEC",
+      "XE_NP_SD_TRY_SDR104_READ_VALIDATED",
+      "XE_NP_SD_TRY_SDR50_READ_VALIDATED",
+      "XE_NP_SD_TRY_DDR_READ_VALIDATED",
+      "XE_NP_SD_TRY_SDR25_HIGH_SPEED",
+      "XE_NP_SD_VALIDATE_SPEED_READ",
+      "XE_NP_SD_POST_INIT_TUNING_ENABLE",
+      "XE_NP_SD_POST_INIT_TUNE_MAX_DIVS",
+      "XE_NP_SD_POST_INIT_TUNE_MAX_EDGES",
+      "XE_NP_SD_POST_INIT_TUNE_MAX_SELCLKRX",
+      "XE_NP_SD_POST_INIT_TUNE_MAX_ICLK_CLOCK_SOURCES",
+      "XE_NP_SD_POST_INIT_TUNE_MAX_SDMMC_CLOCK_SOURCES",
+      "XE_NP_SDMMC_SDMMC_CLOCK_SOURCE_DEFAULT",
+      "XE_NP_SDMMC_ICLK_CLOCK_SOURCE_DEFAULT",
+      "XE_NP_SD_DLYB_TUNE_ENABLE",
+      "XE_NP_SD_DLYB_TUNE_PHASE_TIMEOUT_MS",
+      "XE_NP_SD_DLYB_TUNE_CONFIRM_ATTEMPTS",
+      "XE_NP_SD_DLYB_TUNE_MANUAL_UNIT_COUNT",
+      "XE_NP_SD_DLYB_TUNE_MAX_UNIT_CANDIDATES",
+      "XE_NP_SD_SDR104_MIN_NEGOTIATED_BUS_HZ",
+      "XE_NP_SD_SDR104_PREFERRED_NEGOTIATED_BUS_HZ",
+      "XE_NP_SD_SDR104_ALLOW_CLOCKDIV0_LOWER_KERNEL",
+      "XE_NP_SD_ALLOW_HIGH_SPEED_RAW_PROCESS_TEST",
+      "XE_NP_SD_POWER_RAIL_OFF_MS",
+      "XE_NP_SD_POWER_RAIL_SETTLE_MS"
+    ],
+    "sd_kernel_hz": 120000000,
+    "usb_sd_clock_policy": "Maintained APP SD PLL2Q120MHz/power/tuning; unchanged USB system/capture clock",
+    "usb_system_clock_and_entry_unchanged": true,
+    "app_binary_unchanged": true,
+    "inputs": [
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\main.c",
+        "sha256": "18986B8E771994F30622BBD477084B676DBB2C8ED410A5E3B5AE7ABDD74B0B4D"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\stm32u5xx_hal_msp.c",
+        "sha256": "EB10BFBE4BC52C343114E709A8BAA75B9FD8299701BBC7524D6DCC0ADA46AB2F"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\main.c",
+        "sha256": "DC128FAB7F657902EF8BB156DE2363888B391C3E4903ECF8FF9A896895F11DA8"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\stm32u5xx_hal_msp.c",
+        "sha256": "0EB155D2F640855B940B5E7C1BDD5EC8BDDC0915A019A3441803090E742CDEAC"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_battery_ble_handoff_r2_20261019\\build\\xe_np_usb_stream.c",
+        "sha256": "24A960FCB6FAFDBE15DA0567E7962BC1C5C8A4037D5361D1EFAEB12F326755E2"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_mode_check.h",
+        "sha256": "F852252236242470332AC7E472C31945A24E187B6556A95FBC3CD62A27B685E9"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "main.c",
+        "sha256": "F6272E62F67E71C9CDB0A0B1380F13D62B3B06DBDEF85357B36154D54EB4C654"
+      },
+      {
+        "path": "stm32u5xx_hal_msp.c",
+        "sha256": "C478B9F5D7F95E32B4122E5EB76C45DBBD5DCFB70DCBA39DC70ACF3256212461"
+      },
+      {
+        "path": "xe_np_usb_stream.c",
+        "sha256": "3366C804B8F26951A2E0DA3B87577974F3ACAA42FC2A4F0A5D7312E7ADE21911"
+      },
+      {
+        "path": "np_usb_backend.inc",
+        "sha256": "CCAC4D17D64FBF3FA6C6E77EC5FD0D073B3BD9F2E91EBFFB3441049B92E70BD3"
+      },
+      {
+        "path": "np_usb_sd_mode_check.h",
+        "sha256": "F852252236242470332AC7E472C31945A24E187B6556A95FBC3CD62A27B685E9"
+      }
+    ]
+  },
+  "build": {
+    "changed_units": 1,
+    "compiled_units": [
+      "main"
+    ],
+    "resumed_stream_compile": false,
+    "inputs": {
+      "xe_np_usb_stream": "3366C804B8F26951A2E0DA3B87577974F3ACAA42FC2A4F0A5D7312E7ADE21911",
+      "stm32u5xx_hal_msp": "C478B9F5D7F95E32B4122E5EB76C45DBBD5DCFB70DCBA39DC70ACF3256212461",
+      "main": "F6272E62F67E71C9CDB0A0B1380F13D62B3B06DBDEF85357B36154D54EB4C654"
+    },
+    "main_usb_internal_dma": true,
+    "main_only_defines": [
+      "XE_NP_BOARD_USB_OTG_HS_INTERNAL_DMA=1U",
+      "XE_NP_SD_USB_READ_TIERS=1U"
+    ],
+    "app_binary_changed": false,
+    "boot_changed": false,
+    "usb_profile": "Maintained APP SD PLL2Q120MHz/power/tuning; unchanged USB system/capture clock",
+    "hex_sha256": "59E8BAE60067DE03E5AF1FE8A9F3B4AAB7FF76F0CE6CF47A3D745B94F85205A5",
+    "sealed": false,
+    "hardware_access": false,
+    "published": false
+  },
+  "files": [
+    {
+      "path": "V1_DFU_boot_USBD75CA6F9_sd_tiers_candidate_20261020.hex",
+      "bytes": 999392,
+      "sha256": "EC72CDFEC324E42FC5509DD5E2855EF56E05F745216E7F000066396A9BA1690A"
+    },
+    {
+      "path": "V1_fused_BOOT_USBD75CA6F9_APP654824DE_sd_tiers_candidate_20261020.hex",
+      "bytes": 5745164,
+      "sha256": "AF0E83618771FD20F3BF484F8BDA9A6DA17D580D102B95E13D315D34D52E0AAE"
+    },
+    {
+      "path": "V1_SD_BLE_app_only_store2_rc1.hex",
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "V1_USB_service_D75CA6F9_sd_tiers_candidate_20261020.hex",
+      "bytes": 699517,
+      "sha256": "529F0CCB117BD2762D390388584B5E19F5FA15BB181D39F9F734AB82A5ED5288"
+    }
+  ]
+}

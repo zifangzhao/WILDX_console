@@ -1,0 +1,30 @@
+{
+  "status": "software_checked_usb_candidate_not_live_qualified",
+  "tests": "tests/tests.json",
+  "build": "checked/build/build_receipt.json",
+  "only_two_usb_functions_changed": true,
+  "unchanged_msp_transport_backend": true,
+  "maintained_vs_frozen_executable_tokens_match": true,
+  "app_functions_preprocess_identically_with_usb_tiers_disabled": true,
+  "policy_assertions": 196,
+  "mode_checker_fault_injection": "passed actual header",
+  "usb_internal_dma": true,
+  "sd_kernel_hz": 120000000,
+  "candidate_bus_hz": [120000000, 60000000, 30000000, 20000000],
+  "ddr_enabled": false,
+  "known_maximum_stack_bytes": 2464,
+  "allocated_stack_bytes": 4096,
+  "stack_uncertainty": "existing linker cycles and untraceable function pointers",
+  "reused_objects": {
+    "stm32u5xx_hal_msp.o": "71D4655D6DB9F6585921E41B4F0D6CE5196FB31FF787F95D489457169618ACA2",
+    "xe_np_usb_stream.o": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A"
+  },
+  "candidate_hex_sha256": "59E8BAE60067DE03E5AF1FE8A9F3B4AAB7FF76F0CE6CF47A3D745B94F85205A5",
+  "passive_inventory": "ST-Link present; no V1 USB1209:B386 interface",
+  "remote_9_5_mb_per_second_reproduced": false,
+  "measured_speed_improvement": null,
+  "hardware_access": false,
+  "packaged": false,
+  "published": false,
+  "published_pair_changed": false
+}

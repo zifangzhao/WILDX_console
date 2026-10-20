@@ -1,16 +1,14 @@
-# V1 SD read tiers candidate — USBD75CA6F9 / APP654824DE
+# V1 USB SD200mA fix — USBB5FC4876 / APP654824DE
 
-User-approved early publication. SOFTWARE CHECKED; DEVICE VALIDATION PENDING.
-Use the matching fused HEX for boot + USB + SD/BLE APP. Retained configuration
-is excluded. Separate USB, boot+USB and unchanged APP components are included.
-V1 NP target only, not V1Camera or V2. APP-only flashing does not update USB.
+Use the matching fused HEX for boot+USB+SD/BLE APP; retained configuration is
+excluded. V1 NP only, not V1Camera or V2. APP-only flashing does not update USB.
+USB explicitly selects200mA for SDR104/50/25/12; UHS mode receipts check the
+actual power selection. The U5 CMD6 reader uses two positiveHALF bursts and
+DATAEND/error completion, not an invalid idleRXFIFOE requirement. Cold DEFAULT
+fallback remains read/reference validated without requiring optional CMD6.
 
-USB tries120/60/30/20MHz clock tiers with SDR104/SDR50/SDR25 alternatives,
-fresh per-candidate reset, strict selected-mode query and repeated reference
-reads. Fixes post-validation VSEL mutation. DDR remains disabled. Internal
-USB DMA, guarded read retirement, boot and APP are unchanged.
-
-196 actual-policy assertions and mode-check fault injection passed; one main
-compile passed. No live throughput, streaming, recording or installed-pair test.
-The9.5MB/s report is not proven resolved; signaling clocks are not MB/s claims.
-See download-init-manifest.json for component hashes and validation limits.
+Local WILDX51 production API: reset22846ms,84MiB exact reference,
+1GiB known SHA256 at14.51MB/s,zero retries/errors,
+31-record checkpoint unchanged. Faster UHS not accepted on this card; this is
+not a43MB/s claim. No card writes. Boot/APP unchanged; other modes inherit prior
+evidence, not freshly qualified. See download-init-manifest.json for scope.
