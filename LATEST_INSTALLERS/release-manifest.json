@@ -1,6 +1,6 @@
 {
   "version": "1.0.0.48",
-  "releaseId": "V1_FAST_READY_USB037CF67C_APP654824DE_20261019",
+  "releaseId": "V1_SD_DMA_USB6CD1917C_APP654824DE_20261019",
   "payload": [
     {
       "path": "Firmware/owner-confirmation-20261017.json",
@@ -14,33 +14,33 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 11864,
-      "sha256": "C04AC7A398CA6C4A9F0C23CF4B088165A2A0FA20CB6AABE52FC870103A0F602B"
+      "bytes": 13417,
+      "sha256": "D922A1876C16EB1049224D93FCB73A9863D651635EC406906A97E6D739047728"
     },
     {
       "path": "Firmware/V1/download-acceptance.json",
-      "bytes": 2486,
-      "sha256": "CB7A27B056AD5DC85BA70F38A04A30B8AB11D229AF25D43A3E63996A55AB1B10"
+      "bytes": 2507,
+      "sha256": "BAA05B700809F62D954D5BFB12981EECA4DA4C01965CE0FCB999559D2B92B6BE"
     },
     {
       "path": "Firmware/V1/download-init-manifest.json",
-      "bytes": 4120,
-      "sha256": "B8FCB4A794C69543566740012219348F859A425CC937640219C5260B318A8F0F"
+      "bytes": 5350,
+      "sha256": "78B746F5C37D577C364032A3DB3B5D8D88450A4E5EF2BD0D87FA9AFB46EED138"
     },
     {
       "path": "Firmware/V1/README.md",
-      "bytes": 1245,
-      "sha256": "72B2087615B6F739096A011D4FF36A9364C1AA9B1D745A4A00EB53F58AD23583"
+      "bytes": 1302,
+      "sha256": "27A1D08567EA57D44333ECEB6B7A22CE8D9E79577C05225195DF30CDC4E4E5F4"
     },
     {
-      "path": "Firmware/V1/V1_DFU_boot_USB037CF67C_fast_ready_20261019.hex",
+      "path": "Firmware/V1/V1_DFU_boot_USB6CD1917C_sd_dma_20261019.hex",
       "bytes": 999392,
-      "sha256": "52DC6B34F8AA88F473B6D80A81060E294474C50B91E9D56355F41DD437BDFF4A"
+      "sha256": "7D46EF17962F6D39A2DD943FC2805B168EAA7F3EFFE90CABBC4B3EC21D2EADDB"
     },
     {
-      "path": "Firmware/V1/V1_fused_BOOT_USB037CF67C_APP654824DE_fast_ready_20261019.hex",
+      "path": "Firmware/V1/V1_fused_BOOT_USB6CD1917C_APP654824DE_sd_dma_20261019.hex",
       "bytes": 5745164,
-      "sha256": "608BA93B28C3DA06811D2D95AD9F4B57B328D722887E9972E596C00FD1FAC566"
+      "sha256": "ABA47C1154B246BEF5F0289C5B0D88C1CD308B5E097C5B65A0652E144F48F209"
     },
     {
       "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -48,9 +48,9 @@
       "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
     },
     {
-      "path": "Firmware/V1/V1_USB_service_037CF67C_fast_ready_20261019.hex",
+      "path": "Firmware/V1/V1_USB_service_6CD1917C_sd_dma_20261019.hex",
       "bytes": 699517,
-      "sha256": "4FAB88D3537C95D92FD6F53BA9975D4FCFB7C26AC0A0B6CE71B444D3A717FA4E"
+      "sha256": "1B3CDBD36D46B9D569E9FBC94984B1B599DB7F324D67E2FDDEA7E71EF050BF3A"
     },
     {
       "path": "Firmware/V1Camera/README.md",
@@ -208,19 +208,19 @@
   "applicationRebuilt": false,
   "exporterChanged": false,
   "firmwareSourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-  "sourceIntegration": "Exact checked fast USB initializer objects plus guarded reader; frozen input hashes in manifest. No incidental WILDX private edits.",
+  "sourceIntegration": "Maintained APP SD initializer; main-only USB DMA flag restored; matching reused MSP/guarded reader objects. No incidental WILDX private edits.",
   "validation": {
     "result": "bounded_connected_V1_SD_download_pass",
     "uid": "001D00065942500B20313354",
     "stlink": "001A00423235510D37333439",
-    "usb_crc": "037CF67C",
+    "usb_crc": "6CD1917C",
     "tested_app_crc": "60EC609E",
     "release_app_crc": "654824DE",
     "console_sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
     "raw_bytes": 88080384,
-    "raw_seconds": 2.087,
-    "raw_MB_s": 42.20430474365118,
-    "export_MB_s": 35.00821681953621,
+    "raw_seconds": 2.08,
+    "raw_MB_s": 42.346338461538465,
+    "export_MB_s": 33.69023734674473,
     "byte_identical_export_files": 21,
     "allowed_metadata_differences": [
       "software_version",
@@ -229,21 +229,21 @@
     "large_read_passes": [
       {
         "bytes": 1073741824,
-        "seconds": 25.028880899999997,
-        "MB_per_second": 42.90011286201683,
+        "seconds": 24.9079868,
+        "MB_per_second": 43.10833439176224,
         "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
         "recovered": 0,
         "retries": 0,
-        "diagnostics": "firmware requests=2390 SD_ms=27846 CRC_ms=2 USB_ms=25691 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+        "diagnostics": "firmware requests=2390 SD_ms=23763 CRC_ms=3 USB_ms=25782 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
       },
       {
         "bytes": 1073741824,
-        "seconds": 24.8794301,
-        "MB_per_second": 43.1578141206787,
+        "seconds": 24.7293034,
+        "MB_per_second": 43.419816655976575,
         "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
         "recovered": 0,
         "retries": 0,
-        "diagnostics": "firmware requests=4447 SD_ms=51753 CRC_ms=2 USB_ms=47804 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+        "diagnostics": "firmware requests=4447 SD_ms=44214 CRC_ms=6 USB_ms=47970 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
       }
     ],
     "sd_writes": 0,
@@ -252,13 +252,15 @@
     "frontier": 63471616,
     "restored_SD_BLE": true,
     "software_regression": "Actual canonical reader passed exact length/DATAEND/CRC, bounded STOP/status, delayed/stuck/wrapped DAT0 retirement and sticky no-replay failures",
-    "initializer": "Exact checked USB0E542BBD main/MSP objects; new guarded reader retained",
+    "initializer": "Maintained APP SD120MHz/power/tuning; corrected main-only USB internal DMA build flag",
+    "live_usb_dma": true,
+    "live_GAHBCFG": "0x27",
     "limits": [
       "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
       "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
       "No new recording, streaming, camera, card-removal or endurance qualification",
       "Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s",
-      "Archived main source rebuild differs in performance from the checked object; exact object identity reused, not a clean-source-equivalence claim"
+      "Frozen composed sources and reused matching MSP/reader objects; not a clean-public-HEAD whole-tree build"
     ]
   },
   "installerLaunch": {
@@ -268,14 +270,14 @@
     "scriptSha256": "CB43535C91EB63740853553E4C76D0E40E66E282EBD66F202973DF767DC738CB"
   },
   "previousInstaller": {
-    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB22D0792B.exe",
-    "sha256": "63BA3EBA92AD14A2DA77A4B64F08974DA67977A65ACCB1E2DB7B091869BC9713",
-    "bytes": 6506195
-  },
-  "installer": {
     "sha256": "4B9A8973571C2F310FE1663746D7255BB9EF0DBD40C8E0E7122729265DC0A4FD",
     "bytes": 6510853,
     "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB037CF67C.exe"
+  },
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB6CD1917C.exe",
+    "bytes": 6508907,
+    "sha256": "F3CF134A1E12DA4DE5F075D0BAC3105EDE6AEA12B13ABCF4FBAB5821D53C0216"
   },
   "extractedPayloadFilesVerified": 40,
   "installerExecuted": false,

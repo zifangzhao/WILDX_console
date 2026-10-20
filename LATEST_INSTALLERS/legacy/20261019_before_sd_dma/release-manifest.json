@@ -1,0 +1,283 @@
+{
+  "version": "1.0.0.48",
+  "releaseId": "V1_FAST_READY_USB037CF67C_APP654824DE_20261019",
+  "payload": [
+    {
+      "path": "Firmware/owner-confirmation-20261017.json",
+      "bytes": 1975,
+      "sha256": "1375EB0416FEF31E6B65CB305868CA15A32D22A5E7D2A50E277BDDAD24A78EB3"
+    },
+    {
+      "path": "Firmware/README.md",
+      "bytes": 344,
+      "sha256": "869FC25C4C7F543B63984B00482661D485A837128DB4FA92A0B7F6B493828602"
+    },
+    {
+      "path": "Firmware/releases.json",
+      "bytes": 11864,
+      "sha256": "C04AC7A398CA6C4A9F0C23CF4B088165A2A0FA20CB6AABE52FC870103A0F602B"
+    },
+    {
+      "path": "Firmware/V1/download-acceptance.json",
+      "bytes": 2486,
+      "sha256": "CB7A27B056AD5DC85BA70F38A04A30B8AB11D229AF25D43A3E63996A55AB1B10"
+    },
+    {
+      "path": "Firmware/V1/download-init-manifest.json",
+      "bytes": 4120,
+      "sha256": "B8FCB4A794C69543566740012219348F859A425CC937640219C5260B318A8F0F"
+    },
+    {
+      "path": "Firmware/V1/README.md",
+      "bytes": 1245,
+      "sha256": "72B2087615B6F739096A011D4FF36A9364C1AA9B1D745A4A00EB53F58AD23583"
+    },
+    {
+      "path": "Firmware/V1/V1_DFU_boot_USB037CF67C_fast_ready_20261019.hex",
+      "bytes": 999392,
+      "sha256": "52DC6B34F8AA88F473B6D80A81060E294474C50B91E9D56355F41DD437BDFF4A"
+    },
+    {
+      "path": "Firmware/V1/V1_fused_BOOT_USB037CF67C_APP654824DE_fast_ready_20261019.hex",
+      "bytes": 5745164,
+      "sha256": "608BA93B28C3DA06811D2D95AD9F4B57B328D722887E9972E596C00FD1FAC566"
+    },
+    {
+      "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
+      "bytes": 804887,
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "Firmware/V1/V1_USB_service_037CF67C_fast_ready_20261019.hex",
+      "bytes": 699517,
+      "sha256": "4FAB88D3537C95D92FD6F53BA9975D4FCFB7C26AC0A0B6CE71B444D3A717FA4E"
+    },
+    {
+      "path": "Firmware/V1Camera/README.md",
+      "bytes": 1640,
+      "sha256": "3EF6FAFBC2C2F24F03BDB879B8C8F95B774C9A8576B7B702B6AC3C91220C8B9C"
+    },
+    {
+      "path": "Firmware/V1Camera/release.json",
+      "bytes": 1386,
+      "sha256": "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC"
+    },
+    {
+      "path": "Firmware/V1Camera/source-manifest.json",
+      "bytes": 12122,
+      "sha256": "7C5AB9585FCF62376EC72B39A4A163EC20B280A4E1379B504CF3BD43F339E056"
+    },
+    {
+      "path": "Firmware/V1Camera/source-README.md",
+      "bytes": 3601,
+      "sha256": "6DD320D9D98CB82781720FE84A60D93EB7FE4B4B20223EA433DDE0F3AE13056F"
+    },
+    {
+      "path": "Firmware/V1Camera/source-validation.md",
+      "bytes": 5338,
+      "sha256": "EFCEF24060A7D22BD831E751F681E992EE00D962B8D2D3B4ED20E1034BADAFB8"
+    },
+    {
+      "path": "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "bytes": 5875757,
+      "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
+    },
+    {
+      "path": "Firmware/V1Camera/V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "bytes": 755800,
+      "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
+    },
+    {
+      "path": "Firmware/V2/README.md",
+      "bytes": 2490,
+      "sha256": "D3C80725930CCAC4965B584D54C3F60732813A04D2FFC664746D13943E03E37F"
+    },
+    {
+      "path": "Firmware/V2/source-manifest.json",
+      "bytes": 1645,
+      "sha256": "D6210BFCFD0F939C5474740A07BE1D68CB2413D4BC5A138507D4FE944A7BE906"
+    },
+    {
+      "path": "Firmware/V2/source-SHA256SUMS.txt",
+      "bytes": 380,
+      "sha256": "F39E449ADDFCBA312C3B74A776DF4CB101A570769ED7AD22C94389D89D5E2D42"
+    },
+    {
+      "path": "Firmware/V2/source-validation.md",
+      "bytes": 4442,
+      "sha256": "46802F79483A68CE442C151CF5458B3A9899D26C115C5D390DF9867DFC80A92D"
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_B60291EE_CATALOG_REPAIR_20261019.hex",
+      "bytes": 1031560,
+      "sha256": "9DAB56E0BFBF03B48BE289F436F01A4F4A13E6F0EC503DFC69D51384D1118FDF"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_only_B60291EE_CATALOG_START_FIX_20261019.hex",
+      "bytes": 474528,
+      "sha256": "2D5A6821129ABF3E3C96CC638B13C2EB88AA2698C17E4EF0E007AF9944A39145"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_update_B60291EE_CATALOG_START_FIX_20261019.xenp",
+      "bytes": 172528,
+      "sha256": "B81C05B43DDE1571789C53B158093F52E2CB10BF7F589FC4EDA6B34CD6D3B636"
+    },
+    {
+      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex",
+      "bytes": 474836,
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp",
+      "bytes": 172640,
+      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "bytes": 449,
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "bytes": 55808,
+      "sha256": "24AA1EF7F27FB900FD6A69077A335BEF3491F17757E2598FB0BB773E9B3097DF"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "bytes": 152064,
+      "sha256": "F6D31C088D09D760F6279CE44152D51233646E08C534B2E6709D82862B4E2297"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "bytes": 340,
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "bytes": 434,
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "bytes": 364544,
+      "sha256": "548FDAFDEFD53891134F0DF5414143A2A9D495A3D6D198E0571BEBA2484A9C52"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "bytes": 151552,
+      "sha256": "8F4A438EE4A1AF6C05F52256564669041A77F2F5EAC945CD681C6F68621DD2DD"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "bytes": 458,
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "bytes": 239616,
+      "sha256": "A396530AAD81A5C8BA6FDC8086FC1FB2642A2E4E34C52E50392AE8763FE32A2F"
+    },
+    {
+      "path": "OpenTK.dll",
+      "bytes": 5757952,
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "bytes": 24576,
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "WILDX_console.exe",
+      "bytes": 1502208,
+      "sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486"
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "bytes": 532,
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    }
+  ],
+  "unchanged48payloadFiles": 32,
+  "firmwareChanged": true,
+  "applicationRebuilt": false,
+  "exporterChanged": false,
+  "firmwareSourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+  "sourceIntegration": "Exact checked fast USB initializer objects plus guarded reader; frozen input hashes in manifest. No incidental WILDX private edits.",
+  "validation": {
+    "result": "bounded_connected_V1_SD_download_pass",
+    "uid": "001D00065942500B20313354",
+    "stlink": "001A00423235510D37333439",
+    "usb_crc": "037CF67C",
+    "tested_app_crc": "60EC609E",
+    "release_app_crc": "654824DE",
+    "console_sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
+    "raw_bytes": 88080384,
+    "raw_seconds": 2.087,
+    "raw_MB_s": 42.20430474365118,
+    "export_MB_s": 35.00821681953621,
+    "byte_identical_export_files": 21,
+    "allowed_metadata_differences": [
+      "software_version",
+      "metadata_created_time_utc"
+    ],
+    "large_read_passes": [
+      {
+        "bytes": 1073741824,
+        "seconds": 25.028880899999997,
+        "MB_per_second": 42.90011286201683,
+        "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+        "recovered": 0,
+        "retries": 0,
+        "diagnostics": "firmware requests=2390 SD_ms=27846 CRC_ms=2 USB_ms=25691 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+      },
+      {
+        "bytes": 1073741824,
+        "seconds": 24.8794301,
+        "MB_per_second": 43.1578141206787,
+        "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
+        "recovered": 0,
+        "retries": 0,
+        "diagnostics": "firmware requests=4447 SD_ms=51753 CRC_ms=2 USB_ms=47804 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+      }
+    ],
+    "sd_writes": 0,
+    "new_recordings": 0,
+    "catalog_count": 31,
+    "frontier": 63471616,
+    "restored_SD_BLE": true,
+    "software_regression": "Actual canonical reader passed exact length/DATAEND/CRC, bounded STOP/status, delayed/stuck/wrapped DAT0 retirement and sticky no-replay failures",
+    "initializer": "Exact checked USB0E542BBD main/MSP objects; new guarded reader retained",
+    "limits": [
+      "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
+      "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
+      "No new recording, streaming, camera, card-removal or endurance qualification",
+      "Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s",
+      "Archived main source rebuild differs in performance from the checked object; exact object identity reused, not a clean-source-equivalence claim"
+    ]
+  },
+  "installerLaunch": {
+    "evidence": "Note/INSTALLER_FINISH_LAUNCH_FIX_20261019.md",
+    "isolatedCasesPassed": 3,
+    "scope": "Actual preprocessed MUI callback/dummy payload; checked/unchecked/path-with-spaces and missing executable handling; real WILDX/UAC not executed",
+    "scriptSha256": "CB43535C91EB63740853553E4C76D0E40E66E282EBD66F202973DF767DC738CB"
+  },
+  "previousInstaller": {
+    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB22D0792B.exe",
+    "sha256": "63BA3EBA92AD14A2DA77A4B64F08974DA67977A65ACCB1E2DB7B091869BC9713",
+    "bytes": 6506195
+  },
+  "installer": {
+    "sha256": "4B9A8973571C2F310FE1663746D7255BB9EF0DBD40C8E0E7122729265DC0A4FD",
+    "bytes": 6510853,
+    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB037CF67C.exe"
+  },
+  "extractedPayloadFilesVerified": 40,
+  "installerExecuted": false,
+  "nsisPackagingPasses": 1
+}

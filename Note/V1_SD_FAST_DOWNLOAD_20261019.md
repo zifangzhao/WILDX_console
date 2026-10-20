@@ -1,5 +1,10 @@
 # V1 fast SD download — USB037CF67C / WILDX48
 
+Superseded by USB6CD1917C. The later binary audit resolved the rebuild
+discrepancy: the main-only USB internal-DMA flag was omitted. See
+`Note/V1_USB_DMA_SD_DOWNLOAD_20261019.md`. Results below describe the interim
+checked-object fallback, not the final maintained-source fix.
+
 ## Result and delivery
 
 USB1.0.95-fast-ready restores the exact checked fast USB initializer and retains
@@ -28,11 +33,12 @@ sticky failure and no replay. These checks were not removed to obtain speed.
 
 ## What caused the speed difference, and what remains unresolved
 
-The direct binary split isolated the slowdown to the rebuilt initialization
-unit: the identical guarded reader is fast with the frozen checked initializer
-and slow with the rebuilt one. This is not USB bandwidth, decoder throughput,
-or the added read-retirement checks. Separate timing found virtually all extra
-time in FIFO/data transfer, not command response or initial FIFO latency.
+The direct binary split isolated the slowdown to the cached versus rebuilt main
+object and resulting link/RAM layout: the same guarded-reader object is fast
+with the frozen main object and slow with the rebuilt one. This does not prove
+a semantic SD-initialization difference. The host/decoder and read-retirement
+checks are unchanged. Separate timing found virtually all extra time in
+FIFO/data transfer, not command response or initial FIFO latency.
 
 Restoring FIFO calls, direct FIFO/tick access, HSLV,93.6/120MHz clock policies,
 auxiliary-clock candidates and several reset-sequence arrangements did not
@@ -41,7 +47,9 @@ rebuilt slowly. Therefore a power-sequence-only root cause is NOT established;
 intermediate working hypotheses were rejected. The exact checked main/MSP
 objects are reused, with identities in the release manifest, rather than
 claiming source equivalence. The rejected experiments are not in this release.
-The precise compiled-source/configuration discrepancy remains an audit item.
+The linked clock, SD initialization and MPU settings examined match; compiler
+register allocation and memory/code layout differ. Their causal role remains
+unproven. Precise build/layout equivalence remains an audit item.
 
 ## Frozen inputs and measured scope
 
