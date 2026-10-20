@@ -1,57 +1,80 @@
 {
   "schemaVersion": 1,
-  "releaseId": "V1_APP_SD_INIT_USB22D0792B_APP654824DE_20261019",
-  "usbVersion": "1.0.94-app-sd-init",
-  "usbCrc32": "22D0792B",
+  "releaseId": "V1_FAST_READY_USB037CF67C_APP654824DE_20261019",
+  "usbVersion": "1.0.95-fast-ready",
+  "usbCrc32": "037CF67C",
   "appCrc32": "654824DE",
   "loaderAbi": 258,
   "bootUnchanged": true,
   "appUnchanged": true,
   "configurationIncluded": false,
-  "sdKernelHz": 120000000,
+  "sdKernelHz": 93600000,
   "localNegotiatedMode": "SDR104",
   "consoleSha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
-  "rawMBs": 36.442028961522546,
-  "exportMBs": 32.78099843418381,
+  "rawMBs": 42.20430474365118,
+  "exportMBs": 35.00821681953621,
   "largeReads": [
     {
       "bytes": 1073741824,
-      "seconds": 29.1904489,
-      "MB_per_second": 36.78401192115956,
+      "seconds": 25.028880899999997,
+      "MB_per_second": 42.90011286201683,
       "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
       "recovered": 0,
       "retries": 0,
-      "diagnostics": "firmware requests=2390 SD_ms=33797 CRC_ms=4 USB_ms=25682 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+      "diagnostics": "firmware requests=2390 SD_ms=27846 CRC_ms=2 USB_ms=25691 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
     },
     {
       "bytes": 1073741824,
-      "seconds": 29.2037123,
-      "MB_per_second": 36.76730591541953,
+      "seconds": 24.8794301,
+      "MB_per_second": 43.1578141206787,
       "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
       "recovered": 0,
       "retries": 0,
-      "diagnostics": "firmware requests=4447 SD_ms=62858 CRC_ms=6 USB_ms=47810 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+      "diagnostics": "firmware requests=4447 SD_ms=51753 CRC_ms=2 USB_ms=47804 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
     }
   ],
-  "softwareRegression": "Actual canonical FIFO/CRC reader: exact byte count, DATAEND, data faults, bounded STOP/status, DAT0 busy retirement, sticky failure/no replay",
+  "softwareRegression": "Actual canonical reader passed exact length/DATAEND/CRC, bounded STOP/status, delayed/stuck/wrapped DAT0 retirement and sticky no-replay failures",
   "testedAppCrc32": "60EC609E",
   "releasePairNewlyDeviceTested": false,
   "limits": [
     "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
     "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
     "No new recording, streaming, camera, card-removal or endurance qualification",
-    "New raw36.4MB/s is below prior local44.0MB/s; no same-device speedup claim"
+    "Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s",
+    "Archived main source rebuild differs in performance from the checked object; exact object identity reused, not a clean-source-equivalence claim"
   ],
+  "frozenInputs": {
+    "frozen_from": "R10 fast split, guarded R8 reader",
+    "initializer": "Exact previously checked USB0E542BBD main/MSP objects",
+    "reader": "Current bounded CMD12/CMD13/DAT0/CRC reader",
+    "unsealed_hex_sha256": "4F7FEED2A0A3B8859898CFD8865A356A5157561CFBA03E70E8284FB57428C3E8",
+    "inputs": [
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_download_fast_20261019_r10\\build\\main.o",
+        "sha256": "3B1D597531BA56F8C5B107636F4FF4446DC172925445B6C6560EBE3F835FB3CA"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_download_fast_20261019_r10\\build\\stm32u5xx_hal_msp.o",
+        "sha256": "CF4C637DFC23BF115F73D61DC36C5E1DBCDB6FD967CEA9E6D5FF3585683E4F11"
+      },
+      {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_download_fast_20261019_r10\\build\\xe_np_usb_stream.o",
+        "sha256": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A"
+      }
+    ],
+    "source_limit": "Mutable archived main source rebuild was slower; exact checked object reused, not a clean-source-build equivalence claim",
+    "new_build": false
+  },
   "files": [
     {
-      "path": "V1_DFU_boot_USB22D0792B_app_sd_init_20261019.hex",
+      "path": "V1_DFU_boot_USB037CF67C_fast_ready_20261019.hex",
       "bytes": 999392,
-      "sha256": "0DB7E683B7F600E0347C04F774ADA01F3323DAE93F05D783CB6535A342A5C2DA"
+      "sha256": "52DC6B34F8AA88F473B6D80A81060E294474C50B91E9D56355F41DD437BDFF4A"
     },
     {
-      "path": "V1_fused_BOOT_USB22D0792B_APP654824DE_app_sd_init_20261019.hex",
+      "path": "V1_fused_BOOT_USB037CF67C_APP654824DE_fast_ready_20261019.hex",
       "bytes": 5745164,
-      "sha256": "384EB564A77A638ECF8F3C73997373EDD7DC27337B43C34015FF1CC13A7B2AC5"
+      "sha256": "608BA93B28C3DA06811D2D95AD9F4B57B328D722887E9972E596C00FD1FAC566"
     },
     {
       "path": "V1_SD_BLE_app_only_store2_rc1.hex",
@@ -59,9 +82,9 @@
       "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
     },
     {
-      "path": "V1_USB_service_22D0792B_app_sd_init_20261019.hex",
+      "path": "V1_USB_service_037CF67C_fast_ready_20261019.hex",
       "bytes": 699517,
-      "sha256": "B92949C9F4D0E77E566531AC84B3F4B3862FEB52A9F0AE4A18B846F87D939117"
+      "sha256": "4FAB88D3537C95D92FD6F53BA9975D4FCFB7C26AC0A0B6CE71B444D3A717FA4E"
     }
   ]
 }

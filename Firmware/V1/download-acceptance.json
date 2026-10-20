@@ -2,14 +2,14 @@
   "result": "bounded_connected_V1_SD_download_pass",
   "uid": "001D00065942500B20313354",
   "stlink": "001A00423235510D37333439",
-  "usb_crc": "22D0792B",
+  "usb_crc": "037CF67C",
   "tested_app_crc": "60EC609E",
   "release_app_crc": "654824DE",
   "console_sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
   "raw_bytes": 88080384,
-  "raw_seconds": 2.417,
-  "raw_MB_s": 36.442028961522546,
-  "export_MB_s": 32.78099843418381,
+  "raw_seconds": 2.087,
+  "raw_MB_s": 42.20430474365118,
+  "export_MB_s": 35.00821681953621,
   "byte_identical_export_files": 21,
   "allowed_metadata_differences": [
     "software_version",
@@ -18,21 +18,21 @@
   "large_read_passes": [
     {
       "bytes": 1073741824,
-      "seconds": 29.1904489,
-      "MB_per_second": 36.78401192115956,
+      "seconds": 25.028880899999997,
+      "MB_per_second": 42.90011286201683,
       "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
       "recovered": 0,
       "retries": 0,
-      "diagnostics": "firmware requests=2390 SD_ms=33797 CRC_ms=4 USB_ms=25682 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
+      "diagnostics": "firmware requests=2390 SD_ms=27846 CRC_ms=2 USB_ms=25691 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
     },
     {
       "bytes": 1073741824,
-      "seconds": 29.2037123,
-      "MB_per_second": 36.76730591541953,
+      "seconds": 24.8794301,
+      "MB_per_second": 43.1578141206787,
       "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
       "recovered": 0,
       "retries": 0,
-      "diagnostics": "firmware requests=4447 SD_ms=62858 CRC_ms=6 USB_ms=47810 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
+      "diagnostics": "firmware requests=4447 SD_ms=51753 CRC_ms=2 USB_ms=47804 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
     }
   ],
   "sd_writes": 0,
@@ -40,11 +40,13 @@
   "catalog_count": 31,
   "frontier": 63471616,
   "restored_SD_BLE": true,
-  "initial_candidate_failure": "A0B4AF8C faulted at SDMMC_PowerState_OFF(NULL); guarded reset fixed in22D0792B before acceptance",
+  "software_regression": "Actual canonical reader passed exact length/DATAEND/CRC, bounded STOP/status, delayed/stuck/wrapped DAT0 retirement and sticky no-replay failures",
+  "initializer": "Exact checked USB0E542BBD main/MSP objects; new guarded reader retained",
   "limits": [
     "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
     "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
     "No new recording, streaming, camera, card-removal or endurance qualification",
-    "New raw36.4MB/s is below prior local44.0MB/s; no same-device speedup claim"
+    "Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s",
+    "Archived main source rebuild differs in performance from the checked object; exact object identity reused, not a clean-source-equivalence claim"
   ]
 }

@@ -7,14 +7,14 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_APP_SD_INIT_USB22D0792B_APP654824DE_20261019",
+      "release": "V1_FAST_READY_USB037CF67C_APP654824DE_20261019",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
       "stage": "SCOPED_LOCAL_DOWNLOAD_HIL_EXACT_RELEASE_APP_PAIR_NOT_DEVICE_TESTED",
       "appVersion": "build 654824DE (FS2)",
-      "usbVersion": "1.0.94 / build22D0792B (HS; APP SD initialization + bounded read retirement)",
+      "usbVersion": "1.0.95 / build037CF67C (HS; fast initializer + bounded read retirement)",
       "recoveryVersion": "Included in fused HEX; version not reported",
       "appCrc32": "654824DE",
-      "usbCrc32": "22D0792B",
+      "usbCrc32": "037CF67C",
       "recoveryCrc32": null,
       "app": {
         "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
@@ -22,23 +22,23 @@
       },
       "files": [
         {
-          "path": "V1/V1_DFU_boot_USB22D0792B_app_sd_init_20261019.hex",
-          "sha256": "0DB7E683B7F600E0347C04F774ADA01F3323DAE93F05D783CB6535A342A5C2DA"
+          "path": "V1/V1_DFU_boot_USB037CF67C_fast_ready_20261019.hex",
+          "sha256": "52DC6B34F8AA88F473B6D80A81060E294474C50B91E9D56355F41DD437BDFF4A"
         },
         {
-          "path": "V1/V1_fused_BOOT_USB22D0792B_APP654824DE_app_sd_init_20261019.hex",
-          "sha256": "384EB564A77A638ECF8F3C73997373EDD7DC27337B43C34015FF1CC13A7B2AC5"
+          "path": "V1/V1_fused_BOOT_USB037CF67C_APP654824DE_fast_ready_20261019.hex",
+          "sha256": "608BA93B28C3DA06811D2D95AD9F4B57B328D722887E9972E596C00FD1FAC566"
         },
         {
           "path": "V1/V1_SD_BLE_app_only_store2_rc1.hex",
           "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
         },
         {
-          "path": "V1/V1_USB_service_22D0792B_app_sd_init_20261019.hex",
-          "sha256": "B92949C9F4D0E77E566531AC84B3F4B3862FEB52A9F0AE4A18B846F87D939117"
+          "path": "V1/V1_USB_service_037CF67C_fast_ready_20261019.hex",
+          "sha256": "4FAB88D3537C95D92FD6F53BA9975D4FCFB7C26AC0A0B6CE71B444D3A717FA4E"
         }
       ],
-      "limits": "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested No new recording, streaming, camera, card-removal or endurance qualification New raw36.4MB/s is below prior local44.0MB/s; no same-device speedup claim Exact WILDX48 production API local read/export passed with0errors/retries; preserve configuration/card. See V1/download-init-manifest.json for hashes and measured scope.",
+      "limits": "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested No new recording, streaming, camera, card-removal or endurance qualification Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s Archived main source rebuild differs in performance from the checked object; exact object identity reused, not a clean-source-equivalence claim Exact WILDX48 production API local read/export passed with0errors/retries; preserve configuration/card. See V1/download-init-manifest.json for hashes and measured scope.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -53,8 +53,8 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 248552,
-        "codeCrc32": "22D0792B",
-        "buildIdHex": "6164393939666365633231663835623837303137343237623735316331373039",
+        "codeCrc32": "037CF67C",
+        "buildIdHex": "6435336435363937633331643032666662313032373534396435336635333264",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -102,6 +102,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "22D0792B",
+          "buildIdHex": "6164393939666365633231663835623837303137343237623735316331373039",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -169,27 +179,19 @@
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
-      "sourceCommitScope": "Existing source base anchor only; new USB composed from hashed local inputs, not a clean-public-HEAD reconstruction.",
+      "sourceCommitScope": "Existing source-base anchor only; exact frozen initializer objects and guarded reader inputs recorded, not clean-public-HEAD equivalence.",
       "sourceInputs": [
         {
-          "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\main.c",
-          "sha256": "62EBC409FF44C4323D2235F6802D4B6087A2EA3E7D32717B23A2CCB98E153AC0"
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_download_fast_20261019_r10\\build\\main.o",
+          "sha256": "3B1D597531BA56F8C5B107636F4FF4446DC172925445B6C6560EBE3F835FB3CA"
         },
         {
-          "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\stm32u5xx_hal_msp.c",
-          "sha256": "EB10BFBE4BC52C343114E709A8BAA75B9FD8299701BBC7524D6DCC0ADA46AB2F"
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_download_fast_20261019_r10\\build\\stm32u5xx_hal_msp.o",
+          "sha256": "CF4C637DFC23BF115F73D61DC36C5E1DBCDB6FD967CEA9E6D5FF3585683E4F11"
         },
         {
-          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\main.c",
-          "sha256": "DC128FAB7F657902EF8BB156DE2363888B391C3E4903ECF8FF9A896895F11DA8"
-        },
-        {
-          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\stm32u5xx_hal_msp.c",
-          "sha256": "0EB155D2F640855B940B5E7C1BDD5EC8BDDC0915A019A3441803090E742CDEAC"
-        },
-        {
-          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_battery_ble_handoff_r2_20261019\\build\\xe_np_usb_stream.c",
-          "sha256": "24A960FCB6FAFDBE15DA0567E7962BC1C5C8A4037D5361D1EFAEB12F326755E2"
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_sd_download_fast_20261019_r10\\build\\xe_np_usb_stream.o",
+          "sha256": "A5F440C41531A72C46E98E5661F0BE315A32DA4CE98C8032158D9F0056CF1F9A"
         }
       ]
     },
