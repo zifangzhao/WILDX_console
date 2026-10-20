@@ -207,7 +207,9 @@ namespace USB512_interface
                 previousEnd=frame.FirstTick+(ulong)frame.Rows*stride;packets++;
                 plot.Append(decoded,frame.FirstTick,stride,frame.ValidRows);
             }
-            info.Text=previewHz+" samples/s · subsampled, aliasing possible · gaps "+gaps+" · skipped "+skipped+" · host drops "+stream.Dropped+" · packets "+packets;
+            plot.Invalidate(); // Reveal buffered originals between BLE bursts, even while controls own the radio.
+            info.Text=previewHz+" samples/s grid · "+(legacyPreview?"legacy 16-row transport (gaps expected)":"compact 64-row transport")+
+                " · subsampled, aliasing possible · gaps "+gaps+" · skipped "+skipped+" · host drops "+stream.Dropped+" · packets "+packets;
             if(stream.Silence.ElapsedMilliseconds>2500)throw new NpV2PreviewUnavailableException(128);
         }
         // BLE wire stays raw. Convert only the disposable PC display samples.
@@ -218,7 +220,7 @@ namespace USB512_interface
             readonly NpDisplayHighPass highPass=new NpDisplayHighPass(1);
             readonly short[] displayRow=new short[1];
             internal Func<int,short,short> CorrectSample;
-            int count,write,selectedChannel;uint sampleHz;ulong stride;double windowSeconds=4,gain=1;
+            int count,write,selectedChannel;uint sampleHz;ulong stride,playbackOrigin;long playbackStarted;double windowSeconds=4,gain=1;
             const double ReferenceCounts=256; // Match the USB NP2 display at 1×.
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;ForeColor=Color.LightGreen;}
             internal void SetGain(double value){if(Double.IsNaN(value)||Double.IsInfinity(value)||value<0.1||value>100)throw new ArgumentOutOfRangeException("value");gain=value;Invalidate();}
@@ -232,6 +234,9 @@ namespace USB512_interface
             internal void Clear(int channel){count=write=0;selectedChannel=channel;highPass.Reset();Invalidate();}
             internal void Append(ushort[,] data,ulong first,ulong step,ulong valid)
             {
+                // One received burst supplies the display's initial lead. Pace its
+                // original samples at the declared Fs; never interpolate a gap.
+                if(count==0){playbackOrigin=first;playbackStarted=Stopwatch.GetTimestamp();}
                 stride=step;for(int i=0;i<data.GetLength(0);i++){
                     if((valid&(1UL<<i))==0)continue;ticks[write]=first+(ulong)i*step;
                     short value=NpV2SampleDecoder.NominalCount(data[i,data.GetLength(1)==1?0:selectedChannel/128]);
@@ -240,25 +245,44 @@ namespace USB512_interface
                     values[write]=displayRow[0];write=(write+1)%Capacity;if(count<Capacity)count++;
                 }Invalidate();
             }
+            internal int VisibleSamples(long now){
+                if(count==0 || stride==0 || sampleHz==0)return 0;
+                double elapsedSamples=Math.Max(0,(now-playbackStarted)/(double)Stopwatch.Frequency*sampleHz);
+                int visible=count,start=(write-count+Capacity)%Capacity;
+                while(visible>0 && (ticks[(start+visible-1)%Capacity]-playbackOrigin)/(double)stride>elapsedSamples)visible--;
+                return visible;
+            }
+            double WindowTicks {get{return Math.Max(1,Math.Round(windowSeconds*sampleHz))*stride;}}
+            internal float XForTick(ulong tick){return (float)(15+(tick%WindowTicks)/WindowTicks*Math.Max(1,Width-30));}
+            static void DrawSegment(Graphics graphics,Pen pen,List<PointF> segment){
+                if(segment.Count>1)graphics.DrawLines(pen,segment.ToArray());
+                else if(segment.Count==1)graphics.FillRectangle(Brushes.LightGreen,segment[0].X,segment[0].Y,1,1);
+                segment.Clear();
+            }
             protected override void OnPaint(PaintEventArgs e)
             {
                 base.OnPaint(e);
                 e.Graphics.DrawString("Ch "+selectedChannel+(CorrectSample==null?" · nominal counts ±":" · calibrated counts ±")+(ReferenceCounts/gain).ToString("0.##")+" · "+gain.ToString("0.#")+"×",Font,Brushes.LightGray,10,5);
                 using(var zero=new Pen(Color.DimGray)){zero.DashStyle=System.Drawing.Drawing2D.DashStyle.Dot;e.Graphics.DrawLine(zero,15,Height/2,Math.Max(15,Width-15),Height/2);}
-                if(count<2)return;
-                ulong latest=ticks[(write+Capacity-1)%Capacity];double window=windowSeconds*sampleHz*stride;
-                int first=FirstVisible(latest,window),shown=count-first,start=(write-count+first+Capacity)%Capacity;
-                if(shown<2)return;
-                var segment=new List<PointF>();ulong prev=0;
+                int visible=VisibleSamples(Stopwatch.GetTimestamp());if(visible==0)return;
+                ulong latest=ticks[(write-count+visible-1+Capacity)%Capacity];double window=WindowTicks;
+                int first=FirstVisible(latest,window),shown=visible-first,start=(write-count+first+Capacity)%Capacity;
+                var segment=new List<PointF>();ulong prev=0;float previousX=0;
                 var saved=e.Graphics.Save();e.Graphics.SetClip(new Rectangle(15,30,Math.Max(1,Width-30),Math.Max(1,Height-60)));
                 try{
                 using(var pen=new Pen(Color.LightGreen)){
                     for(int i=0;i<shown;i++){
                         int at=(start+i)%Capacity;ulong tick=ticks[at];if(latest-tick>window)continue;
-                        if(segment.Count>0 && tick-prev!=stride){if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());segment.Clear();}
-                        segment.Add(new PointF((float)(15+(1-(latest-tick)/window)*(Width-30)),ValueY(values[at])));prev=tick;
+                        // Absolute source ticks keep old samples fixed on screen.
+                        // Break at missing data AND sweep wrap; never invent a join.
+                        float x=XForTick(tick);
+                        if(segment.Count>0 && (tick-prev!=stride || x<previousX))DrawSegment(e.Graphics,pen,segment);
+                        segment.Add(new PointF(x,ValueY(values[at])));prev=tick;previousX=x;
                     }
-                    if(segment.Count>1)e.Graphics.DrawLines(pen,segment.ToArray());
+                    DrawSegment(e.Graphics,pen,segment);
+                    using(var cursor=new Pen(Color.FromArgb(100,Color.LightGreen))){
+                        float x=XForTick(latest+stride);e.Graphics.DrawLine(cursor,x,30,x,Height-30);
+                    }
                 }
                 }finally{e.Graphics.Restore(saved);}
             }

@@ -44,6 +44,7 @@ static class NpBlePreviewDisplayTests {
     static void Set(object item,string field,object value){item.GetType().GetField(field,All).SetValue(item,value);}
     static object Call(object item,string method,params object[] args){return item.GetType().GetMethod(method,All).Invoke(item,args);}
     static void Tick(object form){((Task)Call(form,"Tick")).GetAwaiter().GetResult();}
+    static void ElapsePlayback(object plot,double seconds){Set(plot,"playbackStarted",Stopwatch.GetTimestamp()-(long)(seconds*Stopwatch.Frequency));}
     static void Finish(Task task){
         var timeout=Stopwatch.StartNew();
         while(!task.IsCompleted && timeout.ElapsedMilliseconds<5000){Application.DoEvents();Thread.Sleep(1);}
@@ -160,6 +161,7 @@ static class NpBlePreviewDisplayTests {
             }
             Call(plot,"Clear",0);Call(plot,"SetWindowSeconds",0.1);plot.Dock=DockStyle.None;plot.Size=new Size(600,300);
             Call(plot,"Append",row,4UL,64000UL,65535UL);Call(plot,"Append",row,4+32*64000UL,64000UL,65535UL);
+            ElapsePlayback(plot,1);
             using(var image=new Bitmap(600,300)){
                 // Parent form stays hidden. Invoke its actual paint methods;
                 // DrawToBitmap may skip an invisible parent's child entirely.
@@ -291,10 +293,11 @@ static class NpBlePreviewDisplayTests {
         radio=new NpBleConnection();using(var form=Arm(radio,20000,compact:true)){
             var plot=(Control)Get(form,"plot");Call(plot,"SetWindowSeconds",0.1);plot.Dock=DockStyle.None;plot.Size=new Size(600,300);
             radio.Emit(Compact(20000,4,ulong.MaxValue&~(1UL<<32)));Tick(form);
+            ElapsePlayback(plot,1);
             using(var image=new Bitmap(600,300))using(var graphics=Graphics.FromImage(image)){
                 var paint=new PaintEventArgs(graphics,new Rectangle(0,0,600,300));Call(plot,"OnPaintBackground",paint);Call(plot,"OnPaint",paint);
                 Need(image.GetPixel(150,150).ToArgb()==Color.LightGreen.ToArgb() && image.GetPixel(500,150).ToArgb()==Color.LightGreen.ToArgb(),"Compact plot used the wrong timestamp viewing window");
-                Need(image.GetPixel(232,150).ToArgb()!=Color.LightGreen.ToArgb(),"Compact plot drew across invalid row32");
+                Need(image.GetPixel(379,150).ToArgb()!=Color.LightGreen.ToArgb(),"Compact sweep drew across invalid row32");
             }
         }
     }
@@ -399,6 +402,79 @@ static class NpBlePreviewDisplayTests {
         parent.Controls.Remove(control);bool result=control.Visible;
         parent.Controls.Add(control);parent.Controls.SetChildIndex(control,at);return result;
     }
+    static Bitmap Render(Control plot){
+        var image=new Bitmap(plot.Width,plot.Height);
+        using(var graphics=Graphics.FromImage(image)){
+            var paint=new PaintEventArgs(graphics,new Rectangle(Point.Empty,plot.Size));
+            Call(plot,"OnPaintBackground",paint);Call(plot,"OnPaint",paint);
+        }
+        return image;
+    }
+    static void StableSweep(string output){
+        var connection=new NpBleConnection();using(var form=Arm(connection,20000,compact:true)){
+            var plot=(Control)Get(form,"plot");plot.Dock=DockStyle.None;plot.Size=new Size(600,300);
+            Call(plot,"SetSampleRate",500U);Call(plot,"SetWindowSeconds",0.1);
+            var rows=new ushort[16,1];for(int n=0;n<16;n++)rows[n,0]=2048;
+            Call(plot,"Append",rows,4UL,64000UL,65535UL);
+            ulong tick=4+10*64000UL;float before=(float)Call(plot,"XForTick",tick);
+            Call(plot,"Append",rows,4+20*64000UL,64000UL,65535UL);
+            ElapsePlayback(plot,1);
+            Need(before==(float)Call(plot,"XForTick",tick),"New BLE packet shifted the whole existing waveform");
+            Need(Math.Abs(before-129)<0.01,"Sweep scale is not the actual500-Hz source grid");
+            Need(Math.Abs((float)Call(plot,"XForTick",4+63*64000UL)-(float)Call(plot,"XForTick",4+13*64000UL))<0.01,"Sweep period differs from the selected100-ms window");
+            using(var image=Render(plot)){
+                Need(image.GetPixel(129,150).ToArgb()==Color.LightGreen.ToArgb(),"Stable sweep lost an existing sample");
+                Need(image.GetPixel(220,150).ToArgb()!=Color.LightGreen.ToArgb(),"Stable sweep fabricated samples in a source gap");
+            }
+            Call(plot,"Clear",0);
+            var edge=new ushort[,]{{1920},{2176}};
+            Call(plot,"Append",edge,4+49*64000UL,64000UL,3UL);
+            ElapsePlayback(plot,1);
+            using(var image=Render(plot))Need(image.GetPixel(300,150).ToArgb()!=Color.LightGreen.ToArgb(),"Sweep wrap drew a false diagonal through the waveform");
+            Call(plot,"Clear",0);Call(plot,"SetWindowSeconds",1.0);
+            var wave=new ushort[64,1];
+            for(int packet=0;packet<8;packet++){
+                if(packet==4)continue; // A real missing burst must stay visible.
+                for(int row=0;row<64;row++)wave[row,0]=(ushort)(2048+120*Math.Sin((packet*64+row)*2*Math.PI*8/500));
+                Call(plot,"Append",wave,4+(ulong)packet*64*64000UL,64000UL,ulong.MaxValue);
+            }
+            ElapsePlayback(plot,2);
+            if(!String.IsNullOrEmpty(output)){Directory.CreateDirectory(output);using(var image=Render(plot))image.Save(Path.Combine(output,"ble-preview-fixed-sweep.png"));}
+            Need(connection.Writes==0 && connection.Captures==0,"Sweep rendering added BLE or recording traffic");
+        }
+        foreach(bool compact in new[]{false,true}){
+            var radio=new NpBleConnection();using(var form=Arm(radio,20000,compact:compact)){
+                radio.Emit(compact?Compact(20000,4):Packet(20000,4));Tick(form);
+                string text=((Label)Get(form,"info")).Text;
+                Need(text.Contains("samples/s grid") && text.Contains(compact?"compact 64-row":"legacy 16-row") && (compact || text.Contains("gaps expected")),"Preview hides actual transport or mislabels nominal grid as continuous delivered data");
+            }
+        }
+    }
+    static void PacedSweep(){
+        foreach(uint hz in new uint[]{7500,15000,20000,30000})foreach(bool compact in new[]{false,true}){
+            var radio=new NpBleConnection();using(var form=Arm(radio,hz,compact:compact)){
+                var plot=(Control)Get(form,"plot");ulong step=(ulong)(hz/500)*1600;
+                radio.Emit(compact?Compact(hz,4):Packet(hz,4));Tick(form);
+                long start=(long)Get(plot,"playbackStarted");int rows=compact?64:16;
+                Need((int)Call(plot,"VisibleSamples",start)==1,"BLE arrival exposed the entire burst at once");
+                Need((int)Call(plot,"VisibleSamples",start+Stopwatch.Frequency*16/1000)==9,"Display did not release original samples at500Hz");
+                Need((int)Call(plot,"VisibleSamples",start+Stopwatch.Frequency)==rows,"Paced display omitted buffered originals");
+                var samples=(short[])((short[])Get(plot,"values")).Clone();var ticks=(ulong[])((ulong[])Get(plot,"ticks")).Clone();
+                radio.Emit(compact?Compact(hz,4+(ulong)rows*step):Packet(hz,4+(ulong)rows*step));Tick(form);
+                Need((long)Get(plot,"playbackStarted")==start,"Every BLE burst restarted the display clock");
+                Need((int)Call(plot,"VisibleSamples",start+Stopwatch.Frequency*16/1000)==9,"Next packet jumped the playhead or revealed future samples");
+                for(int row=0;row<rows;row++)Need(((short[])Get(plot,"values"))[row]==samples[row] && ((ulong[])Get(plot,"ticks"))[row]==ticks[row],"Pacing resampled or changed an original sample/timestamp");
+                Need(plot.Handle!=IntPtr.Zero,"Offscreen plot handle unavailable");int paints=0;plot.Invalidated+=delegate{paints++;};Set(form,"busy",true);Tick(form);
+                Need(paints>0 && (bool)Get(form,"busy") && radio.Writes==0 && radio.Captures==0,"Paced refresh stalled behind controls or generated radio work");
+                Call(plot,"Clear",0);
+                var sparse=new ushort[64,1];for(int i=0;i<64;i++)sparse[i,0]=2048;
+                Call(plot,"Append",sparse,4UL,step,(1UL<<0)|(1UL<<32)|(1UL<<63));start=(long)Get(plot,"playbackStarted");
+                Need((int)Call(plot,"VisibleSamples",start+Stopwatch.Frequency*32/1000)==1,"Pacing filled an invalid-row interval");
+                Need((int)Call(plot,"VisibleSamples",start+Stopwatch.Frequency*64/1000)==2,"Pacing used arrival count instead of source timestamps");
+                Need((int)Call(plot,"VisibleSamples",start+Stopwatch.Frequency)==3,"Sparse original samples disappeared");
+            }
+        }
+    }
     static void RecordingHeader(){
         var radio=new NpBleConnection();using(var form=Arm(radio,20000,compact:true)){
             var header=(Label)Get(form,"recordingInfo");
@@ -426,6 +502,6 @@ static class NpBlePreviewDisplayTests {
     [STAThread]static int Main(string[] args){try{
         Application.EnableVisualStyles();bool baseline=args.Length!=0 && args[0]=="--baseline";
         BusyDrain(baseline);if(baseline){Console.WriteLine("PASS: frozen production form reproduces control-busy display stall; no radio opened.");return 0;}
-        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();RecordingHeader();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/recording-header checks; fake radio only, no discovery, device or recording.");return 0;
+        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
     }catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

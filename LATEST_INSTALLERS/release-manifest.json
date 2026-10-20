@@ -1,6 +1,9 @@
 {
-  "version": "1.0.0.48",
-  "releaseId": "V1_SD_DMA_USB6CD1917C_APP654824DE_20261019",
+  "schemaVersion": 1,
+  "version": "1.0.0.51",
+  "releaseId": "BLE_PREVIEW_FIXED_PACED_SWEEP_20261020",
+  "baselineRelease": "V1_SD_DMA_USB6CD1917C_APP654824DE_20261019",
+  "firmwareUnchanged": true,
   "payload": [
     {
       "path": "Firmware/owner-confirmation-20261017.json",
@@ -194,8 +197,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1502208,
-      "sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486"
+      "bytes": 1503232,
+      "sha256": "4057008015E449A01A2EFE5A094A66D91B2B54106DC52E4880F1526AC4FA5C72"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -203,83 +206,31 @@
       "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
     }
   ],
-  "unchanged48payloadFiles": 32,
-  "firmwareChanged": true,
-  "applicationRebuilt": false,
-  "exporterChanged": false,
-  "firmwareSourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-  "sourceIntegration": "Maintained APP SD initializer; main-only USB DMA flag restored; matching reused MSP/guarded reader objects. No incidental WILDX private edits.",
-  "validation": {
-    "result": "bounded_connected_V1_SD_download_pass",
-    "uid": "001D00065942500B20313354",
-    "stlink": "001A00423235510D37333439",
-    "usb_crc": "6CD1917C",
-    "tested_app_crc": "60EC609E",
-    "release_app_crc": "654824DE",
-    "console_sha256": "CB392725EE11C8A607D6FECAA013ADC6383BA419C4FAA1046CBB838A366B5486",
-    "raw_bytes": 88080384,
-    "raw_seconds": 2.08,
-    "raw_MB_s": 42.346338461538465,
-    "export_MB_s": 33.69023734674473,
-    "byte_identical_export_files": 21,
-    "allowed_metadata_differences": [
-      "software_version",
-      "metadata_created_time_utc"
-    ],
-    "large_read_passes": [
-      {
-        "bytes": 1073741824,
-        "seconds": 24.9079868,
-        "MB_per_second": 43.10833439176224,
-        "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
-        "recovered": 0,
-        "retries": 0,
-        "diagnostics": "firmware requests=2390 SD_ms=23763 CRC_ms=3 USB_ms=25782 sectors=2437800 CRC_selftest=1 errors=0 completions=2390; guarded read recovery available; recovered=0 retries=0"
-      },
-      {
-        "bytes": 1073741824,
-        "seconds": 24.7293034,
-        "MB_per_second": 43.419816655976575,
-        "sha256": "209CE1222C583003553EF2641DBE79F9F0CD17689BD96AAC187F9528C3EDB954",
-        "recovered": 0,
-        "retries": 0,
-        "diagnostics": "firmware requests=4447 SD_ms=44214 CRC_ms=6 USB_ms=47970 sectors=4535940 CRC_selftest=1 errors=0 completions=4447; guarded read recovery available; recovered=0 retries=0"
-      }
-    ],
-    "sd_writes": 0,
-    "new_recordings": 0,
-    "catalog_count": 31,
-    "frontier": 63471616,
-    "restored_SD_BLE": true,
-    "software_regression": "Actual canonical reader passed exact length/DATAEND/CRC, bounded STOP/status, delayed/stuck/wrapped DAT0 retirement and sticky no-replay failures",
-    "initializer": "Maintained APP SD120MHz/power/tuning; corrected main-only USB internal DMA build flag",
-    "live_usb_dma": true,
-    "live_GAHBCFG": "0x27",
-    "limits": [
-      "Local card/device only; remote11.2MB/s and0xFFFFFFFE cases not reproduced or remotely qualified",
-      "Preserved private APP60EC609E used for local HIL; bundled unchanged APP654824DE pair not newly device-tested",
-      "No new recording, streaming, camera, card-removal or endurance qualification",
-      "Earlier44.0MB/s was a short raw read; this release restores near that rate, not a demonstrated speedup above44MB/s",
-      "Frozen composed sources and reused matching MSP/reader objects; not a clean-public-HEAD whole-tree build"
-    ]
-  },
-  "installerLaunch": {
-    "evidence": "Note/INSTALLER_FINISH_LAUNCH_FIX_20261019.md",
-    "isolatedCasesPassed": 3,
-    "scope": "Actual preprocessed MUI callback/dummy payload; checked/unchecked/path-with-spaces and missing executable handling; real WILDX/UAC not executed",
-    "scriptSha256": "CB43535C91EB63740853553E4C76D0E40E66E282EBD66F202973DF767DC738CB"
-  },
-  "previousInstaller": {
-    "sha256": "4B9A8973571C2F310FE1663746D7255BB9EF0DBD40C8E0E7122729265DC0A4FD",
-    "bytes": 6510853,
-    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB037CF67C.exe"
-  },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.48-V1-SD-download-USB6CD1917C.exe",
-    "bytes": 6508907,
-    "sha256": "F3CF134A1E12DA4DE5F075D0BAC3105EDE6AEA12B13ABCF4FBAB5821D53C0216"
+    "file": "WILDX_console-Setup-1.0.0.51-BLE-preview-20261020.exe",
+    "sha256": "D4E124F6D55027726B71D3D613C3030356419CA19CD0B910824289FF7E5B4264",
+    "bytes": 6509455
+  },
+  "previewValidation": {
+    "radio": "doubled",
+    "sampleValuesAndTicksUnchanged": true,
+    "evidence": "Note/V2_BLE_PREVIEW_DISPLAY_20261017.md",
+    "sourceSha256": "9B61A9E503023C72C6B90228DCF72039A6516B7B1E88D1CDA00BE0193CFED1D7",
+    "actualSourceChecks": 5916,
+    "fixtureSha256": "00B52272B26E524787C73D6D883A364819E0641E3743403000F13395DD8D4BB0",
+    "resampling": false,
+    "managedResourcesMatch48": true,
+    "cachedExporterUnchanged": true,
+    "extraMcuOrBleWork": false
   },
   "extractedPayloadFilesVerified": 40,
   "installerExecuted": false,
-  "nsisPackagingPasses": 1
+  "nsisPackagingPasses": 1,
+  "hardwareAccess": false,
+  "limits": [
+    "Display/software checks only; live RF waveform and user installed version are not confirmed.",
+    "Real missing samples remain gaps; simple500Hz subsampling can alias and is not qualified LFP reconstruction.",
+    "All firmware and39 non-GUI payload files are unchanged from the recorded48 package; no new recording, power, firmware or installed-pair qualification.",
+    "Composed frozen98-source-input baseline plus preview overlay/version, using exact recovered download sources and cached dependencies; not a clean-public-HEAD rebuild."
+  ]
 }
