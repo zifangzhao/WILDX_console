@@ -23,6 +23,7 @@ namespace USB512_interface
         string recordingSummaryFolder;
         DateTime recordingSummaryStartUtc=DateTime.MinValue,recordingSummaryStopUtc=DateTime.MinValue;
         readonly TextBox npSessionLabel=new TextBox {Name="npSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
+        readonly TextBox usbDestinationFolder=new TextBox {Name="usbDestinationFolder",Dock=DockStyle.Fill,AccessibleName="Recording destination folder",AutoCompleteMode=AutoCompleteMode.SuggestAppend,AutoCompleteSource=AutoCompleteSource.FileSystemDirectories};
         bool NpControlsAvailable {get{return (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && !String.IsNullOrWhiteSpace(devicePath) &&
             !running && !ztestRunning && systemInfoActive==0 && deviceRefreshActive==0 && !firmwareManagementActive && npRecoveryCancelled && !DownloadBusy && !BleInUse;}}
         bool DownloadBusy { get { return downloadWorkspace!=null && downloadWorkspace.IsBusy; } }
@@ -122,7 +123,10 @@ namespace USB512_interface
             llblSaveFolder.AutoSize=false;llblSaveFolder.Dock=DockStyle.Fill;llblSaveFolder.TextAlign=ContentAlignment.MiddleLeft;llblSaveFolder.AutoEllipsis=true;llblSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.LinkColor=WildXTheme.Accent;btnSaveFolder.Dock=DockStyle.Fill;btnSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.Text="Choose a destination folder";
-            folderRow.Controls.Add(label2,0,0);folderRow.Controls.Add(llblSaveFolder,1,0);folderRow.Controls.Add(btnSaveFolder,2,0);capture.Controls.Add(folderRow,0,1);
+            usbDestinationFolder.Text=saveFolder??"";usbDestinationFolder.Margin=Padding.Empty;
+            usbDestinationFolder.TextChanged+=delegate{saveFolder=usbDestinationFolder.Text.Trim().Trim('"');UpdateStartEnabled();};
+            llblSaveFolder.TextChanged+=delegate{if(usbDestinationFolder.Text!=saveFolder)usbDestinationFolder.Text=saveFolder??"";};
+            folderRow.Controls.Add(label2,0,0);folderRow.Controls.Add(usbDestinationFolder,1,0);folderRow.Controls.Add(btnSaveFolder,2,0);capture.Controls.Add(folderRow,0,1);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=Padding.Empty};
             nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
             nameRow.Controls.Add(new Label {Text="Session label",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted,Margin=Padding.Empty},0,0);
@@ -331,6 +335,7 @@ namespace USB512_interface
         void UpdateWildXControls()
         {
             npSessionLabel.Enabled=!running && npRecoveryCancelled && !DownloadBusy;
+            usbDestinationFolder.Enabled=btnSaveFolder.Enabled=!running && captureThread==null && npRecoveryCancelled;
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbSelection(devicePath);
             if(advancedTarget!=null)advancedTarget.Text=String.IsNullOrWhiteSpace(devicePath)?
                 "Select a device in USB Mode, or choose an exact device in the firmware manager.":

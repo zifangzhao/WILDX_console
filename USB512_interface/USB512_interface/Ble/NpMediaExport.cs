@@ -34,6 +34,7 @@ namespace CE32_console
         static void ValidateCore(byte[] h,byte[] f,long start,long end,bool allowIncomplete)
         {
             Header(h, "NPSDLOG1"); Header(f, "NPSDEND1");
+            NpV1StoreBinding.Validate(h,f);
             Require(IsTyped(h) && U(h, 16) == 0 && U(h, 24) == 0,
                 "Only dedicated V1 v7/v8 media recordings are supported; mixed NP data must not be decoded as media or Intan.");
             foreach (int p in new[] { 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 80, 96, 112, 116, 120 })
@@ -50,11 +51,12 @@ namespace CE32_console
                 "Unsupported media descriptor rates/channels.");
             Require(allowIncomplete?U(f,60)>=1 && U(f,60)<=4:U(f,60)==3 && U(f,64)==0,"Unsupported media recording state or incomplete strict export.");
         }
-        static void Exact(Stream s, byte[] b, int count = -1)
+        static void Exact(Stream s, byte[] b, int count = -1, Func<bool> cancelled = null)
         {
             if (count < 0) count = b.Length;
-            int at = 0; while (at < count) { int n = s.Read(b, at, count - at); if (n == 0) throw new EndOfStreamException("Truncated media recording."); at += n; }
+            int at = 0; while (at < count) { if(cancelled!=null && cancelled())throw new OperationCanceledException("Media prefix export cancelled.");int n = s.Read(b, at, count - at); if (n == 0) throw new EndOfStreamException("Truncated media recording."); at += n; }
         }
+        static byte[] RecoverySector(Stream card,long lba,Func<bool> cancelled){var bytes=new byte[512];card.Position=checked(lba*512);Exact(card,bytes,-1,cancelled);return bytes;}
         static void Zero(byte[] b, int first, int end)
         {
             for (int n = first; n < end; n++) Require(b[n] == 0, "Nonzero media payload padding.");
@@ -298,6 +300,7 @@ namespace CE32_console
                 {"status", "converting"}, {"native_files_modified", false}, {"microphone_samples", samples}, {"microphone_hz", samples > 0 ? 200000 : 0},
                 {"camera_frames", frames}, {"camera_hz", rate}, {"audio_resampling_or_filtering", false}, {"streams_muxed_or_truncated", false},
                 {"video_timing", "Saved frames at nominal camera rate only; timestamp CSVs remain authoritative. No missing frames are invented."},
+                {"video_color_processing", "BGGR native / RGGB after 180-degree rotation; RGB channel order. Camera tone v2: bounded luminance-shadow contrast, smoothed 99th-percentile white reference, at most 2x display exposure, sRGB curve. Flat scenes keep zero-based tone; no calibrated sensor black level or white balance; native pixels retained."},
                 {"timing_warning", warning}, {"native_timestamps_retained", true}, {"microphone_wav_reused", false}
             };
             bool durationChecked = native.ContainsKey("source_stop_timing_assumption");
@@ -339,15 +342,33 @@ namespace CE32_console
         }
 
         internal static void Export(Stream card, long start, long end, string output, Func<bool> cancelled, Action<int> progress)
+        { ExportCore(card,start,end,output,cancelled,progress,false); }
+
+        // Explicit read-only salvage. The original initial footer remains the
+        // authority for committed_chunks=0; scanned chunks are never committed.
+        internal static void ExportPowerInterruptedPrefix(Stream card,long start,long end,string output,Func<bool> cancelled,Action<int> progress)
+        { ExportCore(card,start,end,output,cancelled,progress,true); }
+
+        static void ExportCore(Stream card,long start,long end,string output,Func<bool> cancelled,Action<int> progress,bool recoverPowerCut)
         {
-            byte[] h = NpDownloadCatalog.Sector(card, start + 3), f = NpDownloadCatalog.Sector(card, start + 4);
+            if(recoverPowerCut) {
+                if(cancelled!=null && cancelled())throw new OperationCanceledException("Media prefix export cancelled.");
+                Require(card!=null && card.CanRead && card.CanSeek && start>=8192 && start<=uint.MaxValue && end<=uint.MaxValue && end>=start+6,
+                    "Bounded readable V1 media source required for prefix export.");
+                Require(card.Length/512>=start+6 && card.Length/512<=uint.MaxValue,"Invalid media prefix source capacity.");
+                Require(!string.IsNullOrWhiteSpace(output) && !File.Exists(output),"A fresh media prefix export folder is required.");
+            }
+            byte[] h = recoverPowerCut?RecoverySector(card,start+3,cancelled):NpDownloadCatalog.Sector(card, start + 3), f = recoverPowerCut?RecoverySector(card,start+4,cancelled):NpDownloadCatalog.Sector(card, start + 4);
             ValidateCommitted(h, f, start, end);
-            if (end > card.Length / 512) throw new InvalidDataException("Media extent exceeds source capacity.");
+            if(recoverPowerCut)Require(U(f,68)==0 && U(f,60)==1 && U(f,64)==0,"Media prefix recovery requires the original zero-count, fault-free initial footer.");
+            else if (end > card.Length / 512) throw new InvalidDataException("Media extent exceeds source capacity.");
             if (Directory.Exists(output)) throw new IOException("Media export folder exists; choose a new destination.");
             Directory.CreateDirectory(output);
-            uint chunks = U(f, 68), session = U(h, 12), hs = U(h, 48);
-            bool recordingComplete=chunks>0 && U(f,60)==3 && U(f,64)==0;
-            byte[] oldClockSector = NpDownloadCatalog.Sector(card, start + 5);
+            uint committedChunks=U(f,68),session=U(h,12),hs=U(h,48);
+            long bound=Math.Min(end,Math.Min((long)U(h,44),card.Length/512));
+            uint chunks=recoverPowerCut?(uint)(Math.Max(0,bound-start-hs)/128):committedChunks;
+            bool recordingComplete=!recoverPowerCut && chunks>0 && U(f,60)==3 && U(f,64)==0;
+            byte[] oldClockSector = recoverPowerCut?RecoverySector(card,start+5,cancelled):NpDownloadCatalog.Sector(card, start + 5);
             var initialMetadata = Metadata(h); var finalMetadata = Metadata(f); var oldClock = ClockMetadata(oldClockSector, session);
             var clockAnchor = finalMetadata; string clockSource = finalMetadata == null ? null : "NPMEDX1.footer";
             if (clockAnchor == null && oldClock != null && (bool)oldClock["anchor_valid"])
@@ -362,6 +383,7 @@ namespace CE32_console
             uint? origin = null, previousFrame = null; uint frameId = 0, frameTick = 0, frameRate = 0, frameMissed = 0;
             ulong continuousCameraTick=0;uint previousCameraTick=0;
             int frameAt = 0; bool complete = false; string failure = null;
+            Exception prefixError=null;string prefixBoundary="Bounded metadata reservation/source limit reached.";
             uint sensorRecords = 0, validImu = 0, validMag = 0, validEnv = 0, lastSensorValid = 0;
             var snapshots=new List<byte[]>();ulong analogRows=0;uint analogFinalValid=0;
             ulong? analogStartUtc=finalMetadata==null?null:UtcAt(clockAnchor,(uint)Number(finalMetadata,"start_tick"),false);
@@ -381,17 +403,39 @@ namespace CE32_console
                     byte[] sensorColumns = Encoding.ASCII.GetBytes(NpCe64Export.SensorColumns + "\n"); sensorCsv.Write(sensorColumns, 0, sensorColumns.Length);
                     camTime.WriteLine("frame_index,device_frame_id,device_tick_ms_u32,camera_hz,device_missed_cadence,final_chunk,device_tick_ms_unwrapped_u64,utc_us,utc_source");
                     micTime.WriteLine("chunk,first_sample_u64,sample_count,microphone_hz,device_origin_ms_u32,device_collection_ms_u32,first_sample_time_ns_u64,end_sample_time_ns_u64,origin_utc_us,first_sample_utc_us,utc_source");
-                    var prefix = new byte[1536]; card.Position = checked(start * 512); Exact(card, prefix);
+                    var prefix = new byte[1536]; card.Position = checked(start * 512); Exact(card, prefix,-1,recoverPowerCut?cancelled:null);
                     using (var parameters = Create(output, "CE_params.bin")) parameters.Write(prefix, 0, prefix.Length);
                     File.WriteAllBytes(Path.Combine(output, "descriptor.bin"), h); File.WriteAllBytes(Path.Combine(output, "footer.bin"), f);
                     File.WriteAllBytes(Path.Combine(output, "clock_anchor_sector5.bin"), oldClockSector);
                     var raw = new byte[ChunkBytes]; var raster = new byte[FrameBytes]; int lastProgress = -1;
-                    card.Position = checked((start + hs) * 512);
+                    if(!recoverPowerCut || chunks>0)card.Position = checked((start + hs) * 512);
                     for (uint sequence = 0; sequence < chunks; sequence++)
                     {
+                        Action rollback=null;
+                        if(recoverPowerCut) {
+                            camTime.Flush();micTime.Flush();analogTimes.Flush();
+                            Stream[] outputs={cam,mic,camTime.BaseStream,micTime.BaseStream,misc,analog,sensorBinary,sensorCsv,analogTimes.BaseStream};
+                            long[] lengths=outputs.Select(stream=>stream.Position).ToArray();
+                            var saved=new{samples,frames,invalidFrames,padding,gaps,processed,firstFrameId,firstCameraTick,irregularTiming,phaseErrors,origin,previousFrame,frameId,frameTick,frameRate,frameMissed,continuousCameraTick,previousCameraTick,frameAt,sensorRecords,validImu,validMag,validEnv,lastSensorValid};
+                            int snapshotCount=snapshots.Count;uint[] misses=cameraMisses.ToArray();var intervals=cameraIntervals.ToArray();
+                            rollback=()=>{
+                                camTime.Flush();micTime.Flush();analogTimes.Flush();
+                                for(int i=0;i<outputs.Length;i++){outputs[i].SetLength(lengths[i]);outputs[i].Position=lengths[i];}
+                                samples=saved.samples;frames=saved.frames;invalidFrames=saved.invalidFrames;padding=saved.padding;gaps=saved.gaps;processed=saved.processed;
+                                firstFrameId=saved.firstFrameId;firstCameraTick=saved.firstCameraTick;irregularTiming=saved.irregularTiming;phaseErrors=saved.phaseErrors;origin=saved.origin;previousFrame=saved.previousFrame;
+                                frameId=saved.frameId;frameTick=saved.frameTick;frameRate=saved.frameRate;frameMissed=saved.frameMissed;continuousCameraTick=saved.continuousCameraTick;previousCameraTick=saved.previousCameraTick;frameAt=saved.frameAt;
+                                sensorRecords=saved.sensorRecords;validImu=saved.validImu;validMag=saved.validMag;validEnv=saved.validEnv;lastSensorValid=saved.lastSensorValid;
+                                snapshots.RemoveRange(snapshotCount,snapshots.Count-snapshotCount);cameraMisses.Clear();foreach(uint value in misses)cameraMisses.Add(value);
+                                cameraIntervals.Clear();foreach(var interval in intervals)cameraIntervals.Add(interval.Key,interval.Value);
+                                // A fragment only appends after saved.frameAt. Its old
+                                // prefix remains intact; no rejected raster is emitted.
+                            };
+                        }
+                        try {
                         if (cancelled != null && cancelled()) throw new OperationCanceledException("Media export cancelled.");
-                        Exact(card, raw); int o = HeaderOffset;
+                        Exact(card, raw,-1,recoverPowerCut?cancelled:null); int o = HeaderOffset;
                         Require(U(raw, o + 508) == NpDownloadStream.Crc(raw, o, 508), "Media chunk header CRC mismatch.");
+                        NpV1StoreBinding.Validate(h,raw,o);
                         Require(U(raw, o + 12) == session && U(raw, o + 16) == sequence &&
                             U(raw, o + 20) == start + hs + (long)sequence * 128, "Media session/sequence/address discontinuity.");
                         string kind = Magic(raw, o); uint version = U(raw, o + 8);
@@ -454,7 +498,7 @@ namespace CE32_console
                         if (Magic(raw, 61440) == "NPSENS01")
                         {
                             lastSensorValid = NpCe64Export.SensorRecord(raw, 61440, sequence, sensorBinary, sensorCsv); sensorRecords++;
-                            var snapshot=new byte[164];Buffer.BlockCopy(raw,61440,snapshot,0,snapshot.Length);snapshots.Add(snapshot);
+                            if(!recoverPowerCut){var snapshot=new byte[164];Buffer.BlockCopy(raw,61440,snapshot,0,snapshot.Length);snapshots.Add(snapshot);}
                             if ((lastSensorValid & 1) != 0) validImu++;
                             if ((lastSensorValid & 2) != 0) validMag++;
                             if ((lastSensorValid & 4) != 0) validEnv++;
@@ -462,6 +506,13 @@ namespace CE32_console
                         }
                         else { Zero(raw, 61440, HeaderOffset); lastSensorValid = 0; }
                         misc.Write(raw, 65024, 512); processed++;
+                        }catch(Exception ex) {
+                            if(!recoverPowerCut)throw;
+                            rollback();prefixBoundary="Chunk "+sequence+": "+ex.Message;
+                            if(!(ex is InvalidDataException))prefixError=ex;
+                            failure="Power-interrupted, structurally validated prefix only; "+prefixBoundary;
+                            break;
+                        }
                         int percent = (int)(processed * 100L / chunks);
                         if (progress != null && percent != lastProgress) { lastProgress = percent; progress(percent); }
                     }
@@ -469,20 +520,21 @@ namespace CE32_console
                     else if(frameAt>0)using(var tail=Create(output,"camera_tail.partial"))tail.Write(raster,0,frameAt);
                     // Physical chunk order interleaves producers. Shared mapping
                     // uses each sensor's native publication tick and validity.
-                    if(finalMetadata!=null&&Number(finalMetadata,"version")==1&&(Number(finalMetadata,"flags")&4)!=0&&snapshots.Count>0)
+                    if(!recoverPowerCut && finalMetadata!=null&&Number(finalMetadata,"version")==1&&(Number(finalMetadata,"flags")&4)!=0&&snapshots.Count>0)
                         analogRows=NpCe64Export.SensorAnalog(snapshots,(uint)Number(finalMetadata,"start_tick"),unchecked((uint)Number(finalMetadata,"stop_tick")-(uint)Number(finalMetadata,"start_tick")),analogStartUtc,analog,analogTimes,cancelled,out analogFinalValid);
                 }
                 foreach (string name in names) File.Move(Path.Combine(output, name + ".partial"), Path.Combine(output, name));
-                complete = true;
+                complete = prefixError==null;
+                if(prefixError!=null)System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(prefixError).Throw();
             }
             catch (Exception ex) { failure = ex.Message; throw; }
             finally
             {
                 var report = new Dictionary<string, object> {
-                    { "status", complete ? "validated transport" : "INCOMPLETE" }, { "error", failure },
+                    { "status", complete && !recoverPowerCut ? "validated transport" : "INCOMPLETE" }, { "error", failure },
                     { "recording_complete", recordingComplete }, { "incomplete_camera_frame_bytes", frameAt },
                     { "format_version", U(h, 8) }, { "session", session }, { "start_lba", start }, { "end_lba", end },
-                    { "committed_chunks", chunks }, { "chunks", processed }, { "camera_frames", frames }, { "camera_invalid_frames", invalidFrames }, { "camera_frame_gaps", gaps },
+                    { "committed_chunks", committedChunks }, { "chunks", processed }, { "camera_frames", frames }, { "camera_invalid_frames", invalidFrames }, { "camera_frame_gaps", gaps },
                     { "camera_first_id", firstFrameId }, { "camera_last_id", previousFrame }, { "camera_first_tick", firstCameraTick }, { "camera_last_tick", previousFrame.HasValue ? (uint?)previousCameraTick : null },
                     { "camera_intervals_ms", cameraIntervals }, { "camera_timing_irregularities", irregularTiming }, { "camera_timing_phase_errors", phaseErrors }, { "camera_timestamp_quantum_ms", 1 }, { "camera_cadence_misses", cameraMisses },
                     { "metadata_descriptor", initialMetadata }, { "metadata_footer", finalMetadata }, { "legacy_clock_metadata", oldClock },
@@ -516,6 +568,13 @@ namespace CE32_console
                     ,{ "continuous_timestamps", "Raw device ticks retained; camera uint32 wrap unwrapped without inventing frames; microphone relative sample time is exact 5000 ns/sample." }
                 };
                 Qualify(h, f, initialMetadata, finalMetadata, report, cameraMisses);
+                if(recoverPowerCut) {
+                    report["power_cut_prefix_export"]=true;report["power_interrupted"]=true;report["recovered"]=processed>0;
+                    report["recovered_prefix_chunks"]=processed;report["prefix_scan_limit_chunks"]=chunks;report["prefix_export_finished"]=complete;
+                    report["prefix_boundary"]=prefixBoundary;report["firmware_committed"]=false;report["finalized"]=false;report["lossless"]=false;
+                    report["recovery_notice"]="Read-only structurally validated contiguous prefix; original footer still reports zero committed chunks. Not finalized, firmware-committed or lossless; no footer/count/timing synthesis. Native pixel/ADC payload has no independent payload checksum.";
+                    report["analogin_timing"]="Not generated for recovery: the initial footer supplies no confirmed capture START/STOP interval. Original sensor snapshots are retained in sensors.dat/csv.";
+                }
                 File.WriteAllText(Path.Combine(output, "recording.json"), new JavaScriptSerializer().Serialize(report) + "\n", new UTF8Encoding(false));
             }
         }
@@ -558,7 +617,7 @@ namespace CE32_console
                     var candidate = new FileStream(dialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     if (candidate.Length == 0 || candidate.Length % raw.Length != 0 || candidate.Length / raw.Length != Convert.ToInt64(report["camera_frames"]))
                     { candidate.Dispose(); throw new InvalidDataException("Camera file length differs from its validated report."); }
-                    stream = candidate; frame = 0; uint rate = Convert.ToUInt32(report["camera_requested_or_effective_hz"]);
+                    stream = candidate; frame = 0; decoder.Reset(); uint rate = Convert.ToUInt32(report["camera_requested_or_effective_hz"]);
                     timer.Interval = rate > 0 && rate <= 58 ? Math.Max(1, (int)(1000 / rate)) : 20; timer.Start();
                 }
                 catch (Exception ex) { status.Text = ex.Message; }

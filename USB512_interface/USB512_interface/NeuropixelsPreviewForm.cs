@@ -673,15 +673,24 @@ namespace USB512_interface
             } finally {updatingView=false;}
         }
 
+        internal static int PreviewIdleMilliseconds(long workMilliseconds)
+        {
+            int work=(int)Math.Max(0,Math.Min(Int32.MaxValue/3,workMilliseconds));
+            // Keep a 20 Hz ceiling and leave at least three work intervals
+            // idle, including when a slow redraw exceeds the normal cadence.
+            return Math.Max(1,Math.Max(50-work,work*3));
+        }
+
         private void RenderLoop()
         {
             try {
                 var timer=new Stopwatch();
                 while(renderRunning) {
                     timer.Restart();if(displayActive)RenderFrame();
-                    // Bound display CPU duty cycle; never spin at full CPU if
-                    // a large/maximized window takes longer than its budget.
-                    Thread.Sleep(Math.Max(20,50-(int)timer.ElapsedMilliseconds));
+                    int idle=PreviewIdleMilliseconds(timer.ElapsedMilliseconds);
+                    while(renderRunning && idle>0) {
+                        int pause=Math.Min(50,idle);Thread.Sleep(pause);idle-=pause;
+                    }
                 }
             } catch(Exception ex) {
                 renderFailure=ex.Message;renderRunning=false;

@@ -121,8 +121,11 @@ namespace USB512_interface
         { return value != null && value.Family == family && boardIds.Contains(value.Board); }
         internal bool HasUpdate(NpFirmwareIdentity value)
         {
-            return Matches(value) && (((value.Flags&4)!=0 && previousApps.Any(x=>x.Same(value.App))) ||
-                ((value.Flags&8)!=0 && previousUsb.Any(x=>x.Same(value.Usb))));
+            if (!Matches(value) || (value.Flags&12)!=12) return false;
+            bool appCurrent=appIdentity.Same(value.App), usbCurrent=usbIdentity.Same(value.Usb);
+            // One older component cannot establish that an unknown/private pair should be updated.
+            return (appCurrent || previousApps.Any(x=>x.Same(value.App))) &&
+                (usbCurrent || previousUsb.Any(x=>x.Same(value.Usb))) && !(appCurrent && usbCurrent);
         }
         internal string Installed(NpFirmwareIdentity value)
         {
@@ -209,9 +212,14 @@ namespace USB512_interface
         }
         internal static string ReviewText(NpFirmwareRelease release, NpFirmwareIdentity identity)
         {
-            return "WILD-X V" + release.family + "\r\nInstalled: " + release.Installed(identity) +
-                "\r\nBundled: " + release.Versions + "\r\n\r\n" + release.stage + "\r\n" + release.board +
-                "\r\n\r\n" + release.limits + "\r\n\r\n" +
+            string update="";
+            if(release.HasUpdate(identity)) {
+                bool app=!release.appIdentity.Same(identity.App), usb=!release.usbIdentity.Same(identity.Usb);
+                update="\r\nUpdate available: "+(app?"APP":"")+(app&&usb?" and ":"")+(usb?"USB service":"")+"."+
+                    (usb?"\r\nAn APP-only update does not update the USB service.":"");
+            }
+            return "WILD-X V" + release.family + update + "\r\nInstalled: " + release.Installed(identity) +
+                "\r\nBundled: " + release.Versions + "\r\n" + release.board + "\r\n\r\n" +
                 (identity == null ? "This firmware does not report installed image versions. A newer version cannot be confirmed.\r\n\r\n" : "") +
                 "Open firmware management? Firmware will be written only after you select and confirm an update.";
         }
@@ -233,7 +241,7 @@ namespace USB512_interface
             if (release == null) throw new IOException("Bundled firmware unavailable: " + NpFirmwareCatalog.Bundled.Error);
             string path = NpFirmwareCatalog.Bundled.CheckedPath(release.app);
             if (MessageBox.Show(owner, "Use bundled WILD-X V" + release.family + " APP " + release.appVersion + " (CRC " + release.appCrc32 + ")?\r\n\r\n" +
-                release.board + "\r\n" + release.stage + "\r\n\r\n" + release.limits +
+                release.board +
                 "\r\n\r\nConfirm that this is the matching board. Only the APP is selected; USB service and recovery images are not sent through the APP updater.",
                 "Select bundled APP", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.OK) return null;
             return path;

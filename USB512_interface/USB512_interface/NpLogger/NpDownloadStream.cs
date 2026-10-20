@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
@@ -11,7 +12,7 @@ namespace CE32_console
         internal NpDownloadProtocolUnavailableException(Exception inner):base("The SD-download test protocol could not be confirmed. No bulk data was tested; this is not a cable-quality result.",inner) {}
     }
     // One synchronous bounded request at a time. No unmanaged OVERLAPPED/buffer
-    // lifetime races and no automatic restart/resync after a transport failure.
+    // lifetime races. Only negotiated, exclusively owned SD reads may be retried.
     internal sealed partial class NpDownloadStream : Stream
     {
         private SafeFileHandle file;
@@ -23,8 +24,15 @@ namespace CE32_console
         private uint epoch, sequence;
         private uint maxBlocks;
         private bool faulted;
+        private bool validatedRead;
         private readonly bool qualityTestSession;
         private bool qualityRequestPending;
+        private bool canRecoverReads;
+        private byte[] recoveryIdentity;
+        private uint recoveryErrorBaseline;
+        internal int RecoveredReads {get;private set;}
+        internal int ReadRecoveryAttempts {get;private set;}
+        internal string ReadRecoveryDiagnostics {get;private set;}
         internal string TransportDescription {get;private set;}
         internal bool IsSynthetic {get;private set;}
         internal Func<bool> Cancelled;
@@ -66,7 +74,7 @@ namespace CE32_console
         internal NpDownloadStream(string path,bool allowSynthetic,bool qualityTest) {
             qualityTestSession=qualityTest;
             if(path==null || path.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)<0)throw new IOException("Not an NP WinUSB device.");
-            file=NpDownloadNative.CreateFile(path,0xc0000000,qualityTest?0U:3U,IntPtr.Zero,3,0x40000080,IntPtr.Zero);
+            file=NpDownloadNative.CreateFile(path,0xc0000000,0,IntPtr.Zero,3,0x40000080,IntPtr.Zero);
             if(file.IsInvalid){file.Dispose();throw new Win32Exception(Marshal.GetLastWin32Error());}
             try {
                 if(!NpDownloadNative.WinUsbInitialize(file,out usb,path))throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -100,12 +108,13 @@ namespace CE32_console
                     Control(0x40,0x62,0,0,0); // discard previous client's pending request
                     for(int i=0;i<100;i++){info=Control(0xc0,0x60,0,0,32);if(U(info,16)==0)break;Thread.Sleep(10);}
                     if(U(info,16)!=0)throw new IOException("NP USB download service is busy.");
-                    // Reset only at a new, idle download session; never replay a
-                    // failed read or alter the continuous recording path.
+                    // Initial idle-session reset. A later negotiated recovery
+                    // separately requires the owned firmware-retirement barrier.
                     if(!NpDownloadNative.WinUsbResetPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
                     if(!NpDownloadNative.WinUsbFlushPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
                 }
                 epoch=U(info,24);sequence=U(info,20);
+                TryEnableReadRecovery(info);
             } catch {Dispose();throw;}
         }
         private byte[] Control(byte type,byte request,ushort value,ushort index,ushort size) {
@@ -140,26 +149,139 @@ namespace CE32_console
             }
             throw new IOException("NP SD reset did not finish within 30 seconds; card contents preserved.");
         }
+        private sealed class NativeBulkReadFailure : IOException {
+            internal readonly int NativeError;
+            internal NativeBulkReadFailure(string message,int error):base(message,new Win32Exception(error)) {NativeError=error;}
+        }
+        private void CheckRecoveryCancellation() {
+            if(Cancelled!=null && Cancelled())throw new OperationCanceledException();
+        }
+        private uint ValidateRecoveryInfo(byte[] info,uint expectedEpoch,uint expectedSequence) {
+            if(U(info,0)!=0x3144504e || U(info,4)!=1 || U(info,8)!=(uint)(length/512) ||
+               U(info,12)!=maxBlocks || U(info,20)!=expectedSequence || U(info,24)!=expectedEpoch || U(info,28)!=1)
+                throw new InvalidDataException("NP USB guarded read identity/geometry/epoch/sequence changed; no read replayed.");
+            return U(info,16);
+        }
+        private void ValidateRecoveryReceipt(byte[] receipt,uint expectedEpoch,uint expectedSequence) {
+            if(U(receipt,0)!=0x3152444e || U(receipt,4)!=1 || U(receipt,8)!=1 || U(receipt,12)!=0 ||
+               U(receipt,16)!=expectedEpoch || U(receipt,20)!=expectedSequence || U(receipt,24)!=0 || U(receipt,28)!=Crc(receipt,0,28))
+                throw new InvalidDataException("NP USB NDR1 retirement receipt invalid or not clean idle; no read replayed.");
+        }
+        private byte[] ReadRecoveryIdentity() {
+            byte[] identity=Control(0xc0,0x79,0,0,64);
+            bool uid=false,cid=false;
+            for(int i=24;i<36;i++)uid|=identity[i]!=0;
+            for(int i=36;i<52;i++)cid|=identity[i]!=0;
+            if(U(identity,0)!=0x3153464e || U(identity,4)!=1 || U(identity,8)>4 || U(identity,8)==1 || U(identity,8)==2 ||
+               U(identity,12)!=0 || U(identity,20)!=(uint)(length/512) || U(identity,56)!=3 ||
+               U(identity,60)!=Crc(identity,0,60) || !uid || !cid)
+                throw new InvalidDataException("NP USB reported SD identity is unavailable/invalid; no read replayed.");
+            if(recoveryIdentity!=null)for(int i=24;i<52;i++)if(identity[i]!=recoveryIdentity[i])
+                throw new InvalidDataException("NP USB reported logger/card identity changed; no read replayed.");
+            return identity;
+        }
+        private void TryEnableReadRecovery(byte[] info) {
+            ReadRecoveryDiagnostics="guarded read recovery disabled";
+            if(qualityTestSession || IsSynthetic)return;
+            try {
+                if(ValidateRecoveryInfo(info,epoch,sequence)!=0)return;
+                // 0x6A remains the independent 192-byte firmware identity API.
+                ValidateRecoveryReceipt(Control(0xc0,0x6b,0,0,32),epoch,sequence);
+                recoveryIdentity=ReadRecoveryIdentity();
+                recoveryErrorBaseline=U(Control(0xc0,0x63,0,0,32),24);canRecoverReads=true;
+                ReadRecoveryDiagnostics="guarded read recovery available; recovered=0 retries=0";
+            } catch(Exception error) when(error is IOException || error is InvalidDataException) {
+                // Unsupported/invalid negotiation never changes legacy failure policy.
+                ReadRecoveryDiagnostics="guarded read recovery disabled: "+error.Message;
+            }
+        }
+        private void RecoverOwnedRead(uint lba,int retry,NativeBulkReadFailure failure) {
+            RetireOwnedRead(lba,retry,failure);
+        }
+        private void RetireOwnedRead(uint lba,int retry,NativeBulkReadFailure failure) {
+            CheckRecoveryCancellation();
+            uint oldEpoch=epoch,ownedSequence=unchecked(sequence+1),nextEpoch=unchecked(epoch+1);
+            byte[] info=Control(0xc0,0x60,0,0,32);
+            CheckRecoveryCancellation();
+            uint state=ValidateRecoveryInfo(info,oldEpoch,ownedSequence);
+            if(state>3)throw new IOException("NP USB failed read is not an owned recoverable request (state "+state+"); no cancel/replay sent.");
+            ReadRecoveryIdentity();CheckRecoveryCancellation();
+            if(retry!=0)ReadRecoveryAttempts++;
+            ReadRecoveryDiagnostics=(retry==0?"terminal owned-read retirement":"guarded read retry "+retry+"/2")+" LBA="+lba+"; "+failure.Message;
+            Trace.WriteLine(ReadRecoveryDiagnostics);
+            Control(0x40,0x62,0,0,0); // exactly once, only after proving this exclusive handle's read
+            var wait=Stopwatch.StartNew();
+            while(true) {
+                CheckRecoveryCancellation();info=Control(0xc0,0x60,0,0,32);CheckRecoveryCancellation();
+                state=ValidateRecoveryInfo(info,nextEpoch,ownedSequence);
+                if(wait.ElapsedMilliseconds>=3000)throw new TimeoutException("NP USB owned-read retirement did not reach matching idle; no read replayed.");
+                if(state==0) {
+                    break;
+                }
+                if(state!=4)throw new IOException("NP USB owned-read retirement failed (state "+state+"); no read replayed.");
+                Thread.Sleep(1);
+            }
+            CheckRecoveryCancellation();
+            if(!NpDownloadNative.WinUsbResetPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
+            if(!NpDownloadNative.WinUsbFlushPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
+            info=Control(0xc0,0x60,0,0,32);CheckRecoveryCancellation();
+            if(ValidateRecoveryInfo(info,nextEpoch,ownedSequence)!=0)throw new IOException("NP USB retired read is no longer idle; no read replayed.");
+            ValidateRecoveryReceipt(Control(0xc0,0x6b,0,0,32),nextEpoch,ownedSequence);
+            ReadRecoveryIdentity();CheckRecoveryCancellation();
+            uint errors=U(Control(0xc0,0x63,0,0,32),24);CheckRecoveryCancellation();
+            if(errors!=recoveryErrorBaseline)
+                throw new IOException("NP USB SD/backend error counter changed ("+recoveryErrorBaseline+" -> "+errors+"); no read replayed.");
+            epoch=nextEpoch;sequence=ownedSequence;validatedRead=false;
+            if(retry==0)ReadRecoveryDiagnostics="terminal owned read retired without replay; recovered="+RecoveredReads+" retries="+ReadRecoveryAttempts+"; "+failure.Message;
+        }
         internal string Diagnostics() {
             var b=Control(0xc0,0x63,0,0,32);
-            return "firmware requests="+U(b,0)+" SD_ms="+U(b,4)+" CRC_ms="+U(b,8)+" USB_ms="+U(b,12)+" sectors="+U(b,16)+" CRC_selftest="+U(b,20)+" errors="+U(b,24)+" completions="+U(b,28);
+            return "firmware requests="+U(b,0)+" SD_ms="+U(b,4)+" CRC_ms="+U(b,8)+" USB_ms="+U(b,12)+" sectors="+U(b,16)+" CRC_selftest="+U(b,20)+" errors="+U(b,24)+" completions="+U(b,28)+"; "+ReadRecoveryDiagnostics;
         }
-        private static void ValidateReplyInPlace(byte[] b,int n,uint lba,uint blocks,uint expectedSequence,uint expectedEpoch) {
+        private static void ValidateReplyHeader(byte[] b,int n,uint lba,uint blocks,uint expectedSequence,uint expectedEpoch) {
             if(b==null || n>b.Length)throw new InvalidDataException("Invalid reply extent.");
             if(n<32 || U(b,0)!=0x3142504e || U(b,4)!=expectedSequence || U(b,8)!=lba || U(b,24)!=expectedEpoch || U(b,28)!=Crc(b,0,28))
                 throw new InvalidDataException("NP USB reply header/sequence/address/CRC mismatch; download stopped.");
             if(U(b,16)!=0)throw new IOException("NP firmware SD read failed: 0x"+U(b,16).ToString("X8"));
-            if(U(b,12)!=blocks || n!=32+blocks*512 || U(b,20)!=Crc(b,32,n-32))throw new InvalidDataException("NP USB payload length/CRC mismatch; download stopped.");
+            if(U(b,12)!=blocks)throw new InvalidDataException("NP USB payload length/CRC mismatch; download stopped.");
+        }
+        private static void ValidateReplyInPlace(byte[] b,int n,uint lba,uint blocks,uint expectedSequence,uint expectedEpoch) {
+            ValidateReplyHeader(b,n,lba,blocks,expectedSequence,expectedEpoch);
+            if(n!=32+blocks*512 || U(b,20)!=Crc(b,32,n-32))throw new InvalidDataException("NP USB payload length/CRC mismatch; download stopped.");
         }
         internal static byte[] ValidateReply(byte[] b,int n,uint lba,uint blocks,uint expectedSequence,uint expectedEpoch) {
             ValidateReplyInPlace(b,n,lba,blocks,expectedSequence,expectedEpoch);
             byte[] result=new byte[n-32];Buffer.BlockCopy(b,32,result,0,result.Length);return result;
+        }
+        private void WaitForDownloadReady() {
+            var wait=Stopwatch.StartNew();
+            while(true) {
+                if(Cancelled!=null && Cancelled())throw new OperationCanceledException();
+                byte[] info=Control(0xc0,0x60,0,0,32);
+                if(Cancelled!=null && Cancelled())throw new OperationCanceledException();
+                if(U(info,0)!=(IsSynthetic?0x3154504eU:0x3144504eU) || U(info,4)!=1 ||
+                   U(info,8)!=(uint)(length/512) || U(info,12)!=maxBlocks || U(info,20)!=sequence ||
+                   U(info,24)!=epoch || U(info,28)!=(IsSynthetic?3U:1U))
+                    throw new InvalidDataException("NP USB download identity/geometry/epoch/sequence/capability changed; next read was not sent.");
+                if(wait.ElapsedMilliseconds>=1000)throw new TimeoutException("NP USB download readiness timed out; next read was not sent.");
+                uint state=U(info,16);
+                if(state==0)return;
+                if(state!=3)throw new IOException("Unexpected NP USB download readiness state "+state+"; next read was not sent.");
+                Thread.Sleep(1);
+            }
         }
         private void Fill() {
             if(faulted)throw new IOException("This download connection failed; close and reopen it before retrying.");
             if(Cancelled!=null && Cancelled())throw new OperationCanceledException();
             uint lba=checked((uint)(position/512)),blocks=(uint)Math.Min(maxBlocks,length/512-lba);
             try {
+              for(int retry=0;;retry++) {
+               try {
+                if(retry!=0)CheckRecoveryCancellation();
+                // Host read completion may precede firmware's EP1 completion.
+                // Only a matching idle receipt permits the next request; never
+                // replay 0x61 after a failed control transfer.
+                if(validatedRead)WaitForDownloadReady();
                 if(qualityTestSession)qualityRequestPending=true;
                 Control(0x40,0x61,(ushort)lba,(ushort)(lba>>16),0);
                 int expected=checked(32+(int)blocks*512);
@@ -171,8 +293,22 @@ namespace CE32_console
                     // A partial reply takes the bounded slow path, preserving
                     // the existing framing/error handling without unsafe pins.
                     byte[] part=got==0?reply:new byte[expected-got];uint n;
-                    if(!NpDownloadNative.WinUsbReadPipe(usb,0x81,part,(uint)(expected-got),out n,IntPtr.Zero) || n==0 || n>expected-got)throw new IOException("NP USB read timed out/failed (Windows "+Marshal.GetLastWin32Error()+", bytes "+n+"); partial download retained.");
+                    long readStarted=Stopwatch.GetTimestamp();
+                    bool readOk=NpDownloadNative.WinUsbReadPipe(usb,0x81,part,(uint)(expected-got),out n,IntPtr.Zero);
+                    int nativeError=Marshal.GetLastWin32Error(); // Capture before timing/formatting/native work.
+                    long readTicks=Stopwatch.GetTimestamp()-readStarted;
+                    if(!readOk || n==0 || n>expected-got) {
+                        string message="NP USB read timed out/failed (Windows "+nativeError+", bytes "+n+"); LBA="+lba+" (0x"+lba.ToString("X8")+"), blocks="+blocks+", expected="+expected+", accumulated="+got+", native_ok="+readOk+", read_ms="+(readTicks*1000.0/Stopwatch.Frequency).ToString("F3",System.Globalization.CultureInfo.InvariantCulture)+"; partial download retained.";
+                        if(!readOk)throw new NativeBulkReadFailure(message,nativeError);
+                        throw new IOException(message);
+                    }
                     if(got!=0)Buffer.BlockCopy(part,0,reply,got,(int)n);got+=(int)n;
+                    // Reject an already observed bad header/SD result before a
+                    // later native failure could qualify for transport recovery.
+                    if(got>=32 && got<expected && got-(int)n<32) {
+                        try {ValidateReplyHeader(reply,got,lba,blocks,unchecked(sequence+1),epoch);}
+                        catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
+                    }
                     // Error response is deliberately a short header-only transfer.
                     if(got==32 && U(reply,16)!=0)break;
                 }
@@ -180,9 +316,34 @@ namespace CE32_console
                 try {ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);USB512_interface.UsbHealth.Integrity(usb,0x81,false,"download header/sequence/payload CRC");}
                 catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
                 sequence++;
+                validatedRead=true;
                 cache=reply;cachePayloadCount=got-32;
                 cacheStart=(long)lba*512;
-            } catch {faulted=true;cache=null;cachePayloadCount=0;throw;}
+                if(retry!=0) {
+                    RecoveredReads++;
+                    ReadRecoveryDiagnostics="guarded read recovered LBA="+lba+"; recovered="+RecoveredReads+" retries="+ReadRecoveryAttempts+" (last read "+retry+"/2)";
+                    Trace.WriteLine(ReadRecoveryDiagnostics);
+                }
+                return;
+               } catch(NativeBulkReadFailure failure) {
+                    cache=null;cachePayloadCount=0;cacheStart=-1;wireBuffer=null;
+                    ReadRecoveryDiagnostics="native bulk failure; recovered="+RecoveredReads+" retries="+ReadRecoveryAttempts+"; "+failure.Message;
+                    if(!canRecoverReads || failure.NativeError==995 || failure.NativeError==1223)throw;
+                    if(retry>=2) {
+                        // Exhausted reads still own a firmware reply. Retire
+                        // only that proven read, never submit another READ or
+                        // replace the original native failure with cleanup.
+                        try {RetireOwnedRead(lba,0,failure);}
+                        catch(Exception retirementFailure) {
+                            failure.Data["TerminalReadRetirementFailure"]=retirementFailure;
+                            ReadRecoveryDiagnostics+="; terminal retirement failed: "+retirementFailure.Message;
+                        }
+                        try {Trace.WriteLine(ReadRecoveryDiagnostics);}catch {}throw;
+                    }
+                    RecoverOwnedRead(lba,retry+1,failure);
+               }
+              }
+            } catch {faulted=true;cache=null;cachePayloadCount=0;wireBuffer=null;throw;}
         }
         public override int Read(byte[] b,int offset,int count) {
             if(usb==IntPtr.Zero)throw new ObjectDisposedException(GetType().Name);

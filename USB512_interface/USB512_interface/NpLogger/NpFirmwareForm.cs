@@ -118,8 +118,7 @@ namespace USB512_interface
         {
             var release=SelectedFirmwareTarget;
             return "\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed(1,firmwareIdentity)+"\r\nBundled: "+(release==null?"Unavailable":release.Versions)+
-                (release==null?"\r\n"+(firmwareTarget.SelectedIndex==1?cameraTargetError:NpFirmwareCatalog.Bundled.Error):
-                "\r\nAPP CRC "+release.appCrc32+" | USB CRC "+release.usbCrc32+"\r\n"+release.stage+"\r\n"+release.limits);
+                (release==null?"\r\n"+(firmwareTarget.SelectedIndex==1?cameraTargetError:NpFirmwareCatalog.Bundled.Error):"");
         }
         async Task UseBundledApp(Func<NpFirmwareRelease,string> selectApp,Func<string,Task> applyApp)
         {

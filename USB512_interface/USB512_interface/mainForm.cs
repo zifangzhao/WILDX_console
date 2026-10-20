@@ -3591,7 +3591,7 @@ namespace USB512_interface
                  * This callback runs on the WinForms thread; a malformed
                  * String.Format template here otherwise terminates the UI
                  * update and is reported only as TargetInvocationException. */
-                lblSpeed.Text = "Sampling (" + rateWindowSeconds.ToString("F1") +
+                string samplingDetails = "Sampling (" + rateWindowSeconds.ToString("F1") +
                     " s average): amplifier " + (amplifierRate / 1000.0).ToString("F2") +
                     " kS/s | analog-in " + (analogInRate / 1000.0).ToString("F2") +
                     " kS/s | camera " + cameraRate.ToString("F1") +
@@ -3600,7 +3600,7 @@ namespace USB512_interface
                     " KiB/s | NP AP " + (neuropixelsApRate / 1000.0).ToString("F2") +
                     " kS/s | LFP " + (neuropixelsLfpRate / 1000.0).ToString("F2") + " kS/s"+
                     (selectedDeviceKind==DeviceKind.XeNp?" (per-probe average, "+npActiveProbeCount+" probes)":"");
-                lblRecInfo.Text = "Payload " + payloadRateMBytes.ToString("F2") +
+                string transferDetails = "Payload " + payloadRateMBytes.ToString("F2") +
                     " MiB/s\r\nsequence gaps " +
                      gaps.ToString("N0") + " (permanent packet loss); USB pipe recoveries " +
                      recoveries.ToString("N0") + "; " + clockSyncStatistics +
@@ -3612,6 +3612,20 @@ namespace USB512_interface
                     adcPackets.ToString("N0") + ", misc " +
                     metadataPackets.ToString("N0") + ", NP " +
                     neuropixelsPackets.ToString("N0") + ", NP IMU samples " + Interlocked.Read(ref npImuSamples).ToString("N0");
+                if(selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) {
+                    lastCaptureReport="USB recording statistics\r\n\r\n"+samplingDetails+"\r\n"+transferDetails;
+                    captureReportButton.Enabled=true;
+                    lblSpeed.Text="Recording";
+                    lblRecInfo.Text="AP "+(neuropixelsApRate/1000.0).ToString("F2")+" kS/s"+
+                        (neuropixelsLfpRate>0?" · LFP "+(neuropixelsLfpRate/1000.0).ToString("F2")+" kS/s":"")+
+                        (cameraRate>0?" · Camera "+cameraRate.ToString("F1")+" fps":"")+
+                        "\r\nData "+payloadRateMBytes.ToString("F2")+" MiB/s"+
+                        (gaps>0?" · Warning: "+gaps.ToString("N0")+" missing packets":"")+
+                        (recoveries>0?" · USB recovered "+recoveries.ToString("N0")+" times":"");
+                } else {
+                    lblSpeed.Text=samplingDetails;
+                    lblRecInfo.Text=transferDetails;
+                }
             });
         }
 

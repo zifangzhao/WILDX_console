@@ -65,6 +65,7 @@ namespace USB512_interface
         readonly NumericUpDown gainBox=new NumericUpDown{Minimum=0.1M,Maximum=100,DecimalPlaces=1,Increment=0.1M,Value=1,Width=65,AccessibleName="Preview display gain",AccessibleDescription="Display only; does not change probe gain or saved data."};
         readonly NpHighPassControl highPass=new NpHighPassControl();
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
+        readonly ToolTip diagnostics=new ToolTip();
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
         readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=16};
         readonly CancellationTokenSource lifetime=new CancellationTokenSource();
@@ -123,7 +124,7 @@ namespace USB512_interface
         protected override void Dispose(bool disposing)
         {
             if(disposing && !closed){closed=true;lifetime.Cancel();DropStream();}
-            if(disposing){timer.Stop();timer.Dispose();lifetime.Dispose();}
+            if(disposing){timer.Stop();timer.Dispose();lifetime.Dispose();diagnostics.Dispose();}
             base.Dispose(disposing);
         }
         async Task Tick()
@@ -139,7 +140,7 @@ namespace USB512_interface
                 // permits one legacy mode switch during this connection epoch.
                 if(ex.Reason==1 && !legacyPreview){
                     var old=stream;stream=null;if(old!=null)old.Dispose();legacyPreview=true;previousEnd=0;
-                    ResetDisplayRate();retry.Restart();info.Text="Compact preview unsupported; waiting to request legacy preview…";return;
+                    ResetDisplayRate();retry.Restart();info.Text="Connecting preview…";return;
                 }
                 enabled.Checked=false;info.Text=ex.Message;return;
             }
@@ -150,11 +151,11 @@ namespace USB512_interface
             try{
                 var token=lifetime.Token;
                 if(stream==null){
-                    if(clock.ElapsedMilliseconds<rearmAfter){info.Text="Waiting for the previous preview lease to expire…";return;}
+                    if(clock.ElapsedMilliseconds<rearmAfter){info.Text="Switching preview…";return;}
                     if(retry.ElapsedMilliseconds<(legacyPreview?550:1000))return;
                     if(session==0){
                         activeProbe=(uint)probe.Value;activeChannel=(uint)channel.Value;hz=status().Hz;
-                        info.Text="Reading probe framing…";
+                        info.Text="Preparing preview…";
                         var calibration=await connection.CapturePreview(Next(),activeProbe,activeChannel,hz,token);
                         if(!SelectionCurrent(generation,hz))return;
                         int capturedPhase=await Task.Run(()=>calibration.FindPhase(),token);
@@ -208,8 +209,9 @@ namespace USB512_interface
                 plot.Append(decoded,frame.FirstTick,stride,frame.ValidRows);
             }
             plot.Invalidate(); // Reveal buffered originals between BLE bursts, even while controls own the radio.
-            info.Text=previewHz+" samples/s grid · "+(legacyPreview?"legacy 16-row transport (gaps expected)":"compact 64-row transport")+
-                " · subsampled, aliasing possible · gaps "+gaps+" · skipped "+skipped+" · host drops "+stream.Dropped+" · packets "+packets;
+            info.Text="Preview · "+previewHz+" samples/s"+(gaps!=0 || skipped!=0 || stream.Dropped!=0?" · Preview gaps":"");
+            diagnostics.SetToolTip(info,(legacyPreview?"Legacy transport":"Compact transport")+
+                " · subsampled, aliasing possible · gaps "+gaps+" · skipped "+skipped+" · host drops "+stream.Dropped+" · packets "+packets);
             if(stream.Silence.ElapsedMilliseconds>2500)throw new NpV2PreviewUnavailableException(128);
         }
         // BLE wire stays raw. Convert only the disposable PC display samples.

@@ -70,7 +70,7 @@ namespace USB512_interface
         NpSdStatus current;
         int recorderVersion;
         uint np2AvailableMask;
-        Button scan,stopScan,connect,disconnect,rescueReset,recordingSettings,usbDownload,previewButton,startRecording,stopRecording,recordingsButton;
+        Button scan,stopScan,connect,disconnect,rescueReset,recordingSettings,usbDownload,previewButton,startRecording,stopRecording,recordingsButton,overwriteRecording;
         bool busy, closing, connecting, hostBusy, mediaSettingsChanged,stopRequested,stopping;
         internal bool IsBusy{get{return busy;}}
         internal bool SessionOwned{get{return busy || connection.Connected || watcher.Status==BluetoothLEAdvertisementWatcherStatus.Started;}}
@@ -133,6 +133,7 @@ namespace USB512_interface
             Add(actions, "Sync PC time", SyncClock);
             previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
             recordingsButton=Add(actions,"Recordings…",OpenRecordings);
+            overwriteRecording=Add(actions,"Overwrite from last known position…",OverwriteFromLastKnownPosition);
             var reportButton=new Button {Text="Report…",AutoSize=true};
             reportButton.Click+=async delegate {await OpenReport();};
             Add(actions,"Calibration…",()=>{NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2);return Task.CompletedTask;});
@@ -175,7 +176,7 @@ namespace USB512_interface
             WildXTheme.Button(connect,true);
             foreach(Control control in actions.Controls)if(control is Button){
                 if(control.Text=="Start recording")WildXTheme.Button((Button)control,true);
-                else if(control.Text=="Stop recording" || control.Text=="ROM DFU")WildXTheme.Button((Button)control,false,true);
+                else if(control.Text=="Stop recording" || control.Text=="ROM DFU" || control==overwriteRecording)WildXTheme.Button((Button)control,false,true);
             }
             foreach(var row in new[]{connectionActions,options,actions,maintenanceActions,statusPanel})foreach(Control control in row.Controls) {
                 control.Anchor=AnchorStyles.Left;
@@ -260,8 +261,16 @@ namespace USB512_interface
             usbDownload.Visible=recorderVersion==1;
             previewButton.Visible=recorderVersion!=0;previewButton.Enabled=ready && (V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current));
             recordingsButton.Enabled=ready;
-            startRecording.Enabled=ready && (V2?clock.Synchronized && NpV2SdControl.CanStart(current):NpV1BleProtocol.CanManualStart(current));
+            // Manual V2 START is a request, not a cached host admission decision.
+            // Firmware owns storage/profile acceptance and returns its rejection.
+            startRecording.Enabled=ready && (V2 || NpV1BleProtocol.CanManualStart(current));
+            UpdateOverwriteControl(ready);
             UpdateMediaControls();
+        }
+        void UpdateOverwriteControl(bool ready)
+        {
+            overwriteRecording.Visible=V2 && NpV2SdControl.HasOverwriteOffer(current);
+            overwriteRecording.Enabled=ready && V2 && NpV2SdControl.CanOverwriteFromLastKnownPosition(current);
         }
         void ClosePreview(){if(preview!=null){preview.Close();preview.Dispose();preview=null;}}
         void ResetDevice(){ClosePreview();ResetMedia();recordingSeconds=0;recordingTime.Text=RecordingTimeText(0);connectedAddress=0;mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
@@ -306,7 +315,7 @@ namespace USB512_interface
             }
             string text="Console: "+typeof(NpBleForm).Assembly.GetName().Version+"\r\nDevice: "+(recorderVersion==0?"Unconfirmed":"Neuropixels V"+recorderVersion)+
                 "\r\nBLE address: "+address.Text+"\r\n"+firmwareStatus.Text+"\r\n"+recordingTime.Text+"\r\n"+state.Text+
-                "\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\n"+failure+"\r\n\r\n"+details+"\r\n\r\n"+log.Text;
+                "\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\nDevice status:\r\n"+current+"\r\n\r\n"+failure+"\r\n\r\n"+details+"\r\n\r\n"+log.Text;
             using(var report=new NpReportForm("BLE report",text))report.ShowDialog(DialogOwner);
         }
         internal static async Task<string> ReadV1FailureDetails(NpSdStatus s,IDictionary<byte,NpConfigRequest> requests,
@@ -363,7 +372,7 @@ namespace USB512_interface
         }
         void ShowStatus(NpSdStatus s){
             if(!V2 && s.Fault!=0 && (current==null || current.Fault!=s.Fault || current.Chunks!=s.Chunks))Append("V1 "+NpV1BleProtocol.StateText(s));
-            current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s)+"\r\n"+s;
+            current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s);
             if(V2 || s.Mask!=0 || s.Chunks==0)recordingSeconds=V2?NpV2SdControl.RecordedSeconds(s):NpV1BleProtocol.RecordedSeconds(s);
             recordingTime.Text=RecordingTimeText(recordingSeconds)+RecordingStorageText(V2,s);
             firmwareStatus.Visible=recorderVersion!=0;firmwareStatus.Text="Firmware: "+NpFirmwareCatalog.Bundled.Installed((uint)recorderVersion,firmwareIdentity);}
@@ -483,41 +492,63 @@ namespace USB512_interface
             if(!V2 && p.Mask==0){await ApplyV1Media();return;}
             var s = await ReadStatus();
             RequireStartNotCanceled();
-            if (V2 ? !NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz) : !NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz)) throw new IOException("Wait for the recorder to stop and confirm an advertised profile.");
-            await Send(V2 ? NpV2SdControl.Request(1, NpV2SdControl.NextId(s), p.Hz, 0, 0, p.Mask) : NpSdControl.Request(1, NpSdControl.NextId(s), p.Mask, p.Hz));
+            if (V2 ? !NpV2SdControl.IsProfile(p.Mask,p.Hz) : !NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz)) throw new IOException("Wait for the recorder to stop and confirm an advertised profile.");
+            uint selectId=V2?NpV2SdControl.NextId(s):NpSdControl.NextId(s);
+            var selected=await Send(V2 ? NpV2SdControl.Request(1, selectId, p.Hz, 0, 0, p.Mask) : NpSdControl.Request(1, selectId, p.Mask, p.Hz));
             // SELECT may only acknowledge a queued command. Wait using reads;
             // never replay SELECT or START if a receipt or preparation is late.
             int epoch=connection.Epoch;var wait=System.Diagnostics.Stopwatch.StartNew();
             string peer=address.Text;bool statusContinued=false;
+            // A correlated pending V1 SELECT may span a rate-family reboot.
+            // Only fresh read-only STATUS receipts may be repeated in this window.
+            bool pendingSelect=!V2 && selected.Operation==1 && selected.RequestId==selectId && selected.Error==0 &&
+                selected.Mask==p.Mask && selected.Hz==p.Hz && (selected.Flags&8)!=0;
             while(wait.Elapsed.TotalSeconds<60){
                 await Task.Delay(250);
                 RequireStartNotCanceled();
                 if(!connection.Connected || connection.Epoch!=epoch || address.Text!=peer)throw new IOException("Connection changed while applying recording settings. Reconnect and read status.");
+                if(wait.Elapsed.TotalSeconds>=60)break;
                 try{s=await ReadStatus();}
-                catch(NpV1ReceiptTimeout ex) when(!V2 && !statusContinued && ex.Operation==0 && ex.Transaction==sequence){
+                catch(NpV1ReceiptTimeout ex) when(!V2 && (pendingSelect || !statusContinued) && ex.Operation==0 && ex.Transaction==sequence){
                     RequireStartNotCanceled();
                     if(!connection.Connected || connection.Epoch!=epoch || address.Text!=peer || wait.Elapsed.TotalSeconds>=60)throw;
+                    if(!statusContinued)Append("Waiting for the device to confirm recording settings…");
                     statusContinued=true;
-                    Append("Status receipt delayed after profile change; checking once more with a fresh STATUS ID. SELECT and START were not replayed.");
                     continue;
                 }
-                if(s.Mask==p.Mask && s.Hz==p.Hz && (V2?NpV2SdControl.CanSelectProfile(s,p.Mask,p.Hz):NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz))){Append("Recording settings confirmed.");return;}
+                RequireStartNotCanceled();
+                if(!connection.Connected || connection.Epoch!=epoch || address.Text!=peer)throw new IOException("Connection changed while applying recording settings. Reconnect and read status.");
+                if(wait.Elapsed.TotalSeconds>=60)break;
+                if((s.Flags&8)==0)pendingSelect=false;
+                if(s.Mask==p.Mask && s.Hz==p.Hz && (V2?!s.Busy:NpV1BleProtocol.CanSelectProfile(s,p.Mask,p.Hz))){Append("Recording settings confirmed.");return;}
             }
             throw new IOException("Recording settings were not confirmed. Read status before retrying; recording was not started.");
+        }
+        async Task PrepareRecordingClock(NpSdStatus s)
+        {
+            if(V2 || (s.Flags&NpV1BleProtocol.Clock)==0 || !NpV1BleProtocol.CanConfigure(s))return;
+            try{await SyncClock();clockStatus.Text="PC time synced";}
+            catch(Exception ex) when(ex is IOException || ex is TimeoutException){
+                clockStatus.Text="Recording time unavailable";
+                Append("Could not synchronize recording time; recording will continue. "+ex.Message);
+            }
         }
         async Task StartRecording()
         {
             var p = profiles.SelectedItem as Profile; var s = await ReadStatus();
             RequireStartNotCanceled();
             if(p==null)throw new IOException("Select recording settings before Start.");
+            if(V2 && !NpV2SdControl.IsProfile(p.Mask,p.Hz))throw new IOException("Invalid V2 recording profile.");
             if(p.Mask!=s.Mask || p.Hz!=s.Hz || !V2 && p.Mask==0 && mediaSettingsChanged){await Apply();s=await ReadStatus();}
             RequireStartNotCanceled();
             if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");
-            if(V2 && !clock.Synchronized)throw new IOException("Synchronize PC time while stopped before starting.");
+            await PrepareRecordingClock(s);
+            RequireStartNotCanceled();
             const uint duration=0;
             if (V2) {
-                // Validate storage/readiness before changing any staged maps.
-                uint blocks = NpV2SdControl.Blocks(s, p.Hz, duration);
+                // Immediate continuous recording: no scheduled UTC or cached
+                // readiness/clock gate. Firmware validates the ordinary START.
+                const uint blocks=0;
                 configurationReceipts.Reset();configurationReadError=null;
                 configurationStatus.Text="No new NP2 IMRO requested.";
                 var staged=new List<Np2ConfigRequest>();
@@ -549,7 +580,7 @@ namespace USB512_interface
                 RequireStartNotCanceled();
                 await Send(NpSdControl.Request(2, NpSdControl.NextId(s), s.Mask, s.Hz, s.Start, end, session == 0 ? 1U : session, s.Qualified ? 0U : 1U));
             }
-            Append("START acknowledged; wait for device-confirmed recording. Continuous until Stop or card full.");
+            Append("Start requested; waiting for the recorder…");
         }
         void RequireStartNotCanceled(){if(stopRequested)throw new OperationCanceledException("Recording start canceled by Stop.");}
         async Task StopRecording()
@@ -629,7 +660,7 @@ namespace USB512_interface
                 if(!np2HostConfigurations.TryGetValue(peer,out requests)){requests=new Dictionary<int,string>();np2HostConfigurations.Add(peer,requests);}
                 using(var dialog=new NpConfigurationDialog(null,np2:true,availableMask:(int)np2AvailableMask,retainedRequests:requests,applyConnectors:Np2ApplyRequests(peer,true),
                     receipt:async(port,json)=>NpConfigurationDialog.Receipt(await new Np2ConfigClient(new ConfigTransport(connection)).StatusAsync((byte)(port-1),CancellationToken.None),json==null?null:NpConfigurationDialog.PrepareV2Request(json,port))))dialog.ShowDialog(owner);
-                Append("NP2 IMRO request retained. Apply-on-capture stages only after the final profile and blocks START unless the firmware returns the matching staged receipt.");
+                Append("Probe configuration saved; it will be applied when recording starts.");
                 return;
             }
             var client = new NpConfigClient(new ConfigTransport(connection));
@@ -645,6 +676,50 @@ namespace USB512_interface
             if (V2 && !NpV2SdControl.CanSwitchMode(s)) throw new IOException("A stopped recorder with mode-switch support is required.");
             await Send(V2 ? NpV2SdControl.ModeRequest(NpV2SdControl.NextId(s), v2) : NpV1BleProtocol.Mode(s, NpSdControl.NextId(s), v1));
             connection.Disconnect(); ResetDevice(); state.Text = TopLevel?"Mode handoff acknowledged. Close BLE Control and refresh USB devices.":"Mode handoff acknowledged. Open USB Mode or Data Download and refresh devices.";
+        }
+        async Task OverwriteFromLastKnownPosition()
+        {
+            // Confirm the cached offer first: Cancel must issue no wire command.
+            if(!V2 || !connection.Connected || connectedAddress==0 || hostBusy || !NpV2SdControl.CanOverwriteFromLastKnownPosition(current))
+                throw new IOException("The V2 logger does not advertise an available overwrite position. Read status first.");
+            uint position=current.Start,capacity=current.Capacity;int generation=connection.Epoch;ulong peer=connectedAddress;
+            if(MessageBox.Show(DialogOwner,"Overwrite from the last known position on V2 "+peer.ToString("X12")+"?\r\n\r\n"+
+                "LBA "+position.ToString("N0")+" · byte offset "+((ulong)position*512).ToString("N0")+" ("+(position*512.0/1073741824).ToString("N2")+" GiB)\r\n"+
+                "Card: "+(capacity*512.0/1073741824).ToString("N2")+" GiB\r\n\r\n"+
+                "This removes catalog entries at and after this position. Future recordings may overwrite ALL data at or after it, including damaged or unindexed recordings. Earlier entries are retained.\r\n\r\n"+
+                "Raw sectors are not erased by this action. Recording will not start automatically.",
+                "Overwrite from last known position",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes)return;
+            Action target=()=>{if(!connection.Connected || connection.Epoch!=generation || !V2 || connectedAddress!=peer || hostBusy)
+                throw new IOException("The connected logger changed. Read status and confirm again; no overwrite replayed.");};
+            target();ClosePreview();var fresh=await ReadStatus();target();
+            byte[] request=NpV2SdControl.OverwriteRequest(fresh,NpV2SdControl.NextId(fresh),position,capacity);
+            uint mutationId=NpSdGeometry.U(request,12);
+            NpSdStatus receipt;
+            try{receipt=await Send(request);target();}
+            catch(TimeoutException ex){
+                throw new IOException("Overwrite outcome is unknown. "+ex.Message+" Read status; no command replayed and no recording started.",ex);
+            }
+            catch(IOException ex){
+                throw new IOException("Overwrite was not confirmed: "+ex.Message+" Read status; no command replayed and no recording started.",ex);
+            }
+            if(receipt.Error!=0)throw new IOException("Overwrite rejected: "+receipt.Error+". No command replayed.");
+            if(receipt.Operation!=12 || receipt.RequestId!=mutationId || receipt.LastId!=mutationId)
+                throw new IOException("Overwrite acknowledgement did not match. Read status; no command replayed.");
+            var wait=System.Diagnostics.Stopwatch.StartNew();
+            try{
+                while(current!=null && (current.Flags&8)!=0 && wait.ElapsedMilliseconds<10000){
+                    await Task.Delay(200);target();await ReadStatus();target();
+                }
+            }catch(Exception ex) when(ex is IOException || ex is TimeoutException){
+                throw new IOException("Overwrite completion is unknown. Read status; no command replayed and no recording started.",ex);
+            }
+            var completed=current;
+            if(completed==null || completed.LastId!=mutationId || completed.Error!=0 || completed.Fault!=0 || completed.Busy ||
+                completed.State!=1 || (completed.Flags&16)==0 || NpV2SdControl.NeedsRecovery(completed) ||
+                NpV2SdControl.HasOverwriteOffer(completed) || completed.Start!=position || completed.Capacity!=capacity)
+                throw new IOException("Overwrite was not confirmed complete. Read status; no command replayed and no recording started.");
+            state.Text="Last known recording position restored. New recordings may overwrite data from LBA "+position.ToString("N0")+". Press Start recording when ready.";
+            Append(state.Text);
         }
         async Task RescueReset()
         {

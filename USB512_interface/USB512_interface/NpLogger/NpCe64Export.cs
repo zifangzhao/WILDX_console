@@ -84,8 +84,8 @@ namespace CE32_console
         }
         internal static bool IsNp(uint tag) { return (tag & 0xffff0000U)==0x4e500000U; }
         static uint U(byte[] b,int p) { return BitConverter.ToUInt32(b,p); }
-        static void Exact(Stream stream,byte[] b) {
-            int p=0,n;while(p<b.Length) {n=stream.Read(b,p,b.Length-p);if(n==0)throw new EndOfStreamException("Truncated NP recording");p+=n;}
+        static void Exact(Stream stream,byte[] b,Func<bool> cancelled=null) {
+            int p=0,n;while(p<b.Length) {if(cancelled!=null && cancelled())throw new OperationCanceledException("NP prefix export cancelled");n=stream.Read(b,p,b.Length-p);if(n==0)throw new EndOfStreamException("Truncated NP recording");p+=n;}
         }
         static uint Crc(byte[] b,int n) {
             uint c=0xffffffffU;for(int i=0;i<n;i++){c^=b[i];for(int bit=0;bit<8;bit++)c=(c>>1)^((c&1)!=0?0xedb88320U:0U);}return ~c;
@@ -101,11 +101,29 @@ namespace CE32_console
         internal static void ExportCalibrated(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration)
         { ExportCore(card,start,directoryEnd,output,cancelled,progress,calibration==null || calibration.Count==0?null:calibration.Copy()); }
 
-        static void ExportCore(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration)
+        // Explicit read-only salvage, not a replacement footer or a finalized
+        // recording. Reuse the validated v6 per-probe geometry and decoder.
+        internal static void ExportPowerInterruptedPrefix(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress)
+        { ExportCore(card,start,directoryEnd,output,cancelled,progress,null,true); }
+
+        sealed class PrefixPoint {
+            internal uint Chunks,LastImu;internal bool HaveImu;
+            internal long ImuGaps;internal long[] Lengths,ApRows,LfpRows;internal uint[] ValidCounts;
+        }
+
+        static void ExportCore(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration,bool recoverPowerCut=false)
         {
+            if(recoverPowerCut) {
+                if(cancelled!=null && cancelled())throw new OperationCanceledException("NP prefix export cancelled");
+                if(card==null || !card.CanRead || !card.CanSeek || start<8192 || start>uint.MaxValue || directoryEnd>uint.MaxValue ||
+                   directoryEnd<start+5 || card.Length/512<start+5)
+                    throw new InvalidDataException("Bounded, readable V1 recording extent required for power-cut prefix export");
+            }
             // V2 shares the CE64 catalog, but its NP2 payload is not NP1 data.
             // Load the same strict decoder used by the WILD release bundle.
             var signature=new byte[8];card.Position=checked((start+3)*512);Exact(card,signature);
+            if(recoverPowerCut && Encoding.ASCII.GetString(signature)!="NPSDLOG1")
+                throw new InvalidDataException("Power-cut prefix export supports only V1 NPSDLOG1 format6");
             if(Encoding.ASCII.GetString(signature)=="N2SDLOG1") {
                 if(start<0 || start>uint.MaxValue)throw new InvalidDataException("Invalid V2 SD start LBA");
                 if(String.IsNullOrWhiteSpace(output) || Directory.Exists(output) || File.Exists(output))
@@ -149,6 +167,7 @@ namespace CE32_console
                 return;
             }
             if(NpMediaExport.IsTyped(NpDownloadCatalog.Sector(card,start+3))) {
+                if(recoverPowerCut)throw new InvalidDataException("Typed media requires its explicit media-prefix recovery entry; no export was started.");
                 if(calibration!=null && calibration.Count!=0)throw new InvalidDataException("Neuropixels calibration does not apply to media recordings.");
                 NpMediaExport.Export(card,start,directoryEnd,output,cancelled,progress);return;
             }
@@ -157,24 +176,37 @@ namespace CE32_console
             var opened=new List<FileStream>();var report=new StringBuilder();
             USB512_interface.NpRecordingSettings recordingSettings=null;
             uint[] validCounts=new uint[3];
+            uint recoveredChunks=0;bool prefixFinished=false;string prefixBoundary="not scanned";
             try {
                 byte[] h=Header(card,start+3,"NPSDLOG1"),f=Header(card,start+4,"NPSDEND1");
                 NpSdGeometry.Validate(h,f,start,directoryEnd);
+                if(recoverPowerCut && (U(h,8)!=6 || U(h,12)==0 || U(h,20)!=1 || U(f,60)<1 || U(f,60)>4 ||
+                    (U(f,60)==3 && U(f,64)==0 && U(f,68)>0)))
+                    throw new InvalidDataException("Explicit prefix recovery requires an initial/incomplete V1 format6 recording");
                 File.WriteAllBytes(Path.Combine(output,"descriptor.bin"),h);
                 File.WriteAllBytes(Path.Combine(output,"footer.bin"),f);
                 uint mask=U(h,16),width=U(h,20),hs=U(h,48),chunks=U(f,68);
+                if(recoverPowerCut) {
+                    long bound=Math.Min(Math.Min(directoryEnd,(long)U(h,44)),card.Length/512);
+                    chunks=(uint)Math.Max(0,(bound-start-hs)/128);
+                    prefixBoundary="Reached bounded extent/stream end";
+                    report.AppendLine("power_interrupted=True").AppendLine("firmware_committed=False").AppendLine("finalized=False").AppendLine("lossless=False")
+                        .AppendLine("recovery_scan_limit_chunks="+chunks).AppendLine("recovery_bound_end_lba="+bound)
+                        .AppendLine("recovery_data_start_lba="+(start+hs)).AppendLine("calibration=none; nominal ADC counts only");
+                }
                 if(calibration!=null){calibration.RequireModel(false,(int)mask);calibration.Save(output);}
                 bool sensors=U(h,8)>=4,paired=U(h,80)==2;
                 recordingSettings=USB512_interface.NpRecordingSettings.Saved(output,false,(int)U(h,24),(int)mask,U(h,8),U(h,12),"sd_export");
                 recordingSettings.Context("dat_files","npN_ap.dat, npN_lfp.dat in physical probe order; analogin.dat");
                 recordingSettings.Context("configuration_archive_file","CE_params.bin; exact probe selection not stored in this SD format");
+                if(recoverPowerCut){recordingSettings.Context("power_cut_prefix_export",true);recordingSettings.Context("recording_finalized",false);recordingSettings.Context("prefix_calibration","none; nominal ADC counts only");}
                 if(calibration!=null)recordingSettings.Context("adc_calibration_file",USB512_interface.NpCalibrationSet.ManifestName);
                 report.AppendLine("format_version="+U(h,8)).AppendLine("probe_mask="+mask).AppendLine("probe_count="+NpSdGeometry.Count(mask));
                 report.AppendLine("ap_sample_rate_hz="+U(h,24)).AppendLine("lfp_sample_rate_hz="+(U(h,24)/12.0).ToString("0.######",CultureInfo.InvariantCulture))
                     .AppendLine("lfp_rate_numerator="+U(h,24)).AppendLine("lfp_rate_denominator=12");
                 report.AppendLine("misc_snapshot=chunk_collection_time").AppendLine("battery_valid=False");
                 report.AppendLine("session="+U(h,12)).AppendLine("start_lba="+start).AppendLine("reserved_end_lba="+directoryEnd)
-                    .AppendLine("committed_chunks="+chunks).AppendLine("channels_per_band=384")
+                    .AppendLine("committed_chunks="+U(f,68)).AppendLine("channels_per_band=384")
                     .AppendLine("sample_format=little-endian signed int16; sample-major, channel0..383")
                     .AppendLine(calibration==null?"sample_units=nominal ADC counts; no gain calibration or microvolt conversion":"sample_units=calibrated nominal ADC counts; factory host correction; no hardware trim or microvolt conversion claim")
                     .AppendLine("sample_transform_version=1").AppendLine(calibration==null?"sample_transform=512 - raw10":"sample_transform=factory digital ADC threshold/offset; 512 - corrected_raw10; factory gain")
@@ -206,19 +238,38 @@ namespace CE32_console
                 }
                 int laneBytes=(int)U(h,32),payloadBytes=laneBytes*4;
                 var raw=new byte[65024];var m=new byte[512];var chronological=new byte[payloadBytes/width];var sampleBytes=new byte[768];
+                var firstPoint=new PrefixPoint[3];var lastPoint=new PrefixPoint[3];var rejectedDecoder=new bool[3];
+                Func<uint,PrefixPoint> savePoint=index=>new PrefixPoint{Chunks=index,Lengths=opened.Select(file=>file.Position).ToArray(),
+                    ApRows=(long[])apRows.Clone(),LfpRows=(long[])lfpRows.Clone(),ValidCounts=(uint[])validCounts.Clone(),
+                    LastImu=lastImu,HaveImu=haveImu,ImuGaps=imuGaps};
+                Action<PrefixPoint> restorePoint=point=>{
+                    for(int i=0;i<opened.Count;i++){opened[i].SetLength(point.Lengths[i]);opened[i].Position=point.Lengths[i];}
+                    Array.Copy(point.ApRows,apRows,3);Array.Copy(point.LfpRows,lfpRows,3);Array.Copy(point.ValidCounts,validCounts,3);
+                    lastImu=point.LastImu;haveImu=point.HaveImu;imuGaps=point.ImuGaps;recoveredChunks=point.Chunks;
+                };
+                var stagedAp=recoverPowerCut?new MemoryStream():null;var stagedLfp=recoverPowerCut?new MemoryStream():null;
+                Exception prefixError=null;
                 card.Position=(start+hs)*512;
                 for(uint chunk=0;chunk<chunks;chunk++) {
-                    if(cancelled!=null && cancelled())throw new OperationCanceledException("NP export cancelled; saved outputs are incomplete");
-                    Exact(card,raw);Exact(card,m);
                     int selected=paired?NpSdGeometry.Probe(mask,chunk):-1;
+                    PrefixPoint point=recoverPowerCut?savePoint(chunk):null;
+                    long nativeBefore=recoverPowerCut?raws[selected].Position:0;
+                    bool qualifiedBefore=recoverPowerCut && decoders[selected].FramesChecked>0;
+                    string phase="read";
+                    if(recoverPowerCut){if(firstPoint[selected]==null)firstPoint[selected]=point;stagedAp.SetLength(0);stagedAp.Position=0;stagedLfp.SetLength(0);stagedLfp.Position=0;}
+                    try {
+                    if(cancelled!=null && cancelled())throw new OperationCanceledException("NP export cancelled; saved outputs are incomplete");
+                    Exact(card,raw,recoverPowerCut?cancelled:null);Exact(card,m,recoverPowerCut?cancelled:null);
+                    phase="descriptor";
                     if(paired) {
                         var d=new byte[512];Buffer.BlockCopy(raw,61632,d,0,512);
                         if(Encoding.ASCII.GetString(d,0,8)!="NPSDBLK1" || U(d,508)!=Crc(d,508))throw new InvalidDataException("NP chunk descriptor CRC/signature failure");
                         NpSdGeometry.Descriptor(h,d,chunk,start+hs+(long)chunk*128);
                         if(U(h,8)==6)decoders[selected].DeclareFixedWord((ushort)U(d,100));
-                    }
+                    }else NpV1StoreBinding.Validate(h,raw,61632);
                     for(int j=payloadBytes+(sensors?164:0);j<raw.Length;j++)
                         if(!(paired && j>=61632 && j<62144) && raw[j]!=0)throw new InvalidDataException("Nonzero NP ephys transport padding");
+                    phase="sensor";
                     if(sensors) {
                         uint valid=SensorRecord(raw,payloadBytes,chunk,sensorBin,sensorCsv);
                         for(int i=0;i<3;i++)if((valid&(1U<<i))!=0)validCounts[i]++;
@@ -228,8 +279,10 @@ namespace CE32_console
                             lastImu=seq;haveImu=true;
                         }
                     }
+                    phase="misc";
                     for(int row=0;row<16;row++)if(BitConverter.ToUInt16(m,row*32+22)!=(ushort)(chunk*16+row) || U(m,row*32+28)!=chunk)
                         throw new InvalidDataException("NP misc sequence discontinuity");
+                    phase="write";
                     ephys.Write(raw,0,payloadBytes);misc.Write(m,0,m.Length);
                     for(int p=0;p<3;p++)if(decoders[p]!=null && (!paired || p==selected)) {
                         int column=width==1?0:p;
@@ -237,19 +290,52 @@ namespace CE32_console
                             chronological[4*i+lane]=raw[lane*laneBytes+i*width+column];
                         raws[p].Write(chronological,0,chronological.Length);
                         int probe=p;
+                        phase="decode";
                         decoders[p].Feed(chronological,(ap,n,lfp,l)=>{
                             if(calibration!=null)calibration.Correct(probe+1,ap,n,lfp,l);
                             apRows[probe]+=n;lfpRows[probe]+=l;
-                            for(int row=0;row<n;row++){Buffer.BlockCopy(ap,row*768,sampleBytes,0,768);aps[probe].Write(sampleBytes,0,768);}
-                            for(int row=0;row<l;row++){Buffer.BlockCopy(lfp,row*768,sampleBytes,0,768);lfps[probe].Write(sampleBytes,0,768);}
+                            for(int row=0;row<n;row++){Buffer.BlockCopy(ap,row*768,sampleBytes,0,768);if(recoverPowerCut)stagedAp.Write(sampleBytes,0,768);else aps[probe].Write(sampleBytes,0,768);}
+                            for(int row=0;row<l;row++){Buffer.BlockCopy(lfp,row*768,sampleBytes,0,768);if(recoverPowerCut)stagedLfp.Write(sampleBytes,0,768);else lfps[probe].Write(sampleBytes,0,768);}
                         });
+                        if(recoverPowerCut){phase="write";stagedAp.WriteTo(aps[p]);stagedLfp.WriteTo(lfps[p]);}
                     }
+                    if(recoverPowerCut){lastPoint[selected]=point;recoveredChunks=chunk+1;}
                     int percent=(int)((chunk+1)*100L/chunks);
                     if(progress!=null && percent!=lastProgress){lastProgress=percent;progress(percent);}
+                    } catch(Exception ex) {
+                        if(!recoverPowerCut)throw;
+                        PrefixPoint keep=point;
+                        if(phase=="decode") {
+                            rejectedDecoder[selected]=true;
+                            // Feed checks frames across chunk seams. If the
+                            // rejected frame began in the prior native chunk,
+                            // remove that chunk too; never retain a torn frame.
+                            long failedAt=decoders[selected].StartupDiscardedBytes+decoders[selected].FramesChecked*60;
+                            if(!qualifiedBefore || decoders[selected].LfpPhaseErrors!=0)keep=firstPoint[selected];
+                            else if(failedAt<nativeBefore && lastPoint[selected]!=null)keep=lastPoint[selected];
+                        }
+                        restorePoint(keep);
+                        prefixBoundary="chunk "+chunk+" "+phase+": "+ex.Message;
+                        bool storedBoundary=ex is InvalidDataException || ex is EndOfStreamException ||
+                            ((phase=="descriptor" || phase=="decode") && ex is IOException);
+                        if(!storedBoundary)prefixError=ex;
+                        break;
+                    }
                 }
-                for(int p=0;p<3;p++)if(decoders[p]!=null && chunks>0){decoders[p].Complete();string name="np"+(p+1);
-                    report.AppendLine(name+"_fixed_word="+decoders[p].ExpectedFixedWord).AppendLine(name+"_frames="+decoders[p].FramesChecked).AppendLine(name+"_ap_rows="+apRows[p]).AppendLine(name+"_lfp_rows="+lfpRows[p])
-                        .AppendLine(name+"_frame_errors="+decoders[p].FrameErrors).AppendLine(name+"_counter_errors="+decoders[p].CounterErrors)
+                if(recoverPowerCut) {
+                    PrefixPoint trim=null;
+                    for(int p=0;p<3;p++)if(lastPoint[p]!=null && lastPoint[p].Chunks<recoveredChunks && !rejectedDecoder[p]) {
+                        try{decoders[p].Complete();}
+                        catch(IOException ex){var keep=decoders[p].FramesChecked==0 || decoders[p].LfpPhaseErrors!=0?firstPoint[p]:lastPoint[p];
+                            if(trim==null || keep.Chunks<trim.Chunks)trim=keep;
+                            prefixBoundary+="; probe "+(p+1)+" final partial frame: "+ex.Message;}
+                    }
+                    if(trim!=null)restorePoint(trim);
+                    prefixFinished=prefixError==null;
+                }
+                for(int p=0;p<3;p++)if(decoders[p]!=null && chunks>0){if(!recoverPowerCut)decoders[p].Complete();string name="np"+(p+1);
+                    report.AppendLine(name+"_fixed_word="+decoders[p].ExpectedFixedWord).AppendLine(name+(recoverPowerCut?"_frames_scanned=":"_frames=")+decoders[p].FramesChecked).AppendLine(name+"_ap_rows="+apRows[p]).AppendLine(name+"_lfp_rows="+lfpRows[p])
+                        .AppendLine(name+(recoverPowerCut?"_scanned_frame_errors=":"_frame_errors=")+decoders[p].FrameErrors).AppendLine(name+(recoverPowerCut?"_scanned_counter_errors=":"_counter_errors=")+decoders[p].CounterErrors)
                         .AppendLine(name+"_relocks="+decoders[p].Resynchronizations).AppendLine(name+"_startup_discarded_bytes="+decoders[p].StartupDiscardedBytes)
                         .AppendLine(name+"_first_superframe_counter="+decoders[p].FirstSuperframeCounter).AppendLine(name+"_initial_lfp_slot="+decoders[p].InitialLfpSlot)
                         .AppendLine(name+"_startup_discarded_lfp_superframes="+decoders[p].StartupDiscardedLfpSuperframes).AppendLine(name+"_lfp_phase_errors="+decoders[p].LfpPhaseErrors)
@@ -258,12 +344,16 @@ namespace CE32_console
                 report.AppendLine("imu_valid="+(validCounts[0]>0)).AppendLine("valid_imu_snapshots="+validCounts[0])
                     .AppendLine("valid_mag_snapshots="+validCounts[1]).AppendLine("valid_env_snapshots="+validCounts[2]);
                 foreach(var file in opened)file.Flush();
-                complete=chunks>0 && U(f,60)==3 && U(f,64)==0;
-                report.AppendLine("download_complete=True").AppendLine("stored_state="+U(f,60)).AppendLine("stored_fault="+U(f,64));
-                if(!complete)failure=chunks==0?"No committed samples; recording metadata retained.":"Firmware recording incomplete; only its verified committed prefix was exported.";
-            } catch(Exception ex){failure=ex.Message;throw;}
+                complete=!recoverPowerCut && chunks>0 && U(f,60)==3 && U(f,64)==0;
+                report.AppendLine("download_complete="+(!recoverPowerCut)).AppendLine("stored_state="+U(f,60)).AppendLine("stored_fault="+U(f,64));
+                if(recoverPowerCut){failure="Power-interrupted, incomplete recording; recovered prefix is not firmware-committed or lossless.";if(prefixError!=null)throw prefixError;}
+                else if(!complete)failure=chunks==0?"No committed samples; recording metadata retained.":"Firmware recording incomplete; only its verified committed prefix was exported.";
+            } catch(Exception ex){if(recoverPowerCut)prefixFinished=false;failure=ex.Message;throw;}
             finally {
                 foreach(var file in opened)file.Dispose();
+                if(recoverPowerCut)report.AppendLine("power_cut_prefix_export=True").AppendLine("recovered="+(recoveredChunks>0)).AppendLine("recovered_prefix_chunks="+recoveredChunks)
+                    .AppendLine("prefix_export_finished="+prefixFinished).AppendLine("prefix_boundary="+prefixBoundary)
+                    .AppendLine("prefix_limits=contiguous whole chunks only; partial final NP1 frame retained natively but never converted; scanned decoder counters may include the excluded boundary; no repair, footer synthesis or sample padding");
                 File.WriteAllText(Path.Combine(output,"capture_status.txt"),"complete="+complete+"\r\nfailure="+failure+"\r\n"+report.ToString());
                 if(recordingSettings!=null) {
                     recordingSettings.Streams(true,validCounts[0]>0,false);

@@ -362,7 +362,9 @@ namespace USB512_interface
             }
             uint expected = magic == 0x31444c4e ? 0x31524c4eU : magic == NpV2SdControl.RequestMagic ? NpV2SdControl.ReplyMagic :
                 magic == NpV2OnlineClock.RequestMagic ? NpV2OnlineClock.ReplyMagic : magic;
-            return BitConverter.ToUInt32(response, 0) == expected && BitConverter.ToUInt32(response, 4) == BitConverter.ToUInt32(request, 4) &&
+            // FORMAT2 opts into a V1 filesystem; its status receipt ABI stays1.
+            uint replyVersion=command==0xb9&&NpV1BleProtocol.IsStoreV2FormatRequest(request)?1U:BitConverter.ToUInt32(request,4);
+            return BitConverter.ToUInt32(response, 0) == expected && BitConverter.ToUInt32(response, 4) == replyVersion &&
                 BitConverter.ToUInt32(response, 8) == BitConverter.ToUInt32(request, 8) && BitConverter.ToUInt32(response, 12) == BitConverter.ToUInt32(request, 12);
         }
         internal static int DeviceVersion(byte[] body,uint id)

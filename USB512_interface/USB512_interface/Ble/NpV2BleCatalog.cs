@@ -30,6 +30,7 @@ namespace USB512_interface
         internal const uint Capability=0x00400000,Last=1U<<16,DeleteAllowed=1U<<17,MetadataValid=1U<<18,Incomplete=1U<<19;
         internal const uint CatalogFull=1U<<16,CatalogRecovery=1U<<17,CatalogRecoverable=1U<<18,CatalogQuarantinable=1U<<19,CatalogFlags=0x000f0000;
         internal const uint MaxRecords=1024U*63U;
+        internal const string AppendDiagnostic="v14: Complete* describes stored metadata only; download verifies payload and logical coverage. Incomplete recordings may contain gaps. Physical/prefix/high-water counts are not reported by this BLE summary.";
         readonly Func<Task<NpSdStatus>> readStatus;
         readonly Func<byte[],Task<byte[]>> exchange;
         readonly Func<byte[],Task<NpSdStatus>> send;
@@ -91,12 +92,24 @@ namespace USB512_interface
             var entry=new NpBleRecord{Id=ordinal+1,Start=NpSdGeometry.U(body,32),End=NpSdGeometry.U(body,36),Cookie=NpSdGeometry.U(body,40),Session=NpSdGeometry.U(body,44),Hz=NpSdGeometry.U(body,48),Mask=NpSdGeometry.U(body,52),Flags=NpSdGeometry.U(body,56)};
             uint format=entry.Flags&255,state=(entry.Flags>>8)&255;bool last=ordinal==info.Count-1;
             if(entry.Start!=expectedStart || entry.End<=(ulong)entry.Start+4 || entry.End>info.Capacity || (entry.Flags&0xfff00000U)!=0 ||
-                (format!=0 && format!=8 && format!=11 && format!=12 && format!=13) || (state!=0 && state!=1 && state!=3 && state!=4) ||
+                (format!=0 && format!=8 && format!=11 && format!=12 && format!=13 && format!=14) || (state!=0 && state!=1 && state!=3 && state!=4) ||
                 ((entry.Flags&Last)!=0)!=last)throw new IOException("Invalid V2 catalog entry geometry/flags.");
             if((entry.Flags&MetadataValid)!=0 && (format==0 || entry.Session==0 || (format==8?entry.Hz!=0 || entry.Mask!=0:!NpV2SdControl.IsProfile(entry.Mask,entry.Hz))))throw new IOException("Invalid V2 recording metadata summary.");
+            if(format==14 && (entry.Flags&MetadataValid)!=0 &&
+                (state==0 || (state==3)==((entry.Flags&Incomplete)!=0)))
+                throw new IOException("Contradictory v14 stored state/incomplete flags. Refresh recordings; no payload completion was inferred.");
             if((entry.Flags&DeleteAllowed)!=0 && (!last || (entry.Flags&MetadataValid)==0 || (state!=3 && state!=4) || (info.Flags&~CatalogFull)!=0))throw new IOException("Invalid V2 delete eligibility.");
             if(last && (entry.Start!=info.LastStart || entry.End!=info.LastEnd || entry.Cookie!=info.LastCookie))throw new IOException("V2 catalog tail cookie/extent changed.");
             return entry;
+        }
+        internal static string RecordStatus(NpBleRecord record)
+        {
+            uint state=(record.Flags>>8)&255;
+            if((record.Flags&255)==14){
+                if((record.Flags&MetadataValid)==0)return "Unverified";
+                return state==3 && (record.Flags&Incomplete)==0?"Complete*":"Incomplete";
+            }
+            return state==3?"Complete":state==4?"Failed":state==1?"Reserved":"Unverified";
         }
         internal static bool SameRecord(NpBleRecord a,NpBleRecord b,bool compareFlags=true)
         {return a.Id==b.Id && a.Start==b.Start && a.End==b.End && a.Cookie==b.Cookie && a.Session==b.Session && a.Hz==b.Hz && a.Mask==b.Mask && (!compareFlags || a.Flags==b.Flags);}

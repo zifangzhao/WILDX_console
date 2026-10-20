@@ -169,6 +169,79 @@ namespace USB512_interface
             if(U(info,0)!=0x3144504e || U(info,4)!=1 || U(info,28)!=1)throw new InvalidDataException("Not a supported read-only NP SD download service.");
             return new Status{Download=true,Role=3,Busy=U(info,16),Description="Standalone SD download firmware. Split mode switching / app update unavailable."};
         }
+        internal sealed class SdFormatInfo
+        {
+            internal uint State,Error,Transaction,Capacity,NextStart,Capabilities;
+            internal string Uid,Cid;
+            internal byte[] Bytes;
+            internal bool Ready {get{return (Capabilities&3U)==3U && Capacity>8192 && State!=1 && State!=2;}}
+            internal string Description {get{return "V1 "+Uid+"\r\nSD CID "+Cid+"\r\n"+(Capacity*512.0/1073741824).ToString("N2")+" GiB ("+Capacity+" sectors)";}}
+        }
+        internal static SdFormatInfo ParseSdFormatInfo(byte[] b,string uid)
+        {
+            if(b==null || b.Length!=64 || U(b,0)!=0x3153464e || U(b,4)!=1 ||
+               U(b,8)>4 || (U(b,56)&~3U)!=0 || U(b,60)!=Crc(b,0,60))
+                throw new InvalidDataException("Invalid V1 USB format capability/receipt. Nothing was retried.");
+            string actual=U(b,24).ToString("X8")+U(b,28).ToString("X8")+U(b,32).ToString("X8");
+            if(!String.Equals(actual,uid,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("USB format logger UID changed.");
+            return new SdFormatInfo{State=U(b,8),Error=U(b,12),Transaction=U(b,16),Capacity=U(b,20),Uid=actual,
+                Cid=U(b,36).ToString("X8")+U(b,40).ToString("X8")+U(b,44).ToString("X8")+U(b,48).ToString("X8"),
+                NextStart=U(b,52),Capabilities=U(b,56),Bytes=(byte[])b.Clone()};
+        }
+        internal static bool SameSdFormatCard(SdFormatInfo a,SdFormatInfo b)
+        {return a!=null && b!=null && a.Uid==b.Uid && a.Cid==b.Cid && a.Capacity==b.Capacity;}
+        internal static byte[] SdFormatRequest(SdFormatInfo info,uint transaction)
+        {
+            if(info==null || !info.Ready || transaction==0 || transaction==info.Transaction)
+                throw new IOException("V1 SD card is absent, busy, unsupported, or transaction is not fresh.");
+            var b=new byte[64];Put(b,0,0x3146534e);Put(b,4,1);Put(b,8,1);Put(b,12,transaction);Put(b,16,info.Capacity);
+            Buffer.BlockCopy(info.Bytes,24,b,20,28);Put(b,48,0x46524d54);Put(b,60,Crc(b,0,60));return b;
+        }
+        // One mutation only. A lost OUT acknowledgement or receipt never replays Format.
+        internal static void RunSdFormat(SdFormatInfo expected,Func<byte[]> readInfo,Func<bool> idle,Action<byte[]> send)
+        {
+            if(expected==null || !expected.Ready || !idle())throw new IOException("Stop capture/download before USB Format. Nothing sent.");
+            var fresh=ParseSdFormatInfo(readInfo(),expected.Uid);
+            if(!fresh.Ready || !SameSdFormatCard(expected,fresh))throw new IOException("The confirmed SD card changed or is busy. Nothing sent.");
+            uint txn=unchecked(fresh.Transaction+1U);if(txn==0)txn=1;
+            byte[] request=SdFormatRequest(fresh,txn);
+            if(!idle())throw new IOException("V1 became busy. Nothing sent.");
+            send(request);
+            var watch=System.Diagnostics.Stopwatch.StartNew();
+            while(watch.ElapsedMilliseconds<20000){
+                var reply=ParseSdFormatInfo(readInfo(),expected.Uid);
+                if(!SameSdFormatCard(expected,reply))throw new IOException("SD identity changed; format not confirmed. No retry sent.");
+                if(reply.Transaction!=txn)throw new IOException("No matching USB format transaction; outcome unknown. No retry sent.");
+                if(reply.State==4)throw new IOException("Firmware format failed (error "+reply.Error+"). Inspect the card before retrying.");
+                if(reply.State==3){
+                    if(reply.Error!=0 || reply.NextStart!=8192 || (reply.Capabilities&3U)!=3U)
+                        throw new IOException("USB format completion was not verified. No retry sent.");
+                    return;
+                }
+                if(reply.State!=1 && reply.State!=2)throw new IOException("Unexpected USB format state; outcome unknown. No retry sent.");
+                Thread.Sleep(50);
+            }
+            throw new IOException("USB format completion timed out; outcome unknown. Read status before retrying. No command replayed.");
+        }
+        bool SdFormatIdle()
+        {var s=ReadStatus();return s.Split && !s.Recovery && s.Role==3 && s.Busy==0 && s.PendingMode==0;}
+        internal SdFormatInfo InspectSdFormat()
+        {
+            if(!SdFormatIdle())throw new IOException("USB Format requires this V1 to be idle in download mode.");
+            byte[] reply;
+            try{reply=Control(0x79,0,64);}catch(Win32Exception error){
+                if(error.NativeErrorCode!=1 && error.NativeErrorCode!=31)throw;
+                throw new IOException("Connected V1 USB firmware does not support guarded USB Format. Install the matching USB-service update. No erase command was sent.",error);
+            }
+            var info=ParseSdFormatInfo(reply,target.Uid);
+            if(!info.Ready)throw new IOException("This V1 does not report a ready SD card and guarded USB Format capability.");return info;
+        }
+        internal void FormatSd(SdFormatInfo confirmed)
+        {RunSdFormat(confirmed,()=>Control(0x79,0,64),SdFormatIdle,b=>{
+            uint n;var setup=new NpDownloadNative.WINUSB_SETUP_PACKET{RequestType=0x40,Request=0x7a,Length=64};
+            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,b,64,out n,IntPtr.Zero))throw new IOException("USB format acknowledgement lost; outcome unknown. No retry sent.",Error());
+            if(n!=64)throw new IOException("Short USB format acknowledgement; outcome unknown. No retry sent.");
+        });}
         internal static Status ParseSplitStatus(byte[] state,string uid)
         {
             if(state==null || state.Length!=32 || !Regex.IsMatch(uid??"",@"\A[0-9a-fA-F]{24}\z") ||

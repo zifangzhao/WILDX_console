@@ -4,6 +4,7 @@ namespace CE32_console {
  internal static class NpV2SdControl {
   internal const uint RequestMagic=0x32444c4e,ReplyMagic=0x32524c4e;
   internal const uint Live7500=0x00100000U,Stored7500=0x00200000U;
+  internal const uint CatalogDegraded=0x00800000U,OverwriteAvailable=0x04000000U;
   internal static uint NextId(NpSdStatus s){
    if(s.LastId!=0)return NpSdControl.NextId(s);
    uint id=BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(),0);return id==0?1:id;
@@ -43,6 +44,21 @@ namespace CE32_console {
    if(format)Buffer.BlockCopy(BitConverter.GetBytes(0x3850534eU),0,b,16,4);
    Buffer.BlockCopy(BitConverter.GetBytes(NpSdControl.Crc(b,60)),0,b,60,4);return b;
   }
+  // With this offer, Start is a proposed discard boundary, not safe free space.
+  internal static bool HasOverwriteOffer(NpSdStatus s){return s!=null&&(s.Flags&OverwriteAvailable)!=0;}
+  internal static bool CanOverwriteFromLastKnownPosition(NpSdStatus s){
+   const uint required=CatalogDegraded|OverwriteAvailable|131072U|17U;
+   return CanPrepareStorage(s)&&s.State==1&&s.Error==0&&s.Fault==0&&(s.Flags&required)==required&&
+    s.Start>=8192&&s.Start%8192==0&&s.Start<s.Capacity;
+  }
+  internal static byte[] OverwriteRequest(NpSdStatus s,uint id,uint expectedStart,uint expectedCapacity){
+   if(!CanOverwriteFromLastKnownPosition(s)||s.Start!=expectedStart||s.Capacity!=expectedCapacity)
+    throw new IOException("The overwrite position or card changed. Read status and confirm again; no command sent.");
+   var b=Request(0,id);uint[] words={12U,0x574f324eU,expectedStart,expectedCapacity};
+   Buffer.BlockCopy(BitConverter.GetBytes(words[0]),0,b,8,4);
+   for(int i=1;i<words.Length;i++)Buffer.BlockCopy(BitConverter.GetBytes(words[i]),0,b,12+i*4,4);
+   Buffer.BlockCopy(BitConverter.GetBytes(NpSdControl.Crc(b,60)),0,b,60,4);return b;
+  }
   internal static bool CanConfigure(NpSdStatus s){
    return s!=null&&!s.Busy &&
     (s.State==1||s.State==5||s.State==7||(s.State==0&&(s.Flags&16384)!=0));
@@ -77,14 +93,16 @@ namespace CE32_console {
    if(!ValidStatus(s))throw new IOException("Unsupported V2 capability/status response");
    string[] names={"SD not mounted","Idle","Preparing probes","Recording","Draining / verifying SD","Complete","Armed for UTC start","Cancelled before capture"};
    string state=s.State==255?(StopAlreadySatisfied(s)?"Stopped after recording failure":"Failed — finalizing"):names[s.State];
-   return "WILD-X V2 / NP2 — "+state+"\r\nDevice-selected: "+ProbePrefix(s.Mask)+", "+s.Hz.ToString("N0")+" samples/s (no separate LFP stream)"+
-    "\r\nCommitted: "+s.Chunks.ToString("N0")+" blocks / "+(s.Chunks*46592.0/1e6).ToString("F2")+" MB"+
-    "\r\nDevice fault: "+s.Fault+"; command error: "+s.Error+
+   return "WILD-X V2 — "+state+"\r\n"+ProbePrefix(s.Mask)+", "+s.Hz.ToString("N0")+" samples/s"+
+    (s.Fault==0?"":"\r\nRecording error: fault "+s.Fault+". Saved data may be incomplete.")+
+    (s.Error==0?"":"\r\nDevice command failed: error "+s.Error)+
+    (HasOverwriteOffer(s)?"\r\nRecording boundary unknown — Overwrite from last known position… requires confirmation.":
+     (s.Flags&CatalogDegraded)!=0?"\r\nSD catalog degraded — some recordings may be incomplete.":"")+
     ((s.Flags&8)!=0?"\r\nCommand queued — not yet confirmed running/stopped.":"")+
     ((s.Flags&64)!=0?"\r\nThis firmware requires a restart before another session.":"");
   }
   internal static bool CanStart(NpSdStatus s){
-   return s!=null && !s.Busy && s.Fault==0 && SupportsCurrentLiveProfile(s) && !IsFull(s) && !NeedsRecovery(s) &&
+   return s!=null && !s.Busy && s.Fault==0 && SupportsCurrentLiveProfile(s) && !IsFull(s) && !NeedsRecovery(s) && !HasOverwriteOffer(s) &&
     (s.State==1 || ((s.Flags&512)!=0 && (s.State==5 || s.State==7)));
   }
   internal static bool StopAlreadySatisfied(NpSdStatus s){
@@ -120,6 +138,7 @@ namespace CE32_console {
   internal static string OnlineState(NpSdStatus s){
    if(s==null)return "Reading device status...";
    if((s.Flags&8)!=0)return "Command sent — waiting for device confirmation...";
+   if(HasOverwriteOffer(s))return "SD recording boundary unknown — Overwrite from last known position… requires confirmation";
    if(s.State==1||s.State==5||s.State==7){
     if(NeedsRecovery(s))return RecoveryRequiresUpgrade(s)?"SD mounted — firmware does not advertise stored 7.5-kHz catalog recovery; upgrade before recovery; raw download remains available":CanQuarantine(s)?"SD mounted — preserve interrupted allocation before Start; valid sample count unknown":(s.Flags&262144)!=0?"SD mounted — recover saved recording end before Start":"SD mounted — interrupted recording needs PC-side recovery; data preserved";
     if(IsFull(s))return "SD mounted — card full; existing recordings retained";

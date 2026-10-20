@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 namespace CE32_console {
  // Only a completed send followed by a missing receipt is eligible. Transport
  // write failures (possibly partial frames) and device rejections are not.
@@ -31,6 +32,10 @@ namespace CE32_console {
   internal const uint Repeat=512, Storage=16384, Waiting=131072, Preparing=262144;
   internal const uint Scaled20=524288, RateProfiles=1048576;
   internal const uint MediaCapability=0x200000, MediaSelected=0x400000;
+  internal const uint CatalogReadOnly=0x01000000;
+  // Versioned V1 filesystem, not the V2 logger board or payload format.
+  internal const uint StoreV2=0x02000000,StoreV2Selected=0x04000000;
+  internal static bool HasReadOnlyCatalog(NpSdStatus s){return s!=null&&(s.Flags&CatalogReadOnly)!=0&&(s.Flags&16)==0&&s.Start==0&&s.Capacity>8192;}
   internal static bool IsMedia(NpSdStatus s){return s!=null&&s.Mask==0&&s.Hz==0&&(s.Flags&(MediaCapability|MediaSelected))==(MediaCapability|MediaSelected);}
   internal static bool TheoreticalMode(uint mask,uint hz){
    if(mask<1||mask>7||(hz!=7500&&hz!=15000&&hz!=20000&&hz!=30000))return false;
@@ -55,18 +60,38 @@ namespace CE32_console {
   internal static bool CanFormat(NpSdStatus s,uint expectedCapacity){
    return CanManageStorage(s)&&expectedCapacity>8192&&s.Capacity==expectedCapacity&&(s.Flags&1)!=0;
   }
-  internal static bool CanStart(NpSdStatus s){return CanConfigure(s)&&CanSelect(s,s.Mask,s.Hz)&&(s.Mask!=0||IsMedia(s))&&(s.Flags&17)==17&&s.Start>=8192&&s.Capacity>s.Start;}
+  internal static bool CanStart(NpSdStatus s){return CanConfigure(s)&&(s.Flags&CatalogReadOnly)==0&&CanSelect(s,s.Mask,s.Hz)&&(s.Mask!=0||IsMedia(s))&&(s.Flags&17)==17&&s.Start>=8192&&s.Capacity>s.Start;}
   // Manual SELECT/START reinitialize a finalized capture in existing firmware.
-  // Scheduled START, MODE and MOUNT/RECOVER retain their fault-zero contracts.
+  // Scheduled START, MODE and RECOVER retain their fault-zero contracts.
   internal static bool CanSelectProfile(NpSdStatus s,uint mask,uint hz){return CanManageStorage(s)&&(s.Flags&1)!=0&&CanSelect(s,mask,hz);}
-  internal static bool CanManualStart(NpSdStatus s){return CanManageStorage(s)&&CanSelect(s,s.Mask,s.Hz)&&(s.Mask!=0||IsMedia(s))&&(s.Flags&17)==17&&s.Start>=8192&&s.Capacity>s.Start;}
-  internal static bool CanMount(NpSdStatus s){return CanConfigure(s)&&CanManageStorage(s)&&(s.Flags&Storage)!=0&&s.Capacity>8192;}
+  internal static bool CanManualStart(NpSdStatus s){return CanManageStorage(s)&&(s.Flags&CatalogReadOnly)==0&&CanSelect(s,s.Mask,s.Hz)&&(s.Mask!=0||IsMedia(s))&&(s.Flags&17)==17&&s.Start>=8192&&s.Capacity>s.Start;}
+  internal static bool CanMount(NpSdStatus s){return CanManageStorage(s)&&(s.Flags&Storage)!=0&&(s.Capacity==0||s.Capacity>8192);}
+  // Explicit MOUNT may recover an approved card after failed initialization.
+  // Firmware owns CID admission; only fresh, correlated mounted STATUS can
+  // establish a previously unavailable capacity for this dialog.
+  internal static uint RequireMountStatusCompleted(NpSdStatus s,uint expectedCapacity,uint mutationId){
+   if(s==null||s.Operation!=0||s.RequestId==0||s.Capacity<=8192||!CanMount(s)||
+      (expectedCapacity!=0&&s.Capacity!=expectedCapacity))
+    throw new IOException("V1 mount capacity was not confirmed by fresh status. Read status; no command replayed.");
+   RequireStorageLayoutCompleted(s,s.Capacity,mutationId,false,0);return s.Capacity;
+  }
   internal static void RequireStorageCompleted(NpSdStatus s,uint capacity,uint mutationId,bool format){
    if(mutationId==0||!CanManageStorage(s)||s.Capacity!=capacity||s.LastId!=mutationId||s.Error!=0||(s.Flags&16)==0||
       (format&&s.Start!=8192))throw new IOException("V1 storage operation not confirmed by a stopped, mounted card. Read status; no command replayed.");
   }
+  internal static void RequireStorageLayoutCompleted(NpSdStatus s,uint capacity,uint mutationId,bool format,uint requestedLayout){
+   RequireStorageCompleted(s,capacity,mutationId,format);
+   if((format?(requestedLayout!=1&&requestedLayout!=2):requestedLayout!=0)||
+      requestedLayout==2&&(s.Flags&(StoreV2|StoreV2Selected))!=(StoreV2|StoreV2Selected))
+    throw new IOException("Requested V1 filesystem layout was not confirmed. Read status; no command replayed.");
+  }
   internal static string StateText(NpSdStatus s){
    if(s==null)return "Reading V1 status...";
+   if(CanManageStorage(s)){
+    string storage=HasReadOnlyCatalog(s)?"SD catalog read-only — readable entries available; recording and deletion disabled.":
+     (s.Flags&16)!=0&&s.Start>=s.Capacity&&s.Capacity>8192?"SD card full — saved recordings available; recording disabled.":null;
+    if(storage!=null)return storage+(s.Fault==0?"":" Last recording error: "+FaultText(s)+" (fault "+s.Fault+"); saved data may be incomplete.");
+   }
    if(s.Fault!=0||s.State==4)return (StopAlreadySatisfied(s)?"Stopped after recording error — ":"Recording error — finalizing — ")+FaultText(s)+" (state "+s.State+", fault "+s.Fault+"). Saved data may be incomplete.";
    if((s.Flags&Waiting)!=0)return "Waiting for scheduled start...";
    if((s.Flags&Preparing)!=0)return "Preparing probes / storage — capture has not started";
@@ -109,9 +134,27 @@ namespace CE32_console {
   }
   internal static byte[] Format(NpSdStatus s,uint expectedCapacity){
    if(!CanFormat(s,expectedCapacity))throw new IOException("Stopped, writable V1 with the confirmed card capacity required.");
-   return NpSdControl.Request(5,NpSdControl.NextId(s),flags:0x46524d54U);
+   if((s.Flags&StoreV2)==0)return NpSdControl.Request(5,NpSdControl.NextId(s),flags:0x46524d54U);
+   var nonce=new byte[8];ulong epoch;
+   using(var random=RandomNumberGenerator.Create()){do{random.GetBytes(nonce);epoch=BitConverter.ToUInt64(nonce,0);}while(epoch==0);}
+   return FormatWithEpoch(s,expectedCapacity,epoch);
   }
-  internal static byte[] Recover(NpSdStatus s,uint id){var b=Mount(s,id);Put(b,8,9);Put(b,60,NpSdControl.Crc(b,60));return b;}
+  internal static byte[] FormatWithEpoch(NpSdStatus s,uint expectedCapacity,ulong epoch){
+   if(!CanFormat(s,expectedCapacity)||(s.Flags&StoreV2)==0)throw new IOException("Stopped, writable V1 with filesystem2 support and the confirmed card capacity required.");
+   if(epoch==0)throw new ArgumentOutOfRangeException("epoch","A fresh nonzero 64-bit format epoch is required.");
+   var b=NpSdControl.Request(5,NpSdControl.NextId(s),flags:0x46524d54U);
+   Put(b,4,2);Put(b,16,2);Put(b,44,(uint)epoch);Put(b,48,(uint)(epoch>>32));Put(b,60,NpSdControl.Crc(b,60));return b;
+  }
+  internal static bool IsStoreV2FormatRequest(byte[] b){
+   return b!=null&&b.Length==64&&NpSdGeometry.U(b,0)==0x31444c4eU&&NpSdGeometry.U(b,4)==2&&
+    NpSdGeometry.U(b,8)==5&&NpSdGeometry.U(b,12)!=0&&NpSdGeometry.U(b,16)==2&&NpSdGeometry.U(b,36)==0x46524d54U&&
+    (NpSdGeometry.U(b,20)|NpSdGeometry.U(b,24)|NpSdGeometry.U(b,28)|NpSdGeometry.U(b,32)|NpSdGeometry.U(b,40)|NpSdGeometry.U(b,52)|NpSdGeometry.U(b,56))==0&&
+    (NpSdGeometry.U(b,44)|NpSdGeometry.U(b,48))!=0&&NpSdGeometry.U(b,60)==NpSdControl.Crc(b,60);
+  }
+  internal static byte[] Recover(NpSdStatus s,uint id){
+   if(!CanConfigure(s)||s.Capacity<=8192)throw new IOException("Stopped, fault-free V1 required for catalog recovery");
+   var b=Mount(s,id);Put(b,8,9);Put(b,60,NpSdControl.Crc(b,60));return b;
+  }
   internal static uint RecordedSeconds(NpSdStatus s){return s==null||s.Hz==0||NpSdGeometry.Count(s.Mask)==0?0:(uint)((ulong)s.Chunks*61440/((ulong)s.Hz*780*(uint)NpSdGeometry.Count(s.Mask)));}
   internal static double RecordedMiB(NpSdStatus s){return s==null?0:s.Chunks/16.0;}
   // V1-specific host telemetry. Never reuse the NP2 state/geometry decoder.

@@ -2,7 +2,7 @@
 
 Independent Windows console for Neuropixels devices. Current published version **1.0.0.48**. Complete hardware qualification is pending.
 
-[Latest installer](LATEST_INSTALLERS/README.md) speeds up the V1 PC-side SD download/export decoder, retaining all integrity checks. The saved-file full-export benchmark is 2.78x faster; this is not a verified fix for the reported live 11 MB/s rate. Firmware and other runtime files are unchanged from 47. [Release scope and limits](Note/RELEASE_1.0.0.48_V1_DOWNLOAD_EXPORT_20261019.md). Existing **Repair SD catalog…** support and its firmware requirements remain unchanged.
+[Latest installer](LATEST_INSTALLERS/README.md) is WILDX1.0.0.60, with corrected camera colors and shadow contrast, lighter previews, editable output paths and USB download-time estimates. It retains the published V1F2D80C4F firmware bundle. [Release details](Note/RELEASE_1.0.0.60_20261020.md).
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -63,7 +63,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX 1.0.0.48 V1 download/export](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.48-V1-download-export.exe), with unchanged bundled firmware and runtime dependencies. [Scope and limits](Note/RELEASE_1.0.0.48_V1_DOWNLOAD_EXPORT_20261019.md).
+The current installer is [WILDX1.0.0.60](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.60.exe). Bundled firmware matches the prior V1USB30k release; V2/camera firmware are unchanged. [Scope and validation](Note/RELEASE_1.0.0.60_20261020.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 

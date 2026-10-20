@@ -24,6 +24,7 @@ namespace USB512_interface
         internal static string DownloadName(string label,DateTime? start,string fallback)
         {
             label=Label(label);
+            if(start.HasValue && (start.Value.Year<2020 || start.Value.Year>2100))start=null;
             return (label.Length==0?"":label+"_")+"wild_"+(start.HasValue?
                 start.Value.ToString("yyyyMMdd_HHmmss.fff",CultureInfo.InvariantCulture):"time_unknown_"+fallback);
         }

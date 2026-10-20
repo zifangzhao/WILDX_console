@@ -10,23 +10,29 @@ namespace CE32_console
 {
     internal sealed class NpDownloadRecord {
         internal long Start,End;internal uint Session,Chunks,ApHz,LfpHz,State,Fault,ProbeMask,LaneBytes,TicksPerBlock;
-        internal uint FormatVersion,CameraHz,MicrophoneHz;
+        internal uint FormatVersion,CameraHz,MicrophoneHz,LogicalPrefixBlocks,LogicalHighWaterBlocks;
         internal string ValidationError;
         internal long CatalogEnd,CommittedEnd;
         internal bool OpenTail;
         internal string RecoveryNotice;
         internal bool Downloadable{get{return string.IsNullOrEmpty(ValidationError);}}
-        internal bool V2{get{return FormatVersion==11 || FormatVersion==12 || FormatVersion==13;}}
+        internal bool V2{get{return FormatVersion==11 || FormatVersion==12 || FormatVersion==13 || FormatVersion==14;}}
         internal bool Media{get{return (FormatVersion==7 || FormatVersion==8) && ProbeMask==0 && ApHz==0;}}
         internal bool Complete{get{return State==3 && Fault==0 && Chunks>0;}}
+        internal bool PowerInterruptedRecovery{get{return Downloadable && (FormatVersion==6 && State>=1 && State<=4 || Media && State==1 && Fault==0) && Chunks==0 && !Complete;}}
         internal string V2ProbeLabel{get{return ProbeMask==1?"probe 1":ProbeMask==3?"probes 1 + 2":ProbeMask==7?"probes 1 + 2 + 3":"mask "+ProbeMask;}}
         internal double V2DurationSeconds{get{return ApHz==0||TicksPerBlock==0?0:Chunks*(double)TicksPerBlock/(ApHz*1600.0);}}
         public override string ToString(){
             if(!Downloadable)return (Start>0?"Recording at LBA "+Start:"Catalog")+" | UNAVAILABLE — "+ValidationError;
-            string state=Complete?"complete (payload not yet validated)":Chunks==0?"INCOMPLETE — metadata only":"INCOMPLETE — committed prefix only";
+            string state=Complete?"complete (payload not yet validated)":PowerInterruptedRecovery?"INCOMPLETE — unfinished footer; read-only recovery available":Chunks==0?"INCOMPLETE — footer reports zero chunks (payload not scanned)":"INCOMPLETE — committed prefix only";
+            if(FormatVersion==14)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N2} GiB | physical/prefix/high-water blocks {4}/{5}/{6} | {7}",
+                Session,V2ProbeLabel,ApHz,Chunks*46592.0/1073741824,Chunks,LogicalPrefixBlocks,LogicalHighWaterBlocks,
+                LogicalPrefixBlocks!=Chunks || LogicalHighWaterBlocks!=Chunks?"INCOMPLETE — logical gaps; DAT export refused":state)+
+                (RecoveryNotice==null?"":" — "+RecoveryNotice);
             if(V2)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N1} s | {4:N2} GiB | {5}{6}",Session,V2ProbeLabel,ApHz,V2DurationSeconds,Chunks*46592.0/1073741824,state,RecoveryNotice==null?"":" — "+RecoveryNotice);
-            if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,state);
-            return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),state);
+            string notice=RecoveryNotice==null?"":" — "+RecoveryNotice;
+            if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,state)+notice;
+            return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),state)+notice;
         }
     }
     internal static class NpDownloadCatalog {
@@ -37,11 +43,17 @@ namespace CE32_console
         // UTC brackets describe capture arming, not the first ADC conversion.
         internal static DateTime? RecordingStartTime(Stream s,NpDownloadRecord record) {
             if(record.Media) {
-                byte[] footer=Sector(s,record.Start+4);Header(footer,"NPSDEND1");
-                var metadata=NpMediaExport.Metadata(footer);
-                if(NpDownloadStream.U(footer,12)==record.Session && metadata!=null) {
+                // Interrupted recordings may retain the START clock only in
+                // the descriptor. Neither sector's legacy CE date is a clock.
+                foreach(int offset in new[]{4,3}) {
+                    byte[] sector=Sector(s,record.Start+offset);
+                    if(Encoding.ASCII.GetString(sector,0,8)!=(offset==4?"NPSDEND1":"NPSDLOG1") ||
+                       NpDownloadStream.U(sector,508)!=NpDownloadStream.Crc(sector,0,508) || NpDownloadStream.U(sector,12)!=record.Session)continue;
+                    var metadata=NpMediaExport.Metadata(sector);
+                    if(metadata==null)continue;
                     ulong? start=NpMediaExport.UtcAt(metadata,Convert.ToUInt32(metadata["start_tick"]),false);
-                    if(start.HasValue)return LocalTime(start.Value);
+                    var local=start.HasValue?LocalTime(start.Value):null;
+                    if(local.HasValue)return local;
                 }
             }
             byte[] b=Sector(s,record.Start+5);bool v2=record.V2;
@@ -90,8 +102,23 @@ namespace CE32_console
                 NpDownloadStream.U(header,magic=="N2SDLOG1"?56:40)==start;
         }
         static List<NpDownloadRecord> ReadCore(Stream s,bool available) {
-            var list=new List<NpDownloadRecord>();var id=Sector(s,16);
-            if(!IsCatalogIdentity(id))throw new InvalidDataException("This is not a supported NP1 / NP2 SD catalog.");
+            var list=new List<NpDownloadRecord>();byte[] id=null;IOException identityError=null;
+            try{id=Sector(s,16);}catch(IOException ex){identityError=ex;}
+            // A recognized legacy primary remains legacy even if sector24
+            // contains a stale filesystem2 identity left by an old formatter.
+            if(!IsCatalogIdentity(id)) {
+                long identitySectors=s.Length/512;bool store2=false;
+                if(s.Length%512==0 && identitySectors>8192 && identitySectors<=uint.MaxValue) {
+                    store2=NpV1StoreV2.IdentityValid(id,(uint)identitySectors);
+                    if(!store2) {
+                        byte[] second=null;try{second=Sector(s,24);}catch(IOException){}
+                        store2=NpV1StoreV2.IdentityValid(second,(uint)identitySectors);
+                    }
+                }
+                if(store2)return ReadStoreV2(s,available);
+                if(identityError!=null)throw identityError;
+                throw new InvalidDataException("This is not a supported NP1 / NP2 SD catalog.");
+            }
             var journal=Sector(s,112);bool cleanDirectory=!journal.Any(b=>b!=0);
             if(!cleanDirectory){
                 if(!available)throw new InvalidDataException("Pending/torn SD journal: recover using recorder firmware before downloading. Nothing was modified.");
@@ -139,6 +166,42 @@ namespace CE32_console
             if(available){list.Add(Unavailable(0,0,"Directory exceeds the supported page bound; readable prefix retained."));return list;}
             throw new InvalidDataException("Directory exceeds supported page bound.");
         }
+        static List<NpDownloadRecord> ReadStoreV2(Stream s,bool available) {
+            var store=NpV1StoreV2.Read(s);var list=new List<NpDownloadRecord>();
+            string allocation="V1 filesystem2 checkpoint generation "+store.Generation+", allocation frontier "+store.Frontier+". Card unchanged; no tail reclaimed or free space inferred. ";
+            foreach(var entry in store.Entries) {
+                if(!entry.Available) {
+                    var missing=Unavailable(0,0,"Filesystem2 record "+entry.Index+": "+entry.ValidationError);
+                    missing.RecoveryNotice=allocation;list.Add(missing);continue;
+                }
+                long bound=entry.ReservedEnd;
+                bool extended=entry.State==1 && store.Open==1 && entry.Index==store.Count-1 &&
+                    entry.Start==store.Start && entry.Session==store.Session && store.End>entry.ReservedEnd;
+                if(extended)bound=store.End;
+                try {
+                    byte[] h=Sector(s,entry.Start+3L),f=Sector(s,entry.Start+4L);
+                    Header(h,"NPSDLOG1");Header(f,"NPSDEND1");
+                    NpV1StoreBinding.RequireRecord(h,f,store.Epoch,entry.Index);
+                    if(NpDownloadStream.U(h,12)!=entry.Session)throw new InvalidDataException("Payload session differs from the filesystem2 record.");
+                    uint state=NpDownloadStream.U(f,60),fault=NpDownloadStream.U(f,64),chunks=NpDownloadStream.U(f,68);
+                    if(state<1 || state>4)throw new InvalidDataException("Unknown V1 payload footer state.");
+                    if(NpMediaExport.IsTyped(h))NpMediaExport.ValidateCommitted(h,f,entry.Start,bound);
+                    else NpSdGeometry.Validate(h,f,entry.Start,bound);
+                    long committed=checked((long)entry.Start+NpDownloadStream.U(h,48)+(long)chunks*128);
+                    bool complete=state==3 && fault==0 && chunks>0;
+                    var record=ReadV1Record(entry.Start,complete?committed:bound,h,f,available);
+                    record.CatalogEnd=bound;record.CommittedEnd=committed;
+                    record.RecoveryNotice=allocation+"Filesystem record state "+entry.State+", stored committed end "+entry.CommittedEnd+"; payload not yet validated. "+
+                        (extended?"Interrupted OPEN last-record recovery bound extended from descriptor grant "+entry.ReservedEnd+" to matching checkpoint grant "+bound+". No write or reclaim is authorized.":
+                        "Reserved grant end "+bound+" remains allocated, including any unused tail.");
+                    list.Add(record);
+                }catch(Exception ex) when(ex is IOException || ex is InvalidDataException || ex is OverflowException) {
+                    var bad=Unavailable(entry.Start,bound,ex.Message);bad.Session=entry.Session;bad.CatalogEnd=bound;bad.RecoveryNotice=allocation;
+                    list.Add(bad);
+                }
+            }
+            return list;
+        }
         static NpDownloadRecord ReadRecord(Stream s,long start,long end,byte[] h,bool available){
                     h=h??Sector(s,start+3);byte[] f=Sector(s,start+4);
                     if(Encoding.ASCII.GetString(h,0,8)=="N2SDLOG1") {
@@ -150,8 +213,11 @@ namespace CE32_console
                                 NpDownloadStream.U(h,72)==s.Length/512 && NpDownloadStream.U(h,68)<=s.Length/512;
                             if(end<NpDownloadStream.U(f,116) || end>NpDownloadStream.U(h,68))throw new InvalidDataException("NP2 extent mismatch: catalog="+end+", payload="+NpDownloadStream.U(h,60)+", committed="+NpDownloadStream.U(f,116)+", reserved="+NpDownloadStream.U(h,68)+", state="+state+", fault="+NpDownloadStream.U(f,104)+", blocks="+NpDownloadStream.U(f,108)+".");}
                         catch(InvalidDataException ex){failure=ex.Message;}
-                        return new NpDownloadRecord{ValidationError=failure,CatalogEnd=end,CommittedEnd=NpDownloadStream.U(f,116),OpenTail=openTail,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104)};
+                        return new NpDownloadRecord{ValidationError=failure,CatalogEnd=end,CommittedEnd=NpDownloadStream.U(f,116),OpenTail=openTail,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104),LogicalPrefixBlocks=NpDownloadStream.U(f,132),LogicalHighWaterBlocks=NpDownloadStream.U(f,136)};
                     }
+                    return ReadV1Record(start,end,h,f,available);
+        }
+        static NpDownloadRecord ReadV1Record(long start,long end,byte[] h,byte[] f,bool available){
                     Header(h,"NPSDLOG1");Header(f,"NPSDEND1");
                     string validationError=null;
                     if(NpMediaExport.IsTyped(h)) {
@@ -170,6 +236,9 @@ namespace CE32_console
             internal string Path,Name,Serial;
             internal long Bytes;
             internal byte[] Identity;
+            internal byte[] SecondaryIdentity;
+            internal bool StoreV2;
+            internal ulong StoreV2Epoch;
             internal readonly List<string> Volumes=new List<string>();
             internal string Description{get{return Name+" | "+Path+" | "+(Bytes/1073741824.0).ToString("N1")+" GiB | serial "+Serial;}}
         }
@@ -200,17 +269,33 @@ namespace CE32_console
                 if(paths!=null)foreach(string volume in paths)if(volume.StartsWith(@"\\?\Volume{",StringComparison.OrdinalIgnoreCase))target.Volumes.Add(volume.TrimEnd('\\'));
             }
             using(var stream=NpDownloadStream.OpenDisk(path)) {
-                if(stream.Length!=target.Bytes)throw new IOException("Disk capacity changed; refresh the source.");
-                target.Identity=NpDownloadCatalog.Sector(stream,16);
-                if(!NpDownloadCatalog.IsCatalogIdentity(target.Identity))throw new IOException("Quick Format accepts only an existing NP/media card. Other filesystems and unknown identities are protected.");
+                InspectIdentity(stream,target);
             }
             return target;
         }
-        internal static void Format(Target confirmed) {Edit(confirmed,stream=>QuickFormat(stream,confirmed.Bytes,confirmed.Identity));}
+        private static void InspectIdentity(Stream stream,Target target) {
+            if(!stream.CanRead || !stream.CanSeek || stream.Length!=target.Bytes || target.Bytes%512!=0 ||
+               target.Bytes/512<=8192 || target.Bytes/512>uint.MaxValue)throw new IOException("Disk capacity/access changed; refresh the source.");
+            byte[] first=NpDownloadCatalog.Sector(stream,16);
+            // An exact supported legacy primary always remains legacy. Never
+            // migrate it because a stale filesystem2 copy survives at24.
+            if(NpDownloadCatalog.IsCatalogIdentity(first)) {
+                target.Identity=first;target.SecondaryIdentity=null;target.StoreV2=false;target.StoreV2Epoch=0;return;
+            }
+            byte[] second=NpDownloadCatalog.Sector(stream,24);uint capacity=(uint)(target.Bytes/512);
+            bool a=NpV1StoreV2.IdentityValid(first,capacity),b=NpV1StoreV2.IdentityValid(second,capacity);
+            if(!a && !b)throw new IOException("Quick Format accepts only an existing NP/media or confirmed V1 filesystem2 card. Other filesystems and unknown identities are protected.");
+            // Reformat is explicit and destructive: conflicting valid FS2
+            // copies may be reset, but both raw copies must stay confirmed.
+            target.Identity=first;target.SecondaryIdentity=second;target.StoreV2=true;
+            target.StoreV2Epoch=BitConverter.ToUInt64(a?first:second,56);
+        }
+        internal static void Format(Target confirmed) {Edit(confirmed,stream=>QuickFormatConfirmed(stream,confirmed));}
         internal static void DeleteLast(Target confirmed,LastRecording latest) {Edit(confirmed,stream=>DeleteLast(stream,confirmed.Bytes,confirmed.Identity,latest));}
         private static void Edit(Target confirmed,Action<Stream> edit) {
+            if(confirmed==null)throw new IOException("Confirm a physical card before maintenance.");
             var current=Inspect(confirmed.Path);
-            if(current.Bytes!=confirmed.Bytes || current.Name!=confirmed.Name || current.Serial!=confirmed.Serial || !current.Identity.SequenceEqual(confirmed.Identity))throw new IOException("Selected disk changed after confirmation; nothing was written.");
+            ValidateTarget(confirmed,current);
             var locks=new List<SafeFileHandle>();
             try {
                 foreach(string path in current.Volumes.Distinct(StringComparer.OrdinalIgnoreCase)) {
@@ -219,8 +304,20 @@ namespace CE32_console
                     locks.Add(handle);uint returned;
                     if(!DeviceIoControl(handle,0x00090018,IntPtr.Zero,0,IntPtr.Zero,0,out returned,IntPtr.Zero) || !DeviceIoControl(handle,0x00090020,IntPtr.Zero,0,IntPtr.Zero,0,out returned,IntPtr.Zero))throw new IOException("Cannot lock/dismount the card volume. Nothing was written.");
                 }
+                // Recheck the same physical identity and complete volume set
+                // after acquiring the existing exclusive volume locks.
+                ValidateTarget(confirmed,Inspect(confirmed.Path));
                 using(var stream=NpDownloadStream.OpenDiskForFormat(current.Path))edit(stream);
             }finally{foreach(var handle in locks)handle.Dispose();}
+        }
+        private static bool SameBytes(byte[] a,byte[] b){return a==null?b==null:b!=null && a.SequenceEqual(b);}
+        private static void ValidateTarget(Target confirmed,Target current) {
+            if(confirmed==null || current==null || current.Path!=confirmed.Path || current.Bytes!=confirmed.Bytes ||
+               current.Name!=confirmed.Name || current.Serial!=confirmed.Serial || current.StoreV2!=confirmed.StoreV2 ||
+               current.StoreV2Epoch!=confirmed.StoreV2Epoch || !SameBytes(current.Identity,confirmed.Identity) ||
+               !SameBytes(current.SecondaryIdentity,confirmed.SecondaryIdentity) ||
+               !new HashSet<string>(current.Volumes,StringComparer.OrdinalIgnoreCase).SetEquals(confirmed.Volumes))
+                throw new IOException("Selected disk/volume identity changed after confirmation; nothing was written.");
         }
         private static byte[] ValidateCard(Stream stream,long confirmedBytes,byte[] confirmedIdentity) {
             if(!stream.CanRead || !stream.CanWrite || !stream.CanSeek || stream.Length!=confirmedBytes || confirmedBytes/512<=8192 || confirmedBytes%512!=0 || confirmedBytes/512>uint.MaxValue)throw new IOException("Invalid or changed SD capacity/access; nothing was written.");
@@ -261,6 +358,41 @@ namespace CE32_console
         private static void WriteVerified(Stream stream,long lba,byte[] bytes) {
             WriteSector(stream,lba,bytes);FlushDisk(stream);
             if(!NpDownloadCatalog.Sector(stream,lba).SequenceEqual(bytes))throw new IOException("Card write verification failed; preserve the card and inspect its catalog before recording. No automatic retry.");
+        }
+        private static void StoreV2Word(byte[] bytes,int offset,uint value){Buffer.BlockCopy(BitConverter.GetBytes(value),0,bytes,offset,4);}
+        private static void StoreV2Seal(byte[] bytes){StoreV2Word(bytes,508,NpDownloadStream.Crc(bytes,0,508));}
+        internal static void QuickFormatConfirmed(Stream stream,Target confirmed) {
+            if(confirmed==null)throw new IOException("Confirm a physical card before formatting.");
+            if(!confirmed.StoreV2){QuickFormat(stream,confirmed.Bytes,confirmed.Identity);return;}
+            if(!stream.CanRead || !stream.CanWrite || !stream.CanSeek)throw new IOException("Card must be readable, writable and seekable; nothing was written.");
+            var current=new Target{Bytes=confirmed.Bytes};InspectIdentity(stream,current);
+            if(!current.StoreV2 || current.StoreV2Epoch!=confirmed.StoreV2Epoch ||
+               !SameBytes(current.Identity,confirmed.Identity) || !SameBytes(current.SecondaryIdentity,confirmed.SecondaryIdentity) ||
+               stream.Length!=confirmed.Bytes)throw new IOException("V1 filesystem2 identity/capacity changed; nothing was written.");
+            uint capacity=(uint)(confirmed.Bytes/512);byte[] nonce=new byte[8];ulong epoch;
+            using(var random=System.Security.Cryptography.RandomNumberGenerator.Create()) {
+                do {random.GetBytes(nonce);epoch=BitConverter.ToUInt64(nonce,0);}
+                while(epoch==0 || NpV1StoreV2.IdentityValid(current.Identity,capacity) && epoch==BitConverter.ToUInt64(current.Identity,56) ||
+                    NpV1StoreV2.IdentityValid(current.SecondaryIdentity,capacity) && epoch==BitConverter.ToUInt64(current.SecondaryIdentity,56));
+            }
+            byte[] identity=new byte[512],checkpoint=new byte[512],zero=new byte[512];
+            Encoding.ASCII.GetBytes("NP_FILESYSTEM_V2").CopyTo(identity,0);Encoding.ASCII.GetBytes("NP_CE64_2").CopyTo(identity,32);
+            StoreV2Word(identity,48,2);StoreV2Word(identity,52,capacity);Buffer.BlockCopy(nonce,0,identity,56,8);
+            StoreV2Word(identity,64,8192);StoreV2Word(identity,68,4032);StoreV2Seal(identity);
+            Encoding.ASCII.GetBytes("NPS2CP01").CopyTo(checkpoint,0);StoreV2Word(checkpoint,8,2);StoreV2Word(checkpoint,12,capacity);
+            Buffer.BlockCopy(nonce,0,checkpoint,16,8);Buffer.BlockCopy(BitConverter.GetBytes(1UL),0,checkpoint,24,8);
+            StoreV2Word(checkpoint,32,8192);StoreV2Seal(checkpoint);
+            if(!NpV1StoreV2.IdentityValid(identity,capacity) || epoch==0 ||
+               NpDownloadStream.U(checkpoint,508)!=NpDownloadStream.Crc(checkpoint,0,508))throw new IOException("Cannot prepare valid V1 filesystem2 metadata; nothing was written.");
+            // Exactly canonical nps2_format's six verified publications. Old
+            // record slots/settings/payload stay untouched; fresh epoch hides them.
+            WriteVerified(stream,16,zero);WriteVerified(stream,24,zero);
+            WriteVerified(stream,112,checkpoint);WriteVerified(stream,113,checkpoint);
+            WriteVerified(stream,16,identity);WriteVerified(stream,24,identity);
+            var empty=NpV1StoreV2.Mount(stream);
+            if(!empty.Ready || empty.Epoch!=epoch || empty.Generation!=1 || empty.Frontier!=8192 ||
+               empty.Count!=0 || empty.Start!=0 || empty.End!=0 || empty.Session!=0 || empty.Open!=0)
+                throw new IOException("V1 filesystem2 format verification failed; preserve the card. No automatic retry.");
         }
         internal static void QuickFormat(Stream stream,long confirmedBytes,byte[] confirmedIdentity) {
             var identity=ValidateCard(stream,confirmedBytes,confirmedIdentity);

@@ -27,6 +27,7 @@ namespace USB512_interface
         readonly NumericUpDown windowSeconds=new NumericUpDown{Minimum=0.1M,Maximum=MaxWindowSeconds,DecimalPlaces=1,Increment=0.1M,Value=4,Width=65,AccessibleName="BLE preview display window in seconds"};
         readonly NumericUpDown gainBox=new NumericUpDown{Minimum=0.1M,Maximum=100,DecimalPlaces=1,Increment=0.1M,Value=1,Width=65,AccessibleName="Preview display gain",AccessibleDescription="Display only; does not change probe gain or saved data."};
         readonly Label info=new Label{AutoSize=true,MaximumSize=new Size(800,0)};
+        readonly ToolTip diagnostics=new ToolTip();
         readonly Plot plot=new Plot{Dock=DockStyle.Fill};
         readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=50};
         readonly CancellationTokenSource lifetime=new CancellationTokenSource();
@@ -103,7 +104,7 @@ namespace USB512_interface
                 if(controlsBusy())return;
                 if(activeId==0){
                     uint p=(uint)probe.Value,c=(uint)channel.Value,b=(uint)band.SelectedIndex,rate=status().Hz;
-                    info.Text="Reading probe framing…";var origin=await Snapshot(p,c,b,rate);uint ph=(uint)await Task.Run(()=>origin.FindPhase(),lifetime.Token);
+                    info.Text="Preparing preview…";var origin=await Snapshot(p,c,b,rate);uint ph=(uint)await Task.Run(()=>origin.FindPhase(),lifetime.Token);
                     if(generation!=selectionVersion || !Current() || controlsBusy() || probe.Value!=p || channel.Value!=c || band.SelectedIndex!=b)return;
                     lock(gate){activeProbe=p;activeChannel=c;activeBand=b;activeSelection=generation;phase=ph;session=origin.Session;hz=origin.Hz;error=null;pending.Clear();dropped=packets=0;previousEnd=0;gaps=0;activeId=Next();silence.Restart();}
                     if(!await connection.TryWritePreview(NpV1PreviewBurst.Request(activeId,2,p,c,ph,session,b),epoch,lifetime.Token))throw new IOException("Controls busy; preview deferred.");
@@ -121,7 +122,8 @@ namespace USB512_interface
                     for(int i=0;i<samples.Length;i++)if(!Double.IsNaN(samples[i])){short nominal=(short)(512-samples[i]);samples[i]=profile==null?nominal:profile.Correct(nominal,(int)activeChannel,activeBand==1);}
                     plot.Append(samples,frame.FirstTick,frame.Stride);previousEnd=frame.FirstTick+16UL*frame.Stride;packets++;
                 }
-                info.Text=(activeBand==0?"AP":"LFP")+" · "+(hz*780.0/((activeBand==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))).ToString("F1")+" samples/s · gaps "+gaps+" · host drops "+hostDrops+" · packets "+packets;
+                info.Text=(activeBand==0?"AP":"LFP")+" preview · "+(hz*780.0/((activeBand==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))).ToString("F1")+" samples/s"+(gaps!=0 || hostDrops!=0?" · Preview gaps":"");
+                diagnostics.SetToolTip(info,"Subsampled preview · gaps "+gaps+" · host drops "+hostDrops+" · packets "+packets);
                 if(idle>2500)throw new IOException("Preview expired. Recording continues independently; toggle Preview to retry.");
             }catch(OperationCanceledException){}
             catch(Exception ex){if(!closed && generation==selectionVersion){enabled.Checked=false;await StopPreview();info.Text=ex.Message;}}
@@ -130,7 +132,7 @@ namespace USB512_interface
         void ClosePreview(){if(closed)return;closed=true;lifetime.Cancel();timer.Stop();connection.PreviewReceived-=Receive;ObserveStop();}
         async void ObserveStop(){await StopPreview();}
         protected override void OnFormClosing(FormClosingEventArgs e){ClosePreview();base.OnFormClosing(e);}
-        protected override void Dispose(bool disposing){if(disposing){ClosePreview();timer.Dispose();}base.Dispose(disposing);}
+        protected override void Dispose(bool disposing){if(disposing){ClosePreview();timer.Dispose();diagnostics.Dispose();}base.Dispose(disposing);}
         sealed class Plot : Control
         {
             const int Capacity=500*MaxWindowSeconds;readonly double[] values=new double[Capacity];readonly ulong[] ticks=new ulong[Capacity];

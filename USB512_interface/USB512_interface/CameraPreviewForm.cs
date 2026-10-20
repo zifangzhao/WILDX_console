@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,9 +17,6 @@ namespace USB512_interface
         private const int FrameWidth = 320;
         private const int FrameHeight = 320;
         private const int FrameBytes = FrameWidth * 500;
-        private const int ActiveRowBytes = 492;
-        private const int RowHeaderBytes = 12;
-        private const int PackedPixelsPerRow = 480;
         private const int PreviewRawBufferCount = 3;
 
         private readonly object rawLock = new object();
@@ -33,6 +28,7 @@ namespace USB512_interface
         private readonly CheckBox autoExposureCheck = new CheckBox();
         private readonly TrackBar exposureSlider = new TrackBar();
         private readonly Label exposureStatus = new Label();
+        private readonly ToolTip diagnostics = new ToolTip();
         private readonly System.Windows.Forms.Timer presentTimer = new System.Windows.Forms.Timer();
         private readonly Thread decodeThread;
         private readonly Action<byte, byte> setSensorExposure;
@@ -40,9 +36,9 @@ namespace USB512_interface
         // resulting working set bounded instead of allocating 160 kB raw
         // buffers at 50 Hz and 960 kB decode buffers at 25 Hz indefinitely.
         private readonly Queue<byte[]> availableRawFrames = new Queue<byte[]>();
-        private readonly ushort[] bayerScratch = new ushort[FrameWidth * FrameHeight];
-        private readonly byte[] pixelScratch = new byte[FrameWidth * FrameHeight * 4];
+        private readonly CE32_console.WILD_VideoDecoder.PreviewDecoder decoder = new CE32_console.WILD_VideoDecoder.PreviewDecoder();
         private volatile bool acceptingFrames = true;
+        private volatile bool displayActive;
         internal bool KeepAliveWhileRecording {get;set;}
         private byte[] latestRaw;
         private Bitmap latestBitmap;
@@ -68,12 +64,10 @@ namespace USB512_interface
         private int filteredExposureMean;
         private bool filteredExposureInitialized;
         private long lastExposureUpdateTimestamp;
+        private long lastExposureMeterTimestamp;
         private byte lastSentRowsInReset = Byte.MaxValue;
         private byte lastSentRampGain = Byte.MaxValue;
         private string lastExposureError;
-        private bool displayLevelsInitialized;
-        private int displayBlack;
-        private int displayWhite = 1023;
 
         public CameraPreviewForm(Action<byte, byte> setSensorExposure)
         {
@@ -134,6 +128,7 @@ namespace USB512_interface
 
             decodeThread = new Thread(DecodeLoop);
             decodeThread.IsBackground = true;
+            decodeThread.Priority = ThreadPriority.BelowNormal;
             decodeThread.Name = "Camera preview decoder";
             decodeThread.Start();
         }
@@ -189,6 +184,24 @@ namespace USB512_interface
             frameReady.Set();
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            displayActive=Visible && WindowState!=FormWindowState.Minimized;
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            displayActive=Visible && WindowState!=FormWindowState.Minimized;
+        }
+
+        internal static int PreviewIdleMilliseconds(long workMilliseconds)
+        {
+            int work=(int)Math.Max(0,Math.Min(Int32.MaxValue/3,workMilliseconds));
+            return Math.Max(1,Math.Max(40-work,work*3));
+        }
+
         private void DecodeLoop()
         {
             Stopwatch clock = Stopwatch.StartNew();
@@ -196,15 +209,6 @@ namespace USB512_interface
             while (acceptingFrames)
             {
                 frameReady.WaitOne(100);
-                if (!acceptingFrames)
-                    break;
-
-                // Decode no faster than 25 Hz.  Incoming 50 Hz camera frames are
-                // coalesced in latestRaw during this pause instead of competing
-                // with the USB capture/logging thread for CPU time.
-                long delay = nextDecodeAtMilliseconds - clock.ElapsedMilliseconds;
-                if (delay > 0)
-                    Thread.Sleep((int)Math.Min(delay, 100));
                 if (!acceptingFrames)
                     break;
 
@@ -218,11 +222,18 @@ namespace USB512_interface
                 if (raw == null)
                     continue;
 
-                nextDecodeAtMilliseconds = clock.ElapsedMilliseconds + 40;
+                long began=clock.ElapsedMilliseconds;
+                bool render=displayActive && began>=nextDecodeAtMilliseconds;
 
                 Bitmap decoded = null;
                 try
                 {
+                    if(!render) {
+                        // Metering is cheap and still controls recorded exposure
+                        // while hidden or waiting for the next image deadline.
+                        UpdateSensorExposure(MeasureCe64Exposure(raw));
+                        continue;
+                    }
                     decoded = DecodeCe64Frame(raw);
                     lock (bitmapLock)
                     {
@@ -244,12 +255,15 @@ namespace USB512_interface
                 finally
                 {
                     ReturnRawFrameBuffer(raw);
+                    long finished=clock.ElapsedMilliseconds;
+                    if(render)nextDecodeAtMilliseconds=finished+PreviewIdleMilliseconds(finished-began);
                 }
             }
         }
 
         private void presentTimer_Tick(object sender, EventArgs e)
         {
+            if(!displayActive)return;
             Bitmap next = null;
             lock (bitmapLock)
             {
@@ -278,9 +292,10 @@ namespace USB512_interface
             }
             string error = lastDecodeError;
             status.Text = String.IsNullOrEmpty(error)
-                ? string.Format("Preview: {0:N0} received, {1:N0} decoded, {2:N0} displayed; {3:N0} stale frames replaced",
-                    submitted, decodedFrames, displayedFrames, dropped)
+                ? (displayedFrames == 0 ? "Waiting for camera frames…" : "Live preview")
                 : "Preview decoder error: " + error;
+            diagnostics.SetToolTip(status, string.Format("{0:N0} received, {1:N0} decoded, {2:N0} displayed; {3:N0} display frames skipped",
+                submitted, decodedFrames, displayedFrames, dropped));
 
             int meter;
             bool automatic;
@@ -297,10 +312,11 @@ namespace USB512_interface
             }
             exposureStatus.Text = !String.IsNullOrEmpty(exposureError)
                 ? "Sensor exposure error: " + exposureError
-                : meter == 0
+                : submitted == 0
                     ? "Sensor exposure: waiting"
-                    : string.Format("Meter: {0} / 1023; row reset: {1}; ramp gain: {2} {3}",
-                        meter, rows, ramp, automatic ? "(auto)" : "(manual)");
+                    : string.Format("Brightness: {0:F0}%", meter * 100.0 / 1023);
+            diagnostics.SetToolTip(exposureStatus, string.Format("Meter: {0} / 1023; row reset: {1}; ramp gain: {2} {3}",
+                meter, rows, ramp, automatic ? "(auto)" : "(manual)"));
         }
 
         private void autoExposureCheck_CheckedChanged(object sender, EventArgs e)
@@ -326,176 +342,16 @@ namespace USB512_interface
             ApplyManualSensorExposure();
         }
 
-        // Matches WILD_VideoDecodewAudio_folder.py:
-        // raw[:320*492].reshape(-1,492).T, discard the first 12 bytes per row,
-        // unpack packed 10-bit Bayer RG values, then rotate 180 degrees.
+        // Share packing, Bayer phase and display tone with saved playback/MP4.
         private Bitmap DecodeCe64Frame(byte[] raw)
         {
-            int meter = MeasureCe64Exposure(raw);
-            UpdateSensorExposure(meter);
-
-            ushort[] bayer = bayerScratch;
-            for (int row = 0; row < FrameHeight; row++)
-            {
-                int source = row * ActiveRowBytes + RowHeaderBytes;
-                int column = 0;
-                for (int packed = 0; packed < PackedPixelsPerRow; packed += 3)
-                {
-                    byte a = raw[source + packed];
-                    byte b = raw[source + packed + 1];
-                    byte c = raw[source + packed + 2];
-                    ushort first = (ushort)(((a & 0x7F) << 3) | ((b & 0xE0) >> 5));
-                    ushort second = (ushort)(((b & 0x07) << 7) | ((c & 0xFE) >> 1));
-
-                    StoreRotated(bayer, column++, row, first);
-                    StoreRotated(bayer, column++, row, second);
-                }
-            }
-
-            // The camera delivers native 10-bit values.  CE64 expands these to
-            // 16-bit for demosaicing, then normalizes percentile levels for its
-            // display/export path.  Use the same contrast-window idea here;
-            // it affects only this lossy preview, never misc.dat or the sensor.
-            int black;
-            int white;
-            GetPreviewLevels(bayer, out black, out white);
-            byte[] pixels = pixelScratch;
-            for (int y = 0; y < FrameHeight; y++)
-            {
-                for (int x = 0; x < FrameWidth; x++)
-                {
-                    int rawValue = bayer[y * FrameWidth + x];
-                    int red;
-                    int green;
-                    int blue;
-                    bool evenY = (y & 1) == 0;
-                    bool evenX = (x & 1) == 0;
-
-                    if (evenY && evenX) // RG Bayer: red sample
-                    {
-                        red = rawValue;
-                        green = AverageCross(bayer, x, y);
-                        blue = AverageDiagonal(bayer, x, y);
-                    }
-                    else if (!evenY && !evenX) // blue sample
-                    {
-                        blue = rawValue;
-                        green = AverageCross(bayer, x, y);
-                        red = AverageDiagonal(bayer, x, y);
-                    }
-                    else if (evenY) // green on a red row
-                    {
-                        green = rawValue;
-                        red = AverageHorizontal(bayer, x, y);
-                        blue = AverageVertical(bayer, x, y);
-                    }
-                    else // green on a blue row
-                    {
-                        green = rawValue;
-                        red = AverageVertical(bayer, x, y);
-                        blue = AverageHorizontal(bayer, x, y);
-                    }
-
-                    int offset = (y * FrameWidth + x) * 4;
-                    pixels[offset] = Scale(blue, black, white);
-                    pixels[offset + 1] = Scale(green, black, white);
-                    pixels[offset + 2] = Scale(red, black, white);
-                    pixels[offset + 3] = 255;
-                }
-            }
-
-            Bitmap bitmap = new Bitmap(FrameWidth, FrameHeight, PixelFormat.Format32bppArgb);
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, FrameWidth, FrameHeight), ImageLockMode.WriteOnly, bitmap.PixelFormat);
-            try
-            {
-                Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
-            return bitmap;
+            UpdateSensorExposure(MeasureCe64Exposure(raw));
+            return decoder.Decode(raw);
         }
 
-        private void GetPreviewLevels(ushort[] bayer, out int black, out int white)
-        {
-            const int bins = 1024;
-            int[] histogram = new int[bins];
-            for (int index = 0; index < bayer.Length; index++)
-                histogram[bayer[index]]++;
-
-            int lowTarget = (bayer.Length + 99) / 100;       // 1st percentile
-            int highTarget = (bayer.Length * 99 + 99) / 100; // 99th percentile
-            int count = 0;
-            int frameBlack = 0;
-            int frameWhite = 1023;
-            bool lowFound = false;
-            for (int value = 0; value < bins; value++)
-            {
-                count += histogram[value];
-                if (!lowFound && count >= lowTarget)
-                {
-                    frameBlack = value;
-                    lowFound = true;
-                }
-                if (count >= highTarget)
-                {
-                    frameWhite = value;
-                    break;
-                }
-            }
-            if (frameWhite <= frameBlack)
-            {
-                frameBlack = Math.Min(1022, frameBlack);
-                frameWhite = frameBlack + 1;
-            }
-
-            // Per-frame percentiles make a low-light live view useful, while a
-            // short EMA avoids brightness pumping as an object crosses a pixel.
-            if (!displayLevelsInitialized)
-            {
-                displayBlack = frameBlack;
-                displayWhite = frameWhite;
-                displayLevelsInitialized = true;
-            }
-            else
-            {
-                displayBlack = (displayBlack * 3 + frameBlack) / 4;
-                displayWhite = (displayWhite * 3 + frameWhite) / 4;
-            }
-            if (displayWhite <= displayBlack)
-            {
-                displayBlack = Math.Min(1022, displayBlack);
-                displayWhite = displayBlack + 1;
-            }
-
-            black = displayBlack;
-            white = displayWhite;
-        }
-
-        // This is the CE64 nine-point metering pattern, applied to the same
-        // packed 10-bit values before Bayer interpolation.
         private static int MeasureCe64Exposure(byte[] raw)
         {
-            int[] rowLocations = { FrameHeight / 4, FrameHeight / 2, (FrameHeight * 3) / 4 };
-            int[] columnLocations = { 80, 240, 400 };
-            int total = 0;
-            int samples = 0;
-
-            for (int rowIndex = 0; rowIndex < rowLocations.Length; rowIndex++)
-            {
-                for (int columnIndex = 0; columnIndex < columnLocations.Length; columnIndex++)
-                {
-                    int location = ActiveRowBytes * rowLocations[rowIndex] +
-                                   RowHeaderBytes + columnLocations[columnIndex];
-                    if (location + 1 >= raw.Length)
-                        continue;
-
-                    total += (((raw[location] & 0x7F) << 8) | raw[location + 1]) >> 5;
-                    samples++;
-                }
-            }
-            return samples == 0 ? 0 : total / samples;
+            return CE32_console.WILD_VideoDecoder.MeasureExposure(raw);
         }
 
         private void UpdateSensorExposure(int meter)
@@ -506,8 +362,13 @@ namespace USB512_interface
             lock (exposureLock)
             {
                 exposureMean = meter;
-                if (!autoExposure || meter <= 0)
+                if (!autoExposure || meter < 0)
                     return;
+                // Preserve the original 25 Hz control-filter cadence even
+                // when cheap metering receives every incoming camera frame.
+                long now = Stopwatch.GetTimestamp();
+                if(now-lastExposureMeterTimestamp<Stopwatch.Frequency*40/1000)return;
+                lastExposureMeterTimestamp=now;
 
                 // Metering uses only nine Bayer sites, so it contains normal
                 // scene/shot noise.  Filter it and change the sensor no more
@@ -522,7 +383,6 @@ namespace USB512_interface
                 {
                     filteredExposureMean = (filteredExposureMean * 7 + meter) / 8;
                 }
-                long now = Stopwatch.GetTimestamp();
                 long intervalTicks = Stopwatch.Frequency * ExposureUpdateIntervalMs / 1000;
                 if ((now - lastExposureUpdateTimestamp) < intervalTicks)
                     return;
@@ -622,51 +482,6 @@ namespace USB512_interface
             }
         }
 
-        private static void StoreRotated(ushort[] destination, int column, int row, ushort value)
-        {
-            destination[(FrameHeight - 1 - row) * FrameWidth + (FrameWidth - 1 - column)] = value;
-        }
-
-        private static int AverageHorizontal(ushort[] values, int x, int y)
-        {
-            return (Sample(values, x - 1, y) + Sample(values, x + 1, y)) / 2;
-        }
-
-        private static int AverageVertical(ushort[] values, int x, int y)
-        {
-            return (Sample(values, x, y - 1) + Sample(values, x, y + 1)) / 2;
-        }
-
-        private static int AverageCross(ushort[] values, int x, int y)
-        {
-            return (Sample(values, x - 1, y) + Sample(values, x + 1, y) +
-                    Sample(values, x, y - 1) + Sample(values, x, y + 1)) / 4;
-        }
-
-        private static int AverageDiagonal(ushort[] values, int x, int y)
-        {
-            return (Sample(values, x - 1, y - 1) + Sample(values, x + 1, y - 1) +
-                    Sample(values, x - 1, y + 1) + Sample(values, x + 1, y + 1)) / 4;
-        }
-
-        private static int Sample(ushort[] values, int x, int y)
-        {
-            if (x < 0) x = 0;
-            else if (x >= FrameWidth) x = FrameWidth - 1;
-            if (y < 0) y = 0;
-            else if (y >= FrameHeight) y = FrameHeight - 1;
-            return values[y * FrameWidth + x];
-        }
-
-        private static byte Scale(int value, int black, int white)
-        {
-            if (value <= black) return 0;
-            int range = white - black;
-            if (range <= 0) return 0;
-            if (value >= white) return 255;
-            return (byte)((value - black) * 255 / range);
-        }
-
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if(KeepAliveWhileRecording && e.CloseReason==CloseReason.UserClosing) {
@@ -695,6 +510,7 @@ namespace USB512_interface
                     }
                 }
                 frameReady.Dispose();
+                diagnostics.Dispose();
             }
             base.Dispose(disposing);
         }

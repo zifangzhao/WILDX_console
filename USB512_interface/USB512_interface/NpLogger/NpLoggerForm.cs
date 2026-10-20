@@ -15,7 +15,7 @@ namespace USB512_interface
         readonly ComboBox devices=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
         readonly ListBox sessions=new ListBox{Dock=DockStyle.Fill,HorizontalScrollbar=true};
         readonly ComboBox method=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=270};
-        readonly TextBox folder=new TextBox{Dock=DockStyle.Fill,ReadOnly=true};
+        readonly TextBox folder=new TextBox{Name="archiveDestinationFolder",Dock=DockStyle.Fill,AutoCompleteMode=AutoCompleteMode.SuggestAppend,AutoCompleteSource=AutoCompleteSource.FileSystemDirectories};
         readonly TextBox sessionLabel=new TextBox {Name="archiveSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
         readonly TextBox log=new TextBox{Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
         readonly Label status=new Label{Text="Refresh to discover V1 loggers (identified by MCU UID).",AutoSize=true,MaximumSize=new Size(810,0)};
@@ -86,7 +86,7 @@ namespace USB512_interface
         }
         void UpdateControls()
         {
-            sessionLabel.Enabled=devices.Enabled=refresh.Enabled=browse.Enabled=method.Enabled=decode.Enabled=!working;
+            folder.Enabled=sessionLabel.Enabled=devices.Enabled=refresh.Enabled=browse.Enabled=method.Enabled=decode.Enabled=!working;
             inspect.Enabled=!working && devices.SelectedItem!=null;
             download.Enabled=!working && deviceStatus!=null && deviceStatus.Download && sessions.SelectedItem!=null && catalogPath!=null;
             enterDownload.Enabled=!working && deviceStatus!=null && deviceStatus.Split && deviceStatus.Busy==0 && deviceStatus.PendingMode==0 && !deviceStatus.Download;

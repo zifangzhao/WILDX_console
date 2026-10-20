@@ -114,9 +114,9 @@ namespace USB512_interface
         }
         internal string Summary()
         {
-            return "Firmware release: " + NpFirmwareCatalog.Bundled.Installed(Family, Firmware) + "\r\nUSB device release: " + UsbRelease + " | " + UsbId +
-                "\r\nUSB serial / UID: " + Serial + "\r\nSD card (cached): " + Card + "\r\nSD total capacity: " + Capacity +
-                " | Free recording space: Unavailable\r\nCached SD query bus: " + Bus + "\r\n" + Status;
+            return "Firmware: " + NpFirmwareCatalog.Bundled.Installed(Family, Firmware) +
+                "\r\nDevice UID: " + Serial + "\r\nSD card: " + Card + "\r\nSD capacity: " + Capacity +
+                "\r\n" + Mode + " · " + Status;
         }
         internal string Report(string consoleVersion)
         {
@@ -129,7 +129,7 @@ namespace USB512_interface
             text.AppendLine("Image identity source: " + (Firmware == null ? NotReported : "Firmware-reported cached manifest checks; NPF1 response CRC verified"));
             if(Firmware!=null){text.AppendLine("APP code checked this boot: "+((Firmware.Flags&4)!=0));text.AppendLine("USB code checked this boot: "+((Firmware.Flags&8)!=0));}
             var bundled = NpFirmwareCatalog.Bundled.For(Family);
-            if (bundled != null) { text.AppendLine("Bundled: " + bundled.Versions); text.AppendLine("Bundle: " + bundled.stage); }
+            if (bundled != null) text.AppendLine("Bundled: " + bundled.Versions);
             text.AppendLine("Console version (running executable): " + consoleVersion); text.AppendLine("Protocol: " + Protocol);
             text.AppendLine("USB device release and protocol ABI are not semantic firmware versions."); text.AppendLine();
             text.AppendLine("SD CARD"); text.AppendLine("Card identity: " + Card); text.AppendLine("Total capacity: " + Capacity);

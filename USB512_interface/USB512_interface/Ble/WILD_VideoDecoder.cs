@@ -126,6 +126,7 @@ namespace CE32_console
             ushort[] rotated = new ushort[Width * Height];
             ushort[] rgb16 = new ushort[Width * Height * 3];
             byte[] rgb48 = new byte[Width * Height * 3 * 2];
+            var tone = new CameraTone();
             int exitCode = -1;
             bool processStarted = false;
             System.Threading.Timer cancellationTimer = null;
@@ -167,7 +168,7 @@ namespace CE32_console
                             Console.WriteLine("Processing " + idx + "/" + totalFrames);
                         }
 
-                        DecodeFrameToRgb48(frameBytes, imgBytes, bayer, rotated, rgb16, rgb48);
+                        DecodeFrameToRgb48(frameBytes, imgBytes, bayer, rotated, rgb16, rgb48, tone);
                         ffmpeg.StandardInput.BaseStream.Write(rgb48, 0, rgb48.Length);
 
                         int progress = totalFrames > 0
@@ -529,12 +530,20 @@ namespace CE32_console
             private readonly ushort[] rgb16 = new ushort[Width * Height * 3];
             private readonly byte[] rgb48 = new byte[Width * Height * 6];
             private readonly byte[] bgr24 = new byte[Width * Height * 3];
+            private readonly CameraTone tone = new CameraTone();
+
+            internal void Reset()
+            {
+                tone.Reset();
+                Array.Clear(rgb16, 0, rgb16.Length);
+                Array.Clear(rgb48, 0, rgb48.Length);
+            }
 
             internal Bitmap Decode(byte[] frame)
             {
                 if (frame == null || frame.Length != BytesPerFrame)
                     throw new InvalidDataException("A camera frame must contain exactly 160000 bytes.");
-                DecodeFrameToRgb48(frame, packed, bayer, rotated, rgb16, rgb48);
+                DecodeFrameToRgb48(frame, packed, bayer, rotated, rgb16, rgb48, tone);
                 for (int i = 0; i < rgb16.Length; i += 3)
                 {
                     bgr24[i] = (byte)(rgb16[i + 2] >> 8);
@@ -559,7 +568,8 @@ namespace CE32_console
             ushort[] bayer,
             ushort[] rotated,
             ushort[] rgb16,
-            byte[] rgb48)
+            byte[] rgb48,
+            CameraTone tone)
         {
             // Inspect the raw marker before interpreting camera packing/bit phase.
             // The caller still writes one frame for this nominal time slot. Its
@@ -603,8 +613,8 @@ namespace CE32_console
                 }
             }
 
-            BilinearDemosaicBggr(rotated, Width, Height, rgb16);
-            NormalizeToFullU16(rgb16);
+            BilinearDemosaicRggb(rotated, Width, Height, rgb16);
+            tone.Apply(rotated, rgb16);
 
             if (BitConverter.IsLittleEndian)
             {
@@ -622,7 +632,7 @@ namespace CE32_console
             }
         }
 
-        private static void BilinearDemosaicBggr(ushort[] src, int width, int height, ushort[] dstRgb)
+        private static void BilinearDemosaicRggb(ushort[] src, int width, int height, ushort[] dstRgb)
         {
             int dst = 0;
             for (int y = 0; y < height; y++)
@@ -646,32 +656,33 @@ namespace CE32_console
                     int g;
                     int b;
 
-                    // BGGR pattern:
-                    // B G B G
-                    // G R G R
-                    if (evenY && evenX) // Blue site
-                    {
-                        b = c;
-                        g = (up + dn + lf + rt) / 4;
-                        r = (ul + ur + dl + dr) / 4;
-                    }
-                    else if (!evenY && !evenX) // Red site
+                    // Native BGGR becomes RGGB after the 180-degree rotation.
+                    // OpenCV's legacy BayerBG2RGB alias also means RGGB.
+                    // R G R G
+                    // G B G B
+                    if (evenY && evenX) // Red site
                     {
                         r = c;
                         g = (up + dn + lf + rt) / 4;
                         b = (ul + ur + dl + dr) / 4;
                     }
-                    else if (evenY) // Green on blue row
+                    else if (!evenY && !evenX) // Blue site
                     {
-                        g = c;
-                        r = (up + dn) / 2;
-                        b = (lf + rt) / 2;
+                        b = c;
+                        g = (up + dn + lf + rt) / 4;
+                        r = (ul + ur + dl + dr) / 4;
                     }
-                    else // Green on red row
+                    else if (evenY) // Green on red row
                     {
                         g = c;
                         r = (lf + rt) / 2;
                         b = (up + dn) / 2;
+                    }
+                    else // Green on blue row
+                    {
+                        g = c;
+                        r = (up + dn) / 2;
+                        b = (lf + rt) / 2;
                     }
 
                     dstRgb[dst++] = ClampU16(r);
@@ -681,30 +692,81 @@ namespace CE32_console
             }
         }
 
-        private static void NormalizeToFullU16(ushort[] rgb)
+        // Display/export only. Estimate shadows from spatial luminance contrast,
+        // never the lowest color channel: uniform bright/tinted scenes must not
+        // be stretched into magenta. Native camera samples remain unchanged.
+        private sealed class CameraTone
         {
-            int min = int.MaxValue;
-            int max = int.MinValue;
-
-            for (int i = 0; i < rgb.Length; i++)
+            readonly int[] histogram = new int[1024];
+            readonly int[] luminance = new int[1024];
+            readonly ushort[] curve = new ushort[1024];
+            double white, black;
+            int curveWhite, curveBlack;
+            internal void Reset() { white = 0; black = 0; }
+            internal void Apply(ushort[] bayer, ushort[] rgb)
             {
-                int v = rgb[i];
-                if (v < min) min = v;
-                if (v > max) max = v;
+                Array.Clear(histogram, 0, histogram.Length);
+                for (int i = 0; i < bayer.Length; i++) histogram[bayer[i]]++;
+                int threshold = (bayer.Length * 99 + 99) / 100, count = 0, percentile = 1023;
+                for (int i = 0; i < histogram.Length; i++)
+                    if ((count += histogram[i]) >= threshold) { percentile = i; break; }
+                Array.Clear(luminance, 0, luminance.Length);
+                // Exclude demosaic boundaries and the captured reference edge.
+                for (int y = 2; y < Height - 2; y++) for (int x = 2; x < Width - 2; x++) {
+                    int i = (y * Width + x) * 3;
+                    luminance[(54 * rgb[i] + 183 * rgb[i + 1] + 19 * rgb[i + 2] + 128) >> 8]++;
+                }
+                int pixels = (Width - 4) * (Height - 4), low = 0, high = 1023;
+                count = 0;
+                for (int i = 0; i < luminance.Length; i++) {
+                    count += luminance[i];
+                    if (count >= (pixels + 99) / 100) { low = i; break; }
+                }
+                count = 0;
+                for (int i = 0; i < luminance.Length; i++)
+                    if ((count += luminance[i]) >= (pixels * 99 + 99) / 100) { high = i; break; }
+                // Limited shadow correction removes the gray veil without
+                // claiming a calibrated sensor black level. Flat scenes retain
+                // their brightness; keep headroom below the measured shadows.
+                int targetBlack = high - low >= 64 ? Math.Max(0, Math.Min(256, low - 8)) : 0;
+                // Ignore sparse hot pixels; place ordinary scene highlights near
+                // half linear scale, with at most 2x digital exposure boost.
+                int target = Math.Max(512, Math.Min(1023, percentile * 2));
+                if (white == 0) { white = target; black = targetBlack; }
+                else {
+                    white += Math.Max(-16, Math.Min(16, (target - white) / 8));
+                    black += Math.Max(-4, Math.Min(4, (targetBlack - black) / 8));
+                }
+                int level = (int)Math.Round(white);
+                int shadow = (int)Math.Round(black);
+                if (curveWhite != level || curveBlack != shadow)
+                {
+                    for (int i = 0; i < curve.Length; i++)
+                    {
+                        double linear = Math.Max(0, Math.Min(1, (i - shadow) / (double)(level - shadow)));
+                        double display = linear <= 0.0031308 ? 12.92 * linear : 1.055 * Math.Pow(linear, 1 / 2.4) - 0.055;
+                        curve[i] = (ushort)Math.Round(display * 65535);
+                    }
+                    curveWhite = level;
+                    curveBlack = shadow;
+                }
+                for (int i = 0; i < rgb.Length; i++) rgb[i] = curve[rgb[i]];
             }
+        }
 
-            int range = max - min;
-            if (range <= 0)
-            {
-                Array.Clear(rgb, 0, rgb.Length);
-                return;
-            }
-
-            for (int i = 0; i < rgb.Length; i++)
-            {
-                int scaled = (rgb[i] - min) * 65535 / range;
-                rgb[i] = (ushort)scaled;
-            }
+        internal static int MeasureExposure(byte[] raw)
+        {
+            if (raw == null || raw.Length != BytesPerFrame)
+                throw new InvalidDataException("A camera frame must contain exactly 160000 bytes.");
+            int sum = 0;
+            for (int row = 80; row <= 240; row += 80)
+                for (int column = 80; column <= 240; column += 80)
+                {
+                    int offset = row * 492 + 12 + column / 2 * 3;
+                    if ((raw[offset] & 0x80) == 0 || (raw[offset + 1] & 0x10) != 0) return -1;
+                    sum += ((raw[offset] & 0x7f) << 3) | (raw[offset + 1] >> 5);
+                }
+            return sum / 9;
         }
 
         private static int P(ushort[] src, int width, int height, int x, int y)
