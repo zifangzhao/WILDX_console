@@ -23,10 +23,20 @@ VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright (c) 2025"
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
 !define MUI_FINISHPAGE_RUN_TEXT "Run WILD-X"
+!define MUI_FINISHPAGE_RUN_FUNCTION LaunchWildX
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
+Function LaunchWildX
+  SetOutPath "$INSTDIR"
+  ClearErrors
+  ; Shell launch honors the application's requireAdministrator manifest.
+  ExecShell "open" "$INSTDIR\${APP_EXE}"
+  IfErrors 0 done
+    MessageBox MB_OK|MB_ICONEXCLAMATION "WILD-X was installed, but could not start. Open it from the Start menu and approve the Windows permission prompt." /SD IDOK
+  done:
+FunctionEnd
 Section "WILD-X"
   SetOutPath "$INSTDIR"
   File "${APP_PAYLOAD_DIR}\${APP_EXE}"

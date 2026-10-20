@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace CE32_console
@@ -14,7 +13,8 @@ namespace CE32_console
         private const int SuperframeBytes=780;
         private const int StartupBytes=2*SuperframeBytes;
         private const ushort SyncFrame=0x00CF, SyncSuperframe=0x0330;
-        private readonly List<byte> pending=new List<byte>(65536);
+        private byte[] pending=new byte[65536];
+        private int pendingCount;
         private readonly short[] lfpAssembly=new short[Channels];
         private readonly short[] apFrame=new short[Channels];
         private readonly ushort[] words=new ushort[32];
@@ -28,7 +28,7 @@ namespace CE32_console
         // A wrapped 20-bit counter alone cannot distinguish all LFP epochs.
         internal void DeclareRecordingReset()
         {
-            if(locked || pending.Count!=0 || FramesChecked!=0 || failed || completed)
+            if(locked || pendingCount!=0 || FramesChecked!=0 || failed || completed)
                 throw new IOException("NP1 reset epoch cannot change after decoding starts.");
             recordingResetDeclared=true;
         }
@@ -51,14 +51,14 @@ namespace CE32_console
             if(value!=0x11 && value!=0x22)throw new IOException("Unsupported NP model fixed word");
             if((declaredFixedWord!=0 && declaredFixedWord!=value) || (ExpectedFixedWord!=0 && ExpectedFixedWord!=value))
                 throw new IOException("NP model changed during recording");
-            if(declaredFixedWord==0 && (locked || pending.Count!=0 || FramesChecked!=0 || failed || completed))
+            if(declaredFixedWord==0 && (locked || pendingCount!=0 || FramesChecked!=0 || failed || completed))
                 throw new IOException("NP model must be declared before decoding starts");
             declaredFixedWord=value;
         }
         internal void UseV1QuadFormat()
         {
             if(Layout==NpCe64LaneLayout.GpioV1Quad)return;
-            if(locked || pending.Count!=0 || FramesChecked!=0 || failed || completed)
+            if(locked || pendingCount!=0 || FramesChecked!=0 || failed || completed)
                 throw new IOException("NP1 transport format changed during a recording.");
             Layout=NpCe64LaneLayout.GpioV1Quad;
         }
@@ -103,7 +103,7 @@ namespace CE32_console
         }
         private int FindAlignedStart()
         {
-            for(int offset=0;offset<=pending.Count-StartupBytes;offset++) {
+            for(int offset=0;offset<=pendingCount-StartupBytes;offset++) {
                 if(Layout!=NpCe64LaneLayout.Auto) {
                     // FIXED is programmed SYNC_DATA, not a transport layout ID.
                     // V1 quad transport carries either approved startup profile:
@@ -139,13 +139,15 @@ namespace CE32_console
         {
             if(failed || completed)throw new InvalidOperationException("NP1 decoder session is closed.");
             if(lanes==null || offset<0 || count<0 || offset>lanes.Length-count)throw new ArgumentOutOfRangeException("count");
-            for(int i=0;i<count;i++)pending.Add(lanes[offset+i]);
+            int needed=checked(pendingCount+count);
+            if(needed>pending.Length)Array.Resize(ref pending,Math.Max(needed,pending.Length*2));
+            Buffer.BlockCopy(lanes,offset,pending,pendingCount,count);pendingCount=needed;
             if(!locked) {
-                if(pending.Count<StartupBytes)return;
+                if(pendingCount<StartupBytes)return;
                 int start=FindAlignedStart();
                 if(start<0) {
-                    int discard=pending.Count-(StartupBytes-1);
-                    StartupDiscardedBytes+=discard;pending.RemoveRange(0,discard);
+                    int discard=pendingCount-(StartupBytes-1);
+                    StartupDiscardedBytes+=discard;RemovePrefix(discard);
                     if(StartupDiscardedBytes>1024*1024) {
                         failed=true;throw new IOException("No valid NP1 framing in the first MiB; check lane layout, clock and probe configuration.");
                     }
@@ -154,23 +156,27 @@ namespace CE32_console
                 if(start>0) {
                     StartupDiscardedBytes+=start;
                     if(Layout!=NpCe64LaneLayout.GpioV1Quad)Resynchronizations++;
-                    pending.RemoveRange(0,start);
+                    RemovePrefix(start);
                 }
                 locked=true;
             }
             int consumed=0;
-            while(pending.Count-consumed>=SuperframeBytes) {
+            while(pendingCount-consumed>=SuperframeBytes) {
                 for(int frame=0;frame<13;frame++)CheckFrame(consumed+frame*60,frame==0?SyncSuperframe:SyncFrame);
                 DecodeSuperframe(consumed,onSamples);consumed+=SuperframeBytes;
             }
-            if(consumed>0)pending.RemoveRange(0,consumed);
+            if(consumed>0)RemovePrefix(consumed);
+        }
+        private void RemovePrefix(int count)
+        {
+            pendingCount-=count;Buffer.BlockCopy(pending,count,pending,0,pendingCount);
         }
         internal void Complete()
         {
             if(completed)return;
             if(failed)throw new IOException("NP1 decoder previously failed.");
             if(!locked)throw new IOException("No qualified pair of NP1 superframes was received.");
-            for(int frame=0;frame<pending.Count/60;frame++)CheckFrame(frame*60,frame==0?SyncSuperframe:SyncFrame);
+            for(int frame=0;frame<pendingCount/60;frame++)CheckFrame(frame*60,frame==0?SyncSuperframe:SyncFrame);
             completed=true;
         }
         private void DecodeSuperframe(int offset,Action<short[],int,short[],int> onSamples)
@@ -207,15 +213,23 @@ namespace CE32_console
         }
         private void ExtractAdcWords(int offset)
         {
-            Array.Clear(words,0,words.Length);
             NpCe64LaneLayout layout=Layout;bool quad=layout==NpCe64LaneLayout.GpioV1Quad;
-            for(int tick=0;tick<50;tick++) {
-                byte lane=Lane(offset+tick,layout);int word=tick/10, bit=9-tick%10;
-                // V1 NRIC1384 Table 15 / Figure 11: five ADCs per PSB line.
-                // Preserve separately qualified legacy integrated-probe layouts.
-                for(int line=0;line<6;line++)if((lane&(1<<(line+1)))!=0)
-                    words[quad ? line*5+word : word*6+line]|=(ushort)(1<<bit);
-                if(tick<20 && (lane&0x80)!=0)words[30+tick/10]|=(ushort)(1<<bit);
+            for(int word=0;word<5;word++) {
+                int a=0,b=0,c=0,d=0,e=0,f=0,g=0;
+                // Transpose ten sampled lane bytes without data-dependent
+                // branches. Framing is checked separately, before emission.
+                for(int bit=0;bit<10;bit++) {
+                    int lane=Lane(offset+word*10+bit,layout);
+                    a=(a<<1)|((lane>>1)&1);b=(b<<1)|((lane>>2)&1);
+                    c=(c<<1)|((lane>>3)&1);d=(d<<1)|((lane>>4)&1);
+                    e=(e<<1)|((lane>>5)&1);f=(f<<1)|((lane>>6)&1);
+                    g=(g<<1)|((lane>>7)&1);
+                }
+                // V1: five ADCs per PSB line; preserve the legacy word order.
+                int at=quad?word:word*6,step=quad?5:1;
+                words[at]=(ushort)a;words[at+step]=(ushort)b;words[at+step*2]=(ushort)c;
+                words[at+step*3]=(ushort)d;words[at+step*4]=(ushort)e;words[at+step*5]=(ushort)f;
+                if(word<2)words[30+word]=(ushort)g;
             }
         }
         private static int AdcWordToChannel(int adc,int slot) { return (adc/2)*24+(adc&1)+slot*2; }

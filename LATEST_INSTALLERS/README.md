@@ -1,9 +1,21 @@
-# WILDX USB catalog repair
+# WILDX 1.0.0.48 — V1 download/export
 
-[Download installer](WILDX_console-Setup-1.0.0.47-USB-catalog-repair.exe) — **1.0.0.47**.
+[Download installer](WILDX_console-Setup-1.0.0.48-V1-download-export.exe) — **1.0.0.48**.
 
-**USB Mode → Repair SD catalog…**, also available in Data Download. Install the included V2 **USB E323A06A** or matching fused HEX; updating only the APP is insufficient. The card is freshly inspected and explicitly confirmed. Repair changes catalog/journal metadata, not recorded payload; no format, rewind or automatic command replay.
+V1's PC-side SD export decoder is faster, with the same framing, continuity
+and corruption checks. Existing file-only validation passed 3,101 cases and
+retained 21 byte-identical output files. Saved-record full export was 2.78x
+faster; this is **not a verified fix for the live 11 MB/s download rate**.
 
-105 actual helper and11 compiled UI checks passed; firmware native metadata/EP0 checks passed. All **48 extracted payload files** match. No new hardware flash, installed-pair, physical repair, recording or endurance test. APPB60291EE/recovery6408DBB8, V1/camera and dependencies are unchanged. Existing recording limits remain; V1 repair firmware is not included.
+The exact checked 48 executable is packaged without rebuilding. All other
+47 runtime/firmware files match release 47, including V1 HS/SD/BLE component
+and fused images, V1 camera, V2 and the checked exporter DLL. No firmware
+update is required for this PC decoder change. Existing USB catalog-repair
+support and firmware requirements are unchanged.
 
-One latest installer; [previous package](legacy/20261019_before_USB_repair_47/README.md). [Firmware and limits](../Firmware/V2/README.md) · [Manifest](release-manifest.json).
+Finish → Run uses Windows shell launch so the app's administrator prompt can
+appear. Three isolated callback/launch cases passed; real WILD-X/UAC was not
+run during packaging. All 48 extracted payload files match the frozen inputs.
+
+No new device, streaming, SD-recording, endurance or installed-pair qualification.
+New unbuilt timing diagnostics are excluded. [Scope and limits](../Note/RELEASE_1.0.0.48_V1_DOWNLOAD_EXPORT_20261019.md) · [Manifest](release-manifest.json) · [Previous installer](legacy/20261019_before_download_export_48/README.md).
