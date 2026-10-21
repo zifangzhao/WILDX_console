@@ -1,76 +1,41 @@
-# V2 USB catalog repair — 2026-10-19
+# V2 compact BLE preview validation
 
-WILDX 1.0.0.47 adds **Repair SD catalog…** to USB Mode and Data Download.
-This is a real firmware operation, not the read-only Recover recordings scan.
-Install USB service **E323A06A**; an APP-only update cannot add this command.
-The matching fused image retains recovery6408DBB8 and APPB60291EE, with
-retained settings omitted. No hardware was flashed for this change.
+The V2 developer supplied the exact APP15FAE47B/USBE323A06A/recovery6408DBB8
+bundle and final acceptance receipt. The matching console is frozen GUI63,
+SHA256 `8653385637E334133CF9C4B0D218F76AF43DD006C55644CBFDB766CB5302AE2C`.
+The fused HEX SHA256 is
+`1289F8D164412186A0AAA0F6578E1A3CC8EF0DE405AEABE613ED09E38D9CE57B`.
+All six component/update/fused files are hash-identified in `source-manifest.json`.
 
-## Scope and safeguards
+The actual hidden form displayed compact kind5 packets at 500 Hz/64 rows with
+a two-second plot window, first P1 then P2/channel383. It consumed 100 packets;
+the independent observer saw 96, with 6,121 valid and 23 invalid rows. Neither
+reported packet gaps, backwards packets or host queue drops. Invalid rows were
+retained as missing. Selection/calibration downtime was 9,629.9402 ms. Twelve
+recording clock heartbeats succeeded. The bounded pressure-retry policy passed
+software checks; this successful run did not exercise a pressure retry.
 
-Only idle USB download mode may inspect/repair. Recording, DMA, download,
-preview and other active owners prevent admission. The SETUP interrupt queues
-work; foreground performs it. Exact device/card/epoch and increasing transaction
-numbers are checked. The user confirms a fresh inspection before one repair.
-Missing acknowledgments/timeouts are unknown outcomes, never automatic replay.
+Normal Stop completed: produced/written/readback-verified blocks all 10,140,
+terminal error/fault zero, source counters equal, no CPU/SD fault, engines quiet.
+Acquisition lasted 25,959 ms; drain 35 ms and readback verification 35,095 ms.
+The 61.047-second adapter wall time includes verification and is not acquisition
+duration. Stopped P2 compact raw bits matched stored SD data. Protected loader,
+settings and exact APP/USB identities were checked. Normal USB boot/status and
+mode return to APP/SD-ready passed; no new USB capture/export test is claimed.
 
-The adapter reuses the existing catalog recovery implementation. Writes are
-restricted to catalog/journal sectors112–113 and128–1151; recording payload,
-descriptor and footer sectors cannot be written by this adapter. It does not
-format, delete, rewind, reclaim unknown allocations or start a recording.
-Genuinely full/unknown-boundary states remain errors, with numeric diagnostics.
-Completed metadata repair does not certify an interrupted recording as complete.
-An SD operation that fails to retire keeps its ownership fence; explicit
-recovery-loader entry is permitted only after physical SD activity stops.
+This is a cached-component integration. Only the preview unit was newly compiled
+at O3 and its object reused over the working APP8A839098 baseline. The other 62
+object hashes, 14 RAM reservations and 148 vector meanings were preserved relative
+to working8A. Compared with public B60291EE, working8A already differs in seven
+objects: cold-init-retry main, source/power, live_sd runtime-window, dual_sd_meta
+append, dual_sd_catalog, dual_sd_catalog_port and dual_sd_app triple15. Catalog
+control retains the existing degraded-warning START fix. Private overflow-drain
+is off; no private source-gap SDK/exporter enters this bundle. `source-build.json`
+records frozen inputs. This is not a clean whole-source build or a claim that
+the public source commit alone reproduces the APP.
 
-## Evidence
-
-- Actual adapter plus real catalog/meta/run code: focused native regression
-  passes v11/v14 metadata, interrupted journal writes, card/epoch changes,
-  nonce/replay/admission, payload canaries, cancellation and held-owner guards.
-  SD HAL/USB are modeled; this is not physical power-interruption qualification.
-- Actual EP0/HAL/LL focused regression passes DMA status-stage bounds, next
-  SETUP/canaries and DMA/non-DMA paths. This proves the source fix, not a cause
-  for every historical Windows error31.
-- One incremental USB build: four changed translation units and83 frozen
-  objects; feature-OFF/source-preimage reproduces every published2E07799E byte.
-  Eight RAM reservations and148 semantic vectors checked; ordinary RAM grows
-  4080bytes. The8KiB startup stack remains bounded. Capture, packing, bulk,
-  clocks, HAL and DMA objects are unchanged. Narrow postcheck corrections reuse
-  already-compiled objects; no repeated compilation.
-- Canonical WILDX1.0.0.47:105 actual helper/EP0-boundary checks and11 actual
-  compiled repair-button ownership checks pass. No manual clicks, discovery or
-  hardware in these tests. Generation-specific capability checks prevent old
-  V1's ROM-DFU flag from being mistaken for repair support. V1 repair firmware
-  remains a separate development task.
-- The first console compile encountered an old cached exporter. Reusing the
-  exact previously-published A396530A… exporter fixed that dependency mismatch;
-  no exporter/configurator/updater rebuild. Automatic versions46/47 reflect
-  failed/successful compile attempts. Two modeled-receipt fixture inconsistencies
-  were corrected without weakening production checks.
-
-Receipts: `_artifacts/v2_usb_catalog_repair_20261019/build/incremental-build.json`,
-`delivery/source-manifest.json`; native output
-`_artifacts/v2_usb_catalog_repair_native_20261019/r2`. Canonical console source
-and its helper/UI evidence remain in the WILDX repository.
-
-The release records the proven object-cache integration. New catalog sources
-and a scoped `usb-catalog-integration.patch` are published; unrelated working
-AUX/idle/download experiments are not staged. The patch's source baseline is
-the exact current-source preimage whose feature-OFF build reproduces published
-USB2E, not a claim that a clean public HEAD reproduces this historical cache.
-
-## Delivery limits
-
-USB-only HEX SHA256:
-76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9.
-Fused HEX SHA256:
-9DAB56E0BFBF03B48BE289F436F01A4F4A13E6F0EC503DFC69D51384D1118FDF.
-USB update container SHA256:
-DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA.
-USB generation3/ABI4/automatic-USB flags3; LF-normalized HEX.
-
-Targeted software/component checks only: no new installed-pair, physical USB
-repair, recording, throughput, endurance or analog qualification. Existing
-APP recording-mode/card/power limits remain; no all-mode lossless or power
-improvement claim. This slice does not resume the deferred power experiments.
+Limits: dual20k failed source overwrite before preview; triple/P3 preview,
+endurance, analog quality, independent DAT export and visible installed UI
+remain unqualified. The first GUI63 connection attempt failed before commands;
+a guarded normal reset restored BLE advertising. New V1 GUI64 recovery and V2
+IMU startup investigation remain separate from this exact checked pair.

@@ -1,0 +1,1 @@
+Exact 98 GUI63 compiler/build inputs, including nine frozen overlays. Hashes cover original bytes and line endings. The archive reproduces the recorded source composition; resources, exporter and dependencies were reused from the checked cache. This is not a new clean-public-HEAD build. GUI64 V1 recovery changes are excluded. See Note/RELEASE_1.0.0.63_20261020.md.

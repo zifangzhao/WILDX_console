@@ -292,10 +292,11 @@ namespace USB512_interface
             }
             string error = lastDecodeError;
             status.Text = String.IsNullOrEmpty(error)
-                ? (displayedFrames == 0 ? "Waiting for camera frames…" : "Live preview")
+                ? (displayedFrames == 0 ? "Waiting for camera frames…" : decoder.HoldingImage ? "Image damaged — holding previous frame" : "Live preview")
                 : "Preview decoder error: " + error;
             diagnostics.SetToolTip(status, string.Format("{0:N0} received, {1:N0} decoded, {2:N0} displayed; {3:N0} display frames skipped",
-                submitted, decodedFrames, displayedFrames, dropped));
+                submitted, decodedFrames, displayedFrames, dropped) +
+                (decoder.RecoverySummary == null ? "" : "; " + decoder.RecoverySummary));
 
             int meter;
             bool automatic;

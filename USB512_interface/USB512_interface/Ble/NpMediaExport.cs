@@ -293,14 +293,18 @@ namespace CE32_console
             Require(frames >= 0 && new FileInfo(camera).Length == checked(frames * FrameBytes) && (frames == 0 || rate > 0 && rate <= 58),
                 "Camera length/rate differs from the native report.");
             string partialWav = Path.Combine(directory, "microphone.partial.wav"), partialVideo = Path.Combine(directory, "camera.partial.mp4");
+            string imageReport = Path.Combine(directory, "camera.image-recovery.csv"), partialImageReport = Path.Combine(directory, "camera.partial.image-recovery.csv");
             if (File.Exists(mp4)) throw new IOException("Converted MP4 already exists; nothing overwritten.");
-            if (File.Exists(partialWav) || File.Exists(partialVideo)) throw new IOException("A partial conversion exists; retain/move it before retrying.");
+            if (File.Exists(partialWav) || File.Exists(partialVideo) || File.Exists(imageReport) || File.Exists(partialImageReport)) throw new IOException("A previous/partial conversion exists; retain/move it before retrying.");
             bool reuseWav = File.Exists(wav); string warning = TimingWarning(native);
+            long checkedFrames = 0, realignedFrames = 0, realignedRows = 0, heldFrames = 0, gapFrames = 0;
             var report = new Dictionary<string, object> {
                 {"status", "converting"}, {"native_files_modified", false}, {"microphone_samples", samples}, {"microphone_hz", samples > 0 ? 200000 : 0},
                 {"camera_frames", frames}, {"camera_hz", rate}, {"audio_resampling_or_filtering", false}, {"streams_muxed_or_truncated", false},
                 {"video_timing", "Saved frames at nominal camera rate only; timestamp CSVs remain authoritative. No missing frames are invented."},
                 {"video_color_processing", "BGGR native / RGGB after 180-degree rotation; RGB channel order. Camera tone v2: bounded luminance-shadow contrast, smoothed 99th-percentile white reference, at most 2x display exposure, sRGB curve. Flat scenes keep zero-based tone; no calibrated sensor black level or white balance; native pixels retained."},
+                {"video_image_recovery", "Every row training marker and every pixel start/stop guard checked. Unique shifts within 32 bytes realigned for display only. Damaged/ambiguous frames hold the previous complete image, or black before the first valid image. No interpolation, native byte changes, frame removal or timestamp changes. Framing guards are not a pixel-value checksum."},
+                {"image_recovery_report", "camera.image-recovery.csv: zero-based frame index; affected frames only; held images are not recovered sensor measurements"},
                 {"timing_warning", warning}, {"native_timestamps_retained", true}, {"microphone_wav_reused", false}
             };
             bool durationChecked = native.ContainsKey("source_stop_timing_assumption");
@@ -324,9 +328,26 @@ namespace CE32_console
                 }
                 if (frames > 0)
                 {
+                    using (var imageLog = new StreamWriter(new FileStream(partialImageReport, FileMode.CreateNew, FileAccess.Write, FileShare.Read), new UTF8Encoding(false))) {
+                    imageLog.WriteLine("frame_index,status,realigned_rows,invalid_rows");
                     WILD_VideoDecoder.DecodeHevcWithAudio(camera, rate, 200000, false, false,
-                        p => { if (progress != null) progress(20 + p * 79 / 100, "Camera MP4: " + p + "% (saved frames only)"); }, partialVideo, cancelled);
+                        p => { if (progress != null) progress(20 + p * 79 / 100, "Camera MP4: " + p + "% (saved frames only)"); }, partialVideo, cancelled,
+                        (index, recovery) => {
+                            checkedFrames++;
+                            if (recovery.CorrectedRows != 0) { realignedFrames++; realignedRows += recovery.CorrectedRows; }
+                            if (recovery.Held) heldFrames++;
+                            if (recovery.Gap) gapFrames++;
+                            if (recovery.Held || recovery.CorrectedRows != 0)
+                                imageLog.WriteLine(index.ToString(CultureInfo.InvariantCulture) + "," + recovery.Status + "," + recovery.CorrectedRows + "," + recovery.InvalidRows);
+                        });
+                    }
                     File.Move(partialVideo, mp4);
+                    File.Move(partialImageReport, imageReport);
+                    if (realignedFrames != 0 || heldFrames != 0) {
+                        string imageWarning = "Image recovery: " + realignedFrames + " frames realigned; " + heldFrames + " frames held. See camera.image-recovery.csv.";
+                        report["image_warning"] = imageWarning;
+                        warning = string.IsNullOrEmpty(warning) ? imageWarning : warning + " " + imageWarning;
+                    }
                 }
                 report["status"] = "complete";
                 if (progress != null) progress(100, "MP4/WAV complete; native files and timestamps retained. " + warning);
@@ -338,7 +359,14 @@ namespace CE32_console
                 if (cancelled != null && cancelled()) throw new OperationCanceledException("Media conversion cancelled; native files retained.", ex);
                 throw;
             }
-            finally { File.WriteAllText(Path.Combine(directory, "conversion.json"), new JavaScriptSerializer().Serialize(report) + "\n", new UTF8Encoding(false)); }
+            finally {
+                report["camera_image_frames_checked"] = checkedFrames;
+                report["camera_image_realigned_frames"] = realignedFrames;
+                report["camera_image_realigned_rows"] = realignedRows;
+                report["camera_image_held_frames"] = heldFrames;
+                report["camera_image_gap_frames"] = gapFrames;
+                File.WriteAllText(Path.Combine(directory, "conversion.json"), new JavaScriptSerializer().Serialize(report) + "\n", new UTF8Encoding(false));
+            }
         }
 
         internal static void Export(Stream card, long start, long end, string output, Func<bool> cancelled, Action<int> progress)
@@ -630,7 +658,8 @@ namespace CE32_console
                 if (stream == null || stream.Position == stream.Length) { timer.Stop(); status.Text = "Finished " + frame + " frames"; return; }
                 int at = 0; while (at < raw.Length) { int n = stream.Read(raw, at, raw.Length - at); if (n == 0) throw new EndOfStreamException(); at += n; }
                 var next = decoder.Decode(raw); var previous = image.Image; image.Image = next; if (previous != null) previous.Dispose();
-                status.Text = "Frame " + (++frame) + " / " + stream.Length / raw.Length;
+                status.Text = "Frame " + (++frame) + " / " + stream.Length / raw.Length +
+                    (decoder.RecoverySummary == null ? "" : " — " + decoder.RecoverySummary);
             }
             catch (Exception ex) { timer.Stop(); status.Text = "Playback stopped: " + ex.Message; }
         }

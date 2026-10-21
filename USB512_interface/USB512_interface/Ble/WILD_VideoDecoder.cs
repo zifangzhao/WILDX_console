@@ -41,7 +41,8 @@ namespace CE32_console
             bool includeAudio = false,
             Action<int> progressCallback = null,
             string outputVideoPath = null,
-            Func<bool> cancelled = null)
+            Func<bool> cancelled = null,
+            Action<long, FrameRecovery> imageRecovery = null)
         {
             if (string.IsNullOrWhiteSpace(miscDatPath))
             {
@@ -121,7 +122,7 @@ namespace CE32_console
             };
 
             byte[] frameBytes = new byte[BytesPerFrame];
-            byte[] imgBytes = new byte[Width * 480];
+            int[] rowStarts = new int[Height];
             ushort[] bayer = new ushort[Width * Height];
             ushort[] rotated = new ushort[Width * Height];
             ushort[] rgb16 = new ushort[Width * Height * 3];
@@ -168,7 +169,8 @@ namespace CE32_console
                             Console.WriteLine("Processing " + idx + "/" + totalFrames);
                         }
 
-                        DecodeFrameToRgb48(frameBytes, imgBytes, bayer, rotated, rgb16, rgb48, tone);
+                        FrameRecovery recovery = DecodeFrameToRgb48(frameBytes, rowStarts, bayer, rotated, rgb16, rgb48, tone);
+                        imageRecovery?.Invoke(idx, recovery);
                         ffmpeg.StandardInput.BaseStream.Write(rgb48, 0, rgb48.Length);
 
                         int progress = totalFrames > 0
@@ -524,17 +526,25 @@ namespace CE32_console
         // One workspace per stream, not fresh image-sized arrays for every frame.
         internal sealed class PreviewDecoder
         {
-            private readonly byte[] packed = new byte[Width * Height * 3 / 2];
+            private readonly int[] rowStarts = new int[Height];
             private readonly ushort[] bayer = new ushort[Width * Height];
             private readonly ushort[] rotated = new ushort[Width * Height];
             private readonly ushort[] rgb16 = new ushort[Width * Height * 3];
             private readonly byte[] rgb48 = new byte[Width * Height * 6];
             private readonly byte[] bgr24 = new byte[Width * Height * 3];
             private readonly CameraTone tone = new CameraTone();
+            private long correctedFrames, heldFrames;
+            internal bool HoldingImage { get; private set; }
+            internal string RecoverySummary { get; private set; }
+            internal FrameRecovery LastRecovery { get; private set; }
 
             internal void Reset()
             {
                 tone.Reset();
+                correctedFrames = heldFrames = 0;
+                HoldingImage = false;
+                RecoverySummary = null;
+                LastRecovery = default(FrameRecovery);
                 Array.Clear(rgb16, 0, rgb16.Length);
                 Array.Clear(rgb48, 0, rgb48.Length);
             }
@@ -543,7 +553,12 @@ namespace CE32_console
             {
                 if (frame == null || frame.Length != BytesPerFrame)
                     throw new InvalidDataException("A camera frame must contain exactly 160000 bytes.");
-                DecodeFrameToRgb48(frame, packed, bayer, rotated, rgb16, rgb48, tone);
+                LastRecovery = DecodeFrameToRgb48(frame, rowStarts, bayer, rotated, rgb16, rgb48, tone);
+                HoldingImage = LastRecovery.Held;
+                if (LastRecovery.CorrectedRows != 0) correctedFrames++;
+                if (HoldingImage) heldFrames++;
+                if (correctedFrames != 0 || heldFrames != 0)
+                    RecoverySummary = correctedFrames + " frames realigned; " + heldFrames + " frames held";
                 for (int i = 0; i < rgb16.Length; i += 3)
                 {
                     bgr24[i] = (byte)(rgb16[i + 2] >> 8);
@@ -562,9 +577,67 @@ namespace CE32_console
             }
         }
 
-        private static void DecodeFrameToRgb48(
+        internal struct FrameRecovery
+        {
+            internal readonly int CorrectedRows, InvalidRows;
+            internal readonly bool Gap;
+            internal FrameRecovery(int corrected, int invalid, bool gap = false)
+            { CorrectedRows = corrected; InvalidRows = invalid; Gap = gap; }
+            internal bool Held { get { return Gap || InvalidRows != 0; } }
+            internal string Status { get { return Gap ? "gap-held" : Held ? "invalid-held" : CorrectedRows != 0 ? "realigned" : "valid"; } }
+        }
+
+        // Training and both guards of every pixel establish alignment
+        // independently of brightness or scene motion. Never change raw bytes.
+        private static int CameraByte(byte[] frame, int bit)
+        {
+            int at = bit >> 3, shift = bit & 7;
+            return shift == 0 ? frame[at] : ((frame[at] << 8 | frame[at + 1]) >> (8 - shift)) & 255;
+        }
+
+        private static bool CameraTraining(byte[] frame, int pixels)
+        {
+            if (pixels < 96) return false;
+            int first = CameraByte(frame, pixels - 96);
+            if (first != 0x55 && first != 0xaa) return false;
+            for (int n = 1; n < 12; n++)
+                if (CameraByte(frame, pixels - 96 + n * 8) != first) return false;
+            return true;
+        }
+
+        private static bool CameraPixelsValid(byte[] frame, int pixels)
+        {
+            // Only the raster and twelve captured trailing bytes can supply
+            // carry bits. The rest of the wire slot is padding.
+            if (pixels < 0 || pixels + Width * 12 > (ActivePackedBytesPerFrame + 12) * 8) return false;
+            for (int pair = 0; pair < Width / 2; pair++) {
+                int at = pixels + pair * 24;
+                if ((CameraByte(frame, at) & 128) == 0 ||
+                    (CameraByte(frame, at + 8) & 24) != 8 ||
+                    (CameraByte(frame, at + 16) & 1) != 0) return false;
+            }
+            return true;
+        }
+
+        private static int CameraRowStart(byte[] frame, int nominal)
+        {
+            if (CameraTraining(frame, nominal) && CameraPixelsValid(frame, nominal)) return nominal;
+            int found = -1;
+            // At most 32 bytes, far shorter than a row. Never borrow a
+            // neighboring sensor row or infer shifts from image similarity.
+            for (int delta = -256; delta <= 256; delta++) {
+                int candidate = nominal + delta;
+                if (delta == 0 || candidate < 96 || candidate + Width * 12 > (ActivePackedBytesPerFrame + 12) * 8) continue;
+                if (!CameraTraining(frame, candidate) || !CameraPixelsValid(frame, candidate)) continue;
+                if (found >= 0) return -1; // Ambiguous framing is not repaired.
+                found = candidate;
+            }
+            return found;
+        }
+
+        private static FrameRecovery DecodeFrameToRgb48(
             byte[] frameBytes,
-            byte[] imgBytes,
+            int[] rowStarts,
             ushort[] bayer,
             ushort[] rotated,
             ushort[] rgb16,
@@ -577,29 +650,38 @@ namespace CE32_console
             // first valid frame because that buffer is initially zero-filled.
             if (IsCameraGapFrame(frameBytes))
             {
-                return;
+                return new FrameRecovery(0, 0, true);
             }
 
-            // Equivalent to:
-            // img = np.reshape(raw[:320*492], (-1,492)).T
-            // img = img[12:, :].T.flatten()
-            for (int row = 0; row < Width; row++)
-            {
-                int srcBase = row * 492 + 12;
-                int dstBase = row * 480;
-                Buffer.BlockCopy(frameBytes, srcBase, imgBytes, dstBase, 480);
+            int invalid = 0, corrected = 0;
+            for (int row = 0; row < Height; row++) {
+                rowStarts[row] = CameraRowStart(frameBytes, row * 492 * 8 + 96);
+                if (rowStarts[row] < 0) invalid++;
             }
+            // An early capture can clip just the first training prefix. Use
+            // its pixels only if all other rows agree on the exact same shift
+            // and every first-row pixel still exists and has valid guards.
+            if (invalid == 1 && rowStarts[0] < 0) {
+                int shift = rowStarts[1] - (492 * 8 + 96);
+                bool uniform = shift < 0 && shift >= -96;
+                for (int row = 1; row < Height && uniform; row++)
+                    uniform = rowStarts[row] == row * 492 * 8 + 96 + shift;
+                if (uniform && CameraPixelsValid(frameBytes, 96 + shift)) { rowStarts[0] = 96 + shift; invalid = 0; }
+            }
+            if (invalid != 0) return new FrameRecovery(0, invalid);
 
-            // Unpack 10-bit packed pixels (3 bytes -> 2 pixels).
+            // Unpack only a complete validated raster. Hold the whole previous
+            // image on damage rather than stitch moving subjects across times.
             int outIdx = 0;
-            for (int i = 0; i < imgBytes.Length; i += 3)
-            {
-                int b0 = imgBytes[i];
-                int b1 = imgBytes[i + 1];
-                int b2 = imgBytes[i + 2];
-
-                bayer[outIdx++] = (ushort)(((b0 & 0x7F) << 3) | ((b1 & 0xE0) >> 5));
-                bayer[outIdx++] = (ushort)(((b1 & 0x07) << 7) | ((b2 & 0xFE) >> 1));
+            for (int row = 0; row < Height; row++) {
+                int start = rowStarts[row];
+                if (start != row * 492 * 8 + 96) corrected++;
+                for (int pair = 0; pair < Width / 2; pair++) {
+                    int at = start + pair * 24;
+                    int b0 = CameraByte(frameBytes, at), b1 = CameraByte(frameBytes, at + 8), b2 = CameraByte(frameBytes, at + 16);
+                    bayer[outIdx++] = (ushort)(((b0 & 0x7F) << 3) | (b1 >> 5));
+                    bayer[outIdx++] = (ushort)(((b1 & 0x07) << 7) | (b2 >> 1));
+                }
             }
 
             // np.rot90(..., 2)
@@ -630,6 +712,7 @@ namespace CE32_console
                     rgb48[j++] = (byte)(v >> 8);
                 }
             }
+            return new FrameRecovery(corrected, 0);
         }
 
         private static void BilinearDemosaicRggb(ushort[] src, int width, int height, ushort[] dstRgb)
@@ -760,12 +843,17 @@ namespace CE32_console
                 throw new InvalidDataException("A camera frame must contain exactly 160000 bytes.");
             int sum = 0;
             for (int row = 80; row <= 240; row += 80)
+            {
+                // Invalid alignment must not drive automatic exposure when
+                // rendering is hidden/throttled. Metering remains inexpensive.
+                if (!CameraTraining(raw, row * 492 * 8 + 96)) return -1;
                 for (int column = 80; column <= 240; column += 80)
                 {
                     int offset = row * 492 + 12 + column / 2 * 3;
-                    if ((raw[offset] & 0x80) == 0 || (raw[offset + 1] & 0x10) != 0) return -1;
+                    if ((raw[offset] & 0x80) == 0 || (raw[offset + 1] & 0x18) != 8 || (raw[offset + 2] & 1) != 0) return -1;
                     sum += ((raw[offset] & 0x7f) << 3) | (raw[offset + 1] >> 5);
                 }
+            }
             return sum / 9;
         }
 

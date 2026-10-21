@@ -16,6 +16,7 @@ static class NpCameraColorTests
     static byte[] Frame(Func<int,int,int> value)
     {
         var raw = new byte[160000];
+        for (int y = 0; y < 320; y++) for (int n = 0; n < 12; n++) raw[y * 492 + n] = 0x55;
         for (int y = 0; y < 320; y++) for (int x = 0; x < 320; x += 2) {
             int a = value(x,y), b = value(x+1,y), at = y * 492 + 12 + x / 2 * 3;
             raw[at] = (byte)(0x80 | (a >> 3));
@@ -25,6 +26,16 @@ static class NpCameraColorTests
         return raw;
     }
     static Color Center(Bitmap image) { return image.GetPixel(160,160); }
+    static byte[] Shift(byte[] raw, Func<int,int> shift)
+    {
+        var moved = new byte[raw.Length];
+        for (int row = 0; row < 320; row++) for (int bit = 0; bit < 492 * 8; bit++) {
+            int source = row * 492 * 8 + bit, target = source + shift(row);
+            if (target >= 0 && target < 157452 * 8 && (raw[source >> 3] & (128 >> (source & 7))) != 0)
+                moved[target >> 3] |= (byte)(128 >> (target & 7));
+        }
+        return moved;
+    }
     static int Brightness(Color c) { return (c.R + c.G + c.B) / 3; }
     static void Same(Bitmap a, Bitmap b)
     {
@@ -95,35 +106,82 @@ static class NpCameraColorTests
             }
             decoder.Reset();using(var image=decoder.Decode(Frame((x,y)=>1000)))
                 Check(Brightness(Center(image))>=250,"Bright flat scene no longer stays white");
+            var detail=Frame((x,y)=>(x*7+y*13+(x%2)*97)%1024);
+            foreach(int shift in new[]{-96,-95,-78,-50,-49,-1,1,7,8,13,64,95,96}) {
+                byte[] moved=Shift(detail,row=>shift), saved=(byte[])moved.Clone();
+                decoder.Reset();
+                using(var expected=new WILD_VideoDecoder.PreviewDecoder().Decode(detail))
+                using(var actual=decoder.Decode(moved)) Same(expected,actual);
+                Check(!decoder.LastRecovery.Held && decoder.LastRecovery.CorrectedRows==320,"Complete shifted raster was not recovered: "+shift);
+                Check(saved.SequenceEqual(moved),"Recovery changed native bytes");
+                Check(WILD_VideoDecoder.MeasureExposure(moved)==-1,"Shifted image drove automatic exposure");
+            }
+            foreach(int value in new[]{0,256,512,1023}) foreach(int shift in new[]{-1,1}) {
+                var flat=Frame((x,y)=>value);
+                decoder.Reset();
+                using(var expected=new WILD_VideoDecoder.PreviewDecoder().Decode(flat))
+                using(var actual=decoder.Decode(Shift(flat,row=>shift))) Same(expected,actual);
+                Check(!decoder.LastRecovery.Held,"Flat/saturated phase was guessed incorrectly");
+            }
+            var ambiguous=Frame((x,y)=>341);
+            for(int row=0;row<320;row++)for(int n=0;n<12;n++)ambiguous[row*492+n]=0xaa;
+            decoder.Reset();using(var image=decoder.Decode(Shift(ambiguous,row=>1)))
+                Check(decoder.HoldingImage,"Ambiguous training/pixel pattern was guessed");
+            decoder.Reset();
+            using(var expected=new WILD_VideoDecoder.PreviewDecoder().Decode(detail))
+            using(var actual=decoder.Decode(Shift(detail,row=>row<160?0:1))) Same(expected,actual);
+            Check(decoder.LastRecovery.CorrectedRows==160 && !decoder.LastRecovery.Held,"Within-frame row phase change failed");
+            // Lost source pixels, malformed guards, or a truncated tail cannot
+            // be recreated. Keep one whole previous image at the same time slot.
+            foreach(byte[] damaged in new[]{Shift(detail,row=>-104),Shift(detail,row=>257)}) {
+                decoder.Reset();using(var before=decoder.Decode(detail))using(var held=decoder.Decode(damaged))Same(before,held);
+                Check(decoder.HoldingImage && decoder.LastRecovery.CorrectedRows==0,"Lost/out-of-range pixels invented");
+            }
+            byte[] torn=(byte[])detail.Clone();Array.Clear(torn,236*492,84*492);
+            decoder.Reset();using(var before=decoder.Decode(detail))using(var held=decoder.Decode(torn))Same(before,held);
+            Check(decoder.LastRecovery.InvalidRows==84 && decoder.HoldingImage,"Torn trailing rows were displayed");
+            decoder.Reset();using(var first=decoder.Decode(torn))Check(Center(first).ToArgb()==Color.Black.ToArgb(),"Initial damaged frame did not stay black");
+            Check(decoder.RecoverySummary!=null,"Held frame was not reported");
+            decoder.Reset();Check(decoder.RecoverySummary==null&&!decoder.HoldingImage,"Recovery state leaked across recordings");
+            foreach(int at in new[]{42*492+12,42*492+13,42*492+14}) {
+                byte[] damaged=(byte[])detail.Clone();damaged[at]^=(byte)(at%492==12?128:at%492==13?8:1);
+                decoder.Reset();using(var before=decoder.Decode(detail))using(var held=decoder.Decode(damaged))Same(before,held);
+                Check(decoder.LastRecovery.InvalidRows==1,"Not every pixel guard was checked");
+            }
             int writes=0;
             using(var live=new CameraPreviewForm((r,g)=>writes++)) {
                 typeof(CameraPreviewForm).GetField("autoExposure",Instance).SetValue(live,false);
                 var decode=typeof(CameraPreviewForm).GetMethod("DecodeCe64Frame",Instance);
                 decoder.Reset();
-                foreach(var frame in new[]{grey,highlighted,bright,colorFrame,gap})
+                foreach(var frame in new[]{grey,highlighted,bright,colorFrame,Shift(colorFrame,row=>1),torn,gap})
                     using(var expected=decoder.Decode(frame))using(var actual=(Bitmap)decode.Invoke(live,new object[]{frame}))Same(expected,actual);
             }
             Check(writes==0,"Offscreen test sent an exposure command");
             if (args.Length > 1) {
                 string rawPath=Path.Combine(args[0],"encoder.raw"), videoPath=Path.Combine(args[0],"encoder.mp4");
-                byte[] native=grey.Concat(highlighted).Concat(bright).Concat(Frame((x,y)=>1023)).Concat(gap).ToArray();
+                var white=Frame((x,y)=>1023);var invalidWhite=(byte[])white.Clone();invalidWhite[42*492+12]^=128;
+                byte[] native=grey.Concat(highlighted).Concat(bright).Concat(white).Concat(Shift(white,row=>1)).Concat(invalidWhite).Concat(gap).ToArray();
                 File.WriteAllBytes(rawPath,native);
                 Environment.SetEnvironmentVariable("CE32_FFMPEG",args[1]);
                 Environment.SetEnvironmentVariable("CE32_FFMPEG_PROFILE","minimal");
-                WILD_VideoDecoder.DecodeHevcWithAudio(rawPath,16,200000,false,false,null,videoPath);
+                var states=new System.Collections.Generic.List<string>();
+                WILD_VideoDecoder.DecodeHevcWithAudio(rawPath,16,200000,false,false,null,videoPath,null,(index,recovery)=>{
+                    Check(index==states.Count,"Recovery report changed frame indices");states.Add(recovery.Status);
+                });
+                Check(string.Join(",",states)=="valid,valid,valid,valid,realigned,invalid-held,gap-held","MP4 recovery report disagrees with source frames");
                 using(var process=new Process {StartInfo=new ProcessStartInfo(args[1],"-hide_banner -loglevel error -i \""+videoPath+"\" -f rawvideo -pix_fmt rgb24 -vsync 0 pipe:1") {UseShellExecute=false,CreateNoWindow=true,RedirectStandardOutput=true,RedirectStandardError=true}})
                 using(var decoded=new MemoryStream()) {
                     process.Start();process.StandardOutput.BaseStream.CopyTo(decoded);string error=process.StandardError.ReadToEnd();
                     Check(process.WaitForExit(10000)&&process.ExitCode==0,"MP4 decode failed: "+error);
                     byte[] pixels=decoded.ToArray();int stride=320*320*3,center=(160*320+160)*3;
-                    Check(pixels.Length==stride*5,"MP4 frame count changed");
+                    Check(pixels.Length==stride*7,"MP4 frame count changed");
                     Check(Math.Abs(pixels[center]-pixels[stride+center])<=4&&pixels[center]>=140,"MP4 highlight darkening");
                     Check(pixels[stride*2+center+1]>=235&&Math.Abs(pixels[stride*2+center]-pixels[stride*2+center+1])<=8,"MP4 purple flash");
-                    Check(pixels[stride*3+center]>=245&&pixels[stride*4+center]>=245,"MP4 saturated/gap frame became black");
+                    for(int i=3;i<7;i++)Check(pixels[stride*i+center]>=245,"MP4 saturated/realigned/held frame became black");
                 }
                 Check(File.ReadAllBytes(rawPath).SequenceEqual(native),"Encoding modified native camera data");
             }
-            File.WriteAllText(Path.Combine(args[0],"result.txt"),"PASS "+checks+" actual-source camera checks; all1024 exposure codes, color/brightness/gaps/reset and identical USB/playback pixels. No hardware.");
+            File.WriteAllText(Path.Combine(args[0],"result.txt"),"PASS "+checks+" actual-source camera checks; all1024 exposure codes, color/tone, bit/row realignment, ambiguous/damaged holds, frame audit and identical USB/playback pixels. No hardware.");
             Console.WriteLine(File.ReadAllText(Path.Combine(args[0],"result.txt")));return 0;
         } catch(Exception ex) { Console.Error.WriteLine(ex);return 1; }
     }

@@ -1,34 +1,55 @@
 {
+  "app_crc32": "15FAE47B",
   "usb_crc32": "E323A06A",
   "recovery_crc32": "6408DBB8",
-  "app_crc32": "B60291EE",
+  "app_identity": {
+    "imageId": 1095782449,
+    "baseAddress": 134348800,
+    "bytes": 181680,
+    "codeCrc32": "15FAE47B",
+    "buildIdHex": "6161353261646565316163316662306439343561323666643966343731316133",
+    "manifestFlags": 0,
+    "minimumLoaderAbi": 4,
+    "generation": 3
+  },
   "files": {
-    "V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex": {
-      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9",
-      "bytes": 474836
+    "V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_15FAE47B_COMPACT_BLE_20261020.hex": {
+      "bytes": 1057080,
+      "sha256": "1289F8D164412186A0AAA0F6578E1A3CC8EF0DE405AEABE613ED09E38D9CE57B"
     },
-    "V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_B60291EE_CATALOG_REPAIR_20261019.hex": {
-      "sha256": "9DAB56E0BFBF03B48BE289F436F01A4F4A13E6F0EC503DFC69D51384D1118FDF",
-      "bytes": 1031560
+    "V2_logger_APP_only_15FAE47B_COMPACT_BLE_20261020.hex": {
+      "bytes": 500048,
+      "sha256": "DC765AD134F32D0D3E3E90518575510AE9242CC32492E48F394B7BDDEF38231C"
+    },
+    "V2_logger_APP_update_15FAE47B_COMPACT_BLE_20261020.xenp": {
+      "bytes": 181808,
+      "sha256": "F6A49412E13A8F19D90195E1D2D23C7CF4BD47E999E72115C75697F510083152"
+    },
+    "V2_recovery_only_6408DBB8_20261012.hex": {
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    "V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex": {
+      "bytes": 474836,
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
     },
     "V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp": {
-      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA",
-      "bytes": 172640
+      "bytes": 172640,
+      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
     }
   },
-  "generation": 3,
-  "loader_abi": 4,
-  "usb_flags": 3,
-  "settings_omitted": true,
-  "all_non_usb_bytes_preserved": true,
-  "native_adapter_evidence": {
-    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_native_20261019/r2/actual_adapter.inc": "0F7DC96202019F447FAECA58AA2DD280058F43CDA751EDAB93927D5574D15849",
-    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_native_20261019/r2/adapter.run.log": "4B060BC3B1C940B76A809E1170225C58924B7AA08E1BC1DA932C0F5C4925EF4F",
-    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_native_20261019/r2/adapter.exe": "83851D41F03BC713EE116FA33ECA9C4BF6AD00E9C414C66471DEC56DC78633CC"
+  "acceptance_sha256": "887B443D7A588FBEFBEC4C785EA2A105BFCFB0F7989F5DCFDBBAE6E129360D73",
+  "package_receipt_sha256": "06A0B493FB4C3C10C4702697F0425F8CDC92690ACB00218FE43F14F95CECA0CC",
+  "source_build_sha256": "B5B1AC15716DA7910910DDE817425AA50F4C2A664CD0484173F32DED9025B6EE",
+  "source_provenance": {
+    "parentReleaseSourceCommit": "1a73610f87794c58c6c50fe942827a3086caa4fb",
+    "baseline": "working APP8A839098 frozen objects; only preview object replaced",
+    "publicBaselineDelta": "7 existing object differences from B60291EE; see source-validation.md",
+    "ownerManifest": "V2/source-manifest.json",
+    "canonicalSourceEquivalenceClaimed": false,
+    "wholeSourceTreeRebuilt": false
   },
-  "integration_receipt_sha256": "A5A866B9AC8CAB398D554A2EF9850205B6AFB137E14C3B98E5A7AEEE57C2C1D7",
-  "scope": "Targeted actual-adapter metadata/EP0 software checks; recording limits inherited, no new capture qualification",
-  "hardware_validated": false,
-  "all_modes_lossless_qualified": false,
-  "published": false
+  "settings_omitted": true,
+  "pair_gui_version": "1.0.0.63",
+  "pair_gui_sha256": "8653385637E334133CF9C4B0D218F76AF43DD006C55644CBFDB766CB5302AE2C"
 }

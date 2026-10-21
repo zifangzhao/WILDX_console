@@ -271,7 +271,7 @@ static class NpBlePreviewDisplayTests {
                 Need((uint)Get(plot,"sampleHz")==500 && (ulong)Get(plot,"stride")==((ulong)hz/500)*1600,"Plot used native Hz or fixed16-row timing");
                 Need(((NpHighPassControl)Get(form,"highPass")).SampleRate==500,"HPF sample rate did not come from preview packet");
                 Need(((NumericUpDown)Get(form,"channel")).Maximum==383,"Exact channel selector lost lanes128..383");
-                Need(((Label)Get(form,"info")).Text.Contains("aliasing"),"Subsampling aliasing limitation is hidden");
+                Need(((ToolTip)Get(form,"diagnostics")).GetToolTip((Label)Get(form,"info")).Contains("aliasing"),"Subsampling limitation is missing from preview details");
                 Need(connection.Writes==0 && connection.Captures==0,"Compact display competed with controls");
             }
         }
@@ -395,6 +395,91 @@ static class NpBlePreviewDisplayTests {
             }
         }
     }
+    static void AdmitCalibration(object form){
+        // Age only the existing admission stopwatch in this radio-double
+        // fixture. Production keeps its real timer and monotonic deadlines.
+        var timer=(Stopwatch)Get(form,"retry");
+        var elapsed=typeof(Stopwatch).GetField("elapsed",All)??typeof(Stopwatch).GetField("_elapsed",All);
+        elapsed.SetValue(timer,(long)elapsed.GetValue(timer)+Stopwatch.Frequency*1100/1000);
+    }
+    static void ExpireCalibrationBackoff(object form){
+        AdmitCalibration(form);Set(Get(form,"calibrationPressureRetry"),"next",0L);
+    }
+    static NpSdStatus PressureStatus(){return new NpSdStatus{State=3,Mask=3,Hz=15000,Flags=0x0030FF95,Start=8192,LastId=71};}
+    static void CalibrationPressure(){
+        var s=PressureStatus();bool ownerBusy=false;
+        Need(s.Busy && NpV2SdControl.CanPreview(s),"Real recording-active flags must exercise production Busy semantics");
+        foreach(uint flags in new uint[]{0x0030FF91U,0x0030FF95U,0x0030FF9DU}){
+            s=PressureStatus();s.Flags=flags;
+            var admission=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4))};
+            using(var form=new NpBlePreviewForm(admission,()=>s,()=>false)){
+                AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
+                Need(admission.Captures==((flags&8U)==0?1:0),"Active recording must allow calibration; pending SD command must defer it");
+            }
+        }
+        s=PressureStatus();
+        var radio=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4))};
+        using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+            var enabled=(CheckBox)Get(form,"enabled");
+            for(int attempt=0;attempt<4;attempt++){
+                ExpireCalibrationBackoff(form);Finish((Task)Call(form,"Tick"));
+                Need(radio.Captures==attempt+1 && radio.Writes==0,"Calibration pressure replayed controls or exceeded retry budget");
+                if(attempt<3){
+                    Need(enabled.Checked && (int)Get(form,"calibrationPressureRetries")==attempt+1,"Explicit calibration pressure disabled Preview before its budget");
+                    var policy=(NpV2PreviewRetry)Get(form,"calibrationPressureRetry");var clock=(Stopwatch)Get(form,"clock");
+                    long remaining=(long)Get(policy,"next")-clock.ElapsedMilliseconds,delay=1000L<<attempt;
+                    Need(remaining>delay-100 && remaining<=delay && !policy.CanAttempt(clock.ElapsedMilliseconds),"Calibration backoff is not bounded1/2/4 seconds");
+                    Tick(form);Need(radio.Captures==attempt+1,"Timer retried calibration before its deadline");
+                }
+            }
+            Need(!enabled.Checked && ((Label)Get(form,"info")).Text.Contains("after 3 retries"),"Persistent pressure did not show a terminal refusal");
+            ExpireCalibrationBackoff(form);Tick(form);Need(radio.Captures==4,"Terminal pressure kept retrying");
+            for(int n=1;n<radio.Calibrations.Count;n++)Need(radio.Calibrations[n][0]!=radio.Calibrations[n-1][0],"Calibration reused a preview request ID");
+        }
+        s=PressureStatus();radio=new NpBleConnection();
+        radio.Calibration=(id,p,c,h)=>radio.Captures==1?Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4)):Task.FromResult(Calibration(id,p,c,h));
+        using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+            AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
+            ownerBusy=true;ExpireCalibrationBackoff(form);Tick(form);
+            Need(radio.Captures==1 && radio.Writes==0,"Pressure retry overtook recording/control ownership");
+            ownerBusy=false;s.Chunks+=100;Finish((Task)Call(form,"Tick"));
+            Need(radio.Captures==2 && radio.Writes==1 && ((CheckBox)Get(form,"enabled")).Checked,"Pressure relief did not start compact preview during the same recording");
+            Need((int)Get(form,"calibrationPressureRetries")==0 && ((NpV2PreviewRetry)Get(form,"calibrationPressureRetry")).CanAttempt(0),"Successful calibration retained retry state");
+            Need(radio.Calibrations[0][0]!=radio.Calibrations[1][0] && radio.Calibrations[1][1]==1 && radio.Calibrations[1][2]==0 && radio.Calibrations[1][3]==15000,"Retry changed selection/rate or reused its ID");
+            var request=radio.Requests[0];uint id=BitConverter.ToUInt32(request,12);
+            Need(BitConverter.ToUInt32(request,8)==5 && BitConverter.ToUInt32(request,28)==7,"Recovered calibration lost kind5 or its actual wire session");
+            radio.Emit(Compact(15000,4,id:id));Tick(form);
+            Need((int)Get(Get(form,"plot"),"count")==64 && (uint)Get(form,"previewHz")==500,"Actual handler did not display compact data after pressure relief");
+        }
+        var failures=new List<Exception>{new TimeoutException("uncertain calibration"),new IOException("uncertain transport"),new OperationCanceledException()};
+        foreach(uint reason in new uint[]{1,2,3,5,128})failures.Add(new NpV2PreviewUnavailableException(reason));
+        foreach(var failure in failures){
+            s=PressureStatus();radio=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(failure)};
+            using(var form=new NpBlePreviewForm(radio,()=>s,()=>false)){
+                AdmitCalibration(form);Finish((Task)Call(form,"Tick"));ExpireCalibrationBackoff(form);Tick(form);
+                Need(radio.Captures==1 && radio.Writes==0 && !((CheckBox)Get(form,"enabled")).Checked,"Non-pressure refusal/uncertainty retried calibration");
+                Need(!(bool)Get(form,"legacyPreview"),"Calibration error triggered legacy fallback");
+            }
+        }
+        foreach(string changed in new[]{"channel","probe","epoch","start","command","rate","stop","fault"}){
+            s=PressureStatus();radio=new NpBleConnection();var pending=new TaskCompletionSource<NpV2PreviewBurst>();
+            radio.Calibration=(id,p,c,h)=>pending.Task;
+            using(var form=new NpBlePreviewForm(radio,()=>s,()=>false)){
+                AdmitCalibration(form);var task=(Task)Call(form,"Tick");Need(!task.IsCompleted,"Calibration fixture did not remain in flight");
+                if(changed=="channel")((NumericUpDown)Get(form,"channel")).Value=128;
+                else if(changed=="probe")((NumericUpDown)Get(form,"probe")).Value=2;
+                else if(changed=="epoch")radio.Epoch++;
+                else if(changed=="start")s.Start+=8192;
+                else if(changed=="command")s.LastId++;
+                else if(changed=="rate")s.Hz=20000;
+                else if(changed=="stop")s.State=5;
+                else s.Fault=5;
+                pending.SetException(new NpV2PreviewUnavailableException(4));Finish(task);
+                Need((int)Get(form,"calibrationPressureRetries")==0 && radio.Captures==1 && radio.Writes==0,"Stale context scheduled calibration pressure retry: "+changed);
+                if(changed=="channel" || changed=="probe")Need(((CheckBox)Get(form,"enabled")).Checked,"Stale calibration refusal unchecked a new selection");
+            }
+        }
+    }
     static bool OwnVisible(Control control){
         // The form is deliberately never shown. Read the control's native
         // visibility without its hidden parent, then restore the same Z order.
@@ -446,7 +531,8 @@ static class NpBlePreviewDisplayTests {
             var radio=new NpBleConnection();using(var form=Arm(radio,20000,compact:compact)){
                 radio.Emit(compact?Compact(20000,4):Packet(20000,4));Tick(form);
                 string text=((Label)Get(form,"info")).Text;
-                Need(text.Contains("samples/s grid") && text.Contains(compact?"compact 64-row":"legacy 16-row") && (compact || text.Contains("gaps expected")),"Preview hides actual transport or mislabels nominal grid as continuous delivered data");
+                string details=((ToolTip)Get(form,"diagnostics")).GetToolTip((Label)Get(form,"info"));
+                Need(text.Contains("Preview") && text.Contains("samples/s") && details.Contains(compact?"Compact transport":"Legacy transport") && details.Contains("subsampled"),"Preview rate or transport details are missing");
             }
         }
     }
@@ -502,6 +588,6 @@ static class NpBlePreviewDisplayTests {
     [STAThread]static int Main(string[] args){try{
         Application.EnableVisualStyles();bool baseline=args.Length!=0 && args[0]=="--baseline";
         BusyDrain(baseline);if(baseline){Console.WriteLine("PASS: frozen production form reproduces control-busy display stall; no radio opened.");return 0;}
-        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
+        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();CalibrationPressure();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/calibration-pressure/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
     }catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

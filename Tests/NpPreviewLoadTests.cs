@@ -19,6 +19,7 @@ static class NpPreviewLoadTests {
  static void Until(Func<bool> ready,string why){var timer=Stopwatch.StartNew();while(!ready()){if(timer.ElapsedMilliseconds>5000)throw new Exception(why);Application.DoEvents();Thread.Sleep(5);}}
  static byte[] Frame(int value){
   var raw=new byte[160000];
+  for(int y=0;y<320;y++)for(int n=0;n<12;n++)raw[y*492+n]=0x55;
   for(int y=0;y<320;y++)for(int x=0;x<320;x+=2){int p=y*492+12+x/2*3;raw[p]=(byte)(0x80|(value>>3));raw[p+1]=(byte)(((value&7)<<5)|8|(value>>7));raw[p+2]=(byte)((value&127)<<1);}
   return raw;
  }

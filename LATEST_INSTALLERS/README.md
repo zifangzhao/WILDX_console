@@ -1,9 +1,18 @@
-# Latest WILDX installer - 1.0.0.60
+# WILDX installer — 1.0.0.63
 
-Download `WILDX_console-Setup-1.0.0.60.exe`.
+Download `WILDX_console-Setup-1.0.0.63.exe`.
 
-Camera preview, playback and MP4 export retain corrected red/blue colors and restore shadow contrast without the pale gray lift. Includes preview CPU limits, editable destination paths, download-time estimates, camera START-time folder handling and simpler firmware status text from the checked console updates.
+Includes compact V2 BLE waveform preview, healthy-recording admission and bounded
+calibration-pressure retries, plus camera row-alignment recovery with the adjusted
+color and contrast. Bundles V2 APP15FAE47B, USBE323A06A and recovery6408DBB8 with
+matching fused/component/update files. V1 and camera firmware retain their prior
+bytes. Installing the console does not flash a logger.
 
-Bundled firmware matches the previous release: V1 USB F2D80C4F with APP654824DE and matching full fused image; V2 and camera firmware are unchanged. Installing the console does not flash a logger.
+The exact app/firmware pair passed bounded dual15k BLE preview and stopped SD
+readback. Dual20k failed source overwrite; triple/P3 preview and other untested
+modes remain unqualified. See Note/RELEASE_1.0.0.63_20261020.md and
+`release-manifest.json` for checks, hashes and limits. All 44 extracted payload
+hashes match. Earlier installers are in `legacy`.
 
-1,064 camera checks,57 extracted-app preview checks and3 real native-frame comparisons passed. No new hardware or installed-pair qualification. See Note/RELEASE_1.0.0.60_20261020.md and release-manifest.json for scope/hashes. Earlier installers are in legacy.
+GUI64 V1 recovery changes and the V2 IMU startup investigation are separate and
+are not included in this tested pair.
