@@ -40,3 +40,10 @@ BLE-control, installed visible UI, newly-flashed-fused or unlimited-endurance
 claim. No power optimization this release. V1/V1Camera packages and catalog
 entries retained unchanged. Main permanent hardware log:
 `XE_NP/V2: Note/V2_RECORDING_FIRST_RESTORE_20261021.md`.
+
+Publication independently confirmed: WILDX/main
+`74d3daeae26ad72e46cf554861f0cfd966095d92`; paired XE_NP/V2
+`6f875d7aa157f25b8ff3caefef8edcc50357e79c`. Receipts record the immutable
+pre-publication assembly; these commits contain the exact checked artifacts.
+No later tests/rebuilds/HW changes for this documentation update. Next power
+work is a separate1probe7.5k baseline/integrity gate before any reduction.
