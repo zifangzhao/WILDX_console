@@ -1,18 +1,15 @@
-# WILDX installer — 1.0.0.63
+# WILD-X1.0.0.70 — V2 recording-first pair
 
-Download `WILDX_console-Setup-1.0.0.63.exe`.
+[Installer](WILDX_console-Setup-1.0.0.70.exe) / [matching V2 firmware](../Firmware/V2/README.md).
+APP660A6DA4, USBE323A06A, recovery6408DBB8.
 
-Includes compact V2 BLE waveform preview, healthy-recording admission and bounded
-calibration-pressure retries, plus camera row-alignment recovery with the adjusted
-color and contrast. Bundles V2 APP15FAE47B, USBE323A06A and recovery6408DBB8 with
-matching fused/component/update files. V1 and camera firmware retain their prior
-bytes. Installing the console does not flash a logger.
+Delkin V90: two NP2 at30kHz passed600s native/full DAT verification, all loss0.
+Actual70 WinUSB reader and production export bridge passed the saved10s session.
+GUI69 fixes, merge/IMRO helpers and V1/V1Camera firmware are preserved.
 
-The exact app/firmware pair passed bounded dual15k BLE preview and stopped SD
-readback. Dual20k failed source overwrite; triple/P3 preview and other untested
-modes remain unqualified. See Note/RELEASE_1.0.0.63_20261020.md and
-`release-manifest.json` for checks, hashes and limits. All 44 extracted payload
-hashes match. Earlier installers are in `legacy`.
+No new all-mode/card, BLE control, installed visual-UI, analog, newly-flashed-fused
+or indefinite-endurance qualification. No power reduction.
 
-GUI64 V1 recovery changes and the V2 IMU startup investigation are separate and
-are not included in this tested pair.
+Installer SHA256: `383E6D2D48DE78830E2C6F706E2A77FB8D9048A119922FFFDCC9B2E7AA0FD1C9`.
+[Exact manifest](release-manifest.json) / [release evidence](../Note/V2_SD_DUAL30_RELEASE_20261021.md).
+Previous pair is retained under `legacy/20261021_before_WILDX70`.

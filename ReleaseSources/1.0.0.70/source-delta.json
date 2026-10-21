@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "scope": "Source-only two-delta rebase; not a new product/native/HIL pass",
+  "export69_equals63": "0F54B9BF66F233A69B0D612095D41761A11BF43F64B6EF2F97090B0DA333DA1A",
+  "export_overlay_held54_sha256": "BBA0A46E3F0E7744B46BC37DA14FE896C324BE97A3BF487DC7074815FB89E56F",
+  "form69_sha256": "F8968FE23189D117C5EF5FF9F1A3EEC8938DEF58DE050393EEF87827A18628A8",
+  "form_overlay_sha256": "893AAABEB191951B1DEC53CB86AEFCE278DF06DF87734906420C495AF9FB5D67",
+  "form_inverse_byte_exact": true,
+  "merge_controls_and_call_preserved": true,
+  "merger_sha256": "2928A4C5B1B64BFC753F7CB4B737D059865B8BDBD62BAABF5ABDE42727D84755",
+  "reused_reporting_checks": 54,
+  "reused_ui69_checks": 118,
+  "reused_v1_runtime_checks": 551,
+  "hardware_access": false
+}

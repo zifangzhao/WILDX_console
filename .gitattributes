@@ -31,3 +31,6 @@ Firmware/** -text
 /LATEST_INSTALLERS/legacy/20261020_before_1.0.0.60/** -text
 
 /LATEST_INSTALLERS/legacy/20261020_before_1.0.0.63/** -text
+/LATEST_INSTALLERS/WILDX_release-manifest.json -text
+/LATEST_INSTALLERS/legacy/20261021_before_WILDX70/** -text
+/ReleaseSources/1.0.0.70/** -text

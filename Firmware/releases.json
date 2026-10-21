@@ -254,31 +254,31 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_COMPACT_BLE_APP15FAE47B_USBE323A06A_GUI63_20261020",
+      "release": "V2_DUAL30_660A6DA4_GUI70_20261021",
       "sourceCommit": "1a73610f87794c58c6c50fe942827a3086caa4fb",
-      "stage": "Bounded dual15k BLE preview and SD readback passed",
-      "appVersion": "build 15FAE47B (compact BLE preview)",
+      "stage": "DELKIN_V90_600S_NATIVE_DAT_AND_CONSOLE70_EXPORT_CHECKED",
+      "appVersion": "build660A6DA4 (recording-first dual30)",
       "usbVersion": "build E323A06A (explicit USB catalog repair)",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "15FAE47B",
+      "appCrc32": "660A6DA4",
       "usbCrc32": "E323A06A",
       "recoveryCrc32": "6408DBB8",
       "app": {
-        "path": "V2/V2_logger_APP_update_15FAE47B_COMPACT_BLE_20261020.xenp",
-        "sha256": "F6A49412E13A8F19D90195E1D2D23C7CF4BD47E999E72115C75697F510083152"
+        "path": "V2/V2_logger_APP_update_660A6DA4_DUAL30_20261021.xenp",
+        "sha256": "CB79738A2E935E51C9FD3FAF5F355424162C71BDCEE0F435185D14E648F13A4D"
       },
       "files": [
         {
-          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_15FAE47B_COMPACT_BLE_20261020.hex",
-          "sha256": "1289F8D164412186A0AAA0F6578E1A3CC8EF0DE405AEABE613ED09E38D9CE57B"
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_660A6DA4_DUAL30_20261021.hex",
+          "sha256": "0BFECE90D3D0B098C645DB5370052C806EC6FB21FE0F1947F1718DFCE61EEFB1"
         },
         {
-          "path": "V2/V2_logger_APP_only_15FAE47B_COMPACT_BLE_20261020.hex",
-          "sha256": "DC765AD134F32D0D3E3E90518575510AE9242CC32492E48F394B7BDDEF38231C"
+          "path": "V2/V2_logger_APP_only_660A6DA4_DUAL30_20261021.hex",
+          "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
         },
         {
-          "path": "V2/V2_logger_APP_update_15FAE47B_COMPACT_BLE_20261020.xenp",
-          "sha256": "F6A49412E13A8F19D90195E1D2D23C7CF4BD47E999E72115C75697F510083152"
+          "path": "V2/V2_logger_APP_update_660A6DA4_DUAL30_20261021.xenp",
+          "sha256": "CB79738A2E935E51C9FD3FAF5F355424162C71BDCEE0F435185D14E648F13A4D"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -293,13 +293,13 @@
           "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
         }
       ],
-      "limits": "Actual frozen GUI63 hidden-form compact500Hz/64-row P1 to P2 channel383 preview during dual15k SD recording;10140 produced/written/readback-verified blocks,error0/fault0.23 invalid preview rows retained; selection/calibration downtime9.630s.12 clock heartbeats passed. Normal USB boot/status/mode return to SD-ready checked; no new USB capture/export qualification. Dual20k failed source overwrite before preview; triple/P3 preview,endurance,analog,independentDAT export and visible installed UI not qualified. Cache-component integration from working8A; not clean-source full build. New V1 GUI64 recovery work excluded.",
+      "limits": "Delkin V90 two NP2 at30k:600s full native/DAT integrity plus console70 production10s read-only export. No all-mode/card, analog, installed visual UI, newly flashed fused or unlimited-endurance claim. Exact components reused without rebuild/reseal; configuration excluded. Power unchanged. Optional guarded-download capability0x6B is unsupported by E323; read-only legacy download passed, no guarded read recovery claimed.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 181680,
-        "codeCrc32": "15FAE47B",
-        "buildIdHex": "6161353261646565316163316662306439343561323666643966343731316133",
+        "bytes": 184716,
+        "codeCrc32": "660A6DA4",
+        "buildIdHex": "3831626561303066323366383536393438343834616237326434636639393834",
         "manifestFlags": 0,
         "minimumLoaderAbi": 4,
         "generation": 3
@@ -315,6 +315,16 @@
         "generation": 3
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 181680,
+          "codeCrc32": "15FAE47B",
+          "buildIdHex": "6161353261646565316163316662306439343561323666643966343731316133",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -349,12 +359,9 @@
         }
       ],
       "sourceProvenance": {
-        "parentReleaseSourceCommit": "1a73610f87794c58c6c50fe942827a3086caa4fb",
-        "baseline": "working APP8A839098 frozen objects; only preview object replaced",
-        "publicBaselineDelta": "7 existing object differences from B60291EE; see source-validation.md",
+        "parentReleaseSourceCommit": "74147ae0f7ab1f19c810981a2d10047c55f72ab8",
         "ownerManifest": "V2/source-manifest.json",
-        "canonicalSourceEquivalenceClaimed": false,
-        "wholeSourceTreeRebuilt": false
+        "canonicalSourceEquivalenceClaimed": false
       }
     }
   ]

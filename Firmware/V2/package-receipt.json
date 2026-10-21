@@ -1,20 +1,21 @@
 {
-  "app_crc32": "15FAE47B",
+  "app_crc32": "660A6DA4",
   "usb_crc32": "E323A06A",
   "recovery_crc32": "6408DBB8",
-  "gui_sha256": "8653385637E334133CF9C4B0D218F76AF43DD006C55644CBFDB766CB5302AE2C",
+  "gui_version": "1.0.0.70",
+  "gui_sha256": "DD7A948B343C90E094C7347A17A690B645FC776E33EFB887416C60AA7C4AA12A",
   "files": {
-    "V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_15FAE47B_COMPACT_BLE_20261020.hex": {
-      "bytes": 1057080,
-      "sha256": "1289F8D164412186A0AAA0F6578E1A3CC8EF0DE405AEABE613ED09E38D9CE57B"
+    "V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_660A6DA4_DUAL30_20261021.hex": {
+      "bytes": 5745164,
+      "sha256": "0BFECE90D3D0B098C645DB5370052C806EC6FB21FE0F1947F1718DFCE61EEFB1"
     },
-    "V2_logger_APP_only_15FAE47B_COMPACT_BLE_20261020.hex": {
-      "bytes": 500048,
-      "sha256": "DC765AD134F32D0D3E3E90518575510AE9242CC32492E48F394B7BDDEF38231C"
+    "V2_logger_APP_only_660A6DA4_DUAL30_20261021.hex": {
+      "bytes": 508400,
+      "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
     },
-    "V2_logger_APP_update_15FAE47B_COMPACT_BLE_20261020.xenp": {
-      "bytes": 181808,
-      "sha256": "F6A49412E13A8F19D90195E1D2D23C7CF4BD47E999E72115C75697F510083152"
+    "V2_logger_APP_update_660A6DA4_DUAL30_20261021.xenp": {
+      "bytes": 184844,
+      "sha256": "CB79738A2E935E51C9FD3FAF5F355424162C71BDCEE0F435185D14E648F13A4D"
     },
     "V2_recovery_only_6408DBB8_20261012.hex": {
       "bytes": 84090,
@@ -29,140 +30,31 @@
       "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
     }
   },
-  "settings_omitted": true,
-  "all_non_app_bytes_preserved": true,
-  "acceptance": {
-    "passed": true,
-    "app_crc32": "15FAE47B",
-    "usb_crc32": "E323A06A",
-    "recovery_crc32": "6408DBB8",
-    "gui_version": "1.0.0.63",
-    "gui_sha256": "8653385637E334133CF9C4B0D218F76AF43DD006C55644CBFDB766CB5302AE2C",
-    "actual_ble_sd_recording": true,
-    "actual_hidden_form": true,
-    "preview_metrics": {
-      "terminal_complete": "true",
-      "terminal_state": "5",
-      "terminal_error": "0",
-      "terminal_fault": "0",
-      "stored_blocks": "10140",
-      "recorded_wall_s": "61.046903199999996",
-      "preview_error": "",
-      "observer_packets": "96",
-      "segment0_packets": "69",
-      "segment1_packets": "27",
-      "observer_valid_rows": "6121",
-      "observer_invalid_rows": "23",
-      "observer_source_gap_events": "0",
-      "observer_source_gap_ticks": "0",
-      "observer_backward_packets": "0",
-      "observer_queue_dropped_bursts": "0",
-      "form_packets": "100",
-      "form_source_gap_events": "0",
-      "form_invalid_rows": "23",
-      "form_queue_dropped_bursts": "0",
-      "actual_plot500Hz_window2s_observed": "true",
-      "active_status_polls": "44",
-      "status_after_preview": "36",
-      "max_status_rpc_ms": "670.6962",
-      "clock_heartbeats": "12",
-      "clock_heartbeat_errors": "0",
-      "calibration_pressure_retries_max_observed": "0",
-      "selection_switched": "true",
-      "subscription_switch_downtime_ms": "9629.9402",
-      "legacy_observed": "false"
+  "checked_components": {
+    "recovery": {
+      "path": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_recovery_only_6408DBB8_20261012.hex",
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
-    "sd_live": {
-      "magic": 1146303054,
-      "version": 1,
-      "state": 6,
-      "error": 0,
-      "cpu_hz": 96000000,
-      "mclk_hz": 24000000,
-      "sample_hz": 15000,
-      "probe_mask": 3,
-      "wire_mask": 63,
-      "codec": 4,
-      "stored_bits": 6,
-      "start_lba": 574750720,
-      "end_lba": 575673460,
-      "target_blocks": 10140,
-      "stream_block_bytes": 46592,
-      "ru_bytes": 186368,
-      "ru_count": 9,
-      "card_blocks": 956546048,
-      "sd_speed_mode": 3,
-      "sd_kernel_hz": 108000000,
-      "sd_bus_hz": 54000000,
-      "signal_1v8": 1,
-      "source_state": 11,
-      "source_error": 0,
-      "source_flags": 3,
-      "source_i2c_error": 0,
-      "produced_blocks": 10140,
-      "written_rus": 2535,
-      "verified_blocks": 10140,
-      "ring_peak": 8,
-      "max_capture_cycles": 40216,
-      "max_write_cycles": 5815507,
-      "max_write_busy_cycles": 37947,
-      "max_cmd25_setup_cycles": 1629,
-      "max_irq_to_service_cycles": 37208,
-      "max_service_interval_cycles": 88679,
-      "source_produced_lo": 623001600,
-      "source_produced_hi": 0,
-      "source_consumed_lo": 623001600,
-      "source_consumed_hi": 0,
-      "source_max_backlog": 122880,
-      "source_irq_count": 20280,
-      "capture_setup_stage": 272,
-      "d8_error": 0,
-      "sd_error": 0,
-      "sd_sta": 0,
-      "fault_sequence": 0,
-      "fault_detail": 0,
-      "recording_ms": 25959,
-      "drain_ms": 35,
-      "verify_ms": 35095,
-      "phase0": 1519,
-      "phase1": 1333,
-      "phase2": 0
+    "usb": {
+      "path": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex",
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
     },
-    "stopped_preview_perf": [
-      22947,
-      4082695,
-      2358,
-      199,
-      0,
-      768,
-      0
-    ],
-    "evidence_sha256": {
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_preview_20261020\\dual15-form63-r2\\result.json": "DF8ABDC0AF33C11875EADC375BB3F4878083F7C4C671765F20E6C746268E0B05",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_preview_20261020\\dual15-form63-r2\\prepared.json": "9B028ABE3F81BA18787AE7A0B9EAD8541B23AE01C43939371D90759A947A204F",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_preview_20261020\\dual15-form63-r2\\hardware-intent.json": "23D36E1B23714DD97535BD6C958DB3F38E44E060BFC86F2FD49FEC129B642A24",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_preview_20261020\\dual15-form63-r2\\run\\events.log": "1C0DD23D33E7717194E90A21835CFFD22425171A71E4CCD0FEADBEF608B65B91",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_preview_20261020\\dual15-form63-r2\\run\\compact-summary.csv": "D98DFC24885FBAE86B782AB10ECD882A39CB0234F49FC28DD4D14ACC64836E40",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_preview_20261020\\dual15-form63-r2\\run\\compact-form.csv": "E4518C25346853C48C06604AEE6593C1C9FC908486A1FF6C3DBCBA0AC810FBC6",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\form63-stopped-app.bin": "8948135DBA3B8A47B7E9C571DD05E62E64849E5FBCF13781571CAE0301912C08",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\form63-stopped-faults.bin": "AF5570F5A1810B7AF78CAF4BC70A660F0DF51E42BAF91D4DE5B2328DE0E83DFC",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\form63-stopped-live.bin": "40231E3CE8AE778804A8D7B385ACA918F21A89218C6D9592F0A9545F5DAA6618",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\form63-stopped-perf.bin": "E0A58EA43BFDAE5DABACF36AF499499FEF094A2EDEC83BCDC2BB029AE6D189EB",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\form63-stopped-preview-perf.bin": "C77C56501D5A047ED6564F4F551674CD7A351D92525EAFA1C1A958DB69764D00",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\form63-stopped-preview.bin": "A2997BE7536D4F3CD88753CAD8933182ACC0BC4A645190C7096DCEB743FFFEAE",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\paired-return-app.log": "366A62042F26C74A1EC56ABA5A6B9AA242DC72DD69908045DBBC01747E460325",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\paired-usb-mode.log": "9D6750866B3923C88AEB5C3B41AAB567E89DFB0CA7B75544B4A8E6A331D8CCA2",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\app-working\\candidate.json": "C2DEDA255D23A7804C7E124E839CC638FA4A5AD0824B3EF56F7F8204E30A9F65",
-      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\app-working\\incremental-build.json": "B5B1AC15716DA7910910DDE817425AA50F4C2A664CD0484173F32DED9025B6EE"
-    },
-    "all_modes_lossless_qualified": false,
-    "independent_dat_export_qualified": false,
-    "visible_installed_ui_qualified": false,
-    "analog_quality_qualified": false,
-    "limits": "Bounded dual15k SD readback and P1/P2 compact500Hz/window2s/selection/control. Dual20k failed source overwrite before preview; triple/P3 preview/endurance not qualified."
+    "app": {
+      "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_sd_copied_counted_window_20261021\\app-append-pipeline16-ready-first-r1\\V2_APP_660A6DA4_PRIVATE.hex",
+      "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
+    }
   },
-  "acceptance_receipt": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_compact_ble_preview_20261020\\acceptance.json",
-  "acceptance_sha256": "887B443D7A588FBEFBEC4C785EA2A105BFCFB0F7989F5DCFDBBAE6E129360D73",
-  "all_modes_lossless_qualified": false,
+  "merge_tool_sha256": "8893A47ED9D6048C00914942D6789F966051D470AF1A04007A9D941EF40AD43E",
+  "settings_omitted": true,
+  "component_seals_preserved": true,
+  "erased_unused_flash_padding": true,
+  "rebuilt": false,
+  "flashed": false,
+  "packaging_hardware_access": false,
+  "native_and_dat_600s_sha256": "AF4E2AEC9076E2D33605CE448384EDF6FD26A8E64930B3CBCD85AC284C04B0B9",
+  "console_pair_sha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
+  "console_build_sha256": "0F79B2E87B37332E12823922629AF0886E91D345FE39463E79775127E61591EF",
+  "scope": "Delkin V90 two NP2 at30k:600s full native/DAT integrity plus console70 production10s read-only export. No all-mode/card, analog, installed visual UI, newly flashed fused or unlimited-endurance claim.",
+  "power_optimized_this_release": false,
   "published": false
 }
