@@ -1,19 +1,19 @@
 {
-  "version": "1.0.0.71",
-  "releaseId": "WILDX71_SD_FINALIZATION_20261021",
-  "baselineVersion": "1.0.0.70",
+  "version": "1.0.0.72",
+  "releaseId": "WILDX72_BLE_DISCOVERY_20261021",
+  "baselineVersion": "1.0.0.71",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "BE9F324CAD9B6795AC4E22291A1F8FBE551B33A59581761807130E0C7DC28A9D",
+  "guiSha256": "31A8B2C22273453CFF22DDBAD52F645306DF2051C98D94910EC92D9AB56A903B",
   "sdkSha256": "F485AFE114AA0E64AF8E24B4B91F809804752056BBC8EDF97977B23C68857AB4",
   "firmwareChanged": false,
   "helpersChanged": false,
-  "consoleBuildSha256": "B2E0FCEE906C5E13CDE277CD3FA7280A857FD951D5A58AC2A9AE2B397F94395E",
-  "sourceArchiveSha256": "CABF1A0D603080FBFEF206934A383020D9D9C35DB031B182AA72F6B5850AC272",
-  "softwareChecks": 111,
+  "consoleBuildSha256": "FC4DC11C4DBAD90CE5F3B13076A0972E21CC6A98CF103054134CC838D39CBAE2",
+  "sourceArchiveSha256": "FB16E75BDD4172232196F3825409699102BA8685C5500D7F0D7337FED3C74EE9",
+  "softwareChecks": 17,
   "reusedHardwarePairVersion": "1.0.0.70",
   "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
   "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "scope": "Checksum-during-write and honest finalization progress;111 saved-image/actual-app software checks. Exact40-file released70 bundle except GUI EXE and SDK. No new hardware/installed UI/pair/endurance qualification.",
+  "scope": "BLE scan on app startup, selected-peer default address while preserving typed input, passive scanning does not own USB session, and exact NP1 USB display label.17 actual-app simulated-advertisement checks; startup/source scope checked. Only GUI differs from71. No radio/device/installed-UI/hardware qualification.",
   "installerExecuted": false,
   "payload": [
     {
@@ -208,8 +208,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1583616,
-      "sha256": "BE9F324CAD9B6795AC4E22291A1F8FBE551B33A59581761807130E0C7DC28A9D"
+      "bytes": 1584128,
+      "sha256": "31A8B2C22273453CFF22DDBAD52F645306DF2051C98D94910EC92D9AB56A903B"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -218,9 +218,9 @@
     }
   ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.71.exe",
-    "bytes": 7012643,
-    "sha256": "838D96A12F73E6F4A42F200DCEF2E2D306A531B4322A7B4250046CA0F7F07988"
+    "file": "WILDX_console-Setup-1.0.0.72.exe",
+    "bytes": 7012818,
+    "sha256": "6654DEFC55DE20320F7099EC8B4564A71CFE19434A085BF3FC15F27534F71F7A"
   },
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1

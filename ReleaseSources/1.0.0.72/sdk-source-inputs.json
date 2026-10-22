@@ -1,0 +1,80 @@
+[
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdDatExport.cs",
+    "archive": "sdk/NpV2SdDatExport.cs",
+    "sha256": "70261F748EBD39B3F573D913AC33BC27D724E5595DC25A99F28529115145EB4F",
+    "provenance": "maintained source snapshot"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpAdcCalibration.cs",
+    "archive": "sdk/NpAdcCalibration.cs",
+    "sha256": "62749EAA50941760B07AEA01D2C06C77C67B5E7239B2787D0DE5E36E137267E9",
+    "provenance": "maintained source snapshot"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpNeuroscopeXml.cs",
+    "archive": "sdk/NpNeuroscopeXml.cs",
+    "sha256": "9BFC0C42467B06C3CD42BD0B5A85FE2CEF77B6157D6D7FEA7370367D87CEFE2D",
+    "provenance": "maintained source snapshot"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpMetadataFile.cs",
+    "archive": "sdk/NpMetadataFile.cs",
+    "sha256": "6578CE6806FC38A3C04DE47E059A82FB44AE33CE98188A88C6F8BB53ED866A14",
+    "provenance": "maintained source snapshot"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\USBConsoleV2\\NpV2UsbConsole.cs",
+    "archive": "sdk/NpV2UsbConsole.cs",
+    "sha256": "4311A241F5BC458221EA9DB4E2DE7A6D85A482B0F850AA36760784923310AC20",
+    "provenance": "maintained source snapshot"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Np2ConfigurationClient.cs",
+    "archive": "sdk/Np2ConfigurationClient.cs",
+    "sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA",
+    "provenance": "checked GUI70 input"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\USB512WinUsb.cs",
+    "archive": "sdk/USB512WinUsb.cs",
+    "sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5",
+    "provenance": "checked GUI70 input"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbHealth.cs",
+    "archive": "sdk/UsbHealth.cs",
+    "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124",
+    "provenance": "checked GUI70 input"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbHealthNative.cs",
+    "archive": "sdk/UsbHealthNative.cs",
+    "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710",
+    "provenance": "checked GUI70 input"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NeuropixelsPreviewForm.cs",
+    "archive": "sdk/NeuropixelsPreviewForm.cs",
+    "sha256": "35870EA5E803A1E24C75F71B5BB9930652F492BCFF32DC5625ADEA4ECC6DFB6F",
+    "provenance": "checked GUI70 input"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\XeNpStreamDecoder.cs",
+    "archive": "sdk/XeNpStreamDecoder.cs",
+    "sha256": "633D986FECDA3F67AF5B1BCD35C27618D510391423340299230FBB88058C3B5E",
+    "provenance": "checked GUI70 input"
+  },
+  {
+    "original": "D:/Code/WILDX_console/WILDX_console/Neuropixels/SD/NpV2SdDatExport.csproj",
+    "archive": "sdk/NpV2SdDatExport.csproj",
+    "sha256": "D7ADC6DC4E71C4AA5B81B61BF6EC618B32CDFA3C7ECD73AE3E1414AFE98DFBDB",
+    "provenance": "actual project/override used for the isolated SDK build"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_finalize_20261021/sdk/sdk-only.targets",
+    "archive": "sdk/sdk-only.targets",
+    "sha256": "58D745AEC7DF26621A683BA791F01DB0CFEDFC8A68FA839785A35E7095085E57",
+    "provenance": "actual project/override used for the isolated SDK build"
+  }
+]

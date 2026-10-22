@@ -1,0 +1,1 @@
+Exact GUI72 compiler/build inputs based on published71, with BLE startup discovery, default address selection, and the NP1 USB label. SDK binary and its archived source inputs are unchanged from71. Resources and other dependencies reuse checked caches. See ../../Note/BLE_AUTO_DISCOVERY_20261021.md for scope and validation.
