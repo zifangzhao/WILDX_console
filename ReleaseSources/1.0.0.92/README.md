@@ -1,0 +1,1 @@
+Exact GUI92 compiler inputs based on published91. V2 BLE automatic recording-list refresh and finalization polling; expanded catalog flags retain geometry and deletion checks. SDK/helpers/V1/USB/recovery unchanged. Matching V2 APP and firmware compiler/native evidence included. Software checks only, no hardware or flashing. See ../../Note/V2_BLE_RECORDINGS_20261022.md.

@@ -1,17 +1,13 @@
-# V2 USB card formatting — 2026-10-22
+# V2 BLE catalog / WILD-X1.0.0.92
 
-USB **B6099A0E**, APP **660A6DA4**, recovery **6408DBB8**.
+APPD44907A5 enables BLE Recordings on the checked APP660 recording/Stop baseline.
+USB B6099A0E and recovery6408DBB8 are unchanged. INFO/ENTRY are stopped-only and read-only;
+degraded/rewind views never offer Delete or silently repair/discard data.
 
-Use WILD-X91's full APP + USB + boot update to install USB formatting. An APP-only
-update does not change the USB service. The USB .xenp is a tooling artifact;
-the existing APP updater cannot install it. Full fused ROM DFU/SWD is required.
-After updating, select the logger in Data Download, press Format card, and
-confirm its UID, CID and capacity. Formatting removes all native catalog
-recordings and is not a secure erase. Flash settings are preserved.
+Use `V2_logger_APP_update_D44907A5_BLE_CATALOG_20261022.xenp` for an APP-only recovery update, or `V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_D44907A5_BLE_CATALOG_20261022.hex` through guarded ROM DFU/SWD.
+HEX excludes retained settings and includes all other logical flash bytes explicitly.
 
-Actual-adapter/real-catalog software checks cover one-shot requests, physical
-CID/CSD refresh, invalid/interrupted catalogs, metadata readback and payload
-preservation. The new USB image has not been flashed or tested on a card here;
-no new pair, recording, download speed or HIL qualification is claimed.
-APP/recovery seals are unchanged. Exact identities and source archive are in
-package-receipt.json; see ../../Note/V2_USB_FORMAT_20261022.md for validation.
+Stop acknowledges once, then drains and verifies stored data before Complete. GUI90+ observes
+this asynchronously without a false30-second failure. Keep power until Complete.
+
+Stopped BLE catalog INFO/ENTRY and explicitly confirmed last-COMPLETE delete checked with actual control/APP/catalog/port native fakes, journal power cuts and degraded/v14 read-only views. APP660 capture/Stop source and59 other objects retained. No hardware access, flash, new recording, all-card/all-mode or installed-pair qualification. USB B6099A0E/recovery6408DBB8 byte-identical; full fused explicit FF except retained settings. GUI92 retains the pending-Stop display fix.

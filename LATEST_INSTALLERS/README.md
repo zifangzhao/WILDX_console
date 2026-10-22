@@ -1,17 +1,17 @@
-# WILD-X 1.0.0.91
+# WILD-X 1.0.0.92
 
-[Installer](WILDX_console-Setup-1.0.0.91.exe).
+[Installer](WILDX_console-Setup-1.0.0.92.exe).
 
-Data Download now supports guarded V2 USB card formatting and retains the
-selected device across USB mode changes. Older V2 USB firmware offers the
-bundled full APP + USB + boot update; an APP-only update cannot add formatting.
-After updating, press Format again and confirm the exact card. Format removes
-all recordings from the native catalog and is not a secure erase.
+V2 BLE Recordings automatically lists a supported catalog and refreshes after
+Stop finishes finalizing. The bundled V2 APP enables the previously omitted
+BLE catalog handlers. Install that APP update to enable listing on old V2
+firmware. Incomplete/degraded catalogs expose a validated readable prefix;
+listing never formats, repairs, deletes or starts a recording.
 
-The V2 Stop finalization fix from90 is retained. SDK, helpers, V1 firmware,
-V2 APP and recovery are unchanged. The new V2 USB format firmware has software
-checks only; no connected-card formatting, flashing or HIL was performed.
+USB card formatting and Stop fixes from91 remain included. USB B6099A0E,
+recovery6408DBB8, V1 firmware, SDK and helpers are unchanged. Software checks
+passed; no hardware recording, card access or flashing was performed.
 
-[Exact manifest](release-manifest.json) / [validation](../Note/V2_USB_FORMAT_20261022.md)
-/ [exact compiler inputs](../ReleaseSources/1.0.0.91/README.md).
-Previous90 is retained under legacy/20261022_before_1.0.0.91.
+[Manifest](release-manifest.json) / [validation](../Note/V2_BLE_RECORDINGS_20261022.md)
+/ [compiler inputs](../ReleaseSources/1.0.0.92/README.md).
+Previous91 is retained under legacy/20261022_before_1.0.0.92.

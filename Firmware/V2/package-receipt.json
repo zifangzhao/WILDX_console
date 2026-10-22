@@ -1,69 +1,49 @@
 {
+  "app_crc32": "D44907A5",
   "usb_crc32": "B6099A0E",
   "recovery_crc32": "6408DBB8",
-  "app_crc32": "660A6DA4",
-  "body_sha256": "F69B5458A7CAE90E3C28DF7FFFD17B60DD87438721D5E8F610A530B7E2A6C74C",
-  "body_bytes": 176608,
-  "generation": 4,
-  "image_id": "55534231",
-  "load_address": "08180000",
-  "manifest_address": "0817E000",
-  "minimum_loader_abi": 4,
-  "usb_flags": 3,
-  "nps2_abi": 4,
-  "nps2_capabilities": "0000003F",
-  "settings_omitted": true,
-  "all_non_usb_bytes_preserved": true,
-  "component_identity": {
-    "app": "660A6DA4",
-    "recovery": "6408DBB8",
-    "parent_fused_sha256": "0BFECE90D3D0B098C645DB5370052C806EC6FB21FE0F1947F1718DFCE61EEFB1"
-  },
+  "gui_version": "1.0.0.92",
+  "gui_sha256": "84FA65044A61F7E7DF5A08DDA3DF2B0745863FA2EAEEFA3FDD5D86975DE30851",
   "files": {
-    "V2_logger_APP_only_660A6DA4_DUAL30_20261021.hex": {
-      "bytes": 508400,
-      "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
+    "V2_logger_APP_only_D44907A5_BLE_CATALOG_20261022.hex": {
+      "bytes": 522216,
+      "sha256": "B5D775212A6AE6CBABD094A5B04125E2C6BE2EF763375F33DF4951D2220C6051"
     },
-    "V2_logger_APP_update_660A6DA4_DUAL30_20261021.xenp": {
-      "bytes": 184844,
-      "sha256": "CB79738A2E935E51C9FD3FAF5F355424162C71BDCEE0F435185D14E648F13A4D"
+    "V2_logger_APP_update_D44907A5_BLE_CATALOG_20261022.xenp": {
+      "bytes": 189868,
+      "sha256": "F351AEB992F8EC89760A0D3E2A87992886796DE0C83D66DFB0C20724321B5304"
+    },
+    "V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_D44907A5_BLE_CATALOG_20261022.hex": {
+      "bytes": 5745164,
+      "sha256": "C7A06E9C15BBED61A1F772E10A66026C07E86BE45D392D2174AC6F0753EA42A8"
     },
     "V2_recovery_only_6408DBB8_20261012.hex": {
       "bytes": 84090,
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
     "V2_USB_only_B6099A0E_GUARDED_FORMAT_20261022.hex": {
-      "bytes": 486100,
-      "sha256": "2B9EF98132EB61773515DC6807EA142ECEBF9E64CFAF6CFE2A670930C3A59ACF"
-    },
-    "V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_660A6DA4_GUARDED_FORMAT_20261022.hex": {
-      "bytes": 5745164,
-      "sha256": "E0683376C7DAB7F36ACBB8D5E67EAD31840C9258402A9FEA7A0D57451B88193A"
+      "sha256": "2B9EF98132EB61773515DC6807EA142ECEBF9E64CFAF6CFE2A670930C3A59ACF",
+      "bytes": 486100
     },
     "V2_USB_update_B6099A0E_GUARDED_FORMAT_20261022.xenp": {
-      "bytes": 176736,
-      "sha256": "6CF99E583545F43308B62042EE3F69FCFC7AABCDF46C3B0AEF0F6EFB3D5AFEB2"
+      "sha256": "6CF99E583545F43308B62042EE3F69FCFC7AABCDF46C3B0AEF0F6EFB3D5AFEB2",
+      "bytes": 176736
     }
   },
-  "build_receipt_sha256": "9C36D8AA7E91AD7193A02E2084F92420BD6CF666D0B4A7E24F89B60732AD5FC6",
-  "source_freeze": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze",
-  "native_evidence": {
-    "actual_format.inc": "B9D648B1FACCAB8466FBE1AC2A366FD2CB0CD3ECE7DDDE4D6442277F038C01BD",
-    "actual_catalog.inc": "7BD985354F521387D44C5222ADAB78766D8F934C4393897D725169F7746DC573",
-    "format.run.log": "D2D6E2BB4086B23AE47073D9B5D897089CCE2E6C49DA004A0156F80B5679DFD0",
-    "format.exe": "3154DD5C5139BD93E281E33E2376BE662084AE3EF32DFB104800DB2BC9705181",
-    "default_off.run.log": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
-  },
-  "protocol": "Download-only C0/79/64 NFS1;40/7A/64 NSF1, exact UID/CID/capacity/transaction/key/CRC; existing self-test79/256 and streaming NPC2 preserved",
-  "settings_semantics": "Flash configuration excluded/preserved; resets card catalog metadata16..19/112/113/128 only, old recordings no longer listed, old payload not erased",
-  "update_transport": "USB service changes require full fused ROM DFU/SWD; existing APP-only .xenp updater does not install USB.xenp",
-  "scope": "Actual-adapter/real-catalog software HAL/EP0 checks and partition/layout packaging only; no connected-device format, flash, erase, HIL or new recording qualification",
-  "hardware_validated": false,
-  "all_modes_lossless_qualified": false,
+  "body_sha256": "7D568C772D87FAE505B11F6C7068D18D9E4E3CA2810182F675A3E9CD82E7DFF9",
+  "body_bytes": 189740,
+  "build_receipt_sha256": "3EB37DD2E951C63AAF4662188B72A1C48C8667C27325F57A5E45517580141C43",
+  "freeze_receipt_sha256": "F3A94F7EE016AEC60A966DF3F6C611E9B6AAFDFD01FF1835272C2B42DC088BB1",
+  "catalog_capability_bit": 22,
+  "info_flags_mask": "048F0000",
+  "settings_omitted": true,
+  "all_non_app_bytes_preserved": true,
   "logical_flash_complete_except_settings": true,
-  "padding_correction": "Explicit FF in USB manifest-page/slot gaps; every previously emitted byte and all nonUSB bytes preserved, no rebuild/reseal",
-  "console_bundle_version": "1.0.0.91",
-  "console_hardware_tested": false,
-  "compiler_source_archive": "../../ReleaseSources/1.0.0.91/usb-format-compiled-sources.zip",
-  "compiler_source_archive_sha256": "C6C410D3C55674E048C6DD00AAEAD4BCE0D37E5DEEEA66F04DF843CA05D65D89"
+  "firmware_source_archive_sha256": "4DC7168EA07D0A940DEB349A640AC7B60CAB9E1404B7638E2B2C9F8600D1EE9F",
+  "firmware_source_archive_path": "ReleaseSources/V2_APP_D44907A5_20261022/compiled-sources.zip",
+  "source_freeze": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_ble_catalog_restore_20261022\\enabled-inputs",
+  "scope": "Stopped BLE catalog INFO/ENTRY and explicitly confirmed last-COMPLETE delete checked with actual control/APP/catalog/port native fakes, journal power cuts and degraded/v14 read-only views. APP660 capture/Stop source and59 other objects retained. No hardware access, flash, new recording, all-card/all-mode or installed-pair qualification. USB B6099A0E/recovery6408DBB8 byte-identical; full fused explicit FF except retained settings. GUI92 retains the pending-Stop display fix.",
+  "pair_hardware_validated": false,
+  "flashed": false,
+  "published": false
 }

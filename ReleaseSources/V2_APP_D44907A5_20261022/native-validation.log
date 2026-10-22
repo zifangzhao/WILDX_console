@@ -1,0 +1,16 @@
+Owner-tested native OFF/ON: actual control/APP/catalog/port, queued delete, journal power cuts, v11-v14, degraded prefixes0/1/63/64. No hardware. See compiler archive for frozen fixture inputs.
+OFF log:
+PASS compile-default OFF: bit22 absent, ops9/10/11 unsupported before I/O, unchanged104-byte mailbox
+
+ON final log:
+PASS actual B9/app/port/catalog: empty, sole, COMPLETE, 63/64 boundaries, queued ACK, immutable prefix, replay/conflict and 104-byte ABI
+PASS 71 physical/software owner fences before any SD I/O at admission and execution, active/unmounted states and pending mode/command
+PASS reserved/envelope validation, STATUS errors, stale token/cookie/count, I/O, mutation invalidation, execution revalidation, FULL deletion and recovery refusal
+PASS 16 delete publication cuts around sole-entry and 63-entry page transition; read-only mount/explicit journal recovery; no payload write/CMD20/erase
+PASS actual zero-valued token, cookie and CID CRC via linear CRC patches; frozen 15-word LE formulas
+PASS corrected first508-byte fingerprint: CRC-valid re-sealed same-extent metadata changes cookie/token; stale ENTRY/DELETE and already-queued DELETE refuse without writes/replay; full512 residue remains2144DF1C
+PASS actual v11/v12/v13/v14 RESERVED/FAILED directory entries visible but read-only; full unused allocation retained
+PASS actual legacy/v14 terminal Complete/Stop finalization then fresh physical INFO/ENTRY count/frontier
+PASS unknown bounds never healthy empty; op12 unsupported/refused and independent read/mutation ID surface
+PASS shared-card finalized foreign v8 listed read-only, no relabel/delete or metadata writes
+PASS actual stopped B9 INFO/ENTRY: stable read-only v14 known-allocation overlay and zero/1/63/64-entry rewind prefixes; contiguous next geometry, delete disabled, all prior sectors/CMD20 unchanged

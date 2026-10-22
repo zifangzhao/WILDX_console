@@ -73,7 +73,10 @@ namespace USB512_interface
                     if(current.State!=1)throw new IOException("Storage catalog did not mount. No command replayed.");
                 }
             };
-            using(var dialog=new NpBleStorageForm("V"+version+" · "+address.Text.Trim().ToUpperInvariant(),initial.Capacity,read,delete,prepare,version==1 || NpV2BleCatalog.Supported(initial))){updateCapacity=dialog.SetCapacity;dialog.ShowDialog(DialogOwner);}
+            using(var dialog=new NpBleStorageForm("V"+version+" · "+address.Text.Trim().ToUpperInvariant(),initial.Capacity,read,delete,prepare,version==1 || NpV2BleCatalog.Supported(initial)){
+                RefreshOnOpen=version==2,
+                RefreshPending=()=>version==2 && connection.Connected && connection.Epoch==generation && current!=null && current.State==4
+            }){updateCapacity=dialog.SetCapacity;dialog.ShowDialog(DialogOwner);}
         }
     }
 
@@ -88,6 +91,9 @@ namespace USB512_interface
         readonly string peer;uint capacity;readonly bool listingSupported;
         readonly Button remove;
         NpBleCatalog catalog;bool busy;
+        internal bool RefreshOnOpen;
+        internal Func<bool> RefreshPending;
+        readonly Timer refreshTimer=new Timer{Interval=2000};
         internal NpBleStorageForm(string device,uint sectors,Func<Task<NpBleCatalog>> list,Func<NpBleCatalog,Task<NpBleCatalog>> deleteLast,Func<bool,Task> storage,bool canList)
         {
             peer=device;capacity=sectors;read=list;delete=deleteLast;prepare=storage;listingSupported=canList;Padding=new Padding(12);
@@ -98,9 +104,14 @@ namespace USB512_interface
             Add("Mount catalog",async()=>{await prepare(false);if(listingSupported)await RefreshRecords();else info.Text="Catalog mounted.";});
             remove=Add("Delete last",DeleteLast);var format=Add("Format card",FormatCard);
             Controls.Add(records);Controls.Add(info);Controls.Add(actions);WildXTheme.Apply(this);WildXTheme.Button(remove,false,true);WildXTheme.Button(format,false,true);info.ForeColor=WildXTheme.Muted;
-            // Recovery format must be reachable before a catalog read: a native
-            // timeout can retire the BLE session on an old/unreadable card.
-            remove.Enabled=false;Shown+=delegate{info.Text=listingSupported?"Refresh to list recordings. Format does not require a readable catalog.":"V2 BLE file listing requires firmware support. Mount and format are available.";};FormClosing+=delegate(object sender,FormClosingEventArgs e){e.Cancel=busy;};
+            // Keep V1 recovery manual: a native read timeout can retire the
+            // BLE session on an old/unreadable card. V2 uses correlated reads.
+            remove.Enabled=false;Shown+=async delegate{
+                info.Text=listingSupported?"Refresh to list recordings. Format does not require a readable catalog.":"V2 BLE file listing requires the bundled APP firmware update. Mount and format are available.";
+                if(RefreshOnOpen && listingSupported){refreshTimer.Start();await Run(RefreshRecords);}
+            };
+            refreshTimer.Tick+=async delegate{if(!busy && RefreshPending!=null && RefreshPending())await Run(RefreshRecords);};
+            FormClosed+=delegate{refreshTimer.Dispose();};FormClosing+=delegate(object sender,FormClosingEventArgs e){e.Cancel=busy;};
             records.SizeChanged+=delegate{records.Columns[3].Width=Math.Max(100,records.ClientSize.Width-474);};
             for(int i=1;i<4;i++)records.Columns[i].TextAlign=HorizontalAlignment.Right;
         }
@@ -125,6 +136,8 @@ namespace USB512_interface
             if(value.V1ReadOnly)info.Text="Read-only catalog — recording and deletion disabled.\r\n"+info.Text;
             else if(value.V1Full)info.Text="SD card full — recording disabled.\r\n"+info.Text;
             if(value.V1Warning!=null)info.Text+="\r\n"+value.V1Warning;
+            if(value.V2!=null && (value.V2.Flags&(NpV2BleCatalog.CatalogDegraded|NpV2BleCatalog.CatalogRecovery))!=0)
+                info.Text+="\r\nSD catalog needs recovery; only readable recordings are shown. Deletion is disabled.";
             if(append)info.Text+="\r\n"+NpV2BleCatalog.AppendDiagnostic;
         }
         async Task DeleteLast()

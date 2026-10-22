@@ -28,7 +28,8 @@ namespace USB512_interface
     internal sealed class NpV2BleCatalog
     {
         internal const uint Capability=0x00400000,Last=1U<<16,DeleteAllowed=1U<<17,MetadataValid=1U<<18,Incomplete=1U<<19;
-        internal const uint CatalogFull=1U<<16,CatalogRecovery=1U<<17,CatalogRecoverable=1U<<18,CatalogQuarantinable=1U<<19,CatalogFlags=0x000f0000;
+        internal const uint CatalogFull=1U<<16,CatalogRecovery=1U<<17,CatalogRecoverable=1U<<18,CatalogQuarantinable=1U<<19,
+            CatalogDegraded=0x00800000,CatalogRewind=0x04000000,CatalogFlags=0x048f0000;
         internal const uint MaxRecords=1024U*63U;
         internal const string AppendDiagnostic="v14: Complete* describes stored metadata only; download verifies payload and logical coverage. Incomplete recordings may contain gaps. Physical/prefix/high-water counts are not reported by this BLE summary.";
         readonly Func<Task<NpSdStatus>> readStatus;
@@ -78,7 +79,8 @@ namespace USB512_interface
             Reply(body,9,id);var info=new NpV2BleCatalogInfo(body);
             if(info.Count>MaxRecords || info.Capacity<=8192 || info.Next<8192 || info.Next%8192!=0 ||
                 info.Next>((ulong)info.Capacity+8191)/8192*8192 || (info.Flags&~CatalogFlags)!=0 ||
-                ((info.Flags&(CatalogRecoverable|CatalogQuarantinable))!=0 && (info.Flags&CatalogRecovery)==0))throw new IOException("Invalid V2 catalog geometry/flags.");
+                ((info.Flags&(CatalogRecoverable|CatalogQuarantinable))!=0 && (info.Flags&CatalogRecovery)==0) ||
+                ((info.Flags&CatalogRewind)!=0 && (info.Flags&(CatalogDegraded|CatalogRecovery))!=(CatalogDegraded|CatalogRecovery)))throw new IOException("Invalid V2 catalog geometry/flags.");
             if(info.Count==0){
                 if(info.LastOrdinal!=UInt32.MaxValue || info.LastStart!=0 || info.LastEnd!=0 || info.LastCookie!=0 || info.Next!=8192)throw new IOException("Invalid empty V2 catalog.");
             }else if(info.LastOrdinal!=info.Count-1 || info.LastStart<8192 || info.LastStart%8192!=0 || info.LastEnd<=((ulong)info.LastStart+4) ||
@@ -118,6 +120,7 @@ namespace USB512_interface
         internal async Task<NpBleCatalog> Read()
         {
             target();var status=await readStatus();target();
+            if(Supported(status) && status.State==4)throw new IOException("Recording is still finalizing. The list will refresh when it finishes.");
             if(!CanRead(status))throw new IOException(Supported(status)?"Stop recording before listing V2 recordings.":"This V2 firmware does not advertise BLE file management.");
             var info=await Info();
             if(info.Capacity!=status.Capacity || info.Next!=status.Start || info.Flags!=(status.Flags&CatalogFlags))throw new IOException("V2 card/catalog changed. Refresh recordings.");
