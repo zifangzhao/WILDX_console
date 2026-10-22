@@ -1,20 +1,20 @@
 {
-  "version": "1.0.0.88",
-  "releaseId": "WILDX88_V2_BUNDLED_UPDATE_20261022",
-  "baselineVersion": "1.0.0.86",
+  "version": "1.0.0.90",
+  "releaseId": "WILDX90_V2_BLE_STOP_20261022",
+  "baselineVersion": "1.0.0.88",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "866DD486D2ECEA0792DB87E942B2FD9C39E7849087411C3430090E17F58E563E",
+  "guiSha256": "8EDDFAD97BA550C74E42D36D16CCEF39294D49CDE0D79D2C9C8483C2AAE1BEED",
   "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
   "firmwareChanged": false,
-  "firmwareCatalogChanged": true,
+  "firmwareCatalogChanged": false,
   "helpersChanged": false,
-  "consoleBuildSha256": "D2CF9279D3CEE5A3AD54B89897781B11C8A41845B20463DA841FDB70A192A153",
-  "sourceArchiveSha256": "3F6440649DF07CA4F2DCE2CF9A76B6F425161CAEF4EF453B8892EAF7BF2D9312",
-  "softwareChecks": 131463,
+  "consoleBuildSha256": "81F82FDCE74F82F04E2F882CB6EE23A4C0D713A5674EB2CACA582CCEC66DFE5E",
+  "sourceArchiveSha256": "9A8BF23684FF3335E4DE826AC83C4C79CF0C06A85C0F26A537CD73693DD93947",
+  "softwareChecks": 102,
   "reusedHardwarePairVersion": "1.0.0.70",
   "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
   "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "scope": "Explicit V2 bundled APP and full fused DFU update with exact catalog hash, UID, config/upper-flash preservation and readback guards. Reported version mismatches prompt for review only; legacy V2 comparison is explicitly unavailable.131463 software checks; no hardware, real DFU or newly-flashed-fused qualification. SDK/helpers/firmware binaries unchanged from86; catalog adds full asset.",
+  "scope": "V2 BLE pending-Stop observation after one command; elapsed finalization beyond30s, fresh same-peer/epoch terminal resolution, lost-receipt/disconnect uncertainty.102 actual-source fake-transport checks. One GUI build; firmware, SDK, helpers and format UI unchanged from88. No hardware or installed-pair qualification.",
   "installerExecuted": false,
   "payload": [
     {
@@ -209,8 +209,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1697280,
-      "sha256": "866DD486D2ECEA0792DB87E942B2FD9C39E7849087411C3430090E17F58E563E"
+      "bytes": 1699840,
+      "sha256": "8EDDFAD97BA550C74E42D36D16CCEF39294D49CDE0D79D2C9C8483C2AAE1BEED"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -219,9 +219,9 @@
     }
   ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.88.exe",
-    "bytes": 7049913,
-    "sha256": "3CD5537F179B6BD82342F979B429F728CF07BF4A7CABEB9CF94B02581EBB359F"
+    "file": "WILDX_console-Setup-1.0.0.90.exe",
+    "bytes": 7050767,
+    "sha256": "1201CAC554E058F0E448FD57B3BB845775B9BBFB0364296D6A13930AC554D8F1"
   },
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1

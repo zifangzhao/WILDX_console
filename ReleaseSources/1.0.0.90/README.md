@@ -1,0 +1,1 @@
+Exact GUI90 compiler inputs: published88 plus V2 BLE pending-Stop observation and compilation version only. Firmware, SDK, helpers, download/format and recording behavior unchanged.102 actual-source fake-transport checks; no hardware or newly installed-pair qualification. See ../../Note/V2_BLE_STOP_FINALIZATION_20261022.md.
