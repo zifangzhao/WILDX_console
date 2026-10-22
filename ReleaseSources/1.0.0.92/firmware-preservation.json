@@ -1,0 +1,8 @@
+{
+  "checks": 8,
+  "non_app_bytes_preserved": true,
+  "retained_settings_omitted": true,
+  "coverage_bytes": 2088960,
+  "app_seal_body_match": true,
+  "hardware_access": false
+}
