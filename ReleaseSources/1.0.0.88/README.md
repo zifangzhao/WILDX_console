@@ -1,0 +1,1 @@
+Exact GUI88 compiler inputs based on published86. Explicit V2 bundled APP/full DFU update and reported-version mismatch review. SDK/helpers/firmware binaries unchanged; catalog adds full V2 asset. Resources and other dependencies reuse checked caches. See ../../Note/V2_BUNDLED_UPDATE_20261022.md for validation and limits.

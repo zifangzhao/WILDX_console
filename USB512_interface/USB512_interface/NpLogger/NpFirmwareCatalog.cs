@@ -114,6 +114,7 @@ namespace USB512_interface
         public NpFirmwareBuild[] previousApps { get; set; }
         public NpFirmwareBuild[] previousUsb { get; set; }
         public NpFirmwareAsset app { get; set; }
+        public NpFirmwareAsset full { get; set; }
         public NpFirmwareAsset[] files { get; set; }
         public string limits { get; set; }
         internal string Versions { get { return "APP " + appVersion + "  |  USB " + usbVersion + "  |  Boot " + recoveryVersion; } }
@@ -126,6 +127,13 @@ namespace USB512_interface
             // One older component cannot establish that an unknown/private pair should be updated.
             return (appCurrent || previousApps.Any(x=>x.Same(value.App))) &&
                 (usbCurrent || previousUsb.Any(x=>x.Same(value.Usb))) && !(appCurrent && usbCurrent);
+        }
+        internal bool Differs(NpFirmwareIdentity value)
+        {
+            // Review is read-only. V2 firmware can identify its family without
+            // advertising a frozen board ID; flashing still requires confirmation.
+            if(value==null||value.Family!=family||(family!=2&&!Matches(value)))return false;
+            return value.App!=null&&!appIdentity.Same(value.App)||value.Usb!=null&&!usbIdentity.Same(value.Usb);
         }
         internal string Installed(NpFirmwareIdentity value)
         {
@@ -177,6 +185,7 @@ namespace USB512_interface
                 if(release.previousApps==null || release.previousUsb==null || release.appIdentity.codeCrc32!=release.appCrc32 || release.usbIdentity.codeCrc32!=release.usbCrc32)
                     throw new InvalidDataException("Firmware identity/history mismatch.");
                 if (!release.files.Any(x => x.path == release.app.path && x.sha256 == release.app.sha256)) throw new InvalidDataException("APP is absent from the checked firmware files.");
+                if(release.full!=null&&!release.files.Any(x=>x.path==release.full.path&&x.sha256==release.full.sha256))throw new InvalidDataException("Full firmware is absent from the checked files.");
                 foreach (var file in release.files) result.CheckedPath(file);
             }
             return result;
@@ -208,14 +217,15 @@ namespace USB512_interface
         static readonly HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         internal static bool IsCurrent(NpFirmwareRelease release, NpFirmwareIdentity identity)
         {
-            return release.Matches(identity) && release.appIdentity.Same(identity.App) && release.usbIdentity.Same(identity.Usb);
+            return identity!=null&&identity.Family==release.family&&(release.family==2||release.Matches(identity)) && release.appIdentity.Same(identity.App) && release.usbIdentity.Same(identity.Usb);
         }
         internal static string ReviewText(NpFirmwareRelease release, NpFirmwareIdentity identity)
         {
             string update="";
-            if(release.HasUpdate(identity)) {
+            if(release.Differs(identity)) {
                 bool app=!release.appIdentity.Same(identity.App), usb=!release.usbIdentity.Same(identity.Usb);
-                update="\r\nUpdate available: "+(app?"APP":"")+(app&&usb?" and ":"")+(usb?"USB service":"")+"."+
+                app=identity.App!=null&&app;usb=identity.Usb!=null&&usb;
+                update="\r\n"+(release.HasUpdate(identity)?"Update available: ":"Different from bundle: ")+(app?"APP":"")+(app&&usb?" and ":"")+(usb?"USB service":"")+"."+
                     (usb?"\r\nAn APP-only update does not update the USB service.":"");
             }
             return "WILD-X V" + release.family + update + "\r\nInstalled: " + release.Installed(identity) +
@@ -226,9 +236,9 @@ namespace USB512_interface
         internal static bool Offer(IWin32Window owner, string device, NpFirmwareRelease release, NpFirmwareIdentity identity)
         {
             if (release == null || String.IsNullOrEmpty(device) || IsCurrent(release, identity) ||
-                !release.HasUpdate(identity) || !seen.Add(device + "|" + release.sourceCommit)) return false;
+                !release.Differs(identity) || !seen.Add((identity.Uid??device)+"|"+release.sourceCommit+"|"+release.appCrc32+"|"+release.usbCrc32+"|"+identity.AppCrc32+"|"+identity.App?.buildIdHex+"|"+identity.UsbCrc32+"|"+identity.Usb?.buildIdHex)) return false;
             return MessageBox.Show(owner, ReviewText(release, identity),
-                "Firmware update available", MessageBoxButtons.YesNo,
+                release.HasUpdate(identity)?"Firmware update available":"Firmware differs from bundle", MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
         }
         internal static string AppPath(IWin32Window owner, uint family)

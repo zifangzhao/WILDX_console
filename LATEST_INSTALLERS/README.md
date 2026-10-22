@@ -1,25 +1,25 @@
-# WILD-X 1.0.0.86
+# WILD-X 1.0.0.88
 
-[Installer](WILDX_console-Setup-1.0.0.86.exe).
+[Installer](WILDX_console-Setup-1.0.0.88.exe).
 
-Elapsed and estimated remaining time now cover USB/card-reader downloads,
-V1 archive transfer and offline decoding, DAT merging, WAV/MP4 conversion,
-and single-file or recursive batch calibration. Selected native downloads
-also show a queue estimate weighted by recording size. Merge and conversion
-have separate phase estimates. The status wraps to fit narrower windows.
+V2 Firmware Update now has a primary Update bundled firmware button with
+APP-only and full APP + USB + recovery choices. Full updates use the existing
+CubeProgrammer DFU backup, exact UID, changed-page programming, preserved
+configuration/upper flash, readback and reconnection checks. Firmware updates
+still require explicit confirmation; detection never starts flashing.
 
-Estimates start after progress is observed for at least three seconds.
-Unknown-length interrupted-recording recovery shows time unknown. Saving
-and flush stages show Finalizing; 100% follows successful completion.
-Older firmware remains supported; firmware, SDK, helpers, USB behavior and
-camera tone are unchanged from 84.
+Reported firmware mismatches prompt once for review. Exact matches remain
+silent. Current legacy V2 firmware does not report image versions, so its
+comparison is explicitly unavailable; bundled update remains accessible
+manually. No board ID or installed version is guessed.
 
-15,457 software checks passed, including synthetic single/batch calibration,
-V1/V2 merge, WAV verification, a two-frame MP4 conversion, cancellation and UI
-renders. All 39 factory CSVs for 27 probes were read-only. No logger/card or
-user DAT was used for these operation tests. The installer was extracted
-and hash-verified without execution; no new device qualification is claimed.
+131,463 software checks passed, including actual-app V1/V2 parser, catalog,
+fake-programmer failure/preservation cases, mismatch notices, passive identity
+and rendered UI. No device or real DFU/flash operation was performed. The new
+full V2 route is software-tested only; no newly-flashed-fused qualification.
+Firmware binaries, SDK, helpers, recording and decoder behavior are unchanged
+from 86. The firmware catalog adds the existing checked full V2 image.
 
-[Exact manifest](release-manifest.json) / [workflow and validation](../Note/OPERATION_TIME_ESTIMATES_20261022.md)
-/ [exact compiler inputs](../ReleaseSources/1.0.0.86/README.md).
-Previous 84 is retained under legacy/20261022_before_1.0.0.86.
+[Exact manifest](release-manifest.json) / [workflow and validation](../Note/V2_BUNDLED_UPDATE_20261022.md)
+/ [exact compiler inputs](../ReleaseSources/1.0.0.88/README.md).
+Previous 86 is retained under legacy/20261022_before_1.0.0.88.

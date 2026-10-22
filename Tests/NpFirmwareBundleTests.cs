@@ -78,7 +78,7 @@ static class NpFirmwareBundleTests
             Put(older,28,0x11b);Seal(older);Check(!(bool)Call(release,"HasUpdate",Parse(older,family)),"Unverified code used to order firmware");
             Put(older,28,0x11f);older[48]^=1;Seal(older);Check(!(bool)Call(release,"HasUpdate",Parse(older,family)),"CRC-only predecessor accepted");
             var missing=(byte[])body.Clone();Array.Clear(missing,32,64);Put(missing,28,0x11a);Seal(missing);Check(Get(Parse(missing,family),"App")==null,"Invalid APP descriptor synthesized");
-            string review=(string)Static(notice,"ReviewText",release,null);Check(review.Contains("newer version cannot be confirmed")&&review.Contains((string)Get(release,"limits")),"Unknown/development notice misleading");
+            string review=(string)Static(notice,"ReviewText",release,null);Check(review.Contains("newer version cannot be confirmed")&&review.Contains("only after you select and confirm")&&!review.Contains((string)Get(release,"limits")),"Unknown version notice invents comparison or exposes internal qualification text");
             var file=Get(release,"app");string hash=(string)Get(file,"sha256");Set(file,"sha256",new string('0',64));Reject(()=>Call(bundle,"CheckedPath",file),"bad package SHA");Set(file,"sha256",hash);
             string path=(string)Get(file,"path");Set(file,"path","../escape.hex");Reject(()=>Call(bundle,"CheckedPath",file),"path traversal");Set(file,"path",path);
         }

@@ -20,6 +20,7 @@ namespace USB512_interface
         readonly byte[] flash=new byte[FlashBytes];
         readonly BitArray present=new BitArray(FlashBytes);
         internal bool Full;
+        uint family=1;
         internal byte[] AppPackage;
         internal string SourceSha256;
         int count;
@@ -38,9 +39,18 @@ namespace USB512_interface
             }
         }
         internal static NpFirmwareImage Parse(byte[] raw)
+        {return ParseCore(raw,1);}
+        internal static NpFirmwareImage LoadBundledV2(string path,string expectedSha256)
+        {
+            var info=new FileInfo(path);if(!info.Exists||info.Length<11||info.Length>8*1024*1024)throw new InvalidDataException("Invalid bundled V2 HEX size.");
+            byte[] raw=File.ReadAllBytes(path);
+            if(!System.Text.RegularExpressions.Regex.IsMatch(expectedSha256??"",@"\A[0-9a-fA-F]{64}\z")||!Sha(raw).Equals(expectedSha256,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Bundled V2 firmware SHA-256 mismatch.");
+            var image=ParseCore(raw,2);if(!image.Full)throw new InvalidDataException("Bundled full V2 firmware must include recovery, APP and USB service.");return image;
+        }
+        static NpFirmwareImage ParseCore(byte[] raw,uint family)
         {
             if(raw==null || raw.Length<11 || raw.Length>8*1024*1024)throw new InvalidDataException("Invalid HEX length.");
-            var image=new NpFirmwareImage{SourceSha256=Sha(raw)};
+            var image=new NpFirmwareImage{SourceSha256=Sha(raw),family=family};
             uint upper=0;uint? start=null;bool eof=false;
             using(var reader=new StringReader(Encoding.ASCII.GetString(raw))) {
                 string line;
@@ -80,7 +90,7 @@ namespace USB512_interface
             if(size<8 || size>NpV1Management.Capacity)throw new InvalidDataException("Invalid APP extent.");
             byte[] app=image.Read(AppBase,(int)size);
             image.AppPackage=new byte[128+app.Length];Buffer.BlockCopy(manifest,0,image.AppPackage,0,128);Buffer.BlockCopy(app,0,image.AppPackage,128,app.Length);
-            NpV1Management.ValidateAppBytes(image.AppPackage);
+            if(family==1)NpV1Management.ValidateAppBytes(image.AppPackage);else image.ValidateManifest(AppManifest,0x41505031,AppBase,UsbManifest);
             if(image.count==image.AppPackage.Length){
                 image.Full=false;
                 if(start.HasValue && (start.Value&~1U)!=(U(app,4)&~1U))throw new InvalidDataException("APP HEX entry does not match its reset vector.");
@@ -88,7 +98,7 @@ namespace USB512_interface
             }
             if(image.count!=FlashBytes-PageBytes)throw new InvalidDataException("Select complete fused V1 firmware or pure APP-only HEX. Partial APP+USB and service-only images are ambiguous.");
             image.Read(FlashBase,(int)(ConfigBase-FlashBase));image.Read(AppManifest,(int)(FlashLimit-AppManifest));
-            ValidateRecovery(image.flash);
+            if(family==1)ValidateRecovery(image.flash);
             ValidateVector(image.flash,0,FlashBase,(int)(ConfigBase-FlashBase));
             image.ValidateManifest(UsbManifest,0x55534231,UsbBase,FlashLimit);
             int dl=(int)(0x081be000-FlashBase);
@@ -109,9 +119,9 @@ namespace USB512_interface
         void ValidateManifest(uint address,uint id,uint imageBase,uint limit)
         {
             var m=Read(address,128);uint size=U(m,28);
-            if(BitConverter.ToUInt64(m,0)!=0x31464e4d31504e58UL || U(m,8)!=1 || U(m,12)!=0x56414c44 || U(m,16)!=id || U(m,24)!=imageBase ||
-                size<8 || size>limit-imageBase || (U(m,80)!=257 && U(m,80)!=258) || U(m,124)!=Crc(m,0,124))
-                throw new InvalidDataException("Invalid V1 USB/download manifest.");
+            if(BitConverter.ToUInt64(m,0)!=(family==1?0x31464e4d31504e58UL:0x31464e4d504e4558UL) || U(m,8)!=1 || U(m,12)!=0x56414c44 || U(m,16)!=id || U(m,24)!=imageBase ||
+                size<8 || size>limit-imageBase || (family==1?U(m,80)!=257&&U(m,80)!=258:U(m,80)!=4) || U(m,124)!=Crc(m,0,124))
+                throw new InvalidDataException("Invalid firmware partition manifest.");
             var bytes=Read(imageBase,(int)size);ValidateVector(bytes,0,imageBase,(int)size);
             if(U(m,32)!=Crc(bytes,0,bytes.Length) || U(m,36)!=U(bytes,0) || U(m,40)!=U(bytes,4))throw new InvalidDataException("V1 service CRC/vector mismatch.");
         }

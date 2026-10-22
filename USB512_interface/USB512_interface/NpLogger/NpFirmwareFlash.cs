@@ -93,7 +93,7 @@ namespace USB512_interface
             if(devices.Count!=1 || (serial!=null && devices[0].Serial!=serial))throw new IOException("The bound DFU target disappeared or its identity changed. No other device will be substituted.");
             var device=devices[0];string identity=Path.Combine(directory,Guid.NewGuid().ToString("N")+"-uid.bin"),size=Path.Combine(directory,Guid.NewGuid().ToString("N")+"-size.bin");
             Call(Connect(device,"-u","0x0BFA0700","12",identity,"-u","0x0BFA07A0","2",size));
-            if(ReadUid(File.ReadAllBytes(identity))!=uid)throw new IOException("DFU MCU UID does not match selected V1 "+uid+". No write was allowed.");
+            if(ReadUid(File.ReadAllBytes(identity))!=uid)throw new IOException("DFU MCU UID does not match selected logger "+uid+". No write was allowed.");
             var bytes=File.ReadAllBytes(size);
             if(bytes.Length!=2 || (BitConverter.ToUInt16(bytes,0)!=2048 && BitConverter.ToUInt16(bytes,0)!=4096))throw new InvalidDataException("Unexpected STM32U5 flash geometry.");
             int reported=BitConverter.ToUInt16(bytes,0)*1024;
@@ -108,16 +108,16 @@ namespace USB512_interface
         }
         internal string Execute(NpFirmwareImage image,string selectedUid,bool alreadyDfu,Action requestDfu,Func<bool> reconnect)
         {
-            if(image==null || !Regex.IsMatch(selectedUid??"",@"\A[0-9A-Fa-f]{24}\z") || selectedUid==new string('0',24) || selectedUid.Equals(new string('F',24),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("An explicitly selected full V1 MCU UID is required.");
+            if(image==null || !Regex.IsMatch(selectedUid??"",@"\A[0-9A-Fa-f]{24}\z") || selectedUid==new string('0',24) || selectedUid.Equals(new string('F',24),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("An explicitly selected full logger MCU UID is required.");
             uid=selectedUid.ToUpperInvariant();Directory.CreateDirectory(directory);
-            File.AppendAllText(Path.Combine(directory,"operation.log"),"Selected V1 UID: "+uid+"; validated image SHA256: "+image.SourceSha256+"; scope: "+(image.Full?"complete fused firmware":"APP only")+Environment.NewLine);
+            File.AppendAllText(Path.Combine(directory,"operation.log"),"Selected logger UID: "+uid+"; validated image SHA256: "+image.SourceSha256+"; scope: "+(image.Full?"complete fused firmware":"APP only")+Environment.NewLine);
             var initial=List();
-            if(alreadyDfu){if(initial.Count!=1)throw new IOException("The previously selected V1 is not uniquely present in DFU.");}
+            if(alreadyDfu){if(initial.Count!=1)throw new IOException("The previously selected logger is not uniquely present in DFU.");}
             else{
                 if(initial.Count!=0)throw new IOException("A pre-existing DFU device is connected. No DFU request or write was sent.");
-                progress("Requesting guarded DFU for V1 "+uid,5);requestDfu();
+                progress("Requesting guarded DFU for logger "+uid,5);requestDfu();
                 var watch=Stopwatch.StartNew();
-                do{var available=List();if(available.Count==1)break;if(watch.ElapsedMilliseconds>=30000)throw new IOException("Selected V1 did not enumerate in DFU within 30 seconds. No write was sent.");Thread.Sleep(250);}while(true);
+                do{var available=List();if(available.Count==1)break;if(watch.ElapsedMilliseconds>=30000)throw new IOException("Selected logger did not enumerate in DFU within 30 seconds. No write was sent.");Thread.Sleep(250);}while(true);
             }
             progress("Checking full MCU UID and flash geometry",10);var device=CheckTarget();
             progress("Reading complete physical flash backup; preserving configuration and omitted bytes",15);var before=ReadFlash(device,"before.bin");var expected=image.ExpectedFlash(before);
@@ -138,7 +138,7 @@ namespace USB512_interface
                 for(int i=0;i<expected.Length;i++)if(after[i]!=expected[i])throw new IOException("Flash readback or preserved byte differs at 0x"+(NpFirmwareImage.FlashBase+(uint)i).ToString("X8")+". Remaining in DFU.");
             }
             progress("Firmware bytes verified; exiting DFU for the same MCU UID",90);device=CheckTarget(device.Serial);Call(Connect(device,"-s","0x08000000"));
-            if(!reconnect())throw new IOException("Firmware verified, but V1 "+uid+" did not reconnect in a verified idle USB role. Update completion is not confirmed; see "+directory+".");
+            if(!reconnect())throw new IOException("Firmware verified, but logger "+uid+" did not reconnect in a verified idle USB role. Update completion is not confirmed; see "+directory+".");
             string result="Verified "+(image.Full?"full firmware":"APP")+" and exact UID "+uid+" reconnected; configuration and omitted flash bytes preserved. Log/readbacks: "+directory;
             File.AppendAllText(Path.Combine(directory,"operation.log"),result+Environment.NewLine);progress(result,100);return result;
         }
