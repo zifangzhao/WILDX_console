@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace CE32_console
 {
     internal sealed class NpDownloadForm : Form {
-        private sealed class Source {internal string Path,Label,MediaType;internal bool Usb;internal bool CanDelete{get{return !Usb && NpCardFormat.IsRemovableMedia(MediaType);}}internal bool CanFormat{get{return CanDelete || Usb && USB512_interface.NpV1Management.UidFromPath(Path)!=null;}}public override string ToString(){return Label;}}
+        private sealed class Source {internal string Path,Label,MediaType;internal bool Usb;internal bool CanDelete{get{return !Usb && NpCardFormat.IsRemovableMedia(MediaType);}}internal bool CanFormat{get{return CanDelete || Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(Path);}}public override string ToString(){return Label;}}
         private readonly ComboBox sources=new ComboBox{Dock=DockStyle.Top,DropDownStyle=ComboBoxStyle.DropDownList};
         private readonly CheckedListBox records=new CheckedListBox{Dock=DockStyle.Fill,CheckOnClick=true};
         private readonly TextBox sessionLabel=new TextBox{Name="downloadSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
@@ -73,7 +73,7 @@ namespace CE32_console
             format.Click+=async(s,e)=>await FormatSelectedAsync();
             deleteLast.Click+=async(s,e)=>await DeleteLastAsync();
             repairCatalog.Click+=async(s,e)=>await RepairSelectedCatalogAsync();
-            sources.SelectedIndexChanged+=(s,e)=>{var source=sources.SelectedItem as Source;if(source!=null&&!refreshing)boundSourcePath=source.Path;UpdateControls();};
+            sources.SelectedIndexChanged+=(s,e)=>{var source=sources.SelectedItem as Source;if(source!=null&&!refreshing)boundSourcePath=source.Path;if(listedSource!=null && source!=listedSource)ClearListing();UpdateControls();};
             FormClosing+=(s,e)=>{if(busy){cancelled=true;e.Cancel=true;status.Text="Wait for the current operation to finish before closing. A catalog reset cannot be interrupted.";}};
             Shown+=(s,e)=>{if(autoDiscover){RefreshSources();enumerationTimer.Start();}};
             enumerationTimer.Tick+=(s,e)=>{if(!busy && Visible)try{PollUsb();}catch(Exception ex){status.Text="USB discovery: "+ex.Message;}};
@@ -93,17 +93,23 @@ namespace CE32_console
         internal void SetUsbBlocked(bool value){usbBlocked=value;UpdateControls();}
         internal void RequestCancel(){if(busy){cancelled=true;status.Text="Waiting for the operation to finish. A catalog reset cannot be interrupted.";}}
         protected override void Dispose(bool disposing){if(disposing){enumerationTimer.Stop();enumerationTimer.Dispose();}base.Dispose(disposing);}
-        private void PollUsb() {
+        private void PollUsb() { PollUsbPaths(NpDownloadNative.EnumerateNpPaths()); }
+        internal void PollUsbPaths(IEnumerable<string> discovered) {
             refreshing=true;
             try {
-            var paths=NpDownloadNative.EnumerateNpPaths()
-                .Where(p=>p.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)>=0).ToList();
-            for(int i=sources.Items.Count-1;i>=0;i--){var item=(Source)sources.Items[i];if(item.Usb&&!paths.Contains(item.Path))sources.Items.RemoveAt(i);}
-            foreach(string path in paths)if(!sources.Items.Cast<Source>().Any(p=>p.Usb&&p.Path==path))sources.Items.Insert(0,new Source{Usb=true,Path=path,Label=UsbSourceLabel(path)});
-            if(sources.SelectedIndex<0)SelectBoundSource();
-            }finally{refreshing=false;}
+            var paths=discovered.Where(p=>p.IndexOf("vid_1209&pid_b386",StringComparison.OrdinalIgnoreCase)>=0).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            var retained=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            for(int i=sources.Items.Count-1;i>=0;i--){var item=(Source)sources.Items[i];if(!item.Usb)continue;
+                var matches=paths.Where(p=>SameSource(item.Path,p)).ToList();
+                if(matches.Count!=1 || !retained.Add(matches[0]))sources.Items.RemoveAt(i);
+                else {item.Path=matches[0];item.Label=UsbSourceLabel(item.Path);}
+            }
+            foreach(string path in paths)if(!sources.Items.Cast<Source>().Any(p=>p.Usb&&string.Equals(p.Path,path,StringComparison.OrdinalIgnoreCase)))sources.Items.Insert(0,new Source{Usb=true,Path=path,Label=UsbSourceLabel(path)});
+            SelectBoundSource();
+            }finally{refreshing=false;UpdateControls();}
         }
-        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=mergeDat.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);recover.Enabled=!busy && source!=null && HeaderRecoveryEligible(source.Usb,source.Path) && !(usbBlocked && source.Usb);deleteLast.Enabled=!busy && source!=null && source.CanDelete;format.Enabled=!busy && source!=null && source.CanFormat && !(usbBlocked && source.Usb);repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=true;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. Catalog repair requires supported USB firmware and confirmation; Format is a separate erase action.":"Recover is read-only; delete/format require removable SD media.";cancel.Enabled=busy && !maintenanceActive;}
+        private void ClearListing(){records.Items.Clear();listedSource=null;listedRecoverySearch=false;progress.Value=0;}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=mergeDat.Enabled=!busy;list.Enabled=save.Enabled=!busy && source!=null && !(usbBlocked && source.Usb);recover.Enabled=!busy && source!=null && HeaderRecoveryEligible(source.Usb,source.Path) && !(usbBlocked && source.Usb);deleteLast.Enabled=!busy && source!=null && source.CanDelete;format.Enabled=!busy && source!=null && source.CanFormat && !(usbBlocked && source.Usb);repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=true;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. Catalog repair requires supported USB firmware and confirmation; Format is a separate erase action.":"Recover is read-only; delete/format require removable SD media.";cancel.Enabled=busy && !maintenanceActive;}
         private void SetBusy(bool value){busy=value;destination.Enabled=browseDestination.Enabled=!busy;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
         internal async Task RepairUsbCatalogAsync(string path) {
             if(busy || usbBlocked || !USB512_interface.NpUsbCatalogRepair.IsEligiblePath(path))return;
@@ -135,16 +141,26 @@ namespace CE32_console
             }
         }
         private async Task FormatSelectedAsync() {
-            var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat || source.Usb && usbBlocked){status.Text="Quick Format requires removable SD media or an idle, supported V1 USB logger.";return;}
+            var source=sources.SelectedItem as Source;if(source==null || !source.CanFormat || source.Usb && usbBlocked){status.Text="Quick Format requires removable SD media or an idle, supported V1/V2 USB logger.";return;}
             maintenanceActive=true;SetBusy(true);
             try {
                 if(source.Usb){
                     cancelled=false;await PrepareSourceAsync(source);
+                    if(USB512_interface.NpV1Management.UidFromPath(source.Path)==null){
+                        using(var manager=new USB512_interface.NpV2UsbFormat(source.Path,()=>!usbBlocked && !IsDisposed)){
+                            var card=await Task.Run(()=>manager.Inspect());
+                            string description="V2 "+card.Uid+"\r\nSD CID "+card.Cid+"\r\n"+(card.Capacity*512.0/1073741824).ToString("N2")+" GiB ("+card.Capacity+" sectors)";
+                            if(!ConfirmUsbFormat("V2",description)){status.Text="Format cancelled; nothing written.";return;}
+                            ClearListing();status.Text="Formatting the confirmed V2 SD card and verifying metadata…";
+                            await Task.Run(()=>manager.Format(card));
+                        }
+                        progress.Value=100;status.Text="V2 USB Quick Format verified: empty NP catalog. Settings retained; old payload is not securely erased.";return;
+                    }
                     var selected=new USB512_interface.NpV1Target{Path=source.Path,Uid=USB512_interface.NpV1Management.UidFromPath(source.Path)};
                     using(var manager=new USB512_interface.NpV1Management(selected)){
                         var card=await Task.Run(()=>manager.InspectSdFormat());
-                        if(MessageBox.Show(DialogOwner,"Erase the recording catalog on this V1 SD card?\r\n\r\n"+card.Description+"\r\n\r\nAll recordings become unavailable and may be overwritten, including interrupted data still recoverable now. Recover needed data FIRST. A broken/foreign catalog is allowed. Settings are retained; this is not a secure erase.\r\nDo not remove power or swap the card until finished.","Destructive V1 USB SD Quick Format",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes){status.Text="Format cancelled; nothing written.";return;}
-                        status.Text="Formatting the confirmed V1 SD card and verifying metadata…";
+                        if(!ConfirmUsbFormat("V1",card.Description)){status.Text="Format cancelled; nothing written.";return;}
+                        ClearListing();status.Text="Formatting the confirmed V1 SD card and verifying metadata…";
                         await Task.Run(()=>manager.FormatSd(card));
                     }
                     records.Items.Clear();listedSource=null;status.Text="V1 USB Quick Format verified: empty NP catalog. Settings retained; old payload is not securely erased.";return;
@@ -154,9 +170,14 @@ namespace CE32_console
                 status.Text="Resetting and verifying native NP/media catalog…";
                 await Task.Run(()=>NpCardFormat.Format(target));records.Items.Clear();listedSource=null;
                 status.Text="Quick Format verified: empty NP/media catalog. Settings retained; old payload data is not securely erased.";
+            }catch(NotSupportedException ex) when(source.Usb && USB512_interface.NpV1Management.UidFromPath(source.Path)==null){
+                status.Text=ex.Message;
+                if(MessageBox.Show(DialogOwner,ex.Message+"\r\n\r\nOpen the bundled full firmware update? After updating, press Format again.","V2 USB firmware update required",MessageBoxButtons.YesNo,MessageBoxIcon.Information,MessageBoxDefaultButton.Button2)==DialogResult.Yes)
+                    using(var updater=new USB512_interface.NpV2FirmwareForm(source.Path)){updater.SelectFullBundle();updater.ShowDialog(DialogOwner);}
             }catch(Exception ex){status.Text="Format not confirmed: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"NP/media SD",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
             finally{maintenanceActive=false;SetBusy(false);}
         }
+        private bool ConfirmUsbFormat(string generation,string description){return MessageBox.Show(DialogOwner,"Erase the recording catalog on this "+generation+" SD card?\r\n\r\n"+description+"\r\n\r\nAll recordings become unavailable and may be overwritten, including interrupted data still recoverable now. Recover needed data FIRST. A broken/foreign catalog is allowed. Settings are retained; this is not a secure erase.\r\nDo not remove power or swap the card until finished.","Destructive "+generation+" USB SD Quick Format",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)==DialogResult.Yes;}
         private async Task DeleteLastAsync() {
             var source=sources.SelectedItem as Source;if(source==null || !source.CanDelete)return;
             maintenanceActive=true;SetBusy(true);
@@ -195,8 +216,12 @@ namespace CE32_console
             finally{if(sources.SelectedIndex<0)SelectBoundSource();refreshing=false;}
         }
         internal static bool SameSource(string first,string second) {
-            if(string.Equals(first,second,StringComparison.OrdinalIgnoreCase))return true;
             if(string.IsNullOrEmpty(first)||string.IsNullOrEmpty(second))return false;
+            if(string.Equals(first,second,StringComparison.OrdinalIgnoreCase))return true;
+            if(USB512_interface.NpUsbCatalogRepair.IsEligiblePath(first) && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(second)){
+                string v1a=USB512_interface.NpV1Management.UidFromPath(first),v1b=USB512_interface.NpV1Management.UidFromPath(second);
+                return (v1a==null)==(v1b==null) && string.Equals(v1a??USB512_interface.NpV2FirmwareForm.Uid(first),v1b??USB512_interface.NpV2FirmwareForm.Uid(second),StringComparison.OrdinalIgnoreCase);
+            }
             int a=first.LastIndexOf('#'),b=second.LastIndexOf('#');
             return a>0&&b>0&&string.Equals(first.Substring(0,a),second.Substring(0,b),StringComparison.OrdinalIgnoreCase);
         }
@@ -206,6 +231,7 @@ namespace CE32_console
                 if(selected>=0){sources.SelectedIndex=-1;return;}selected=i;
             }
             sources.SelectedIndex=selected;
+            if(selected>=0){boundSourcePath=((Source)sources.SelectedItem).Path;if(status.Text.StartsWith("Selected device is absent",StringComparison.Ordinal))status.Text="Selected "+((Source)sources.SelectedItem).Label+". List recordings to refresh the card.";}
             if(selected<0)status.Text="Selected device is absent; choose a source explicitly. Another board was not substituted.";
         }
         internal static long RequiredBytes(NpDownloadRecord record) {

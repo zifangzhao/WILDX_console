@@ -1,0 +1,1 @@
+Exact GUI91 compiler inputs based on published90. Guarded V2 USB formatting, full-update guidance for old firmware, and exact-UID reconnect selection. SDK/helpers/APP/recovery unchanged. New USB format firmware is software-tested only. Resources and other dependencies reuse checked caches. See ../../Note/V2_USB_FORMAT_20261022.md for validation and limits.

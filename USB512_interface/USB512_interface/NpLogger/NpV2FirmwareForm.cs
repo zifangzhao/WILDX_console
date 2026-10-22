@@ -52,6 +52,7 @@ namespace USB512_interface
             Resize+=delegate{status.MaximumSize=new Size(Math.Max(200,ClientSize.Width-40),0);};
             foreach(Control control in actions.Controls)if(control is Button && control.Text=="Update bundled firmware…")WildXTheme.Button((Button)control,true);
         }
+        internal void SelectFullBundle(){bundledPart.SelectedIndex=1;}
         internal static string Uid(string path)
         {
             var match = Regex.Match(path ?? "", @"#(?:npv2-)?([0-9a-f]{24})#", RegexOptions.IgnoreCase);

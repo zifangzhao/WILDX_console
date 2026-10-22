@@ -1,0 +1,1 @@
+PASS actual V2 USB format + real catalog: guarded one-shot EP0, fresh physical CID/CSD, native V2 publication, metadata-only bounds, readback and owner/cancel/fault checks; software only

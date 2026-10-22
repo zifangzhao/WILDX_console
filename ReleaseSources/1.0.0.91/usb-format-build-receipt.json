@@ -1,0 +1,2459 @@
+{
+  "role": "USB",
+  "parent_crc32": "E323A06A",
+  "body_crc32": "B6099A0E",
+  "body_sha256": "F69B5458A7CAE90E3C28DF7FFFD17B60DD87438721D5E8F610A530B7E2A6C74C",
+  "body_bytes": 176608,
+  "rebuilt_units": [
+    "xe_np_usb_stream"
+  ],
+  "source_inputs": {
+    "Core/Src/xe_np_usb_stream.c": {
+      "sha256": "D6A3B13D47CC81874C082A39D70B8B4636523DE3CF63B0C8F5949E745FAF51C5",
+      "baseline_sha256": "4CB7E01C438B51950AA4B34A0EFF09EBA39929589128FFC7BD0922AD0D7DCD11",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_stream.c",
+      "changed": true
+    },
+    "Core/Src/xe_np_usb_unified.inc": {
+      "sha256": "4797DC00911C28A6C74E5D84BF9E8C4689D863EEDA488BD53A14E716B89BBCE9",
+      "baseline_sha256": "526C171E7394B186548C7E0A6473CEE6E39A65E6C162D20DEC78E3320656F191",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_unified.inc",
+      "changed": true
+    },
+    "Core/Src/xe_np_usb_catalog.inc": {
+      "sha256": "26E87BD8CD7AC3E64BDDA17459DB329F7E47BE45ABFB3F908C536605FE170793",
+      "baseline_sha256": "AEE91CDF16F98CFF4DE832C9DA14773F7501EF3D4BF9B46EB51BE57A70643EEB",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_catalog.inc",
+      "changed": true
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_pcd.c": {
+      "sha256": "0B726B35181816E3ECF0186E0FF593C7688E8A8F74FD7768EEF19D04A41B57EB",
+      "baseline_sha256": "0B726B35181816E3ECF0186E0FF593C7688E8A8F74FD7768EEF19D04A41B57EB",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Src\\stm32u5xx_hal_pcd.c",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_ll_usb.c": {
+      "sha256": "18E6194CB3B4C1CF29023E2426625C4637DAE5A1001EA5E2ADE5B9BF42A65BB1",
+      "baseline_sha256": "18E6194CB3B4C1CF29023E2426625C4637DAE5A1001EA5E2ADE5B9BF42A65BB1",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Src\\stm32u5xx_ll_usb.c",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u595xx.h": {
+      "sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650",
+      "baseline_sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u595xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_usb.h": {
+      "sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D",
+      "baseline_sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_usb.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pcd.h": {
+      "sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8",
+      "baseline_sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h": {
+      "sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C",
+      "baseline_sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_sd_ex.h": {
+      "sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1",
+      "baseline_sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_gpio_ex.h": {
+      "sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840",
+      "baseline_sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_control.h": {
+      "sha256": "34EA61AC40247B84814378F3123B026CE2944FF4BBBBEAAA9FAC0B51EF96E93F",
+      "baseline_sha256": "34EA61AC40247B84814378F3123B026CE2944FF4BBBBEAAA9FAC0B51EF96E93F",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_control.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u599xx.h": {
+      "sha256": "0723C4F1A2ADF3D3E5652FB0E8577FC60D12B945044253DAEEC100A818F7EAD0",
+      "baseline_sha256": "0723C4F1A2ADF3D3E5652FB0E8577FC60D12B945044253DAEEC100A818F7EAD0",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u599xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_adc.h": {
+      "sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38",
+      "baseline_sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_hcd.h": {
+      "sha256": "321A66DC4770E2F2A89E841522508D354486A03285BEED0E57E1342A8D67D48C",
+      "baseline_sha256": "321A66DC4770E2F2A89E841522508D354486A03285BEED0E57E1342A8D67D48C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_hcd.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_usb_wire.h": {
+      "sha256": "A0D6B50284ECF793DC3C1B440642BE5E9343822C8794884738EEFE3CB4ED6534",
+      "baseline_sha256": "A0D6B50284ECF793DC3C1B440642BE5E9343822C8794884738EEFE3CB4ED6534",
+      "origin": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\baseline-inputs\\Core\\Inc\\xe_np_np2_usb_wire.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_smartcard.h": {
+      "sha256": "82F48E91B17DF18F0B49F91D2DAAEA01AB642A0FB8FED08DC03794A312AED30B",
+      "baseline_sha256": "82F48E91B17DF18F0B49F91D2DAAEA01AB642A0FB8FED08DC03794A312AED30B",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_smartcard.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_lptim.h": {
+      "sha256": "57667B248F76A181F1C5DBC02F2C4A9EFF940D0FF6B7DCA81C5DB5D3FD8DAED7",
+      "baseline_sha256": "57667B248F76A181F1C5DBC02F2C4A9EFF940D0FF6B7DCA81C5DB5D3FD8DAED7",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_lptim.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_msc.h": {
+      "sha256": "184B37795A3D0A26A2EE16F2ECD2BB9061B3E17E2B83C957024ED0F57C8461BF",
+      "baseline_sha256": "184B37795A3D0A26A2EE16F2ECD2BB9061B3E17E2B83C957024ED0F57C8461BF",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_msc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_icache.h": {
+      "sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141",
+      "baseline_sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_icache.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_smbus_ex.h": {
+      "sha256": "8DB3D98066B63D7B8046F28F2A2B67A5F3052602180FE3ED3A5BA72E1EEA306A",
+      "baseline_sha256": "8DB3D98066B63D7B8046F28F2A2B67A5F3052602180FE3ED3A5BA72E1EEA306A",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_smbus_ex.h",
+      "changed": false
+    },
+    "Core/Inc/main.h": {
+      "sha256": "F6EF6F3ED680DE6288E789EEC1403240462819D437C0F2E50D1CDC286AD0C166",
+      "baseline_sha256": "F6EF6F3ED680DE6288E789EEC1403240462819D437C0F2E50D1CDC286AD0C166",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\main.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_runtime.h": {
+      "sha256": "B657BE3D73BC002A53DA7DB6557BF32D96C2FAC5B55ADA87C113F38A6F2ED35E",
+      "baseline_sha256": "B657BE3D73BC002A53DA7DB6557BF32D96C2FAC5B55ADA87C113F38A6F2ED35E",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_runtime.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_comp.h": {
+      "sha256": "9CC726F4B0184C093C795AB23E64DB57C5B5D3564FEC2C725A3E72F0F0BDBA64",
+      "baseline_sha256": "9CC726F4B0184C093C795AB23E64DB57C5B5D3564FEC2C725A3E72F0F0BDBA64",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_comp.h",
+      "changed": false
+    },
+    "Tools/V1Capture/SdLogger/np_sd_read_crc.inc": {
+      "sha256": "F881D599D1F9E04ACD765C87F6797A728B2E9A567CECC7990A6193A693300552",
+      "baseline_sha256": "F881D599D1F9E04ACD765C87F6797A728B2E9A567CECC7990A6193A693300552",
+      "origin": "D:\\Code\\XE_NP_V2\\Tools\\V1Capture\\SdLogger\\np_sd_read_crc.inc",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_irda_ex.h": {
+      "sha256": "735C171DC3A69039FAD96EF4C7AA048AFED1E83C0D57A0ADB6D1167D17A6A536",
+      "baseline_sha256": "735C171DC3A69039FAD96EF4C7AA048AFED1E83C0D57A0ADB6D1167D17A6A536",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_irda_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_usart.h": {
+      "sha256": "382D720CFBE4A14CCCE96A413563077677D567A62FF6FFC340682CC6B2E8A257",
+      "baseline_sha256": "382D720CFBE4A14CCCE96A413563077677D567A62FF6FFC340682CC6B2E8A257",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_usart.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_cryp.h": {
+      "sha256": "A819BB371B0069BBC4E5A1D528BEDA0DA32D19825CBF75D0E808ECB97C391A3C",
+      "baseline_sha256": "A819BB371B0069BBC4E5A1D528BEDA0DA32D19825CBF75D0E808ECB97C391A3C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cryp.h",
+      "changed": false
+    },
+    "Core/Inc/ce32_wire.h": {
+      "sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7",
+      "baseline_sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\ce32_wire.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_i2c.h": {
+      "sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA",
+      "baseline_sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_iwdg.h": {
+      "sha256": "12AFEFFAD4F34A390EF2ABABFADCF91A63A4F9AE6708F95B90BB5734AA6AF83B",
+      "baseline_sha256": "12AFEFFAD4F34A390EF2ABABFADCF91A63A4F9AE6708F95B90BB5734AA6AF83B",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_iwdg.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u575xx.h": {
+      "sha256": "7B7C82A1952D23194DF2A3078FCF275B7A9B7A19BDC07EE316F58C3CA22E6236",
+      "baseline_sha256": "7B7C82A1952D23194DF2A3078FCF275B7A9B7A19BDC07EE316F58C3CA22E6236",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u575xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_mmc_ex.h": {
+      "sha256": "4AFFC558D8548D47E5A1FD5B193C6DC4C4725257F3F8A15D6B31B86AD65CB815",
+      "baseline_sha256": "4AFFC558D8548D47E5A1FD5B193C6DC4C4725257F3F8A15D6B31B86AD65CB815",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_mmc_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_adc.h": {
+      "sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4",
+      "baseline_sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_adc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_otfdec.h": {
+      "sha256": "054D46EE9F31830AC99A7A43461D5B5CAE3C706620FD195FBF47B4FDFCE2074C",
+      "baseline_sha256": "054D46EE9F31830AC99A7A43461D5B5CAE3C706620FD195FBF47B4FDFCE2074C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_otfdec.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_usb_aux.inc": {
+      "sha256": "FA1FA49175B330958472DDC3647926340B7439153AD79BC1EF8642F3D6F7450C",
+      "baseline_sha256": "FA1FA49175B330958472DDC3647926340B7439153AD79BC1EF8642F3D6F7450C",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_aux.inc",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_adc_ex.h": {
+      "sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2",
+      "baseline_sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_ospi.h": {
+      "sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356",
+      "baseline_sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ospi.h",
+      "changed": false
+    },
+    "Middlewares/Bosch/BMM150_SensorAPI/bmm150.h": {
+      "sha256": "BB51F04F957BA372F638FF45F33934A4D150FF57DB3F419C604EDF426F7C778A",
+      "baseline_sha256": "BB51F04F957BA372F638FF45F33934A4D150FF57DB3F419C604EDF426F7C778A",
+      "origin": "D:\\Code\\XE_NP_V2\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_transport.h": {
+      "sha256": "08959454F136221F42F78115024CB1AE8CF394F21A9ECB7216F7F68CA782D3EE",
+      "baseline_sha256": "08959454F136221F42F78115024CB1AE8CF394F21A9ECB7216F7F68CA782D3EE",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_transport.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_media_camera.h": {
+      "sha256": "BAF331F3DF9F25D287E7AF3EF724037E68404C13653568B696D731B632E59C4A",
+      "baseline_sha256": "BAF331F3DF9F25D287E7AF3EF724037E68404C13653568B696D731B632E59C4A",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_media_camera.h",
+      "changed": false
+    },
+    "Core/Inc/stm32u5xx_hal_conf.h": {
+      "sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "baseline_sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\stm32u5xx_hal_conf.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_gtzc.h": {
+      "sha256": "7FA837AF4F09CD2EDAF10AED0C933ADE4D9EDE8EB9CF90AE9613C22BD87178A6",
+      "baseline_sha256": "7FA837AF4F09CD2EDAF10AED0C933ADE4D9EDE8EB9CF90AE9613C22BD87178A6",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gtzc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dcache.h": {
+      "sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67",
+      "baseline_sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcache.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_dlyb.h": {
+      "sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105",
+      "baseline_sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_dlyb.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5f9xx.h": {
+      "sha256": "CF0119D1CCB6E5EF6C749F0C1F312AE6B190F1D25E88FD764757A9B4AB76099F",
+      "baseline_sha256": "CF0119D1CCB6E5EF6C749F0C1F312AE6B190F1D25E88FD764757A9B4AB76099F",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5f9xx.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_dual_sd_meta.h": {
+      "sha256": "6BBDB486D7808F7C932ABBA8265A68A29E70E06CC0DF05BAF5E44F9197B0B8C0",
+      "baseline_sha256": "6BBDB486D7808F7C932ABBA8265A68A29E70E06CC0DF05BAF5E44F9197B0B8C0",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_dual_sd_meta.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u535xx.h": {
+      "sha256": "474CEBA4C8C84036BE79832EE264A77C76FB06A958D236C44D6D0DA663742007",
+      "baseline_sha256": "474CEBA4C8C84036BE79832EE264A77C76FB06A958D236C44D6D0DA663742007",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u535xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pcd_ex.h": {
+      "sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C",
+      "baseline_sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rtc.h": {
+      "sha256": "F30B54E142F1778F8443BFC04BCCB2943AD29C5A5E84D24D8DF0CC9C3DBCA0BC",
+      "baseline_sha256": "F30B54E142F1778F8443BFC04BCCB2943AD29C5A5E84D24D8DF0CC9C3DBCA0BC",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rtc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_fmc.h": {
+      "sha256": "019863A83EF36AA57C8284A1D147D76EBFEFE42F2FD060A5B973E7BBB6D7F054",
+      "baseline_sha256": "019863A83EF36AA57C8284A1D147D76EBFEFE42F2FD060A5B973E7BBB6D7F054",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_fmc.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_sd_append.h": {
+      "sha256": "F9F1BCEB2CE11BEB8E7353FA57DC9ECAEADB850DB3E675D592183F9F55E1AE90",
+      "baseline_sha256": "F9F1BCEB2CE11BEB8E7353FA57DC9ECAEADB850DB3E675D592183F9F55E1AE90",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_sd_append.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_gpu2d.h": {
+      "sha256": "9BDEF9A134971CDBFF59B742CC5378D0D0AADF6DC07DA4117C59B63AC3EED4BC",
+      "baseline_sha256": "9BDEF9A134971CDBFF59B742CC5378D0D0AADF6DC07DA4117C59B63AC3EED4BC",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpu2d.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_def.h": {
+      "sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3",
+      "baseline_sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_def.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_session.h": {
+      "sha256": "FAE4EA0089F6DAA0577B98F384DCFAE6F2397AB42CAA00E89278A2EAAF862DB3",
+      "baseline_sha256": "FAE4EA0089F6DAA0577B98F384DCFAE6F2397AB42CAA00E89278A2EAAF862DB3",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_session.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_gfxtim.h": {
+      "sha256": "EF0C410046266305E3CBA08FE9A946292593B69EA95BFA034CCB47CDBF06C37C",
+      "baseline_sha256": "EF0C410046266305E3CBA08FE9A946292593B69EA95BFA034CCB47CDBF06C37C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gfxtim.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_board.h": {
+      "sha256": "99516C9B3E39A7B04E863BED14B5991CA7D0E0F7ED100C4251D6161E603A238B",
+      "baseline_sha256": "99516C9B3E39A7B04E863BED14B5991CA7D0E0F7ED100C4251D6161E603A238B",
+      "origin": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\baseline-inputs\\Core\\Inc\\xe_np_board.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_image_role.h": {
+      "sha256": "20AA92634A2209D540E94C366B5064F02D5996206733B35CBE641796AE407C8F",
+      "baseline_sha256": "20AA92634A2209D540E94C366B5064F02D5996206733B35CBE641796AE407C8F",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_image_role.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_nand.h": {
+      "sha256": "EE2F2782604C983D227F8D8FDF83A02DFBDC62D2D193919C1BF19902C98056AE",
+      "baseline_sha256": "EE2F2782604C983D227F8D8FDF83A02DFBDC62D2D193919C1BF19902C98056AE",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_nand.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma2d.h": {
+      "sha256": "49F2757012300326E75C8AFAD04A1B3F5DCCCDA4A570A3128748084754F3065D",
+      "baseline_sha256": "49F2757012300326E75C8AFAD04A1B3F5DCCCDA4A570A3128748084754F3065D",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma2d.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_hash.h": {
+      "sha256": "C03731AD07AC7FE5F8DC25A63AFF4EBFF2CAD494F70EA99081249B64E49CA1C2",
+      "baseline_sha256": "C03731AD07AC7FE5F8DC25A63AFF4EBFF2CAD494F70EA99081249B64E49CA1C2",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_hash.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_np2_usb_stream.inc": {
+      "sha256": "1D8FF81A7A54123F50A62E46FF709AD604C0DF4CB3ED43AE636846EA3B58652D",
+      "baseline_sha256": "1D8FF81A7A54123F50A62E46FF709AD604C0DF4CB3ED43AE636846EA3B58652D",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_np2_usb_stream.inc",
+      "changed": false
+    },
+    "Tools/V2SdLogger/SharedV1/np_ce64.h": {
+      "sha256": "D38D2022EAE38C2D9588E90EE797520632E8C81E84782ADA5C417F4B06FA7EDE",
+      "baseline_sha256": "D38D2022EAE38C2D9588E90EE797520632E8C81E84782ADA5C417F4B06FA7EDE",
+      "origin": "D:\\Code\\XE_NP_V2\\Tools\\V2SdLogger\\SharedV1\\np_ce64.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pwr_ex.h": {
+      "sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF",
+      "baseline_sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_capture.h": {
+      "sha256": "0144B49B964E8448C95D165D6A95067C87DE06ECCC9B715E5549519AA10BA3CE",
+      "baseline_sha256": "0144B49B964E8448C95D165D6A95067C87DE06ECCC9B715E5549519AA10BA3CE",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_capture.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tsc.h": {
+      "sha256": "B4C0EF654AAA09B62124218E732266AEC8CA9CF85EFDAF84A89F1FDF6C5A14E4",
+      "baseline_sha256": "B4C0EF654AAA09B62124218E732266AEC8CA9CF85EFDAF84A89F1FDF6C5A14E4",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tsc.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_usb_selftest.inc": {
+      "sha256": "A176A0A9B45F7BFFBF13368251DF9FAC595A9972B6C9DEF45B9A63F6D18FDBF0",
+      "baseline_sha256": "A176A0A9B45F7BFFBF13368251DF9FAC595A9972B6C9DEF45B9A63F6D18FDBF0",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_selftest.inc",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/core_cm33.h": {
+      "sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE",
+      "baseline_sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\core_cm33.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_catalog.h": {
+      "sha256": "8FD2BB3D4B8A9E1B7D0695BD6482CF2A9AF0CE5FB82968E35325ABC25477B4C2",
+      "baseline_sha256": "8FD2BB3D4B8A9E1B7D0695BD6482CF2A9AF0CE5FB82968E35325ABC25477B4C2",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_catalog.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dac.h": {
+      "sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788",
+      "baseline_sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dcmi.h": {
+      "sha256": "21F202B122A0596496F176CF2EA6A6696AB325CD3A40A6577A105A62272AFFAC",
+      "baseline_sha256": "21F202B122A0596496F176CF2EA6A6696AB325CD3A40A6577A105A62272AFFAC",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcmi.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/cmsis_armcc.h": {
+      "sha256": "D074534D7106CEC83474B3B0A897BD2553E1A8895ECBD54F4F4FB25928066EEE",
+      "baseline_sha256": "D074534D7106CEC83474B3B0A897BD2553E1A8895ECBD54F4F4FB25928066EEE",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\cmsis_armcc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pssi.h": {
+      "sha256": "8236A96DF4D011114CC7C43D72D97FD51EEB695D6BFA31B48E34FBF150E6FB1E",
+      "baseline_sha256": "8236A96DF4D011114CC7C43D72D97FD51EEB695D6BFA31B48E34FBF150E6FB1E",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pssi.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h": {
+      "sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78",
+      "baseline_sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_fdcan.h": {
+      "sha256": "3AB2A1E18A862A3F0AB40F24BF8089E443D8691BB9018A904A79DD15D4748CB4",
+      "baseline_sha256": "3AB2A1E18A862A3F0AB40F24BF8089E443D8691BB9018A904A79DD15D4748CB4",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_fdcan.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_sram.h": {
+      "sha256": "BA0B85FDC6393300FDF21458ECA01B4D2F7839A402299B2C34D9E2A38D730263",
+      "baseline_sha256": "BA0B85FDC6393300FDF21458ECA01B4D2F7839A402299B2C34D9E2A38D730263",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sram.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_uart.h": {
+      "sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8",
+      "baseline_sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_usb_source.h": {
+      "sha256": "F162294A9F310305026D0D14C21CB5E324D1BCAB7AF6F431BA58F89D374E7041",
+      "baseline_sha256": "F162294A9F310305026D0D14C21CB5E324D1BCAB7AF6F431BA58F89D374E7041",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_usb_source.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rtc_ex.h": {
+      "sha256": "300CC0BA9695CD319B8296AE775B3C026059EC5E4614793077D2978DCF1D7877",
+      "baseline_sha256": "300CC0BA9695CD319B8296AE775B3C026059EC5E4614793077D2978DCF1D7877",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rtc_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma_ex.h": {
+      "sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3",
+      "baseline_sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma_ex.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5a9xx.h": {
+      "sha256": "B5F8EFA395EF7CB4C5E184AB956BD330720C554FB058D73C165B0C570655B069",
+      "baseline_sha256": "B5F8EFA395EF7CB4C5E184AB956BD330720C554FB058D73C165B0C570655B069",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5a9xx.h",
+      "changed": false
+    },
+    "Firmware/V1/Core/Inc/np_media_metadata.h": {
+      "sha256": "D921B5B4032F72F642BF7766DB010BBE5488D5B1E02B0DB50F0FA9CDA80A1554",
+      "baseline_sha256": "D921B5B4032F72F642BF7766DB010BBE5488D5B1E02B0DB50F0FA9CDA80A1554",
+      "origin": "D:\\Code\\XE_NP_V2\\Firmware\\V1\\Core\\Inc\\np_media_metadata.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_stream.h": {
+      "sha256": "A24ACD310C07BA13E689B695D5CFFBE1C5DE0D5F88040594DB704092921E5FCB",
+      "baseline_sha256": "A24ACD310C07BA13E689B695D5CFFBE1C5DE0D5F88040594DB704092921E5FCB",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_stream.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_hash_ex.h": {
+      "sha256": "D86C07C59D584245C0DEA4BF1AE7EB43204178AB82350AC0FAFF8B63A7789D13",
+      "baseline_sha256": "D86C07C59D584245C0DEA4BF1AE7EB43204178AB82350AC0FAFF8B63A7789D13",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_hash_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_sensors.h": {
+      "sha256": "3D1EF5951F21D71DACE94CE6F2B1F20DB98772CF5AD4B7C45DF83045376BCDA2",
+      "baseline_sha256": "3D1EF5951F21D71DACE94CE6F2B1F20DB98772CF5AD4B7C45DF83045376BCDA2",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_sensors.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/system_stm32u5xx.h": {
+      "sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7",
+      "baseline_sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\system_stm32u5xx.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5g7xx.h": {
+      "sha256": "D1EE7EA7705B08D05DD78352B38E80AEDF600230D1291EB16384A1B7CE7B1067",
+      "baseline_sha256": "D1EE7EA7705B08D05DD78352B38E80AEDF600230D1291EB16384A1B7CE7B1067",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5g7xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_spi.h": {
+      "sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4",
+      "baseline_sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_sd_record_plan.h": {
+      "sha256": "28C982786AAC1DD75536906DD6394493F69B5AE0BDF4B948CB62C90B883FEB64",
+      "baseline_sha256": "28C982786AAC1DD75536906DD6394493F69B5AE0BDF4B948CB62C90B883FEB64",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_sd_record_plan.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_producer.h": {
+      "sha256": "7A127FC7BBA6B2D2E37427CA16214CEEA225ED8E28125F95FC2F33B6EF4A77DC",
+      "baseline_sha256": "7A127FC7BBA6B2D2E37427CA16214CEEA225ED8E28125F95FC2F33B6EF4A77DC",
+      "origin": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\baseline-inputs\\Core\\Inc\\xe_np_np2_producer.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_dual_sd_run.h": {
+      "sha256": "D3F46CB006F847C19612D6436E632E6ACF930CC08C493E7C2C918FE8F556884B",
+      "baseline_sha256": "D3F46CB006F847C19612D6436E632E6ACF930CC08C493E7C2C918FE8F556884B",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_dual_sd_run.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_smbus.h": {
+      "sha256": "3370EF60C442F616197BDE751F30DC5497D1F77534DC2E5FAD89B372C14FED86",
+      "baseline_sha256": "3370EF60C442F616197BDE751F30DC5497D1F77534DC2E5FAD89B372C14FED86",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_smbus.h",
+      "changed": false
+    },
+    "Core/Inc/CE32_Sync.h": {
+      "sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6",
+      "baseline_sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\CE32_Sync.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rcc.h": {
+      "sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC",
+      "baseline_sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u545xx.h": {
+      "sha256": "ECA8A22660D190461E3A543D0F0D20DD14D9DB55BC8B60BE5EAC124C70C8AD03",
+      "baseline_sha256": "ECA8A22660D190461E3A543D0F0D20DD14D9DB55BC8B60BE5EAC124C70C8AD03",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u545xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_smartcard_ex.h": {
+      "sha256": "AF33C29555D6C45CE229E6A9049C6E5D87C5A7ECF3C3A70B074963657E2AE1F2",
+      "baseline_sha256": "AF33C29555D6C45CE229E6A9049C6E5D87C5A7ECF3C3A70B074963657E2AE1F2",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_smartcard_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_cordic.h": {
+      "sha256": "FB94012467578308038567D283A92181DA8712CC4A92EDE84494F26C7EEE5A8F",
+      "baseline_sha256": "FB94012467578308038567D283A92181DA8712CC4A92EDE84494F26C7EEE5A8F",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cordic.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_irda.h": {
+      "sha256": "0F2DDABDB0B68C1364855F5C0EB8968E017118E4DD05845E1695305B126C9CBF",
+      "baseline_sha256": "0F2DDABDB0B68C1364855F5C0EB8968E017118E4DD05845E1695305B126C9CBF",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_irda.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h": {
+      "sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573",
+      "baseline_sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5xx.h": {
+      "sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB",
+      "baseline_sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_crc.h": {
+      "sha256": "0145E462E401FCFAE466905CBCBE535AFFBDE29B3B0EF16D1E0AB11845E31767",
+      "baseline_sha256": "0145E462E401FCFAE466905CBCBE535AFFBDE29B3B0EF16D1E0AB11845E31767",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_crc.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/cmsis_version.h": {
+      "sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC",
+      "baseline_sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\cmsis_version.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_np2_dual_sd_meta.c": {
+      "sha256": "93EE9ECD0208089523E413B18DD9B9D47D1B73511457DD11E25E3434717A1F4D",
+      "baseline_sha256": "93EE9ECD0208089523E413B18DD9B9D47D1B73511457DD11E25E3434717A1F4D",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_np2_dual_sd_meta.c",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_xspi.h": {
+      "sha256": "6717140A4942BCE3168E17DFAF1F8998AB31677CAE6C13ADD9BB43546E9B8A96",
+      "baseline_sha256": "6717140A4942BCE3168E17DFAF1F8998AB31677CAE6C13ADD9BB43546E9B8A96",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_xspi.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_app.h": {
+      "sha256": "905BD5293B7A52E3B6454387B44E328BF045C864AAA5D4639CFA63D12FA24C48",
+      "baseline_sha256": "905BD5293B7A52E3B6454387B44E328BF045C864AAA5D4639CFA63D12FA24C48",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_app.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pwr.h": {
+      "sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0",
+      "baseline_sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_cortex.h": {
+      "sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE",
+      "baseline_sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cortex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_boot_contract.h": {
+      "sha256": "457B12AEA9D75EBA723CEBF478C61879466BDEE8260A46B80251DF99C115AAF7",
+      "baseline_sha256": "457B12AEA9D75EBA723CEBF478C61879466BDEE8260A46B80251DF99C115AAF7",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_boot_contract.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/mpu_armv8.h": {
+      "sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C",
+      "baseline_sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\mpu_armv8.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_hal.h": {
+      "sha256": "5C9C10CBAB38FF6AC367B7C1B42FA4B83ECDE359D3F2F8F05AFB0F22DFA64850",
+      "baseline_sha256": "5C9C10CBAB38FF6AC367B7C1B42FA4B83ECDE359D3F2F8F05AFB0F22DFA64850",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_hal.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_lptim.h": {
+      "sha256": "21E76CAC24694F8D683DE595741587BF3DD6A9124601F0EEA36AF62DD46BEEDE",
+      "baseline_sha256": "21E76CAC24694F8D683DE595741587BF3DD6A9124601F0EEA36AF62DD46BEEDE",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_lptim.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rng_ex.h": {
+      "sha256": "E78B091F7CE81139DD8F561BDDC9F28AE9BF0054E66E391124BEF672C9559CE6",
+      "baseline_sha256": "E78B091F7CE81139DD8F561BDDC9F28AE9BF0054E66E391124BEF672C9559CE6",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rng_ex.h",
+      "changed": false
+    },
+    "Tools/V2SdLogger/SharedV1/np_sd_log.h": {
+      "sha256": "BCC488E483787170E14F1A2A9FAB06039C91D683B1CC9F6A5778A5EF7EB116D5",
+      "baseline_sha256": "BCC488E483787170E14F1A2A9FAB06039C91D683B1CC9F6A5778A5EF7EB116D5",
+      "origin": "D:\\Code\\XE_NP_V2\\Tools\\V2SdLogger\\SharedV1\\np_sd_log.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5f7xx.h": {
+      "sha256": "A9E478858302E02B13FBC3F1A1AC752702A222893CA19A900EA8D093073C7C08",
+      "baseline_sha256": "A9E478858302E02B13FBC3F1A1AC752702A222893CA19A900EA8D093073C7C08",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5f7xx.h",
+      "changed": false
+    },
+    "Core/Inc/dataMGR.h": {
+      "sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594",
+      "baseline_sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\dataMGR.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_opamp.h": {
+      "sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8",
+      "baseline_sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_sd_info.h": {
+      "sha256": "890073F8ABA0685D32E44708CEE9A7E1ED7ADBC171350991B11C389427ADF67A",
+      "baseline_sha256": "890073F8ABA0685D32E44708CEE9A7E1ED7ADBC171350991B11C389427ADF67A",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_sd_info.h",
+      "changed": false
+    },
+    "Tools/V1Capture/SdLogger/np_sd_usb_download.inc": {
+      "sha256": "E59609EC3F755F750758C9C11207F0423668A2633FB9EAD9CF77A09E56E14EDC",
+      "baseline_sha256": "E59609EC3F755F750758C9C11207F0423668A2633FB9EAD9CF77A09E56E14EDC",
+      "origin": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\baseline-inputs\\Tools\\V1Capture\\SdLogger\\np_sd_usb_download.inc",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_wwdg.h": {
+      "sha256": "C80DFE93A5D3B503F0B8A6517365721D865D86FF52A4B10729F4A7EE2E72F4C7",
+      "baseline_sha256": "C80DFE93A5D3B503F0B8A6517365721D865D86FF52A4B10729F4A7EE2E72F4C7",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_wwdg.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma.h": {
+      "sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596",
+      "baseline_sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_ramcfg.h": {
+      "sha256": "CA181A88389DDE693DAEEC1A03D3B68E4AE3D8BAD3FF8D90337F3C5D63C32B06",
+      "baseline_sha256": "CA181A88389DDE693DAEEC1A03D3B68E4AE3D8BAD3FF8D90337F3C5D63C32B06",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ramcfg.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_sai.h": {
+      "sha256": "D0463BD32FD5DFE04476AE95BDA91DC08A76859A391D66FDC006291D1A99F9C8",
+      "baseline_sha256": "D0463BD32FD5DFE04476AE95BDA91DC08A76859A391D66FDC006291D1A99F9C8",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sai.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h": {
+      "sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525",
+      "baseline_sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_exti.h",
+      "changed": false
+    },
+    "Middlewares/Bosch/BME280_SensorAPI/bme280_defs.h": {
+      "sha256": "E4BFF60BB29C49C1FD68B1EA91A362063D5814FEE202F444D57F95595A577D0E",
+      "baseline_sha256": "E4BFF60BB29C49C1FD68B1EA91A362063D5814FEE202F444D57F95595A577D0E",
+      "origin": "D:\\Code\\XE_NP_V2\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280_defs.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_uart_ex.h": {
+      "sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F",
+      "baseline_sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_sdio.h": {
+      "sha256": "44FA26C6EB0D2FD62A0FEA7242770AAE26BBEFDDCDAC93029A779E5AE09952AF",
+      "baseline_sha256": "44FA26C6EB0D2FD62A0FEA7242770AAE26BBEFDDCDAC93029A779E5AE09952AF",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sdio.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_jpeg.h": {
+      "sha256": "854FA347D10CA7FDB9D90DBDFECE37E41E0708C83E03FEE61BCB4EEF2D69CD37",
+      "baseline_sha256": "854FA347D10CA7FDB9D90DBDFECE37E41E0708C83E03FEE61BCB4EEF2D69CD37",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_jpeg.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rcc_ex.h": {
+      "sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463",
+      "baseline_sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_pssi_log_format.h": {
+      "sha256": "FBCEE8641B76A63393A836A3E725FC4B2073D1A93F0753A6F48846772DBF407D",
+      "baseline_sha256": "FBCEE8641B76A63393A836A3E725FC4B2073D1A93F0753A6F48846772DBF407D",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_pssi_log_format.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_aux.h": {
+      "sha256": "E72351512117C20F2616158F3BC13680F4AEA6A2AB2131DCFA244F3A7990DCBB",
+      "baseline_sha256": "E72351512117C20F2616158F3BC13680F4AEA6A2AB2131DCFA244F3A7990DCBB",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_aux.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_nor.h": {
+      "sha256": "9300EBF0F8A93AEE617E35D381D729CFC693DB08E4AB88B638B035BD543F6845",
+      "baseline_sha256": "9300EBF0F8A93AEE617E35D381D729CFC693DB08E4AB88B638B035BD543F6845",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_nor.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_selftest.h": {
+      "sha256": "175D5CD66599C60967828F8A5513F1755127FC2AF82E3EA1FE19FA38504EBA8B",
+      "baseline_sha256": "175D5CD66599C60967828F8A5513F1755127FC2AF82E3EA1FE19FA38504EBA8B",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_selftest.h",
+      "changed": false
+    },
+    "Middlewares/Bosch/BMM150_SensorAPI/bmm150_defs.h": {
+      "sha256": "BCCBE06B31F8F1A46DE6317DE67CE23AE13182B2B5C9E1230ADE0491C7078FDB",
+      "baseline_sha256": "BCCBE06B31F8F1A46DE6317DE67CE23AE13182B2B5C9E1230ADE0491C7078FDB",
+      "origin": "D:\\Code\\XE_NP_V2\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150_defs.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_media_adc.h": {
+      "sha256": "C48446FFE96D0810AB24B43AE14F319303CDEDA4DD1027DDF13423623B005099",
+      "baseline_sha256": "C48446FFE96D0810AB24B43AE14F319303CDEDA4DD1027DDF13423623B005099",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_media_adc.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_np2_dual_sd_run.c": {
+      "sha256": "6CD7783C3ACF986FD5B83EFD2C2FA4D46C1EA900D1A7FA88631FB67749A5EA86",
+      "baseline_sha256": "6CD7783C3ACF986FD5B83EFD2C2FA4D46C1EA900D1A7FA88631FB67749A5EA86",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_np2_dual_sd_run.c",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_opamp_ex.h": {
+      "sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5",
+      "baseline_sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_live_sd.h": {
+      "sha256": "2782217676175648DCFC0F15F3304359FEB4325C5218F215FC3FE2A4F29E851D",
+      "baseline_sha256": "2782217676175648DCFC0F15F3304359FEB4325C5218F215FC3FE2A4F29E851D",
+      "origin": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\baseline-inputs\\Core\\Inc\\xe_np_np2_live_sd.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_fault.h": {
+      "sha256": "813D563E6BABEBBF95FD3BDDAAFC417EEEDB2501CF9CB8FED64E06F32DA24940",
+      "baseline_sha256": "813D563E6BABEBBF95FD3BDDAAFC417EEEDB2501CF9CB8FED64E06F32DA24940",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_fault.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/cmsis_armclang_ltm.h": {
+      "sha256": "8621969EA669A1B230FF2125A760EF66D575C48CB45E9E457F768909ABCBDA46",
+      "baseline_sha256": "8621969EA669A1B230FF2125A760EF66D575C48CB45E9E457F768909ABCBDA46",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\cmsis_armclang_ltm.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_usb_idle_sleep.inc": {
+      "sha256": "91F9E171C50182B5D3A3B9C8B6B55E8678F1810885C15DC97421E4BF42B55270",
+      "baseline_sha256": "91F9E171C50182B5D3A3B9C8B6B55E8678F1810885C15DC97421E4BF42B55270",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_idle_sleep.inc",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_cryp_ex.h": {
+      "sha256": "F9AE902D4014668AABF8EF03E1D61660E99D36838649DEF080229EAF3E4C541F",
+      "baseline_sha256": "F9AE902D4014668AABF8EF03E1D61660E99D36838649DEF080229EAF3E4C541F",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cryp_ex.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u585xx.h": {
+      "sha256": "9264DF2BD7CD78AC9FECA4B207DB10C1D260A14C87F77E43F0A07FF582888629",
+      "baseline_sha256": "9264DF2BD7CD78AC9FECA4B207DB10C1D260A14C87F77E43F0A07FF582888629",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u585xx.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/cmsis_armclang.h": {
+      "sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311",
+      "baseline_sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\cmsis_armclang.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5g9xx.h": {
+      "sha256": "A710B1AE7E5C7AA924411E35B92D9C98BEE4418422F4193BC1719C71D157AD32",
+      "baseline_sha256": "A710B1AE7E5C7AA924411E35B92D9C98BEE4418422F4193BC1719C71D157AD32",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5g9xx.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_direct_layout.h": {
+      "sha256": "DB942C7FA218A9B0E51E336BD43516872E6EE54C4246AA7786F95B6969D9A6E5",
+      "baseline_sha256": "DB942C7FA218A9B0E51E336BD43516872E6EE54C4246AA7786F95B6969D9A6E5",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_direct_layout.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_dual_sd_catalog.h": {
+      "sha256": "BB84E0E92F18163D9A4F9F72F66AFEE7BAFA3037AF94A1489797ED20AAD4868C",
+      "baseline_sha256": "BB84E0E92F18163D9A4F9F72F66AFEE7BAFA3037AF94A1489797ED20AAD4868C",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_dual_sd_catalog.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_sensors_port.h": {
+      "sha256": "656C87342527A5F056545AC6A034D28D697FDAE3526ADAD7B56141AB54F2B911",
+      "baseline_sha256": "656C87342527A5F056545AC6A034D28D697FDAE3526ADAD7B56141AB54F2B911",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_sensors_port.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_sai_ex.h": {
+      "sha256": "0CD512AB9F12ED1D9D486B5C57D2B1A1D8A24A5A5BC5648D8D80CB1E662C5E40",
+      "baseline_sha256": "0CD512AB9F12ED1D9D486B5C57D2B1A1D8A24A5A5BC5648D8D80CB1E662C5E40",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sai_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_media_profile.h": {
+      "sha256": "542C072110CF4D1D3F392600AF2296CEF7D0902B0AEF0670A2B0754658935BCC",
+      "baseline_sha256": "542C072110CF4D1D3F392600AF2296CEF7D0902B0AEF0670A2B0754658935BCC",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_media_profile.h",
+      "changed": false
+    },
+    "Core/Inc/CE32_COMMAND.h": {
+      "sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465",
+      "baseline_sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\CE32_COMMAND.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/cmsis_gcc.h": {
+      "sha256": "3D4E265D0AA42F888385CCF073666E6EBB5EC9F834760B9DA27C474E177F708D",
+      "baseline_sha256": "3D4E265D0AA42F888385CCF073666E6EBB5EC9F834760B9DA27C474E177F708D",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\cmsis_gcc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h": {
+      "sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4",
+      "baseline_sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_usart_ex.h": {
+      "sha256": "7E3D0F0BBBF44754C9E9AE7C2E08BFDAC97F491A6DF9FA330B2BFB11F2542EF6",
+      "baseline_sha256": "7E3D0F0BBBF44754C9E9AE7C2E08BFDAC97F491A6DF9FA330B2BFB11F2542EF6",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_usart_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rng.h": {
+      "sha256": "7A5925E19EE6C1FDCFBD4DBDABCE0E78400326E582784DBCC8FD38513EE11A6E",
+      "baseline_sha256": "7A5925E19EE6C1FDCFBD4DBDABCE0E78400326E582784DBCC8FD38513EE11A6E",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rng.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_np2_dual_sd_catalog.c": {
+      "sha256": "FCB5D23A59B59BB1690D5CD226877637D2386AF6AFD9313F121A5727F2E2ECD6",
+      "baseline_sha256": "FCB5D23A59B59BB1690D5CD226877637D2386AF6AFD9313F121A5727F2E2ECD6",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_np2_dual_sd_catalog.c",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_config.h": {
+      "sha256": "759866CED75A040375C079427A4A8D57B06714F8BFFAD4F2EE888C9AB2A819B9",
+      "baseline_sha256": "759866CED75A040375C079427A4A8D57B06714F8BFFAD4F2EE888C9AB2A819B9",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_config.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_flash.h": {
+      "sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40",
+      "baseline_sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash.h",
+      "changed": false
+    },
+    "Middlewares/Bosch/BME280_SensorAPI/bme280.h": {
+      "sha256": "0476F04E3BBC24AB97EF735170A983A566276CDDF593EBA39331F4CC053A0ED6",
+      "baseline_sha256": "0476F04E3BBC24AB97EF735170A983A566276CDDF593EBA39331F4CC053A0ED6",
+      "origin": "D:\\Code\\XE_NP_V2\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pka.h": {
+      "sha256": "413BC991C278BF6C478D377D0514436A79C4B7494AA589EAC5478AE786D4C39A",
+      "baseline_sha256": "413BC991C278BF6C478D377D0514436A79C4B7494AA589EAC5478AE786D4C39A",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pka.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_gpio.h": {
+      "sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92",
+      "baseline_sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_spi_ex.h": {
+      "sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F",
+      "baseline_sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_gfxmmu.h": {
+      "sha256": "3088EDC19E0B5BAC1986F778245577A8C61259568BFC9D2C1FFD605637EBA854",
+      "baseline_sha256": "3088EDC19E0B5BAC1986F778245577A8C61259568BFC9D2C1FFD605637EBA854",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gfxmmu.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_i2c_ex.h": {
+      "sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9",
+      "baseline_sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c_ex.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_psram.h": {
+      "sha256": "29D64BF15754BBE764E457D8CF13908B883EC4B6B2665605B88A764243ECA46E",
+      "baseline_sha256": "29D64BF15754BBE764E457D8CF13908B883EC4B6B2665605B88A764243ECA46E",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_psram.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_capture_port.h": {
+      "sha256": "31E400E66FEB493B9B1EDE8B2057EA0B6B17DA5FA8D5F25CEA57441DEC1D0C4C",
+      "baseline_sha256": "31E400E66FEB493B9B1EDE8B2057EA0B6B17DA5FA8D5F25CEA57441DEC1D0C4C",
+      "origin": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\baseline-inputs\\Core\\Inc\\xe_np_np2_capture_port.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Device/ST/STM32U5xx/Include/stm32u5a5xx.h": {
+      "sha256": "6F7EB1654AA445470996FD33E9C283E81086B043C93BF79573CB4913F4A339F8",
+      "baseline_sha256": "6F7EB1654AA445470996FD33E9C283E81086B043C93BF79573CB4913F4A339F8",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5a5xx.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_mdf.h": {
+      "sha256": "0D51EF07C24C4F366304DA2996328AEF55015B526C2349331A6D5CC0C66F81F7",
+      "baseline_sha256": "0D51EF07C24C4F366304DA2996328AEF55015B526C2349331A6D5CC0C66F81F7",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_mdf.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_np2_phase.h": {
+      "sha256": "D4A72937B0251FA9FCD28885536450427A4DB7441E32E0502EE0CBFBFDD93BE0",
+      "baseline_sha256": "D4A72937B0251FA9FCD28885536450427A4DB7441E32E0502EE0CBFBFDD93BE0",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_phase.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_crc_ex.h": {
+      "sha256": "21C8E5759048B95D2F48192F22E038F45B8CB3883E0FBFD5D8B0B2D52D04D498",
+      "baseline_sha256": "21C8E5759048B95D2F48192F22E038F45B8CB3883E0FBFD5D8B0B2D52D04D498",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_crc_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_sd.h": {
+      "sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A",
+      "baseline_sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_fmac.h": {
+      "sha256": "75D380E574FEBBF1532A7BE5E94C46B507A7AAD14E2EA14CDE79A86CA62AA42E",
+      "baseline_sha256": "75D380E574FEBBF1532A7BE5E94C46B507A7AAD14E2EA14CDE79A86CA62AA42E",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_fmac.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dac_ex.h": {
+      "sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518",
+      "baseline_sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_ltdc.h": {
+      "sha256": "8990B4AB11A09BAE2BA249A3E02AAF495AEECCD53CFA52E6CF10EFFC93A6F12C",
+      "baseline_sha256": "8990B4AB11A09BAE2BA249A3E02AAF495AEECCD53CFA52E6CF10EFFC93A6F12C",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ltdc.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_mmc.h": {
+      "sha256": "7E65F03556B03BEDAF056BD779189A7DE2412C6D70718D6C2DC636032D608863",
+      "baseline_sha256": "7E65F03556B03BEDAF056BD779189A7DE2412C6D70718D6C2DC636032D608863",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_mmc.h",
+      "changed": false
+    },
+    "Core/Inc/stm32f4xx_hal.h": {
+      "sha256": "D77D254AE8BBFD028191A96CEF92720365A5352209FCF985FFE2FAFBF38FEAD7",
+      "baseline_sha256": "D77D254AE8BBFD028191A96CEF92720365A5352209FCF985FFE2FAFBF38FEAD7",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\stm32f4xx_hal.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_flash_ex.h": {
+      "sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907",
+      "baseline_sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash_ex.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_sdmmc.h": {
+      "sha256": "F8FC6FFC3FF7E06DAA0C0F3D3C544B2821A9420D87B8E4583AA0849B4422BBEA",
+      "baseline_sha256": "F8FC6FFC3FF7E06DAA0C0F3D3C544B2821A9420D87B8E4583AA0849B4422BBEA",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_sdmmc.h",
+      "changed": false
+    },
+    "Drivers/CMSIS/Include/cmsis_compiler.h": {
+      "sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6",
+      "baseline_sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\CMSIS\\Include\\cmsis_compiler.h",
+      "changed": false
+    },
+    "Core/Inc/xe_np_usb_unified.h": {
+      "sha256": "9EC94343CF2375888FFF06A1DB1983D0CD150BD9DC1A8BC91E1778E3485E5539",
+      "baseline_sha256": "9EC94343CF2375888FFF06A1DB1983D0CD150BD9DC1A8BC91E1778E3485E5539",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_unified.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dsi.h": {
+      "sha256": "6045B48FBB1A3781DCBA2C2195F762EE18C8FD789D95D1F4D6779EC9BA312059",
+      "baseline_sha256": "6045B48FBB1A3781DCBA2C2195F762EE18C8FD789D95D1F4D6779EC9BA312059",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dsi.h",
+      "changed": false
+    },
+    "Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_ltdc_ex.h": {
+      "sha256": "F4F006682809D4C200FA82FF72DB11034B80A1DF9F70D3C8A95E7F87B0689733",
+      "baseline_sha256": "F4F006682809D4C200FA82FF72DB11034B80A1DF9F70D3C8A95E7F87B0689733",
+      "origin": "D:\\Code\\XE_NP_V2\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ltdc_ex.h",
+      "changed": false
+    },
+    "Core/Src/xe_np_usb_sd_format.inc": {
+      "sha256": "FDCE23D5FC20DE0AF638EE2C0FCF2A5A7B2D87B61EC921DD12A8210614A759BA",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_usb_sd_format.inc",
+      "new": true
+    },
+    "Core/Inc/xe_np_usb_sd_format.h": {
+      "sha256": "6BB80212AEABAAFD0FA8F978F6FF9BD9C2CF009D1D38F8BD24C8FA0839E04861",
+      "origin": "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_usb_sd_format.h",
+      "new": true
+    }
+  },
+  "compiler_args": [
+    "-xc",
+    "-std=c11",
+    "--target=arm-arm-none-eabi",
+    "-mcpu=cortex-m33",
+    "-mfpu=fpv5-sp-d16",
+    "-mfloat-abi=hard",
+    "-c",
+    "-funsigned-char",
+    "-fshort-enums",
+    "-fshort-wchar",
+    "-O3",
+    "-gdwarf-4",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-Wno-license-management",
+    "-DSTM32U595xx",
+    "-DUSE_HAL_DRIVER",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Bootloader\\Inc",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\STM32U5xx_HAL_Driver\\Inc",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\CMSIS\\Include",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\USBX\\App",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\USBX\\Target",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Middlewares\\ST\\STM32_USB_Device_Library\\Core\\Inc",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Middlewares\\ST\\STM32_USB_Device_Library\\Class\\MSC\\Inc",
+    "-I",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\MDK-ARM\\RTE\\_USB384_NP_BGA_MMC",
+    "-DXE_NP_IMAGE_ROLE=2U",
+    "-DVECT_TAB_OFFSET=0x00180000",
+    "-DXE_NP_USB_UNIFIED_ENABLE=1U",
+    "-DXE_NP_BOARD_ALLOW_NON_30KSPS_MCO=1U",
+    "-DXE_NP_BOARD_EXPERIMENT_DISABLE_SD_INIT=1U",
+    "-DXE_NP_BOARD_SD_WRITE_BENCH_IMAGE=0U",
+    "-DXE_NP_BOARD_NP1_SPI_TAP_ENABLE=0U",
+    "-DXE_NP_APP_RAW_SD_SINK_ENABLE=0U",
+    "-DXE_NP_APP_RAW_SD_WRITE_ENABLE=0U",
+    "-DXE_NP_APP_RAW_SD_PIPELINE_ENABLE=0U",
+    "-DXE_NP_APP_RAW_SD_LINKED_STREAM_ENABLE=0U",
+    "-DXE_NP_APP_EXPERIMENT_SD_STRESS_WRITER_ENABLE=0U",
+    "-DXE_NP_APP_LEGACY_FS_ENABLE=0U",
+    "-DXE_NP_APP_CAPTURE_STORAGE_BYTES=737280UL",
+    "-DXE_NP_USB_TX_PREEMPHASIS=3U",
+    "-DXE_NP_BOARD_USB_OTG_HS_INTERNAL_DMA=1U",
+    "-DXE_NP_BOARD_USB_OTG_HS_IDMA_SINGLE_BURST=0U",
+    "-DXE_NP_USB_STREAM_RX_FIFO_WORDS=320U",
+    "-DXE_NP_USB_STREAM_EP1_TX_FIFO_WORDS=448U",
+    "-DXE_NP_USB_DOWNLOAD_BLOCKS=1020U",
+    "-DXE_NP_BOARD_V2_NP2_CAPTURE_ENABLE=1U",
+    "-DXE_NP_NP2_USB_SOURCE_ENABLE=1U",
+    "-DXE_NP_NP2_CAPTURE_PORT_ENABLE=1U",
+    "-DXE_NP_USB_STREAM_CAPTURE_STAGING_DMA_ENABLE=0U",
+    "-DXE_NP_BOARD_EXPERIMENTAL_NP2_128MHZ_20KHZ_CORE=1U",
+    "-DXE_NP_NP2_USB_V3_ENABLE=1U",
+    "-DXE_NP_NP2_USB_PACKED_DUAL=0U",
+    "-DXE_NP_NP2_CAPTURE_16BIT_PSSI=0U",
+    "-DXE_NP_NP2_CAPTURE_BYTE_DMA=0U",
+    "-DXE_NP_NP2_USB_SERVICE_SPAN_TICKS=16384U",
+    "-DXE_NP_NP2_USB_EP_SEGMENT_BYTES=46592U",
+    "-DXE_NP_NP2_USB_EARLY_REARM=0U",
+    "-DXE_NP_NP2_SPI2_D8_DIAG_ENABLE=0U",
+    "-DXE_NP_NP2_SPI2_D8_WORD_COPY=0U",
+    "-DXE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+    "-DXE_NP_USB_TX_MPU_NONCACHEABLE=1U",
+    "-DXE_NP_NP2_NODE_BYTES=61440U",
+    "-DXE_NP_NP2_USB_V3_PROBE_MASK=7U",
+    "-DXE_NP_NP2_USB_V3_LIVE_PROBE_MASK=7U",
+    "-DXE_NP_NP2_SPI2_D8_CAPTURE_ENABLE=1U",
+    "-DXE_NP_BOARD_SD_PLL2Q_HZ=108000000UL",
+    "-DXE_NP_BOARD_SD_SDR50_ONLY=0U",
+    "-DXE_NP_BOARD_SD_SDR104_ONLY=1U",
+    "-DXE_NP_BOARD_SD_SDR50_TARGET_HZ=100000000UL",
+    "-DXE_NP_BOARD_SD_GPIO_SPEED=GPIO_SPEED_FREQ_VERY_HIGH",
+    "-DXE_NP_BOARD_SD_CLK_GPIO_SPEED=GPIO_SPEED_FREQ_VERY_HIGH",
+    "-DXE_NP_BOARD_SD_RX_CLOCK_TEST=2U",
+    "-DXE_NP_BOARD_SD_DMA_READ_POLLING_ENABLE=1U",
+    "-DXE_NP_BOARD_SD_RISING_EDGE_FIRST=0U",
+    "-DXE_NP_SD_PAD_HSLV_DISABLE=1U",
+    "-DXE_NP_BOARD_SENSOR_SERVICE_ENABLE=1U",
+    "-DXE_NP_USB_DOWNLOAD_IDMA_READ_ENABLE=1U",
+    "-DXE_NP_SD_USB_FUSED_CRC=0U",
+    "-DXE_NP_USB_IDLE_SLEEP_ENABLE=0U",
+    "-iquote",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+    "-DXE_NP_USB_CATALOG_REPAIR_ENABLE=1U",
+    "-DXE_NP_USB_SD_FORMAT_ENABLE=1U"
+  ],
+  "frozen_object_sha256": {
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/startup_stm32u595xx.o": "088EB7408FA97E740DF04D621F34CCEC3DA7EAA370494E9EE45C48AD0C7CBD5C",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_imu_sr_20261013/usb/main.o": "4DFDB1A929FFE48BAD5A8B9470BF3346D1350895B85EFEDD99F5E3D660B570C4",
+    "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/stm32u5xx_it.o": "7DF1EDB0F23D87D91881FCE0D7F6BED3154BA17409884D2569245D7FDBB0F787",
+    "D:/Code/XE_NP_V2/_artifacts/v2_psram_feed_20261013/usb-idma108/stm32u5xx_hal_msp.o": "61B46797F3432945E2BBD8D851E9E04028A74259AD405D534AB49975FD1ED647",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/base_string.o": "464D505DF42C486641923C9FD73896DC60F1B6B53A4CBAA738A7DAC39AB60DF5",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_command.o": "CFFA5B7C691A988F70F255DF18FC551E7602EA302EDE45B049C1BAB9EFE58781",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_adc.o": "0F1388336A4C6B9543FB86AA78CD1FEDD420B251A8342795B60214E6A04555B0",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_uart_intercom.o": "6837F7864A0AD1BEEC4F947021E332E16973DDB45B56A098607BA27555C3AF09",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/ce32_hj580.o": "E1738590207C75ACA4DE7DE60282F66F6F2984C4B7F70ADBBD58B95946542D17",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_bmx160.o": "20E2DB9054698554260DF1B011BE5265BEFC25D5B9C11BF26C638C22913E7996",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/ce32_filesystem.o": "ABE7104735ED72FDDCD7184DA054224657097C0C16CADAB08747C27469E3D98B",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_submod.o": "520CCBB31730033E60FF6A7EDA92F7DE68F3904D969F1A80779E8DE46504EA22",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_sync.o": "5C15E62A3FA412D699C07B6B1A4D0A9136FF024BD1EB5E094F91C1E847151FAC",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_macro.o": "BBA9743326A8269FCF07B1DB9629CF17203D4ADDC851C52FAAAFCBAF64D29FA7",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/ce32_system_compat.o": "FB09EAF21997144BE5D9B98371E9E03D6351B24E3426EF281216D68D9CBC79C1",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_wire.o": "97143D8DDB6E54761E954F36C46B151A5643FE5C183BEB9DCA0DAEB947DD14AD",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/datamgr.o": "FD563454A7B4BAFA054A5782E66C9C496A297098BB3938B790F683CB9091E143",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/hd32_sd_driver.o": "D00C9FA25BB57DDF97C780A43CE99A1943E2CAC46C4999B7B311CA643339AAEA",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_legacy_fs.o": "1279E48DEF48BBDA6C37EC8CE62F2FD879A8C9E5E877D0F9FA636DC976544111",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_capture.o": "3F3BDF86FEED8B2869D289B1B751BCB34BDF827CD24D625125D3016B9998F936",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_nric.o": "9AA992652FC98A2CAB838400170C9503A3A5CC9A42EB62395DE44C9609215031",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_app.o": "018E4034E25D0C083C36561E614FBC5E160CA7FC651FA413C78210E7F708EA54",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_imu_sr_20261013/usb/xe_np_board.o": "7C279F2150A1BA559D6CF996B575401D980F8E4596F183CCA22C122EDBDD7A75",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_psram.o": "89FB3CAC9734C8366F2840146E8B689CC9BF49A67B6227F4C1E48A7F75549918",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_20261019/build/xe_np_np2_dual_sd_catalog.o": "EFDB63E25028F908D60CE3387B4F90AC5A85B264F32F2D1E5F10D776C45F3958",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_20261019/build/xe_np_np2_dual_sd_meta.o": "14D35DE9BBBD3394EEC309E3A2DEE2413A9236A133C32609600B1FF9080F1BD5",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_20261019/build/xe_np_np2_dual_sd_run.o": "63D2BED825E91D2E1162D29AADF58954B633247B91C4EB001D0D561C62D040C7",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_20261019/build/xe_np_usb_stream.o": "80C5D6E257B8C88FED3F6D2F3D62A6255EF1DADD8AF91DC8218CEB4C0E9E88D6",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_runtime.o": "6DBE1DCA19203D80D01D92A83D1DE132DEC7ABD0F5A3B932A27C596F4372EBBF",
+    "D:/Code/XE_NP_V2/_artifacts/v2_mag_restore_20261013/usb/xe_np_sensors.o": "599CBF5D7B8099CA764367766C78ACA127AD47FC5235B586EA0946468497F690",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_imu_sr_20261013/usb/xe_np_sensors_port.o": "78B41DE7167E5C16A36756A12AF9901F49001750AB98D25D0E3CFF80E1DAB6C5",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_bme_compensation.o": "0DE7BB9556B989A6C1C65D676B3AB33C21990B92BA61503C3804B9D38CCB97B3",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_bmm_compensation.o": "C71249943F2A4C5A2EA80A474B2027EB3AAF532C987F107040BC36B62056E2C3",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_boot_contract.o": "4579CB1563D68A9ACC7012CEC7A0B9B17BFC9BCCEA64C813BA9EE9D0FFB704E9",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_adc.o": "BA1E7CA13E41272A64B0CFBF91C0270B3C00C079BCECD6EB92D21B7655EE208B",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_adc_ex.o": "E1D1B3934193CAFC80979A0EF25200EC30B733484E89DC27DD9ABD8EC4F6F24F",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dma.o": "A8478778BB036338F804FC6288C10E5B4937A82A7339F3B7F2530136046EC1CE",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dma_ex.o": "28F00957AA622480B48CB19BA12C4FFD2BCB509791F956EA391FA6F63CB14D5D",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal.o": "B0165F1083BB934A792FD2632DC6D4277D0CA616EBDF4DA4123125FEA65F44FC",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_i2c.o": "7EFB0F09C48C21D9C0BFBBC4690FF4FCDABA718AF55832628AED8119B29DE704",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_i2c_ex.o": "65F603F54D88F8361BD7411AD4311F5F3696908F781F323DED06014051BEEF35",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_rcc.o": "26F1AC8E7B94BB85A0D3BA30F932D6D2462BE7918C550E8E4774B150BC588D6C",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_rcc_ex.o": "A97CEE055D28A2B5DBBC1458A3B3DAE5D46CC7E97218437A1189B07C8084C6B6",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_cortex.o": "3B23E830CE07226C4CD13317F6859FF2D93A32EBE96B0ACB44B4E41088CA4134",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_flash.o": "FAA25B0DD60A459A7A15C88E657E2ADC9A02EAC0A39E421884F72A64F7FF9342",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_flash_ex.o": "6338BAC46E83884176EE6FEFE9567C86C35C5367A5B1AD55FFB425AC614293EA",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_gpio.o": "1C94CEAEA0CAAAD2478CD95C58FE0EA0E9081D0FCE47DF2B8537EB75E692DDF3",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_exti.o": "62873B1F9B8D08DB8A2553B3ABD3F6235FE2FE4278A3A912F3CFE125CAA0066B",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pwr.o": "657C92BEACC9C7EA3F6E919033414CF05A9734A96E0AAE4095BCE3E6FE709854",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pwr_ex.o": "25E90D58AED2D147A367F0E6C244A613CEACC438ACFD51D4CEFB966CF51469F1",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_gtzc.o": "4BDB043DF7B4A40E39930C43E198BFD4F7D36CC6C28ED5A3FBEABEA1560C9AF5",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_icache.o": "EEAEADD8FEF48F03BF11CB9FE27F5465CF7E0D3C3A1D8D0FACC22E4148F67D28",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dac.o": "F64A02D4321112FEC78ACD6F05F3ABD969A2E9D414E3B46F366AA365CBFD28F8",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dac_ex.o": "EEDB13116D0A4D0BE60C47CF013C57DEC2D2E8A57DCA5C4F9645B5C62381988D",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dcache.o": "C5AE8C8F1FB157AA7BA7FFF96886567F26F9AC99FFC9D04392A23A98E7A92964",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_uart.o": "3E9452FD284DCBC391E8D5A109FF8CF2B23E18CFBFA5CFA4E8F7F68B00722618",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_uart_ex.o": "3A038F25F193633FF3CCCEAB946C8FD5119AF4339C177BC6A36EB5C750534BBB",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_ospi.o": "A967E6E53F1B482D5AC9DFE1774AD16673877F64FD07C993AEB16E02EA265FAB",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_ll_dlyb.o": "77AE5F386B2D0F20322564813B23D238980BEF984F4828512689E52DCB66D711",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_opamp.o": "706457C1C4E5A2B5FBBAD9DF492DD5A33C9D0885FB844FD22C7444C311F85CA0",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_opamp_ex.o": "CFBA9C3FA33F6AF8EFC0307EFF1775260C154438DB2979C8CCC107430D1291B4",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_ll_sdmmc.o": "6E626E24E1670B728ED791F33AAFE0CCCBDFAEB5708AF31A96E6A7EECF853795",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_sd.o": "64CF3CD7360AB2FD665F7E32637FE13F51A8B5CDF841ADF6C331BE1FCFD0558A",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_sd_ex.o": "48DED92C1645B1D5C24B1C5ACE8D8CDCB51ACF06D835D5EA059E2BAE079EFD7A",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_mmc.o": "58863109E35CD398021275580C4EF18342506FC538AFE9BCEBCA903B8703647B",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_mmc_ex.o": "5E6F9AB150AC59FD086450491DCE7C0911BC5AF80C73BE5B5D10B43D98641640",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_sdio.o": "B96D899F79D7E880C1EBCA9112AC6728429494E32DD828CA794BA183A43D52BC",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_spi.o": "C89593B3CD33AEA1E203A660302AE26A2741516EE7140F1418DE268DFBDDB2AF",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_spi_ex.o": "517FAC3E7834D1045D91BC679C912EF107E026A6FB83618DBDB85011FB8983E3",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_tim.o": "60A800D57A4192E91C4F694679EB00D26F26EAE612F8D194FD5310DDAA262216",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_tim_ex.o": "826F9D1F4C0373CCD6327DC0B7DB9AE5AC826524707511394E4F968BDE9A11CE",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pcd.o": "545852911E4CFF9D7635F4D4C8910EE1BA5981B881B40A5892DA88982A20BBE9",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pcd_ex.o": "005FDA55095961B28F2DB7406A71C96D72AFA5E0E3149BEAC9E2CC5AC7A250EE",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_ll_usb.o": "CFC5BCD94E334D79FB2799704BDC330DFD2572787E1BD1F33A167DB52A4D8186",
+    "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/system_stm32u5xx.o": "B2C6BAAAD7CA4294345D97D21B0512BA8BD81EF9CA03E0FA05C6C7577CFD2FD9",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_usb_fault.o": "6E149AB5D92875DCAE122E00ED6262DA47DAE88ED705F4E976445AFF3F21C5E2",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_msc_bot.o": "07B166AAD7B95490DF74D80CB613AC4A61EFDB23D4D1E0FDAEE8A4E1ACF52E49",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_usb_msc.o": "A29EACFF7D0881EC61DAA259AB345AA7FCD8914075D2579F784EBA5763309FFA",
+    "D:/Code/XE_NP_V2/_artifacts/v2_partial_probe_usb_20261013/usb/xe_np_np2_usb_source.o": "9560300F11D8031D78165E1D282C8B72C57D8BF1F83BF63482AD7FDF964AF56E",
+    "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/xe_np_np2_capture_port.o": "0C7DE531112BECCA0B05351C3CF6B8641F62D88D7455926A5BA9137F8AB46A13",
+    "D:/Code/XE_NP_V2/_artifacts/v2_usb_logging_20261010/usb/xe_np_np2_producer.o": "1770C6F3113CD30B3B5C1BE06993DBA108F3C28C34BBDFA6A14189C2F67DCBFA",
+    "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/xe_np_np2_transport.o": "F2A14F3F77E8A88EAEDA0D644C29F1738B0238CBE69BE880CE48FF0931B3E059",
+    "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/xe_np_np2_triple_transport.o": "683CDE0819DB410D0E59DA2B763F2CEF95E77FE01B870B7FAAA71E6C6BC3BA6B",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/usbd_msc_bot.o": "9100DE5AB566096EE71A61EE900969CA5489B0967619DC1C8115297F6231EF2A",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/usbd_msc_scsi.o": "5C484C08D807E10FED32E10985E7C910A407F287101B46578CD8F073086B29F4",
+    "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/usbd_msc_data.o": "B582073821F0EEDC84DBD9B11B7FCDE8784EE96420268F372EEF0C4093453B5F",
+    "D:/Code/XE_NP_V2/_artifacts/v2_partial_probe_usb_20261013/usb/xe_np_np2_config.o": "663083E061316F657928123B5FA21C65FA55F4EDD142A34B563DADE6ED122654"
+  },
+  "reused_object_count": 86,
+  "ram": {
+    "reservations": [
+      [
+        "RW_IRAM1",
+        536870912,
+        109072,
+        131072
+      ],
+      [
+        "RW_USB_DMA",
+        537001984,
+        65248,
+        65536
+      ],
+      [
+        "RW_DOWNLOAD0",
+        537067520,
+        524288,
+        524288
+      ],
+      [
+        "RW_AUX",
+        537591808,
+        35312,
+        57344
+      ],
+      [
+        "RW_NOINIT",
+        537649152,
+        4,
+        8192
+      ],
+      [
+        "RW_NP2_DESC",
+        537657344,
+        584,
+        65536
+      ],
+      [
+        "RW_NP_CAPTURE",
+        537722880,
+        833008,
+        851968
+      ],
+      [
+        "RW_DOWNLOAD1",
+        538574848,
+        524288,
+        524288
+      ]
+    ],
+    "ordinary_growth_bytes": 152,
+    "new_ordinary_symbols": [
+      [
+        "xe_np_usb_catalog_format_active",
+        4,
+        "xe_np_usb_stream.o",
+        1
+      ],
+      [
+        "xe_np_usb_catalog_format_receiving",
+        4,
+        "xe_np_usb_stream.o",
+        1
+      ],
+      [
+        "xe_np_usb_catalog_format_ep0",
+        64,
+        "xe_np_usb_stream.o",
+        1
+      ],
+      [
+        "xe_np_usb_catalog_format",
+        116,
+        "xe_np_usb_stream.o",
+        1
+      ],
+      [
+        "xe_np_usb_catalog_format_rx",
+        64,
+        "xe_np_usb_stream.o",
+        1
+      ]
+    ],
+    "stack_base": 537618928,
+    "stack_bytes": 8192,
+    "vectors": {
+      "slots": 148,
+      "startup_owner": "startup_stm32u595xx.o(RESET)",
+      "mapping": [
+        {
+          "slot": 0,
+          "handler": "__initial_sp",
+          "owner": "startup_stm32u595xx.o(STACK)",
+          "original_address": 537627040,
+          "address": 537627120
+        },
+        {
+          "slot": 1,
+          "handler": "Reset_Handler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791501,
+          "address": 135791501
+        },
+        {
+          "slot": 2,
+          "handler": "NMI_Handler",
+          "owner": "stm32u5xx_it.o(.text.NMI_Handler)",
+          "original_address": 135848861,
+          "address": 135849345
+        },
+        {
+          "slot": 3,
+          "handler": "HardFault_Handler",
+          "owner": "stm32u5xx_it.o(.text.HardFault_Handler)",
+          "original_address": 135843437,
+          "address": 135843921
+        },
+        {
+          "slot": 4,
+          "handler": "MemManage_Handler",
+          "owner": "stm32u5xx_it.o(.text.MemManage_Handler)",
+          "original_address": 135848857,
+          "address": 135849341
+        },
+        {
+          "slot": 5,
+          "handler": "BusFault_Handler",
+          "owner": "stm32u5xx_it.o(.text.BusFault_Handler)",
+          "original_address": 135793621,
+          "address": 135793621
+        },
+        {
+          "slot": 6,
+          "handler": "UsageFault_Handler",
+          "owner": "stm32u5xx_it.o(.text.UsageFault_Handler)",
+          "original_address": 135865937,
+          "address": 135867665
+        },
+        {
+          "slot": 7,
+          "handler": "SecureFault_Handler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791525,
+          "address": 135791525
+        },
+        {
+          "slot": 8,
+          "reserved": true
+        },
+        {
+          "slot": 9,
+          "reserved": true
+        },
+        {
+          "slot": 10,
+          "reserved": true
+        },
+        {
+          "slot": 11,
+          "handler": "SVC_Handler",
+          "owner": "stm32u5xx_it.o(.text.SVC_Handler)",
+          "original_address": 135859237,
+          "address": 135860965
+        },
+        {
+          "slot": 12,
+          "handler": "DebugMon_Handler",
+          "owner": "stm32u5xx_it.o(.text.DebugMon_Handler)",
+          "original_address": 135797617,
+          "address": 135797617
+        },
+        {
+          "slot": 13,
+          "reserved": true
+        },
+        {
+          "slot": 14,
+          "handler": "PendSV_Handler",
+          "owner": "stm32u5xx_it.o(.text.PendSV_Handler)",
+          "original_address": 135849749,
+          "address": 135851333
+        },
+        {
+          "slot": 15,
+          "handler": "SysTick_Handler",
+          "owner": "stm32u5xx_it.o(.text.SysTick_Handler)",
+          "original_address": 135859241,
+          "address": 135860969
+        },
+        {
+          "slot": 16,
+          "handler": "WWDG_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 17,
+          "handler": "PVD_PVM_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 18,
+          "handler": "RTC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 19,
+          "handler": "RTC_S_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 20,
+          "handler": "TAMP_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 21,
+          "handler": "RAMCFG_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 22,
+          "handler": "FLASH_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 23,
+          "handler": "FLASH_S_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 24,
+          "handler": "GTZC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 25,
+          "handler": "RCC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 26,
+          "handler": "RCC_S_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 27,
+          "handler": "EXTI0_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 28,
+          "handler": "EXTI1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 29,
+          "handler": "EXTI2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 30,
+          "handler": "EXTI3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 31,
+          "handler": "EXTI4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 32,
+          "handler": "EXTI5_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 33,
+          "handler": "EXTI6_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 34,
+          "handler": "EXTI7_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 35,
+          "handler": "EXTI8_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 36,
+          "handler": "EXTI9_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 37,
+          "handler": "EXTI10_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 38,
+          "handler": "EXTI11_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 39,
+          "handler": "EXTI12_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 40,
+          "handler": "EXTI13_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 41,
+          "handler": "EXTI14_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 42,
+          "handler": "EXTI15_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 43,
+          "handler": "IWDG_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 44,
+          "reserved": true
+        },
+        {
+          "slot": 45,
+          "handler": "GPDMA1_Channel0_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 46,
+          "handler": "GPDMA1_Channel1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 47,
+          "handler": "GPDMA1_Channel2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 48,
+          "handler": "GPDMA1_Channel3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 49,
+          "handler": "GPDMA1_Channel4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 50,
+          "handler": "GPDMA1_Channel5_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 51,
+          "handler": "GPDMA1_Channel6_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 52,
+          "handler": "GPDMA1_Channel7_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 53,
+          "handler": "ADC1_2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 54,
+          "handler": "DAC1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 55,
+          "handler": "FDCAN1_IT0_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 56,
+          "handler": "FDCAN1_IT1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 57,
+          "handler": "TIM1_BRK_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 58,
+          "handler": "TIM1_UP_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 59,
+          "handler": "TIM1_TRG_COM_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 60,
+          "handler": "TIM1_CC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 61,
+          "handler": "TIM2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 62,
+          "handler": "TIM3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 63,
+          "handler": "TIM4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 64,
+          "handler": "TIM5_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 65,
+          "handler": "TIM6_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 66,
+          "handler": "TIM7_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 67,
+          "handler": "TIM8_BRK_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 68,
+          "handler": "TIM8_UP_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 69,
+          "handler": "TIM8_TRG_COM_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 70,
+          "handler": "TIM8_CC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 71,
+          "handler": "I2C1_EV_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 72,
+          "handler": "I2C1_ER_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 73,
+          "handler": "I2C2_EV_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C2_EV_IRQHandler)",
+          "original_address": 135843449,
+          "address": 135843933
+        },
+        {
+          "slot": 74,
+          "handler": "I2C2_ER_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C2_ER_IRQHandler)",
+          "original_address": 135843441,
+          "address": 135843925
+        },
+        {
+          "slot": 75,
+          "handler": "SPI1_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.SPI1_IRQHandler)",
+          "original_address": 135859233,
+          "address": 135860961
+        },
+        {
+          "slot": 76,
+          "handler": "SPI2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 77,
+          "handler": "USART1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 78,
+          "handler": "USART2_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.USART2_IRQHandler)",
+          "original_address": 135860201,
+          "address": 135861929
+        },
+        {
+          "slot": 79,
+          "handler": "USART3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 80,
+          "handler": "UART4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 81,
+          "handler": "UART5_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 82,
+          "handler": "LPUART1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 83,
+          "handler": "LPTIM1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 84,
+          "handler": "LPTIM2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 85,
+          "handler": "TIM15_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 86,
+          "handler": "TIM16_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 87,
+          "handler": "TIM17_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 88,
+          "handler": "COMP_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 89,
+          "handler": "OTG_HS_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.OTG_HS_IRQHandler)",
+          "original_address": 135849721,
+          "address": 135851305
+        },
+        {
+          "slot": 90,
+          "handler": "CRS_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 91,
+          "handler": "FMC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 92,
+          "handler": "OCTOSPI1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 93,
+          "handler": "PWR_S3WU_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 94,
+          "handler": "SDMMC1_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.SDMMC1_IRQHandler)",
+          "original_address": 135855477,
+          "address": 135857061
+        },
+        {
+          "slot": 95,
+          "handler": "SDMMC2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 96,
+          "handler": "GPDMA1_Channel8_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 97,
+          "handler": "GPDMA1_Channel9_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.GPDMA1_Channel9_IRQHandler)",
+          "original_address": 135797669,
+          "address": 135797669
+        },
+        {
+          "slot": 98,
+          "handler": "GPDMA1_Channel10_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.GPDMA1_Channel10_IRQHandler)",
+          "original_address": 135797629,
+          "address": 135797629
+        },
+        {
+          "slot": 99,
+          "handler": "GPDMA1_Channel11_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.GPDMA1_Channel11_IRQHandler)",
+          "original_address": 135797633,
+          "address": 135797633
+        },
+        {
+          "slot": 100,
+          "handler": "GPDMA1_Channel12_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.GPDMA1_Channel12_IRQHandler)",
+          "original_address": 135797645,
+          "address": 135797645
+        },
+        {
+          "slot": 101,
+          "handler": "GPDMA1_Channel13_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.GPDMA1_Channel13_IRQHandler)",
+          "original_address": 135797649,
+          "address": 135797649
+        },
+        {
+          "slot": 102,
+          "handler": "GPDMA1_Channel14_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.GPDMA1_Channel14_IRQHandler)",
+          "original_address": 135797653,
+          "address": 135797653
+        },
+        {
+          "slot": 103,
+          "handler": "GPDMA1_Channel15_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 104,
+          "handler": "I2C3_EV_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C3_EV_IRQHandler)",
+          "original_address": 135843465,
+          "address": 135843949
+        },
+        {
+          "slot": 105,
+          "handler": "I2C3_ER_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C3_ER_IRQHandler)",
+          "original_address": 135843457,
+          "address": 135843941
+        },
+        {
+          "slot": 106,
+          "handler": "SAI1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 107,
+          "handler": "SAI2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 108,
+          "handler": "TSC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 109,
+          "reserved": true
+        },
+        {
+          "slot": 110,
+          "handler": "RNG_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 111,
+          "handler": "FPU_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 112,
+          "handler": "HASH_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 113,
+          "reserved": true
+        },
+        {
+          "slot": 114,
+          "handler": "LPTIM3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 115,
+          "handler": "SPI3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 116,
+          "handler": "I2C4_ER_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C4_ER_IRQHandler)",
+          "original_address": 135843473,
+          "address": 135843957
+        },
+        {
+          "slot": 117,
+          "handler": "I2C4_EV_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C4_EV_IRQHandler)",
+          "original_address": 135843481,
+          "address": 135843965
+        },
+        {
+          "slot": 118,
+          "handler": "MDF1_FLT0_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 119,
+          "handler": "MDF1_FLT1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 120,
+          "handler": "MDF1_FLT2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 121,
+          "handler": "MDF1_FLT3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 122,
+          "handler": "UCPD1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 123,
+          "handler": "ICACHE_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 124,
+          "reserved": true
+        },
+        {
+          "slot": 125,
+          "reserved": true
+        },
+        {
+          "slot": 126,
+          "handler": "LPTIM4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 127,
+          "handler": "DCACHE1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 128,
+          "handler": "ADF1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 129,
+          "handler": "ADC4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 130,
+          "handler": "LPDMA1_Channel0_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.LPDMA1_Channel0_IRQHandler)",
+          "original_address": 135847733,
+          "address": 135848217
+        },
+        {
+          "slot": 131,
+          "handler": "LPDMA1_Channel1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 132,
+          "handler": "LPDMA1_Channel2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 133,
+          "handler": "LPDMA1_Channel3_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 134,
+          "handler": "DMA2D_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 135,
+          "handler": "DCMI_PSSI_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.DCMI_PSSI_IRQHandler)",
+          "original_address": 135797581,
+          "address": 135797581
+        },
+        {
+          "slot": 136,
+          "handler": "OCTOSPI2_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 137,
+          "handler": "MDF1_FLT4_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 138,
+          "handler": "MDF1_FLT5_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 139,
+          "handler": "CORDIC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 140,
+          "handler": "FMAC_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 141,
+          "handler": "LSECSSD_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 142,
+          "handler": "USART6_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        },
+        {
+          "slot": 143,
+          "handler": "I2C5_ER_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C5_ER_IRQHandler)",
+          "original_address": 135843489,
+          "address": 135843973
+        },
+        {
+          "slot": 144,
+          "handler": "I2C5_EV_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C5_EV_IRQHandler)",
+          "original_address": 135843501,
+          "address": 135843985
+        },
+        {
+          "slot": 145,
+          "handler": "I2C6_ER_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C6_ER_IRQHandler)",
+          "original_address": 135843513,
+          "address": 135843997
+        },
+        {
+          "slot": 146,
+          "handler": "I2C6_EV_IRQHandler",
+          "owner": "stm32u5xx_it.o(.text.I2C6_EV_IRQHandler)",
+          "original_address": 135843525,
+          "address": 135844009
+        },
+        {
+          "slot": 147,
+          "handler": "HSPI1_IRQHandler",
+          "owner": "startup_stm32u595xx.o(.text)",
+          "original_address": 135791535,
+          "address": 135791535
+        }
+      ],
+      "relocated_slots": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        11,
+        14,
+        15,
+        73,
+        74,
+        75,
+        78,
+        89,
+        94,
+        104,
+        105,
+        116,
+        117,
+        130,
+        143,
+        144,
+        145,
+        146
+      ],
+      "stack_validated_separately": true
+    }
+  },
+  "changed_text": [
+    ".text.HAL_PCD_DataInStageCallback",
+    ".text.HAL_PCD_DataOutStageCallback",
+    ".text.HAL_PCD_DisconnectCallback",
+    ".text.HAL_PCD_ResetCallback",
+    ".text.HAL_PCD_SetupStageCallback",
+    ".text.HAL_PCD_SuspendCallback",
+    ".text.NP_SD_UsbRequest",
+    ".text.XE_NP_UsbStream_Service",
+    ".text.xe_np_usb_catalog_busy",
+    ".text.xe_np_usb_catalog_format_admit",
+    ".text.xe_np_usb_catalog_format_command",
+    ".text.xe_np_usb_catalog_format_identify",
+    ".text.xe_np_usb_catalog_format_info",
+    ".text.xe_np_usb_catalog_format_sector",
+    ".text.xe_np_usb_catalog_format_service",
+    ".text.xe_np_usb_catalog_owners_idle",
+    ".text.xe_np_usb_catalog_write_sector",
+    ".text.xe_np_usb_mode_busy",
+    ".text.xe_np_usb_selftest_other_busy"
+  ],
+  "reviewed_compiler_effects": {
+    ".text.HAL_PCD_DataInStageCallback": "8488F917AB4891C9ABE3D789D90FCA0E48058EE9D546E31BBF6140278C4E669B",
+    ".text.HAL_PCD_DisconnectCallback": "9F9E9BBB080B6384C8107DE4F091E3F5FA3B86EA639DDAE5B63538827753B07D",
+    ".text.HAL_PCD_ResetCallback": "055D83F29859CB79FC4F1368B5A79BF58324A68E477738961C5090156F9ABC33",
+    ".text.HAL_PCD_SuspendCallback": "791252114462558E79153AA8D3AD34E3C05B2F25C1DF00190561A8D07E4D1B7D",
+    ".text.NP_SD_UsbRequest": "6FCB3F3EE409804E5DA5FAD4D4868DF6105E12FD93437A25888E74CF1AC2E0D2",
+    ".text.xe_np_usb_catalog_owners_idle": "07C34F2BE7711A786912383BA25CED20A1F6FF9D4B23BDF1713D3B05313B6AD5",
+    ".text.xe_np_usb_selftest_other_busy": "48D8033BBA90377D880D707E6A59665DCF37D77BC4FC53707B3D7593B00A3CA3"
+  },
+  "rebuilt_object_sha256": "478459834DB5B12B12D0BD1E6BDE00FA2023AEFC4378695F5CBE2083D8D33E7E",
+  "capture_bulk_unchanged": true,
+  "hardware_validated": false,
+  "published": false
+}

@@ -18,7 +18,7 @@ static class NpUsbCatalogRepairUiTests
             var sourceType=type.GetNestedType("Source",BindingFlags.NonPublic);
             Action<string,bool,string> choose=(path,usb,media)=>{var source=Activator.CreateInstance(sourceType,true);Set(source,"Path",path);Set(source,"Usb",usb);Set(source,"Label",path);Set(source,"MediaType",media);sources.Items.Add(source);sources.SelectedItem=source;};
             choose(@"\\?\usb#vid_1209&pid_b386#001a0020434250062039314e#{test}",true,null);
-            Need(repair.Enabled && !recover.Enabled && !format.Enabled,"V2 repair confused with V1 recovery/format");
+            Need(repair.Enabled && !recover.Enabled && format.Enabled,"V2 repair/format missing or confused with V1 recovery");
             type.GetMethod("SetUsbBlocked",Flags).Invoke(form,new object[]{true});Need(!repair.Enabled,"Capture/BLE/USB owner did not block Repair");
             type.GetMethod("SetUsbBlocked",Flags).Invoke(form,new object[]{false});Need(repair.Enabled,"Repair stayed disabled after ownership released");
             type.GetMethod("SetBusy",Flags).Invoke(form,new object[]{true});Need(!repair.Enabled,"Download/maintenance did not block Repair");

@@ -20,7 +20,14 @@ $fixturePath=Join-Path $OutputDirectory 'UsbCatalogRepairFixture.cs'
 [IO.File]::WriteAllText($fixturePath,$fixture,[Text.UTF8Encoding]::new($false))
 $csc='C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/Roslyn/csc.exe'
 $exe=Join-Path $OutputDirectory 'UsbCatalogRepairTests.exe'
-& $csc /nologo /warnaserror /nowarn:0649 /r:System.Core.dll "/out:$exe" "$appRoot/NpLogger/NpUsbCatalogRepair.cs" $fixturePath
+$maintenance=Get-Content -LiteralPath "$appRoot/NpLogger/NpUsbCatalogRepair.cs" -Raw
+$namespace=$maintenance.IndexOf('namespace USB512_interface')
+$class=$maintenance.IndexOf('    internal sealed class NpUsbCatalogRepair')
+if($namespace-lt0-or$class-lt0){throw 'Catalog repair class not found'}
+# Format has its own actual-app fake-boundary tests; this fixture isolates repair.
+$repairPath=Join-Path $OutputDirectory 'ActualUsbCatalogRepair.cs'
+[IO.File]::WriteAllText($repairPath,$maintenance.Substring(0,$namespace)+"namespace USB512_interface`r`n{`r`n"+$maintenance.Substring($class),[Text.UTF8Encoding]::new($false))
+& $csc /nologo /warnaserror /nowarn:0649 /r:System.Core.dll "/out:$exe" $repairPath $fixturePath
 if($LASTEXITCODE){throw 'V1/V2 USB catalog transaction checks did not compile'}
 & $exe
 if($LASTEXITCODE){throw 'V1/V2 USB catalog transaction checks failed'}

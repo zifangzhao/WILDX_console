@@ -1,0 +1,60 @@
+{
+  "app_crc32": "660A6DA4",
+  "usb_crc32": "E323A06A",
+  "recovery_crc32": "6408DBB8",
+  "gui_version": "1.0.0.70",
+  "gui_sha256": "DD7A948B343C90E094C7347A17A690B645FC776E33EFB887416C60AA7C4AA12A",
+  "files": {
+    "V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_660A6DA4_DUAL30_20261021.hex": {
+      "bytes": 5745164,
+      "sha256": "0BFECE90D3D0B098C645DB5370052C806EC6FB21FE0F1947F1718DFCE61EEFB1"
+    },
+    "V2_logger_APP_only_660A6DA4_DUAL30_20261021.hex": {
+      "bytes": 508400,
+      "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
+    },
+    "V2_logger_APP_update_660A6DA4_DUAL30_20261021.xenp": {
+      "bytes": 184844,
+      "sha256": "CB79738A2E935E51C9FD3FAF5F355424162C71BDCEE0F435185D14E648F13A4D"
+    },
+    "V2_recovery_only_6408DBB8_20261012.hex": {
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    "V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex": {
+      "bytes": 474836,
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
+    },
+    "V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp": {
+      "bytes": 172640,
+      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
+    }
+  },
+  "checked_components": {
+    "recovery": {
+      "path": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_recovery_only_6408DBB8_20261012.hex",
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    "usb": {
+      "path": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex",
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
+    },
+    "app": {
+      "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_sd_copied_counted_window_20261021\\app-append-pipeline16-ready-first-r1\\V2_APP_660A6DA4_PRIVATE.hex",
+      "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
+    }
+  },
+  "merge_tool_sha256": "8893A47ED9D6048C00914942D6789F966051D470AF1A04007A9D941EF40AD43E",
+  "settings_omitted": true,
+  "component_seals_preserved": true,
+  "erased_unused_flash_padding": true,
+  "rebuilt": false,
+  "flashed": false,
+  "packaging_hardware_access": false,
+  "native_and_dat_600s_sha256": "AF4E2AEC9076E2D33605CE448384EDF6FD26A8E64930B3CBCD85AC284C04B0B9",
+  "console_pair_sha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
+  "console_build_sha256": "0F79B2E87B37332E12823922629AF0886E91D345FE39463E79775127E61591EF",
+  "scope": "Delkin V90 two NP2 at30k:600s full native/DAT integrity plus console70 production10s read-only export. No all-mode/card, analog, installed visual UI, newly flashed fused or unlimited-endurance claim.",
+  "power_optimized_this_release": false,
+  "published": false
+}

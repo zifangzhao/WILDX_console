@@ -1,20 +1,21 @@
 {
-  "version": "1.0.0.90",
-  "releaseId": "WILDX90_V2_BLE_STOP_20261022",
-  "baselineVersion": "1.0.0.88",
+  "version": "1.0.0.91",
+  "releaseId": "WILDX91_V2_USB_FORMAT_20261022",
+  "baselineVersion": "1.0.0.90",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "8EDDFAD97BA550C74E42D36D16CCEF39294D49CDE0D79D2C9C8483C2AAE1BEED",
+  "guiSha256": "248CA3C63F29AF777D5BE5E06D65715806584F42DB472331791913174912BDA6",
   "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
-  "firmwareChanged": false,
-  "firmwareCatalogChanged": false,
+  "firmwareChanged": true,
+  "firmwareCatalogChanged": true,
   "helpersChanged": false,
-  "consoleBuildSha256": "81F82FDCE74F82F04E2F882CB6EE23A4C0D713A5674EB2CACA582CCEC66DFE5E",
-  "sourceArchiveSha256": "9A8BF23684FF3335E4DE826AC83C4C79CF0C06A85C0F26A537CD73693DD93947",
-  "softwareChecks": 102,
+  "newFirmwareHardwareQualified": false,
+  "consoleBuildSha256": "CAF5D7B5152084323E99BDF57AC7F2991C9E4163B14C04502D57CD4518DCEA7A",
+  "sourceArchiveSha256": "C7C8D83125FE797501E8CE2F437859325CE9CA6B723756F787A6CBDD42D8E2D4",
+  "softwareChecks": 131703,
   "reusedHardwarePairVersion": "1.0.0.70",
   "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
-  "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "scope": "V2 BLE pending-Stop observation after one command; elapsed finalization beyond30s, fresh same-peer/epoch terminal resolution, lost-receipt/disconnect uncertainty.102 actual-source fake-transport checks. One GUI build; firmware, SDK, helpers and format UI unchanged from88. No hardware or installed-pair qualification.",
+  "firmwareReceiptSha256": "27318880F0EC47920B3464DD8267DFF5C2FDDA60637B2FA671B6B50FC6CA73C6",
+  "scope": "V2 guarded USB format GUI and exact-UID download source reconnection. The separate Stop fix in90 is retained. SDK/helpers/APP/recovery unchanged; the new USB format firmware is software-tested only, with no card erase, flashing, HIL or newly-flashed-pair qualification.",
   "installerExecuted": false,
   "payload": [
     {
@@ -26,11 +27,6 @@
       "path": "Firmware/README.md",
       "bytes": 232,
       "sha256": "B48C7B519E494D33D540C9BF931A7ABB56FDFD0D8AE18DA9A543AAE3733AB543"
-    },
-    {
-      "path": "Firmware/releases.json",
-      "bytes": 14628,
-      "sha256": "728527938C4741FF8931C3CCEB60AF011E304C569BFF3DBA320576727409CD7E"
     },
     {
       "path": "Firmware/V1/download-acceptance.json",
@@ -108,26 +104,6 @@
       "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
     },
     {
-      "path": "Firmware/V2/package-receipt.json",
-      "bytes": 2869,
-      "sha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44"
-    },
-    {
-      "path": "Firmware/V2/README.md",
-      "bytes": 1524,
-      "sha256": "3D303714B3AA0C969550A188014808CA5E154BF86434768B74853881BDDBCD46"
-    },
-    {
-      "path": "Firmware/V2/SHA256SUMS.txt",
-      "bytes": 714,
-      "sha256": "C8D515FAE8AA77F0FA0D41CE44282444F5E9381EF1FD8AD79AE49186E17A0E8A"
-    },
-    {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_660A6DA4_DUAL30_20261021.hex",
-      "bytes": 5745164,
-      "sha256": "0BFECE90D3D0B098C645DB5370052C806EC6FB21FE0F1947F1718DFCE61EEFB1"
-    },
-    {
       "path": "Firmware/V2/V2_logger_APP_only_660A6DA4_DUAL30_20261021.hex",
       "bytes": 508400,
       "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
@@ -141,16 +117,6 @@
       "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
       "bytes": 84090,
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-    },
-    {
-      "path": "Firmware/V2/V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex",
-      "bytes": 474836,
-      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
-    },
-    {
-      "path": "Firmware/V2/V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp",
-      "bytes": 172640,
-      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -209,19 +175,54 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1699840,
-      "sha256": "8EDDFAD97BA550C74E42D36D16CCEF39294D49CDE0D79D2C9C8483C2AAE1BEED"
+      "bytes": 1706496,
+      "sha256": "248CA3C63F29AF777D5BE5E06D65715806584F42DB472331791913174912BDA6"
     },
     {
       "path": "WILDX_console.exe.config",
       "bytes": 532,
       "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    },
+    {
+      "path": "Firmware/releases.json",
+      "bytes": 15500,
+      "sha256": "6B85B101B218C1D2A1C3F2BEEE8234264A1F5459198865FDD6B3D0AF203890A3"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_only_B6099A0E_GUARDED_FORMAT_20261022.hex",
+      "bytes": 486100,
+      "sha256": "2B9EF98132EB61773515DC6807EA142ECEBF9E64CFAF6CFE2A670930C3A59ACF"
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_660A6DA4_GUARDED_FORMAT_20261022.hex",
+      "bytes": 5745164,
+      "sha256": "E0683376C7DAB7F36ACBB8D5E67EAD31840C9258402A9FEA7A0D57451B88193A"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_update_B6099A0E_GUARDED_FORMAT_20261022.xenp",
+      "bytes": 176736,
+      "sha256": "6CF99E583545F43308B62042EE3F69FCFC7AABCDF46C3B0AEF0F6EFB3D5AFEB2"
+    },
+    {
+      "path": "Firmware/V2/README.md",
+      "bytes": 1020,
+      "sha256": "5A34AD398E146610B9E3809C7697A980D75A0436A7D7AD5691EAD3ECD4EA4838"
+    },
+    {
+      "path": "Firmware/V2/package-receipt.json",
+      "bytes": 3652,
+      "sha256": "27318880F0EC47920B3464DD8267DFF5C2FDDA60637B2FA671B6B50FC6CA73C6"
+    },
+    {
+      "path": "Firmware/V2/SHA256SUMS.txt",
+      "bytes": 716,
+      "sha256": "75361D31DDA5DE50D600F33949136588993A1B6054B7D2360C43C727785839BB"
     }
   ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.90.exe",
-    "bytes": 7050767,
-    "sha256": "1201CAC554E058F0E448FD57B3BB845775B9BBFB0364296D6A13930AC554D8F1"
+    "file": "WILDX_console-Setup-1.0.0.91.exe",
+    "bytes": 7063535,
+    "sha256": "5CB7A0620E2053801232F7E258F9B1FFBBDBDDBF5B0FACC17A17B18BF528EABD"
   },
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1

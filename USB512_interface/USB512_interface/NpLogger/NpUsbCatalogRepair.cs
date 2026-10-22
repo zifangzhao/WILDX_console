@@ -10,6 +10,70 @@ using CE32_console;
 
 namespace USB512_interface
 {
+    // V2 explicitly advertises the shared NFS1/NSF1 guarded format protocol.
+    // Older USB services must not receive 0x79/0x7A based on repair support.
+    internal sealed class NpV2UsbFormat : IDisposable
+    {
+        internal const uint Capability=0x20;
+        const string UpdateMessage="This V2 USB firmware does not support card formatting. Install the bundled full firmware update (APP + USB + boot); an APP-only update cannot add USB formatting. No format command was sent.";
+        readonly string uid;
+        readonly Func<byte[]> service,info;
+        readonly Action<byte[]> send;
+        readonly Func<bool> available;
+        SafeFileHandle file;IntPtr usb;
+        internal NpV2UsbFormat(string uid,Func<byte[]> service,Func<byte[]> info,Action<byte[]> send,Func<bool> available)
+        {this.uid=uid;this.service=service;this.info=info;this.send=send;this.available=available;}
+        internal NpV2UsbFormat(string path,Func<bool> available)
+        {
+            if(!NpUsbCatalogRepair.IsEligiblePath(path) || NpV1Management.UidFromPath(path)!=null)throw new IOException("Select the exact V2 USB logger before formatting.");
+            uid=NpV2FirmwareForm.Uid(path);this.available=available;
+            service=()=>Read(0x6e,32);info=()=>Read(0x79,64);send=Send;
+            RequireHost();file=NpDownloadNative.CreateFile(path,0xc0000000,0,IntPtr.Zero,3,0x40000080,IntPtr.Zero);
+            try{if(file.IsInvalid || !NpDownloadNative.WinUsbInitialize(file,out usb))throw new Win32Exception(Marshal.GetLastWin32Error());}catch{Dispose();throw;}
+        }
+        void RequireHost(){if(available==null || !available())throw new IOException("USB Format access is unavailable. Disconnect BLE and finish capture/download. No new format command was sent.");}
+        bool RequireIdle()
+        {
+            RequireHost();byte[] bytes;
+            try{bytes=service();}catch(Win32Exception ex) when(ex.NativeErrorCode==1 || ex.NativeErrorCode==31){throw new NotSupportedException(UpdateMessage,ex);}
+            var state=NpV2ServiceStatus.Parse(bytes);state.RequireUid(uid);
+            if((state.Capabilities&Capability)==0)throw new NotSupportedException(UpdateMessage);
+            if(state.Mode!=3 || state.Busy!=0 || state.Target!=0)throw new IOException("USB Format requires this V2 idle in download mode with no pending operation. Nothing sent.");
+            return true;
+        }
+        static void RequireCard(NpV1Management.SdFormatInfo card)
+        {
+            if(card==null || !card.Ready || card.Cid==new string('0',32) || card.Cid==new string('F',32))throw new IOException("This V2 does not report a ready SD card and guarded USB Format capability.");
+        }
+        internal NpV1Management.SdFormatInfo Inspect()
+        {
+            RequireIdle();var card=NpV1Management.ParseSdFormatInfo(info(),uid);RequireCard(card);return card;
+        }
+        internal void Format(NpV1Management.SdFormatInfo confirmed)
+        {
+            RequireCard(confirmed);bool first=true;
+            NpV1Management.RunSdFormat(confirmed,()=>{
+                RequireHost();byte[] bytes=info();
+                if(first){first=false;var fresh=NpV1Management.ParseSdFormatInfo(bytes,uid);RequireCard(fresh);
+                    if(fresh.Transaction!=confirmed.Transaction || fresh.State!=confirmed.State || fresh.Error!=confirmed.Error)throw new IOException("The confirmed V2 format receipt changed. Inspect and confirm again; nothing sent.");}
+                return bytes;
+            },RequireIdle,b=>{RequireHost();send(b);});
+        }
+        byte[] Read(byte request,int length)
+        {
+            var bytes=new byte[length];uint n;var setup=new NpDownloadNative.WINUSB_SETUP_PACKET{RequestType=0xc0,Request=request,Length=(ushort)length};
+            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,bytes,(uint)length,out n,IntPtr.Zero))throw new Win32Exception(Marshal.GetLastWin32Error());
+            if(n!=length)throw new IOException("Short USB format reply; outcome is not confirmed. No command replayed.");return bytes;
+        }
+        void Send(byte[] bytes)
+        {
+            RequireHost();uint n;var setup=new NpDownloadNative.WINUSB_SETUP_PACKET{RequestType=0x40,Request=0x7a,Length=64};
+            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,bytes,64,out n,IntPtr.Zero))throw new IOException("USB format acknowledgement lost; outcome unknown. No retry sent.",new Win32Exception(Marshal.GetLastWin32Error()));
+            if(n!=64)throw new IOException("Short USB format acknowledgement; outcome unknown. No retry sent.");
+        }
+        public void Dispose(){if(usb!=IntPtr.Zero){NpDownloadNative.WinUsbFree(usb);usb=IntPtr.Zero;}if(file!=null){file.Dispose();file=null;}}
+    }
+
     // Shared stopped V1/V2 metadata repair; each service must advertise its own capability.
     internal sealed class NpUsbCatalogRepair : IDisposable
     {
