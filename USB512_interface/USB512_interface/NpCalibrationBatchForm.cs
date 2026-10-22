@@ -11,6 +11,7 @@ namespace USB512_interface
     internal sealed class NpCalibrationBatchForm:Form
     {
         readonly NpCalibrationSet profiles;
+        readonly NpCalibrationLibrary library;
         readonly TextBox source=new TextBox{Name="calibrationBatchSource",Dock=DockStyle.Fill,AutoCompleteMode=AutoCompleteMode.SuggestAppend,AutoCompleteSource=AutoCompleteSource.FileSystemDirectories};
         readonly TextBox output=new TextBox{Name="calibrationBatchOutput",Dock=DockStyle.Fill,AutoCompleteMode=AutoCompleteMode.SuggestAppend,AutoCompleteSource=AutoCompleteSource.FileSystemDirectories};
         readonly ComboBox encoding=new ComboBox{Name="calibrationBatchEncoding",DropDownStyle=ComboBoxStyle.DropDownList,Width=250};
@@ -23,9 +24,10 @@ namespace USB512_interface
         readonly Dictionary<NpCalibrationBatch.Item,DataGridViewRow> rows=new Dictionary<NpCalibrationBatch.Item,DataGridViewRow>();
         List<NpCalibrationBatch.Item> items=new List<NpCalibrationBatch.Item>();
         Button outputBrowse;bool busy,outputEdited;volatile bool cancelled;
-        internal NpCalibrationBatchForm(NpCalibrationSet profiles)
+        internal NpCalibrationBatchForm(NpCalibrationSet profiles):this(profiles,null){}
+        internal NpCalibrationBatchForm(NpCalibrationSet profiles,NpCalibrationLibrary library)
         {
-            this.profiles=profiles.Copy();Text="WILD-X — Post-calibration";Icon=NpPreviewTheme.ApplicationIcon;
+            this.profiles=profiles.Copy();this.library=library;Text="WILD-X — Post-calibration";Icon=NpPreviewTheme.ApplicationIcon;
             Font=WildXTheme.Body;ClientSize=new Size(1120,650);MinimumSize=new Size(900,520);StartPosition=FormStartPosition.CenterParent;
             var layout=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(16),ColumnCount=1,RowCount=6};layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
             foreach(var style in new[]{new RowStyle(SizeType.AutoSize),new RowStyle(SizeType.AutoSize),new RowStyle(SizeType.AutoSize),new RowStyle(SizeType.Percent,100),new RowStyle(SizeType.AutoSize),new RowStyle(SizeType.AutoSize)})layout.RowStyles.Add(style);
@@ -33,7 +35,7 @@ namespace USB512_interface
             AddPath(paths,0,"Source folder",source);AddPath(paths,1,"Output folder",output);layout.Controls.Add(paths,0,0);
             var options=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,WrapContents=true};options.Controls.Add(new Label{Text="Source encoding",AutoSize=true,Margin=new Padding(0,9,8,0)});
             encoding.Items.AddRange(new object[]{"Auto from recording","Signed nominal ADC counts","Legacy unsigned ADC codes"});encoding.SelectedIndex=0;options.Controls.Add(encoding);options.Controls.Add(overwrite);options.Controls.Add(scan);layout.Controls.Add(options,0,1);
-            var assignments=new Label{AutoSize=true,Dock=DockStyle.Fill,Margin=new Padding(0,8,0,10),Text=String.Join("   |   ",profiles.Ports.Select(p=>{var c=profiles.Get(p);return "P"+p+" → SN "+c.Serial+" · "+c.Model+(c.Np2?"":" · AP "+c.ApGain+" / LFP "+c.LfpGain);}))};layout.Controls.Add(assignments,0,2);
+            var assignments=new Label{AutoSize=true,Dock=DockStyle.Fill,Margin=new Padding(0,8,0,10),Text=library!=null?"Factory folder: "+library.Folder+" · "+library.Count+" probe serials · match each recording automatically":String.Join("   |   ",profiles.Ports.Select(p=>{var c=profiles.Get(p);return "P"+p+" → SN "+c.Serial+" · "+c.Model+(c.Np2?"":" · AP "+c.ApGain+" / LFP "+c.LfpGain);}))};layout.Controls.Add(assignments,0,2);
             files.Columns.Add("file","File");files.Columns[0].FillWeight=28;
             files.Columns.Add("band","Band");files.Columns[1].FillWeight=6;
             files.Columns.Add("ports","Probe order");files.Columns[2].FillWeight=10;
@@ -68,7 +70,7 @@ namespace USB512_interface
             try{
                 string from=source.Text.Trim().Trim('"'),to=overwrite.Checked?from:output.Text.Trim().Trim('"');if(from.Length==0||to.Length==0)throw new IOException("Enter source and output folders.");
                 var format=(NpCalibrationBatch.Encoding)encoding.SelectedIndex;var ui=new Progress<string>(message=>status.Text=message);
-                bool replace=overwrite.Checked;items=await Task.Run(()=>NpCalibrationBatch.Scan(from,to,profiles,format,()=>cancelled,message=>((IProgress<string>)ui).Report(message),replace));
+                bool replace=overwrite.Checked;items=await Task.Run(()=>library==null?NpCalibrationBatch.Scan(from,to,profiles,format,()=>cancelled,message=>((IProgress<string>)ui).Report(message),replace):NpCalibrationBatch.ScanLibrary(from,to,profiles,library,format,()=>cancelled,message=>((IProgress<string>)ui).Report(message),replace));
                 files.Rows.Clear();rows.Clear();foreach(var item in items){int index=files.Rows.Add(item.Relative,item.Output==null?"":item.Lfp?"LFP":"AP",item.Ports==null?"":String.Join(",",item.Ports),item.Status,item.Detail);rows.Add(item,files.Rows[index]);}
                 status.Text=items.Count(p=>p.Ready)+" ready · "+items.Count(p=>!p.Ready)+" skipped. "+(replace?"Original DATs will be replaced after successful calibration.":"Output mirrors the source subfolders.");
             }catch(OperationCanceledException){status.Text="Scan cancelled.";items.Clear();}catch(Exception ex){status.Text=ex.Message;items.Clear();}

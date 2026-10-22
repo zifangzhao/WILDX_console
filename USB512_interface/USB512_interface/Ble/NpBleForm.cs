@@ -136,7 +136,9 @@ namespace USB512_interface
             overwriteRecording=Add(actions,"Overwrite from last known position…",OverwriteFromLastKnownPosition);
             var reportButton=new Button {Text="Report…",AutoSize=true};
             reportButton.Click+=async delegate {await OpenReport();};
-            Add(actions,"Calibration…",()=>{NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2);return Task.CompletedTask;});
+            Add(actions,"Calibration…",()=>{Dictionary<int,string> requests=null;if(V2)np2HostConfigurations.TryGetValue(connectedAddress,out requests);
+                else if(connectedAddress!=0)requests=V1Configurations().Values.ToDictionary(p=>p.Port+1,p=>p.Json);
+                NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2,requests);return Task.CompletedTask;});
             Add(maintenanceActions, "Recover interrupted catalog", async () => {
                 var s = await ReadStatus();
                 if (V2 && !NpV2SdControl.CanRecover(s)) throw new IOException(NpV2SdControl.RecoveryRequiresUpgrade(s)?"Firmware does not advertise stored 7.5-kHz catalog recovery. Upgrade before recovery; raw download remains available.":"Firmware does not advertise a recoverable interrupted allocation.");

@@ -1,0 +1,804 @@
+{
+  "version": "1.0.0.82",
+  "gui_sha256": "183EBBA3DDE85A0538C68ADE954D7CF4FA738063A74419C26F22BCCB9DD06AB2",
+  "sdk_sha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
+  "source_inputs": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/CameraPreviewForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\CameraPreviewForm.cs",
+      "sha256": "F68578ACE3248DE0A3C1D3BC5311303F5BFA37EB6D13A0E6A73E95322B8A88AD",
+      "baseline_sha256": "F68578ACE3248DE0A3C1D3BC5311303F5BFA37EB6D13A0E6A73E95322B8A88AD"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/USB512WinUsb.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\USB512WinUsb.cs",
+      "sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5",
+      "baseline_sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/UsbHealth.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbHealth.cs",
+      "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124",
+      "baseline_sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/UsbHealthNative.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbHealthNative.cs",
+      "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710",
+      "baseline_sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/UsbQualityTest.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbQualityTest.cs",
+      "sha256": "537B02EF089A6D8BD3B925FF43198009501AC2F9FD1057BDCE4B9D78CCECBE89",
+      "baseline_sha256": "537B02EF089A6D8BD3B925FF43198009501AC2F9FD1057BDCE4B9D78CCECBE89"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.UsbQuality.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\mainForm.UsbQuality.cs",
+      "sha256": "1BF3BEB4EC0D6D6849AA3299BB0FE839F3D30334F5B141F6BB6FA531D92A413F",
+      "baseline_sha256": "1BF3BEB4EC0D6D6849AA3299BB0FE839F3D30334F5B141F6BB6FA531D92A413F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Ce64MscProtocol.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ce64MscProtocol.cs",
+      "sha256": "D567DB81EC1C737875F6AE0DE285BF845A4DCEBE3569FCF4BD6C447843D5E7FF",
+      "baseline_sha256": "D567DB81EC1C737875F6AE0DE285BF845A4DCEBE3569FCF4BD6C447843D5E7FF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Ce64MscRawBlockDevice.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ce64MscRawBlockDevice.cs",
+      "sha256": "6CF145013AE5DA8FE44236DFF110D11EFB384E5083921B6640EBEA3DAB73C82B",
+      "baseline_sha256": "6CF145013AE5DA8FE44236DFF110D11EFB384E5083921B6640EBEA3DAB73C82B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Ce64MscCompressedDecoder.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ce64MscCompressedDecoder.cs",
+      "sha256": "1B9CE3BEC6085A0E403D783175FF78A082225696247249B8E655D26CE8682484",
+      "baseline_sha256": "1B9CE3BEC6085A0E403D783175FF78A082225696247249B8E655D26CE8682484"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Ce64MscDiscovery.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ce64MscDiscovery.cs",
+      "sha256": "6872C79E23F44AA84F2639E7358AE47337ADED6AD43CAD273BDDE20EF708C402",
+      "baseline_sha256": "6872C79E23F44AA84F2639E7358AE47337ADED6AD43CAD273BDDE20EF708C402"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/ImpedanceReportForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\ImpedanceReportForm.cs",
+      "sha256": "5D978CCB484462BF88BCA9D9C834ECC3CA786B3578A3285294A8131C27C9334E",
+      "baseline_sha256": "5D978CCB484462BF88BCA9D9C834ECC3CA786B3578A3285294A8131C27C9334E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/EisSpectrumForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\EisSpectrumForm.cs",
+      "sha256": "6D7B596640960860CB81E236C7A2FEF910D58C1D5D97986E31BEB6831906ABFF",
+      "baseline_sha256": "6D7B596640960860CB81E236C7A2FEF910D58C1D5D97986E31BEB6831906ABFF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/XeNpWinUsb.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\XeNpWinUsb.cs",
+      "sha256": "764B2513F9A2DD9EEAF54CA446B3040D992A830BDC7B8BD0504473680B74A020",
+      "baseline_sha256": "764B2513F9A2DD9EEAF54CA446B3040D992A830BDC7B8BD0504473680B74A020"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpModeDialog.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpModeDialog.cs",
+      "sha256": "5A9ADB1338CC64A8853A0DDC29A07661FC60F2A6239F322C19430FAA6025F98D",
+      "baseline_sha256": "5A9ADB1338CC64A8853A0DDC29A07661FC60F2A6239F322C19430FAA6025F98D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpRecovery.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpRecovery.cs",
+      "sha256": "9B03E3FE1BDC9A9AF464B04A5F59A4FDF11C3ACEF3997B8E5533DD9C2FC00408",
+      "baseline_sha256": "9B03E3FE1BDC9A9AF464B04A5F59A4FDF11C3ACEF3997B8E5533DD9C2FC00408"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpGpioRtcLogger.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpGpioRtcLogger.cs",
+      "sha256": "0504DA4849AE3513BACAB9D9C5124E7019DC1E54EF0E2887D19C7CD2A4915E92",
+      "baseline_sha256": "0504DA4849AE3513BACAB9D9C5124E7019DC1E54EF0E2887D19C7CD2A4915E92"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpFolderNaming.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFolderNaming.cs",
+      "sha256": "3BACD7C35DC69E146077EC6B571C301E88D6CC6A7C52BFA07943990A688F807E",
+      "baseline_sha256": "3BACD7C35DC69E146077EC6B571C301E88D6CC6A7C52BFA07943990A688F807E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpUsbSensors.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpUsbSensors.cs",
+      "sha256": "9C8E0E7A4852DF043B50C51C45890E5BBED915E03CC806AC73A81A99AF7E1CD1",
+      "baseline_sha256": "9C8E0E7A4852DF043B50C51C45890E5BBED915E03CC806AC73A81A99AF7E1CD1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpUsbSensorMonitor.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpUsbSensorMonitor.cs",
+      "sha256": "4DED31C00F4FBEBF234C49D606B4285475F3C8430527D285E137DFA6A2967070",
+      "baseline_sha256": "4DED31C00F4FBEBF234C49D606B4285475F3C8430527D285E137DFA6A2967070"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpClockFit.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpClockFit.cs",
+      "sha256": "E6A0ED0CA88AB92012557B6CBF305C911942F92B06C432BF470DD06AA489D724",
+      "baseline_sha256": "E6A0ED0CA88AB92012557B6CBF305C911942F92B06C432BF470DD06AA489D724"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpClockJournal.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpClockJournal.cs",
+      "sha256": "9550523DEDF579F710C8AC33DFD2DB47B0A64A51C8D4FD924B5B0B06C5766F63",
+      "baseline_sha256": "9550523DEDF579F710C8AC33DFD2DB47B0A64A51C8D4FD924B5B0B06C5766F63"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpConfigurationDialog.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpConfigurationDialog.cs",
+      "sha256": "C52CD41EE0105BA12F0425CC9D767EF4246A14AC1A52987E868F0CC1663CF3E1",
+      "baseline_sha256": "C52CD41EE0105BA12F0425CC9D767EF4246A14AC1A52987E868F0CC1663CF3E1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpConfigurationUsb.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpConfigurationUsb.cs",
+      "sha256": "DA22C2CEDB30AE6874D340BFE460E586A9C79A86F797BD06B9524292E1288F55",
+      "baseline_sha256": "DA22C2CEDB30AE6874D340BFE460E586A9C79A86F797BD06B9524292E1288F55"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Np2ConfigurationClient.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Np2ConfigurationClient.cs",
+      "sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA",
+      "baseline_sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Np2ConfigurationPreferences.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Np2ConfigurationPreferences.cs",
+      "sha256": "374EA02A2691E22C6F984C2BA9FB9F8822CE020A268167A5F5002F4998F2230D",
+      "baseline_sha256": "374EA02A2691E22C6F984C2BA9FB9F8822CE020A268167A5F5002F4998F2230D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Np2ConfigurationUsb.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Np2ConfigurationUsb.cs",
+      "sha256": "378634A808E2C8C9109DF13ABBD8018A668B60CAFBFE873061EEBCABEE2FD08F",
+      "baseline_sha256": "378634A808E2C8C9109DF13ABBD8018A668B60CAFBFE873061EEBCABEE2FD08F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpProbeManifest.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpProbeManifest.cs",
+      "sha256": "BCF39B04FD3DF61D0F5B3C9DBF0796CD4207C0E4B9298071586EE625DBFFDDAE",
+      "baseline_sha256": "BCF39B04FD3DF61D0F5B3C9DBF0796CD4207C0E4B9298071586EE625DBFFDDAE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpRecordingSettings.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpRecordingSettings.cs",
+      "sha256": "112AC5DC933A2AD8BB213555B5C442464B6DB92705C0A7BA184413A6D9082BA7",
+      "baseline_sha256": "112AC5DC933A2AD8BB213555B5C442464B6DB92705C0A7BA184413A6D9082BA7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpRecordingDialog.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpRecordingDialog.cs",
+      "sha256": "FB015A2ABCE687FBBF525BAA50A2CD91AA44F10F41937DAC5021BA8435D47A62",
+      "baseline_sha256": "FB015A2ABCE687FBBF525BAA50A2CD91AA44F10F41937DAC5021BA8435D47A62"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpMediaUsbForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpMediaUsbForm.cs",
+      "sha256": "23203AAAFB819546ED66D398BA6827DDBC7BA8EC18588346C1E441D9D4193231",
+      "baseline_sha256": "23203AAAFB819546ED66D398BA6827DDBC7BA8EC18588346C1E441D9D4193231"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpAudioPreview.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpAudioPreview.cs",
+      "sha256": "AE2D6F2596F372772EE9F46AB16107428B9D6E1A745038303E070D01A0AD75A0",
+      "baseline_sha256": "AE2D6F2596F372772EE9F46AB16107428B9D6E1A745038303E070D01A0AD75A0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpDiagnosticsForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpDiagnosticsForm.cs",
+      "sha256": "0706C3B52551831B81FC8AA254CBF43C65AF8DA740D98EB9F8C227A6B363814D",
+      "baseline_sha256": "0706C3B52551831B81FC8AA254CBF43C65AF8DA740D98EB9F8C227A6B363814D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCalibrationForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpCalibrationForm.cs",
+      "sha256": "47DE9E4C1749975380C26C2DFFBA35D583036BF9E9256C8A0189D4EEF35996D7",
+      "baseline_sha256": "768C6B8C974283293589F709CADC54DB059ED45CD37C1E0B2E3AFF6B34414C4B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpConfigClient.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\V1Capture\\Configuration\\NpConfigClient.cs",
+      "sha256": "025105EAD2405DAA08846B3389E1FE64CD288630CB59EDEBE643700323DB1E92",
+      "baseline_sha256": "025105EAD2405DAA08846B3389E1FE64CD288630CB59EDEBE643700323DB1E92"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpDeviceConfigForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\V1Capture\\Configuration\\NpDeviceConfigForm.cs",
+      "sha256": "D1F4CE6A4E6D7C0CBC8BBAE5733A407C739069A5DE1A5436D87C292AE697EFF7",
+      "baseline_sha256": "D1F4CE6A4E6D7C0CBC8BBAE5733A407C739069A5DE1A5436D87C292AE697EFF7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/XeNpSdInfo.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\XeNpSdInfo.cs",
+      "sha256": "6B96264278AA5449AE5575ECABD80AD1813999F3A9367EF3F4695757231349CF",
+      "baseline_sha256": "6B96264278AA5449AE5575ECABD80AD1813999F3A9367EF3F4695757231349CF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpDownloadNative.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpDownloadNative.cs",
+      "sha256": "272FDE1CE6F87B7E62D4C4FCC28116A6102142830630ACE83A2665737446AE7F",
+      "baseline_sha256": "272FDE1CE6F87B7E62D4C4FCC28116A6102142830630ACE83A2665737446AE7F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV1StoreV2.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpV1StoreV2.cs",
+      "sha256": "D2B1E7952C45081F95C3EA8A979D0C8C663E44CEE2E2AEF4A3CD07206319B124",
+      "baseline_sha256": "D2B1E7952C45081F95C3EA8A979D0C8C663E44CEE2E2AEF4A3CD07206319B124"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCatalogRecovery.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpCatalogRecovery.cs",
+      "sha256": "14C4ED6400893F27E81CA7B676F4D0CC8BD22256ABD41E927C3785CA5682ABB1",
+      "baseline_sha256": "14C4ED6400893F27E81CA7B676F4D0CC8BD22256ABD41E927C3785CA5682ABB1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpSdDatMerge.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpSdDatMerge.cs",
+      "sha256": "2928A4C5B1B64BFC753F7CB4B737D059865B8BDBD62BAABF5ABDE42727D84755",
+      "baseline_sha256": "2928A4C5B1B64BFC753F7CB4B737D059865B8BDBD62BAABF5ABDE42727D84755"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpSdGeometry.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpSdGeometry.cs",
+      "sha256": "7303E533911AEA509CE7737C1ABB5FD955659FFD10B633B500EABE271AFBE843",
+      "baseline_sha256": "7303E533911AEA509CE7737C1ABB5FD955659FFD10B633B500EABE271AFBE843"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/RawBurst.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\RawBurst.cs",
+      "sha256": "A5F5DFAB8C10343F69525C0697FBAC4703A1FEC2072453CFAB59741F6AA64734",
+      "baseline_sha256": "A5F5DFAB8C10343F69525C0697FBAC4703A1FEC2072453CFAB59741F6AA64734"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpArchive.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpArchive.cs",
+      "sha256": "B7934764590869E603199FDC51CE5BFEE104332FD100A0FFD97231D4DBB663D6",
+      "baseline_sha256": "B7934764590869E603199FDC51CE5BFEE104332FD100A0FFD97231D4DBB663D6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV1Management.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpV1Management.cs",
+      "sha256": "778FAFF45E1A8CBDDECDF44A456B59831237CD60F596980457EED3F73215C02F",
+      "baseline_sha256": "778FAFF45E1A8CBDDECDF44A456B59831237CD60F596980457EED3F73215C02F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpFirmwareImage.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareImage.cs",
+      "sha256": "B0A393E0698C68A23BD95F50D7BA3A5406367625689D10174170BD5743CF5A61",
+      "baseline_sha256": "B0A393E0698C68A23BD95F50D7BA3A5406367625689D10174170BD5743CF5A61"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpFirmwareFlash.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareFlash.cs",
+      "sha256": "53A5C33158CE1DD456F5C005532F100B83E8B11BCEA901E64FC11963FDE868E2",
+      "baseline_sha256": "53A5C33158CE1DD456F5C005532F100B83E8B11BCEA901E64FC11963FDE868E2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpLoggerForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpLoggerForm.cs",
+      "sha256": "B8DAC5FA5438AE402C15FB52CAB9551B1A220F2F69E998305732613E19669C98",
+      "baseline_sha256": "B8DAC5FA5438AE402C15FB52CAB9551B1A220F2F69E998305732613E19669C98"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpFirmwareForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareForm.cs",
+      "sha256": "63778162FF802911F94B7F7FB0A226496DDD63B4EB3F4A8F8BE125EA8CBD8F36",
+      "baseline_sha256": "63778162FF802911F94B7F7FB0A226496DDD63B4EB3F4A8F8BE125EA8CBD8F36"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NeuropixelsPreviewForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NeuropixelsPreviewForm.cs",
+      "sha256": "35870EA5E803A1E24C75F71B5BB9930652F492BCFF32DC5625ADEA4ECC6DFB6F",
+      "baseline_sha256": "35870EA5E803A1E24C75F71B5BB9930652F492BCFF32DC5625ADEA4ECC6DFB6F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.SystemInfo.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\mainForm.SystemInfo.cs",
+      "sha256": "E7F90AB565137FAE7ACD629C896E44E8D5B628EDC238F5574C9F1197131476F0",
+      "baseline_sha256": "E7F90AB565137FAE7ACD629C896E44E8D5B628EDC238F5574C9F1197131476F0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.NetworkTime.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\mainForm.NetworkTime.cs",
+      "sha256": "B3650DB2F53CE6A1F18F23953DE99704A8145B561957B3A37A9B21F40208289B",
+      "baseline_sha256": "B3650DB2F53CE6A1F18F23953DE99704A8145B561957B3A37A9B21F40208289B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NetworkTimeClock.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NetworkTimeClock.cs",
+      "sha256": "27AF992021B83A3F565A96A6F6B8B8EB60241CD05B194B8729E86EAF958189E2",
+      "baseline_sha256": "27AF992021B83A3F565A96A6F6B8B8EB60241CD05B194B8729E86EAF958189E2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpSystemInfo.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSystemInfo.cs",
+      "sha256": "084C5ED5826BC5BFBEA399F6B641F32681DF2AB2BC3A817574AE3B125FC20186",
+      "baseline_sha256": "084C5ED5826BC5BFBEA399F6B641F32681DF2AB2BC3A817574AE3B125FC20186"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.Designer.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\mainForm.Designer.cs",
+      "sha256": "741064CA784848D10B105D32F7A8C790FD18D277A49B930BE53C6C741136C207",
+      "baseline_sha256": "741064CA784848D10B105D32F7A8C790FD18D277A49B930BE53C6C741136C207"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Program.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Program.cs",
+      "sha256": "79269F2B2DA151C212B1846B7627B29501365573E4FE91891871176B09F2D1C0",
+      "baseline_sha256": "79269F2B2DA151C212B1846B7627B29501365573E4FE91891871176B09F2D1C0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.WildX.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\mainForm.WildX.cs",
+      "sha256": "9663D0B4D060ED9C9D6C0611C5471F39B6DAF9DBC148CC25FE9FD7B77153FCFA",
+      "baseline_sha256": "A265F42AEA9FEEEEC3DC8406E6431489030AF8A6B9D8E750F94DCAF21EBDBDD1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.GpioRtc.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\mainForm.GpioRtc.cs",
+      "sha256": "28113066A69A1E3A4B219760367F6B3FB2928B7C00096441DF86BBCB7B55E28C",
+      "baseline_sha256": "28113066A69A1E3A4B219760367F6B3FB2928B7C00096441DF86BBCB7B55E28C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/WildXTheme.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\WildXTheme.cs",
+      "sha256": "ABDAE77C0C6DA0B46135AACA15992B69F8658754A823DA0606AA44CF9A6D4026",
+      "baseline_sha256": "ABDAE77C0C6DA0B46135AACA15992B69F8658754A823DA0606AA44CF9A6D4026"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpSdControl.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpSdControl.cs",
+      "sha256": "FE8F6D35EE521EB366E5E6F2AB392CD24B00F846C0DA84A54BC832F7292175C2",
+      "baseline_sha256": "FE8F6D35EE521EB366E5E6F2AB392CD24B00F846C0DA84A54BC832F7292175C2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV1BleProtocol.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV1BleProtocol.cs",
+      "sha256": "5C1F3F5A0122D7B38044A090B5598CFF998BDCF20467AC42CC66FAF7FA09069C",
+      "baseline_sha256": "5C1F3F5A0122D7B38044A090B5598CFF998BDCF20467AC42CC66FAF7FA09069C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2SdControl.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2SdControl.cs",
+      "sha256": "D0AB3CD0BE12BE525C2B9E65348CC0445DA707E7705FF305D6CAB0D5104DCD51",
+      "baseline_sha256": "D0AB3CD0BE12BE525C2B9E65348CC0445DA707E7705FF305D6CAB0D5104DCD51"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2OnlineClock.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2OnlineClock.cs",
+      "sha256": "D69BC693B27D4FE6E353983A00C70E0F4CC52B66D1665E4D41B2A17C602DC3D1",
+      "baseline_sha256": "D69BC693B27D4FE6E353983A00C70E0F4CC52B66D1665E4D41B2A17C602DC3D1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleWire.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleWire.cs",
+      "sha256": "8D577F27EC65A9779E33167BE46232DF548322319EEF4D8FFBEF8C22434A4E09",
+      "baseline_sha256": "8D577F27EC65A9779E33167BE46232DF548322319EEF4D8FFBEF8C22434A4E09"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleConnection.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConnection.cs",
+      "sha256": "7E8AED633B25F96C85DA30A0953CB80E8B993B92093739CAB29FA5CBD733D7C7",
+      "baseline_sha256": "7E8AED633B25F96C85DA30A0953CB80E8B993B92093739CAB29FA5CBD733D7C7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleConnection.Media.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConnection.Media.cs",
+      "sha256": "971094726089793A1868F7E3020DDD937FBAA19C1177EDA33B401604586AD308",
+      "baseline_sha256": "971094726089793A1868F7E3020DDD937FBAA19C1177EDA33B401604586AD308"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleConnection.Storage.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConnection.Storage.cs",
+      "sha256": "9BE44D64FF999D76EE6768369203AAD84850826EBB788A63E92BE09BDAA29CCB",
+      "baseline_sha256": "9BE44D64FF999D76EE6768369203AAD84850826EBB788A63E92BE09BDAA29CCB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleForm.cs",
+      "sha256": "20402444D423FF69534C9DA9D40B409B3D05CDF2C0A7FA9F420F1B24E9CEB90F",
+      "baseline_sha256": "5F69970081CD224A4D916234D9035B80F7FFAF946219F208FE2EE28E3A8C008C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleForm.Media.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleForm.Media.cs",
+      "sha256": "77D2853FCA6D6553A0A6CEB5E2E0C8A037AFAFE7D06643F753CE2DD3C36F28F9",
+      "baseline_sha256": "77D2853FCA6D6553A0A6CEB5E2E0C8A037AFAFE7D06643F753CE2DD3C36F28F9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleForm.Storage.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleForm.Storage.cs",
+      "sha256": "98D5CFD14A06C63663E1FA263B3D126404BE88495F3F939727A0A983F0083615",
+      "baseline_sha256": "98D5CFD14A06C63663E1FA263B3D126404BE88495F3F939727A0A983F0083615"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleStorage.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleStorage.cs",
+      "sha256": "DE2C238DB20750054D3C3458FB5295ADD9BDE509032AF02079CBDC2235E458F0",
+      "baseline_sha256": "DE2C238DB20750054D3C3458FB5295ADD9BDE509032AF02079CBDC2235E458F0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2BleCatalog.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2BleCatalog.cs",
+      "sha256": "F5DF1E04A7FD01263920C6DAA54020F3D737316F28B6F9CF6799A02E48DEE0C9",
+      "baseline_sha256": "F5DF1E04A7FD01263920C6DAA54020F3D737316F28B6F9CF6799A02E48DEE0C9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleConfigurationReceipts.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConfigurationReceipts.cs",
+      "sha256": "E6915BB7AFED12D2FCC330240FF2E80147BEA22B4EDFDE1B26BF64BD090CE0E9",
+      "baseline_sha256": "E6915BB7AFED12D2FCC330240FF2E80147BEA22B4EDFDE1B26BF64BD090CE0E9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleClock.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleClock.cs",
+      "sha256": "2C3D5C5D0967E0B1B89F2B55657B000B0D0EA065DCB5282B9CC33DBC770AFE3A",
+      "baseline_sha256": "2C3D5C5D0967E0B1B89F2B55657B000B0D0EA065DCB5282B9CC33DBC770AFE3A"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2Preview.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2Preview.cs",
+      "sha256": "C02E8F94C90E1164D2DF44BDAD6985F7DF99F831948490F3BA6DCA03D58670DF",
+      "baseline_sha256": "C02E8F94C90E1164D2DF44BDAD6985F7DF99F831948490F3BA6DCA03D58670DF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2PreviewWire.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2PreviewWire.cs",
+      "sha256": "9E79A7A687D0C5D5F5639EA607A10D496D874FEF1EC8A8284CD64862C84D7A4F",
+      "baseline_sha256": "9E79A7A687D0C5D5F5639EA607A10D496D874FEF1EC8A8284CD64862C84D7A4F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBlePreviewForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBlePreviewForm.cs",
+      "sha256": "8D64FFE9B832008501FD1EC81987450E1A6F53A43903017D16A396B0F76016D5",
+      "baseline_sha256": "8D64FFE9B832008501FD1EC81987450E1A6F53A43903017D16A396B0F76016D5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV1BlePreviewForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV1BlePreviewForm.cs",
+      "sha256": "90C652CA47AAAB854BFD64298AEC0BB958C4BAC3ED316246E5122E3D9909E798",
+      "baseline_sha256": "90C652CA47AAAB854BFD64298AEC0BB958C4BAC3ED316246E5122E3D9909E798"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpUsbCatalogRepair.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpUsbCatalogRepair.cs",
+      "sha256": "5C5B108F444FBAFF821B805A9850DF7644D3E24AB644AB6FD142EB6CA60C90E8",
+      "baseline_sha256": "5C5B108F444FBAFF821B805A9850DF7644D3E24AB644AB6FD142EB6CA60C90E8"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2FirmwareForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpV2FirmwareForm.cs",
+      "sha256": "4CD97D1F3F7D3A80D18350F38CC788B748CA14B5636FFCFB67A3A534B3D5483C",
+      "baseline_sha256": "4CD97D1F3F7D3A80D18350F38CC788B748CA14B5636FFCFB67A3A534B3D5483C"
+    },
+    {
+      "path": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Properties\\AssemblyInfo.cs",
+      "sha256": "F5AD06B33D168EDA7286D4E80D8BFA679B2D50768AE3B068D788F1370D0E4B1A",
+      "baseline_sha256": "03BE5AB47397A19CC9A3DA70EEF05BD9D6D7F19B35DB18B8ABF374F760411194"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/ScopeForm_drawbank.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\ScopeForm_drawbank.cs",
+      "sha256": "44CAF0DC3060D37E1D76C0C2F3D6E1E37DC4A71F779F729C6F5BAFAB22C3E82A",
+      "baseline_sha256": "44CAF0DC3060D37E1D76C0C2F3D6E1E37DC4A71F779F729C6F5BAFAB22C3E82A"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/ScopeForm_drawbank.Designer.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\ScopeForm_drawbank.Designer.cs",
+      "sha256": "7BDCD59E9B2FDE6B5B2DC9F949CDF68AAAB53793F966B4771BDD8B048A4D4F7C",
+      "baseline_sha256": "7BDCD59E9B2FDE6B5B2DC9F949CDF68AAAB53793F966B4771BDD8B048A4D4F7C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Resources.Designer.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Properties\\Resources.Designer.cs",
+      "sha256": "84C340F1D30687745D308757A8C44E558A23AAA083D1728358F2F97BF6E46F94",
+      "baseline_sha256": "84C340F1D30687745D308757A8C44E558A23AAA083D1728358F2F97BF6E46F94"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/Settings.Designer.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Properties\\Settings.Designer.cs",
+      "sha256": "3EDB938CE340EDCBCF2C576832CA1EFCF4E2FF8906248B046C9F5F1AFDEB4221",
+      "baseline_sha256": "ECC3AB3000932187615666D0BEC50864CABF220A0970267F24F58C86F0A28096"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpFirmwareCatalog.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareCatalog.cs",
+      "sha256": "485F86962526DADB11A7EB2198A4701A7F310AFC7504E2F1A7F2827FFAAE9213",
+      "baseline_sha256": "485F86962526DADB11A7EB2198A4701A7F310AFC7504E2F1A7F2827FFAAE9213"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpMediaExport.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\NpMediaExport.cs",
+      "sha256": "9DB5BD74C2AC8AA125E0FA358F22A606F16646C680B93E3EE9BD0BD7ACE66E36",
+      "baseline_sha256": "9DB5BD74C2AC8AA125E0FA358F22A606F16646C680B93E3EE9BD0BD7ACE66E36"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/WILD_VideoDecoder.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\WILD_VideoDecoder.cs",
+      "sha256": "E77D8EFE487568B3C2373CE5B01E319C834528A6E423C48B4DA43404CA1025A6",
+      "baseline_sha256": "E77D8EFE487568B3C2373CE5B01E319C834528A6E423C48B4DA43404CA1025A6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpDownloadCatalog.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\NpDownloadCatalog.cs",
+      "sha256": "90AAC9154D1EF1024A78756DB190E4464CE092D6848D5A8DE10B6FBBB4C97B84",
+      "baseline_sha256": "90AAC9154D1EF1024A78756DB190E4464CE092D6848D5A8DE10B6FBBB4C97B84"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpDownloadForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_finalize_20261021/gui/baseline/NpDownloadForm.cs",
+      "sha256": "3DC9D5400545E23F8D3DB323DDC9BDA346A595C1FCC4CBCAB0A83ABFB55088ED",
+      "baseline_sha256": "3DC9D5400545E23F8D3DB323DDC9BDA346A595C1FCC4CBCAB0A83ABFB55088ED"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpDownloadStream.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\NpDownloadStream.cs",
+      "sha256": "02D62A9EC78DA8DF308082DECFCD141A0CE139C341808D0B6E940CBE79C62014",
+      "baseline_sha256": "02D62A9EC78DA8DF308082DECFCD141A0CE139C341808D0B6E940CBE79C62014"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCe64Decoder.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\NpCe64Decoder.cs",
+      "sha256": "C5EBC49D246CFB9FD262AB4999A5BCF5E31C01439CCED92AF2FA3467F8820629",
+      "baseline_sha256": "C5EBC49D246CFB9FD262AB4999A5BCF5E31C01439CCED92AF2FA3467F8820629"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCe64Export.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v2_gui_bf32_compat_from69_20261021\\baseline\\NpCe64Export.cs",
+      "sha256": "A3B65428B0D210C9810C1C0BF961F3B201B1BB3EC7ADA4966C62A1F4F476485D",
+      "baseline_sha256": "A3B65428B0D210C9810C1C0BF961F3B201B1BB3EC7ADA4966C62A1F4F476485D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/mainForm.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\mainForm.cs",
+      "sha256": "DC4498CC1828B75E006E575AE24903E0CBA877CC6978037C3920098478F93595",
+      "baseline_sha256": "D709A00B724EED2C4ED0B76737DE0C18866C512BD4D88CE2F37FFFA76F41229C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCaptureModes.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\NpCaptureModes.cs",
+      "sha256": "2CE2577125ABC1D0C3A342542B6CF9CD9C3B39ED21EF51225D5F3EA449769B16",
+      "baseline_sha256": "2CE2577125ABC1D0C3A342542B6CF9CD9C3B39ED21EF51225D5F3EA449769B16"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/XeNpStreamDecoder.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\XeNpStreamDecoder.cs",
+      "sha256": "633D986FECDA3F67AF5B1BCD35C27618D510391423340299230FBB88058C3B5E",
+      "baseline_sha256": "633D986FECDA3F67AF5B1BCD35C27618D510391423340299230FBB88058C3B5E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpV2UsbConsole.cs",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\NpV2UsbConsole.cs",
+      "sha256": "5D65F18458DC9C1917612F7257A18BA5AABA93946EE83FC6FE7FD96104C5C4FF",
+      "baseline_sha256": "5D65F18458DC9C1917612F7257A18BA5AABA93946EE83FC6FE7FD96104C5C4FF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/BuildVersion.targets",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\BuildVersion.targets",
+      "sha256": "B2F203FA614010C59D510E4AE7E101D421EF96A0B3D85074209A0DE5FE791A81",
+      "baseline_sha256": "B2F203FA614010C59D510E4AE7E101D421EF96A0B3D85074209A0DE5FE791A81"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/bump_version.ps1",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\bump_version.ps1",
+      "sha256": "00360445AC5483B0005DD9FB00C405A428BE3892060E2E07C00A48F5B179627D",
+      "baseline_sha256": "00360445AC5483B0005DD9FB00C405A428BE3892060E2E07C00A48F5B179627D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/WILDX_console.csproj",
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\WILDX_console.csproj",
+      "sha256": "10AD4DAE61A0FCD4325C6F9EE84072CCC25A32BF8B18C6AC8B90E968E506C4B3",
+      "baseline_sha256": "1FF5256B95D8A1918EB0D52AD6528F7567DB1B462CFD30072DC114DBD7AAF4E9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCalibrationBatch.cs",
+      "original": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/NpCalibrationBatch.cs",
+      "sha256": "42F4B1985215A555E028E9AD3E84DF819C1CD9DF7AA3B7AF3BB0E479E63BF1F9",
+      "baseline_sha256": "6CDD9CE86E35836D4FE6629173E5E276B77169854BBB0D6D70E854AEE2366EED"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCalibrationBatchForm.cs",
+      "original": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/NpCalibrationBatchForm.cs",
+      "sha256": "26B7F3C209B237DEBBB3E15C421101E621EB7B1DF216D95932D42B72899F9CB6",
+      "baseline_sha256": "7B8152D1F971F7BCD747034C9E25ED9FA88CDBF5D1ECE39D08BFCFB04170A063"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpProbeIdentity.cs",
+      "original": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/NpProbeIdentity.cs",
+      "sha256": "A1DADA32D1BD7755A15223740D9FD2FB44DB524ED8AC64843CBFED945C6D6AF1",
+      "baseline_sha256": "A1DADA32D1BD7755A15223740D9FD2FB44DB524ED8AC64843CBFED945C6D6AF1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpBleForm.Metadata.cs",
+      "original": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/Ble/NpBleForm.Metadata.cs",
+      "sha256": "2AED7926084539F9D265A17AC9F11464A1B299FC33DE94A3C02A1B59C5CCA9DE",
+      "baseline_sha256": "2AED7926084539F9D265A17AC9F11464A1B299FC33DE94A3C02A1B59C5CCA9DE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCalibrationLibrary.cs",
+      "original": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/NpCalibrationLibrary.cs",
+      "sha256": "199F3DE8FF82EE5C20830931D02AAB1655D12BA4A7D1126F1DB3F9D96D940654",
+      "baseline_sha256": null
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\calibration_library_20261022/gui82/baseline/compiled/NpCalibrationLibraryForm.cs",
+      "original": "D:/Code/WILDX_console/WILDX_console/USB512_interface/USB512_interface/NpCalibrationLibraryForm.cs",
+      "sha256": "164A2C0FB39FFE917FE2C99C40E33949EFBFCB6C440C9DDCEBEBF3205DEFD0E4",
+      "baseline_sha256": null
+    }
+  ],
+  "payload": [
+    {
+      "path": "Firmware/owner-confirmation-20261017.json",
+      "sha256": "1375EB0416FEF31E6B65CB305868CA15A32D22A5E7D2A50E277BDDAD24A78EB3"
+    },
+    {
+      "path": "Firmware/README.md",
+      "sha256": "B48C7B519E494D33D540C9BF931A7ABB56FDFD0D8AE18DA9A543AAE3733AB543"
+    },
+    {
+      "path": "Firmware/releases.json",
+      "sha256": "712B4F4F3FE103F43062A3936F7EADE2FE30E21913DFBA12452B71F6614C2353"
+    },
+    {
+      "path": "Firmware/V1/download-acceptance.json",
+      "sha256": "2D341DBEC1B32362FE44B1DC0C462022532EC369EC603361C7E42CB5B4C310E5"
+    },
+    {
+      "path": "Firmware/V1/download-init-manifest.json",
+      "sha256": "A7DA54B154A64713DFCF0F6059ED62907314FA06F86DF20B5C7D93357D0296E8"
+    },
+    {
+      "path": "Firmware/V1/README.md",
+      "sha256": "6816953D1C3DFA0464225B0AB2AE6181985C4485B70E8284F3969B79CD7D06CB"
+    },
+    {
+      "path": "Firmware/V1/usb30-source-delta.patch",
+      "sha256": "3EF8E797651D700502F1B9C7C5C550082B4BE3FB1B9BF590194C3C2322874C8E"
+    },
+    {
+      "path": "Firmware/V1/V1_DFU_boot_USBF2D80C4F_usb30_startup_20261020.hex",
+      "sha256": "BE9122F07CDA4169A7E8C49B0D40A6B033FB4648D362A5F3A299DE752C8C7E3B"
+    },
+    {
+      "path": "Firmware/V1/V1_fused_BOOT_USBF2D80C4F_APP654824DE_usb30_startup_20261020.hex",
+      "sha256": "0B38F0ECF60A7D9B99DEF8C6DE3C430063627636ACD770D0579A3EC9BE78F995"
+    },
+    {
+      "path": "Firmware/V1/V1_SD_BLE_app_only_store2_rc1.hex",
+      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
+    },
+    {
+      "path": "Firmware/V1/V1_USB_service_F2D80C4F_usb30_startup_20261020.hex",
+      "sha256": "141B8E99DE4FC13E955C601008F9E7F5869EBEFFF62F15A259CB7717AC7057A5"
+    },
+    {
+      "path": "Firmware/V1Camera/README.md",
+      "sha256": "3EF6FAFBC2C2F24F03BDB879B8C8F95B774C9A8576B7B702B6AC3C91220C8B9C"
+    },
+    {
+      "path": "Firmware/V1Camera/release.json",
+      "sha256": "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC"
+    },
+    {
+      "path": "Firmware/V1Camera/source-manifest.json",
+      "sha256": "7C5AB9585FCF62376EC72B39A4A163EC20B280A4E1379B504CF3BD43F339E056"
+    },
+    {
+      "path": "Firmware/V1Camera/source-README.md",
+      "sha256": "6DD320D9D98CB82781720FE84A60D93EB7FE4B4B20223EA433DDE0F3AE13056F"
+    },
+    {
+      "path": "Firmware/V1Camera/source-validation.md",
+      "sha256": "EFCEF24060A7D22BD831E751F681E992EE00D962B8D2D3B4ED20E1034BADAFB8"
+    },
+    {
+      "path": "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
+    },
+    {
+      "path": "Firmware/V1Camera/V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+      "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
+    },
+    {
+      "path": "Firmware/V2/package-receipt.json",
+      "sha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44"
+    },
+    {
+      "path": "Firmware/V2/README.md",
+      "sha256": "3D303714B3AA0C969550A188014808CA5E154BF86434768B74853881BDDBCD46"
+    },
+    {
+      "path": "Firmware/V2/SHA256SUMS.txt",
+      "sha256": "C8D515FAE8AA77F0FA0D41CE44282444F5E9381EF1FD8AD79AE49186E17A0E8A"
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_E323A06A_APP_660A6DA4_DUAL30_20261021.hex",
+      "sha256": "0BFECE90D3D0B098C645DB5370052C806EC6FB21FE0F1947F1718DFCE61EEFB1"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_only_660A6DA4_DUAL30_20261021.hex",
+      "sha256": "505B07DEC991BD5D424FDC722C7AF4DF460DCF7EC83F7F84622B063D528FF25F"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_update_660A6DA4_DUAL30_20261021.xenp",
+      "sha256": "CB79738A2E935E51C9FD3FAF5F355424162C71BDCEE0F435185D14E648F13A4D"
+    },
+    {
+      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_only_E323A06A_CATALOG_REPAIR_20261019.hex",
+      "sha256": "76740C47FBB6A3271C46796150F1A220B8FA02F2ABCBB6F23341B1CA8DE7C0C9"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_update_E323A06A_CATALOG_REPAIR_20261019.xenp",
+      "sha256": "DFFF2AE25A08015214ED661DC912C14F604BFDD3CD93D40E820521F70F5F36CA"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "sha256": "24AA1EF7F27FB900FD6A69077A335BEF3491F17757E2598FB0BB773E9B3097DF"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "sha256": "F6D31C088D09D760F6279CE44152D51233646E08C534B2E6709D82862B4E2297"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "sha256": "8C74CBFCE15D3311642A4A7F3DCCB27BD95F79ACEBE6DC55105205E7698E7481"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "sha256": "D374175A0AD928F0E640A58833A43356F702517E4DC766AFE39E035B4CD52BC0"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    },
+    {
+      "path": "NpV2SdDatExport.dll",
+      "sha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546"
+    },
+    {
+      "path": "OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "WILDX_console.exe",
+      "sha256": "183EBBA3DDE85A0538C68ADE954D7CF4FA738063A74419C26F22BCCB9DD06AB2"
+    },
+    {
+      "path": "WILDX_console.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    }
+  ],
+  "checks": 15366,
+  "hardware_access": false,
+  "packaged": false,
+  "published": false,
+  "scope": "Factory folder indexed by CSV serial, IMRO/recorded-gain lookup, automatic per-recording recursive calibration for any number of serials, simplified calibration page and saved folder preference. SDK/firmware/helpers unchanged from78."
+}

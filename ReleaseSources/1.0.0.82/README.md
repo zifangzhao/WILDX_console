@@ -1,0 +1,1 @@
+Exact GUI82 compiler inputs based on published78. Automatic factory folder/SN/IMRO lookup and simplified calibration workflow; SDK/firmware/helpers unchanged. Resources and other dependencies reuse checked caches. See ../../Note/CALIBRATION_LIBRARY_20261022.md for validation and limits.

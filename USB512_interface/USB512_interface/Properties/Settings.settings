@@ -10,5 +10,6 @@
     <Setting Name="NetworkTimeUpgradeRequired" Type="System.Boolean" Scope="User"><Value Profile="(Default)">True</Value></Setting>
     <Setting Name="Np2ConfigurationIntents" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
     <Setting Name="GpioRtcDevice" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
+    <Setting Name="NpCalibrationFolder" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
   </Settings>
 </SettingsFile>

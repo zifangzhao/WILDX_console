@@ -50,5 +50,8 @@ namespace USB512_interface.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string GpioRtcDevice { get { return (string)this["GpioRtcDevice"]; } set { this["GpioRtcDevice"] = value; } }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string NpCalibrationFolder { get { return (string)this["NpCalibrationFolder"]; } set { this["NpCalibrationFolder"] = value; } }
     }
 }

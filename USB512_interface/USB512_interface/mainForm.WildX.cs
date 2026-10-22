@@ -133,7 +133,10 @@ namespace USB512_interface
             nameRow.Controls.Add(npSessionLabel,1,0);npSessionLabel.Dock=DockStyle.None;npSessionLabel.Anchor=AnchorStyles.Left|AnchorStyles.Right;npSessionLabel.Margin=Padding.Empty;WildXTheme.Apply(npSessionLabel);capture.Controls.Add(nameRow,0,2);
             btnStart.Text="Start recording";btnStop.Text="Stop recording";btnStreams.Text="Recording settings";
             calibrationButton=new Button {Text="Calibration…",AutoSize=true};
-            calibrationButton.Click+=delegate {if(!running && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2))NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2);};
+            calibrationButton.Click+=delegate {if(!running && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2)){
+                var requests=selectedDeviceKind==DeviceKind.XeNp?NpRequestsForDevice(devicePath):null;
+                NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2,selectedDeviceKind==DeviceKind.NpV2?NpV2RequestsForDevice(devicePath):requests==null?null:requests.Values.ToDictionary(p=>p.Port+1,p=>p.Json));
+            }};
             WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);
             var captureActions=ActionRow(btnStart,btnStop,btnStreams,calibrationButton);captureActions.Name="usbAcquisitionActions";capture.Controls.Add(captureActions,0,3);
             npAutoRecover.AutoSize=true;npAutoRecover.Margin=Padding.Empty;capture.Controls.Add(npAutoRecover,0,4);

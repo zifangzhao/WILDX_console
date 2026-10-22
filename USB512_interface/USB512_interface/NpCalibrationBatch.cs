@@ -22,6 +22,7 @@ namespace USB512_interface
             internal string StagingFolder;
             internal long Bytes;
             internal NpCalibrationSet Calibration;
+            internal readonly Dictionary<int,string> Imros=new Dictionary<int,string>(),ImroHashes=new Dictionary<int,string>();
             internal bool Ready { get { return Status=="Ready"; } }
         }
         internal sealed class Progress
@@ -57,6 +58,10 @@ namespace USB512_interface
             return root.TrimEnd(Path.DirectorySeparatorChar).Equals(Path.GetPathRoot(root).TrimEnd(Path.DirectorySeparatorChar),StringComparison.OrdinalIgnoreCase)?Path.Combine(root,"calibrated"):root.TrimEnd(Path.DirectorySeparatorChar)+"_calibrated";
         }
         internal static List<Item> Scan(string root,string output,NpCalibrationSet profiles,Encoding encoding,Func<bool> cancelled,Action<string> progress=null,bool overwrite=false)
+        {return ScanCore(root,output,profiles,null,encoding,cancelled,progress,overwrite);}
+        internal static List<Item> ScanLibrary(string root,string output,NpCalibrationSet profiles,NpCalibrationLibrary library,Encoding encoding,Func<bool> cancelled,Action<string> progress=null,bool overwrite=false)
+        {return ScanCore(root,output,profiles,library,encoding,cancelled,progress,overwrite);}
+        static List<Item> ScanCore(string root,string output,NpCalibrationSet profiles,NpCalibrationLibrary library,Encoding encoding,Func<bool> cancelled,Action<string> progress,bool overwrite)
         {
             root=Path.GetFullPath(root);output=Path.GetFullPath(output);
             if(!Directory.Exists(root))throw new DirectoryNotFoundException("Select an existing recording folder.");
@@ -65,7 +70,8 @@ namespace USB512_interface
                 if(File.Exists(Path.Combine(output,"post_calibration_report.json")))throw new IOException("A batch report already exists; choose a fresh output folder.");
                 if(root.TrimEnd(Path.DirectorySeparatorChar).Equals(output.TrimEnd(Path.DirectorySeparatorChar),StringComparison.OrdinalIgnoreCase)||Inside(root,output))throw new IOException("Choose a separate output folder outside the selected recordings.");
             }
-            if(profiles==null||profiles.Count==0)throw new InvalidDataException("Load factory calibration for the probes before scanning folders.");
+            if((profiles==null||profiles.Count==0)&&library==null)throw new InvalidDataException("Select a calibration folder or load factory profiles before scanning.");
+            if(profiles==null)profiles=new NpCalibrationSet();
             var items=new List<Item>();var pending=new Stack<string>();pending.Push(root);
             while(pending.Count!=0){
                 if(cancelled!=null&&cancelled())throw new OperationCanceledException();
@@ -79,13 +85,13 @@ namespace USB512_interface
                         if(cancelled!=null&&cancelled())throw new OperationCanceledException();
                         string relative=file.Substring(root.TrimEnd(Path.DirectorySeparatorChar).Length).TrimStart(Path.DirectorySeparatorChar);
                         var item=new Item{Input=file,Relative=relative,Output=overwrite?file:Path.Combine(output,relative),Overwrite=overwrite,Status="Ready"};items.Add(item);
-                        try{Plan(item,profiles,encoding);}catch(Exception ex){item.Status="Skipped";item.Detail=ex.Message;}
+                        try{Plan(item,profiles,encoding,library);}catch(Exception ex){item.Status="Skipped";item.Detail=ex.Message;}
                     }
                 }catch(OperationCanceledException){throw;}catch(Exception ex){items.Add(new Item{Input=folder,Relative=folder,Status="Skipped",Detail="Cannot scan folder: "+ex.Message});}
             }
             return items;
         }
-        static void Plan(Item item,NpCalibrationSet profiles,Encoding encoding)
+        static void Plan(Item item,NpCalibrationSet profiles,Encoding encoding,NpCalibrationLibrary library=null)
         {
             if((File.GetAttributes(item.Input)&FileAttributes.ReparsePoint)!=0)throw new InvalidDataException("Linked files are not followed.");
             string[] folders=EvidenceFolders(item.Input).ToArray();
@@ -94,6 +100,7 @@ namespace USB512_interface
             if((!item.Overwrite&&(File.Exists(item.Output)||Directory.Exists(item.Output)||File.Exists(Path.ChangeExtension(item.Output,".xml"))))||
                 new[]{item.Output+".partial",item.Output+".calibration.json",item.Output+".calibration",item.Output+".source-metadata"}.Any(p=>File.Exists(p)||Directory.Exists(p)))throw new IOException("Output already exists; choose a fresh output folder.");
             string metadata=folders.Select(p=>Path.Combine(p,"recording_settings.json")).FirstOrDefault(File.Exists);
+            if(metadata==null)metadata=folders.Select(p=>Path.Combine(p,"probe_info.json")).FirstOrDefault(File.Exists);
             item.MetadataFolder=metadata==null?null:Path.GetDirectoryName(metadata);
             var doc=metadata==null?null:Read(metadata);var output=Part(doc,"output");var actual=Part(doc,"actual");
             if(Value(doc,"adc_calibration_file")!=null||True(Value(doc,"calibration_applied"))||
@@ -126,9 +133,13 @@ namespace USB512_interface
             item.Calibration=new NpCalibrationSet();
             foreach(int port in item.Ports){
                 Dictionary<string,object> probe=null;var list=Value(doc,"probes") as IEnumerable;
-                if(list!=null)probe=list.Cast<object>().OfType<Dictionary<string,object>>().FirstOrDefault(p=>Number(Value(p,"probe"))==port);
+                if(list!=null)probe=list.Cast<object>().OfType<Dictionary<string,object>>().FirstOrDefault(p=>Number(Value(p,"probe")??Value(p,"physical_port"))==port);
                 string serial=RecordedSerial(Part(probe,"identity"));NpAdcCalibration profile;
-                if(serial!=null){
+                if(serial!=null&&library!=null){
+                    string imro;profile=library.Recording(serial,probe,item.MetadataFolder,out imro,profiles.Get(port));
+                    if(imro!=null){item.Imros[port]=imro;item.ImroHashes[port]=NpCalibrationLibrary.Hash(imro);}
+                    notes.Add("P"+port+" SN "+serial+" · factory folder · "+(profile.Np2?"NP2 gain":imro==null?"AP/LFP gains":"recorded IMRO gains"));
+                }else if(serial!=null){
                     var matches=profiles.Ports.Select(profiles.Get).Where(p=>p.Serial==serial).ToArray();
                     if(matches.Length==0)throw new InvalidDataException("No loaded calibration matches probe "+port+" serial "+serial+".");
                     profile=matches.FirstOrDefault(p=>Object.ReferenceEquals(p,profiles.Get(port)))??matches[0];
@@ -201,6 +212,7 @@ namespace USB512_interface
                         // Re-plan immediately before writing: do not trust an old scan
                         // if provenance, metadata or an output changed in the meantime.
                         var check=new Item{Input=item.Input,Output=item.Output,Overwrite=overwrite};Plan(check,item.Calibration,item.Legacy?Encoding.LegacyUnsigned:Encoding.SignedNominal);
+                        foreach(var imro in item.Imros)if(NpCalibrationLibrary.Hash(imro.Value)!=item.ImroHashes[imro.Key])throw new IOException("Recorded IMRO changed after scan; scan again.");
                         if(!check.Ports.SequenceEqual(item.Ports)||check.Bytes!=item.Bytes)throw new IOException("Recording layout/size changed after scan; scan again.");
                         Directory.CreateDirectory(Path.GetDirectoryName(item.Output));
                         string target=item.Output;
@@ -236,6 +248,12 @@ namespace USB512_interface
             string receipt=target+".calibration.json";var document=Read(receipt);
             document["operation"]="batch_post_calibration";document["source_original_preserved"]=!item.Overwrite;
             document["source_recording_metadata"]=Path.GetFileName(item.Output)+".source-metadata";
+            if(item.Imros.Count!=0){
+                var mappings=new List<object>();foreach(var pair in item.Imros){string name="probe"+pair.Key+".imro",path=Path.Combine(target+".calibration",name);File.Copy(pair.Value,path,false);
+                    if(NpCalibrationLibrary.Hash(path)!=item.ImroHashes[pair.Key])throw new IOException("IMRO changed while archiving calibration provenance.");
+                    mappings.Add(new{physical_port=pair.Key,serial=item.Calibration.Get(pair.Key).Serial,file=name,sha256=item.ImroHashes[pair.Key]});}
+                document["probe_imros"]=mappings;
+            }
             File.WriteAllText(receipt,Json.Serialize(document)+Environment.NewLine,new UTF8Encoding(false));
             string manifest=Path.Combine(target+".calibration",NpCalibrationSet.ManifestName);document=Read(manifest);
             document["stage"]="batch_host_post_calibration";document["raw_preserved"]=!item.Overwrite;

@@ -957,7 +957,7 @@ namespace USB512_interface
                 if(selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) {
                     var calibration = NpCalibrationStore.Get(devicePath);
                     calibration.RequireModel(selectedDeviceKind==DeviceKind.NpV2,7);
-                    if(calibration.Count!=0){calibration.Save(runFolder);npRunCalibration=calibration;}
+                    if(calibration.Count!=0){calibration.Save(runFolder);NpCalibrationStore.SaveImros(devicePath,runFolder);npRunCalibration=calibration;}
                 }
                 if(selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) {
                     bool np2=selectedDeviceKind==DeviceKind.NpV2;

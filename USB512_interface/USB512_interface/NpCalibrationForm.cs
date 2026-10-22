@@ -14,13 +14,18 @@ namespace USB512_interface
     internal static class NpCalibrationStore
     {
         static readonly Dictionary<string, NpCalibrationSet> selections = new Dictionary<string, NpCalibrationSet>(StringComparer.OrdinalIgnoreCase);
+        static readonly Dictionary<string,Dictionary<int,byte[]>> imros=new Dictionary<string,Dictionary<int,byte[]>>(StringComparer.OrdinalIgnoreCase);
+        internal static string LibraryFolder {get{return Properties.Settings.Default.NpCalibrationFolder;}set{Properties.Settings.Default.NpCalibrationFolder=value;Properties.Settings.Default.Save();}}
         static string Key(string source) { if (String.IsNullOrWhiteSpace(source)) return "offline"; int at = source.LastIndexOf('#'); return at > 0 ? source.Substring(0, at) : source; }
         internal static NpCalibrationSet Get(string source) { NpCalibrationSet value; return selections.TryGetValue(Key(source), out value) ? value.Copy() : new NpCalibrationSet(); }
-        internal static void Set(string source, NpCalibrationSet value) { selections[Key(source)] = value.Copy(); }
-        internal static void Show(IWin32Window owner, string source, bool? np2 = null) { using (var form = new NpCalibrationForm(source, np2)) form.ShowDialog(owner); }
+        internal static void Set(string source, NpCalibrationSet value) { selections[Key(source)] = value.Copy();imros.Remove(Key(source)); }
+        internal static void SetImros(string source,Dictionary<int,byte[]> value){imros[Key(source)]=value.ToDictionary(p=>p.Key,p=>(byte[])p.Value.Clone());}
+        internal static void SaveImros(string source,string folder){Dictionary<int,byte[]> selected;if(!imros.TryGetValue(Key(source),out selected))return;
+            Directory.CreateDirectory(Path.Combine(folder,"calibration"));foreach(var pair in selected)File.WriteAllBytes(Path.Combine(folder,"calibration","probe"+pair.Key+".imro"),pair.Value);}
+        internal static void Show(IWin32Window owner, string source, bool? np2 = null,IDictionary<int,string> configurations=null) { using (var form = new NpCalibrationForm(source, np2,configurations)) form.ShowDialog(owner); }
     }
 
-    internal sealed class NpCalibrationForm : Form
+    internal sealed class NpCalibrationManualForm : Form
     {
         readonly string source; readonly bool? np2; readonly NpCalibrationSet calibration;
         readonly TableLayoutPanel layout;
@@ -32,7 +37,7 @@ namespace USB512_interface
         readonly Label status = new Label { Dock = DockStyle.Fill, AutoSize = true };
         readonly Button apply = new Button { Text = "Load for probe", AutoSize = true }, correct = new Button { Text = "Correct DAT…", AutoSize = true }, batch = new Button { Text = "Calibrate folders…", AutoSize = true }, close = new Button { Text = "Done", AutoSize = true };
         bool busy; volatile bool cancelled;
-        internal NpCalibrationForm(string source, bool? np2)
+        internal NpCalibrationManualForm(string source, bool? np2)
         {
             this.source = source; this.np2 = np2; calibration = NpCalibrationStore.Get(source);
             Text = "WILD-X — Calibration"; ClientSize = new Size(950, 430); MinimumSize = new Size(850, 430); StartPosition = FormStartPosition.CenterParent;

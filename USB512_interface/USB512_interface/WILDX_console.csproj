@@ -101,6 +101,8 @@
     <Compile Include="NpAudioPreview.cs" />
     <Compile Include="NpDiagnosticsForm.cs" />
     <Compile Include="NpCalibrationForm.cs" />
+    <Compile Include="NpCalibrationLibrary.cs" />
+    <Compile Include="NpCalibrationLibraryForm.cs" />
     <Compile Include="NpCalibrationBatch.cs" />
     <Compile Include="NpCalibrationBatchForm.cs" />
     <Compile Include="..\..\Neuropixels\V1Capture\Configuration\NpConfigClient.cs"><Link>NpConfigClient.cs</Link></Compile>
