@@ -77,12 +77,60 @@ static class NpCalibrationLibraryTests
         return library;
     }
     static void Wait(Task task){while(!task.IsCompleted){Application.DoEvents();System.Threading.Thread.Sleep(10);}task.GetAwaiter().GetResult();}
+    static void Idle(Form form){var watch=System.Diagnostics.Stopwatch.StartNew();while((bool)Field(form,"busy")){if(watch.ElapsedMilliseconds>10000)throw new Exception("GUI did not finish matching");Application.DoEvents();System.Threading.Thread.Sleep(10);}}
+    static void MissingProbes(object library)
+    {
+        var np1=((IEnumerable)Call(library,"ListProbes",false)).Cast<object>().ToArray();var np2=((IEnumerable)Call(library,"ListProbes",true)).Cast<object>().ToArray();
+        Need(np1.Length==1&&np2.Length==4&&(string)Field(np1[0],"Serial")=="9001","V1/V2 factory list filter failed");
+        Need(((string)Field(np1[0],"Files")).Contains("renamed-adc.csv")&&((string)Field(np1[0],"Files")).Contains("renamed-gain.csv"),"Probe list omitted factory file pair");
+        string input=Path.Combine(root,"choices"),output=Path.Combine(root,"choices-calibrated");
+        Recording(Path.Combine(input,"legacy_a"),null,true);Recording(Path.Combine(input,"legacy_b"),null,true);Recording(Path.Combine(input,"legacy_np1"),null,false,500,true);Recording(Path.Combine(input,"known"),"1004",true);
+        File.Copy(Path.Combine(input,"legacy_np1/np1_ap.dat"),Path.Combine(input,"legacy_np1/np1_lfp.dat"));
+        string merged=Path.Combine(input,"merged");Recording(merged,null,true);File.Delete(Path.Combine(merged,"np1_ap.dat"));
+        Write(Path.Combine(merged,"recording_settings.json"),Json.Serialize(new{actual=new{probe_mask=5},output=new{dat_layout="merged",channel_order="ascending physical probe; contiguous 384-channel blocks",channel_count_per_dat=768,lfp_sample_rate=new{present=false}},probes=new[]{new{probe=1,identity=new{serial=(string)null}},new{probe=3,identity=new{serial=(string)null}}}}));
+        using(var file=new BinaryWriter(File.Create(Path.Combine(merged,"neuropixels_ap.dat"))))for(int n=0;n<1536;n++)file.Write((short)100);
+        var metadata=Directory.GetFiles(input,"*.json",SearchOption.AllDirectories).ToDictionary(p=>p,p=>File.ReadAllText(p));
+        var global=new NpCalibrationSet();global.Set(1,Resolve(library,"1004"));var format=Enum.ToObject(T("NpCalibrationBatch+Encoding"),0);
+        var items=(IList)Call(T("NpCalibrationBatch"),"ScanLibrary",input,output,global,library,format,(Func<bool>)(()=>false),null,false);
+        Need(items.Cast<object>().Count(p=>(string)Field(p,"Status")=="Ready")==1,"Global per-port choice silently applied to unrelated missing-SN recordings");
+        var missing=((IEnumerable)Call(T("NpCalibrationBatch"),"MissingSelections",items)).Cast<object>().ToArray();Need(missing.Length==5,"AP/LFP prompts not deduplicated or merged ports lost");
+        foreach(var request in missing){string folder=(string)Field(request,"Recording");int port=(int)Field(request,"Port");bool v2=(bool)Field(request,"Np2");
+            string serial=folder.EndsWith("legacy_a")?"1001":folder.EndsWith("legacy_b")?"1002":folder.EndsWith("legacy_np1")?"9001":port==1?"1003":"1004";
+            if(!v2)Refuse(()=>Call(T("NpCalibrationBatch"),"Assign",items,request,Resolve(library,"1001"),null),"Model conflict accepted for missing SN");
+            var args=new object[]{serial,Field(request,"Probe"),Field(request,"MetadataFolder"),null,null,null};
+            var profile=(NpAdcCalibration)Call(library,"SelectRecording",args);
+            string imro=!v2?Path.Combine(folder,"probe_1.imro"):null;Call(T("NpCalibrationBatch"),"Assign",items,request,profile,imro);
+        }
+        Call(T("NpCalibrationBatch"),"ResolveSelections",items,global,library,format);
+        Need(items.Cast<object>().All(p=>(string)Field(p,"Status")=="Ready"),"Explicit missing-SN choices did not resolve all files");
+        var a=items.Cast<object>().Single(p=>((string)Field(p,"Input")).Contains("legacy_a"));var b=items.Cast<object>().Single(p=>((string)Field(p,"Input")).Contains("legacy_b"));
+        Need(((NpCalibrationSet)Field(a,"Calibration")).Get(1).Serial=="1001"&&((NpCalibrationSet)Field(b,"Calibration")).Get(1).Serial=="1002","Recording-scoped choices leaked across sessions");
+        Call(T("NpCalibrationBatch"),"Run",items,output,(Func<bool>)(()=>false),null,false);Need(items.Cast<object>().All(p=>(string)Field(p,"Status")=="Complete"),"Selected-probe calibration failed during revalidation");
+        foreach(var item in items){string receipt=File.ReadAllText((string)Field(item,"Output")+".calibration.json");bool known=((string)Field(item,"Input")).Contains("known");Need(known?!receipt.Contains("user_selected_missing_serial"):receipt.Contains("user_selected_missing_serial"),"Assignment provenance missing or measured identity overwritten");}
+        foreach(var pair in metadata)Need(File.ReadAllText(pair.Key)==pair.Value,"Missing-SN choice rewrote original recording metadata");
+        using(var picker=(Form)Activator.CreateInstance(T("NpCalibrationProbePicker"),All,null,new object[]{library,true,"legacy_a · P1",null,null,null},null)){
+            var grid=(DataGridView)Field(picker,"files");Need(grid.Rows.Count==4&&grid.SelectedRows.Count==0,"Picker silently selected a default or showed wrong probe model");
+            picker.ShowInTaskbar=false;picker.StartPosition=FormStartPosition.Manual;picker.Location=new Point(-20000,-20000);picker.Show();Application.DoEvents();
+            Need(!((ComboBox)Field(picker,"model")).Enabled,"Known recorder model filter can be changed to an incompatible type");
+            grid.Rows[1].Selected=true;Wait((Task)Call(picker,"SelectProbe"));
+            Need(picker.DialogResult==DialogResult.OK&&((NpAdcCalibration)picker.GetType().GetProperty("Profile",All).GetValue(picker,null)).Serial=="1002","Probe picker did not return explicit selected factory SN");
+        }
+        using(var picker=(Form)Activator.CreateInstance(T("NpCalibrationProbePicker"),All,null,new object[]{library,null,"legacy · P1",null,null,null},null)){
+            picker.ShowInTaskbar=false;picker.StartPosition=FormStartPosition.Manual;picker.Location=new Point(-20000,-20000);picker.Show();Application.DoEvents();
+            Need(((DataGridView)Field(picker,"files")).SelectedRows.Count==0,"Opening picker selected a default probe");
+            var filter=(ComboBox)Field(picker,"model");filter.SelectedIndex=1;var grid=(DataGridView)Field(picker,"files");Need(grid.Rows.Count==1,"Unknown-model picker V1 filter failed");
+            filter.SelectedIndex=2;Need(grid.Rows.Count==4,"Unknown-model picker V2 filter failed");
+            picker.ClientSize=new Size(760,460);using(var bitmap=new Bitmap(picker.Width,picker.Height)){picker.DrawToBitmap(bitmap,new Rectangle(Point.Empty,bitmap.Size));bitmap.Save(Path.Combine(root,"missing-probe-picker.png"));}
+            picker.DialogResult=DialogResult.Cancel;Need(picker.GetType().GetProperty("Profile",All).GetValue(picker,null)==null,"Skipping picker assigned a probe");
+        }
+    }
     static void Ui(object library)
     {
         using(var form=(Form)Activator.CreateInstance(T("NpCalibrationForm"),All,null,new object[]{"library-test",null,null},null)){
             var events=(System.ComponentModel.EventHandlerList)typeof(System.ComponentModel.Component).GetProperty("Events",All).GetValue(form,null);object key=typeof(Form).GetField("EVENT_SHOWN",All).GetValue(null);if(events[key]!=null)events.RemoveHandler(key,events[key]);
             ((TextBox)Field(form,"folder")).Text=factory;Set(form,"library",library);Call(form,"SetBusy",false);var serials=(ComboBox[])Field(form,"serials");var imros=(TextBox[])Field(form,"imros");
-            imros[0].Text=Path.Combine(root,"recordings/np1_500/probe_1.imro");serials[0].Text="9001";serials[1].Text="1002";
+            var model=(ComboBox)Field(form,"model");model.SelectedIndex=1;Need(serials.All(p=>p.Items.Count==1),"Calibration page did not filter NP1 files");model.SelectedIndex=2;Need(serials.All(p=>p.Items.Count==4),"Calibration page did not filter NP2 files");model.SelectedIndex=0;
+            imros[0].Text=Path.Combine(root,"recordings/np1_500/probe_1.imro");serials[0].Text="9001";Idle(form);serials[1].Text="1002";Idle(form);
             Wait((Task)Call(form,"Match",0));Wait((Task)Call(form,"Match",1));Wait((Task)Call(form,"Apply"));
             var selected=(NpCalibrationSet)Call(T("NpCalibrationStore"),"Get","library-test");Need(selected.Count==2&&selected.Get(1).Serial=="9001"&&selected.Get(2).Serial=="1002","Simplified GUI did not apply SN/IMRO-matched profiles");
             string saved=Path.Combine(root,"live_metadata");Directory.CreateDirectory(saved);Call(T("NpCalibrationStore"),"SaveImros","library-test",saved);Need(File.Exists(Path.Combine(saved,"calibration/probe1.imro")),"Live calibration IMRO snapshot not retained");
@@ -96,8 +144,20 @@ static class NpCalibrationLibraryTests
     {
         var before=Directory.GetFiles(path,"*.csv",SearchOption.AllDirectories).ToDictionary(p=>p,p=>(string)Call(T("NpCalibrationLibrary"),"Hash",p));
         object library=Scan(path);var serials=((IEnumerable)library.GetType().GetProperty("Serials",All).GetValue(library,null)).Cast<string>().ToArray();Need(serials.Length==27,"Unexpected real factory serial count");
+        Need(((IEnumerable)Call(library,"ListProbes",false)).Cast<object>().Count()==12&&((IEnumerable)Call(library,"ListProbes",true)).Cast<object>().Count()==15,"Real factory model filters failed");
         int np1=0,np2=0;foreach(string serial in serials){NpAdcCalibration profile;try{profile=Resolve(library,serial);np2++;}catch(InvalidDataException){profile=Resolve(library,serial,Mapping(serial));np1++;}Need(profile.Serial==serial,"Real factory lookup returned another probe");Need(profile.Np2||profile.DigitalAdc,"Real NP1 ADC pair not found");}
         foreach(var pair in before)Need((string)Call(T("NpCalibrationLibrary"),"Hash",pair.Key)==pair.Value,"User factory file changed");Console.WriteLine("Real factory folder: "+serials.Length+" serials (NP1 "+np1+", NP2 "+np2+"); "+before.Count+" CSVs read-only.");
     }
-    [STAThread]static int Main(string[] args){try{Application.EnableVisualStyles();Control.CheckForIllegalCrossThreadCalls=true;app=Assembly.LoadFrom(Path.GetFullPath(args[0]));root=Path.GetFullPath(args[1]);Directory.CreateDirectory(root);var library=Fixtures();Ui(library);if(args.Length>2)Real(args[2]);Console.WriteLine("PASS "+checks+" calibration folder/SN/IMRO/recursive/UI checks; no hardware or source data writes.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
+    [STAThread]static int Main(string[] args)
+    {
+        int result=0;
+        try{
+            Application.EnableVisualStyles();Control.CheckForIllegalCrossThreadCalls=true;app=Assembly.LoadFrom(Path.GetFullPath(args[0]));root=Path.GetFullPath(args[1]);Directory.CreateDirectory(root);var library=Fixtures();
+            using(var runner=new Form{ShowInTaskbar=false,StartPosition=FormStartPosition.Manual,Location=new Point(-20000,-20000)}){
+                runner.Shown+=delegate{runner.BeginInvoke(new Action(()=>{try{MissingProbes(library);Ui(library);if(args.Length>2)Real(args[2]);Console.WriteLine("PASS "+checks+" calibration folder/SN/IMRO/recursive/UI checks; no hardware or source data writes.");}catch(Exception ex){Console.Error.WriteLine(ex);result=1;}finally{runner.Close();}}));};
+                Application.Run(runner);
+            }
+        }catch(Exception ex){Console.Error.WriteLine(ex);result=1;}
+        return result;
+    }
 }

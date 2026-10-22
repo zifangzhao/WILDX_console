@@ -15,6 +15,7 @@ namespace USB512_interface
     {
         sealed class FactoryFile { internal string Path,Hash;internal int Columns; }
         internal sealed class Mapping { internal bool Np2;internal int ApGain,LfpGain;internal string Serial,File,Hash; }
+        internal sealed class ProbeFile { internal string Serial,Files;internal bool Np2; }
         readonly Dictionary<string,List<FactoryFile>> files=new Dictionary<string,List<FactoryFile>>();
         readonly Dictionary<string,NpAdcCalibration> profiles=new Dictionary<string,NpAdcCalibration>();
         readonly Dictionary<string,Mapping> maps=new Dictionary<string,Mapping>(StringComparer.OrdinalIgnoreCase);
@@ -22,6 +23,12 @@ namespace USB512_interface
         internal string Folder {get;private set;}
         internal IEnumerable<string> Serials {get{return files.Where(p=>p.Value.Any(f=>f.Columns==2||f.Columns==17)).Select(p=>p.Key).OrderBy(p=>p,StringComparer.Ordinal);}}
         internal int Count {get{return Serials.Count();}}
+        internal ProbeFile[] ListProbes(bool? np2)
+        {
+            return files.OrderBy(p=>p.Key,StringComparer.Ordinal).SelectMany(p=>p.Value.Where(f=>f.Columns==2||f.Columns==17).Select(f=>f.Columns==2).Distinct()
+                .Where(model=>!np2.HasValue||model==np2.Value).Select(model=>new ProbeFile{Serial=p.Key,Np2=model,
+                    Files=String.Join("; ",p.Value.Where(f=>model?f.Columns==2:f.Columns==17||f.Columns==9).Select(f=>f.Path.Substring(Folder.TrimEnd(Path.DirectorySeparatorChar).Length+1)))})).ToArray();
+        }
         static readonly JavaScriptSerializer Json=new JavaScriptSerializer{MaxJsonLength=4*1024*1024};
         static readonly int[] Gains={50,125,250,500,1000,1500,2000,3000};
         internal static string Serial(object value)
@@ -32,6 +39,11 @@ namespace USB512_interface
             return serial.ToString(CultureInfo.InvariantCulture);
         }
         internal static object Value(IDictionary<string,object> doc,string key){object value;return doc!=null&&doc.TryGetValue(key,out value)?value:null;}
+        internal static bool? ModelHint(Dictionary<string,object> probe)
+        {
+            var identity=Value(probe,"identity") as Dictionary<string,object>;string model=(Value(identity,"model") as string??"").ToUpperInvariant();
+            if(model.Contains("NP2")||model.Contains("2.0"))return true;if(model.Contains("NP1")||model.Contains("1.0")||model.Contains("NRIC"))return false;return null;
+        }
         internal static string Hash(string path){using(var stream=File.OpenRead(path))using(var hash=SHA256.Create())return BitConverter.ToString(hash.ComputeHash(stream)).Replace("-","");}
         internal static NpCalibrationLibrary Scan(string folder,Func<bool> cancelled=null)
         {
@@ -125,6 +137,16 @@ namespace USB512_interface
             }
             if(mapping==null&&fallback!=null&&fallback.Serial==serial)mapping=new Mapping{Np2=fallback.Np2,ApGain=fallback.ApGain,LfpGain=fallback.LfpGain};
             return Resolve(serial,mapping);
+        }
+        internal NpAdcCalibration SelectRecording(string serial,Dictionary<string,object> probe,string metadataFolder,string selectedImro,NpAdcCalibration fallback,out string imro)
+        {
+            var selected=String.IsNullOrWhiteSpace(selectedImro)?null:Resolve(serial,ReadMapping(selectedImro));
+            var profile=Recording(serial,probe,metadataFolder,out imro,selected??fallback);
+            if(selected!=null){
+                if(selected.Np2!=profile.Np2||selected.ApGain!=profile.ApGain||selected.LfpGain!=profile.LfpGain)throw new InvalidDataException("Selected IMRO conflicts with the recorded acquisition gains.");
+                imro=Path.GetFullPath(selectedImro);
+            }
+            return profile;
         }
     }
 }

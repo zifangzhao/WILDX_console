@@ -71,6 +71,14 @@ namespace USB512_interface
                 string from=source.Text.Trim().Trim('"'),to=overwrite.Checked?from:output.Text.Trim().Trim('"');if(from.Length==0||to.Length==0)throw new IOException("Enter source and output folders.");
                 var format=(NpCalibrationBatch.Encoding)encoding.SelectedIndex;var ui=new Progress<string>(message=>status.Text=message);
                 bool replace=overwrite.Checked;items=await Task.Run(()=>library==null?NpCalibrationBatch.Scan(from,to,profiles,format,()=>cancelled,message=>((IProgress<string>)ui).Report(message),replace):NpCalibrationBatch.ScanLibrary(from,to,profiles,library,format,()=>cancelled,message=>((IProgress<string>)ui).Report(message),replace));
+                if(library!=null){
+                    foreach(var missing in NpCalibrationBatch.MissingSelections(items)){
+                        if(cancelled)throw new OperationCanceledException();
+                        using(var picker=new NpCalibrationProbePicker(library,missing.Np2,missing.Recording+" · P"+missing.Port,missing.Probe,missing.MetadataFolder,profiles.Get(missing.Port)))
+                            if(picker.ShowDialog(this)==DialogResult.OK)NpCalibrationBatch.Assign(items,missing,picker.Profile,picker.Imro);
+                    }
+                    await Task.Run(()=>NpCalibrationBatch.ResolveSelections(items,profiles,library,format));
+                }
                 files.Rows.Clear();rows.Clear();foreach(var item in items){int index=files.Rows.Add(item.Relative,item.Output==null?"":item.Lfp?"LFP":"AP",item.Ports==null?"":String.Join(",",item.Ports),item.Status,item.Detail);rows.Add(item,files.Rows[index]);}
                 status.Text=items.Count(p=>p.Ready)+" ready · "+items.Count(p=>!p.Ready)+" skipped. "+(replace?"Original DATs will be replaced after successful calibration.":"Output mirrors the source subfolders.");
             }catch(OperationCanceledException){status.Text="Scan cancelled.";items.Clear();}catch(Exception ex){status.Text=ex.Message;items.Clear();}

@@ -1,0 +1,1 @@
+Exact GUI84 compiler inputs based on published82. V1/V2 filtered factory probe lists and recording-scoped missing-SN selection; SDK/firmware/helpers unchanged. Resources and other dependencies reuse checked caches. See ../../Note/PROBE_CALIBRATION_PICKER_20261022.md for validation and limits.

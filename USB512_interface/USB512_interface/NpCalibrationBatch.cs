@@ -14,6 +14,13 @@ namespace USB512_interface
     internal static class NpCalibrationBatch
     {
         internal enum Encoding { Auto, SignedNominal, LegacyUnsigned }
+        internal sealed class MissingProbe
+        {
+            internal string Recording,MetadataFolder;internal int Port;internal bool? Np2;internal Dictionary<string,object> Probe;
+            internal string Key {get{return Path.GetFullPath(Recording).TrimEnd(Path.DirectorySeparatorChar)+"|"+Port;}}
+        }
+        internal sealed class Selection {internal NpAdcCalibration Profile;internal string Imro,ImroHash;}
+        sealed class MissingSerial:IOException {internal MissingSerial():base("Probe SN unavailable; select a factory probe for this recording."){} }
         internal sealed class Item
         {
             internal string Input,Output,Relative,Status,Detail,MetadataFolder;
@@ -23,6 +30,8 @@ namespace USB512_interface
             internal long Bytes;
             internal NpCalibrationSet Calibration;
             internal readonly Dictionary<int,string> Imros=new Dictionary<int,string>(),ImroHashes=new Dictionary<int,string>();
+            internal readonly List<MissingProbe> Missing=new List<MissingProbe>();
+            internal readonly Dictionary<int,Selection> Selections=new Dictionary<int,Selection>();
             internal bool Ready { get { return Status=="Ready"; } }
         }
         internal sealed class Progress
@@ -85,7 +94,7 @@ namespace USB512_interface
                         if(cancelled!=null&&cancelled())throw new OperationCanceledException();
                         string relative=file.Substring(root.TrimEnd(Path.DirectorySeparatorChar).Length).TrimStart(Path.DirectorySeparatorChar);
                         var item=new Item{Input=file,Relative=relative,Output=overwrite?file:Path.Combine(output,relative),Overwrite=overwrite,Status="Ready"};items.Add(item);
-                        try{Plan(item,profiles,encoding,library);}catch(Exception ex){item.Status="Skipped";item.Detail=ex.Message;}
+                        try{Plan(item,profiles,encoding,library);}catch(Exception ex){item.Status=ex is MissingSerial?"Select probe":"Skipped";item.Detail=ex.Message;}
                     }
                 }catch(OperationCanceledException){throw;}catch(Exception ex){items.Add(new Item{Input=folder,Relative=folder,Status="Skipped",Detail="Cannot scan folder: "+ex.Message});}
             }
@@ -93,6 +102,7 @@ namespace USB512_interface
         }
         static void Plan(Item item,NpCalibrationSet profiles,Encoding encoding,NpCalibrationLibrary library=null)
         {
+            item.Missing.Clear();item.Imros.Clear();item.ImroHashes.Clear();
             if((File.GetAttributes(item.Input)&FileAttributes.ReparsePoint)!=0)throw new InvalidDataException("Linked files are not followed.");
             string[] folders=EvidenceFolders(item.Input).ToArray();
             if(File.Exists(item.Input+".post-calibration.pending.json"))throw new InvalidDataException("An interrupted overwrite needs review; see the pending marker and batch report.");
@@ -129,7 +139,7 @@ namespace USB512_interface
             if(Value(actual,"probe_mask")!=null){int mask=Number(Value(actual,"probe_mask"));Mask(mask);if(item.Ports.Any(p=>(mask&(1<<(p-1)))==0))throw new InvalidDataException("File probe identity conflicts with the recorded probe mask.");}
             if(generic.Success&&item.Ports.Length>1&&Value(output,"channel_count_per_dat")!=null&&Number(Value(output,"channel_count_per_dat"))!=item.Ports.Length*384)throw new InvalidDataException("Recorded merged channel count conflicts with probe order.");
             if(!item.Lfp&&True(Value(output,"ap_upsampled_15_to_20")))throw new InvalidDataException("AP was resampled; post-calibration cannot reproduce correction before resampling.");
-            bool? np2=null;var lfp=Part(output,"lfp_sample_rate");if(Value(lfp,"present") is bool)np2=!(bool)Value(lfp,"present");
+            bool? np2=item.Lfp?(bool?)false:null;var lfp=Part(output,"lfp_sample_rate");if(Value(lfp,"present") is bool)np2=!(bool)Value(lfp,"present");
             item.Calibration=new NpCalibrationSet();
             foreach(int port in item.Ports){
                 Dictionary<string,object> probe=null;var list=Value(doc,"probes") as IEnumerable;
@@ -145,15 +155,38 @@ namespace USB512_interface
                     profile=matches.FirstOrDefault(p=>Object.ReferenceEquals(p,profiles.Get(port)))??matches[0];
                     if(matches.Any(p=>p.ApGain!=profile.ApGain||p.LfpGain!=profile.LfpGain||p.GainHash!=profile.GainHash||p.AdcHash!=profile.AdcHash))throw new InvalidDataException("Multiple loaded profiles for serial "+serial+" have different correction settings.");
                     notes.Add("P"+port+" SN "+serial+" matched");
+                }else if(library!=null){
+                    Selection selection;if(!item.Selections.TryGetValue(port,out selection)){
+                        item.Missing.Add(new MissingProbe{Recording=item.MetadataFolder??Path.GetDirectoryName(item.Input),MetadataFolder=item.MetadataFolder,Port=port,Np2=np2??NpCalibrationLibrary.ModelHint(probe),Probe=probe});continue;
+                    }
+                    profile=selection.Profile;
+                    if(selection.Imro!=null){if(NpCalibrationLibrary.Hash(selection.Imro)!=selection.ImroHash)throw new IOException("Selected IMRO changed; select it again.");item.Imros[port]=selection.Imro;item.ImroHashes[port]=selection.ImroHash;}
+                    notes.Add("P"+port+" SN "+profile.Serial+" user selected for this recording; recorded serial unavailable");
                 }else{profile=profiles.Get(port);if(profile==null)throw new InvalidDataException("Load calibration for physical probe "+port+"; recorded serial unavailable.");notes.Add("P"+port+" SN "+profile.Serial+" manual assignment; recorded serial unavailable");}
                 if(np2.HasValue&&profile.Np2!=np2.Value||item.Lfp&&profile.Np2)throw new InvalidDataException("Calibration model does not match the recording/band.");
                 CheckGain(probe,profile,item.Lfp);item.Calibration.Set(port,profile);
             }
+            if(item.Missing.Count!=0)throw new MissingSerial();
             CheckMissingRows(item,folders);
             item.Legacy=SourceEncoding(item.Input,folders,encoding,notes);
             item.Bytes=new FileInfo(item.Input).Length;
             if(item.Bytes==0||item.Bytes%(item.Ports.Length*768)!=0)throw new InvalidDataException("Empty DAT or incomplete channel row.");
             item.Detail=String.Join("; ",notes);
+        }
+        internal static MissingProbe[] MissingSelections(IEnumerable<Item> items)
+        {
+            return items.Where(p=>p.Status=="Select probe").SelectMany(p=>p.Missing).GroupBy(p=>p.Key,StringComparer.OrdinalIgnoreCase)
+                .Select(g=>g.FirstOrDefault(p=>p.Np2.HasValue)??g.First()).ToArray();
+        }
+        internal static void Assign(IEnumerable<Item> items,MissingProbe missing,NpAdcCalibration profile,string imro)
+        {
+            if(missing.Np2.HasValue&&missing.Np2.Value!=profile.Np2)throw new InvalidDataException("Calibration model does not match the recording.");
+            string hash=imro==null?null:NpCalibrationLibrary.Hash(imro);
+            foreach(var item in items.Where(p=>p.Missing.Any(m=>String.Equals(m.Key,missing.Key,StringComparison.OrdinalIgnoreCase))))item.Selections[missing.Port]=new Selection{Profile=profile,Imro=imro,ImroHash=hash};
+        }
+        internal static void ResolveSelections(IEnumerable<Item> items,NpCalibrationSet profiles,NpCalibrationLibrary library,Encoding encoding)
+        {
+            foreach(var item in items.Where(p=>p.Status=="Select probe"))try{Plan(item,profiles,encoding,library);item.Status="Ready";}catch(Exception ex){item.Status=ex is MissingSerial?"Select probe":"Skipped";item.Detail=ex.Message;}
         }
         static string RecordedSerial(Dictionary<string,object> identity)
         {
@@ -248,6 +281,7 @@ namespace USB512_interface
             string receipt=target+".calibration.json";var document=Read(receipt);
             document["operation"]="batch_post_calibration";document["source_original_preserved"]=!item.Overwrite;
             document["source_recording_metadata"]=Path.GetFileName(item.Output)+".source-metadata";
+            if(item.Selections.Count!=0)document["probe_assignments"]=item.Selections.Select(p=>new{physical_port=p.Key,serial=p.Value.Profile.Serial,model=p.Value.Profile.Model,source="user_selected_missing_serial",recorded_serial_available=false}).ToArray();
             if(item.Imros.Count!=0){
                 var mappings=new List<object>();foreach(var pair in item.Imros){string name="probe"+pair.Key+".imro",path=Path.Combine(target+".calibration",name);File.Copy(pair.Value,path,false);
                     if(NpCalibrationLibrary.Hash(path)!=item.ImroHashes[pair.Key])throw new IOException("IMRO changed while archiving calibration provenance.");
