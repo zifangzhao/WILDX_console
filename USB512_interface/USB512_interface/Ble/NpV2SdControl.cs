@@ -75,6 +75,14 @@ namespace CE32_console {
   }
   internal static bool NeedsRecovery(NpSdStatus s){return s!=null&&(s.Flags&131072)!=0;}
   internal static bool IsFull(NpSdStatus s){return s!=null&&(s.Flags&65536)!=0;}
+  internal static string StartStorageError(NpSdStatus s){
+   string full=IsFull(s)?"No unreserved SD space remains. An incomplete recording may still reserve unused space; recorded size can be smaller than its allocation. ":"";
+   if(NeedsRecovery(s))return full+(CanRecover(s)?
+    "The SD catalog needs recovery. Use Recover interrupted catalog; recovery preserves recorded data but may retain its full allocation.":
+    "The SD catalog needs recovery, which this device state or firmware cannot currently perform. Download existing recordings before further storage maintenance.");
+   if(IsFull(s))return full+"Existing recordings are preserved. Recover does not release a finalized incomplete allocation on this firmware. Download data before deleting recordings or formatting.";
+   return "The SD catalog is not ready for another recording. Read status and save the BLE report before further storage maintenance.";
+  }
   internal static bool CanQuarantine(NpSdStatus s){return NeedsRecovery(s)&&(s.Flags&524288)!=0;}
   internal static bool CanRecover(NpSdStatus s){return CanPrepareStorage(s)&&!RecoveryRequiresUpgrade(s)&&(s.Flags&32768)!=0&&(s.Flags&(262144|524288))!=0;}
   internal static string RecoveryAction(NpSdStatus s){return CanQuarantine(s)?"Preserve interrupted allocation (keeps all data)":"Recover saved recording end (keeps data)";}
@@ -96,6 +104,7 @@ namespace CE32_console {
    return "WILD-X V2 — "+state+"\r\n"+ProbePrefix(s.Mask)+", "+s.Hz.ToString("N0")+" samples/s"+
     (s.Fault==0?"":"\r\nRecording error: fault "+s.Fault+". Saved data may be incomplete.")+
     (s.Error==0?"":"\r\nDevice command failed: error "+s.Error)+
+    ((s.Operation==2 && s.Error==8) || StopAlreadySatisfied(s) && (IsFull(s)||NeedsRecovery(s))?"\r\n"+StartStorageError(s):"")+
     (HasOverwriteOffer(s)?"\r\nRecording boundary unknown — Overwrite from last known position… requires confirmation.":
      (s.Flags&CatalogDegraded)!=0?"\r\nSD catalog degraded — some recordings may be incomplete.":"")+
     ((s.Flags&8)!=0?"\r\nCommand queued — not yet confirmed running/stopped.":"")+

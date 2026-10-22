@@ -34,6 +34,7 @@ namespace USB512_interface
         readonly ComboBox apGain = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 100 }, lfpGain = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 100 };
         readonly ComboBox encoding = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 220 }, band = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 70 };
         readonly TextBox order = new TextBox { Text = "1", Width = 85 };
+        readonly CheckBox keepBackup = new CheckBox { Name = "calibrationSingleKeepBackup", Text = "Keep original backup (.dat.bak)", Checked = true, AutoSize = true };
         readonly Label status = new Label { Dock = DockStyle.Fill, AutoSize = true };
         readonly Button apply = new Button { Text = "Load for probe", AutoSize = true }, correct = new Button { Text = "Correct DAT…", AutoSize = true }, batch = new Button { Text = "Calibrate folders…", AutoSize = true }, close = new Button { Text = "Done", AutoSize = true };
         bool busy; volatile bool cancelled;
@@ -51,7 +52,7 @@ namespace USB512_interface
             Row(layout, 2, "Gain CSV", FileRow(gain)); Row(layout, 3, "ADC CSV (NP1)", FileRow(adc));
             var gains = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; gains.Controls.AddRange(new Control[] { new Label { Text = "NP1 AP gain", AutoSize = true }, apGain, new Label { Text = "LFP gain", AutoSize = true }, lfpGain }); Row(layout, 4, "Acquired gains", gains);
             var actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; var clear = new Button { Text = "Clear probe", AutoSize = true }; actions.Controls.AddRange(new Control[] { apply, clear, close }); Row(layout, 5, "", actions);
-            var offline = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; offline.Controls.AddRange(new Control[] { correct, batch, encoding, band, new Label { Text = "Probe order", AutoSize = true }, order }); Row(layout, 6, "Offline", offline);
+            var offline = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; offline.Controls.AddRange(new Control[] { correct, batch, encoding, band, new Label { Text = "Probe order", AutoSize = true }, order, keepBackup }); Row(layout, 6, "Offline", offline);
             Row(layout, 7, "", status); Controls.Add(layout); WildXTheme.Apply(this); WildXTheme.Button(apply, true); WildXTheme.Button(correct, true);
             port.SelectedIndexChanged += delegate { SelectPort(); };
             apply.Click += delegate { try { LoadProfile(); } catch (Exception ex) { status.Text = ex.Message; } };
@@ -89,34 +90,25 @@ namespace USB512_interface
         }
         async Task CorrectDat() {
             if (busy) return;
-            string input, output;
+            string input;
             using (var file = new OpenFileDialog { Filter = "Neuropixels DAT|*.dat" }) { if (file.ShowDialog(this) != DialogResult.OK) return; input = file.FileName; }
-            using (var file = new SaveFileDialog { Filter = "Corrected DAT|*.dat", FileName = Path.GetFileNameWithoutExtension(input) + ".calibrated.dat" }) { if (file.ShowDialog(this) != DialogResult.OK) return; output = file.FileName; }
-            try{await CorrectFile(input,output,order.Text.Split(',').Select(s=>Int32.Parse(s.Trim())).ToArray(),band.SelectedIndex==1,encoding.SelectedIndex==1);}
+            try{await CorrectFile(input,order.Text.Split(',').Select(s=>Int32.Parse(s.Trim())).ToArray(),band.SelectedIndex==1,encoding.SelectedIndex==1);}
             catch(Exception ex){status.Text=ex.Message;}
         }
-        async Task CorrectFile(string input,string output,int[] ports,bool lfp,bool legacy)
+        async Task CorrectFile(string input,int[] ports,bool lfp,bool legacy)
         {
             if(busy)return;var estimate=new NpProgressEstimate();
             try {
-                busy = true; cancelled = false; apply.Enabled = correct.Enabled = batch.Enabled = port.Enabled = false; close.Text = "Cancel"; status.Text = "Correcting DAT · "+estimate.Percent(0);
+                busy = true; cancelled = false; apply.Enabled = correct.Enabled = batch.Enabled = port.Enabled = keepBackup.Enabled = false; close.Text = "Cancel"; status.Text = "Correcting DAT · "+estimate.Percent(0);
                 var snapshot = calibration.Copy();
                 var ui=new Progress<Tuple<int,string>>(p=>status.Text=p.Item2);
-                if(Directory.Exists(output+".source-metadata") || File.Exists(output+".source-metadata"))throw new IOException("Choose a fresh output and source-metadata destination.");
-                await Task.Run(() => {
-                    long total=new FileInfo(input).Length;var update=System.Diagnostics.Stopwatch.StartNew();
-                    NpCalibrationDat.Correct(input, output, snapshot, ports, lfp, legacy, () => {
-                        if(update.ElapsedMilliseconds>=250){update.Restart();var partial=new FileInfo(output+".partial");long done=partial.Exists?Math.Min(total,partial.Length):0;
-                            ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(total<=0?0:(int)(done*100.0/total),"Correcting DAT: "+(total<=0?0:(int)(done*100.0/total))+"% · "+estimate.Describe(done,total)));}
-                        return cancelled;
-                    });
-                    ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(100,"Saving calibration metadata · "+estimate.Percent(100)));
-                    NpRecordingSettings.CopySourceMetadata(input,output);
-                });
-                status.Text = "Corrected DAT saved · "+estimate.Elapsed+": " + output;
+                bool backup=keepBackup.Checked;
+                await Task.Run(() => NpCalibrationBatch.CorrectSingle(input,snapshot,ports,lfp,legacy,backup,()=>cancelled,(done,total)=>
+                    ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(total<=0?0:(int)(done*100.0/total),"Correcting DAT: "+(total<=0?0:(int)(done*100.0/total))+"% · "+estimate.Describe(done,total)))));
+                status.Text = "Corrected DAT saved · "+estimate.Elapsed+": " + input+(backup?" · Original: "+input+".bak":"");
             } catch (OperationCanceledException) { status.Text="Calibration cancelled · "+estimate.Elapsed+". Partial output retained.";
             } catch (Exception ex) { status.Text = ex.Message; }
-            finally { busy = false; apply.Enabled = correct.Enabled = port.Enabled = true; batch.Enabled=calibration.Count!=0; close.Text = "Done"; }
+            finally { busy = false; apply.Enabled = correct.Enabled = port.Enabled = keepBackup.Enabled = true; batch.Enabled=calibration.Count!=0; close.Text = "Done"; }
         }
     }
 }

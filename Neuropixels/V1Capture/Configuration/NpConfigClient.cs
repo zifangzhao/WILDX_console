@@ -48,13 +48,22 @@ namespace WildNpConfiguration {
   public async Task<NpConfigReply> StatusAsync(byte port,CancellationToken cancel){
    await gate.WaitAsync(cancel);try{return await Send(Frame(0,port,0,0,0,0),cancel);}finally{gate.Release();}
   }
-  public async Task<NpConfigReply> StageAsync(byte[] selection,CancellationToken cancel){
+  public Task<NpConfigReply> StageAsync(byte[] selection,CancellationToken cancel){return StageAsync(selection,cancel,false);}
+  public async Task<NpConfigReply> StageAsync(byte[] selection,CancellationToken cancel,bool reuseMatching){
    if(selection==null||selection.Length!=1576||selection[0]!=78||selection[1]!=80||selection[2]!=66||selection[3]!=49||selection[5]>2)
     throw new InvalidDataException("Invalid NP selection payload.");
    await gate.WaitAsync(cancel);byte port=selection[5];uint id=BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(),0)|1U,crc=Crc(selection,selection.Length);
    bool begun=false,commitSent=false;
    try {
     var status=await Send(Frame(0,port,0,0,0,0),cancel);Require(status);
+    // A fresh matching receipt proves that the map is resident, not that the
+    // probe has been configured for this recording. START still applies it.
+    if(reuseMatching && (status.TransferState==0 || status.TransferState==2) && status.Received==0 &&
+       (status.PortState==2 || status.PortState==3) && status.PayloadCrc==crc &&
+       status.ConfigurationId!=null && status.ConfigurationId.Length==32){
+     bool same=true;for(int i=0;i<32;i++)if(status.ConfigurationId[i]!=selection[8+i]){same=false;break;}
+     if(same)return status;
+    }
     Require(await Send(Frame(1,port,id,0,1576,crc),cancel));begun=true;
     for(int at=0;at<selection.Length;at+=32) {
      int count=Math.Min(32,selection.Length-at);var data=new byte[count];Buffer.BlockCopy(selection,at,data,0,count);
@@ -82,9 +91,12 @@ namespace WildNpConfiguration {
     throw new IOException("Requested P"+(selection[5]+1)+" configuration lacks the firmware verification receipt. Capture was not released.");
   }
   static void Require(NpConfigReply reply){if(reply.Error!=0)throw new IOException("NP configuration rejected by firmware, code "+reply.Error+". No applied-state claim is made.");}
-  public async Task StageForCaptureAsync(System.Collections.Generic.IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel) {
+  public Task StageForCaptureAsync(System.Collections.Generic.IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel) {
+   return StageForCaptureAsync(requests,mask,cancel,false);
+  }
+  public async Task StageForCaptureAsync(System.Collections.Generic.IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel,bool reuseMatching) {
    foreach(var request in requests)if((mask&(1<<request.Port))!=0) {
-    try{await StageAsync(request.Selection,cancel);}
+    try{await StageAsync(request.Selection,cancel,reuseMatching);}
     catch(IOException ex){throw new IOException("Cannot stage requested P"+(request.Port+1)+" configuration after final capture-mode selection: "+ex.Message,ex);}
    }
   }

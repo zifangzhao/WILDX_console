@@ -16,11 +16,12 @@ namespace USB512_interface
         internal string Status;
         internal Func<int,int,string> Validate;
         internal Func<int,int,string> Warning;
+        internal Action<int,int> WarningAccepted;
     }
 
     internal sealed class NpSdRecordingOptions
     {
-        internal bool AllowUnqualified, MediaAvailable, Media, Camera, Microphone;
+        internal bool MediaAvailable, Media, Camera, Microphone;
         internal int CameraHz;
         internal Func<Task<NpUsbRecordingProfile>> Read;
         internal Func<IWin32Window,Task> Configure;
@@ -39,7 +40,6 @@ namespace USB512_interface
         readonly Button accept = new Button { Text="Save settings", AutoSize=true, Enabled=false };
         readonly Button refresh = new Button { Text="Read device status", AutoSize=true };
         readonly ComboBox source = new ComboBox { DropDownStyle=ComboBoxStyle.DropDownList, Width=200 };
-        readonly CheckBox allowUnqualified = new CheckBox { Text="Allow unqualified card/profile (V1)", AutoSize=true };
         readonly CheckBox camera = new CheckBox { Text="Camera", AutoSize=true };
         readonly CheckBox microphone = new CheckBox { Text="Microphone (200 kHz)", AutoSize=true };
         readonly NumericUpDown cameraRate = new NumericUpDown { Minimum=1, Maximum=50, Value=40, Width=64 };
@@ -70,7 +70,8 @@ namespace USB512_interface
             Text="Recording settings";ClientSize=new Size(660,530);MinimumSize=new Size(610,500);
             StartPosition=FormStartPosition.CenterParent;Icon=NpPreviewTheme.ApplicationIcon;
             var layout=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=1,RowCount=8,Padding=new Padding(18) };
-            foreach(int height in new[]{36,40,42,28,0,sd==null?88:40,44,46})layout.RowStyles.Add(new RowStyle(height==0?SizeType.Percent:SizeType.Absolute,height==0?100:height));
+            foreach(int height in new[]{36,40,42,28,0,sd==null?88:0,44,46})layout.RowStyles.Add(new RowStyle(height==0?SizeType.Percent:SizeType.Absolute,height==0?100:height));
+            if(sd!=null){layout.RowStyles[5].SizeType=SizeType.Absolute;layout.RowStyles[5].Height=0;}
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));Controls.Add(layout);
             var heading=new FlowLayoutPanel {Dock=DockStyle.Fill};heading.Controls.Add(WildXTheme.Label(sd!=null&&sd.MediaAvailable?"Recording source":"Connectors",true));
             source.Items.AddRange(new object[]{"Neuropixels","Camera / Microphone"});source.SelectedIndex=sd!=null&&sd.Media?1:0;
@@ -89,7 +90,6 @@ namespace USB512_interface
             var options=new FlowLayoutPanel { Dock=DockStyle.Fill,FlowDirection=FlowDirection.TopDown,WrapContents=false };
             merge.Checked=mergeProbes;upsample.Checked=resample;upsample.Visible=!np2;misc.Checked=recordMisc;
             if(sd==null)options.Controls.AddRange(new Control[]{merge,upsample,misc});
-            else {allowUnqualified.Checked=sd.AllowUnqualified;allowUnqualified.Visible=!np2;options.Controls.Add(allowUnqualified);}
             layout.Controls.Add(options,0,5);
             configuration=new Button { Text="Probe configuration…",AutoSize=true };
             configuration.Click+=async delegate {
@@ -109,7 +109,10 @@ namespace USB512_interface
                 string problem=profile.Validate(effective,SampleHz);
                 if(problem!=null){status.Text=problem;return;}
                 string warning=profile.Warning(effective,SampleHz);
-                if(warning!=null && MessageBox.Show(this,warning,"Recording profile",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning)!=DialogResult.OK)return;
+                if(warning!=null){
+                    if(MessageBox.Show(this,warning,"Recording profile",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning)!=DialogResult.OK)return;
+                    profile.WarningAccepted?.Invoke(effective,SampleHz);
+                }
                 SaveSdOptions();DialogResult=DialogResult.OK;
             };
             buttons.Controls.AddRange(new Control[]{refresh,accept,cancel});layout.Controls.Add(buttons,0,7);
@@ -132,7 +135,7 @@ namespace USB512_interface
             catch(Exception ex){profile=null;status.Text="Device status unavailable: "+ex.Message;UpdateSelection();}
             finally {loading=false;refresh.Enabled=configuration.Enabled=true;UpdateSelection();}
         }
-        void SaveSdOptions(){if(sd==null)return;sd.AllowUnqualified=allowUnqualified.Checked;sd.Media=Media;sd.Camera=camera.Checked;sd.Microphone=microphone.Checked;sd.CameraHz=(int)cameraRate.Value;}
+        void SaveSdOptions(){if(sd==null)return;sd.Media=Media;sd.Camera=camera.Checked;sd.Microphone=microphone.Checked;sd.CameraHz=(int)cameraRate.Value;}
         void AdoptProfile(NpUsbRecordingProfile next)
         {
                 profile=null;rate.Items.Clear();

@@ -32,8 +32,9 @@ namespace USB512_interface
         sealed class ConfigTransport : INpConfigTransport, INp2ConfigTransport
         {
             readonly NpBleConnection connection;
-            internal ConfigTransport(NpBleConnection connection) { this.connection = connection; }
-            public Task<byte[]> ExchangeAsync(byte[] request, CancellationToken cancel) { return connection.ExchangeAsync(0xb8, request, cancel); }
+            readonly Action<byte[]> progress;
+            internal ConfigTransport(NpBleConnection connection,Action<byte[]> progress=null) { this.connection = connection;this.progress=progress; }
+            public Task<byte[]> ExchangeAsync(byte[] request, CancellationToken cancel) { progress?.Invoke(request);return connection.ExchangeAsync(0xb8, request, cancel); }
         }
         readonly NpBleConnection connection = new NpBleConnection();
         readonly BluetoothLEAdvertisementWatcher watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
@@ -64,6 +65,7 @@ namespace USB512_interface
         readonly Label clockStatus=new Label{AutoSize=true};
         readonly Label configurationStatus=new Label{AutoSize=true,MaximumSize=new Size(850,0)};
         readonly NpBleConfigurationReceipts configurationReceipts=new NpBleConfigurationReceipts();
+        readonly HashSet<Tuple<uint,uint,uint>> acknowledgedSdProfiles=new HashSet<Tuple<uint,uint,uint>>();
         string configurationReadError;
         Form preview;
         NpSdStatus current;
@@ -133,7 +135,7 @@ namespace USB512_interface
                 await Run(StopRecording);
             };
             recordingSettings=Add(actions,"Recording settings",OpenRecordingSettings);
-            Add(actions, "Sync PC time", SyncClock);
+            Add(actions, "Sync PC time", () => SyncClock());
             previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
             recordingsButton=Add(actions,"Recordings…",OpenRecordings);
             overwriteRecording=Add(actions,"Overwrite from last known position…",OverwriteFromLastKnownPosition);
@@ -142,7 +144,7 @@ namespace USB512_interface
             Add(actions,"Calibration…",()=>{Dictionary<int,string> requests=null;if(V2)np2HostConfigurations.TryGetValue(connectedAddress,out requests);
                 else if(connectedAddress!=0)requests=V1Configurations().Values.ToDictionary(p=>p.Port+1,p=>p.Json);
                 NpCalibrationStore.Show(DialogOwner,"ble:"+address.Text.Trim().ToUpperInvariant(),V2,requests);return Task.CompletedTask;});
-            Add(maintenanceActions, "Recover interrupted catalog", async () => {
+            Add(actions, "Recover interrupted catalog", async () => {
                 var s = await ReadStatus();
                 if (V2 && !NpV2SdControl.CanRecover(s)) throw new IOException(NpV2SdControl.RecoveryRequiresUpgrade(s)?"Firmware does not advertise stored 7.5-kHz catalog recovery. Upgrade before recovery; raw download remains available.":"Firmware does not advertise a recoverable interrupted allocation.");
                 await Send(V2 ? NpV2SdControl.Request(8, NpV2SdControl.NextId(s)) : NpV1BleProtocol.Recover(s, NpSdControl.NextId(s)));
@@ -305,13 +307,20 @@ namespace USB512_interface
             overwriteRecording.Enabled=ready && V2 && NpV2SdControl.CanOverwriteFromLastKnownPosition(current);
         }
         void ClosePreview(){if(preview!=null){preview.Close();preview.Dispose();preview=null;}}
-        void ResetDevice(){ForgetPendingStop();RetireBleRecordingMetadata();bleDeviceUid=null;ClosePreview();ResetMedia();recordingSeconds=0;recordingTime.Text=RecordingTimeText(0);connectedAddress=0;mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
+        void ResetDevice(){ForgetPendingStop();RetireBleRecordingMetadata();bleDeviceUid=null;ClosePreview();ResetMedia();recordingSeconds=0;recordingTime.Text=RecordingTimeText(0);connectedAddress=0;mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();acknowledgedSdProfiles.Clear();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
         async Task Run(Func<Task> action)
         {
             if (busy || hostBusy) return; busy = true; UpdateControls();
             NotifyState();
             try { await refreshTask;await action(); }
-            catch (Exception ex) { current = null; state.Text = ex.Message; Append(ex.Message); }
+            catch (Exception ex) {
+                // A CRC/identity-validated rejection still contains fresh device
+                // state. A transport failure does not establish a new state.
+                var rejected=ex as NpSdCommandException;
+                if(rejected!=null && connection.Connected && recorderVersion==rejected.Version){ShowStatus(rejected.Status);ObserveBleRecordingMetadata(rejected.Status);}
+                else current=null;
+                state.Text=ex.Message;Append(ex.Message);
+            }
             finally {
                 busy = false; UpdateControls();NotifyState();
                 if(stopRequested && connection.Connected && !hostBusy)await Run(StopRecording);
@@ -347,7 +356,10 @@ namespace USB512_interface
             }
             string text="Console: "+typeof(NpBleForm).Assembly.GetName().Version+"\r\nDevice: "+(recorderVersion==0?"Unconfirmed":"Neuropixels V"+recorderVersion)+
                 "\r\nBLE address: "+address.Text+"\r\nRecording metadata: "+(bleMetadataFolder??"No host recording receipt")+"\r\n"+firmwareStatus.Text+"\r\n"+recordingTime.Text+"\r\n"+state.Text+
-                "\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\nDevice status:\r\n"+current+"\r\n\r\n"+failure+"\r\n\r\n"+details+"\r\n\r\n"+log.Text;
+                "\r\n"+clockStatus.Text+"\r\n"+configurationStatus.Text+"\r\n\r\nDevice status:\r\n"+current+
+                (current==null?"":"\r\nFlags 0x"+current.Flags.ToString("X8")+"; next/start LBA "+current.Start+"; end LBA "+current.End+
+                    "; last command "+current.LastId+"; receipt "+current.Operation+"/"+current.RequestId+"; command error "+current.Error)+
+                "\r\n\r\n"+failure+"\r\n\r\n"+details+"\r\n\r\n"+log.Text;
             using(var report=new NpReportForm("BLE report",text))report.ShowDialog(DialogOwner);
         }
         internal static async Task<string> ReadV1FailureDetails(NpSdStatus s,IDictionary<byte,NpConfigRequest> requests,
@@ -404,6 +416,7 @@ namespace USB512_interface
             finally{connecting=false;UpdateControls();}
         }
         void ShowStatus(NpSdStatus s){
+            ObserveSdProfileContext(s);
             if(!V2 && s.Fault!=0 && (current==null || current.Fault!=s.Fault || current.Chunks!=s.Chunks))Append("V1 "+NpV1BleProtocol.StateText(s));
             current=s;state.Text=V2?NpV2SdControl.Describe(s):"WILD-X V1 — "+NpV1BleProtocol.StateText(s);
             if(V2 || s.Mask!=0 || s.Chunks==0)recordingSeconds=V2?NpV2SdControl.RecordedSeconds(s):NpV1BleProtocol.RecordedSeconds(s);
@@ -423,8 +436,11 @@ namespace USB512_interface
             // Preserve the last attempted ID even if its acknowledgement is
             // lost, so a subsequent STOP cannot reuse that mutation's ID.
             sequence=NpSdGeometry.U(request,12);
+            int epoch=connection.Epoch,version=recorderVersion;ulong peer=connectedAddress;
             var body = await connection.ExchangeAsync(request); uint op = NpSdGeometry.U(request, 8), id = NpSdGeometry.U(request, 12);
-            var s=NpBleConnection.ParseStatus(body,recorderVersion,op,id);ShowStatus(s);ObserveBleRecordingMetadata(s);
+            if(!connection.Connected || connection.Epoch!=epoch || recorderVersion!=version || connectedAddress!=peer)
+                throw new IOException("Connection changed before the command receipt. Read status; no command replayed.");
+            var s=NpBleConnection.ParseStatus(body,version,op,id);ShowStatus(s);ObserveBleRecordingMetadata(s);
             return s;
         }
         async Task<NpSdStatus> ReadStatus()
@@ -474,12 +490,16 @@ namespace USB512_interface
         {
             var selected=profiles.SelectedItem as Profile;
             var choices=profiles.Items.Cast<Profile>().Where(p=>p.Mask!=0).ToArray();
+            uint capacity=current==null?0:current.Capacity;
             return new NpUsbRecordingProfile {
                 AvailableMask=choices.Aggregate(0,(mask,p)=>mask|(int)p.Mask),SelectedMask=selected==null?0:(int)selected.Mask,
                 SelectedHz=selected==null?0:(int)selected.Hz,Rates=choices.Select(p=>(int)p.Hz).Distinct().OrderBy(hz=>hz).ToArray(),
                 Status="Neuropixels V"+recorderVersion+" · SD recording\r\n"+(V2?NpV2SdControl.Describe(current):NpV1BleProtocol.StateText(current)),
                 Validate=(mask,hz)=>choices.Any(p=>p.Mask==(uint)mask && p.Hz==(uint)hz)?null:"This probe combination / sample rate is not supported by the device.",
-                Warning=(mask,hz)=>V2 && NpCaptureMode.Count(mask)>1 && hz==30000?"Multi-probe 30 kHz recording is experimental. Continue with this profile?":null
+                Warning=(mask,hz)=>NpCaptureMode.Count(mask)>1 && hz==30000 && !acknowledgedSdProfiles.Contains(Tuple.Create((uint)mask,(uint)hz,capacity))?
+                    (V2?"Multi-probe 30 kHz recording is experimental. Continue with this profile?":
+                        "Two-probe 30 kHz SD recording has shown sustained-recording failures. Data may be incomplete. Continue with this profile?"):null,
+                WarningAccepted=(mask,hz)=>acknowledgedSdProfiles.Add(Tuple.Create((uint)mask,(uint)hz,capacity))
             };
         }
         async Task OpenRecordingSettings()
@@ -559,10 +579,15 @@ namespace USB512_interface
             }
             throw new IOException("Recording settings were not confirmed. Read status before retrying; recording was not started.");
         }
+        void ObserveSdProfileContext(NpSdStatus s)
+        {
+            if(current!=null && (s.Capacity!=current.Capacity || (current.Flags&16)!=0 && (s.Flags&16)==0))acknowledgedSdProfiles.Clear();
+        }
         async Task PrepareRecordingClock(NpSdStatus s)
         {
             if(V2 || (s.Flags&NpV1BleProtocol.Clock)==0 || !NpV1BleProtocol.CanConfigure(s))return;
-            try{await SyncClock();clockStatus.Text="PC time synced";}
+            clockStatus.Text="Synchronizing recording time…";
+            try{await SyncClock(8);clockStatus.Text="PC time synced";}
             catch(Exception ex) when(ex is IOException || ex is TimeoutException){
                 clockStatus.Text="Recording time unavailable";
                 Append("Could not synchronize recording time; recording will continue. "+ex.Message);
@@ -578,10 +603,14 @@ namespace USB512_interface
             if(p.Mask!=s.Mask || p.Hz!=s.Hz || !V2 && p.Mask==0 && mediaSettingsChanged){await Apply();s=await ReadStatus();}
             RequireStartNotCanceled();
             if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");
-            if(!V2 && !s.Qualified) {
-                MessageBox.Show(DialogOwner,"This recording profile has not been validated with the installed SD card. Recording may fail or lose data.",
+            var warningProfile=Tuple.Create(s.Mask,s.Hz,s.Capacity);
+            if(!V2 && (!s.Qualified || s.Mask==3 && s.Hz==30000) && !acknowledgedSdProfiles.Contains(warningProfile)) {
+                MessageBox.Show(DialogOwner,s.Mask==3 && s.Hz==30000?
+                    "Two-probe 30 kHz SD recording has shown sustained-recording failures. Data may be incomplete.":
+                    "Firmware does not report validation for this SD card and recording profile. Recording may fail or lose data.",
                     "Recording profile",MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 RequireStartNotCanceled();
+                acknowledgedSdProfiles.Add(warningProfile);
             }
             await PrepareRecordingClock(s);
             RequireStartNotCanceled();
@@ -605,11 +634,17 @@ namespace USB512_interface
                     await client.StageAsync(request,CancellationToken.None);
                     staged.Add(request);
                 }
+                RequireStartNotCanceled();
                 configurationReceipts.Expect(staged);
                 if(staged.Count!=0){configurationStatus.Text="NP2 IMRO staged; probe application pending. Read status confirms it after preparation.";Append(configurationStatus.Text);}
-                RequireStartNotCanceled();
                 var start=NpV2SdControl.Request(2, NpV2SdControl.NextId(s), p.Hz, blocks, 0, p.Mask);
-                BeginBleRecordingMetadata(s,start);await Send(start);
+                BeginBleRecordingMetadata(s,start);
+                try{await Send(start);}
+                catch(NpSdCommandException){
+                    configurationReceipts.Reset();
+                    configurationStatus.Text=staged.Count==0?"":"Probe settings staged; recording was rejected before capture started.";
+                    throw;
+                }
             }
             else {
                 if(s.Mask==0)await VerifyV1Media();
@@ -617,7 +652,18 @@ namespace USB512_interface
                 uint session=unchecked((uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 // Profile changes may reset staged selections; retain and stage
                 // each selected port's explicit host request before START.
-                if(s.Mask!=0)await new NpConfigClient(new ConfigTransport(connection)).StageForCaptureAsync(V1Configurations().Values,(int)s.Mask,CancellationToken.None);
+                if(s.Mask!=0){
+                    var transport=new ConfigTransport(connection,frame=>{
+                        byte op=frame[5];if(op==4)return;
+                        string port="Probe "+(frame[6]+1);
+                        configurationStatus.Text=op==2?port+" configuration upload · "+
+                            Math.Min(100,(NpSdGeometry.U(frame,12)+NpSdGeometry.U(frame,16))*100U/1576U)+"%":
+                            port+(op==0?" · checking retained configuration…":op==3?" · confirming staged configuration…":" · preparing configuration upload…");
+                    });
+                    await new NpConfigClient(transport).StageForCaptureAsync(V1Configurations().Values,(int)s.Mask,CancellationToken.None,true);
+                    if(V1Configurations().Values.Any(request=>(s.Mask&(1U<<request.Port))!=0))
+                        configurationStatus.Text="Probe maps available; application occurs at recording start.";
+                }
                 RequireStartNotCanceled();
                 var start=NpSdControl.Request(2, NpSdControl.NextId(s), s.Mask, s.Hz, s.Start, end, session == 0 ? 1U : session, s.Qualified ? 0U : 1U);
                 BeginBleRecordingMetadata(s,start);await Send(start);
@@ -693,12 +739,12 @@ namespace USB512_interface
             bool failed=s.Fault!=0 || s.State==(V2?255U:4U);
             Append(failed?"Recording is stopped after a device failure. "+(V2?"Fault "+s.Fault:NpV1BleProtocol.FaultText(s))+"; saved data may be incomplete.":V2 && s.State==5?"Recording complete; device confirmed Stop. No capture is active.":"Recording stopped; no capture is active.");
         }
-        async Task SyncClock()
+        async Task SyncClock(uint observations=16)
         {
             var s = await ReadStatus();
             if (V2 ? !NpV2SdControl.CanConfigure(s) : !NpV1BleProtocol.CanConfigure(s) || (s.Flags & NpV1BleProtocol.Clock) == 0) throw new IOException("Stopped recorder with PC-time support required.");
             if(V2){await InitializeClock(s);return;}
-            var result = await NpV2OnlineClock.Synchronize(connection.ExchangeAsync, Next, 16);
+            var result = await NpV2OnlineClock.Synchronize(connection.ExchangeAsync, Next, observations);
             Append("PC time confirmed; uncertainty " + (result.UncertaintySeconds * 1000).ToString("F2") + " ms.");
         }
         void ShowClock(){clockStatus.Text=clock.Synchronized?"PC time synced · ±"+clock.BoundMilliseconds.ToString("F2")+" ms":clock.Error==null?"":"PC time unconfirmed";}

@@ -1,22 +1,23 @@
 {
-  "version": "1.0.0.92",
-  "releaseId": "WILDX92_V2_BLE_RECORDINGS_20261022",
-  "baselineVersion": "1.0.0.91",
+  "version": "1.0.0.96",
+  "releaseId": "WILDX96_BLE_SETUP_SD_WARNINGS_CALIBRATION_20261022",
+  "baselineVersion": "1.0.0.92",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "84FA65044A61F7E7DF5A08DDA3DF2B0745863FA2EAEEFA3FDD5D86975DE30851",
+  "guiSha256": "620F4BADCCEF312C2B15E94AF96C7FDFD729209F0D7C7CECDFEC3660C61B2BF7",
   "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
-  "firmwareChanged": true,
-  "firmwareCatalogChanged": true,
+  "firmwareChanged": false,
+  "firmwareCatalogChanged": false,
   "helpersChanged": false,
   "newFirmwareHardwareQualified": false,
-  "consoleBuildSha256": "0E802BC69CB5C9816D4CB1C144E477F8844F8D6AE00564257B7AEB02DC3F71CF",
-  "sourceArchiveSha256": "E4BCBB0DD0AF2A2098BE768505AD1CC25AB3AF89F7EDE38E06BB50CA7A2356E4",
-  "softwareChecks": 135954,
-  "reusedHardwarePairVersion": "1.0.0.70",
-  "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
-  "firmwareReceiptSha256": "A1890BD29FC0F8A8B3A35E47D88E88B7ED15A8F2A0309FDDAED04F0F2441C8EF",
-  "scope": "V2 BLE recordings list GUI and APP D44907A5. Automatic opening/finalization refresh and validated degraded read-only catalog. V1, SDK/helpers, USB B6099A0E and recovery6408DBB8 unchanged; software only, no hardware/flash/new recording qualification.",
+  "sourceArchiveSha256": "0409CE9C233A64982E2BAC7433589CFF78412CC5D409A3F7BE2A086A497720C4",
+  "scope": "Calibration in-place .dat.bak option, validated BLE rejection status and metadata, faster V1 BLE setup, and profile warning acknowledgements. Existing V2 USB format/BLE catalog support and firmware payload unchanged. Software only; no new hardware/flash/recording qualification.",
   "installerExecuted": false,
+  "installerPayloadExtractedAndVerified": true,
+  "installer": {
+    "bytes": 7080236,
+    "sha256": "65E2DE691F7D603D51EACED2E5E43BCAA5C79D51A3F4CE97B6CA824187B2A9AF",
+    "file": "WILDX_console-Setup-1.0.0.96.exe"
+  },
   "payload": [
     {
       "path": "Firmware/owner-confirmation-20261017.json",
@@ -160,8 +161,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1708544,
-      "sha256": "84FA65044A61F7E7DF5A08DDA3DF2B0745863FA2EAEEFA3FDD5D86975DE30851"
+      "bytes": 1716224,
+      "sha256": "620F4BADCCEF312C2B15E94AF96C7FDFD729209F0D7C7CECDFEC3660C61B2BF7"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -219,11 +220,7 @@
       "sha256": "0BC85009FF9059E382C12D23B2699928206E12AC46EEF8E85787DB6AB82D2D33"
     }
   ],
-  "installer": {
-    "file": "WILDX_console-Setup-1.0.0.92.exe",
-    "bytes": 7077493,
-    "sha256": "DB952217CAA57C2D017723BEBBF3F7682FEF9845A2A3AAAC432B56FCFC5DDF65"
-  },
   "extractedPayloadFilesVerified": 40,
-  "nsisPackagingPasses": 1
+  "nsisPackagingPasses": 1,
+  "softwareChecks": 23662
 }

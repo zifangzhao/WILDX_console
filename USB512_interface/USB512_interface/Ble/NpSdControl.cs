@@ -6,7 +6,16 @@ namespace CE32_console {
   internal uint Operation,RequestId,Error,State,Fault,Mask,Hz,Chunks,Start,End,Capacity,Flags,LastId;
   internal bool Qualified{get{return (Flags&2)!=0;}}
   internal bool Busy{get{return (Flags&12)!=0;}}
-  public override string ToString(){return string.Format("Mask {0}, AP {1:N0} Hz / LFP {2:N3} Hz\r\nState {3}, fault {4}, chunks {5:N0}; card {6:N0} sectors\r\n{7}; writes {8}; mounted {9}; pending {10}",Mask,Hz,Hz/12.0,State,Fault,Chunks,Capacity,Qualified?"Card/profile qualified":"HARDWARE UNQUALIFIED",(Flags&1)!=0,(Flags&16)!=0,(Flags&8)!=0);}
+  public override string ToString(){return string.Format("Mask {0}, AP {1:N0} Hz / LFP {2:N3} Hz\r\nState {3}, fault {4}, chunks {5:N0}; card {6:N0} sectors\r\n{7}; writes {8}; mounted {9}; pending {10}",Mask,Hz,Hz/12.0,State,Fault,Chunks,Capacity,Qualified?"Card/profile validation reported":"Card/profile validation not reported",(Flags&1)!=0,(Flags&16)!=0,(Flags&8)!=0);}
+ }
+ internal sealed class NpSdCommandException : IOException {
+  internal readonly NpSdStatus Status;
+  internal readonly int Version;
+  internal NpSdCommandException(int version,NpSdStatus status,string detail=null) : base(
+   "Device rejected operation "+status.Operation+": error "+status.Error+"; fault "+status.Fault+"."+
+   (String.IsNullOrEmpty(detail)?"":" "+detail)) {
+   Version=version;Status=status;
+  }
  }
  internal sealed class NpSdControl {
   readonly Func<byte[],Task<byte[]>> exchange;

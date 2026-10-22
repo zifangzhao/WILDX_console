@@ -1,5 +1,5 @@
 # WILD-X / V2 bundle
 
-Use [WILD-X1.0.0.92](WILDX_console-Setup-1.0.0.92.exe) and install the [bundled V2 APP](../Firmware/V2/README.md) for BLE recording lists.
+Use [WILD-X1.0.0.96](WILDX_console-Setup-1.0.0.96.exe). The [existing bundled V2 firmware](../Firmware/V2/README.md) provides USB formatting (USB B6099A0E) and BLE recording lists (APP D44907A5).
 
-[Evidence](README.md) / [manifest](release-manifest.json). WILDX_release-manifest.json is byte-identical.
+[Manifest](release-manifest.json) / [release notes](README.md).

@@ -46,8 +46,8 @@ namespace USB512_interface
         void ObserveBleRecordingMetadata(NpSdStatus status)
         {
             if(bleRecordingMetadata==null || bleMetadataFinished || status==null)return;
-            bool recording=V2?status.State==3:status.State==1;
-            if(status.State==bleMetadataState && status.Fault==bleMetadataFault && (!recording || bleMetadataRecordingSeen))return;
+            bool recording=status.Error==0 && (V2?status.State==3:status.State==1);
+                if(status.Error==0 && status.State==bleMetadataState && status.Fault==bleMetadataFault && (!recording || bleMetadataRecordingSeen))return;
             try {
                 if(recording && !bleMetadataRecordingSeen) {
                     bleMetadataRecordingSeen=true;
@@ -57,8 +57,14 @@ namespace USB512_interface
                 bleMetadataState=status.State;bleMetadataFault=status.Fault;
                 bleRecordingMetadata.Context("ble_device_status",NpRecordingSettings.Fields("state",status.State,"fault",status.Fault,"mask",status.Mask,
                     "sample_hz",status.Hz,"stored_chunks",status.Chunks,"start_lba",status.Start,"end_lba",status.End,"last_command_id",status.LastId));
+                if(status.Operation==2 && status.Error!=0){
+                    bleMetadataFinished=true;
+                    bleRecordingMetadata.Finished(false,"Recording start rejected by device: error "+status.Error+"; fault "+status.Fault+".");
+                    bleRecordingMetadata.Context("start_rejection",NpRecordingSettings.Fields("error",status.Error,"flags",status.Flags,"request_id",status.RequestId));
+                    bleRecordingMetadata.Context("completion_evidence","Validated rejection of this START request; this host request did not start a recording.");
+                }
                 bool stopped=V2?NpV2SdControl.StopAlreadySatisfied(status):NpV1BleProtocol.StopAlreadySatisfied(status);
-                if(stopped && (bleMetadataRecordingSeen || status.Fault!=0)) {
+                if(!bleMetadataFinished && stopped && (bleMetadataRecordingSeen || status.Fault!=0)) {
                     bleMetadataFinished=true;bool complete=status.Fault==0 && status.State==(V2?5U:3U);
                     bleRecordingMetadata.Finished(complete,complete?null:"Device stopped without a complete recording state.");
                     bleRecordingMetadata.Context("completion_evidence","BLE terminal state only; SD payload has not been downloaded or validated.");

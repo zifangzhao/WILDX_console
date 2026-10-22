@@ -1,0 +1,2 @@
+PASS 92 actual-app BLE settings/capability/fault checks; no hardware.
+PASS 111 actual-source BLE Apply/Start checks; fake transport only.

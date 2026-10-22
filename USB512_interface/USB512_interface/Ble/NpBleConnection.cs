@@ -379,7 +379,8 @@ namespace USB512_interface
         {
             if(version!=1 && version!=2)throw new IOException("Unsupported device control protocol.");
             var s=version==2?NpV2SdControl.Parse(body,op,id):NpSdControl.Parse(body,op,id);
-            if(s.Error!=0)throw new IOException("Device rejected operation "+op+": error "+s.Error+"; fault "+s.Fault+".");
+            if(s.Error!=0)throw new NpSdCommandException(version,s,
+                version==2 && op==2 && s.Error==8?NpV2SdControl.StartStorageError(s):null);
             return s;
         }
         internal static async Task<Tuple<int,NpSdStatus>> ReadDevice(Func<byte,byte[],CancellationToken,Task<byte[]>> exchange,Func<uint> next)

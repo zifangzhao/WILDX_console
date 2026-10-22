@@ -1,0 +1,9 @@
+{
+  "baselineVersion": "1.0.0.92",
+  "all_non_gui_payload_bytes_identical": true,
+  "payload_files_verified": 40,
+  "baseline_manifest_sha256": "27573F435E171DDD0CE049359866EF4DF41A556DD6D376EFF98F25A6D4B70F1E",
+  "firmware_changed": false,
+  "helpers_changed": false,
+  "sdk_changed": false
+}

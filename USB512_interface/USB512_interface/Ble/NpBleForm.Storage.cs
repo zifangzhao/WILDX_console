@@ -39,6 +39,7 @@ namespace USB512_interface
                 var result=await read();if(result.Records.Count!=fresh.Records.Count-1)throw new IOException("Deleted catalog could not be verified. No delete replayed.");return result;
             };
             Func<bool,Task> prepare=async format=>{
+                if(format)acknowledgedSdProfiles.Clear();
                 target();var s=await ReadStatus();target();
                 if(s.Capacity!=initial.Capacity)throw new IOException("Card capacity changed. Reopen Recordings before modifying storage.");
                 bool recoverCapacity=version==1&&!format&&initial.Capacity==0;

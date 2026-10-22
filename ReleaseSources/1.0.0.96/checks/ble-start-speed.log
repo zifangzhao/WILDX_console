@@ -1,0 +1,2 @@
+PASS 29 actual V1 map-reuse checks; unchanged two-probe setup 106 to 2 exchanges, reset/mismatch/failure fallback retained; no hardware.
+PASS 146 actual-source GUI clock checks; idle16/singlecommit, active/heartbeat Observe, quality/CRC/generation/receipt refusals; synthetic replies, no radio.
