@@ -1,0 +1,1 @@
+Exact GUI76 compiler/build inputs based on published73, with recursive post-calibration and explicit atomic overwrite. SDK binary and archived inputs are unchanged from73. Resources and other dependencies reuse checked caches. See ../../Note/BATCH_POST_CALIBRATION_20261022.md for validation and limits.

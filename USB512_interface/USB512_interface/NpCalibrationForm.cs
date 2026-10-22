@@ -30,12 +30,12 @@ namespace USB512_interface
         readonly ComboBox encoding = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 220 }, band = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 70 };
         readonly TextBox order = new TextBox { Text = "1", Width = 85 };
         readonly Label status = new Label { Dock = DockStyle.Fill, AutoSize = true };
-        readonly Button apply = new Button { Text = "Load for probe", AutoSize = true }, correct = new Button { Text = "Correct DAT…", AutoSize = true }, close = new Button { Text = "Done", AutoSize = true };
+        readonly Button apply = new Button { Text = "Load for probe", AutoSize = true }, correct = new Button { Text = "Correct DAT…", AutoSize = true }, batch = new Button { Text = "Calibrate folders…", AutoSize = true }, close = new Button { Text = "Done", AutoSize = true };
         bool busy; volatile bool cancelled;
         internal NpCalibrationForm(string source, bool? np2)
         {
             this.source = source; this.np2 = np2; calibration = NpCalibrationStore.Get(source);
-            Text = "WILD-X — Calibration"; ClientSize = new Size(780, 385); MinimumSize = new Size(700, 385); StartPosition = FormStartPosition.CenterParent;
+            Text = "WILD-X — Calibration"; ClientSize = new Size(950, 430); MinimumSize = new Size(850, 430); StartPosition = FormStartPosition.CenterParent;
             layout = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(18), ColumnCount = 2, RowCount = 8 };
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130)); layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             for (int p = 1; p <= 3; p++) port.Items.Add(p); port.SelectedIndex = 0;
@@ -46,13 +46,14 @@ namespace USB512_interface
             Row(layout, 2, "Gain CSV", FileRow(gain)); Row(layout, 3, "ADC CSV (NP1)", FileRow(adc));
             var gains = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; gains.Controls.AddRange(new Control[] { new Label { Text = "NP1 AP gain", AutoSize = true }, apGain, new Label { Text = "LFP gain", AutoSize = true }, lfpGain }); Row(layout, 4, "Acquired gains", gains);
             var actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; var clear = new Button { Text = "Clear probe", AutoSize = true }; actions.Controls.AddRange(new Control[] { apply, clear, close }); Row(layout, 5, "", actions);
-            var offline = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; offline.Controls.AddRange(new Control[] { correct, encoding, band, new Label { Text = "Probe order", AutoSize = true }, order }); Row(layout, 6, "Offline", offline);
+            var offline = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; offline.Controls.AddRange(new Control[] { correct, batch, encoding, band, new Label { Text = "Probe order", AutoSize = true }, order }); Row(layout, 6, "Offline", offline);
             Row(layout, 7, "", status); Controls.Add(layout); WildXTheme.Apply(this); WildXTheme.Button(apply, true); WildXTheme.Button(correct, true);
             port.SelectedIndexChanged += delegate { SelectPort(); };
             apply.Click += delegate { try { LoadProfile(); } catch (Exception ex) { status.Text = ex.Message; } };
             clear.Click += delegate { if (busy) return; calibration.Remove(SelectedPort); NpCalibrationStore.Set(source, calibration); SelectPort(); };
             close.Click += delegate { if (busy) { cancelled = true; return; } Close(); };
             correct.Click += async delegate { await CorrectDat(); };
+            batch.Click += delegate { if(!busy)using(var form=new NpCalibrationBatchForm(calibration))form.ShowDialog(this); };
             FormClosing += delegate(object sender, FormClosingEventArgs e) { if (busy) { cancelled = true; e.Cancel = true; } };
             SelectPort();
         }
@@ -65,6 +66,7 @@ namespace USB512_interface
             browse.Click += delegate { if (busy) return; using (var file = new OpenFileDialog { Filter = "Factory calibration CSV|*.csv" }) if (file.ShowDialog(this) == DialogResult.OK) text.Text = file.FileName; }; return row;
         }
         void SelectPort() {
+            batch.Enabled=calibration.Count!=0;
             var p = calibration.Get(SelectedPort); serial.Text = p == null ? "" : p.Serial; gain.Text = p == null ? "" : p.GainPath; adc.Text = p == null ? "" : p.AdcPath;
             apGain.SelectedItem = p == null || p.Np2 ? null : (object)p.ApGain; lfpGain.SelectedItem = p == null || p.Np2 ? null : (object)p.LfpGain;
             order.Text = SelectedPort.ToString(); status.Text = p == null ? "No calibration loaded for this probe." : p.Model + " · serial " + p.Serial + " · host correction loaded";
@@ -76,6 +78,7 @@ namespace USB512_interface
             var p = new NpAdcCalibration(gain.Text, adc.Text, serial.Text.Trim(), apGain.SelectedItem == null ? 0 : (int)apGain.SelectedItem, lfpGain.SelectedItem == null ? 0 : (int)lfpGain.SelectedItem);
             if (np2.HasValue && p.Np2 != np2.Value) throw new InvalidDataException("Calibration type does not match this device.");
             calibration.Set(SelectedPort, p); NpCalibrationStore.Set(source, calibration);
+            batch.Enabled=true;
             FactoryRows(p);
             status.Text = p.Model + " · serial " + p.Serial + " · loaded. " + (p.DigitalAdc ? "ADC register trims are retained, not written to hardware." : "Gain correction only.");
         }
@@ -86,7 +89,7 @@ namespace USB512_interface
             using (var file = new SaveFileDialog { Filter = "Corrected DAT|*.dat", FileName = Path.GetFileNameWithoutExtension(input) + ".calibrated.dat" }) { if (file.ShowDialog(this) != DialogResult.OK) return; output = file.FileName; }
             try {
                 int[] ports = order.Text.Split(',').Select(s => Int32.Parse(s.Trim())).ToArray(); bool lfp = band.SelectedIndex == 1, legacy = encoding.SelectedIndex == 1;
-                busy = true; cancelled = false; apply.Enabled = correct.Enabled = port.Enabled = false; close.Text = "Cancel"; status.Text = "Correcting DAT…";
+                busy = true; cancelled = false; apply.Enabled = correct.Enabled = batch.Enabled = port.Enabled = false; close.Text = "Cancel"; status.Text = "Correcting DAT…";
                 var snapshot = calibration.Copy();
                 if(Directory.Exists(output+".source-metadata") || File.Exists(output+".source-metadata"))throw new IOException("Choose a fresh output and source-metadata destination.");
                 await Task.Run(() => {
@@ -95,7 +98,7 @@ namespace USB512_interface
                 });
                 status.Text = "Corrected DAT saved: " + output;
             } catch (Exception ex) { status.Text = ex.Message; }
-            finally { busy = false; apply.Enabled = correct.Enabled = port.Enabled = true; close.Text = "Done"; }
+            finally { busy = false; apply.Enabled = correct.Enabled = port.Enabled = true; batch.Enabled=calibration.Count!=0; close.Text = "Done"; }
         }
     }
 }

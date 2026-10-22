@@ -1,17 +1,20 @@
-# WILD-X 1.0.0.73
+# WILD-X 1.0.0.76
 
-[Installer](WILDX_console-Setup-1.0.0.73.exe).
+[Installer](WILDX_console-Setup-1.0.0.76.exe).
 
-New V1 SD neural downloads write decoded AP/LFP DAT without ephys.bin or lane8
-copies. Probe configuration, metadata, sensors, analog data and timestamps remain
-with the recording. Optional merged DAT still works. Raw-only fast archive is
-removed from the download page. Existing recordings and camera.raw are unchanged.
-V1/V2 live recording and V2 SD export already use DAT-only neural output.
+Calibration → Calibrate folders scans a selected folder and its subfolders for
+merged/per-probe AP/LFP DATs. Load the factory profiles first, review the file
+preview and choose Calibrate ready files. Copy mode mirrors a separate output
+tree; Overwrite originals is an explicit option using staged atomic replacement.
+Original probe/IMRO/timing metadata and exact calibration files/hashes accompany
+each result. Already-calibrated, ambiguous or unsupported files are reported.
 
-1,181 software checks passed, including byte comparisons against72 and interrupted
-recording recovery/cancellation. No physical device or installed-UI qualification
-was performed. SDK, firmware and helpers are unchanged from72.
+15,060 actual-app synthetic checks passed, including ADC/gain correction,
+recursive scan/UI, physical probe order/serial mapping, cancellation and failed
+overwrite recovery. The offscreen GUI render was inspected. No user recording,
+physical device or installed-application qualification was performed.
+SDK, firmware, helpers and acquisition paths are unchanged from73.
 
-[Exact manifest](release-manifest.json) / [change and validation](../Note/NEURAL_DAT_ONLY_20261022.md)
-/ [compiled source inputs](../ReleaseSources/1.0.0.73/README.md).
-The previous installer is retained under `legacy/20261022_before_1.0.0.73`.
+[Exact manifest](release-manifest.json) / [workflow and limits](../Note/BATCH_POST_CALIBRATION_20261022.md)
+/ [compiled source inputs](../ReleaseSources/1.0.0.76/README.md).
+The previous installer is retained under `legacy/20261022_before_1.0.0.76`.

@@ -1,19 +1,19 @@
 {
-  "version": "1.0.0.73",
-  "releaseId": "WILDX73_NEURAL_DAT_ONLY_20261022",
-  "baselineVersion": "1.0.0.72",
+  "version": "1.0.0.76",
+  "releaseId": "WILDX76_BATCH_CALIBRATION_20261022",
+  "baselineVersion": "1.0.0.73",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "B1D37ACA5DA14C42B6748C92095CBCC755072DC9F87B032A485298FD312A43CD",
+  "guiSha256": "CABD9E27F1FBEBF3D3E5F726BE67BE1FBA86F15287A473E4B8EC50F9788E80D2",
   "sdkSha256": "F485AFE114AA0E64AF8E24B4B91F809804752056BBC8EDF97977B23C68857AB4",
   "firmwareChanged": false,
   "helpersChanged": false,
-  "consoleBuildSha256": "50E00F921C72042697543ABA3C257976761B8EBAE70E68E5CF480E37FC269540",
-  "sourceArchiveSha256": "F5B92E528869046277B0EDAC39CA106F892E606D018ADEBBC0DF41C63D2C332D",
-  "softwareChecks": 1181,
+  "consoleBuildSha256": "5292A35FEA030CB7C69F4F9C899EDB4438080E1E824278DC4C79474E917B1A6E",
+  "sourceArchiveSha256": "EC0F3A8F8000F8B4A8F838B154675A3C2A8268D9E842E8A696F44838F06FABF9",
+  "softwareChecks": 15060,
   "reusedHardwarePairVersion": "1.0.0.70",
   "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
   "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "scope": "V1 SD neural DAT-only output without ephys.bin or lane8 writes, byte-offset prefix recovery, removal of raw-only archive entry and updated output-space/status text.1181 actual-app synthetic-source comparison/recovery checks. Only GUI differs from72. Camera raw, SDK, firmware and helpers unchanged; no physical-device or installed-UI qualification.",
+  "scope": "GUI batch post-calibration for recursive merged/per-probe AP/LFP DAT, serial/order/encoding checks, copied source metadata, and explicit staged atomic overwrite with pending journal.15060 actual-app synthetic checks plus offscreen UI render. SDK/firmware/helpers/acquisition unchanged from73; no real recording or hardware qualification.",
   "installerExecuted": false,
   "payload": [
     {
@@ -208,8 +208,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1584128,
-      "sha256": "B1D37ACA5DA14C42B6748C92095CBCC755072DC9F87B032A485298FD312A43CD"
+      "bytes": 1623552,
+      "sha256": "CABD9E27F1FBEBF3D3E5F726BE67BE1FBA86F15287A473E4B8EC50F9788E80D2"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -218,9 +218,9 @@
     }
   ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.73.exe",
-    "bytes": 7012869,
-    "sha256": "C975C86560556564FB379FD5B877E397359DD0050C6ACFA37DA5632F911F6C52"
+    "file": "WILDX_console-Setup-1.0.0.76.exe",
+    "bytes": 7026861,
+    "sha256": "CAF6C88314ABB48AD1E165AB468A16397406AE893B1DEF9FC05C6ACDC67BB48E"
   },
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1
