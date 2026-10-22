@@ -1,0 +1,1 @@
+Exact GUI71 99 tracked compiler/build inputs plus the new SDK11-source snapshot/project/override. Source composition archive; resources and unchanged dependencies reused from checked caches. Not a clean-public-HEAD or new hardware qualification claim. See Note/SD_DOWNLOAD_FINALIZATION_20261021.md.

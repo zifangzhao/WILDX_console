@@ -1,15 +1,19 @@
 {
-  "version": "1.0.0.70",
-  "releaseId": "WILDX70_V2_DUAL30_660A6DA4_20261021",
+  "version": "1.0.0.71",
+  "releaseId": "WILDX71_SD_FINALIZATION_20261021",
+  "baselineVersion": "1.0.0.70",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "DD7A948B343C90E094C7347A17A690B645FC776E33EFB887416C60AA7C4AA12A",
-  "sdkSha256": "BF32A4602C775E78AFE00F09856908116EEE9A6EEF41E144013EC3EC5000048E",
-  "firmwareChanged": true,
+  "guiSha256": "BE9F324CAD9B6795AC4E22291A1F8FBE551B33A59581761807130E0C7DC28A9D",
+  "sdkSha256": "F485AFE114AA0E64AF8E24B4B91F809804752056BBC8EDF97977B23C68857AB4",
+  "firmwareChanged": false,
+  "helpersChanged": false,
+  "consoleBuildSha256": "B2E0FCEE906C5E13CDE277CD3FA7280A857FD951D5A58AC2A9AE2B397F94395E",
+  "sourceArchiveSha256": "CABF1A0D603080FBFEF206934A383020D9D9C35DB031B182AA72F6B5850AC272",
+  "softwareChecks": 111,
+  "reusedHardwarePairVersion": "1.0.0.70",
+  "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
   "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "consoleBuildSha256": "0F79B2E87B37332E12823922629AF0886E91D345FE39463E79775127E61591EF",
-  "consolePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
-  "sourceArchiveSha256": "FD0B9503B994CE031610992DFFA98E9AB442C2C89E2B89D2DF198977BE829D64",
-  "scope": "Delkin V90 two NP2 at30k:600s full native/DAT integrity plus console70 production10s read-only export. No all-mode/card, analog, installed visual UI, newly flashed fused or unlimited-endurance claim.",
+  "scope": "Checksum-during-write and honest finalization progress;111 saved-image/actual-app software checks. Exact40-file released70 bundle except GUI EXE and SDK. No new hardware/installed UI/pair/endurance qualification.",
   "installerExecuted": false,
   "payload": [
     {
@@ -189,8 +193,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 253952,
-      "sha256": "BF32A4602C775E78AFE00F09856908116EEE9A6EEF41E144013EC3EC5000048E"
+      "bytes": 255488,
+      "sha256": "F485AFE114AA0E64AF8E24B4B91F809804752056BBC8EDF97977B23C68857AB4"
     },
     {
       "path": "OpenTK.dll",
@@ -205,7 +209,7 @@
     {
       "path": "WILDX_console.exe",
       "bytes": 1583616,
-      "sha256": "DD7A948B343C90E094C7347A17A690B645FC776E33EFB887416C60AA7C4AA12A"
+      "sha256": "BE9F324CAD9B6795AC4E22291A1F8FBE551B33A59581761807130E0C7DC28A9D"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -213,21 +217,11 @@
       "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
     }
   ],
-  "notDistributedDebugSymbols": [
-    {
-      "path": "NPConfigurator/NPConfigurator.pdb",
-      "bytes": 42108,
-      "sha256": "9DDFA50B1B512D64A7950794ED3340568B480E02673E2245BCF6733061D70899"
-    }
-  ],
   "installer": {
-    "sha256": "383E6D2D48DE78830E2C6F706E2A77FB8D9048A119922FFFDCC9B2E7AA0FD1C9",
-    "file": "WILDX_console-Setup-1.0.0.70.exe",
-    "bytes": 7012482
+    "file": "WILDX_console-Setup-1.0.0.71.exe",
+    "bytes": 7012643,
+    "sha256": "838D96A12F73E6F4A42F200DCEF2E2D306A531B4322A7B4250046CA0F7F07988"
   },
   "extractedPayloadFilesVerified": 40,
-  "nsisPackagingPasses": 1,
-  "actualFirmwareCatalogPassed": true,
-  "actualV2AppPackageParserPassed": true,
-  "fusedLayoutCheckedDuringMerge": true
+  "nsisPackagingPasses": 1
 }

@@ -1,15 +1,19 @@
-# WILD-X1.0.0.70 — V2 recording-first pair
+# WILD-X 1.0.0.71
 
-[Installer](WILDX_console-Setup-1.0.0.70.exe) / [matching V2 firmware](../Firmware/V2/README.md).
-APP660A6DA4, USBE323A06A, recovery6408DBB8.
+[Installer](WILDX_console-Setup-1.0.0.71.exe).
 
-Delkin V90: two NP2 at30kHz passed600s native/full DAT verification, all loss0.
-Actual70 WinUSB reader and production export bridge passed the saved10s session.
-GUI69 fixes, merge/IMRO helpers and V1/V1Camera firmware are preserved.
+SD download computes DAT checksums while writing, avoiding the long reread after
+the last USB block. Progress stays below 100% until finalization completes.
+Download ETA, merged DAT export and recording configuration files are retained.
 
-No new all-mode/card, BLE control, installed visual-UI, analog, newly-flashed-fused
-or indefinite-endurance qualification. No power reduction.
+111 software checks passed, including saved native recordings, independent DAT
+checksums, cancellation and the actual application export bridge. No new hardware
+or installed-UI qualification was performed for this software change.
 
-Installer SHA256: `383E6D2D48DE78830E2C6F706E2A77FB8D9048A119922FFFDCC9B2E7AA0FD1C9`.
-[Exact manifest](release-manifest.json) / [release evidence](../Note/V2_SD_DUAL30_RELEASE_20261021.md).
-Previous pair is retained under `legacy/20261021_before_WILDX70`.
+Firmware and helpers are byte-identical to version 70: V2 APP 660A6DA4,
+USB E323A06A, recovery 6408DBB8. Prior hardware evidence and its limits remain in
+the [version 70 release note](../Note/V2_SD_DUAL30_RELEASE_20261021.md).
+
+[Exact manifest](release-manifest.json) / [fix and validation](../Note/SD_DOWNLOAD_FINALIZATION_20261021.md)
+/ [compiled source inputs](../ReleaseSources/1.0.0.71/README.md).
+The previous installer is retained under `legacy/20261021_before_1.0.0.71`.
