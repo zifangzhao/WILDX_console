@@ -129,8 +129,9 @@ namespace CE32_console
                 if(String.IsNullOrWhiteSpace(output) || Directory.Exists(output) || File.Exists(output))
                     throw new IOException("A fresh NP export folder is required; existing outputs are never overwritten.");
                 bool success=false,exported=false;string error=null;
+                USB512_interface.NpV2SdDatExport.Result result=null;
                 try {
-                    var result=USB512_interface.NpV2SdDatExport.ExportCommitted(card,(uint)start,output,directoryEnd,cancelled,progress,calibration);
+                    result=USB512_interface.NpV2SdDatExport.ExportCommitted(card,(uint)start,output,directoryEnd,cancelled,progress,calibration);
                     exported=true;success=result.RecordingComplete;
                     if(!success)error="Recording incomplete (stored state "+result.StoredState+", fault "+result.StoredFault+"); verified committed prefix exported.";
                 }
@@ -143,6 +144,11 @@ namespace CE32_console
                         var settings=USB512_interface.NpRecordingSettings.Saved(output,true,(int)U(d,16),(int)U(d,24),U(d,8),U(d,12),"sd_export");
                         settings.Context("dat_files","neuropixels_probeN_ap.dat in recorded physical probe order; .partial suffix until fully verified");
                         settings.Context("descriptor_file","descriptor.bin");
+                        if(exported && result!=null && result.CommittedBlocks>0){
+                            var identityHeader=result.IdentityHeader;
+                            USB512_interface.NpProbeIdentity.V2Header(settings,identityHeader,"Verified historical SD payload header; not the currently connected probe");
+                            File.WriteAllBytes(Path.Combine(output,"probe_identity_header.bin"),identityHeader);
+                        }
                         bool nativeSuccess=exported;Exception metadataError=null;
                         // Retain the exact dual full requests or triple fingerprints
                         // with the DAT. These are recorded intents, not applied proof.

@@ -21,6 +21,7 @@ namespace USB512_interface
             public ulong SourceTicks;
             public readonly long[] Rows;
             public readonly int[] Phases;
+            public byte[] IdentityHeader { get; internal set; }
             public Result() : this(2) { }
             internal Result(int probes) { Rows = new long[probes]; Phases = new int[probes]; }
         }
@@ -118,6 +119,7 @@ namespace USB512_interface
                         progress((int)((ulong)(seq + 1) * 100 / result.CommittedBlocks));
                 }
                 decoder.Complete();
+                result.IdentityHeader=new byte[Sector];Buffer.BlockCopy(immutable,0,result.IdentityHeader,0,Sector);
                 if (verifier.Blocks != result.CommittedBlocks) throw new InvalidDataException("SD verifier extent mismatch.");
                 for (int p = 0; p < probes; p++) {
                     result.Phases[p] = verifier.PhaseForProbe(p);

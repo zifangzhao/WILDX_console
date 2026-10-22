@@ -2504,6 +2504,7 @@ namespace USB512_interface
         private uint probeMask, liveProbeMask, mclkHz, sampleHz, flags, ingressBytes, codecValue, d8PhaseBits, d8LookaheadBytes;
         private readonly int[] phases = { -1, -1, -1 };
         private byte[] staticContract;
+        internal byte[] IdentityHeader { get; private set; }
         internal long Blocks { get; private set; }
         internal ulong PayloadBytesSeen { get; private set; }
         internal int StoredBits { get; private set; }
@@ -2660,6 +2661,7 @@ namespace USB512_interface
                 }
             }
             nextSequence = sequence + 1UL; nextTick = tick + (uint)ticks; first = false;
+            if(Blocks==0){IdentityHeader=new byte[HeaderBytes];Buffer.BlockCopy(bytes,offset,IdentityHeader,0,HeaderBytes);}
             Blocks++; PayloadBytesSeen += PayloadBytes;
         }
 
@@ -3126,6 +3128,7 @@ namespace USB512_interface
                         settings.Context("neural_software_arm_completed_ms",result.FinalCapture.CaptureStartedMs);
                         settings.Context("neural_timing_anchor","software arm completion, 1 ms resolution; not a first ADC-conversion timestamp");
                     }
+                    NpProbeIdentity.V2Header(settings,result.Verifier.IdentityHeader,"Verified live USB block header; EEPROM identity cached before capture");
                     if(result.FinalSource!=null)settings.Context("np2_source_status",NpRecordingSettings.Fields(
                         "words",result.FinalSource.Words,"serial",result.FinalSource.Serial,"model",result.FinalSource.Model,
                         "identity_scope","firmware source-status receipt; physical per-port identity is not advertised"));

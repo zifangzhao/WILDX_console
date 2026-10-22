@@ -6,7 +6,7 @@ New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $exe=Join-Path $OutputDirectory 'NpRecordingSettingsTests.exe'
 $sdAssembly=if($CompanionAssembly){[IO.Path]::GetFullPath($CompanionAssembly)}else{Join-Path $console 'bin\Release\NpV2SdDatExport.dll'}
 Copy-Item -LiteralPath $sdAssembly -Destination $OutputDirectory
-$sources=@("$PSScriptRoot\Tests\TestNpRecordingSettings.cs","$console\NpRecordingSettings.cs","$console\NpProbeManifest.cs","$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",
+$sources=@("$PSScriptRoot\Tests\TestNpRecordingSettings.cs","$console\NpRecordingSettings.cs","$console\NpProbeIdentity.cs","$console\NpProbeManifest.cs","$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",
  "$console\NpLogger\NpCe64Export.cs","$console\NpLogger\NpCe64Decoder.cs","$console\NpLogger\NpSdGeometry.cs",
  "$console\NpLogger\NpDownloadCatalog.cs","$console\NpLogger\NpDownloadStream.cs","$console\NpLogger\NpDownloadNative.cs","$console\NpLogger\RawBurst.cs",
  "$console\Ble\NpMediaExport.cs","$console\Ble\WILD_VideoDecoder.cs","$console\WildXTheme.cs")

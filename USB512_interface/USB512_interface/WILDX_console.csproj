@@ -94,6 +94,7 @@
     <Compile Include="Np2ConfigurationPreferences.cs" />
     <Compile Include="Np2ConfigurationUsb.cs" />
     <Compile Include="NpProbeManifest.cs" />
+    <Compile Include="NpProbeIdentity.cs" />
     <Compile Include="NpRecordingSettings.cs" />
     <Compile Include="NpRecordingDialog.cs" />
     <Compile Include="NpMediaUsbForm.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Ble\NpBleConnection.Media.cs" />
     <Compile Include="Ble\NpBleConnection.Storage.cs" />
     <Compile Include="Ble\NpBleForm.cs" />
+    <Compile Include="Ble\NpBleForm.Metadata.cs" />
     <Compile Include="Ble\NpBleForm.Media.cs" />
     <Compile Include="Ble\NpBleForm.Storage.cs" />
     <Compile Include="Ble\NpBleStorage.cs" />

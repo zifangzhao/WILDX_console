@@ -29,7 +29,7 @@ $sources = @(
     "$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs", "$console\NeuropixelsPreviewForm.cs", "$console\XeNpStreamDecoder.cs",
     "$PSScriptRoot\Tests\TestNpV2SdDatExport.cs", "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",
     "$console\NpLogger\NpCe64Export.cs", "$console\NpLogger\NpCe64Decoder.cs", "$console\NpLogger\NpSdGeometry.cs",
-    "$console\NpRecordingSettings.cs", "$console\NpProbeManifest.cs", "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",
+    "$console\NpRecordingSettings.cs","$console\NpProbeIdentity.cs", "$console\NpProbeManifest.cs", "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",
     "$console\NpLogger\NpDownloadCatalog.cs", $DownloadStreamSource, "$console\NpLogger\NpDownloadNative.cs", "$console\NpLogger\RawBurst.cs",
     "$console\Ble\NpMediaExport.cs", "$console\Ble\WILD_VideoDecoder.cs"
     "$console\WildXTheme.cs"

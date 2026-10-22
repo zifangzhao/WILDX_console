@@ -1,0 +1,10 @@
+{
+  "total": 15221,
+  "installer_executed": false,
+  "hardware_access": false,
+  "metadata_persistence": 22,
+  "ui_render_scope": "Three window widths plus enlarged fonts/controls; not physical DPI/monitor qualification.",
+  "batch_calibration": 15060,
+  "identity_layout_sd": 139,
+  "network_access": false
+}

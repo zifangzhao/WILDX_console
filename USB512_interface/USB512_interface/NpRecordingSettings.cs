@@ -84,7 +84,7 @@ namespace USB512_interface {
    Dictionary<string,object> p;if(probes.TryGetValue(port,out p))return p;
    if(port<1 || port>3)throw new ArgumentOutOfRangeException("port");
    p=Fields("schema_version",1,"probe",port,"active",null,"channels_per_band",384,"probe_file","probe_"+port+".json",
-    "identity",null,"channel_mapping",null,"configuration_state","unavailable","configuration_evidence","No channel-selection receipt is available.",
+    "identity",NpProbeIdentity.Unknown("Firmware/recording does not expose a per-probe EEPROM identity."),"channel_mapping",null,"configuration_state","unavailable","configuration_evidence","No channel-selection receipt is available.",
     "requested_configuration_file",null,"applied_configuration_file",null,"device_receipt_file",null,"selection_file",null,
     "imro_file",null,"imro_state","unavailable","imro_origin",null);
    probes.Add(port,p);return p;
@@ -145,7 +145,7 @@ namespace USB512_interface {
    int port=manifest.Port+1;var p=Probe(port);string prefix="probe_"+port;
    string receipt="neuropixels_probe"+port+"_metadata.json",selection="neuropixels_probe"+port+"_applied-selection.npb1";
    var saved=(Dictionary<string,object>)json.DeserializeObject(manifest.BuildJson(selection));
-   p["identity"]=saved["identity"];p["device_snapshot"]=saved["configuration"];p["device_receipt_file"]=receipt;
+   NpProbeIdentity.V1Receipt(this,manifest);p["device_snapshot"]=saved["configuration"];p["device_receipt_file"]=receipt;
    p["device_receipt_time"]="after_stop";
    if(!manifest.HasSelection) {
     if((string)p["configuration_state"]!="device_confirmed_requested") {
@@ -180,6 +180,12 @@ namespace USB512_interface {
    p["configuration_state"]=manifest.ConfigurationState==3 && (manifest.Verification&required)==required?"device_confirmed_applied":"device_snapshot_unverified";
    p["configuration_evidence"]="Post-stop firmware-held selection and CRC; verification level is recorded in the receipt; analog signals are not verified.";
    if(p["imro_file"]!=null)p["imro_state"]=p["configuration_state"];
+  }
+  internal void Identity(int port,Dictionary<string,object> identity){Probe(port)["identity"]=identity;}
+  void WriteProbeInfo(string target,IEnumerable<Dictionary<string,object>> values) {
+   SaveJson(Path.Combine(target,"probe_info.json"),Fields("schema_version",1,"format","neuropixels.probe_info","source",document["source"],
+    "probes",values.Select(p=>Fields("physical_port",p["probe"],"active",p["active"],"identity",p["identity"],
+     "probe_file",p["probe_file"],"imro_file",p["imro_file"],"imro_state",p["imro_state"],"configuration_state",p["configuration_state"])) .ToArray()));
   }
   static bool Equal(byte[] a,byte[] b){if(a.Length!=b.Length)return false;for(int i=0;i<a.Length;i++)if(a[i]!=b[i])return false;return true;}
   internal void Finished(bool complete,string failure){document["state"]=complete?"complete":"incomplete";document["recording_complete"]=complete;document["failure"]=failure;}
@@ -219,7 +225,8 @@ namespace USB512_interface {
     var errors=new List<Exception>();
     TrySave(errors,()=>WriteXml(folder,activeMask,(string)Part("output")["dat_layout"]=="merged"));
     var list=new List<object>();foreach(var item in probes){list.Add(item.Value);TrySave(errors,()=>SaveJson(Path.Combine(folder,"probe_"+item.Key+".json"),item.Value));}
-    document["probes"]=list;TrySave(errors,()=>SaveJson(Path.Combine(folder,"recording_settings.json"),document));
+    document["probes"]=list;document["probe_info_file"]="probe_info.json";
+    TrySave(errors,()=>WriteProbeInfo(folder,probes.Values));TrySave(errors,()=>SaveJson(Path.Combine(folder,"recording_settings.json"),document));
     if(!probeChildren){TrySave(errors,()=>RefreshBundle(folder));RequireSaved(errors);return;}
    foreach(var item in probes)if((activeMask&(1<<(item.Key-1)))!=0) {
      TrySave(errors,()=>{
@@ -248,6 +255,7 @@ namespace USB512_interface {
     output["dat_layout"]="per_probe";output["channel_count_per_dat"]=384;output["probe_subfolders"]=false;
     WriteXml(child,1<<(item.Key-1),false);
     SaveJson(Path.Combine(child,"recording_settings.json"),local);
+    WriteProbeInfo(child,new[]{item.Value});
     RefreshBundle(child);
      });
    }

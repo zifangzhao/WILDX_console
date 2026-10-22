@@ -1,19 +1,19 @@
 {
-  "version": "1.0.0.76",
-  "releaseId": "WILDX76_BATCH_CALIBRATION_20261022",
-  "baselineVersion": "1.0.0.73",
+  "version": "1.0.0.78",
+  "releaseId": "WILDX78_PROBE_INFO_LAYOUT_20261022",
+  "baselineVersion": "1.0.0.76",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "CABD9E27F1FBEBF3D3E5F726BE67BE1FBA86F15287A473E4B8EC50F9788E80D2",
-  "sdkSha256": "F485AFE114AA0E64AF8E24B4B91F809804752056BBC8EDF97977B23C68857AB4",
+  "guiSha256": "3E2121B8578CC964CD1123D210C6DA35D5701D6357E3DF030330312C09535F67",
+  "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
   "firmwareChanged": false,
   "helpersChanged": false,
-  "consoleBuildSha256": "5292A35FEA030CB7C69F4F9C899EDB4438080E1E824278DC4C79474E917B1A6E",
-  "sourceArchiveSha256": "EC0F3A8F8000F8B4A8F838B154675A3C2A8268D9E842E8A696F44838F06FABF9",
-  "softwareChecks": 15060,
+  "consoleBuildSha256": "27809D4BB8FE8624E51E941BDBAA464E6F77CC5D716B7E73B62C5BEB12198593",
+  "sourceArchiveSha256": "FB949ADC69931D1F44203F69DDB61370673A5D198E0D81AE9F3F67E11CFD0F7C",
+  "softwareChecks": 15221,
   "reusedHardwarePairVersion": "1.0.0.70",
   "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
   "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "scope": "GUI batch post-calibration for recursive merged/per-probe AP/LFP DAT, serial/order/encoding checks, copied source metadata, and explicit staged atomic overwrite with pending journal.15060 actual-app synthetic checks plus offscreen UI render. SDK/firmware/helpers/acquisition unchanged from73; no real recording or hardware qualification.",
+  "scope": "Responsive USB layout/GPIO LEDs; shared per-probe identity sidecars, V1 optional receipt fallback, V2 verified native per-port identities, BLE host-side request receipts. Old firmware stays usable; missing legacy BLE/SD identities remain null. Firmware/helpers unchanged.",
   "installerExecuted": false,
   "payload": [
     {
@@ -193,8 +193,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 255488,
-      "sha256": "F485AFE114AA0E64AF8E24B4B91F809804752056BBC8EDF97977B23C68857AB4"
+      "bytes": 254464,
+      "sha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546"
     },
     {
       "path": "OpenTK.dll",
@@ -208,8 +208,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1623552,
-      "sha256": "CABD9E27F1FBEBF3D3E5F726BE67BE1FBA86F15287A473E4B8EC50F9788E80D2"
+      "bytes": 1633280,
+      "sha256": "3E2121B8578CC964CD1123D210C6DA35D5701D6357E3DF030330312C09535F67"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -218,9 +218,9 @@
     }
   ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.76.exe",
-    "bytes": 7026861,
-    "sha256": "CAF6C88314ABB48AD1E165AB468A16397406AE893B1DEF9FC05C6ACDC67BB48E"
+    "file": "WILDX_console-Setup-1.0.0.78.exe",
+    "bytes": 7030294,
+    "sha256": "FECF104B94B71756C701E5E0517D67F079593E897833CFD5BD64697FC59D8588"
   },
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1

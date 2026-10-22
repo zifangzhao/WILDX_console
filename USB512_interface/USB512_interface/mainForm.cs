@@ -1709,19 +1709,22 @@ namespace USB512_interface
                         failure="Probe "+probe.Probe+" produced no complete AP/LFP rows; recording is not qualified.";
                 }
                 if(device!=null && stoppedForProbeMetadata && parser.Probes.Count>0) {
-                    try {
-                        foreach(var probe in parser.Probes) {
+                    int savedProbeReceipts=0;
+                    foreach(var probe in parser.Probes) {
+                        try {
                             NpProbeManifest manifest=device.GetProbeManifest((byte)(probe.Probe-1));
+                            if(manifest.Port!=probe.Probe-1)throw new IOException("Probe identity receipt returned a different physical port.");
                             probeMetadataLines.AddRange(manifest.Save(runFolder));
                             if(settings!=null)settings.Receipt(manifest);
+                            savedProbeReceipts++;
+                        } catch(Exception ex) {
+                            // Optional identity reads are not a capture/recovery
+                            // gate. Older firmware can STALL this request.
+                            if(settings!=null)settings.Identity(probe.Probe,NpProbeIdentity.Unknown("Post-stop identity receipt unavailable: "+ex.Message));
+                            probeMetadataLines.Add("probe_"+probe.Probe+"_metadata_unavailable="+ex.Message);
                         }
-                        probeMetadataStatus="saved applied firmware receipt for "+parser.Probes.Count+" probe(s)";
-                    } catch(Exception ex) {
-                        // Metadata enhancement failure must never relabel an
-                        // already validated sample stream as corrupt.
-                        probeMetadataStatus="unavailable: "+ex.Message;
-                        probeMetadataLines.Add("firmware_probe_metadata="+probeMetadataStatus);
                     }
+                    probeMetadataStatus="saved firmware receipt for "+savedProbeReceipts+" / "+parser.Probes.Count+" probe(s); unsupported identities remain unavailable";
                 } else if(parser.Probes.Count>0) {
                     probeMetadataStatus="not queried because the firmware did not reach a confirmed stopped state";
                     probeMetadataLines.Add("firmware_probe_metadata="+probeMetadataStatus);

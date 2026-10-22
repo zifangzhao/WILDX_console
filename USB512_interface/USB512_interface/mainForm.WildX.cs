@@ -42,8 +42,8 @@ namespace USB512_interface
 
         static FlowLayoutPanel ActionRow(params Control[] controls)
         {
-            var row=new FlowLayoutPanel { Dock=DockStyle.Fill,WrapContents=true,Margin=Padding.Empty,BackColor=WildXTheme.Surface };
-            foreach(var control in controls){control.Dock=DockStyle.None;control.Anchor=AnchorStyles.Top|AnchorStyles.Left;control.Margin=new Padding(0,0,8,8);
+            var row=new FlowLayoutPanel { Dock=DockStyle.Fill,AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,WrapContents=true,Margin=Padding.Empty,BackColor=WildXTheme.Surface };
+            foreach(var control in controls){control.Dock=DockStyle.None;control.Anchor=AnchorStyles.Left;control.Margin=new Padding(0,0,8,8);
                 if(control is Button){var button=(Button)control;if(button.FlatStyle!=FlatStyle.Flat)WildXTheme.Button(button);control.AutoSize=true;button.AutoSizeMode=AutoSizeMode.GrowAndShrink;control.MinimumSize=new Size(0,36);control.Height=36;}
                 row.Controls.Add(control);
             }
@@ -109,7 +109,7 @@ namespace USB512_interface
             online.RowStyles.Add(new RowStyle(SizeType.Absolute,276));online.RowStyles.Add(new RowStyle(SizeType.Absolute,150));online.RowStyles.Add(new RowStyle(SizeType.Percent,100));usbPage.Controls.Add(online);
             usbPage.AutoScroll=true;
 
-            var capture=Stack(36,36,30,44,24,36);
+            var capture=Stack(36,36,36,44,24,36);
             label1.AutoSize=false;label1.Text="USB device";label1.ForeColor=WildXTheme.Muted;label1.Dock=DockStyle.Fill;label1.TextAlign=ContentAlignment.MiddleLeft;label1.Margin=Padding.Empty;
             var deviceRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=3,RowCount=1,Margin=Padding.Empty };
             deviceRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));
@@ -119,11 +119,11 @@ namespace USB512_interface
             label2.Text="Output folder";label2.ForeColor=WildXTheme.Muted;label2.AutoSize=false;label2.Dock=DockStyle.Fill;label2.TextAlign=ContentAlignment.MiddleLeft;label2.Margin=Padding.Empty;
             var folderRow=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=3,RowCount=1,Margin=Padding.Empty };
             folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));
-            folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,132));
+            folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));folderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,102));
             llblSaveFolder.AutoSize=false;llblSaveFolder.Dock=DockStyle.Fill;llblSaveFolder.TextAlign=ContentAlignment.MiddleLeft;llblSaveFolder.AutoEllipsis=true;llblSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.LinkColor=WildXTheme.Accent;btnSaveFolder.Dock=DockStyle.Fill;btnSaveFolder.Margin=Padding.Empty;
             llblSaveFolder.Text="Choose a destination folder";
-            usbDestinationFolder.Text=saveFolder??"";usbDestinationFolder.Margin=Padding.Empty;
+            usbDestinationFolder.Text=saveFolder??"";usbDestinationFolder.Dock=DockStyle.None;usbDestinationFolder.Anchor=AnchorStyles.Left|AnchorStyles.Right;usbDestinationFolder.Margin=new Padding(0,0,10,0);
             usbDestinationFolder.TextChanged+=delegate{saveFolder=usbDestinationFolder.Text.Trim().Trim('"');UpdateStartEnabled();};
             llblSaveFolder.TextChanged+=delegate{if(usbDestinationFolder.Text!=saveFolder)usbDestinationFolder.Text=saveFolder??"";};
             folderRow.Controls.Add(label2,0,0);folderRow.Controls.Add(usbDestinationFolder,1,0);folderRow.Controls.Add(btnSaveFolder,2,0);capture.Controls.Add(folderRow,0,1);
@@ -161,7 +161,8 @@ namespace USB512_interface
             usbDetails.Click+=delegate {using(var report=new NpReportForm("USB transfer health",CurrentUsbHealthReport))report.ShowDialog(this);};
             usbQualityTestButton=new Button {Name="usbQualityTest",Text="USB quality test…",AutoSize=true};usbQualityTestButton.Click+=async delegate {await TestUsbQualityAsync();};
             usbQualityContinuous=new CheckBox {Name="usbQualityContinuous",Text="Continuous",Checked=true,AutoSize=true};
-            activity.Controls.Add(ActionRow(lblSpeed,captureReportButton),0,1);
+            lblSpeed.Margin=new Padding(0,0,8,8);
+            var activityActions=ActionRow(lblSpeed,captureReportButton);activity.Controls.Add(activityActions,0,1);
             lblRecInfo.AutoSize=false;lblRecInfo.Dock=DockStyle.Fill;lblRecInfo.AutoEllipsis=false;lblRecInfo.UseMnemonic=false;lblRecInfo.Margin=Padding.Empty;lblRecInfo.Text="Choose a USB device and an output folder to begin.";activity.Controls.Add(lblRecInfo,0,2);
             llblSavefile.AutoSize=false;llblSavefile.Dock=DockStyle.Fill;llblSavefile.AutoEllipsis=false;llblSavefile.UseMnemonic=false;llblSavefile.Margin=Padding.Empty;llblSavefile.LinkColor=WildXTheme.Accent;activity.Controls.Add(llblSavefile,0,3);
             var usbInfo=Stack(36,24,0);usbInfo.RowStyles[2].SizeType=SizeType.Absolute;
@@ -190,10 +191,11 @@ namespace USB512_interface
                         var row=activity.RowStyles[activity.GetRow(label)];
                         if(row.Height!=height)row.Height=height;
                     }
+                    float scale=DeviceDpi/96F;
+                    activity.RowStyles[1].Height=Math.Max(36*scale,activityActions.GetPreferredSize(new Size(activity.ClientSize.Width,0)).Height);
                     var layout=(TableLayoutPanel)activityCard.Controls[0];
                     int heightNeeded=(int)(layout.RowStyles[0].Height+activity.RowStyles.Cast<RowStyle>().Sum(row=>row.Height))+
                         activityCard.Padding.Vertical+activityCard.Margin.Vertical;
-                    float scale=activity.RowStyles[1].Height/36F;
                     capture.RowStyles[3].Height=Math.Max(40*scale,captureActions.GetPreferredSize(new Size(capture.ClientSize.Width,0)).Height);
                     capture.RowStyles[4].Height=npAutoRecover.Visible?npAutoRecover.GetPreferredSize(Size.Empty).Height+npAutoRecover.Margin.Vertical:0;
                     var acquisitionLayout=(TableLayoutPanel)acquisitionCard.Controls[0];
@@ -210,7 +212,8 @@ namespace USB512_interface
                     int upperHeight=Math.Max(captureHeight+activityHeight,(int)Math.Ceiling(408*scale));
                     online.RowStyles[0].Height=upperHeight-activityHeight;
                     online.RowStyles[1].Height=activityHeight;
-                    healthAndGpio.RowStyles[0].Height=176*scale;
+                    health.RowStyles[0].Height=Math.Max(40*scale,health.Controls[0].GetPreferredSize(new Size(health.ClientSize.Width,0)).Height);
+                    healthAndGpio.RowStyles[0].Height=Math.Max(176*scale,health.RowStyles[0].Height+96*scale);
                     healthAndGpio.RowStyles[1].Height=upperHeight-healthAndGpio.RowStyles[0].Height;
                     online.Height=Math.Max(upperHeight+(int)Math.Ceiling(224*scale),usbPage.ClientSize.Height-usbPage.Padding.Vertical);
                 } finally {arrangingActivity=false;}
@@ -220,7 +223,7 @@ namespace USB512_interface
             usbHealthSummary.TextChanged+=delegate {arrangeActivity();};usbHealthSummary.FontChanged+=delegate {arrangeActivity();};
             usbInfo.SizeChanged+=delegate {arrangeActivity();};
             lblRecInfo.FontChanged+=delegate {arrangeActivity();};llblSavefile.FontChanged+=delegate {arrangeActivity();};
-            activity.SizeChanged+=delegate {arrangeActivity();};capture.SizeChanged+=delegate {arrangeActivity();};
+            activity.SizeChanged+=delegate {arrangeActivity();};capture.SizeChanged+=delegate {arrangeActivity();};health.SizeChanged+=delegate {arrangeActivity();};
             captureActions.Layout+=delegate {arrangeActivity();};npAutoRecover.VisibleChanged+=delegate {arrangeActivity();};
             usbPage.Resize+=delegate {arrangeActivity();};arrangeActivity();
             var recordingSummaryTimer=new Timer {Interval=1000};components.Add(recordingSummaryTimer);

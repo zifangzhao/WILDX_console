@@ -1,0 +1,1 @@
+Exact GUI78 compiler inputs and SDK sources/build options. Based on published76; UI alignment, probe identity metadata and legacy fallback. Bundled firmware/helpers are unchanged. See ../../Note/PROBE_INFO_LAYOUT_20261022.md for behavior and firmware limitations.15,221 software checks passed; no hardware or installed-pair qualification.

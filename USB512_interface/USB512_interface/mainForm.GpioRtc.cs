@@ -73,10 +73,15 @@ namespace USB512_interface {
     foreach(var cell in gpioRows[id].Cells){gpioChannelTable.Controls.Remove(cell);cell.Dispose();}gpioRows.Remove(id);
    }
    foreach(byte id in ids)if(!gpioRows.ContainsKey(id)) {
-    var row=new GpioChannelRow {Id=GpioTableCell(id.ToString(),ContentAlignment.MiddleLeft),Led=GpioTableCell("●",ContentAlignment.MiddleCenter),
+    var row=new GpioChannelRow {Id=GpioTableCell(id.ToString(),ContentAlignment.MiddleLeft),Led=GpioTableCell("",ContentAlignment.MiddleCenter),
      Count=GpioTableCell("0",ContentAlignment.MiddleRight),Frequency=GpioTableCell("0.0",ContentAlignment.MiddleRight)};
     row.Id.Name="gpioChannelId"+id;row.Led.Name="gpioChannelLed"+id;row.Count.Name="gpioChannelCount"+id;row.Frequency.Name="gpioChannelRate"+id;
-    row.Led.Font=WildXTheme.Title;row.Led.ForeColor=WildXTheme.Border;
+    row.Led.ForeColor=WildXTheme.Border;
+    row.Led.Paint+=delegate(object sender,PaintEventArgs e){var led=(Label)sender;
+     int diameter=Math.Max(4,Math.Min(led.Font.Height,Math.Min(led.ClientSize.Width,led.ClientSize.Height)-6));
+     e.Graphics.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+     using(var brush=new SolidBrush(led.ForeColor))e.Graphics.FillEllipse(brush,(led.Width-diameter)/2F,(led.Height-diameter)/2F,diameter,diameter);
+    };
     row.Led.AccessibleName="GPIO channel "+id+" activity";row.Count.AccessibleName="GPIO channel "+id+" events";
     row.Frequency.AccessibleName="GPIO channel "+id+" event frequency in Hz";
     gpioRows.Add(id,row);foreach(var cell in row.Cells)gpioChannelTable.Controls.Add(cell);

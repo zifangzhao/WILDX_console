@@ -18,7 +18,7 @@ $sources=@(
  "$console\NpLogger\NpCe64Decoder.cs","$console\NpLogger\NpCe64Export.cs","$console\NpLogger\NpSdGeometry.cs",
  "$PSScriptRoot\SD\NpV2SdDatExport.cs","$PSScriptRoot\USBConsoleV2\NpV2UsbConsole.cs","$console\Np2ConfigurationClient.cs",
  "$console\NpAdcCalibration.cs",
- "$PSScriptRoot\SD\NpNeuroscopeXml.cs","$PSScriptRoot\SD\NpMetadataFile.cs","$console\WildXTheme.cs","$console\NpRecordingSettings.cs",
+ "$PSScriptRoot\SD\NpNeuroscopeXml.cs","$PSScriptRoot\SD\NpMetadataFile.cs","$console\WildXTheme.cs","$console\NpRecordingSettings.cs","$console\NpProbeIdentity.cs",
  "$console\NpLogger\NpDownloadCatalog.cs","$console\Ble\NpMediaExport.cs","$console\Ble\WILD_VideoDecoder.cs",
  "$console\XeNpWinUsb.cs","$console\NpProbeManifest.cs","$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs","$console\XeNpSdInfo.cs",
  "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs","$console\NpLogger\NpV1Management.cs",
