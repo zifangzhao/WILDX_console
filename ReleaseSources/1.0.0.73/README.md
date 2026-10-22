@@ -1,0 +1,1 @@
+Exact GUI73 compiler/build inputs based on published72, with DAT-only V1 SD neural output and prefix byte-offset tracking. SDK binary and archived source inputs are unchanged from72. Resources and other dependencies reuse checked caches. See ../../Note/NEURAL_DAT_ONLY_20261022.md for scope and validation.
