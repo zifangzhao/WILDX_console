@@ -87,11 +87,12 @@ namespace USB512_interface
         async Task Calibrate()
         {
             if(busy||!items.Any(p=>p.Ready))return;cancelled=false;SetBusy(true);progress.Value=0;
+            var estimate=new NpProgressEstimate();
             try{
                 bool replace=overwrite.Checked;string target=Path.GetFullPath((replace?source:output).Text.Trim().Trim('"'));
-                var ui=new Progress<NpCalibrationBatch.Progress>(p=>{progress.Value=p.Total==0?0:(int)Math.Min(100,p.Done*100.0/p.Total);status.Text=p.Message;DataGridViewRow row;if(p.Item!=null&&rows.TryGetValue(p.Item,out row)){row.Cells[3].Value=p.Item.Status;row.Cells[4].Value=p.Item.Detail;}});
+                var ui=new Progress<NpCalibrationBatch.Progress>(p=>{progress.Value=p.Total==0?0:(int)Math.Min(99,p.Done*100.0/p.Total);status.Text=p.Message+" · "+estimate.Describe(p.Done,p.Total);DataGridViewRow row;if(p.Item!=null&&rows.TryGetValue(p.Item,out row)){row.Cells[3].Value=p.Item.Status;row.Cells[4].Value=p.Item.Detail;}});
                 string report=await Task.Run(()=>NpCalibrationBatch.Run(items,target,()=>cancelled,p=>((IProgress<NpCalibrationBatch.Progress>)ui).Report(p),replace));
-                progress.Value=100;status.Text=items.Count(p=>p.Status=="Complete")+" complete · "+items.Count(p=>p.Status=="Failed")+" failed · "+items.Count(p=>p.Status=="Skipped")+" skipped. Report: "+report;
+                progress.Value=100;status.Text=items.Count(p=>p.Status=="Complete")+" complete · "+items.Count(p=>p.Status=="Failed")+" failed · "+items.Count(p=>p.Status=="Skipped")+" skipped · "+estimate.Elapsed+". Report: "+report;
             }catch(OperationCanceledException){status.Text="Cancelled. Completed outputs and the batch report are saved; partial files remain marked incomplete.";}
             catch(Exception ex){status.Text=ex.Message;}
             finally{foreach(var item in items){DataGridViewRow row;if(rows.TryGetValue(item,out row)){row.Cells[3].Value=item.Status;row.Cells[4].Value=item.Detail;}}SetBusy(false);}

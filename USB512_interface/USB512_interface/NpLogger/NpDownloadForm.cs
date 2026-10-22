@@ -26,8 +26,9 @@ namespace CE32_console
         private readonly Button deleteLast=new Button{Name="deleteLastNpRecording",Text="Delete last recording…",AutoSize=true};
         private readonly Button repairCatalog=new Button{Name="repairUsbCatalog",Text="Repair SD catalog…",AutoSize=true};
         private readonly Label cardHelp=new Label{AutoSize=true,Text="Delete and format require an SD card reader.",Margin=new Padding(8,9,0,0)};
-        private readonly Button fast=new Button{Text="NP1 fast archive…",AutoSize=true};
+
         private readonly CheckBox convertAfterDownload=new CheckBox{Text="MP4 + WAV",Checked=true,AutoSize=true};
+        private readonly CheckBox mergeDat=new CheckBox{Name="mergeSdProbeDat",Text="Merge probes into one DAT",AutoSize=true};
         private bool busy,refreshing,usbBlocked,maintenanceActive,listedRecoverySearch;private volatile bool cancelled;private Source listedSource;
         private readonly string requestedSourcePath;
         private string boundSourcePath;
@@ -50,11 +51,11 @@ namespace CE32_console
             boundSourcePath=requestedSourcePath;
             Text="WILD-X NP1 / NP2 / media — SD Download";Width=950;Height=500;
             var actions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};actions.Controls.AddRange(new Control[]{refresh,list,recover,save,cancel,play,convert,convertAfterDownload});
-            actions.Controls.Add(calibrationButton);
+            actions.Controls.Add(mergeDat);actions.Controls.Add(calibrationButton);
             calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
-            actions.Controls.Add(fast);
+
             var cardActions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};cardActions.Controls.AddRange(new Control[]{deleteLast,format,repairCatalog,cardHelp});
-            fast.Click+=(s,e)=>{if(busy || usbBlocked)return;var source=sources.SelectedItem as Source;using(var form=new USB512_interface.NpLoggerForm(source!=null&&source.Usb?source.Path:null,sessionLabel.Text))form.ShowDialog(DialogOwner);};
+
             Controls.Add(records);Controls.Add(cardActions);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Top,Height=76,ColumnCount=3,RowCount=2,Padding=new Padding(0,4,0,4)};
             nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));
@@ -81,12 +82,14 @@ namespace CE32_console
             USB512_interface.WildXTheme.Apply(this);Padding=new Padding(0);
             records.IntegralHeight=false;records.Font=USB512_interface.WildXTheme.Body;
             sources.Margin=new Padding(0,0,0,12);status.Padding=new Padding(0,10,0,0);status.Height=68;
+            status.TextChanged+=(s,e)=>FitStatus();status.SizeChanged+=(s,e)=>FitStatus();
             status.ForeColor=USB512_interface.WildXTheme.Muted;
             Controls.Add(new Label {Text="STORAGE SOURCE  /  USB device or card reader",Dock=DockStyle.Top,Height=26,ForeColor=USB512_interface.WildXTheme.Muted});
             USB512_interface.WildXTheme.Button(save,true);USB512_interface.WildXTheme.Button(format,false,true);USB512_interface.WildXTheme.Button(deleteLast,false,true);cardHelp.ForeColor=USB512_interface.WildXTheme.Muted;
             if(!autoDiscover)status.Text="Refresh sources to choose a USB device or card reader. List its recordings before downloading.";
         }
         internal void SetUsbSelection(string path){if(!busy && !string.Equals(path,parentUsbPath,StringComparison.OrdinalIgnoreCase)){parentUsbPath=path;if(!string.IsNullOrEmpty(path))boundSourcePath=path;}}
+        void FitStatus(){int width=Math.Max(160,status.ClientSize.Width-status.Padding.Horizontal);int height=Math.Max(68,TextRenderer.MeasureText(status.Text,status.Font,new System.Drawing.Size(width,Int32.MaxValue),TextFormatFlags.WordBreak|TextFormatFlags.TextBoxControl).Height+status.Padding.Vertical+4);if(status.Height!=height)status.Height=height;}
         internal void SetUsbBlocked(bool value){usbBlocked=value;UpdateControls();}
         internal void RequestCancel(){if(busy){cancelled=true;status.Text="Waiting for the operation to finish. A catalog reset cannot be interrupted.";}}
         protected override void Dispose(bool disposing){if(disposing){enumerationTimer.Stop();enumerationTimer.Dispose();}base.Dispose(disposing);}
@@ -100,7 +103,7 @@ namespace CE32_console
             if(sources.SelectedIndex<0)SelectBoundSource();
             }finally{refreshing=false;}
         }
-        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);fast.Enabled=!busy && !usbBlocked;recover.Enabled=!busy && source!=null && HeaderRecoveryEligible(source.Usb,source.Path) && !(usbBlocked && source.Usb);deleteLast.Enabled=!busy && source!=null && source.CanDelete;format.Enabled=!busy && source!=null && source.CanFormat && !(usbBlocked && source.Usb);repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=true;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. Catalog repair requires supported USB firmware and confirmation; Format is a separate erase action.":"Recover is read-only; delete/format require removable SD media.";cancel.Enabled=busy && !maintenanceActive;}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=mergeDat.Enabled=!busy;list.Enabled=save.Enabled=!busy && !(usbBlocked && source!=null && source.Usb);recover.Enabled=!busy && source!=null && HeaderRecoveryEligible(source.Usb,source.Path) && !(usbBlocked && source.Usb);deleteLast.Enabled=!busy && source!=null && source.CanDelete;format.Enabled=!busy && source!=null && source.CanFormat && !(usbBlocked && source.Usb);repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=true;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. Catalog repair requires supported USB firmware and confirmation; Format is a separate erase action.":"Recover is read-only; delete/format require removable SD media.";cancel.Enabled=busy && !maintenanceActive;}
         private void SetBusy(bool value){busy=value;destination.Enabled=browseDestination.Enabled=!busy;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
         internal async Task RepairUsbCatalogAsync(string path) {
             if(busy || usbBlocked || !USB512_interface.NpUsbCatalogRepair.IsEligiblePath(path))return;
@@ -170,8 +173,9 @@ namespace CE32_console
         private async Task ConvertExistingAsync() {
             string folder;using(var dialog=new OpenFileDialog{Title="Select exported recording metadata",Filter="Recording metadata (recording.json)|recording.json",InitialDirectory=Directory.Exists(destination.Text)?destination.Text:""}){if(dialog.ShowDialog(DialogOwner)!=DialogResult.OK)return;folder=Path.GetDirectoryName(dialog.FileName);}
             SetBusy(true);cancelled=false;progress.Value=0;
-            var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=p.Item1;status.Text=p.Item2;});
-            try{string warning=await Task.Run(()=>NpMediaExport.ConvertFiles(folder,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(p,message))));progress.Value=100;status.Text="Converted media. Native files and timestamp CSVs retained; video and audio durations are independent. "+warning;}
+            var estimate=new USB512_interface.NpProgressEstimate();
+            var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=Math.Max(0,Math.Min(99,p.Item1));status.Text=p.Item2;});
+            try{string warning=await Task.Run(()=>NpMediaExport.ConvertFiles(folder,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(p,message))));progress.Value=100;status.Text="Converted media · "+estimate.Elapsed+". Native files and timestamp CSVs retained; video and audio durations are independent. "+warning;}
             catch(OperationCanceledException){status.Text="Conversion cancelled. Native export and any completed outputs are retained.";}
             catch(Exception ex){status.Text="Conversion failed; native export retained: "+ex.Message;}
             finally{SetBusy(false);}
@@ -205,7 +209,7 @@ namespace CE32_console
             if(selected<0)status.Text="Selected device is absent; choose a source explicitly. Another board was not substituted.";
         }
         internal static long RequiredBytes(NpDownloadRecord record) {
-            return record.V2?checked(((long)record.Chunks*61440+1599)/1600*2*384*2):checked((long)record.Chunks*65536*4);
+            return record.V2?checked(((long)record.Chunks*61440+1599)/1600*2*384*2):checked((long)record.Chunks*65536*(record.Media?4L:2L));
         }
         private Stream Open(Source source) {
             if(source.Usb){if(usbBlocked)throw new IOException("Disconnect BLE and finish the USB operation before accessing this USB logger.");return new NpDownloadStream(source.Path){Cancelled=()=>cancelled};}
@@ -229,7 +233,8 @@ namespace CE32_console
             if(forceHeaders && !HeaderRecoveryEligible(source.Usb,source.Path)){status.Text="This recovery path supports V1 neural/camera recordings through V1 USB or an SD reader.";return;}
             SetBusy(true);cancelled=false;records.Items.Clear();listedSource=null;listedRecoverySearch=false;
             progress.Value=0;
-            var ui=new Progress<int>(p=>{progress.Value=Math.Max(0,Math.Min(100,p));status.Text="Recovering recording list from validated headers (read-only)…";});
+            var estimate=new USB512_interface.NpProgressEstimate();
+            var ui=new Progress<int>(p=>{progress.Value=Math.Max(0,Math.Min(99,p));status.Text="Recovering recording list: "+p+"% · "+estimate.Percent(p);});
             try {await PrepareSourceAsync(source);status.Text="Reading NP recording directory (read-only)…";
                 string transport="SD reader";
                 var found=await Task.Run(()=>{using(var stream=Open(source)){if(stream is NpDownloadStream)transport=((NpDownloadStream)stream).TransportDescription;return ReadCatalog(stream,source,p=>((IProgress<int>)ui).Report(p),forceHeaders);}});
@@ -243,13 +248,7 @@ namespace CE32_console
         private List<NpDownloadRecord> ReadCatalog(Stream stream,Source source,Action<int> report=null,bool forceHeaders=false)
         {return HeaderRecoveryEligible(source.Usb,source.Path)?NpCatalogRecovery.Read(stream,()=>cancelled,report,forceHeaders):NpDownloadCatalog.ReadAvailable(stream);}
         internal static string DownloadTimeRemaining(int percent,double elapsedSeconds,bool knownSize) {
-            if(!knownSize)return "Time remaining unknown (size unknown)";
-            if(percent>=100)return "Finalizing…";
-            if(percent<=0 || elapsedSeconds<3 || Double.IsNaN(elapsedSeconds) || Double.IsInfinity(elapsedSeconds))return "Estimating time…";
-            double seconds=Math.Ceiling(elapsedSeconds*(100-percent)/percent);
-            if(seconds>=TimeSpan.MaxValue.TotalSeconds)return "Estimating time…";
-            var remaining=TimeSpan.FromSeconds(seconds);
-            return "~"+((long)remaining.TotalHours).ToString("00")+":"+remaining.Minutes.ToString("00")+":"+remaining.Seconds.ToString("00")+" remaining";
+            return USB512_interface.NpProgressEstimate.Remaining(percent,100,elapsedSeconds,knownSize);
         }
         private async Task SaveAsync() {
             string label;try{label=USB512_interface.NpFolderNaming.Label(sessionLabel.Text);}catch(ArgumentException ex){status.Text=ex.Message;return;}
@@ -262,13 +261,17 @@ namespace CE32_console
                 if(answer==DialogResult.Cancel)return;recoverInterrupted=answer==DialogResult.Yes;
             }
             string root=destination.Text.Trim().Trim('"');if(root.Length==0){status.Text="Enter a destination folder or choose Browse.";return;}
-            try {root=Path.GetFullPath(root);destination.Text=root;long required=chosen.Sum(RequiredBytes)+16*1024*1024;
+            bool merge=mergeDat.Checked;
+            try {root=Path.GetFullPath(root);destination.Text=root;long required=checked(chosen.Sum(r=>RequiredBytes(r)*(merge&&!r.Media?2L:1L))+16*1024*1024);
                 var drive=new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root)));
-                if(drive.AvailableFreeSpace<required){status.Text="Insufficient space: allow "+(required/1073741824.0).ToString("N1")+" GiB for raw, AP/LFP and auxiliary outputs.";return;}
+                if(drive.AvailableFreeSpace<required){status.Text="Insufficient space: allow "+(required/1073741824.0).ToString("N1")+" GiB for decoded data and auxiliary outputs.";return;}
             }catch(Exception ex){status.Text="Cannot check destination space: "+ex.Message;return;}
             bool makeMedia=convertAfterDownload.Checked;var conversionErrors=new List<string>();var conversionWarnings=new List<string>();
             var calibration=USB512_interface.NpCalibrationStore.Get("offline");
             SetBusy(true);cancelled=false;progress.Value=0;var source=listedSource;
+            var elapsed=new USB512_interface.NpProgressEstimate();double nativeTotal=chosen.Sum(r=>(double)r.Chunks*(r.V2?46592:65536)),nativeDone=0,nativeSeconds=0;
+            bool queueSizeKnown=!(recoverInterrupted&&chosen.Any(r=>r.PowerInterruptedRecovery));
+            status.Text="Preparing download · "+elapsed.Percent(0);
             var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=Math.Max(0,Math.Min(100,p.Item1));status.Text=p.Item2;});
             try {await PrepareSourceAsync(source);await Task.Run(()=>{using(var stream=Open(source)) {
                 // Revalidate directory on the new connection; never trust stale UI extents.
@@ -282,26 +285,35 @@ namespace CE32_console
                     Action<int> reportProgress=p=>{
                         double totalBytes=(double)r.Chunks*(r.V2?46592:65536),bytes=totalBytes*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
                         bool knownSize=!(recoverInterrupted&&r.PowerInterruptedRecovery);
-                        int local=r.Media&&makeMedia?p*75/100:p;
+                        int weight=r.Media&&makeMedia?75:merge&&!r.Media?70:100;int local=Math.Min(99,p*weight/100);
                         string activity=knownSize?"native download ~"+(bytes/1073741824).ToString("F2")+" / "+(totalBytes/1073741824).ToString("F2")+" GiB · ~"+(bytes/seconds/1e6).ToString("F1")+" MB/s":"read-only prefix recovery";
-                        ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+" ("+(index+1)+"/"+chosen.Count+"): "+p+"% | "+activity+" | "+DownloadTimeRemaining(p,seconds,knownSize)+"\r\n"+output));
+                        ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+" ("+(index+1)+"/"+chosen.Count+"): "+
+                            (p>=100?"Finalizing recording files…":p+"% | "+activity+" | "+DownloadTimeRemaining(p,seconds,knownSize))+
+                            " | Selected downloads: "+USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown)+" · "+elapsed.Elapsed+"\r\n"+output));
                     };
                     reportProgress(0);
                     if(recoverInterrupted&&r.PowerInterruptedRecovery){
                         if(r.Media)NpMediaExport.ExportPowerInterruptedPrefix(stream,r.Start,r.End,output,()=>cancelled,reportProgress);
                         else NpCe64Export.ExportPowerInterruptedPrefix(stream,r.Start,r.End,output,()=>cancelled,reportProgress);
                     }
-                    else NpCe64Export.ExportCalibrated(stream,r.Start,r.End,output,()=>cancelled,reportProgress,calibration.Count==0?null:calibration);
+                    else {
+                        var result=NpCe64Export.ExportCalibrated(stream,r.Start,r.End,output,()=>cancelled,reportProgress,calibration.Count==0?null:calibration);
+                        string warning=NpCe64Export.V2RecordingWarning(result);
+                        if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);
+                    }
+                    nativeDone+=(double)r.Chunks*(r.V2?46592:65536);nativeSeconds+=watch.Elapsed.TotalSeconds;
+                    if(merge && !r.Media && (r.Chunks>0 || recoverInterrupted&&r.PowerInterruptedRecovery))NpSdDatMerge.ExportTimed(output,r.V2,(int)r.ProbeMask,(int)r.ApHz,()=>cancelled,
+                        (p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+70+Math.Min(29,p*29/100))/chosen.Count,message+"\r\n"+output)));
                     if(r.RecoveryNotice!=null)File.WriteAllText(Path.Combine(output,"download_catalog.txt"),
                         (r.V2?"published_catalog_end_lba="+r.CatalogEnd+"\ncommitted_download_end_lba="+r.End:"record_start_lba="+r.Start+"\nexport_bound_end_lba="+r.End+"\nfooter_reported_chunks="+r.Chunks)+"\nstored_state="+r.State+"\nstored_fault="+r.Fault+"\n"+r.RecoveryNotice+"\nThe card was not modified. Stored recording metadata is retained unchanged. Recovery is not a free-space or payload-durability proof.\n");
                     if(r.Media&&makeMedia&&recoverInterrupted&&r.PowerInterruptedRecovery)conversionWarnings.Add("Session "+r.Session+": recovered native prefix remains incomplete; convert separately after inspection.");
                     if(r.Media&&makeMedia&&!(recoverInterrupted&&r.PowerInterruptedRecovery))try{
-                        string warning=NpMediaExport.ConvertFiles(output,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+75+p*25/100)/chosen.Count,message)));
+                        string warning=NpMediaExport.ConvertFiles(output,()=>cancelled,(p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+75+Math.Min(24,p*24/100))/chosen.Count,message)));
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);
                     }catch(OperationCanceledException){throw;}catch(Exception ex){conversionErrors.Add("Session "+r.Session+": "+ex.Message);}
                     }
                 }
-            }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Export finished. Native files and timestamps retained. NP: capture_status.txt.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+(recoverInterrupted?"Recovered prefixes remain INCOMPLETE; not firmware-finalized. ":chosen.Any(r=>!r.Complete)?"Incomplete recordings contain footer-reported data only. ":"")+string.Join("; ",conversionWarnings);
+            }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Export finished · "+elapsed.Elapsed+". Data, metadata and timestamps saved. NP: capture_status.txt.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+(recoverInterrupted?"Recovered prefixes remain INCOMPLETE; not firmware-finalized. ":chosen.Any(r=>!r.Complete)?"Incomplete recordings contain footer-reported data only. ":"")+string.Join("; ",conversionWarnings);
             }catch(OperationCanceledException){status.Text="Cancelled. Partial files are retained and marked incomplete.";}
             catch(Exception ex){status.Text="Download stopped: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"NP download",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
             finally{SetBusy(false);}

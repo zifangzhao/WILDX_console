@@ -1,0 +1,1 @@
+Exact GUI86 compiler inputs based on published84. Elapsed and remaining-time estimates across downloads, archive decoding, DAT merging, media conversion and calibration; SDK/firmware/helpers unchanged. Resources and other dependencies reuse checked caches. See ../../Note/OPERATION_TIME_ESTIMATES_20261022.md for validation and limits.

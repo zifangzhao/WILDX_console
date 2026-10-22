@@ -1,19 +1,19 @@
 {
-  "version": "1.0.0.84",
-  "releaseId": "WILDX84_CALIBRATION_PROBE_PICKER_20261022",
-  "baselineVersion": "1.0.0.82",
+  "version": "1.0.0.86",
+  "releaseId": "WILDX86_OPERATION_TIME_ESTIMATES_20261022",
+  "baselineVersion": "1.0.0.84",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "06452316D4D0325BF8DDFDCFAEE007EFA2A6F835E19AB8210C63DAA60199011C",
+  "guiSha256": "D1B0F7C77A41E2FEFF15E341D9E07A06725CC8932B4072FEE60C476CC9D61E4A",
   "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
   "firmwareChanged": false,
   "helpersChanged": false,
-  "consoleBuildSha256": "5FBCE186C5282D8D9EFC110D7F46EC126E2C587887B4A1883AD021E566496387",
-  "sourceArchiveSha256": "643C5E544501A4D140895B944B35681D08D4E455DE96753D24A4567CC593473D",
-  "softwareChecks": 15395,
+  "consoleBuildSha256": "9906B154C0503442AE793CD651F3AFCEBC40A2A0BDAC89A74C54FA298F8404AA",
+  "sourceArchiveSha256": "BA3D5502E40498BFAF895382BF91FD6FBDB72224B75DC7E05F5166DD98FFDACA",
+  "softwareChecks": 15457,
   "reusedHardwarePairVersion": "1.0.0.70",
   "reusedHardwarePairSha256": "EED29F379182334772D955D7AE3DA2F8DC988AB7161FB608BC4EBBD56269FC50",
   "firmwareReceiptSha256": "B8BC2FBA73D625B84647361A2C9EFC618D46086B4483F21F623DAC1595905B44",
-  "scope": "V1/V2 filtered factory probe lists and per-recording selection when SN is missing; AP/LFP prompt deduplication, explicit selection provenance, and unchanged original metadata.15395 software checks plus read-only verification of27 real probes/39 factory CSVs. SDK/firmware/helpers unchanged from82; no hardware qualification.",
+  "scope": "Elapsed and remaining-time estimates for USB/SD and archive downloads, decoding, DAT merging, WAV/MP4 conversion, and single/batch calibration. Selected-download queue ETA is native-byte-weighted; per-phase timing and wrapped status layout.15457 software checks. All39 other payload files, SDK, firmware, helpers and decoder/camera tone unchanged from84; no new logger qualification.",
   "installerExecuted": false,
   "payload": [
     {
@@ -208,8 +208,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1682432,
-      "sha256": "06452316D4D0325BF8DDFDCFAEE007EFA2A6F835E19AB8210C63DAA60199011C"
+      "bytes": 1689600,
+      "sha256": "D1B0F7C77A41E2FEFF15E341D9E07A06725CC8932B4072FEE60C476CC9D61E4A"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -218,9 +218,9 @@
     }
   ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.84.exe",
-    "bytes": 7044659,
-    "sha256": "2D3C0D91FC8C3653186180D67F7DB7344340003A0187A23F224936EC8DDF0CD0"
+    "file": "WILDX_console-Setup-1.0.0.86.exe",
+    "bytes": 7047123,
+    "sha256": "BD0FFAA88A6C6BC7A6CC1CBDC0A40AC19F14445B70B830D6DAF859EBE97DFD53"
   },
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1

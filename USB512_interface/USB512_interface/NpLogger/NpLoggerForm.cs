@@ -149,11 +149,12 @@ namespace USB512_interface
                     settings.Context("raw_archive_file",choice==2?null:Path.GetFileName(archive));
                     settings.Context("decoded_output_folder",choice==1?null:"decoded");
                     settings.Context("firmware_recording_complete",current.Complete);settings.Write();
-                    if(choice==2){NpCe64Export.Export(s,current.Start,current.End,output,()=>cancelled,p=>Report("Compatible USB transfer + decoding: "+p+"%",p));}
+                    if(choice==2){var estimate=new NpProgressEstimate();NpCe64Export.Export(s,current.Start,current.End,output,()=>cancelled,p=>Report("Compatible USB transfer + decoding: "+p+"% · "+estimate.Percent(p),Math.Min(99,p)));}
                     else {
                         var watch=Stopwatch.StartNew();
+                        var estimate=new NpProgressEstimate();
                         string result=s.SaveRawDownload(checked((uint)current.Start),current.End-current.Start,2,archive,
-                            (done,total)=>Report(string.Format("USB archive: {0:N1} / {1:N1} MiB | {2:N2} MB/s",done/1048576.0,total/1048576.0,done/Math.Max(.001,watch.Elapsed.TotalSeconds)/1e6),(int)(done*100/total)));
+                            (done,total)=>Report(string.Format("USB archive: {0:N1} / {1:N1} MiB | {2:N2} MB/s · {3}",done/1048576.0,total/1048576.0,done/Math.Max(.001,watch.Elapsed.TotalSeconds)/1e6,estimate.Describe(done,total)),(int)(done*(choice==0?60.0:99.0)/total)));
                         File.AppendAllText(archive+".status.txt","summary="+result+Environment.NewLine+"device_uid="+t.Uid+Environment.NewLine);
                     }
                 } // USB is closed before CPU/disk-intensive decoding starts.
@@ -164,18 +165,18 @@ namespace USB512_interface
                         File.WriteAllBytes(Path.Combine(recordingFolder,part.Item1),bytes);
                     }
                 }
-                if(choice==0)using(var saved=new NpArchive(archive))NpCe64Export.Export(saved,saved.StartLba,saved.EndLba,output,()=>cancelled,p=>Report("Archive saved. Offline NP decoding: "+p+"%",p));
+                if(choice==0)using(var saved=new NpArchive(archive)){var estimate=new NpProgressEstimate();NpCe64Export.Export(saved,saved.StartLba,saved.EndLba,output,()=>cancelled,p=>Report("Archive saved. Offline NP decoding: "+p+"% · "+estimate.Percent(p),60+p*39/100));}
                 finished=true;
-                Report(choice==1?"Archive complete (transport checked; NP decoding not performed).":"Download + NP decoding complete. See capture_status.txt.",100);
                 } catch(Exception ex){failure=ex.Message;throw;}
                 finally {try{if(settings!=null){settings.Finished(finished && firmwareComplete,failure??(firmwareComplete?null:"Firmware marked recording incomplete"));settings.Context("download_complete",finished);settings.Context("completion_evidence",!finished?"transfer/export did not finish":choice==1?"archive transport checked; neural decoding not performed":"strict DAT export completed");settings.Write();}}finally{if(destination!=null)destination.Dispose();}}
+                Report(choice==1?"Archive complete (transport checked; NP decoding not performed).":"Download + NP decoding complete. See capture_status.txt.",100);
             }));
         }
         async Task DecodeArchive()
         {
             string path;using(var d=new OpenFileDialog{Filter="NP raw archive (*.npraw)|*.npraw",Title="Select completed archive (keep its .status.txt alongside it)"}){if(d.ShowDialog(this)!=DialogResult.OK)return;path=d.FileName;}
             string output=Path.Combine(folder.Text,Path.GetFileNameWithoutExtension(path)+"_decoded_"+DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));
-            await Run(()=>Task.Run(()=>{using(var s=new NpArchive(path))NpCe64Export.Export(s,s.StartLba,s.EndLba,output,()=>cancelled,p=>Report("Offline NP decode: "+p+"%",p));Report("Decoded. See "+Path.Combine(output,"capture_status.txt"),100);}));
+            await Run(()=>Task.Run(()=>{var estimate=new NpProgressEstimate();using(var s=new NpArchive(path))NpCe64Export.Export(s,s.StartLba,s.EndLba,output,()=>cancelled,p=>Report("Offline NP decode: "+p+"% · "+estimate.Percent(p),Math.Min(99,p)));Report("Decoded · "+estimate.Elapsed+". See "+Path.Combine(output,"capture_status.txt"),100);}));
         }
         async Task EnterDownloadMode()
         {

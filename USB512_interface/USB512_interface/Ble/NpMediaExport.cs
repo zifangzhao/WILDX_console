@@ -316,22 +316,28 @@ namespace CE32_console
             {
                 if (reuseWav)
                 {
+                    var estimate=new USB512_interface.NpProgressEstimate();
+                    if(progress!=null)progress(0,"Verifying existing WAV · "+estimate.Percent(0));
                     VerifyMicrophoneWav(Path.Combine(directory, "microphone.dat"), wav, samples, cancelled,
-                        p => { if (progress != null) progress(p * 20 / 100, "Verifying existing sample-exact WAV: " + p + "%"); });
+                        p => { if (progress != null) progress(p * 20 / 100, "Verifying existing sample-exact WAV: " + p + "% · "+estimate.Percent(p)); });
                     report["microphone_wav_reused"] = true;
                 }
                 else if (samples > 0)
                 {
+                    var estimate=new USB512_interface.NpProgressEstimate();
+                    if(progress!=null)progress(0,"Microphone WAV · "+estimate.Percent(0));
                     WriteMicrophoneWav(Path.Combine(directory, "microphone.dat"), partialWav, samples, cancelled,
-                        p => { if (progress != null) progress(p * 20 / 100, "Microphone WAV: " + p + "% (200 kHz, sample-exact)"); });
+                        p => { if (progress != null) progress(p * 20 / 100, "Microphone WAV: " + p + "% (200 kHz, sample-exact) · "+estimate.Percent(p)); });
                     File.Move(partialWav, wav);
                 }
                 if (frames > 0)
                 {
+                    var estimate=new USB512_interface.NpProgressEstimate();
+                    if(progress!=null)progress(20,"Camera MP4 · "+estimate.Percent(0));
                     using (var imageLog = new StreamWriter(new FileStream(partialImageReport, FileMode.CreateNew, FileAccess.Write, FileShare.Read), new UTF8Encoding(false))) {
                     imageLog.WriteLine("frame_index,status,realigned_rows,invalid_rows");
                     WILD_VideoDecoder.DecodeHevcWithAudio(camera, rate, 200000, false, false,
-                        p => { if (progress != null) progress(20 + p * 79 / 100, "Camera MP4: " + p + "% (saved frames only)"); }, partialVideo, cancelled,
+                        p => { if (progress != null) progress(20 + p * 79 / 100, "Camera MP4: " + p + "% (saved frames only) · "+estimate.Percent(p)); }, partialVideo, cancelled,
                         (index, recovery) => {
                             checkedFrames++;
                             if (recovery.CorrectedRows != 0) { realignedFrames++; realignedRows += recovery.CorrectedRows; }

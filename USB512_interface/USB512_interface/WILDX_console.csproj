@@ -101,6 +101,7 @@
     <Compile Include="NpAudioPreview.cs" />
     <Compile Include="NpDiagnosticsForm.cs" />
     <Compile Include="NpCalibrationForm.cs" />
+    <Compile Include="NpProgressEstimate.cs" />
     <Compile Include="NpCalibrationLibrary.cs" />
     <Compile Include="NpCalibrationLibraryForm.cs" />
     <Compile Include="NpCalibrationBatch.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="NpLogger\NpCatalogRecovery.cs" />
     <Compile Include="NpLogger\NpCe64Decoder.cs" />
     <Compile Include="NpLogger\NpCe64Export.cs" />
+    <Compile Include="NpLogger\NpSdDatMerge.cs" />
     <Compile Include="NpLogger\NpSdGeometry.cs" />
     <Compile Include="NpLogger\RawBurst.cs" />
     <Compile Include="NpLogger\NpArchive.cs" />

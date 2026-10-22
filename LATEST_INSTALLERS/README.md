@@ -1,22 +1,25 @@
-# WILD-X 1.0.0.84
+# WILD-X 1.0.0.86
 
-[Installer](WILDX_console-Setup-1.0.0.84.exe).
+[Installer](WILDX_console-Setup-1.0.0.86.exe).
 
-Calibration lists factory probes with V1/NP1 and V2/NP2 filters. When a recording
-has no saved SN, select its probe from the matching factory files. AP/LFP files
-in that recording share the choice; other recordings prompt independently.
-Known SNs still match automatically. Skip leaves a recording unresolved.
+Elapsed and estimated remaining time now cover USB/card-reader downloads,
+V1 archive transfer and offline decoding, DAT merging, WAV/MP4 conversion,
+and single-file or recursive batch calibration. Selected native downloads
+also show a queue estimate weighted by recording size. Merge and conversion
+have separate phase estimates. The status wraps to fit narrower windows.
 
-Recorded gains or an IMRO supply NP1 gain settings. Missing-SN choices are
-marked as user selections in calibration receipts; original recording metadata
-is preserved. Existing merged/unmerged, copy/overwrite, and validation behavior
-remains available. Older firmware remains supported; no upgrade is needed.
+Estimates start after progress is observed for at least three seconds.
+Unknown-length interrupted-recording recovery shows time unknown. Saving
+and flush stages show Finalizing; 100% follows successful completion.
+Older firmware remains supported; firmware, SDK, helpers, USB behavior and
+camera tone are unchanged from 84.
 
-15,395 software checks passed. All 27 probes in the shared calibration folder
-loaded and all 39 CSV hashes remained unchanged. SDK, firmware, helpers, and
-other payload files are unchanged from 82. No user DAT was processed and no
-hardware tests were performed. The installer was extracted and hash-verified.
+15,457 software checks passed, including synthetic single/batch calibration,
+V1/V2 merge, WAV verification, a two-frame MP4 conversion, cancellation and UI
+renders. All 39 factory CSVs for 27 probes were read-only. No logger/card or
+user DAT was used for these operation tests. The installer was extracted
+and hash-verified without execution; no new device qualification is claimed.
 
-[Exact manifest](release-manifest.json) / [workflow and validation](../Note/PROBE_CALIBRATION_PICKER_20261022.md)
-/ [exact compiler inputs](../ReleaseSources/1.0.0.84/README.md).
-Previous 82 is retained under legacy/20261022_before_1.0.0.84.
+[Exact manifest](release-manifest.json) / [workflow and validation](../Note/OPERATION_TIME_ESTIMATES_20261022.md)
+/ [exact compiler inputs](../ReleaseSources/1.0.0.86/README.md).
+Previous 84 is retained under legacy/20261022_before_1.0.0.86.

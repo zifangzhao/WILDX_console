@@ -92,16 +92,29 @@ namespace USB512_interface
             string input, output;
             using (var file = new OpenFileDialog { Filter = "Neuropixels DAT|*.dat" }) { if (file.ShowDialog(this) != DialogResult.OK) return; input = file.FileName; }
             using (var file = new SaveFileDialog { Filter = "Corrected DAT|*.dat", FileName = Path.GetFileNameWithoutExtension(input) + ".calibrated.dat" }) { if (file.ShowDialog(this) != DialogResult.OK) return; output = file.FileName; }
+            try{await CorrectFile(input,output,order.Text.Split(',').Select(s=>Int32.Parse(s.Trim())).ToArray(),band.SelectedIndex==1,encoding.SelectedIndex==1);}
+            catch(Exception ex){status.Text=ex.Message;}
+        }
+        async Task CorrectFile(string input,string output,int[] ports,bool lfp,bool legacy)
+        {
+            if(busy)return;var estimate=new NpProgressEstimate();
             try {
-                int[] ports = order.Text.Split(',').Select(s => Int32.Parse(s.Trim())).ToArray(); bool lfp = band.SelectedIndex == 1, legacy = encoding.SelectedIndex == 1;
-                busy = true; cancelled = false; apply.Enabled = correct.Enabled = batch.Enabled = port.Enabled = false; close.Text = "Cancel"; status.Text = "Correcting DAT…";
+                busy = true; cancelled = false; apply.Enabled = correct.Enabled = batch.Enabled = port.Enabled = false; close.Text = "Cancel"; status.Text = "Correcting DAT · "+estimate.Percent(0);
                 var snapshot = calibration.Copy();
+                var ui=new Progress<Tuple<int,string>>(p=>status.Text=p.Item2);
                 if(Directory.Exists(output+".source-metadata") || File.Exists(output+".source-metadata"))throw new IOException("Choose a fresh output and source-metadata destination.");
                 await Task.Run(() => {
-                    NpCalibrationDat.Correct(input, output, snapshot, ports, lfp, legacy, () => cancelled);
+                    long total=new FileInfo(input).Length;var update=System.Diagnostics.Stopwatch.StartNew();
+                    NpCalibrationDat.Correct(input, output, snapshot, ports, lfp, legacy, () => {
+                        if(update.ElapsedMilliseconds>=250){update.Restart();var partial=new FileInfo(output+".partial");long done=partial.Exists?Math.Min(total,partial.Length):0;
+                            ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(total<=0?0:(int)(done*100.0/total),"Correcting DAT: "+(total<=0?0:(int)(done*100.0/total))+"% · "+estimate.Describe(done,total)));}
+                        return cancelled;
+                    });
+                    ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create(100,"Saving calibration metadata · "+estimate.Percent(100)));
                     NpRecordingSettings.CopySourceMetadata(input,output);
                 });
-                status.Text = "Corrected DAT saved: " + output;
+                status.Text = "Corrected DAT saved · "+estimate.Elapsed+": " + output;
+            } catch (OperationCanceledException) { status.Text="Calibration cancelled · "+estimate.Elapsed+". Partial output retained.";
             } catch (Exception ex) { status.Text = ex.Message; }
             finally { busy = false; apply.Enabled = correct.Enabled = port.Enabled = true; batch.Enabled=calibration.Count!=0; close.Text = "Done"; }
         }
