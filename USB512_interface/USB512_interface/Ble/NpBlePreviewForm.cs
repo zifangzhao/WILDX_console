@@ -122,6 +122,17 @@ namespace USB512_interface
             var s=status();return NpV2SdControl.CanPreview(s) && (s.Flags&8U)==0 && s.Error==0 && s.Fault==0 &&
                 s.Start==calibrationStart && s.LastId==calibrationCommand && s.Mask==calibrationMask && s.Hz==hz;
         }
+        bool DeferPreview(NpV2PreviewUnavailableException error,int generation,bool leaseMayBeActive){
+            if(!error.CanRetry || !SelectionCurrent(generation,hz) || !CalibrationRecordingCurrent())return false;
+            uint expectedHz=hz;DropStream();hz=expectedHz;ResetDisplayRate();
+            if(calibrationPressureRetries<int.MaxValue)calibrationPressureRetries++;
+            calibrationPressureRetry.Defer(clock.ElapsedMilliseconds,leaseMayBeActive);
+            if(leaseMayBeActive)rearmAfter=Math.Max(rearmAfter,clock.ElapsedMilliseconds+LeaseRetireMilliseconds);
+            retry.Restart();
+            info.Text=error.Reason==4?"Preview waiting for recording bandwidth…":
+                error.Reason==129?"Preview waiting for BLE controls…":"Preview waiting for data…";
+            return true;
+        }
         void RefreshRecordingInfo(){
             try{
                 string text=RecordingInfo==null?null:RecordingInfo();
@@ -151,7 +162,9 @@ namespace USB512_interface
                     var old=stream;stream=null;if(old!=null)old.Dispose();legacyPreview=true;previousEnd=0;
                     ResetDisplayRate();retry.Restart();info.Text="Connecting preview…";return;
                 }
-                enabled.Checked=false;info.Text=ex.Message;return;
+                if(DeferPreview(ex,selectionGeneration,true))selectionGeneration++; // Retire any old lease write still awaiting GATT completion.
+                else{enabled.Checked=false;info.Text=ex.Message;}
+                return;
             }
             catch(Exception ex){enabled.Checked=false;info.Text=ex.Message;return;}
             if(busy || controlsBusy())return;
@@ -187,7 +200,7 @@ namespace USB512_interface
                     }
                     if(!SelectionCurrent(generation,hz))return;
                     if(calibrationMask!=0 && !CalibrationRecordingCurrent())throw new IOException("Recording changed; reopen preview.");
-                    if(controlsBusy()){DropStream();return;}
+                    if(controlsBusy())return; // Phase is valid for this unchanged recording; yield without repeating calibration.
                     plot.Clear((int)activeChannel);gaps=skipped=0;packets=0;
                     var profile=factoryCalibration==null?null:factoryCalibration.Get((int)activeProbe);
                     plot.CorrectSample=profile==null?null:(Func<int,short,short>)((ch,value)=>profile.Correct(value,ch));
@@ -195,7 +208,7 @@ namespace USB512_interface
                     request=Next();stream=new NpBlePreviewStream(connection,request,activeProbe,activeChannel,session,hz,kind);
                     bool sent=await connection.TryWritePreview(NpV2PreviewBurst.Request(request,kind,activeProbe,activeChannel,(uint)phase,session),epoch,token);
                     if(!SelectionCurrent(generation,hz))return;
-                    if(!sent){DropStream();retry.Restart();return;}
+                    if(!sent){var unsent=stream;stream=null;if(unsent!=null)unsent.Dispose();retry.Restart();return;}
                     if(stream==null)return;
                     heartbeat.Restart();
                 }
@@ -206,14 +219,10 @@ namespace USB512_interface
                 }
             }catch(NpV2PreviewUnavailableException ex){
                 if(!closed && generation==selectionGeneration){
-                    // Only an explicit refusal of this disposable calibration
-                    // request can retry. Never replay controls or uncertainty.
-                    if(capturingCalibration && ex.Reason==4 && session==0 && SelectionCurrent(generation,hz) && CalibrationRecordingCurrent() && calibrationPressureRetries<3){
-                        calibrationPressureRetries++;calibrationPressureRetry.Defer(clock.ElapsedMilliseconds);
-                        retry.Restart();info.Text="Preview waiting for recording bandwidth… (retry "+calibrationPressureRetries+"/3)";
-                    }else{
-                        bool exhausted=capturingCalibration && ex.Reason==4 && calibrationPressureRetries>=3;
-                        enabled.Checked=false;info.Text=exhausted?"Preview unavailable: recording bandwidth stayed busy after 3 retries.":ex.Message;
+                    // Typed disposable refusals and silence can re-arm after
+                    // backoff/lease retirement. No control command is replayed.
+                    if(!DeferPreview(ex,generation,!capturingCalibration || ex.Reason==128)){
+                        enabled.Checked=false;info.Text=ex.Message;
                     }
                 }
             }catch(OperationCanceledException){if(!closed && generation==selectionGeneration)enabled.Checked=false;}

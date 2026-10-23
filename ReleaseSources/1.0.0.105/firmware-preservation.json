@@ -1,0 +1,8 @@
+{
+  "baselineVersion": "1.0.0.96",
+  "all_non_gui_payload_bytes_identical": true,
+  "payload_files_verified": 40,
+  "firmware_changed": false,
+  "helpers_changed": false,
+  "sdk_changed": false
+}

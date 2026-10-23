@@ -5,10 +5,11 @@ namespace CE32_console {
  // writes and unknown transport failures must never use this retry policy.
  internal sealed class NpV2PreviewUnavailableException : IOException {
   internal readonly uint Reason;
-  internal bool CanRetry {get{return Reason==2||Reason==3||Reason==4||Reason==5||Reason==128;}}
+  internal bool CanRetry {get{return Reason==2||Reason==3||Reason==4||Reason==5||Reason==128||Reason==129;}}
   internal NpV2PreviewUnavailableException(uint reason):base(reason==2?
    "Preview waiting for SD recording; preview never starts acquisition.":reason==128?
-   "Preview unavailable/no data; recording is independent.":
+   "Preview unavailable/no data; recording is independent.":reason==129?
+   "Preview waiting for another BLE command.":
    "Preview skipped (reason "+reason+"): recording/state/pressure takes priority."){Reason=reason;}
  }
  internal sealed class NpV2PreviewRetry {

@@ -1,22 +1,22 @@
 {
-  "version": "1.0.0.96",
-  "releaseId": "WILDX96_BLE_SETUP_SD_WARNINGS_CALIBRATION_20261022",
-  "baselineVersion": "1.0.0.92",
-  "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "620F4BADCCEF312C2B15E94AF96C7FDFD729209F0D7C7CECDFEC3660C61B2BF7",
+  "version": "1.0.0.105",
+  "releaseId": "WILDX105_V2_BLE_PREVIEW_RECOVERY_20261023",
+  "baselineVersion": "1.0.0.96",
+  "applicationRebuiltDuringPackaging": true,
+  "guiSha256": "74218DF3DB0EC895E57FCEEC67D110E0A42AFD1BF021A9B9CFBBD0B1E431DD4E",
   "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
   "firmwareChanged": false,
   "firmwareCatalogChanged": false,
   "helpersChanged": false,
   "newFirmwareHardwareQualified": false,
-  "sourceArchiveSha256": "0409CE9C233A64982E2BAC7433589CFF78412CC5D409A3F7BE2A086A497720C4",
-  "scope": "Calibration in-place .dat.bak option, validated BLE rejection status and metadata, faster V1 BLE setup, and profile warning acknowledgements. Existing V2 USB format/BLE catalog support and firmware payload unchanged. Software only; no new hardware/flash/recording qualification.",
+  "sourceArchiveSha256": "0886C8A32E58EADEAEDCC58FD319F92BE31937A869CBE0A680111CA9F1EC96C0",
+  "scope": "Only V2 BLE preview recovery/control handoff and normal version increment.",
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
   "installer": {
-    "bytes": 7080236,
-    "sha256": "65E2DE691F7D603D51EACED2E5E43BCAA5C79D51A3F4CE97B6CA824187B2A9AF",
-    "file": "WILDX_console-Setup-1.0.0.96.exe"
+    "file": "WILDX_console-Setup-1.0.0.105.exe",
+    "bytes": 7080325,
+    "sha256": "FA61A8D54643964262A4AC43A330F0515BC69FA3759C118D18AB5AD96EB057EC"
   },
   "payload": [
     {
@@ -161,8 +161,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1716224,
-      "sha256": "620F4BADCCEF312C2B15E94AF96C7FDFD729209F0D7C7CECDFEC3660C61B2BF7"
+      "bytes": 1716736,
+      "sha256": "74218DF3DB0EC895E57FCEEC67D110E0A42AFD1BF021A9B9CFBBD0B1E431DD4E"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -222,5 +222,8 @@
   ],
   "extractedPayloadFilesVerified": 40,
   "nsisPackagingPasses": 1,
-  "softwareChecks": 23662
+  "softwareChecks": {
+    "preview": 6106
+  },
+  "bleTriple20HardwareTested": false
 }

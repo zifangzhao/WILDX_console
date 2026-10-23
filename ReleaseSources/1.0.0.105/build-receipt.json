@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0.105",
+  "executable_sha256": "74218DF3DB0EC895E57FCEEC67D110E0A42AFD1BF021A9B9CFBBD0B1E431DD4E",
+  "exporter_dll_sha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
+  "compile_source_count": 104,
+  "baseline_version": "1.0.0.96",
+  "changed_sources": [
+    "AssemblyInfo.cs",
+    "NpBleConnection.cs",
+    "NpBlePreviewForm.cs",
+    "NpV2PreviewWire.cs"
+  ],
+  "source_archive_sha256": "0886C8A32E58EADEAEDCC58FD319F92BE31937A869CBE0A680111CA9F1EC96C0",
+  "preview_software_checks": 6106,
+  "hardware_tested": false,
+  "scope": "Only V2 BLE preview recovery/control handoff and normal version increment."
+}

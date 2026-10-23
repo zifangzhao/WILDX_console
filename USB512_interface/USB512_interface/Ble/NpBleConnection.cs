@@ -512,7 +512,7 @@ namespace USB512_interface
             };
             PreviewReceived+=receive;
             try{
-                if(!await TryWritePreview(NpV2PreviewBurst.Request(id,0,probe,channel,0,0),expectedEpoch,cancel))throw new IOException("Controls busy; preview deferred.");
+                if(!await TryWritePreview(NpV2PreviewBurst.Request(id,0,probe,channel,0,0),expectedEpoch,cancel))throw new NpV2PreviewUnavailableException(129); // Confirmed not submitted; safe to defer this display request.
                 if(await Task.WhenAny(done.Task,Task.Delay(2000,cancel))!=done.Task){cancel.ThrowIfCancellationRequested();throw new NpV2PreviewUnavailableException(128);}
                 var complete=await done.Task;
                 if(!Connected || Epoch!=expectedEpoch)throw new IOException("Preview connection changed; discard.");

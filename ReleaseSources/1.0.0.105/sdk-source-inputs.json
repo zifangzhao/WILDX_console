@@ -1,0 +1,74 @@
+[
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdDatExport.cs",
+    "archive": "sdk/NpV2SdDatExport.cs",
+    "sha256": "BD5409E3E6FBCDA98D471B9393D95D34ACABC96FE12A9497CB2141B7D55B3737",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpAdcCalibration.cs",
+    "archive": "sdk/NpAdcCalibration.cs",
+    "sha256": "62749EAA50941760B07AEA01D2C06C77C67B5E7239B2787D0DE5E36E137267E9",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpNeuroscopeXml.cs",
+    "archive": "sdk/NpNeuroscopeXml.cs",
+    "sha256": "9BFC0C42467B06C3CD42BD0B5A85FE2CEF77B6157D6D7FEA7370367D87CEFE2D",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpMetadataFile.cs",
+    "archive": "sdk/NpMetadataFile.cs",
+    "sha256": "6578CE6806FC38A3C04DE47E059A82FB44AE33CE98188A88C6F8BB53ED866A14",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\USBConsoleV2\\NpV2UsbConsole.cs",
+    "archive": "sdk/NpV2UsbConsole.cs",
+    "sha256": "4311A241F5BC458221EA9DB4E2DE7A6D85A482B0F850AA36760784923310AC20",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Np2ConfigurationClient.cs",
+    "archive": "sdk/Np2ConfigurationClient.cs",
+    "sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\USB512WinUsb.cs",
+    "archive": "sdk/USB512WinUsb.cs",
+    "sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbHealth.cs",
+    "archive": "sdk/UsbHealth.cs",
+    "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\UsbHealthNative.cs",
+    "archive": "sdk/UsbHealthNative.cs",
+    "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NeuropixelsPreviewForm.cs",
+    "archive": "sdk/NeuropixelsPreviewForm.cs",
+    "sha256": "35870EA5E803A1E24C75F71B5BB9930652F492BCFF32DC5625ADEA4ECC6DFB6F",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\unified_capture_ui_20261021\\gui\\baseline\\XeNpStreamDecoder.cs",
+    "archive": "sdk/XeNpStreamDecoder.cs",
+    "sha256": "633D986FECDA3F67AF5B1BCD35C27618D510391423340299230FBB88058C3B5E",
+    "provenance": "Frozen76 SDK source with verified-header512-byte result addition only in NpV2SdDatExport.cs"
+  },
+  {
+    "original": "D:/Code/WILDX_console/WILDX_console/_artifacts/release_1.0.0.78_20261022/source-freeze/sdk/build-options.json",
+    "archive": "sdk/build-options.json",
+    "sha256": "C6DE751BF9132B187E18985B4855BD3A2D235FF4D204BECC750C33DF9CDA2CB1",
+    "provenance": "Actual isolated csc build options"
+  }
+]

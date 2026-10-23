@@ -99,6 +99,7 @@ static class NpBlePreviewDisplayTests {
         ((CheckBox)Get(form,"enabled")).Checked=true;
         Set(form,"hz",hz);Set(form,"phase",0);Set(form,"session",7U);Set(form,"activeProbe",selectedProbe);
         Set(form,"activeChannel",selectedChannel);Set(form,"request",91U);Call(Get(form,"plot"),"Clear",(int)selectedChannel);
+        Set(form,"calibrationStart",status.Start);Set(form,"calibrationCommand",status.LastId);Set(form,"calibrationMask",status.Mask);
         var mode=form.GetType().GetField("legacyPreview",All);if(mode!=null)mode.SetValue(form,!compact);
         // Reflection keeps the same fixture compilable with the frozen baseline form.
         object stream=compact?Activator.CreateInstance(typeof(NpBlePreviewStream),All,null,new object[]{connection,91U,selectedProbe,selectedChannel,7U,hz,5U},null):new NpBlePreviewStream(connection,91,selectedProbe,selectedChannel,7,hz);
@@ -319,10 +320,11 @@ static class NpBlePreviewDisplayTests {
             connection.Emit(Error(1,id));Tick(form);Tick(form);
             Need(connection.Writes==1 && !((CheckBox)Get(form,"enabled")).Checked,"Legacy unsupported retried/fell back again");
         }
-        foreach(uint reason in new uint[]{2,3,4,5,128}){
+        foreach(uint reason in new uint[]{2,3,4,5}){
             connection=new NpBleConnection();using(var form=Arm(connection,20000,compact:true,ownerBusy:()=>false)){
                 connection.Emit(Error(reason));Tick(form);Tick(form);
-                Need(!(bool)Get(form,"legacyPreview") && connection.Writes==0 && !((CheckBox)Get(form,"enabled")).Checked,"Generic preview rejection triggered unsafe legacy fallback");
+                Need(!(bool)Get(form,"legacyPreview") && connection.Writes==0 && connection.Captures==0 && ((CheckBox)Get(form,"enabled")).Checked && Get(form,"stream")==null,"Transient preview refusal disabled selection, replayed immediately or triggered legacy fallback");
+                Need(!(bool)Call(Get(form,"calibrationPressureRetry"),"CanAttempt",((Stopwatch)Get(form,"clock")).ElapsedMilliseconds),"Rolling retry ignored backoff");
             }
         }
         connection=new NpBleConnection();using(var form=Arm(connection,20000,compact:true,ownerBusy:()=>false)){
@@ -334,7 +336,7 @@ static class NpBlePreviewDisplayTests {
             Thread.Sleep(1050);Tick(form);
             Need(connection.Writes==1 && BitConverter.ToUInt32(connection.Requests[0],8)==5,"New preview did not request compact kind5");
             Thread.Sleep(2550);Tick(form);Tick(form);
-            Need(!(bool)Get(form,"legacyPreview") && connection.Writes==1 && connection.Captures==0 && !((CheckBox)Get(form,"enabled")).Checked,"Silence/timeout retried or fell back without explicit unsupported");
+            Need(!(bool)Get(form,"legacyPreview") && connection.Writes==1 && connection.Captures==0 && ((CheckBox)Get(form,"enabled")).Checked && Get(form,"stream")==null,"Silence disabled preview or caused immediate replay/fallback");
         }
     }
     static void SelectionSwitch(){
@@ -421,19 +423,19 @@ static class NpBlePreviewDisplayTests {
         var radio=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4))};
         using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
             var enabled=(CheckBox)Get(form,"enabled");
-            for(int attempt=0;attempt<4;attempt++){
+            for(int attempt=0;attempt<8;attempt++){
                 ExpireCalibrationBackoff(form);Finish((Task)Call(form,"Tick"));
-                Need(radio.Captures==attempt+1 && radio.Writes==0,"Calibration pressure replayed controls or exceeded retry budget");
-                if(attempt<3){
-                    Need(enabled.Checked && (int)Get(form,"calibrationPressureRetries")==attempt+1,"Explicit calibration pressure disabled Preview before its budget");
+                Need(radio.Captures==attempt+1 && radio.Writes==0,"Calibration pressure replayed controls or duplicated a retry");
+                {
+                    Need(enabled.Checked && (int)Get(form,"calibrationPressureRetries")==attempt+1,"Persistent pressure disabled Preview");
                     var policy=(NpV2PreviewRetry)Get(form,"calibrationPressureRetry");var clock=(Stopwatch)Get(form,"clock");
-                    long remaining=(long)Get(policy,"next")-clock.ElapsedMilliseconds,delay=1000L<<attempt;
-                    Need(remaining>delay-100 && remaining<=delay && !policy.CanAttempt(clock.ElapsedMilliseconds),"Calibration backoff is not bounded1/2/4 seconds");
+                    long remaining=(long)Get(policy,"next")-clock.ElapsedMilliseconds,delay=1000L<<Math.Min(attempt,3);
+                    Need(remaining>delay-100 && remaining<=delay && !policy.CanAttempt(clock.ElapsedMilliseconds),"Calibration backoff is not bounded1/2/4/8 seconds");
                     Tick(form);Need(radio.Captures==attempt+1,"Timer retried calibration before its deadline");
                 }
             }
-            Need(!enabled.Checked && ((Label)Get(form,"info")).Text.Contains("after 3 retries"),"Persistent pressure did not show a terminal refusal");
-            ExpireCalibrationBackoff(form);Tick(form);Need(radio.Captures==4,"Terminal pressure kept retrying");
+            Need(enabled.Checked && ((Label)Get(form,"info")).Text.Contains("waiting for recording bandwidth"),"Persistent pressure lost waiting state");
+            enabled.Checked=false;ExpireCalibrationBackoff(form);Tick(form);Need(radio.Captures==8,"Explicit pause kept retrying");
             for(int n=1;n<radio.Calibrations.Count;n++)Need(radio.Calibrations[n][0]!=radio.Calibrations[n-1][0],"Calibration reused a preview request ID");
         }
         s=PressureStatus();radio=new NpBleConnection();
@@ -452,7 +454,7 @@ static class NpBlePreviewDisplayTests {
             Need((int)Get(Get(form,"plot"),"count")==64 && (uint)Get(form,"previewHz")==500,"Actual handler did not display compact data after pressure relief");
         }
         var failures=new List<Exception>{new TimeoutException("uncertain calibration"),new IOException("uncertain transport"),new OperationCanceledException()};
-        foreach(uint reason in new uint[]{1,2,3,5,128})failures.Add(new NpV2PreviewUnavailableException(reason));
+        failures.Add(new NpV2PreviewUnavailableException(1));
         foreach(var failure in failures){
             s=PressureStatus();radio=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(failure)};
             using(var form=new NpBlePreviewForm(radio,()=>s,()=>false)){
@@ -477,6 +479,68 @@ static class NpBlePreviewDisplayTests {
                 pending.SetException(new NpV2PreviewUnavailableException(4));Finish(task);
                 Need((int)Get(form,"calibrationPressureRetries")==0 && radio.Captures==1 && radio.Writes==0,"Stale context scheduled calibration pressure retry: "+changed);
                 if(changed=="channel" || changed=="probe")Need(((CheckBox)Get(form,"enabled")).Checked,"Stale calibration refusal unchecked a new selection");
+            }
+        }
+    }
+    static void TripleRecordingRetry(){
+        foreach(uint reason in new uint[]{2,3,4,5,128,129}){
+            var s=new NpSdStatus{State=3,Mask=7,Hz=20000,Flags=128|4,Start=8192,LastId=71};
+            bool ownerBusy=false;var radio=new NpBleConnection();
+            radio.Calibration=(id,p,c,h)=>radio.Captures==1?
+                Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(reason)):
+                Task.FromResult(Calibration(id,p,c,h));
+            using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+                AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
+                Need(((CheckBox)Get(form,"enabled")).Checked && radio.Captures==1 && radio.Writes==0,"Triple20 startup disabled preview on transient reason "+reason);
+                Need((uint)Get(form,"hz")==20000 && (uint)Get(form,"calibrationMask")==7,"Retry lost triple20 recording context");
+                Tick(form);Need(radio.Captures==1,"Retry ignored deadline");
+                // Fake-radio deadline acceleration only; production always waits
+                // its monotonic backoff and full lease-retirement deadline.
+                ExpireCalibrationBackoff(form);Set(form,"rearmAfter",0L);ownerBusy=true;Tick(form);
+                Need(radio.Captures==1,"Preview retry overtook controls");
+                ownerBusy=false;Finish((Task)Call(form,"Tick"));
+                Need(((CheckBox)Get(form,"enabled")).Checked && radio.Captures==2 && radio.Writes==1,"Triple20 preview did not resume after transient refusal");
+                Need(radio.Calibrations[0][0]!=radio.Calibrations[1][0] && BitConverter.ToUInt32(radio.Requests[0],8)==5,"Retry reused request ID or changed transport without explicit unsupported");
+                uint id=BitConverter.ToUInt32(radio.Requests[0],12);radio.Emit(Compact(20000,4,id:id));Tick(form);
+                Need((int)Get(Get(form,"plot"),"count")==64,"Recovered triple20 preview never rendered data");
+                radio.Emit(Error(4,id));Tick(form);
+                Need(((CheckBox)Get(form,"enabled")).Checked && Get(form,"stream")==null,"Rolling pressure disabled triple20 preview");
+                long deadline=(long)Get(form,"rearmAfter");
+                Need(deadline-((Stopwatch)Get(form,"clock")).ElapsedMilliseconds>2100,"Rolling recovery did not wait for the old lease");
+                ExpireCalibrationBackoff(form);Set(form,"rearmAfter",0L);s.Start+=8192;Tick(form);
+                Need(radio.Captures==2 && radio.Writes==1,"Changed recording was replayed under old preview context");
+            }
+        }
+    }
+    static void RetryDuringLeaseWrite(){
+        var radio=new NpBleConnection{PendingWrite=new TaskCompletionSource<bool>()};
+        using(var form=Arm(radio,20000,compact:true,ownerBusy:()=>false)){
+            var heartbeat=(Stopwatch)Get(form,"heartbeat");
+            var elapsed=typeof(Stopwatch).GetField("elapsed",All)??typeof(Stopwatch).GetField("_elapsed",All);
+            elapsed.SetValue(heartbeat,(long)elapsed.GetValue(heartbeat)+Stopwatch.Frequency);
+            var pending=(Task)Call(form,"Tick");
+            Need(!pending.IsCompleted && radio.Writes==1 && BitConverter.ToUInt32(radio.Requests[0],8)==4,"Lease-write fixture did not remain in flight");
+            radio.Emit(Error(4));Tick(form);
+            Need(((CheckBox)Get(form,"enabled")).Checked && Get(form,"stream")==null,"Refusal during lease write disabled Preview");
+            Set(form,"rearmAfter",0L);radio.PendingWrite.SetResult(true);Finish(pending);
+            Need((long)Get(form,"rearmAfter")-((Stopwatch)Get(form,"clock")).ElapsedMilliseconds>2100,"Recovery retirement was timed before old GATT write completed");
+            radio.Emit(Compact(20000,4));Tick(form);
+            Need(radio.Writes==1 && radio.Captures==0 && Get(form,"stream")==null,"Old lease completion/reply resumed or renewed a retired subscription");
+        }
+    }
+    static void ControlsAfterPhase(){
+        foreach(bool controlRace in new[]{false,true}){
+            var s=new NpSdStatus{State=3,Mask=7,Hz=20000,Flags=128|4,Start=8192,LastId=71};
+            bool ownerBusy=false;var radio=new NpBleConnection();
+            radio.Calibration=(id,p,c,h)=>{
+                if(controlRace)radio.transaction.Wait();else ownerBusy=true;
+                return Task.FromResult(Calibration(id,p,c,h));
+            };
+            using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+                AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
+                Need(((CheckBox)Get(form,"enabled")).Checked && radio.Captures==1 && radio.Writes==0 && Get(form,"stream")==null && (uint)Get(form,"session")==7,"Control ownership discarded a completed triple20 phase snapshot");
+                ownerBusy=false;if(controlRace)radio.transaction.Release();AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
+                Need(radio.Captures==1 && radio.Writes==1 && BitConverter.ToUInt32(radio.Requests[0],8)==5,"Idle control handoff repeated phase calibration instead of starting preview");
             }
         }
     }
@@ -588,6 +652,6 @@ static class NpBlePreviewDisplayTests {
     [STAThread]static int Main(string[] args){try{
         Application.EnableVisualStyles();bool baseline=args.Length!=0 && args[0]=="--baseline";
         BusyDrain(baseline);if(baseline){Console.WriteLine("PASS: frozen production form reproduces control-busy display stall; no radio opened.");return 0;}
-        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();CalibrationPressure();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/calibration-pressure/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
+        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();CalibrationPressure();TripleRecordingRetry();RetryDuringLeaseWrite();ControlsAfterPhase();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/calibration-pressure/triple20-recovery/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
     }catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

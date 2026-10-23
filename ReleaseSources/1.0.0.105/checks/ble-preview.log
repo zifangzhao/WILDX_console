@@ -1,0 +1,1 @@
+PASS 6106 actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/calibration-pressure/triple20-recovery/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.
