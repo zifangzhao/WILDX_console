@@ -1,0 +1,98 @@
+DISTINCT RETAINED IMU OBSERVATIONS TO PC TIME — SOFTWARE MILESTONE, 2026-10-23
+
+Result
+Implemented in private WILDX1.0.0.128. GUI SHA256:
+30cc724a8dff619c186790715b469b3fcb99849348312dca7fe01e279ebe4a59
+No hardware/device access, firmware installation, recording, installer,
+publication or Slack posting was performed for this implementation.
+The earlier private125 sources/binaries and its hardware evidence are preserved.
+
+Concrete change
+NpImuTimeCorrection.cs adds a streaming distinct-valid-sample journal and a
+file-only converter. V1 NpUsbSensors.Feed/FeedSnapshot and V2's verified sensor
+header consumer opt in during live neural USB recording when misc saving is on.
+After sensor files close and stopped clock queries are saved, correction writes
+a measured-values CSV, one float64 PC Unix-second timestamp per retained sample
+row, validity/bounds, source/output hashes and a calibration report. No samples
+are reconstructed from the1250Hz held analogin grid. Duplicate/invalid records
+do not become new sample rows. Missing observations are not filled.
+
+Raw native counter, MCU IRQ-completion ms, sequence, available firmware session/
+transport metadata, validity, full raw snapshot and actual host receipt QPC are
+retained. The sensor counter unwraps only for consistent short forward progress;
+resets/ambiguous wraps/gaps are labeled. MCU reset rows remain unbound to old
+clock observations. No clock calls/USB queries are introduced by this converter.
+The host receipt is provenance, not substituted for sample time.
+
+Reference and uncertainty
+This maps the MCU I2C-completion proxy to PC time, using bracketed control queries
+with integer-ms phase and epoch uncertainty. It does not establish physical ADC,
+read-latch-to-completion, filter/update, IRQ latency, clock nonlinearity, lossless
+200Hz capture or a1ms NP/GPIO bound. The neural67–135us first-row intervals are
+not assigned to IMU samples. Old firmware works with available coarse evidence;
+missing identity/clock coverage leaves NaN PC time without gating neural Start.
+
+Software evidence
+- 54 targeted checks pass on128, including actual compiled V1 packet and V2
+  header consumers, distinct/invalid/duplicate records, values and row identity,
+  native+MCU wrap, sequence/session/reset gaps, known fractional-ms phase bounds,
+  UID/epoch mismatch, raw-field disagreement, no extrapolation, source journal
+  I/O/flush status, original preservation and derived overwrite protection.
+- Existing valid V2 capture fromWILDX105, P12320k/10.362s:206 retained snapshots
+  and206 mapped rows, all finite/strictly increasing. Full proxy clock intervals
+  4160–4166us. Status/experiment UID matches the clock journal. Source raw SHA256:
+  7E08DEDD223641ECC03888BA749810B4F1CDF224AA71538F8BE1BB3A80567055.
+  The1847 retained-sequence skips reflect sparse latest-value publication; they
+  are not a proven count of lost ADC conversions or USB errors. Exact APP/USB
+  image identities are not inferred from that older experiment.
+- Private125 V2 capture:1399 invalid snapshots -> zero sample rows and explicit
+  no_valid_samples, no fabricated times. Raw SHA256 unchanged:
+  4B5E455A1958B7EF5D31C1D809885D9C75DFD29203620062CD8FC671561E57A0.
+- Actual128 standalone script recursively processes the valid/invalid replay
+  copies. Independent verification checks float64 byte/row counts, finite/order,
+  exact CSV/time agreement, per-row bounds, identities and original raw hashes.
+- Neural regressions on126:594 model checks,11 anchored/shared-clock cases and30
+  actual recording-worker file-only checks pass. Later127/128 change only IMU
+  raw-field/error handling. Final128 compiled consumers and targeted checks pass.
+- Frozen comparison proves NpAcquisitionAnchor/NpHostClock/NpTimeCorrection/
+  NpGpioTimeCorrection and SDK binary are byte-identical to125. Changed compiled
+  sources are only the new IMU helper, V1/V2 hooks, sensor consumers and version.
+
+Changed repository files
+USB512_interface/USB512_interface/NpImuTimeCorrection.cs
+USB512_interface/USB512_interface/NpUsbSensors.cs
+USB512_interface/USB512_interface/NpUsbSensorMonitor.cs
+USB512_interface/USB512_interface/mainForm.cs
+Neuropixels/USBConsoleV2/NpV2UsbConsole.cs
+USB512_interface/USB512_interface/WILDX_console.csproj
+USB512_interface/USB512_interface/Properties/AssemblyInfo.cs
+Tools/Correct-RecordingTime.ps1
+Tests/NpImuTimeCorrectionTests.cs
+test_imu_time.ps1
+docs/imu-time-correction.md
+docs/recording-time-correction.md
+
+Limits and next milestone
+V2's device I/O acquisition fault is not fixed by a host converter; firmware
+diagnosis belongs to the V2 owner. Valid advancing acquisition under simultaneous
+NP load remains unverified with128. Existing V1 HIL files retain a held grid,
+not their discarded native samples, so they cannot validate native replay.
+This first milestone covers live USB neural recording and retained raw replay;
+it does not add native BLE/SD sample transport or reconstruct absent samples.
+
+The concrete bounded joint test is prepared in docs/imu-time-correction.md:
+exact identities/hashes, one WILDX process, existing GPIO wiring only,70seconds
+per NP device sequentially (V1P12/native15k, V2P123/20k), source/query/event
+retention, validity/row/gap/overflow/epoch criteria, explicit Stop, and full
+original-image restoration by the firmware owners if temporary USB images are
+authorized. GPIO's exact installed identity and Frank's direct hardware approval
+are required before execution. No events means no event-timing qualification;
+no synthetic pulses or physical1ms claim is inferred.
+
+Frozen sources and receipts
+build128/compile-bin/WILDX_console.exe is private software-only checked.
+build128-receipt.json and candidate128-sources.zip retain exact compiled inputs,
+script, tests, plan and hashes. independent-verification.json/log record replay
+and unchanged-engine checks. The tests and compiled-script-replay folders retain
+software outputs. No release root, firmware repository or external data folder
+was modified for this work.

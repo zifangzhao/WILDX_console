@@ -1,0 +1,501 @@
+{
+  "version": "1.0.0.128",
+  "status": "private software-checked; no hardware/firmware installation/installer/publication",
+  "gui_sha256": "30cc724a8dff619c186790715b469b3fcb99849348312dca7fe01e279ebe4a59",
+  "sdk_sha256": "494df1f900a2beb16aa9ec923792c3e423cf206d13c7c2a2a36d457cfe4a8679",
+  "source_baseline": "Frozen125 plus IMU-only overlay; original125 preserved; 126/127 are private intermediate compiles",
+  "changed_from125": [
+    "NpUsbSensors.cs",
+    "NpUsbSensorMonitor.cs",
+    "AssemblyInfo.cs",
+    "mainForm.cs",
+    "NpV2UsbConsole.cs",
+    "NpImuTimeCorrection.cs"
+  ],
+  "neural_gpio_clock_engines_unchanged": true,
+  "gui_sources": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\CameraPreviewForm.cs",
+      "sha256": "c2869a25c0e0dd51019c64b52fcda49a3b690932cfaecc57614160f2f3c3f70d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\USB512WinUsb.cs",
+      "sha256": "f605dd002725bf7eec437ad142913071d11a4f8ea81bda3589d9e3916d26f567"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\UsbHealth.cs",
+      "sha256": "01ad3edd572a055c4ade43d081453eecba28c9ed32e748358053080ff5914a37"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\UsbHealthNative.cs",
+      "sha256": "0937b7d6bb0bf8e83e458f4d0f83b58d485bc635b4aab450d54d38e37aeab368"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\UsbQualityTest.cs",
+      "sha256": "5fba1b1b5c8c1f3b3bd97e78878f13bf6e2cf9093928443e21c02a2fb330201b"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.UsbQuality.cs",
+      "sha256": "737969bfc703cbc12117dac3b44fa2543c4ae48bc723d26fa3109f619ac7187f"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Ce64MscProtocol.cs",
+      "sha256": "74435724d4fd26cf14bbaa854d22925c6971548e091170dca2c0033fadb3b437"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Ce64MscRawBlockDevice.cs",
+      "sha256": "c1cbdeb4a7debbe7a43840250be0ca09943b9d971e4f225bc958a57342540a42"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Ce64MscCompressedDecoder.cs",
+      "sha256": "7d6ca39ab6fb6d0556ec75e5f18896c3af59fef8056f3496d6c06f1affb0d201"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Ce64MscDiscovery.cs",
+      "sha256": "cf0ceaa0c34662d5f8c34086cc785ba80aeb339b459ae09fb59ef431f250935d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\ImpedanceReportForm.cs",
+      "sha256": "413fe9da8bfe1c58ae4a68f3150b495a7f26ceb31455a24d3b3c76d0e44f10aa"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\EisSpectrumForm.cs",
+      "sha256": "44bd5fd0bdf49d2d733c9d92b99eb8233e41060cdc90082d0a08a3a06caadf60"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\XeNpWinUsb.cs",
+      "sha256": "af28505cc1a0fcd9abc3170a6b2d7a69e4162318288a12aecacfa2dabcf84c1c"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpModeDialog.cs",
+      "sha256": "02890c7239fdf9c9f52e73e39618f5d0224367ba9955b8d27953b9ff7f0a04a5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpRecovery.cs",
+      "sha256": "6af5a2e3bf08585f326da2f404d8f08bad4fecd875f6c7dc349c21fc71f20bd3"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpGpioRtcLogger.cs",
+      "sha256": "e37dd24746d6bfd83372355772a5822e379c71b63fe367f9a06dbaa6793b115e"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpFolderNaming.cs",
+      "sha256": "56e3878a80806dfe588313311e31a341107e06880729ec69d50247d8e6c81034"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpUsbSensors.cs",
+      "sha256": "b56791069668bf997878d4cc5d632ae0e7aaca048ef579d18dd5386b2c4bec5c"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpUsbSensorMonitor.cs",
+      "sha256": "f81a78e013b9b232f021551c00f4a8db57ea7736d287ffe8f932463b952e8cec"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpClockFit.cs",
+      "sha256": "9f221bc820f58e65d568f2fd23e3beffe53ca617c8529d84416eb5e5599a157b"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpClockJournal.cs",
+      "sha256": "037f23531b639a6ec91fa63f7b903bb683e810b57b8a88977ff9ba29f885602e"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpConfigurationDialog.cs",
+      "sha256": "946748b38e1e754666427c7a451fa0b1878f7690b3e3cb8c3fb622cb102dfeb5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpConfigurationUsb.cs",
+      "sha256": "da22c2cedb30ae6874d340bfe460e586a9c79a86f797bd06b9524292e1288f55"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Np2ConfigurationClient.cs",
+      "sha256": "defcf85450879fa8d8937fd6f35a26cf149e63926593df8267e604d3d64b3021"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Np2ConfigurationPreferences.cs",
+      "sha256": "56967b5528caac4d3cf04f17fb2e8bc1c005d363712d572d13bc12a0697aae0f"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Np2ConfigurationUsb.cs",
+      "sha256": "79cc23da9aff32e2b8ec0f09e7be313e6b1d147b51de9ae098d1278e24d950a0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpProbeManifest.cs",
+      "sha256": "ce0c4fd0b0f2c2970ded5cbd4086dc77fd9c8203583b602c18e38f09df04b17b"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpRecordingSettings.cs",
+      "sha256": "748ddf0f9ac1875df792da9df75195b07a3e8ddd66ad7443e14619edf99696f4"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpRecordingDialog.cs",
+      "sha256": "67b89c32d97b2c881ab4cce7b5560a0240853659db9b35f37ed926e869622898"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpMediaUsbForm.cs",
+      "sha256": "5d020ea8424d021db04b9d0312ed0e777063c65abc4f2bb97ce66a0f7cdc16fc"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpAudioPreview.cs",
+      "sha256": "23ce504172a8ed1808e9a1b8899c79480ca15e198ee35235858c60ef66e5d4c8"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpDiagnosticsForm.cs",
+      "sha256": "9d314727ca54d2d3e701672b6a67e0ba71e7343238327159dd3a58aadbd6d54e"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCalibrationForm.cs",
+      "sha256": "9363cdfeda07475a37a68ea7eaae64ff3decca394ac1303b6c39b6bbabed1357"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpConfigClient.cs",
+      "sha256": "9ce6bbe6905b835edf34cf471ca0eb5f9d20dd76c497687068f1a2484fd3ac20"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpDeviceConfigForm.cs",
+      "sha256": "f7df87bea59cbaa3f2e1122a37e6b0921c48e782ce3cb8238c26490ca300ea7d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\XeNpSdInfo.cs",
+      "sha256": "ad8c2b41d5d154a3f8c7812fdeb5a12e6cbbb4bc55a863a61fe8b892eba0594b"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpDownloadNative.cs",
+      "sha256": "9cd68b201c57682edf4da1d93d115312888ca65b4e8f083b3ce9ef21806ac4d1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV1StoreV2.cs",
+      "sha256": "373fd1fe29d4c97e1acbc83fb8e5a5f881b1852ad0b98671f0eba93598d818aa"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCatalogRecovery.cs",
+      "sha256": "b22ac64441beca05a57f7e346999fd7f7bf3db5221b0872d40f9b595e4fff1a7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSdDatMerge.cs",
+      "sha256": "d0c5f3a927a1047c08dcc68631652419a845af1c8de651126e4098a78d56843d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSdGeometry.cs",
+      "sha256": "038cff48d29e82633e688347867be50809bc966b04569043ccf46206cc996850"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\RawBurst.cs",
+      "sha256": "9caaea03ca06d8f4c1a93985bccdc367663e212a9fe462a53061e61cf6598605"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpArchive.cs",
+      "sha256": "19be940bfea7a2153c468c59ffaf29cfa41e02df28e5c7548776405792f5bf43"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV1Management.cs",
+      "sha256": "1b68485dba5ade9ff49d1b58c1d792feedf82e59d1b76f5861afe6bd09bbb524"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpFirmwareImage.cs",
+      "sha256": "35b8808b8e75995d5fb465475a6322f846c1e4c6317f9382533ebca6504bb0ae"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpFirmwareFlash.cs",
+      "sha256": "64e7083c388d574c94c8475e4c5d7b3be115d0cafd55c4e227baa6a36f562a56"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpLoggerForm.cs",
+      "sha256": "5ae9e59d0c8ea8890a48120f303a28c33b9b1ff6a0dbed697f635851f24bce0b"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpFirmwareForm.cs",
+      "sha256": "6ae72b05d28ef65165030542e6f5282efcfcef7821e006ccd87cd1bf5798ad46"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NeuropixelsPreviewForm.cs",
+      "sha256": "5ac3054149cd5fd35bedd158b3d58dec883e5cda989d8d96590aae9acac3269f"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.SystemInfo.cs",
+      "sha256": "a3d87d897b81508d76be779b49eb19133d550aae66e4324d54388328e2400b52"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.NetworkTime.cs",
+      "sha256": "6b5d271f058d1aad3720d5c68c987a81ca9f7198b72e45c17eacb643391df884"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NetworkTimeClock.cs",
+      "sha256": "95b30f01fcc412328e4497de49dbd757e8e8bcba2c44672eb010f851b18c8eda"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSystemInfo.cs",
+      "sha256": "2cf7a68f5a37324a7ede279361d93861663c6c9d0c730739c0248c5eda64e010"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.Designer.cs",
+      "sha256": "d2279b7a21c570a7a9733ceba4c3c60dbee3b2911ef337747dc315fa77a138fb"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Program.cs",
+      "sha256": "085dead6553a7a0c6a3bf3f33a13b00bb0a0caf7b47d60bbe0ff9c45b20dd81d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.WildX.cs",
+      "sha256": "a255b888c950b21eb96005266f51f13c5cd5197e62c3ca8087e7625556d927fc"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.GpioRtc.cs",
+      "sha256": "66a7691ce27f00ae2e37a1b502112ea46c815a832959f829246e7bca4bf09275"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\WildXTheme.cs",
+      "sha256": "15dd936c29603a9028a1edd5869de92ef465ebc058c8d2a061a774e1bce1bc31"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSdControl.cs",
+      "sha256": "1f3a80118afd66f4882a88152116dedd32240b5f4c764daad5a911ce17a65e90"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV1BleProtocol.cs",
+      "sha256": "3a4fbf5c21a187fa8ccebee58f41c8257a8188c8f9289753bc545764cfe5c46e"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2SdControl.cs",
+      "sha256": "97ff2d1c51f847760829162a1099e7c9988a614467c73d242e1d37792cfa4c6f"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2OnlineClock.cs",
+      "sha256": "7e38a814fe3e57db7801ba091d9e6eea18bd33bd3fe22f94d368830fa16df689"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleWire.cs",
+      "sha256": "07781790ac2a79115c280fd7f4f33dcccaaca37ddbff90776289ba2482f0be84"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleConnection.cs",
+      "sha256": "d77f59dbef0ce79fe6a725a3d1f5c58c7970730b4e7d1ffac458667f76343762"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleConnection.Media.cs",
+      "sha256": "258493b17da21b770c7197c7e5320c847b27fcf57f9754502740357cc3a33478"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleConnection.Storage.cs",
+      "sha256": "0a2a88769cb87d033ab2df5903bc9506da9aeb9d706b42f077a840536f5f2d44"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleForm.cs",
+      "sha256": "05787fbd5a47eba6177c05600ee36db0a813b2a56410865087d09058bdcfcbac"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleForm.Media.cs",
+      "sha256": "cefb63d6d3ffc6b195e3ad5dbee380b96014305ab4ae9834f5c8ec920511a155"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleForm.Storage.cs",
+      "sha256": "3a3a131d6f4f563ceb8b664a798b0f4b4edafbae3564d4af61310d5a3484fb5f"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleStorage.cs",
+      "sha256": "76228c5f4a7fe957994ff36de173b86035da5580990ade84d3d57198164a63d9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2BleCatalog.cs",
+      "sha256": "7ea35ac9ebacd4c8f5af1562ca2e360f11f22699fdbae7435b7cec50187c5c14"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleConfigurationReceipts.cs",
+      "sha256": "7ef1f5887ba838dca3fffb3e2db82bbe2179f07032b09d4d19adbce17cc6fdb2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleClock.cs",
+      "sha256": "f006ecbd26eb49f261482793accaca6053126fbdf02957a9959bc3050d1c2538"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2Preview.cs",
+      "sha256": "c02e8f94c90e1164d2df44bdad6985f7df99f831948490f3ba6dca03d58670df"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2PreviewWire.cs",
+      "sha256": "979fae895a10905aea69f86c8a3367c30002f0fd9af97e452be3558b288915c5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBlePreviewForm.cs",
+      "sha256": "cf0d059b26cf9b307eb993e0f5bccf7b3856e3b91086cc540d64cc3cb036ed4e"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV1BlePreviewForm.cs",
+      "sha256": "03e7a74f7fc7e6402c802520071c6e648c87c7c7851878abbd16f391b07c208a"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpUsbCatalogRepair.cs",
+      "sha256": "6a2300940ac9a7e319a0e28d327ca65d9f904c3f7b6073732c3f29a7d4698ef8"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2FirmwareForm.cs",
+      "sha256": "e5cb8dd56e5a1c6372baea054f29278962bf18bff43dec36ff2dd0e256af0a86"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\AssemblyInfo.cs",
+      "sha256": "74002a0cf30c17642d5113af36d71de8d54fb1083ec66be83f261e8ddb1306fc"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\ScopeForm_drawbank.cs",
+      "sha256": "3b91994ea330cf65140a89eba58f6f0a7aa1b565c7114a5f0eeb4411375d0c49"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\ScopeForm_drawbank.Designer.cs",
+      "sha256": "40a149a6316521dba84f3cfc32ceb95f3bd24677cee23016065f41da0aa8ed09"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Resources.Designer.cs",
+      "sha256": "b13980bd89e22074e4a15569a6d560feb10db99a4ce3cf237e7e09e5228de9fa"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\Settings.Designer.cs",
+      "sha256": "e954d7441b242db4225c1d6705d53b08f37a0fc6ed4c8ad36d921f3863954cdc"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpFirmwareCatalog.cs",
+      "sha256": "4090892f785b2bc556a6c4e6eb8159cde9a2d67471816f34606ed79169ea4662"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpMediaExport.cs",
+      "sha256": "23968c87919c6e99c65c97e71aacf883ee0da60cda394311b2948cd0a9cc41b7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\WILD_VideoDecoder.cs",
+      "sha256": "3100250cdc61e330e7af0094f27d28bf76e5c52c78ccebe09833ef743c6b4b90"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpDownloadCatalog.cs",
+      "sha256": "ac497294f152aba7cf60623d9479448cbce55a189be8c1fd4d0bc6dadb4d7dc0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpDownloadForm.cs",
+      "sha256": "08c94bae2b0b81f50a455f668ac73bcafe4b16d5b8f5967e2d3e41ef85ce8a1e"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpDownloadStream.cs",
+      "sha256": "d42be09bb113bbcd2ed34df14434bd3dff414683ee1d43e3440451dcf66c25f1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCe64Decoder.cs",
+      "sha256": "2d21ccb49cafe698b805bf5f5972237f09ffb1da36a8c0a37254c2ac7d2b93e7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCe64Export.cs",
+      "sha256": "753ddd10284e05fd71965b7ca6503a71bc2e0166ef6d829aeaa5ebc8aa7600e7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\mainForm.cs",
+      "sha256": "9c7721387d23ac31f5d158343e296aae4d3b2ea27d2a1caa394360cdd14ec8fb"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCaptureModes.cs",
+      "sha256": "bae5c16e9fa5e73c755215ec2eb1d69b6467906d341678016142b3f0fb88bdba"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\XeNpStreamDecoder.cs",
+      "sha256": "6ccca4b3d115fb73e5c2ab59bb636d7e80b1760bb9872fd46300d2ee40a1caa7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpV2UsbConsole.cs",
+      "sha256": "e5569e738d665f141dd839d28749a49488dbdd41b035ad1ed500de74748c7e26"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCalibrationBatch.cs",
+      "sha256": "0e07c56e0e4be5ecaf59797daa9d8d661b7cf5e1f23e892e01da3d0ad2669451"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCalibrationBatchForm.cs",
+      "sha256": "e4bdb36a6425bff2ed9a98858af990711ad896cf6a6e363425cf4efc1da2670a"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpProbeIdentity.cs",
+      "sha256": "be2453e4d1384d14dc34657000d56b985d3745b4f6a1467dd6562ceed545efe3"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpBleForm.Metadata.cs",
+      "sha256": "31a7792c4d54d394b13899cb1811b2590e9b66c5b03ccf86e8262b84e232a400"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCalibrationLibrary.cs",
+      "sha256": "043f790880ffa8f346d78ba608f156fd69c00e1830ce174be10577f44e4cda1d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpCalibrationLibraryForm.cs",
+      "sha256": "cf0bb9f9de53a92f3087499a3d3b8fc7b3dd75251dbc1b87af0d3f2226073c4d"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpProgressEstimate.cs",
+      "sha256": "53aece91015369580c46c1152d673191d69b0137145e0d7a03fd46d1eb0a1e37"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpAcquisitionAnchor.cs",
+      "sha256": "38452871dc332f536fcca916d2da4b07855f3327c371132be387323baaf7db13"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpTimeCorrection.cs",
+      "sha256": "84d0c6c9f2cf2f0899cd2bf40e4330e39b141b7b7aa91a8cb1d9d219f34d7a67"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpHostClock.cs",
+      "sha256": "57ba177ae33b6aaec9e6de0f01d876d1d5723320493e085f34e407c6e2b2095b"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSdCardTest.cs",
+      "sha256": "dea95f09f4aab9bbef761437754685ada38cbff1b3a6410e6ffba71e763a6cba"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSdLoggerTest.cs",
+      "sha256": "f6b3498397bd2b8440f686de82dca9549f534308cd53cb83746e69ff40e39740"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpSdTestForm.cs",
+      "sha256": "82fd95d0c1d8c818eee957d2f2a8e0f6d8749fff1275486874602452b746da2a"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpGpioTimeCorrection.cs",
+      "sha256": "e1ccaa9429836b72fc45e5f7d8baea2a94ad9f4f4b200d7f3a4ac458ad65a772"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\source\\NpImuTimeCorrection.cs",
+      "sha256": "37cd84ee30f788438cc6e7c617778b24e238231af8415548b966cd8db6401343"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\imu_sample_time_20261023\\build128\\compile-obj\\.NETFramework,Version=v4.8.1.AssemblyAttributes.cs",
+      "sha256": "4c500a42809cc8209244dd1daf241a8e12d09085da6185f850a5d66b33124a5a"
+    }
+  ],
+  "checks": {
+    "imu_targeted_and_actual_compiled_consumers": 54,
+    "neural_model_checks_on126": 594,
+    "neural_anchor_checks_on126": 11,
+    "recording_worker_checks_on126": 30
+  },
+  "replays": [
+    {
+      "case": "valid",
+      "samples": 206,
+      "source_sha256": "7E08DEDD223641ECC03888BA749810B4F1CDF224AA71538F8BE1BB3A80567055",
+      "all_original_raw_bytes_preserved": true,
+      "mapped_samples": 206,
+      "clock_interval_us": [
+        4160,
+        4166
+      ],
+      "retained_sequence_gaps": 1847
+    },
+    {
+      "case": "invalid",
+      "samples": 0,
+      "source_sha256": "4B5E455A1958B7EF5D31C1D809885D9C75DFD29203620062CD8FC671561E57A0",
+      "all_original_raw_bytes_preserved": true,
+      "mapped_samples": 0,
+      "clock_interval_us": [
+        null,
+        null
+      ],
+      "retained_sequence_gaps": 0
+    }
+  ],
+  "hardware_test_plan": "docs/imu-time-correction.md",
+  "physical_accuracy_qualified": false,
+  "source_archive_sha256": "e67ff1a3358af210906e245080408a43cdf10d2fad99314eea417b88d65d0216"
+}

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "replays": [
+    {
+      "case": "valid",
+      "samples": 206,
+      "source_sha256": "7E08DEDD223641ECC03888BA749810B4F1CDF224AA71538F8BE1BB3A80567055",
+      "all_original_raw_bytes_preserved": true,
+      "mapped_samples": 206,
+      "clock_interval_us": [
+        4160,
+        4166
+      ],
+      "retained_sequence_gaps": 1847
+    },
+    {
+      "case": "invalid",
+      "samples": 0,
+      "source_sha256": "4B5E455A1958B7EF5D31C1D809885D9C75DFD29203620062CD8FC671561E57A0",
+      "all_original_raw_bytes_preserved": true,
+      "mapped_samples": 0,
+      "clock_interval_us": [
+        null,
+        null
+      ],
+      "retained_sequence_gaps": 0
+    }
+  ],
+  "unchanged_prior125_engines": true,
+  "changed_sources": [
+    "NpUsbSensors.cs",
+    "NpUsbSensorMonitor.cs",
+    "AssemblyInfo.cs",
+    "mainForm.cs",
+    "NpV2UsbConsole.cs",
+    "NpImuTimeCorrection.cs"
+  ]
+}

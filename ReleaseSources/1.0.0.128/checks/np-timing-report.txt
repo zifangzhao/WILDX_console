@@ -1,0 +1,153 @@
+NP FIRST-SAMPLE PC TIME — CONNECTED V1/V2 VALIDATION, 2026-10-23
+
+Implemented in private WILDX 1.0.0.125. The first saved neural source row now
+uses fresh, high-resolution device-counter observations where supported. NP
+and GPIO derived timestamps share the process-wide QPC/PC Unix time axis.
+Network/UTC correction remains separate. This is not a claim of calibrated
+physical ADC-to-GPIO latency or a released firmware/software bundle.
+
+Human authorization
+The user explicitly approved installing the prepared USB-only test images,
+running a 70-second USB capture on each exact device, then restoring originals.
+The respective firmware developers owned exact-UID backup/install/rollback.
+The host owned the production recording workers. No SD recording, erase,
+format, delete, APP/boot/configuration update or release publication was done.
+
+Actual hardware results — WILDX 1.0.0.125
+
+Device       V1                                      V2
+MCU UID      001D00065942500B20313354                 001A0004434250062039314E
+APP CRC      60EC609E (unchanged)                    70CC573C (unchanged)
+Test USB CRC 60981517                               7EC500CA
+Profile      2 probes / native 15 kHz                3 probes / 20 kHz
+Duration     70 s after first observed data          70.382 s data, 70 s requested
+USB          High-speed                              High-speed
+AP rows      P1 1,054,026; P2 1,053,963              1,406,975 each probe
+LFP rows     P1 87,834; P2 87,829                    n/a
+Full PC      AP 67 us; LFP 68 us                    135 us
+interval
+Same-run     5,911 us                               5,353–5,354 us
+coarse width
+Anchor       54 cycles at 187.2 MHz                 12 cycles at 128 MHz
+Observations 8 pre + 8 post, matching domain         8 pre + 8 post, matching domain
+Generation   2                                      1
+
+Both workers completed, drained/closed their DATs, and automatically generated
+all seven calibrated timestamp streams. No reported midstream neural USB/frame/
+counter/host-buffer loss in V1, or raw/decoded-lane drops/decode error in V2.
+V1 correctly retains lossless=False because 836 startup bytes were trimmed.
+Different V1 probe tail lengths are retained; no unmatched samples are invented.
+
+The coarse widths above independently reproduce the previous HAL-ms algorithm
+using this capture's retained coarse queries; this is a same-run computation,
+not another hardware run. The previous V2 run's 5.248 ms interval is separate
+historical evidence. Fine widths are full conditional intervals, not 1-sigma
+noise or validated physical error. Startup counter phase is measured instead
+of removing coarse safety allowances.
+
+Raw first-row source phase is retained:
+V1 origin 253568 source ticks; first AP P1=253991, P2=253981 at 11.7 MHz.
+P2 is 0.854701 us before P1. LFP P1=260231, P2=260221.
+V2 origin0; first AP P1=576, P2=772, P3=784 at 32 MHz.
+Relative to P1, P2 is +6.125 us and P3 +6.5 us.
+The integer-microsecond PC bound rounding can quantize derived row origins by
+less than 1 us; exact source tick phase remains in first_sample_timestamps.json.
+Both captures use one shared AP rate correction across probes/bands; V1 LFP
+retains the exact 12:1 period relation. Estimated periods are relative to this
+PC clock, not independent crystal calibration or multi-hour stability evidence.
+
+Independent file verification
+verify_and_plot.py checks all 6,504,577 timestamps: exact DAT row counts, finite,
+strictly increasing, no unmapped rows, digital_source_anchor basis, shared host
+epoch, shared rate correction and source-phase consistency. It independently
+checks all 32 raw NPHR CRC/UID/ID replies, unwraps multiple counter wraps, chooses
+the matched pre/post domain and reproduces the propagated clock bounds.
+All checks pass; see independent-verification.json and independent-verification.log.
+The plot compares same-capture coarse/fine intervals and retained source phase.
+
+Software changes
+- Optional USB C0/7F 64-byte NPHR snapshots bind fresh nonzero query IDs to the
+  exact UID, counter domain/Hz and capture generation. Existing C0/7E NPAR stays
+  unchanged. No timing queries run in the live bulk loop.
+- V1 observes before START; V2 observes after Ready and before host capture
+  release. Post queries run only after all bulk work retires. HAL milliseconds
+  select wrap count; they do not supply fractional phase in the fine path.
+- A reset, unsafe/debug/stopped clock, missing query, ambiguous wrap, changed
+  UID/frequency/domain/generation or unsupported firmware retains the labeled
+  coarse/arrival fallback. Old firmware continues recording without a start gate.
+- first_sample_timestamps.json retains raw replies and per-row pc_mapping and
+  bounds; existing post-record correction and standalone script consume them.
+- GPIO close queues creation of gpio_rtc_events.timestamps.calibrated.csv and
+  gpio_timestamp_calibration.json beside raw events/queries. These use the same
+  PC epoch with integer-RTC phase/query uncertainty. Unbracketed events remain
+  explicitly unmapped. Raw logs, neural DATs and original timestamps are kept.
+- Correct-RecordingTime.ps1 can regenerate neural and GPIO derived outputs,
+  recursively, with existing-derived protection and explicit replacement.
+
+Software validation
+Anchor parser/CRC/family/ID/domain/generation/clock/wrap/fallback checks pass,
+including HAL wrap and multiple DWT wraps, stale V2 preparation domain, and
+known-truth synthetic interval containment. GPIO shared-PC event mapping,
+coverage/reset rejection/source preservation and derived protection pass.
+594 correction checks, 11 source/shared-rate/gap/legacy/epoch checks and 30
+actual compiled V1/V2 recorder-worker file checks pass on build124.
+GPIO protocol/lifecycle46, GUI warning/panel38 and continuity54 checks pass
+with simulated serial traffic (build123; GPIO bounds tightened in124).
+Build125 differs from124 only by version and a report limitation wording fix;
+build125-delta.json verifies this. Both actual hardware captures ran build125.
+No new physical GPIO test was performed.
+
+Restoration
+V1 original USBF8E721C2 restored. Full2MiB flash and option bytes independently
+match the fresh pretest backup exactly; final role3/busy0/pending0, debugger off.
+See v1-restoration-verification.json and the developer restoration receipt.
+V2 original USB02AB1A78 restored. Full4MiB flash independently matches the fresh
+pretest backup exactly; all35 semantic option fields are unchanged. Final
+production status is mode3/busy0/target0 for the exact UID, debugger off and
+all handles closed. See v2-restoration-verification.json and the developer's
+restored-verification.json/restored-usb-status.json. Both original APP images,
+boot/configuration and SD recordings were preserved.
+
+Remaining physical limits / Yoshi's question
+The common PC coordinate and first-source-row mapping are implemented and tested.
+A simultaneous compatible NP+GPIO recording is still missing. Such a joint run
+without an independent physical input can establish shared epoch/units, event
+coverage and transport consistency, but cannot identify unknown constant probe
+ADC/filter/serialization/receiver or GPIO edge/IRQ delays. Those unobservable
+terms prevent a defensible approximately1ms physical AP-to-GPIO bound. GPIO's
+integer-ms RTC phase and query interval also remain in its own event bounds.
+The new 67–135us NP clock intervals do not remove those terms. No external wiring
+was added. Historical RM032 files cannot gain missing acquisition anchors.
+
+IMU remains separate from NP row timing. The old V2 capture's1399 snapshots all
+have enabled1/valid0/sequence0/imu_tick0/sensor_time0/chipID0, IMU error1 and
+IO-errors2. That is no valid AG sample observed, not a host transport-loss proof.
+The new V2 run again reports1399 snapshots and0 distinct valid IMU samples.
+V1's new run has14017 distinct observations,0 sequence gaps/queue overflow and
+802 estimated missed conversions; latest-register polling is not lossless FIFO.
+Firmware-owner source review confirms imu_tick_ms is the I2C-completion IRQ's
+HALms; sensor_time_24 is a free-running counter latched at register-read start,
+not ADC conversion time. V2 publishes latest snapshots at at most20Hz, so those
+records cannot reconstruct every200Hz sample. A separate future IMU native-row
+sidecar can retain existing sequence/counter/IRQms/session/validity and coarse
+PC bounds. Full-rate capture needs firmware queue/batch transport; tighter sensor
+read-clock mapping needs burst-start/end counter brackets and reset binding.
+Neither the held1250Hz analogin grid nor NP timing alone supplies missing samples
+or physical IMU filter/update phase. This assessment does not implement that
+separate IMU acquisition work or claim historical recovery of absent data.
+
+Build identity and frozen source
+build125-receipt.json records GUI/SDK/source hashes; candidate125-sources.zip
+contains exact compiled GUI inputs and build/script files. The SDK binary is
+unchanged by the USB fine mapping. The private app is
+build125/compile-bin/WILDX_console.exe. No installer or push in this task.
+
+Communication / closure
+Measured results and plot sent to Yoshi in the existing agentchat thread:
+https://ayalab.slack.com/archives/C0C8LFU0D0W/p1792724096864569
+Plot:
+https://ayalab.slack.com/files/U05U5J1B807/F0CBR9ENNM8/np-first-sample-timing-20261023.png
+Follow-up with actual IMU condition, new GPIO output and remaining validation:
+https://ayalab.slack.com/archives/C0C8LFU0D0W/p1792783584708279
+Both firmware-owner lanes are closed after original-image restoration. No
+further hardware actions or publication are requested by this report.

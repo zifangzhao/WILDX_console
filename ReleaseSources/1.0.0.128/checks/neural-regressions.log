@@ -1,0 +1,3 @@
+PASS 594 clock drift/jitter/outlier/latency/epoch/merged/separate/legacy/source-preservation/automatic checks. Synthetic files only.
+PASS 11 anchored-rate, merged-phase, SD gap, legacy, corrupt/stale/epoch and shared-clock checks.
+PASS 30 actual V1/V2 merged/separate recording-worker and automatic PC timestamp checks; no hardware.

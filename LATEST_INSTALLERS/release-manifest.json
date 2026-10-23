@@ -1,24 +1,75 @@
 {
-  "version": "1.0.0.105",
-  "releaseId": "WILDX105_V2_BLE_PREVIEW_RECOVERY_20261023",
-  "baselineVersion": "1.0.0.96",
-  "applicationRebuiltDuringPackaging": true,
-  "guiSha256": "74218DF3DB0EC895E57FCEEC67D110E0A42AFD1BF021A9B9CFBBD0B1E431DD4E",
-  "sdkSha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546",
+  "version": "1.0.0.128",
+  "releaseId": "WILDX128_NP_GPIO_IMU_PC_TIMESTAMPS_20261023",
+  "baselineVersion": "1.0.0.105",
+  "applicationRebuiltDuringPackaging": false,
+  "guiSha256": "30CC724A8DFF619C186790715B469B3FCB99849348312DCA7FE01E279EBE4A59",
+  "sdkSha256": "494DF1F900A2BEB16AA9EC923792C3E423CF206D13C7C2A2A36D457CFE4A8679",
+  "sourceArchiveSha256": "3D952D3683489AABD2C2A7A946AA31FE4D79CDFF32AE9B6AD2558868CAB846FC",
   "firmwareChanged": false,
   "firmwareCatalogChanged": false,
   "helpersChanged": false,
-  "newFirmwareHardwareQualified": false,
-  "sourceArchiveSha256": "0886C8A32E58EADEAEDCC58FD319F92BE31937A869CBE0A680111CA9F1EC96C0",
-  "scope": "Only V2 BLE preview recovery/control handoff and normal version increment.",
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
+  "extractedPayloadFilesVerified": 43,
+  "scope": "PC-clock correction for neural/GPIO timestamps; distinct retained IMU samples and derived timestamps; SD test workflow. Frozen build128, not the unrelated working tree.",
+  "timingFirmwareIncluded": false,
+  "timingFirmwareRequiredForHighResolutionNeuralBounds": true,
+  "existingFirmwareSupported": true,
+  "physicalAdcGpioAlignmentQualified": false,
+  "softwareChecks": {
+    "imu_targeted_and_actual_compiled_consumers": 54,
+    "neural_model_checks_on126": 594,
+    "neural_anchor_checks_on126": 11,
+    "recording_worker_checks_on126": 30
+  },
+  "replayChecks": [
+    {
+      "case": "valid",
+      "samples": 206,
+      "source_sha256": "7E08DEDD223641ECC03888BA749810B4F1CDF224AA71538F8BE1BB3A80567055",
+      "all_original_raw_bytes_preserved": true,
+      "mapped_samples": 206,
+      "clock_interval_us": [
+        4160,
+        4166
+      ],
+      "retained_sequence_gaps": 1847
+    },
+    {
+      "case": "invalid",
+      "samples": 0,
+      "source_sha256": "4B5E455A1958B7EF5D31C1D809885D9C75DFD29203620062CD8FC671561E57A0",
+      "all_original_raw_bytes_preserved": true,
+      "mapped_samples": 0,
+      "clock_interval_us": [
+        null,
+        null
+      ],
+      "retained_sequence_gaps": 0
+    }
+  ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.105.exe",
-    "bytes": 7080325,
-    "sha256": "FA61A8D54643964262A4AC43A330F0515BC69FA3759C118D18AB5AD96EB057EC"
+    "file": "WILDX_console-Setup-1.0.0.128.exe",
+    "bytes": 7171239,
+    "sha256": "80D9BD8045DF0DD5291E2CF506E7402421BB7A0F7EA7A05BB45C5499F0FFDE8D"
   },
   "payload": [
+    {
+      "path": "Correct-RecordingTime.ps1",
+      "bytes": 4219,
+      "sha256": "25D1B74B2E963857BF438C25427C8C3E4FE610E8D6BBF4FBA90C085151DAD2E2"
+    },
+    {
+      "path": "docs/imu-time-correction.md",
+      "bytes": 11391,
+      "sha256": "35BFDA2F5DF6941FFBDF6CDC4B31E9170030C143DFEF76EB5AECBB0AE34B1400"
+    },
+    {
+      "path": "docs/recording-time-correction.md",
+      "bytes": 13077,
+      "sha256": "7C1A38CE78C8E0D3F11164FD3E9434761327E2483D3B6E14B50D6752A8800AD9"
+    },
     {
       "path": "Firmware/owner-confirmation-20261017.json",
       "bytes": 1975,
@@ -28,6 +79,11 @@
       "path": "Firmware/README.md",
       "bytes": 232,
       "sha256": "B48C7B519E494D33D540C9BF931A7ABB56FDFD0D8AE18DA9A543AAE3733AB543"
+    },
+    {
+      "path": "Firmware/releases.json",
+      "bytes": 15794,
+      "sha256": "0BC85009FF9059E382C12D23B2699928206E12AC46EEF8E85787DB6AB82D2D33"
     },
     {
       "path": "Firmware/V1/download-acceptance.json",
@@ -105,6 +161,51 @@
       "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
     },
     {
+      "path": "Firmware/V2/package-receipt.json",
+      "bytes": 2681,
+      "sha256": "A1890BD29FC0F8A8B3A35E47D88E88B7ED15A8F2A0309FDDAED04F0F2441C8EF"
+    },
+    {
+      "path": "Firmware/V2/README.md",
+      "bytes": 1245,
+      "sha256": "3CD4F047AE793AF86AABE1573A4DEA5374CF7CDC10C665F5729CE14939C219DE"
+    },
+    {
+      "path": "Firmware/V2/SHA256SUMS.txt",
+      "bytes": 729,
+      "sha256": "61F16795AFB6B1D4E31547B787840419FA55799CD3BF3238898DD6C2E1313E8E"
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_D44907A5_BLE_CATALOG_20261022.hex",
+      "bytes": 5745164,
+      "sha256": "C7A06E9C15BBED61A1F772E10A66026C07E86BE45D392D2174AC6F0753EA42A8"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_only_D44907A5_BLE_CATALOG_20261022.hex",
+      "bytes": 522216,
+      "sha256": "B5D775212A6AE6CBABD094A5B04125E2C6BE2EF763375F33DF4951D2220C6051"
+    },
+    {
+      "path": "Firmware/V2/V2_logger_APP_update_D44907A5_BLE_CATALOG_20261022.xenp",
+      "bytes": 189868,
+      "sha256": "F351AEB992F8EC89760A0D3E2A87992886796DE0C83D66DFB0C20724321B5304"
+    },
+    {
+      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_only_B6099A0E_GUARDED_FORMAT_20261022.hex",
+      "bytes": 486100,
+      "sha256": "2B9EF98132EB61773515DC6807EA142ECEBF9E64CFAF6CFE2A670930C3A59ACF"
+    },
+    {
+      "path": "Firmware/V2/V2_USB_update_B6099A0E_GUARDED_FORMAT_20261022.xenp",
+      "bytes": 176736,
+      "sha256": "6CF99E583545F43308B62042EE3F69FCFC7AABCDF46C3B0AEF0F6EFB3D5AFEB2"
+    },
+    {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
       "bytes": 449,
       "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
@@ -146,8 +247,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 254464,
-      "sha256": "86EF0F858AE6CDB188C9C525ED50894EA204D6DB15C1C38BC1EB472CDBC7F546"
+      "bytes": 310784,
+      "sha256": "494DF1F900A2BEB16AA9EC923792C3E423CF206D13C7C2A2A36D457CFE4A8679"
     },
     {
       "path": "OpenTK.dll",
@@ -161,69 +262,13 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1716736,
-      "sha256": "74218DF3DB0EC895E57FCEEC67D110E0A42AFD1BF021A9B9CFBBD0B1E431DD4E"
+      "bytes": 1881600,
+      "sha256": "30CC724A8DFF619C186790715B469B3FCB99849348312DCA7FE01E279EBE4A59"
     },
     {
       "path": "WILDX_console.exe.config",
       "bytes": 532,
       "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
-    },
-    {
-      "path": "Firmware/V2/V2_logger_APP_only_D44907A5_BLE_CATALOG_20261022.hex",
-      "bytes": 522216,
-      "sha256": "B5D775212A6AE6CBABD094A5B04125E2C6BE2EF763375F33DF4951D2220C6051"
-    },
-    {
-      "path": "Firmware/V2/V2_logger_APP_update_D44907A5_BLE_CATALOG_20261022.xenp",
-      "bytes": 189868,
-      "sha256": "F351AEB992F8EC89760A0D3E2A87992886796DE0C83D66DFB0C20724321B5304"
-    },
-    {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_D44907A5_BLE_CATALOG_20261022.hex",
-      "bytes": 5745164,
-      "sha256": "C7A06E9C15BBED61A1F772E10A66026C07E86BE45D392D2174AC6F0753EA42A8"
-    },
-    {
-      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
-      "bytes": 84090,
-      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-    },
-    {
-      "path": "Firmware/V2/V2_USB_only_B6099A0E_GUARDED_FORMAT_20261022.hex",
-      "bytes": 486100,
-      "sha256": "2B9EF98132EB61773515DC6807EA142ECEBF9E64CFAF6CFE2A670930C3A59ACF"
-    },
-    {
-      "path": "Firmware/V2/V2_USB_update_B6099A0E_GUARDED_FORMAT_20261022.xenp",
-      "bytes": 176736,
-      "sha256": "6CF99E583545F43308B62042EE3F69FCFC7AABCDF46C3B0AEF0F6EFB3D5AFEB2"
-    },
-    {
-      "path": "Firmware/V2/package-receipt.json",
-      "bytes": 2681,
-      "sha256": "A1890BD29FC0F8A8B3A35E47D88E88B7ED15A8F2A0309FDDAED04F0F2441C8EF"
-    },
-    {
-      "path": "Firmware/V2/README.md",
-      "bytes": 1245,
-      "sha256": "3CD4F047AE793AF86AABE1573A4DEA5374CF7CDC10C665F5729CE14939C219DE"
-    },
-    {
-      "path": "Firmware/V2/SHA256SUMS.txt",
-      "bytes": 729,
-      "sha256": "61F16795AFB6B1D4E31547B787840419FA55799CD3BF3238898DD6C2E1313E8E"
-    },
-    {
-      "path": "Firmware/releases.json",
-      "bytes": 15794,
-      "sha256": "0BC85009FF9059E382C12D23B2699928206E12AC46EEF8E85787DB6AB82D2D33"
     }
-  ],
-  "extractedPayloadFilesVerified": 40,
-  "nsisPackagingPasses": 1,
-  "softwareChecks": {
-    "preview": 6106
-  },
-  "bleTriple20HardwareTested": false
+  ]
 }
