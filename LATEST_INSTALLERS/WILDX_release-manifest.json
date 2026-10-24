@@ -1,58 +1,38 @@
 {
-  "version": "1.0.0.128",
-  "releaseId": "WILDX128_NP_GPIO_IMU_PC_TIMESTAMPS_20261023",
-  "baselineVersion": "1.0.0.105",
+  "version": "1.0.0.133",
+  "releaseId": "WILDX133_BLE_IMU_POLLING_20261024",
+  "baselineVersion": "1.0.0.128",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "30CC724A8DFF619C186790715B469B3FCB99849348312DCA7FE01E279EBE4A59",
+  "guiSha256": "CE8E156350E4596A5728F7FD2F281304D899C083E0441F0B04FFDA5B85218CA9",
   "sdkSha256": "494DF1F900A2BEB16AA9EC923792C3E423CF206D13C7C2A2A36D457CFE4A8679",
-  "sourceArchiveSha256": "3D952D3683489AABD2C2A7A946AA31FE4D79CDFF32AE9B6AD2558868CAB846FC",
+  "sourceArchiveSha256": "D3CFAC562A6DB5CC647CD8A395FEB99D0E7FF2BFEFAD63ED18C4D19F72807A17",
   "firmwareChanged": false,
   "firmwareCatalogChanged": false,
   "helpersChanged": false,
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
   "extractedPayloadFilesVerified": 43,
-  "scope": "PC-clock correction for neural/GPIO timestamps; distinct retained IMU samples and derived timestamps; SD test workflow. Frozen build128, not the unrelated working tree.",
+  "scope": "BLE coherent IMU snapshot support, IMU priority/retry, serialized background polling, stale display, and raw periodic clock evidence. Frozen checked build133; unrelated working-tree edits excluded.",
   "timingFirmwareIncluded": false,
   "timingFirmwareRequiredForHighResolutionNeuralBounds": true,
   "existingFirmwareSupported": true,
+  "bleImuRequiresCompatibleFirmware": true,
+  "bleImuIsSparseSnapshotStream": true,
+  "apDriftCorrectionImplemented": false,
   "physicalAdcGpioAlignmentQualified": false,
+  "simultaneousBleWaveformImuHardwareQualified": false,
+  "v2Sd292IndependentReadbackQualified": false,
   "softwareChecks": {
-    "imu_targeted_and_actual_compiled_consumers": 54,
-    "neural_model_checks_on126": 594,
-    "neural_anchor_checks_on126": 11,
-    "recording_worker_checks_on126": 30
+    "baseline_overlap_reproduced": 5,
+    "actual_source_background_fix": 22,
+    "actual_compiled_usb_imu_lifecycle": 5,
+    "actual_compiled_ble_imu": 366,
+    "actual_compiled_clock_evidence": 43
   },
-  "replayChecks": [
-    {
-      "case": "valid",
-      "samples": 206,
-      "source_sha256": "7E08DEDD223641ECC03888BA749810B4F1CDF224AA71538F8BE1BB3A80567055",
-      "all_original_raw_bytes_preserved": true,
-      "mapped_samples": 206,
-      "clock_interval_us": [
-        4160,
-        4166
-      ],
-      "retained_sequence_gaps": 1847
-    },
-    {
-      "case": "invalid",
-      "samples": 0,
-      "source_sha256": "4B5E455A1958B7EF5D31C1D809885D9C75DFD29203620062CD8FC671561E57A0",
-      "all_original_raw_bytes_preserved": true,
-      "mapped_samples": 0,
-      "clock_interval_us": [
-        null,
-        null
-      ],
-      "retained_sequence_gaps": 0
-    }
-  ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.128.exe",
-    "bytes": 7171239,
-    "sha256": "80D9BD8045DF0DD5291E2CF506E7402421BB7A0F7EA7A05BB45C5499F0FFDE8D"
+    "file": "WILDX_console-Setup-1.0.0.133.exe",
+    "bytes": 7181648,
+    "sha256": "3C15E46F9EDAF4937B6933C53C7E9EB0023A7DA5391AA0EE331DA90C0B128CB7"
   },
   "payload": [
     {
@@ -262,8 +242,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1881600,
-      "sha256": "30CC724A8DFF619C186790715B469B3FCB99849348312DCA7FE01E279EBE4A59"
+      "bytes": 1906688,
+      "sha256": "CE8E156350E4596A5728F7FD2F281304D899C083E0441F0B04FFDA5B85218CA9"
     },
     {
       "path": "WILDX_console.exe.config",

@@ -1,0 +1,2 @@
+PASS: 5 actual-source background overlap reproduced checks; no hardware/UI access.
+PASS: 22 actual-source background serialization/freshness/recovery checks; no hardware/UI access.

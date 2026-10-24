@@ -1,0 +1,1 @@
+PASS 5 actual-compiled USB IMU lifecycle checks; no device handle/EP0 access.
