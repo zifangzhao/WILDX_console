@@ -1,0 +1,63 @@
+{
+  "result": "Observer binary cast defect; actual138 B9 views and display/journal replay pass",
+  "host_version": "1.0.0.138",
+  "gui_sha256": "6E1A2E88B98E6DC55A2733082BECD8496913F91DA99A5C4A86876BC195B8DB86",
+  "observer_exe": "D:/Code/XE_NP_V2/_artifacts/v2_imu_restore_20261023/BleImuHardware.exe",
+  "observer_sha256": "3720FEC645F4787DC2C7F6901C9BB1BF531B8534B11C3B4764347D6E38EEDD78",
+  "observer_il": "<Imu>d__22 IL_013E unbox.any System.Boolean; actual138 NpImuDisplay.Valid is UInt32",
+  "actual_session_replays": 8,
+  "views": [
+    {
+      "file": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_resume_20261025\\ble-sd-final-r1\\imu-000.bin",
+      "bytes": 140,
+      "sha256": "3829E88291779D5696E6898EC974A7AD769737791F063112DEA29123ADDB4A7D",
+      "magic": "0x31534e53",
+      "version": 1,
+      "valid": 3,
+      "publication_ms": 66755,
+      "imu_sequence": 3206,
+      "imu_tick_ms": 66753,
+      "mag_tick_ms": 66747
+    },
+    {
+      "file": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_resume_20261025\\ble-sd-final-r1\\imu-001.bin",
+      "bytes": 140,
+      "sha256": "6D6E661A6FA3E3C72AB3141A5B6CFE376C8E60BE65FC70FB91EAAE2053AEDF6F",
+      "magic": "0x31534e53",
+      "version": 1,
+      "valid": 3,
+      "publication_ms": 67879,
+      "imu_sequence": 3421,
+      "imu_tick_ms": 67878,
+      "mag_tick_ms": 67873
+    },
+    {
+      "file": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_resume_20261025\\ble-sd-final-r1\\imu-002.bin",
+      "bytes": 140,
+      "sha256": "C9040BCF57BB603630B0B6DDEB4FACB5924E3B31E77D615D7D6D371BC13D58B1",
+      "magic": "0x31534e53",
+      "version": 1,
+      "valid": 3,
+      "publication_ms": 69117,
+      "imu_sequence": 3658,
+      "imu_tick_ms": 69113,
+      "mag_tick_ms": 69078
+    },
+    {
+      "file": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_resume_20261025\\ble-sd-final-r1\\imu-003.bin",
+      "bytes": 140,
+      "sha256": "CD0F7101A8427FA1BDD4334BAF98D3D85E2E907833AEC4CBA2F44AD7793AF82F",
+      "magic": "0x31534e53",
+      "version": 1,
+      "valid": 3,
+      "publication_ms": 70317,
+      "imu_sequence": 3889,
+      "imu_tick_ms": 70315,
+      "mag_tick_ms": 70284
+    }
+  ],
+  "host_changes": false,
+  "firmware_changes": false,
+  "hardware_accessed": false,
+  "limits": "One skipped request was contention-compatible; no packet trace attests its precise owner. Four later fixture cast failures are established. Warm USB-return failure remains separate and unqualified."
+}

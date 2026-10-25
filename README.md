@@ -2,7 +2,7 @@
 
 Independent Windows console for Neuropixels devices. Current published version **1.0.0.138**.
 
-[Latest installer](LATEST_INSTALLERS/README.md) adds up to four selected V1 BLE preview channels with the bundled APP firmware. Existing firmware retains single-channel preview; USB firmware, buffered downloads and V2 are unchanged. [Release details](ReleaseSources/1.0.0.138/README.md).
+[Latest installer](LATEST_INSTALLERS/README.md) adds up to four selected V1 BLE preview channels with the bundled APP firmware. Existing firmware retains single-channel preview; USB firmware and buffered downloads are unchanged. A [standalone V2 firmware/catalog update](Firmware/Updates/WILDX138_V2_1D3262FB_8DE56637_20261025.zip) provides USB 1D3262FB / APP 8DE56637 for the existing application. [Release details](ReleaseSources/1.0.0.138/README.md).
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 

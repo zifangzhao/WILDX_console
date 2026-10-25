@@ -1,0 +1,11 @@
+{
+    "result":  "PASS actual138 standalone catalog install, V1 preservation, matching-pair/no-prompt, idempotence, wrong-app and corrupt-payload refusal",
+    "appSha256":  "6E1A2E88B98E6DC55A2733082BECD8496913F91DA99A5C4A86876BC195B8DB86",
+    "sdkSha256":  "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
+    "catalogSha256":  "E4C69C64835FF3030EC3BBFBCF7A8C6E6190330C8453891FE9F3C1E1096244C1",
+    "v2AppCrc32":  "8DE56637",
+    "v2UsbCrc32":  "1D3262FB",
+    "v1Preserved":  true,
+    "hardwareAccessed":  false,
+    "installerExecuted":  false
+}

@@ -1,0 +1,4 @@
+V2 firmware files and matching catalog installed. Open WILD-X and use Firmware Update to update the device.
+Previous catalog saved as D:\Code\WILDX_console\WILDX_console\_artifacts\v2_catalog_20261025\checks-r3\installed\Firmware\releases.before-V2-1D-8DE.2b2ecb7b86b14b58812a4570264606e2.bak
+The matching V2 firmware catalog is already installed.
+PASS actual138 standalone catalog install, V1 preservation, matching-pair/no-prompt, idempotence, wrong-app and corrupt-payload refusal

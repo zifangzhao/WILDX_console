@@ -1,49 +1,55 @@
 {
-  "app_crc32": "D44907A5",
-  "usb_crc32": "B6099A0E",
+  "app_crc32": "8DE56637",
+  "usb_crc32": "1D3262FB",
   "recovery_crc32": "6408DBB8",
-  "gui_version": "1.0.0.92",
-  "gui_sha256": "84FA65044A61F7E7DF5A08DDA3DF2B0745863FA2EAEEFA3FDD5D86975DE30851",
+  "gui_version": "1.0.0.138",
+  "gui_installer_sha256": "CABD0D9810DA4FC0DF4C3373E0EFB1C7CC9AF33222E7D24B16CCB0727DC90779",
+  "gui_installer_bytes": 10465768,
+  "gui_distribution": "Unchanged published138 installer alongside standalone new firmware; installer itself retains its old bundled firmware catalog. Do not accept a stale bundled firmware downgrade.",
   "files": {
-    "V2_logger_APP_only_D44907A5_BLE_CATALOG_20261022.hex": {
-      "bytes": 522216,
-      "sha256": "B5D775212A6AE6CBABD094A5B04125E2C6BE2EF763375F33DF4951D2220C6051"
+    "V2_fused_RECOVERY_6408DBB8_USB_1D3262FB_APP_8DE56637_IMU_STARTUP_20261025.hex": {
+      "bytes": 5711372,
+      "sha256": "784D27B1F3F0BBBDEC256FFBE4FA3534EEC56E3565A0F8E6D0992F8BDFBA667D"
     },
-    "V2_logger_APP_update_D44907A5_BLE_CATALOG_20261022.xenp": {
-      "bytes": 189868,
-      "sha256": "F351AEB992F8EC89760A0D3E2A87992886796DE0C83D66DFB0C20724321B5304"
+    "V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex": {
+      "bytes": 564648,
+      "sha256": "D45DA210D8AD9B768A427A0B64E35E774F9B88042BD210E875A75C5B732640B3"
     },
-    "V2_fused_RECOVERY_6408DBB8_USB_B6099A0E_APP_D44907A5_BLE_CATALOG_20261022.hex": {
-      "bytes": 5745164,
-      "sha256": "C7A06E9C15BBED61A1F772E10A66026C07E86BE45D392D2174AC6F0753EA42A8"
+    "V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp": {
+      "bytes": 205292,
+      "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
     },
     "V2_recovery_only_6408DBB8_20261012.hex": {
       "bytes": 84090,
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
-    "V2_USB_only_B6099A0E_GUARDED_FORMAT_20261022.hex": {
-      "sha256": "2B9EF98132EB61773515DC6807EA142ECEBF9E64CFAF6CFE2A670930C3A59ACF",
-      "bytes": 486100
+    "V2_USB_only_1D3262FB_IMU_STARTUP_20261025.hex": {
+      "bytes": 508472,
+      "sha256": "41543E24190C2AC3E395D0EBF69C28D1DCAF6A1963F36ED0D40E4986DD25DE76"
     },
-    "V2_USB_update_B6099A0E_GUARDED_FORMAT_20261022.xenp": {
-      "sha256": "6CF99E583545F43308B62042EE3F69FCFC7AABCDF46C3B0AEF0F6EFB3D5AFEB2",
-      "bytes": 176736
+    "V2_USB_update_1D3262FB_IMU_STARTUP_20261025.xenp": {
+      "bytes": 184868,
+      "sha256": "70FA53D3931A65FED12D85BB8314B8A0D8601ECF8247625AA45E093254C87707"
     }
   },
-  "body_sha256": "7D568C772D87FAE505B11F6C7068D18D9E4E3CA2810182F675A3E9CD82E7DFF9",
-  "body_bytes": 189740,
-  "build_receipt_sha256": "3EB37DD2E951C63AAF4662188B72A1C48C8667C27325F57A5E45517580141C43",
-  "freeze_receipt_sha256": "F3A94F7EE016AEC60A966DF3F6C611E9B6AAFDFD01FF1835272C2B42DC088BB1",
-  "catalog_capability_bit": 22,
-  "info_flags_mask": "048F0000",
+  "firmware_source_archive_path": "ReleaseSources/V2_IMU_1D3262FB_8DE56637_20261025/compiled-sources.zip",
+  "firmware_source_archive_sha256": "2F0C8F2C001B4A5D5ECDF2B1A7F426A2377516EBB03CA9EC0E05E637EFF5DF62",
   "settings_omitted": true,
-  "all_non_app_bytes_preserved": true,
-  "logical_flash_complete_except_settings": true,
-  "firmware_source_archive_sha256": "4DC7168EA07D0A940DEB349A640AC7B60CAB9E1404B7638E2B2C9F8600D1EE9F",
-  "firmware_source_archive_path": "ReleaseSources/V2_APP_D44907A5_20261022/compiled-sources.zip",
-  "source_freeze": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_ble_catalog_restore_20261022\\enabled-inputs",
-  "scope": "Stopped BLE catalog INFO/ENTRY and explicitly confirmed last-COMPLETE delete checked with actual control/APP/catalog/port native fakes, journal power cuts and degraded/v14 read-only views. APP660 capture/Stop source and59 other objects retained. No hardware access, flash, new recording, all-card/all-mode or installed-pair qualification. USB B6099A0E/recovery6408DBB8 byte-identical; full fused explicit FF except retained settings. GUI92 retains the pending-Stop display fix.",
-  "pair_hardware_validated": false,
-  "flashed": false,
-  "published": false
+  "omitted_ranges": [
+    "0801C000-0801DFFF",
+    "081FD000-081FFFFF"
+  ],
+  "validation": {
+    "USB": "Final1D P123/20k9.328s and packedP1/30k9.664s after software restart/rate change, no reported drops/errors,186/189 valid fresh IMU records; startup/SD-download/BLE-return exercised",
+    "BLE_SD": "APP8DE P123/20k10.83904s,8468blocks,216780rows/probe; actual138 full export plus independent framing/length/hash/loss checks; four during-recording B9 AG+MAG views replayed through actual138 display/session; STOP15.147s; catalog292prior records preserved",
+    "software": "83587 driver assertions; actual port/core/consumer role1+2 regression; exact empty-cancel catalog fixtures with publication cuts; static RAM/stack/entry and manifests",
+    "limits": "Short selected modes on current board/card only. No all-card/all-mode/endurance/analog-quality/physical-time qualification. UTC1 lacks first-sample PC timing; GUI optional NPAQ times out5s. One USB return required cable reconnect; a subsequent final1D BLE-to-USB return passed. Fused assembled from exact checked components; not separately flashed as a whole."
+  },
+  "pair_hardware_validated": true,
+  "installed_components": true,
+  "fused_whole_flash_tested": false,
+  "published": false,
+  "hardware_pair_scope": "Exact published GUI138/SDK production API capture/control/export on004B; installer was not executed and manual/visual installed-pair qualification was not performed.",
+  "installer_executed_here": false,
+  "visual_or_installed_pair_qualified": false
 }

@@ -1,0 +1,9 @@
+save=False imu-000.bin {"Values":[0.161621,0.949707,-0.000732,-0.548,-0.426,0.304,34.626,-56.221,-68.099],"Error":null,"Valid":3,"Sequence":3206,"DeviceMs":66753,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=False imu-001.bin {"Values":[0.162841,0.943359,0.000976,-0.426,-0.365,0.121,34.263,-57.725,-66.965],"Error":null,"Valid":3,"Sequence":3421,"DeviceMs":67878,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=False imu-002.bin {"Values":[0.163818,0.946044,0.006347,-0.426,-0.487,0.182,33.901,-55.881,-67.953],"Error":null,"Valid":3,"Sequence":3658,"DeviceMs":69113,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=False imu-003.bin {"Values":[0.163818,0.946777,0.01123,-0.548,-0.487,0.121,34.655,-52.915,-69.756],"Error":null,"Valid":3,"Sequence":3889,"DeviceMs":70315,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=True imu-000.bin {"Values":[0.161621,0.949707,-0.000732,-0.548,-0.426,0.304,34.626,-56.221,-68.099],"Error":null,"Valid":3,"Sequence":3206,"DeviceMs":66753,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=True imu-001.bin {"Values":[0.162841,0.943359,0.000976,-0.426,-0.365,0.121,34.263,-57.725,-66.965],"Error":null,"Valid":3,"Sequence":3421,"DeviceMs":67878,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=True imu-002.bin {"Values":[0.163818,0.946044,0.006347,-0.426,-0.487,0.182,33.901,-55.881,-67.953],"Error":null,"Valid":3,"Sequence":3658,"DeviceMs":69113,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+save=True imu-003.bin {"Values":[0.163818,0.946777,0.01123,-0.548,-0.487,0.121,34.655,-52.915,-69.756],"Error":null,"Valid":3,"Sequence":3889,"DeviceMs":70315,"ImuError":0,"EnvironmentError":7,"Overflow":0}
+PASS 8 actual138 IMU session/display/serialization replays, no hardware
