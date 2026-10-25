@@ -1,9 +1,7 @@
-# WILD-X 1.0.0.138
+# WILD-X 1.0.0.139
 
-[Download installer](WILDX_console-Setup-1.0.0.138.exe).
+[Download installer](WILDX_console-Setup-1.0.0.139.exe).
 
-Adds up to four selected V1 BLE preview channels with the bundled APP firmware. AP and LFP preview passed a two-probe 20 kHz SD recording and full sample/readback comparison. Existing firmware retains single-channel preview.
+Includes the latest V2 USB 1D3262FB / APP 8DE56637 firmware and matching catalog directly. No separate ZIP is needed. V1 firmware and the existing USB download/preview features remain included. After installation, use Firmware Update in the app to update a device when required.
 
-UART remains 115,200 baud. USB download improvements remain included. The installer retains its original V2 bundle; use the [standalone V2 firmware/catalog update](../Firmware/Updates/WILDX138_V2_1D3262FB_8DE56637_20261025.zip) for USB 1D3262FB / APP 8DE56637.
-
-[Release details](../ReleaseSources/1.0.0.138/README.md) / [manifest](release-manifest.json).
+[Release details](../ReleaseSources/1.0.0.139/README.md) / [manifest](release-manifest.json).

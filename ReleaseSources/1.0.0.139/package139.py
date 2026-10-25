@@ -1,0 +1,45 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess
+repo=Path(__file__).resolve().parents[2];root=Path(__file__).resolve().parent
+payload=root/'release/app';release=repo/'ReleaseSources/1.0.0.139';latest=repo/'LATEST_INSTALLERS'
+load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest().upper()
+def save(p,x):p.write_text(json.dumps(x,indent=2)+'\n',encoding='utf-8')
+def cp(a,b):b.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(a,b)
+old=load(latest/'release-manifest.json');assert old['version']=='1.0.0.138'
+receipt=load(root/'build139-receipt.json');assert receipt['changed_sources']==['AssemblyInfo.cs']
+assert sha(payload/'WILDX_console.exe')==receipt['gui_sha256'] and sha(payload/'NpV2SdDatExport.dll')==receipt['sdk_sha256']
+catalog=load(payload/'Firmware/releases.json');v2=next(x for x in catalog['releases'] if x['family']==2)
+assert (v2['appCrc32'],v2['usbCrc32'])==('8DE56637','1D3262FB')
+assert not list(payload.rglob('*.zip')) and not list(payload.rglob('*STANDALONE*'))
+expected=[{'path':p.relative_to(payload).as_posix(),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(payload.rglob('*')) if p.is_file()]
+assert not list(payload.glob('*Setup*.exe'))
+with (root/'release/nsis.log').open('wb') as log:
+ subprocess.run(['C:/Program Files (x86)/NSIS/makensis.exe','/NOCD','/V2','/DAPP_PAYLOAD_DIR='+str(payload),str(release/'installer.nsi')],cwd=repo/'USB512_interface',stdout=log,stderr=subprocess.STDOUT,check=True)
+installer=payload/'WILDX_console-Setup-1.0.0.139.exe';extracted=root/'release/extracted';assert not extracted.exists()
+with (root/'release/extract.log').open('wb') as log:
+ subprocess.run(['C:/ProgramData/NVIDIA Corporation/NVIDIA App/UpdateFramework/ota-artifacts/nvapp/post-processing/241407d0d505673fd4d654200345ed76/NvApp/7z.exe','x',str(installer),'-o'+str(extracted),'-y'],stdout=log,stderr=subprocess.STDOUT,check=True)
+for item in expected:assert sha(extracted/item['path'])==item['sha256'],item['path']
+actual={p.relative_to(extracted).as_posix() for p in extracted.rglob('*') if p.is_file()}
+assert actual-{x['path'] for x in expected}=={'$PLUGINSDIR/System.dll','$PLUGINSDIR/nsDialogs.dll','$PLUGINSDIR/modern-wizard.bmp'}
+manifest={'version':'1.0.0.139','releaseId':'WILDX139_BUNDLED_V2_IMU_20261025','baselineVersion':'1.0.0.138','applicationRebuiltDuringPackaging':False,'guiSha256':receipt['gui_sha256'],'sdkSha256':receipt['sdk_sha256'],'changedGuiSources':['AssemblyInfo.cs'],'sourceArchiveSha256':sha(release/'compiled-sources.zip'),'v1FirmwareChanged':False,'v2FirmwareChanged':True,'v2AppCrc32':'8DE56637','v2UsbCrc32':'1D3262FB','v2RecoveryCrc32':'6408DBB8','v2SourceCommit':'3280df8fea774eb3fce1650a6fd1c84ce4383817','helpersChanged':False,'installerExecuted':False,'installerPayloadExtractedAndVerified':True,'extractedPayloadFilesVerified':len(expected),'standaloneUpdateRequired':False,'separateZipIncluded':False,'hardwareTestsRepeatedForVersionOnlyBuild':False,'firstSamplePcTimeAvailableOnV2LegacyUtc1':False,'allModeOrEnduranceQualified':False,'scope':'Version-only GUI compilation from exact138 inputs. Bundle the accepted V2 pair and matching local catalog directly. V1, SDK and application behavior unchanged. No separate ZIP or updater needed.','v2Acceptance':load(payload/'Firmware/V2/package-receipt.json'),'installer':{'file':installer.name,'bytes':installer.stat().st_size,'sha256':sha(installer)},'payload':expected}
+save(release/'package-verification.json',manifest);cp(root/'catalog-smoke.log',release/'checks/catalog-smoke.log')
+cp(root/'prepare139.py',release/'prepare139.py');cp(root/'prepare_payload.py',release/'prepare_payload.py');cp(root/'package139.py',release/'package139.py')
+archive=latest/'legacy/20261025_before_1.0.0.139';assert not archive.exists();archive.mkdir(parents=True)
+assert archive.resolve().is_relative_to(latest.resolve())
+for p in list(latest.iterdir()):
+ if p.is_file():assert p.resolve().parent==latest.resolve();shutil.move(str(p),str(archive/p.name))
+cp(installer,latest/installer.name)
+for name in ['release-manifest.json','WILDX_release-manifest.json']:save(latest/name,manifest)
+(latest/'SHA256SUMS.txt').write_text(sha(installer)+'  '+installer.name+'\n',encoding='utf-8')
+(latest/'README.md').write_text('# WILD-X 1.0.0.139\n\n[Download installer]('+installer.name+').\n\nIncludes the latest V2 USB 1D3262FB / APP 8DE56637 firmware and matching catalog directly. No separate ZIP is needed. V1 firmware and the existing USB download/preview features remain included. After installation, use Firmware Update in the app to update a device when required.\n\n[Release details](../ReleaseSources/1.0.0.139/README.md) / [manifest](release-manifest.json).\n',encoding='utf-8')
+(latest/'WILDX_V2_README.md').write_text('# WILD-X / V2\n\n[Install WILD-X 1.0.0.139]('+installer.name+'). The installer includes V2 USB 1D3262FB / APP 8DE56637 and their matching catalog; no separate update ZIP is required. Use Firmware Update in the app to flash the device when needed.\n\n[Validation and limits](../ReleaseSources/1.0.0.139/README.md).\n',encoding='utf-8')
+p=repo/'README.md';s=p.read_text(encoding='utf-8');a=s.index('Independent Windows console');b=s.index('The application uses',a)
+s=s[:a]+'Independent Windows console for Neuropixels devices. Current published version **1.0.0.139**.\n\n[Latest installer](LATEST_INSTALLERS/README.md) includes V2 USB 1D3262FB / APP 8DE56637 and the matching firmware catalog directly. No separate ZIP is needed. Existing V1 firmware, preview and buffered USB downloads remain included. [Release details](ReleaseSources/1.0.0.139/README.md).\n\n'+s[b:];p.write_text(s,encoding='utf-8')
+p=repo/'.gitattributes';data=p.read_bytes().rstrip(b'\r\n')
+for line in [b'/LATEST_INSTALLERS/legacy/20261025_before_1.0.0.139/** -text',b'/ReleaseSources/1.0.0.139/** -text']:
+ if line not in data:data+=b'\n'+line
+p.write_bytes(data+b'\n')
+assert len(list(latest.glob('*.exe')))==1
+save(root/'release/preparation.json',{'version':'1.0.0.139','installer_created':True,'payload_verified':True,'published':False,'standaloneZipRequired':False})
+print(json.dumps({'installer':manifest['installer'],'payloadFilesVerified':len(expected),'standaloneZipRequired':False}))

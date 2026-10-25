@@ -1,0 +1,55 @@
+{
+  "app_crc32": "8DE56637",
+  "usb_crc32": "1D3262FB",
+  "recovery_crc32": "6408DBB8",
+  "gui_version": "1.0.0.138",
+  "gui_installer_sha256": "CABD0D9810DA4FC0DF4C3373E0EFB1C7CC9AF33222E7D24B16CCB0727DC90779",
+  "gui_installer_bytes": 10465768,
+  "gui_distribution": "Unchanged published138 installer alongside standalone new firmware; installer itself retains its old bundled firmware catalog. Do not accept a stale bundled firmware downgrade.",
+  "files": {
+    "V2_fused_RECOVERY_6408DBB8_USB_1D3262FB_APP_8DE56637_IMU_STARTUP_20261025.hex": {
+      "bytes": 5711372,
+      "sha256": "784D27B1F3F0BBBDEC256FFBE4FA3534EEC56E3565A0F8E6D0992F8BDFBA667D"
+    },
+    "V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex": {
+      "bytes": 564648,
+      "sha256": "D45DA210D8AD9B768A427A0B64E35E774F9B88042BD210E875A75C5B732640B3"
+    },
+    "V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp": {
+      "bytes": 205292,
+      "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
+    },
+    "V2_recovery_only_6408DBB8_20261012.hex": {
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    "V2_USB_only_1D3262FB_IMU_STARTUP_20261025.hex": {
+      "bytes": 508472,
+      "sha256": "41543E24190C2AC3E395D0EBF69C28D1DCAF6A1963F36ED0D40E4986DD25DE76"
+    },
+    "V2_USB_update_1D3262FB_IMU_STARTUP_20261025.xenp": {
+      "bytes": 184868,
+      "sha256": "70FA53D3931A65FED12D85BB8314B8A0D8601ECF8247625AA45E093254C87707"
+    }
+  },
+  "firmware_source_archive_path": "ReleaseSources/V2_IMU_1D3262FB_8DE56637_20261025/compiled-sources.zip",
+  "firmware_source_archive_sha256": "2F0C8F2C001B4A5D5ECDF2B1A7F426A2377516EBB03CA9EC0E05E637EFF5DF62",
+  "settings_omitted": true,
+  "omitted_ranges": [
+    "0801C000-0801DFFF",
+    "081FD000-081FFFFF"
+  ],
+  "validation": {
+    "USB": "Final1D P123/20k9.328s and packedP1/30k9.664s after software restart/rate change, no reported drops/errors,186/189 valid fresh IMU records; startup/SD-download/BLE-return exercised",
+    "BLE_SD": "APP8DE P123/20k10.83904s,8468blocks,216780rows/probe; actual138 full export plus independent framing/length/hash/loss checks; four during-recording B9 AG+MAG views replayed through actual138 display/session; STOP15.147s; catalog292prior records preserved",
+    "software": "83587 driver assertions; actual port/core/consumer role1+2 regression; exact empty-cancel catalog fixtures with publication cuts; static RAM/stack/entry and manifests",
+    "limits": "Short selected modes on current board/card only. No all-card/all-mode/endurance/analog-quality/physical-time qualification. UTC1 lacks first-sample PC timing; GUI optional NPAQ times out5s. One USB return required cable reconnect; a subsequent final1D BLE-to-USB return passed. Fused assembled from exact checked components; not separately flashed as a whole."
+  },
+  "pair_hardware_validated": true,
+  "installed_components": true,
+  "fused_whole_flash_tested": false,
+  "published": false,
+  "hardware_pair_scope": "Exact published GUI138/SDK production API capture/control/export on004B; installer was not executed and manual/visual installed-pair qualification was not performed.",
+  "installer_executed_here": false,
+  "visual_or_installed_pair_qualified": false
+}
