@@ -1,0 +1,99 @@
+ static readonly object observationGate=new object();
+ static StreamWriter sampleCsv;static FileStream notificationBytes;static long observedPackets,validSamples,invalidSamples,previewErrors,stalePackets,sourceGaps;
+ static Dictionary<string,ulong> expectedTicks=new Dictionary<string,ulong>();
+ static List<object> phaseResults=new List<object>();
+ static void ObservePreview(int epoch,byte[] body){
+  if(body.Length!=224 || BitConverter.ToUInt32(body,0)!=0x3156504e || ((BitConverter.ToUInt32(body,28)>>8)&15)!=5)return;
+  var form=preview;if(form==null)return;
+  lock(observationGate)lock(Get(form,"gate")){
+   try{
+    uint id=BitConverter.ToUInt32(body,4);
+    if(epoch!=(int)Get(connection,"Epoch")||id!=U(form,"activeId")){stalePackets++;return;}
+    var burst=New(T("CE32_console.NpV1PreviewBurst"),id);Need((bool)Call(burst,"Accept",body),"Compact parser rejected body");
+    var values=(double[][])Call(burst,"DecodeCompact",U(form,"phase"));var channels=(ushort[])Get(burst,"Channels");var masks=(ushort[])Get(burst,"ValidMasks");var offsets=(uint[])Get(burst,"TickOffsets");
+    Need(channels.SequenceEqual(new ushort[]{0,24,25,383}),"Unexpected compact channel list");
+    uint band=U(burst,"Band"),probe=U(burst,"Probe"),stride=U(burst,"Stride");ulong first=(ulong)Get(burst,"FirstTick");
+    for(int c=0;c<channels.Length;c++){
+     string key=probe+":"+band+":"+channels[c];ulong expected,start=first+offsets[c];
+     if(expectedTicks.TryGetValue(key,out expected)&&expected!=start)sourceGaps++;expectedTicks[key]=start+16UL*stride;
+     for(int n=0;n<16;n++){
+      bool valid=!Double.IsNaN(values[c][n]);if(valid)validSamples++;else invalidSamples++;
+      sampleCsv.WriteLine(String.Join(",",band,probe,channels[c],start+(ulong)n*stride,valid?values[c][n].ToString(System.Globalization.CultureInfo.InvariantCulture):"",valid?1:0,id,U(burst,"Session"),stride,masks[c],U(burst,"Dropped")));
+     }
+    }
+    observedPackets++;
+   }catch(Exception e){previewErrors++;sampleCsv.WriteLine("# error,"+e.Message.Replace(',',';'));}
+  }
+ }
+ static async Task ObservePhase(string name,int seconds,bool requirePreview){
+  long before;lock(observationGate)before=observedPackets;uint chunks=U(current,"Chunks");var latencies=new List<long>();var watch=Stopwatch.StartNew();
+  while(watch.Elapsed.TotalSeconds<seconds){await Task.Delay(1000);var poll=Stopwatch.StartNew();await Status();latencies.Add(poll.ElapsedMilliseconds);Need(U(current,"State")==1&&U(current,"Fault")==0,"Recording changed during "+name);}
+  long received;lock(observationGate)received=observedPackets-before;
+  Need(U(current,"Chunks")>chunks,"No committed SD progress during "+name);
+  if(requirePreview){Need(received>0,"No compact packets during "+name);Need(((CheckBox)Get(preview,"enabled")).Checked,"Production preview disabled during "+name);Need((bool)Get(preview,"activeCompact"),"Production preview did not negotiate compact");PreviewSnapshot(name);}
+  phaseResults.Add(new {phase=name,seconds=watch.Elapsed.TotalSeconds,packets=received,begin_chunks=chunks,end_chunks=U(current,"Chunks"),status_ms=latencies});Save("phase-results",phaseResults);
+ }
+ static void AuditCrc(){
+  byte[] data=File.ReadAllBytes(Path.Combine(output,"ble-notifications.bin"));int seen=0,invalid=0;
+  for(int at=0;at+228<=data.Length;at++)if(data[at]==0xad&&data[at+1]==0xba&&BitConverter.ToUInt32(data,at+2)==0x3156504e&&((data[at+31]&15)==5)&&data[at+226]==0xda&&data[at+227]==0xda){
+   var body=new byte[224];System.Buffer.BlockCopy(data,at+2,body,0,224);seen++;
+   if(BitConverter.ToUInt32(body,220)!=(uint)Call(T("CE32_console.NpSdControl"),"Crc",body,220))invalid++;
+  }
+  Save("preview-observer",new {observedPackets,validSamples,invalidSamples,previewErrors,stalePackets,sourceGaps,framed_compact_packets=seen,framed_crc_errors=invalid,scope="Framed preview payload CRC only; malformed headers/truncation and physical BLE errors are not counted as CRC errors."});
+  Need(previewErrors==0&&invalid==0,"Preview decode/CRC errors observed; review preserved evidence");
+ }
+ static async Task WaitProfile(uint mask,uint hz){
+  var wait=Stopwatch.StartNew();
+  while(wait.Elapsed.TotalSeconds<30){
+   await Status();Need(U(current,"Fault")==0,"Profile transition fault");
+   if(!(bool)Get(current,"Busy")&&(U(current,"Flags")&(131072|262144))==0&&U(current,"Mask")==mask&&U(current,"Hz")==hz)return;
+   await Task.Delay(500);
+  }
+  throw new TimeoutException("Profile did not become idle/ready within30s; no mutation replay");
+ }
+ static bool restore15;
+ static async Task Record(){
+  savedMask=U(current,"Mask");savedHz=restore15?15000U:U(current,"Hz");
+  Need(!restore15||savedMask==3,"Explicit original15k restore requires P12");Save("initial-status",Fields(current));Save("restore-profile",new{mask=savedMask,hz=savedHz,from_prior_run=restore15});
+  try{await RecordCore();}
+  finally{if(!startSent)try{
+   var wait=Stopwatch.StartNew();await Status();while(wait.Elapsed.TotalSeconds<30&&((bool)Get(current,"Busy")||(U(current,"Flags")&(131072|262144))!=0)){await Task.Delay(500);await Status();}
+   Need(!(bool)Get(current,"Busy")&&(U(current,"Flags")&(131072|262144))==0&&U(current,"Fault")==0,"Pre-start profile restore requires confirmed idle");
+   if(U(current,"Mask")!=savedMask||U(current,"Hz")!=savedHz){await Send(Request(1,savedMask,savedHz));await WaitProfile(savedMask,savedHz);}
+   Log("pre_start_original_profile_restored=true");
+  }catch(Exception e){Log("pre_start_profile_restore_failed="+e.Message);}}
+ }
+ static async Task RecordCore(){
+  Need(version==1,"V1 only");
+  Need(!(bool)Get(current,"Busy")&&U(current,"Fault")==0,"Recorder not idle");
+  var before=await Catalog("catalog-before");Need(before!=null,"Initial catalog unavailable");
+  var serializer=new JavaScriptSerializer();var oldRecords=((IEnumerable)Get(before,"Records")).Cast<object>().Select(x=>serializer.Serialize(Fields(x))).ToList();
+  await Status();await Send(Request(1,3,20000));await WaitProfile(3,20000);
+  Need((U(current,"Flags")&0x08000000)!=0,"Compact preview capability not advertised");
+  uint reserve=(uint)Call(T("CE32_console.NpV1BleProtocol"),"EndLba",current,40U,50U,true);
+  Need(reserve>U(current,"Start")&&((ulong)reserve-U(current,"Start"))*512<=2UL*1024*1024*1024,"Bound exceeds2GiB");
+  var rx=(GattCharacteristic)Get(connection,"rx");
+  Windows.Foundation.TypedEventHandler<GattCharacteristic,GattValueChangedEventArgs> raw=(s,e)=>{var data=new byte[e.CharacteristicValue.Length];using(var reader=DataReader.FromBuffer(e.CharacteristicValue))reader.ReadBytes(data);lock(observationGate)notificationBytes.Write(data,0,data.Length);};
+  Action<int,byte[]> observer=ObservePreview;var received=connection.GetType().GetEvent("PreviewReceived",F);
+  sampleCsv=new StreamWriter(Path.Combine(output,"preview-samples.csv"));sampleCsv.WriteLine("band,probe,channel,source_tick,raw10,valid,request,session,stride,mask,device_dropped");notificationBytes=File.Create(Path.Combine(output,"ble-notifications.bin"));
+  received.GetAddMethod(true).Invoke(connection,new object[]{observer});rx.ValueChanged+=raw;
+  try{
+   byte[] start=Request(2,3,20000,reserve,unchecked((uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds()),(bool)Get(current,"Qualified")?0U:1U);
+   startSent=true;await Send(start);var wait=Stopwatch.StartNew();bool recording=false;
+   while(wait.Elapsed.TotalSeconds<65){await Task.Delay(500);await Status();StatusLog("start_poll");Need(U(current,"Fault")==0,"Start fault");if(U(current,"State")==1&&(U(current,"Flags")&(8|131072|262144))==0){recording=true;break;}}
+   Need(recording,"Start not confirmed");Save("recording-status",Fields(current));
+   await ObservePhase("preview-off-before",4,false);OpenPreview();
+   ((NumericUpDown)Get(preview,"probe")).Value=1;((NumericUpDown)Get(preview,"traceCount")).Value=4;((NumericUpDown)Get(preview,"channel")).Value=0;
+   var selected=(NumericUpDown[])Get(preview,"extraChannels");selected[0].Value=24;selected[1].Value=25;selected[2].Value=383;
+   await ObservePhase("compact-ap",10,true);((ComboBox)Get(preview,"band")).SelectedIndex=1;await ObservePhase("compact-lfp",10,true);
+   ((CheckBox)Get(preview,"enabled")).Checked=false;await ObservePhase("preview-off-after",4,false);await Stop();Save("stopped-status",Fields(current));
+   var after=await Catalog("catalog-after");Need(after!=null,"Final catalog unavailable");var now=((IEnumerable)Get(after,"Records")).Cast<object>().Select(x=>serializer.Serialize(Fields(x))).ToList();
+   Need(now.Count==oldRecords.Count+1&&oldRecords.SequenceEqual(now.Take(oldRecords.Count)),"Previous catalog changed or new recording missing");
+   if(savedMask!=3||savedHz!=20000){await Status();await Send(Request(1,savedMask,savedHz));await WaitProfile(savedMask,savedHz);}
+   Save("final-status",Fields(current));
+  }finally{
+   rx.ValueChanged-=raw;received.GetRemoveMethod(true).Invoke(connection,new object[]{observer});
+   lock(observationGate){sampleCsv.Dispose();notificationBytes.Dispose();}
+  }
+  AuditCrc();Log("compact_preview_sd_test_completed=true; full_SD_payload_readback_required=true");
+ }

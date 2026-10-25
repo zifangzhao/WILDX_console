@@ -1,0 +1,91 @@
+{
+  "role": "APP",
+  "label": "LIFECYCLE_20261025",
+  "abi": 258,
+  "image": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_sealed\\V1_APP_LIFECYCLE_20261025.hex",
+  "sha256": "47235C80933F0FE7A24148899EDA61B1033FDFECD58BBA67B994FCB09417FA3E",
+  "crc32": "CC50D8D2",
+  "bytes": 293564,
+  "sp": "20017F10",
+  "pc": "0802038D",
+  "buildIdHex": "3738666561656437363464643431396233386466386334613065333038616436",
+  "manifest_address": "0801E000",
+  "manifest_hex": "584E50314D4E463101000000444C4156315050410100000000000208BC7A0400D2D850CC107F01208D0302083738666561656437363464643431396233386466386334613065333038616436000000000201000000000000000000000000000000000000000000000000000000000000000000000000000000000000408E4662",
+  "input": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_build\\lifecycle_UNSEALED.hex",
+  "input_sha256": "5CFD1D31FD2F57E58060D54530C12B76F2980F6B6849C838CA86FE754B3C323B",
+  "axf_sha256": "36241393EAB8ACA8EF9A3EAA498ADECC6892BAF50451F8196D01E8C899CB2647",
+  "execution_regions": [
+    {
+      "name": "ER_IROM1",
+      "base": 134348800,
+      "size": 276092,
+      "maximum": 1433600
+    },
+    {
+      "name": "RW_IRAM1",
+      "base": 536870912,
+      "size": 98064,
+      "maximum": 98304
+    },
+    {
+      "name": "RW_SD_INPUT",
+      "base": 536969216,
+      "size": 65536,
+      "maximum": 65536
+    },
+    {
+      "name": "RW_BLE_UART_RX",
+      "base": 537034752,
+      "size": 5132,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_SD_TRACE",
+      "base": 537042944,
+      "size": 1120,
+      "maximum": 24576
+    },
+    {
+      "name": "RW_SD_RU0",
+      "base": 537067520,
+      "size": 524288,
+      "maximum": 524288
+    },
+    {
+      "name": "RW_NOINIT",
+      "base": 537649152,
+      "size": 24,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_NP_LLI",
+      "base": 537657344,
+      "size": 384,
+      "maximum": 512
+    },
+    {
+      "name": "RW_CAMERA_STATE",
+      "base": 537657856,
+      "size": 4624,
+      "maximum": 65024
+    },
+    {
+      "name": "RW_NP_CAPTURE",
+      "base": 537722880,
+      "size": 752728,
+      "maximum": 786432
+    },
+    {
+      "name": "RW_SD_RU1",
+      "base": 538574848,
+      "size": 851968,
+      "maximum": 851968
+    }
+  ],
+  "known_stack_bytes": 5368,
+  "stack_allocation_bytes": 8192,
+  "stack_unknown": "Cycles, Untraceable Function Pointers",
+  "hardware_tested": false,
+  "published": false,
+  "fused": false
+}

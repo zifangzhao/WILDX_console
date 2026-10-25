@@ -1,0 +1,25 @@
+{
+  "scope": "Observer only; profile-ready wait and explicit phase/list/session/rate persistence; product138 unchanged. Never executed by WILDX root.",
+  "files": [
+    {
+      "name": "BleCompactSuite.cs",
+      "sha256": "61DEC01B1A9BC98ADD8E5251CCD83736538FF0657AFC220021D43B6120B96C65"
+    },
+    {
+      "name": "harness_record.cs.txt",
+      "sha256": "910F9EE6605C93ACECA640C42C8F800AC136941F8A2C4B64E736D5F93AF882EF"
+    },
+    {
+      "name": "prepare_harness.py",
+      "sha256": "28145B5C429AAD80CD14B58E17B36758051CE40B4D49FB638935E8D9FB4C3562"
+    },
+    {
+      "name": "BleCompactSuite-r3.exe",
+      "sha256": "E48CBF43D1C34CD78CFA06E5C0A4F3CB6E88A2EA22A36AE1638CB307F8557B3C"
+    },
+    {
+      "name": "BleCompactSuite-r3.exe.config",
+      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+    }
+  ]
+}

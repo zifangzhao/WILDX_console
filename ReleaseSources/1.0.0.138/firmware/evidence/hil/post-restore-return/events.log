@@ -1,0 +1,8 @@
+2026-10-25T06:30:43.6038853Z version=1.0.0.138; uid=001D00065942500B20313354; action=return
+2026-10-25T06:30:45.5649099Z connect=address=F6D598CA53BA; 0ms begin | 31ms selected-address retained-type reuse; connection pending | 31ms FFF0 service discovery; cache_mode=Uncached | 1514ms FFF0 service discovery result=Success; cache_mode=Uncached; attempt=1 | 1516ms FFF1/FFF2 characteristic discovery; cache_mode=Uncached | 1577ms notification subscription | 1941ms connected
+2026-10-25T06:30:45.7223868Z initial={"Operation":0,"RequestId":280522344,"Error":0,"State":0,"Fault":0,"Mask":3,"Hz":15000,"Chunks":0,"Start":70631424,"End":0,"Capacity":500695040,"Flags":238583697,"LastId":0}
+2026-10-25T06:30:45.7500643Z uid_verified=001D00065942500B20313354
+2026-10-25T06:30:45.7515664Z request=4E-4C-44-31-01-00-00-00-07-00-00-00-01-00-00-00-04-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-F1-6E-C2-02
+2026-10-25T06:30:45.8691849Z reply=4E-4C-52-31-01-00-00-00-07-00-00-00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-03-00-00-00-98-3A-00-00-00-00-00-00-00-C0-35-04-00-00-00-00-00-00-D8-1D-99-7F-38-0E-01-00-00-00-2B-49-CC-A7
+2026-10-25T06:30:45.8691849Z USB_return_ack=true
+2026-10-25T06:30:45.8691849Z observer_completed=true

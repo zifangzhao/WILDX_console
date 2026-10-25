@@ -7,44 +7,44 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_LIFECYCLE_USB4F7B521A_APPCC50D8D2_20261025",
+      "release": "V1_COMPACT4_PREVIEW_USB4F7B521A_APP82E51DEA_20261025",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "BOUNDED_USB_BLE_SD_IMU_TIMING_CHECKED",
-      "appVersion": "build CC50D8D2 (SD/BLE lifecycle + UTC2)",
+      "stage": "BOUNDED_COMPACT_PREVIEW_SD_READBACK_CHECKED",
+      "appVersion": "build82E51DEA (compact four-channel BLE preview)",
       "usbVersion": "1.0.108",
       "recoveryVersion": "Included in fused HEX; version not reported",
-      "appCrc32": "CC50D8D2",
+      "appCrc32": "82E51DEA",
       "usbCrc32": "4F7B521A",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_APP_CC50D8D2_lifecycle_20261025.hex",
-        "sha256": "47235C80933F0FE7A24148899EDA61B1033FDFECD58BBA67B994FCB09417FA3E"
+        "path": "V1/V1_APP_82E51DEA_compact4_preview_20261025.hex",
+        "sha256": "2945F6523C3187BB226472149F203847A1D37D8BE6B0D9E6F30052239AF3F174"
       },
       "files": [
         {
-          "path": "V1/V1_APP_CC50D8D2_lifecycle_20261025.hex",
-          "sha256": "47235C80933F0FE7A24148899EDA61B1033FDFECD58BBA67B994FCB09417FA3E"
+          "path": "V1/V1_APP_82E51DEA_compact4_preview_20261025.hex",
+          "sha256": "2945F6523C3187BB226472149F203847A1D37D8BE6B0D9E6F30052239AF3F174"
         },
         {
           "path": "V1/V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
           "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F"
         },
         {
-          "path": "V1/V1_fused_BOOT_USB4F7B521A_APPCC50D8D2_lifecycle_20261025.hex",
-          "sha256": "2A87A27F58B48FFB7231CD3795D11AEAC061EDF8A6D074EF6081C10371253076"
+          "path": "V1/V1_fused_BOOT_USB4F7B521A_APP82E51DEA_compact4_preview_20261025.hex",
+          "sha256": "63C60326FCB89A83D72862706E7D5406B2EE0F5FE8FE5A3F2217290D4C2093BE"
         },
         {
           "path": "V1/V1_USB_service_1.0.108_USB4F7B521A_lifecycle_20261025.hex",
           "sha256": "0BDDFBEDDB1FE3F842E485732F0B1104AD75708EB8446A509AA26C943E5CCC2B"
         }
       ],
-      "limits": "V1 USB P1+P2/20 kHz for70s and P1/30 kHz for60s passed with137, IMU and optional timing. Short APP BLE/SD P1+P2/15 kHz Start/Stop and complete264-chunk readback passed. Prior34 catalog entries preserved. Best-effort recovery reports loss; hard DMA/ownership faults remain hard. Not an all-mode/endurance or physical ADC/GPIO synchronization qualification. See acceptance.json.",
+      "limits": "One P12/20 kHz SD recording with four P1 AP/LFP preview channels passed full readback and sample comparison. Preview gaps remain explicit. UART remains115200; no higher-rate or all-mode/endurance qualification. See acceptance.json.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 293564,
-        "codeCrc32": "CC50D8D2",
-        "buildIdHex": "3738666561656437363464643431396233386466386334613065333038616436",
+        "bytes": 296380,
+        "codeCrc32": "82E51DEA",
+        "buildIdHex": "3561636438633237373132353430633533616633346134636662393632613738",
         "manifestFlags": 0,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -60,6 +60,16 @@
         "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 293564,
+          "codeCrc32": "CC50D8D2",
+          "buildIdHex": "3738666561656437363464643431396233386466386334613065333038616436",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -249,17 +259,17 @@
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
-      "sourceCommitScope": "Baseline repository anchor only; exact admitted local source inputs and reused-object identities are preserved in ReleaseSources/1.0.0.137/firmware.",
+      "sourceCommitScope": "Exact admitted local inputs and reused-object identities are retained in ReleaseSources/1.0.0.138/firmware.",
       "sourceInputs": {
-        "baselineRelease": "V1_USB30K_USBF2D80C4F_APP654824DE_20261020",
-        "bundleSha256": "B58F4806BD274418CE04968664ED4FE315A1189A0BCB24D64593278F180DFB29",
-        "sourceArchiveSha256": "E0240A26D18382C90D8983414E51ACA2068A418202E7D8D96D5685190E0176E7",
-        "sourceArchive": "ReleaseSources/1.0.0.137/firmware/V1_lifecycle_sources_20261025.zip",
+        "baselineRelease": "V1_LIFECYCLE_USB4F7B521A_APPCC50D8D2_20261025",
+        "bundleSha256": "31070094FF8629E59FCC2EF8C90EDB309D1736DE91DACCB5F9C939066BC72858",
+        "sourceArchiveSha256": "28754D94A92D9D865427C90974028EE5F4D8D8A2881FA3DA3F26FE7B54804CCE",
+        "sourceArchive": "ReleaseSources/1.0.0.138/firmware/V1_compact_preview_sources_20261025.zip",
         "acceptance": "V1/acceptance.json"
       },
       "full": {
-        "path": "V1/V1_fused_BOOT_USB4F7B521A_APPCC50D8D2_lifecycle_20261025.hex",
-        "sha256": "2A87A27F58B48FFB7231CD3795D11AEAC061EDF8A6D074EF6081C10371253076"
+        "path": "V1/V1_fused_BOOT_USB4F7B521A_APP82E51DEA_compact4_preview_20261025.hex",
+        "sha256": "63C60326FCB89A83D72862706E7D5406B2EE0F5FE8FE5A3F2217290D4C2093BE"
       }
     },
     {

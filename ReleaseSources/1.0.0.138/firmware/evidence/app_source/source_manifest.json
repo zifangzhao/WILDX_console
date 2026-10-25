@@ -1,0 +1,1357 @@
+{
+  "stage": "SOURCE_GRAPH_ONLY_COMPACT_PREVIEW_NOT_BUILT",
+  "parent_app_crc32": "CC50D8D2",
+  "parent_build_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_build\\build.json",
+  "parent_build_receipt_sha256": "95767E2664E449534E59C07588AE768625464207C9F6B93B2A6D70340FE7D314",
+  "parent_source_manifest_sha256": "59D2C76F244C97234CEF1A68E0D2245EE329D2DB703FD40C8879B5047F2ED328",
+  "source_dependencies": [
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\xe_np_app.c",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\xe_np_app.c",
+      "parent_sha256": "6CFD70BCDF8A6CA55E3E1DAB1CE0A73F78075B06A6BAD4D1067DC70884BD70BA",
+      "candidate_sha256": "6CFD70BCDF8A6CA55E3E1DAB1CE0A73F78075B06A6BAD4D1067DC70884BD70BA"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_internal_memory.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_internal_memory.h",
+      "parent_sha256": "A4403D051499618D2F5CC0C4D0900978358347928F2E23FC1237304FF22690EE",
+      "candidate_sha256": "A4403D051499618D2F5CC0C4D0900978358347928F2E23FC1237304FF22690EE"
+    },
+    {
+      "parent_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stdint.h",
+      "candidate_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stdint.h",
+      "parent_sha256": "ECB59E04B0703AB780391D6DB7ECF339E24F9B1641EE4DB2932FF80656558E24",
+      "candidate_sha256": "ECB59E04B0703AB780391D6DB7ECF339E24F9B1641EE4DB2932FF80656558E24"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_modes.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_modes.h",
+      "parent_sha256": "0AA441B3B02A8EF41ADAD3905D896083BF2FC6AE5B3D48E4E56D2A5326781C81",
+      "candidate_sha256": "0AA441B3B02A8EF41ADAD3905D896083BF2FC6AE5B3D48E4E56D2A5326781C81"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_rate_plan.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_rate_plan.h",
+      "parent_sha256": "7A600DFF5CE2463855561E2B7892C6971B7F0D55D865A05B658ECA77BCA04F7E",
+      "candidate_sha256": "7A600DFF5CE2463855561E2B7892C6971B7F0D55D865A05B658ECA77BCA04F7E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\probe_identity.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\probe_identity.h",
+      "parent_sha256": "13E869B1F12C47685014B3AA1B7D513D652D2D1C21C0E4F726BE36D8661B2361",
+      "candidate_sha256": "13E869B1F12C47685014B3AA1B7D513D652D2D1C21C0E4F726BE36D8661B2361"
+    },
+    {
+      "parent_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stddef.h",
+      "candidate_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stddef.h",
+      "parent_sha256": "53F8785B90B4F178183FEA3A384D41E946BA533C8655993C8F4CD3C73FFD5EA3",
+      "candidate_sha256": "53F8785B90B4F178183FEA3A384D41E946BA533C8655993C8F4CD3C73FFD5EA3"
+    },
+    {
+      "parent_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\string.h",
+      "candidate_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\string.h",
+      "parent_sha256": "57F0F46E41327D504CCB51DEA2DD20AB4E3A64E7C6C9C1C54B31A85AC4EED217",
+      "candidate_sha256": "57F0F46E41327D504CCB51DEA2DD20AB4E3A64E7C6C9C1C54B31A85AC4EED217"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_config_port.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_config_port.h",
+      "parent_sha256": "F72C660D9B51751DD265744C0DAA4959D465855C4E9A201C4C27147ADC228140",
+      "candidate_sha256": "F72C660D9B51751DD265744C0DAA4959D465855C4E9A201C4C27147ADC228140"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_config.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_config.h",
+      "parent_sha256": "C1A59CB9384CCA7382A9B2188D4FA5E42247C6295F643C274F15DA6180A1E25B",
+      "candidate_sha256": "C1A59CB9384CCA7382A9B2188D4FA5E42247C6295F643C274F15DA6180A1E25B"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_nric.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_nric.h",
+      "parent_sha256": "B312633BFF1EBF0E4BF6C8FA18CCC2E5A9B8EA0E339FC14F7C0E150DDFF66626",
+      "candidate_sha256": "B312633BFF1EBF0E4BF6C8FA18CCC2E5A9B8EA0E339FC14F7C0E150DDFF66626"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_board.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_board.h",
+      "parent_sha256": "B3C0ED26281459DA51F089C5355D6DF08B205DA018F04458FBD116CDFE92034F",
+      "candidate_sha256": "B3C0ED26281459DA51F089C5355D6DF08B205DA018F04458FBD116CDFE92034F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_hal.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_hal.h",
+      "parent_sha256": "A8658EF8F7C42B6BFB2828AFFDB7158E6BB018801FDB171A9F25DC05ECAC8234",
+      "candidate_sha256": "A8658EF8F7C42B6BFB2828AFFDB7158E6BB018801FDB171A9F25DC05ECAC8234"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal.h",
+      "parent_sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573",
+      "candidate_sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\stm32u5xx_hal_conf.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\stm32u5xx_hal_conf.h",
+      "parent_sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "candidate_sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc.h",
+      "parent_sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC",
+      "candidate_sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_def.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_def.h",
+      "parent_sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3",
+      "candidate_sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5xx.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5xx.h",
+      "parent_sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB",
+      "candidate_sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u595xx.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u595xx.h",
+      "parent_sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650",
+      "candidate_sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\core_cm33.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\core_cm33.h",
+      "parent_sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE",
+      "candidate_sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_version.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_version.h",
+      "parent_sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC",
+      "candidate_sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_compiler.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_compiler.h",
+      "parent_sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6",
+      "candidate_sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_armclang.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_armclang.h",
+      "parent_sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311",
+      "candidate_sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\mpu_armv8.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\mpu_armv8.h",
+      "parent_sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C",
+      "candidate_sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\system_stm32u5xx.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\system_stm32u5xx.h",
+      "parent_sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7",
+      "candidate_sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h",
+      "parent_sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C",
+      "candidate_sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C"
+    },
+    {
+      "parent_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\math.h",
+      "candidate_path": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\math.h",
+      "parent_sha256": "E0FFC7783AAE749727B446C500C7E6C45D39193A90251AF5D147892278DA30B3",
+      "candidate_sha256": "E0FFC7783AAE749727B446C500C7E6C45D39193A90251AF5D147892278DA30B3"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc_ex.h",
+      "parent_sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463",
+      "candidate_sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio.h",
+      "parent_sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92",
+      "candidate_sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio_ex.h",
+      "parent_sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840",
+      "candidate_sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_icache.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_icache.h",
+      "parent_sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141",
+      "candidate_sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcache.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcache.h",
+      "parent_sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67",
+      "candidate_sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma.h",
+      "parent_sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596",
+      "candidate_sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma_ex.h",
+      "parent_sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3",
+      "candidate_sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cortex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cortex.h",
+      "parent_sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE",
+      "candidate_sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc.h",
+      "parent_sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38",
+      "candidate_sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_adc.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_adc.h",
+      "parent_sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4",
+      "candidate_sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc_ex.h",
+      "parent_sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2",
+      "candidate_sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac.h",
+      "parent_sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788",
+      "candidate_sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac_ex.h",
+      "parent_sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518",
+      "candidate_sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash.h",
+      "parent_sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40",
+      "candidate_sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash_ex.h",
+      "parent_sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907",
+      "candidate_sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c.h",
+      "parent_sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA",
+      "candidate_sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c_ex.h",
+      "parent_sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9",
+      "candidate_sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp.h",
+      "parent_sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8",
+      "candidate_sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp_ex.h",
+      "parent_sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5",
+      "candidate_sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr.h",
+      "parent_sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0",
+      "candidate_sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr_ex.h",
+      "parent_sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF",
+      "candidate_sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ospi.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ospi.h",
+      "parent_sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356",
+      "candidate_sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_dlyb.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_dlyb.h",
+      "parent_sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105",
+      "candidate_sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd.h",
+      "parent_sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A",
+      "candidate_sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_sdmmc.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_sdmmc.h",
+      "parent_sha256": "75C802F6E7ABE6F17C38F6D7B03B4074D6EAE4FCD3938306AAA2BCF6723D1595",
+      "candidate_sha256": "75C802F6E7ABE6F17C38F6D7B03B4074D6EAE4FCD3938306AAA2BCF6723D1595"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd_ex.h",
+      "parent_sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1",
+      "candidate_sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi.h",
+      "parent_sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4",
+      "candidate_sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi_ex.h",
+      "parent_sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F",
+      "candidate_sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim.h",
+      "parent_sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78",
+      "candidate_sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim_ex.h",
+      "parent_sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4",
+      "candidate_sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart.h",
+      "parent_sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8",
+      "candidate_sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart_ex.h",
+      "parent_sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F",
+      "candidate_sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd.h",
+      "parent_sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8",
+      "candidate_sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_usb.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_usb.h",
+      "parent_sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D",
+      "candidate_sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd_ex.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd_ex.h",
+      "parent_sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C",
+      "candidate_sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_exti.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_exti.h",
+      "parent_sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525",
+      "candidate_sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_app.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_app.h",
+      "parent_sha256": "B63911C8F9AA630A9DCA5A6A29993C246BCEF7BD6AC6E85EB91097C82A99D180",
+      "candidate_sha256": "B63911C8F9AA630A9DCA5A6A29993C246BCEF7BD6AC6E85EB91097C82A99D180"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_runtime.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_runtime.h",
+      "parent_sha256": "0A9F8950A0331BAAA50B3DE4E43FC928330BB555A504F3E5027CC049F4E4A6BE",
+      "candidate_sha256": "0A9F8950A0331BAAA50B3DE4E43FC928330BB555A504F3E5027CC049F4E4A6BE"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_COMMAND.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_COMMAND.h",
+      "parent_sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465",
+      "candidate_sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_Sync.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_Sync.h",
+      "parent_sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6",
+      "candidate_sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\ce32_wire.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\ce32_wire.h",
+      "parent_sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7",
+      "candidate_sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\dataMGR.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\dataMGR.h",
+      "parent_sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594",
+      "candidate_sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_capture.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_capture.h",
+      "parent_sha256": "7FCC8B6C42C5FA1239F91239A2B84C542025D4BF5ABDCC58850617F26753D414",
+      "candidate_sha256": "7FCC8B6C42C5FA1239F91239A2B84C542025D4BF5ABDCC58850617F26753D414"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_system.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_system.h",
+      "parent_sha256": "5F87F835795F4F9B0BFAF80411B34B0D3B917B81C7949F90EB6BF6CB5CF5B9B5",
+      "candidate_sha256": "5F87F835795F4F9B0BFAF80411B34B0D3B917B81C7949F90EB6BF6CB5CF5B9B5"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_ADC.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_ADC.h",
+      "parent_sha256": "9813E9FABE11AC4D02D00790B7847FF1D6D1384350D82CCE3EFD7D9469A8FD15",
+      "candidate_sha256": "9813E9FABE11AC4D02D00790B7847FF1D6D1384350D82CCE3EFD7D9469A8FD15"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\stm32f4xx_hal.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\stm32f4xx_hal.h",
+      "parent_sha256": "D77D254AE8BBFD028191A96CEF92720365A5352209FCF985FFE2FAFBF38FEAD7",
+      "candidate_sha256": "D77D254AE8BBFD028191A96CEF92720365A5352209FCF985FFE2FAFBF38FEAD7"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_macro.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_macro.h",
+      "parent_sha256": "2C3BED1B10EB8942C68E17BB45AC779C88DE653BC7D26A4FD12E141CD1872C68",
+      "candidate_sha256": "2C3BED1B10EB8942C68E17BB45AC779C88DE653BC7D26A4FD12E141CD1872C68"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_BMX160.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_BMX160.h",
+      "parent_sha256": "8E16A3BD1B9F4BC212EE31466314DFCE07DD9B5A27D6D4707CC3FD4C4D3F2315",
+      "candidate_sha256": "8E16A3BD1B9F4BC212EE31466314DFCE07DD9B5A27D6D4707CC3FD4C4D3F2315"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_HJ580.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_HJ580.h",
+      "parent_sha256": "385D3CA4F03ADC6ECDE4631B7647BD4CB7B97FC43836DA5EDFDBC9AF9D1D6F4C",
+      "candidate_sha256": "385D3CA4F03ADC6ECDE4631B7647BD4CB7B97FC43836DA5EDFDBC9AF9D1D6F4C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\main.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\main.h",
+      "parent_sha256": "078F3EEB4DB335DD053C9E386DB1FC140CC504D987A617221B85D52AA8C43B70",
+      "candidate_sha256": "078F3EEB4DB335DD053C9E386DB1FC140CC504D987A617221B85D52AA8C43B70"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_UART_INTERCOM.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_UART_INTERCOM.h",
+      "parent_sha256": "5384EE6AA7243215AFA166338AB6A3F0CED33C6C50C9E3449608A26D2DD090BB",
+      "candidate_sha256": "5384EE6AA7243215AFA166338AB6A3F0CED33C6C50C9E3449608A26D2DD090BB"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_filesystem.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_filesystem.h",
+      "parent_sha256": "8CBE9E56814303F68A5480226B02D4FB5ED28D7105BDF40C410E45D5C1DCF58D",
+      "candidate_sha256": "8CBE9E56814303F68A5480226B02D4FB5ED28D7105BDF40C410E45D5C1DCF58D"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\HD32_SD_driver.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\HD32_SD_driver.h",
+      "parent_sha256": "E520B4B3778B1AC3AF21FCB09F0E3FA0FB54798AE141CC9E256A82A80E8DB6E5",
+      "candidate_sha256": "E520B4B3778B1AC3AF21FCB09F0E3FA0FB54798AE141CC9E256A82A80E8DB6E5"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\CE32_ClosedLoop.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_ClosedLoop.h",
+      "parent_sha256": "9FA22E52B8DEBEFA085CA8050B8F990A78EB645F43C5C9DB8ED206249990AC04",
+      "candidate_sha256": "9FA22E52B8DEBEFA085CA8050B8F990A78EB645F43C5C9DB8ED206249990AC04"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_legacy_fs.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_legacy_fs.h",
+      "parent_sha256": "E7343022F808CE1BD414640DEFACF3CD4F285347B95E22BD6834ECB38C695F89",
+      "candidate_sha256": "E7343022F808CE1BD414640DEFACF3CD4F285347B95E22BD6834ECB38C695F89"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_psram.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_psram.h",
+      "parent_sha256": "E098507D1C94D07D51F9B0413007841E914A2C6D4852E6CFC2ED8BA543F98FF8",
+      "candidate_sha256": "E098507D1C94D07D51F9B0413007841E914A2C6D4852E6CFC2ED8BA543F98FF8"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_probe_config_generated.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_probe_config_generated.h",
+      "parent_sha256": "E5D9D6942DC310F9282B0016FEB8E3A56BD561DD08547F542911F05DB35E22B9",
+      "candidate_sha256": "E5D9D6942DC310F9282B0016FEB8E3A56BD561DD08547F542911F05DB35E22B9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_usb_stream.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_usb_stream.h",
+      "parent_sha256": "5786C9744123D2F223C6A0B9280789F5E0822FB892EF8A02E05BF538353D8D5C",
+      "candidate_sha256": "5786C9744123D2F223C6A0B9280789F5E0822FB892EF8A02E05BF538353D8D5C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_capture_anchor_port.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_capture_anchor_port.inc",
+      "parent_sha256": "81F46000467D6B35C6BA5BD358A2150722D45290331DED92E58C5B1F7C8D0EE9",
+      "candidate_sha256": "81F46000467D6B35C6BA5BD358A2150722D45290331DED92E58C5B1F7C8D0EE9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_capture_anchor.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_capture_anchor.h",
+      "parent_sha256": "12BF968675ED8F1B9D70F2425B6E0BD7D432591531334B012A72C49368EF006F",
+      "candidate_sha256": "12BF968675ED8F1B9D70F2425B6E0BD7D432591531334B012A72C49368EF006F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_acquisition_anchor.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_acquisition_anchor.h",
+      "parent_sha256": "437E2A5BB30E81DB5F70466F4F4D72C01B0AB97887989FA53432E55A367BDFAD",
+      "candidate_sha256": "437E2A5BB30E81DB5F70466F4F4D72C01B0AB97887989FA53432E55A367BDFAD"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_online_impl.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_online_impl.h",
+      "parent_sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "candidate_sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_online.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_online.h",
+      "parent_sha256": "7658A2DB3F8ABC5D5298637BFDF57411D38161D0F1E7E665B2194EACE9915A39",
+      "candidate_sha256": "7658A2DB3F8ABC5D5298637BFDF57411D38161D0F1E7E665B2194EACE9915A39"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_capture_origin.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_capture_origin.h",
+      "parent_sha256": "6B8400A0CD12E078C8A2264B7A06C7B5B50F745BFA9AE856DECDC7B6513467B0",
+      "candidate_sha256": "6B8400A0CD12E078C8A2264B7A06C7B5B50F745BFA9AE856DECDC7B6513467B0"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_ring_observer.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_ring_observer.h",
+      "parent_sha256": "9543D9822A8AFC3A71F463BB12900182D51DCE9D6193D0CBDADE39141015E626",
+      "candidate_sha256": "9543D9822A8AFC3A71F463BB12900182D51DCE9D6193D0CBDADE39141015E626"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\operation_led.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\operation_led.h",
+      "parent_sha256": "7E64988D003A2AB3F0293BF6DA29DB12E75672A6A35F6D3F33280502544594AD",
+      "candidate_sha256": "7E64988D003A2AB3F0293BF6DA29DB12E75672A6A35F6D3F33280502544594AD"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_capture_timer_stop.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_capture_timer_stop.inc",
+      "parent_sha256": "EB1246ADEDB5545A7D3E019147DC83531C205CDDEDE3E33E2DE620381C2B4E4D",
+      "candidate_sha256": "EB1246ADEDB5545A7D3E019147DC83531C205CDDEDE3E33E2DE620381C2B4E4D"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_continuous_clock_reset.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_continuous_clock_reset.inc",
+      "parent_sha256": "A7549A9F7F4213DC7CEFF78D922CCBB52FE9D762174AA6A7A9047BAED84DE2D7",
+      "candidate_sha256": "A7549A9F7F4213DC7CEFF78D922CCBB52FE9D762174AA6A7A9047BAED84DE2D7"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_capture_admit.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_capture_admit.inc",
+      "parent_sha256": "D9C75092B61529F2B553A1421CE8EBA7D2A258108A08E011CFA61AF098EA96D3",
+      "candidate_sha256": "D9C75092B61529F2B553A1421CE8EBA7D2A258108A08E011CFA61AF098EA96D3"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np3_producer.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np3_producer.inc",
+      "parent_sha256": "10B3A947A49BA7E5CD9FBB1D756D66F3F5B23DE7E773D3FAF24B3FAF71A0944D",
+      "candidate_sha256": "10B3A947A49BA7E5CD9FBB1D756D66F3F5B23DE7E773D3FAF24B3FAF71A0944D"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_capture_origin_producer.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_capture_origin_producer.inc",
+      "parent_sha256": "513EABE39B8A68A0702EA109296CDCCADB0E07928800C819597548EFBBDF840E",
+      "candidate_sha256": "513EABE39B8A68A0702EA109296CDCCADB0E07928800C819597548EFBBDF840E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_firmware.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_firmware.inc",
+      "parent_sha256": "993DF5EB5462AC8F108A7B8CD8B678D77995108623EDC30819B4C97F425E810C",
+      "candidate_sha256": "993DF5EB5462AC8F108A7B8CD8B678D77995108623EDC30819B4C97F425E810C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_camera_exposure.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_camera_exposure.h",
+      "parent_sha256": "F8BDC9C93C79BBAE7B7D9C7D666F4B42F83FF4DF177585DA7E8A5CC99098F1C8",
+      "candidate_sha256": "F8BDC9C93C79BBAE7B7D9C7D666F4B42F83FF4DF177585DA7E8A5CC99098F1C8"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_media_metadata.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_media_metadata.h",
+      "parent_sha256": "D921B5B4032F72F642BF7766DB010BBE5488D5B1E02B0DB50F0FA9CDA80A1554",
+      "candidate_sha256": "D921B5B4032F72F642BF7766DB010BBE5488D5B1E02B0DB50F0FA9CDA80A1554"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_log.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_log.h",
+      "parent_sha256": "56F9D34B658114F704BD3EF390469099AE6117F03593DEF540F3D9D1BDE51122",
+      "candidate_sha256": "56F9D34B658114F704BD3EF390469099AE6117F03593DEF540F3D9D1BDE51122"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_control.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_control.h",
+      "parent_sha256": "3FB10F37FF1C878CCA734A8127BB9D147767C41096049274F35A7531EDE057E3",
+      "candidate_sha256": "3FB10F37FF1C878CCA734A8127BB9D147767C41096049274F35A7531EDE057E3"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_fast_crc.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_fast_crc.h",
+      "parent_sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B",
+      "candidate_sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_stage_timing.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_stage_timing.h",
+      "parent_sha256": "06DE7F734218620C37EBABD88B6FA3AFC7D9C338FE1C27A6D242BE6DCDB36FF5",
+      "candidate_sha256": "06DE7F734218620C37EBABD88B6FA3AFC7D9C338FE1C27A6D242BE6DCDB36FF5"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_dma_chain.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_dma_chain.h",
+      "parent_sha256": "C8AA8946749204523EB1873D753A71BC32037F62995252AD6CFBA9EFBF8AFBBB",
+      "candidate_sha256": "C8AA8946749204523EB1873D753A71BC32037F62995252AD6CFBA9EFBF8AFBBB"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_sensors_port.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_sensors_port.h",
+      "parent_sha256": "3950771985FBF5A89021C099FB8145BA4F04F048111AEA7EFB44887C55D78D6F",
+      "candidate_sha256": "3950771985FBF5A89021C099FB8145BA4F04F048111AEA7EFB44887C55D78D6F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_sensors.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_sensors.h",
+      "parent_sha256": "75F128ECE5FBACBB5FB7E15F1AF6825B0AE5A2520D1082BE94DEF6CCFBF49DB3",
+      "candidate_sha256": "75F128ECE5FBACBB5FB7E15F1AF6825B0AE5A2520D1082BE94DEF6CCFBF49DB3"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280.h",
+      "parent_sha256": "0476F04E3BBC24AB97EF735170A983A566276CDDF593EBA39331F4CC053A0ED6",
+      "candidate_sha256": "0476F04E3BBC24AB97EF735170A983A566276CDDF593EBA39331F4CC053A0ED6"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280_defs.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280_defs.h",
+      "parent_sha256": "E4BFF60BB29C49C1FD68B1EA91A362063D5814FEE202F444D57F95595A577D0E",
+      "candidate_sha256": "E4BFF60BB29C49C1FD68B1EA91A362063D5814FEE202F444D57F95595A577D0E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150.h",
+      "parent_sha256": "BB51F04F957BA372F638FF45F33934A4D150FF57DB3F419C604EDF426F7C778A",
+      "candidate_sha256": "BB51F04F957BA372F638FF45F33934A4D150FF57DB3F419C604EDF426F7C778A"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150_defs.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150_defs.h",
+      "parent_sha256": "BCCBE06B31F8F1A46DE6317DE67CE23AE13182B2B5C9E1230ADE0491C7078FDB",
+      "candidate_sha256": "BCCBE06B31F8F1A46DE6317DE67CE23AE13182B2B5C9E1230ADE0491C7078FDB"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_sensors.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_sensors.h",
+      "parent_sha256": "47436E9D944B708DA0A3D29A9DD9306471F28C42F4B458935192DF9283843CFB",
+      "candidate_sha256": "47436E9D944B708DA0A3D29A9DD9306471F28C42F4B458935192DF9283843CFB"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_chunk_pool.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_chunk_pool.h",
+      "parent_sha256": "80A8AE280371ED0C203F3E7EC2E5677EBF935350F31784EFAD684E7F746A3DA9",
+      "candidate_sha256": "80A8AE280371ED0C203F3E7EC2E5677EBF935350F31784EFAD684E7F746A3DA9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_scratch_pair_state.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_scratch_pair_state.inc",
+      "parent_sha256": "24D207845334BDE71B4AFE63F8DF0A8DDC5A7C7B6D54AD83FB2268B21646D54F",
+      "candidate_sha256": "24D207845334BDE71B4AFE63F8DF0A8DDC5A7C7B6D54AD83FB2268B21646D54F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_chunk_memory.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_chunk_memory.inc",
+      "parent_sha256": "E673BE633AA35A82D266357E288064EE1E8B35CCB4F9342A76624662AB15CB10",
+      "candidate_sha256": "E673BE633AA35A82D266357E288064EE1E8B35CCB4F9342A76624662AB15CB10"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_scratch_pair_service.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_scratch_pair_service.inc",
+      "parent_sha256": "BE5528C136DAD571B85B48FA352E1F9BFC4B2DA8D6B0E62212B351A216EF6981",
+      "candidate_sha256": "BE5528C136DAD571B85B48FA352E1F9BFC4B2DA8D6B0E62212B351A216EF6981"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_preset_stage.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_preset_stage.inc",
+      "parent_sha256": "CBF35BD7C70670DB5AD94E49CFA66F0FBFDD95E6D1B49E70001F5F3ECE6BDC9B",
+      "candidate_sha256": "CBF35BD7C70670DB5AD94E49CFA66F0FBFDD95E6D1B49E70001F5F3ECE6BDC9B"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_fast_stage.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_fast_stage.h",
+      "parent_sha256": "0B1B3490089A789384AB29B867BBB1D15DB24626D3057F207634D5C809FEFDDF",
+      "candidate_sha256": "0B1B3490089A789384AB29B867BBB1D15DB24626D3057F207634D5C809FEFDDF"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_ce64_firmware.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_ce64_firmware.inc",
+      "parent_sha256": "A7331BE6623524B196795CB2858E1AC97E8927EEFB2ED8AF61E8EB80A3112C0A",
+      "candidate_sha256": "A7331BE6623524B196795CB2858E1AC97E8927EEFB2ED8AF61E8EB80A3112C0A"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ce64.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ce64.h",
+      "parent_sha256": "366F648FB9F3685F997A9D6FA2E768CAF98D96CF8667E9A2663631AB98D5D87C",
+      "candidate_sha256": "366F648FB9F3685F997A9D6FA2E768CAF98D96CF8667E9A2663631AB98D5D87C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ce64_metadata.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ce64_metadata.h",
+      "parent_sha256": "467777EBAED62BE2F7EB6123B9D4A7476B44413BF19A12352F5081A2D7819B3A",
+      "candidate_sha256": "467777EBAED62BE2F7EB6123B9D4A7476B44413BF19A12352F5081A2D7819B3A"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_store_v2_adapter.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_store_v2_adapter.inc",
+      "parent_sha256": "88D3DEEE7BA1F0D023E66752F0E526A343FFADEAD0E9ED0A22FA90D7C50D6964",
+      "candidate_sha256": "88D3DEEE7BA1F0D023E66752F0E526A343FFADEAD0E9ED0A22FA90D7C50D6964"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_store_v2.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_store_v2.h",
+      "parent_sha256": "3632CFD46B5DDCCADD3FE5F1C45D3168DB4E9AA1A58698604CD2BD8EC3741047",
+      "candidate_sha256": "3632CFD46B5DDCCADD3FE5F1C45D3168DB4E9AA1A58698604CD2BD8EC3741047"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_store_v2_binding.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_store_v2_binding.h",
+      "parent_sha256": "771FCC45A89C471F89A91304A63780CBB97E5675998297A409AF308C716C8D05",
+      "candidate_sha256": "771FCC45A89C471F89A91304A63780CBB97E5675998297A409AF308C716C8D05"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_usb_camera_driver.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_usb_camera_driver.inc",
+      "parent_sha256": "326A86D6AB319A0D28982D0B03498F604A5805702C592C2D486971A5F3A04040",
+      "candidate_sha256": "326A86D6AB319A0D28982D0B03498F604A5805702C592C2D486971A5F3A04040"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_camera_timing.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_timing.h",
+      "parent_sha256": "1F14D483326C83FB0AC6D1AE9E9C0FE85A1E57B4F155CE4ABA234DC3CD49F8DB",
+      "candidate_sha256": "1F14D483326C83FB0AC6D1AE9E9C0FE85A1E57B4F155CE4ABA234DC3CD49F8DB"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\usb512_camera.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\usb512_camera.h",
+      "parent_sha256": "829F7D1B8E3C0765551D185B69B5DA87D2D2C5C2968DB5C522D626CE7F2F29B4",
+      "candidate_sha256": "829F7D1B8E3C0765551D185B69B5DA87D2D2C5C2968DB5C522D626CE7F2F29B4"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_camera_alignment.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_alignment.h",
+      "parent_sha256": "5CFC80153CA226CDDD4672DF78ECAF8EC8C5FD5EE53256A690937EDDA6151F79",
+      "candidate_sha256": "5CFC80153CA226CDDD4672DF78ECAF8EC8C5FD5EE53256A690937EDDA6151F79"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_camera_storage.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_storage.inc",
+      "parent_sha256": "5711EC7855CF0CC6E4EA55A6CB73CE5CE6BF17CB37D383E18B9E126CBB5BDC21",
+      "candidate_sha256": "5711EC7855CF0CC6E4EA55A6CB73CE5CE6BF17CB37D383E18B9E126CBB5BDC21"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_camera_hardware.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_hardware.inc",
+      "parent_sha256": "34750C7B497F1986074D42471187BFECBA910DE8A65D76E8873BC84E2D65F410",
+      "candidate_sha256": "34750C7B497F1986074D42471187BFECBA910DE8A65D76E8873BC84E2D65F410"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_camera.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_camera.inc",
+      "parent_sha256": "D7711692AD8139C61CD0DD44417C221527B030F14D20C5F65C39BDA41BF7FEC4",
+      "candidate_sha256": "D7711692AD8139C61CD0DD44417C221527B030F14D20C5F65C39BDA41BF7FEC4"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_camera_preview.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_camera_preview.h",
+      "parent_sha256": "AAD31AFF83D362C43F470486CDB76023B895CEBC6DE6B68E7A89E5B0C9BC29D4",
+      "candidate_sha256": "AAD31AFF83D362C43F470486CDB76023B895CEBC6DE6B68E7A89E5B0C9BC29D4"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_microphone.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_microphone.inc",
+      "parent_sha256": "56C619A10A9379C0321E9707A2CD267CAACD2DC41F6D9B94A52084164EBF270E",
+      "candidate_sha256": "56C619A10A9379C0321E9707A2CD267CAACD2DC41F6D9B94A52084164EBF270E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_battery_adc2.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_battery_adc2.inc",
+      "parent_sha256": "9A77E7FE3E105591B4A0B57AD157434BC531BE5159032291814FCC85E6AB93B7",
+      "candidate_sha256": "9A77E7FE3E105591B4A0B57AD157434BC531BE5159032291814FCC85E6AB93B7"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_vsc.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_vsc.inc",
+      "parent_sha256": "63D0909C0A6C1D99C9FD6AEA9EF7FF08681B218EE1C62F9604436EC2906AE0FF",
+      "candidate_sha256": "63D0909C0A6C1D99C9FD6AEA9EF7FF08681B218EE1C62F9604436EC2906AE0FF"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_vsc_dir.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_vsc_dir.h",
+      "parent_sha256": "D427ED0E648730B3FD27FA650792DC4673719C42156AE4B2D5D6E44ED2C5837F",
+      "candidate_sha256": "D427ED0E648730B3FD27FA650792DC4673719C42156AE4B2D5D6E44ED2C5837F"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\sd_modes.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\sd_modes.inc",
+      "parent_sha256": "C2C0137531F3775448EE3D1A200FE98DBCA122A722760E7865347638AF24DF7B",
+      "candidate_sha256": "C2C0137531F3775448EE3D1A200FE98DBCA122A722760E7865347638AF24DF7B"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\mode_policy.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\mode_policy.h",
+      "parent_sha256": "478F8704BB40ECA68645AA25E7BC929724FCF1F063886E3FCE8542D7952E42FD",
+      "candidate_sha256": "478F8704BB40ECA68645AA25E7BC929724FCF1F063886E3FCE8542D7952E42FD"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_boot_contract.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_boot_contract.h",
+      "parent_sha256": "1AFB776187A82D5D244818ED1248D3A4448CF72E234B062E1EF879395498BFCE",
+      "candidate_sha256": "1AFB776187A82D5D244818ED1248D3A4448CF72E234B062E1EF879395498BFCE"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_stream.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_stream.inc",
+      "parent_sha256": "26BCFEE31474AF357BF979881D47F61BE7D7FFA3D4C01351DB49F33C1FB5C534",
+      "candidate_sha256": "26BCFEE31474AF357BF979881D47F61BE7D7FFA3D4C01351DB49F33C1FB5C534"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_transaction.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_transaction.h",
+      "parent_sha256": "BB29D8F52610639A36612027A28B303E01129982114ADC3023C0781A648C633C",
+      "candidate_sha256": "BB29D8F52610639A36612027A28B303E01129982114ADC3023C0781A648C633C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_idma_list.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_idma_list.h",
+      "parent_sha256": "D0154B9721C8BD1443180D4385A64F0BB79B513D8F9A381310D6FA07E6DBBA67",
+      "candidate_sha256": "D0154B9721C8BD1443180D4385A64F0BB79B513D8F9A381310D6FA07E6DBBA67"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_store_v2_async.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_store_v2_async.inc",
+      "parent_sha256": "A15D5E32C15451B71D566AE38F6E68629B8C32E29F6ED0D21C6854583A557698",
+      "candidate_sha256": "A15D5E32C15451B71D566AE38F6E68629B8C32E29F6ED0D21C6854583A557698"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_store_v2_grow.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_store_v2_grow.h",
+      "parent_sha256": "A375A5DA0CA2C21315A79F4FB1F3A9556941A463FB487D3D150AD822303F647C",
+      "candidate_sha256": "A375A5DA0CA2C21315A79F4FB1F3A9556941A463FB487D3D150AD822303F647C"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_control.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_control.inc",
+      "parent_sha256": "658FA2871EEFDF7B3868731902A5716F1443669034EF0D6F36833C1C6664896F",
+      "candidate_sha256": "19B1AC81C4AD1E5DFF592FC680A3953BE081356F726BF240A3D74D8F169B420E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_qualification.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_qualification.h",
+      "parent_sha256": "6DC0E4AD27C819C5AD15D2DD52CFA0D72910FA3672104A87B2A2958EF11DEDE9",
+      "candidate_sha256": "6DC0E4AD27C819C5AD15D2DD52CFA0D72910FA3672104A87B2A2958EF11DEDE9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_sd_rate_port.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_rate_port.h",
+      "parent_sha256": "7A16CFFE7E536556E1152A1856CEEE641A9E0612FA3211F418B8D6B4BE9DC2EC",
+      "candidate_sha256": "7A16CFFE7E536556E1152A1856CEEE641A9E0612FA3211F418B8D6B4BE9DC2EC"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_ble_online_port.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_ble_online_port.inc",
+      "parent_sha256": "44AF120A8BEE2631086E19E639CCAF46C1A5D45A5BEFD783B421011E74D91FFF",
+      "candidate_sha256": "44AF120A8BEE2631086E19E639CCAF46C1A5D45A5BEFD783B421011E74D91FFF"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\xe_np_online_impl.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_online_impl.h",
+      "parent_sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "candidate_sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ble_schedule.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_schedule.h",
+      "parent_sha256": "BB062BDFF491EB71AB40340F1E63E498FE85D4569E4EC7873CFE7937919E2B3E",
+      "candidate_sha256": "BB062BDFF491EB71AB40340F1E63E498FE85D4569E4EC7873CFE7937919E2B3E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ble_preview.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_preview.h",
+      "parent_sha256": "4A06EB245CF4F21AB9FBA96AE56EBEA15E0C5EAC8991338A198CC015107585B2",
+      "candidate_sha256": "D13E8F8A3B61D0FD18B8781C65A8DB73AA4139160E04009181A8E8774AD6E591"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ble_dfu.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_dfu.h",
+      "parent_sha256": "D66AF05BCF892351F7CECEB326236E69D60ADDDBA978004203CD1348B211DB66",
+      "candidate_sha256": "D66AF05BCF892351F7CECEB326236E69D60ADDDBA978004203CD1348B211DB66"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ble_storage.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_storage.h",
+      "parent_sha256": "D6F645F3B94D5D2DB4D02DBE8515B665FE84E71CF19B0B05167CB4967ECD6452",
+      "candidate_sha256": "D6F645F3B94D5D2DB4D02DBE8515B665FE84E71CF19B0B05167CB4967ECD6452"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_ble_ce32_info.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_ble_ce32_info.inc",
+      "parent_sha256": "FC115CCFD2EB73250E1BC5B9AA8021D153EE1E88E897CF4A6CEBCDB5650F14F2",
+      "candidate_sha256": "FC115CCFD2EB73250E1BC5B9AA8021D153EE1E88E897CF4A6CEBCDB5650F14F2"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_media_ble.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_media_ble.inc",
+      "parent_sha256": "5A334F2AE8F52F01225B75ABBC9E783577B770A652FB1DF5E9E89756E24B8E1E",
+      "candidate_sha256": "5A334F2AE8F52F01225B75ABBC9E783577B770A652FB1DF5E9E89756E24B8E1E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_battery_ble.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_battery_ble.inc",
+      "parent_sha256": "C1CFA1D9536747F646AC51EC748AD34238EFBF6EEA0A79695969F8B72BE9BF90",
+      "candidate_sha256": "C1CFA1D9536747F646AC51EC748AD34238EFBF6EEA0A79695969F8B72BE9BF90"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_media_capture_metadata.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_media_capture_metadata.inc",
+      "parent_sha256": "B2CBEAAE481037CB9151D533BB129458010E62185FE778D25DA340EEB7A6F9D6",
+      "candidate_sha256": "B2CBEAAE481037CB9151D533BB129458010E62185FE778D25DA340EEB7A6F9D6"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_idle_sleep.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_idle_sleep.inc",
+      "parent_sha256": "AB3C6806C849C58B233F0874A253F10724BD4CC2B4187FE4856593DCDC933AB8",
+      "candidate_sha256": "AB3C6806C849C58B233F0874A253F10724BD4CC2B4187FE4856593DCDC933AB8"
+    }
+  ],
+  "dependency_count": 159,
+  "defines": [
+    "NP_SD_IDLE_SLEEP_ENABLE=1U",
+    "NP_BATTERY_DIVIDER_TOP_KOHM=91U",
+    "NP_BATTERY_DIVIDER_BOTTOM_KOHM=91U",
+    "__UVISION_VERSION=537",
+    "_RTE_",
+    "STM32U595xx",
+    "USE_HAL_DRIVER",
+    "NP_SD_APP=1U",
+    "NP_SD_SLOTS=128U",
+    "NP_SD_VSC=1U",
+    "NP_SD_VSC_ERASE=0U",
+    "NP_SD_CE64=1U",
+    "NP_SD_SENSORS=1U",
+    "NP_SD_BME_WIRING_CONFIRMED=0U",
+    "NP_SD_ALLOW_WRITES=1U",
+    "NP_SD_PROBE_MASK=2U",
+    "NP_SD_AP_HZ=15000U",
+    "XE_NP_BOARD_EXPERIMENT_DISABLE_SD_INIT=0U",
+    "XE_NP_APP_QUAD_USB_PACED=1U",
+    "XE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+    "XE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+    "XE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+    "XE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+    "XE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+    "XE_NP_CAPTURE_DMA_NODE_BYTES=7680UL",
+    "XE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+    "XE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+    "XE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+    "XE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+    "XE_NP_APP_GPIOE_CAPTURE_TIM2_RISING_EDGE=0U",
+    "XE_NP_APP_GPIOE_CAPTURE_TIM2_FILTER=0U",
+    "XE_NP_APP_GPIOE_CAPTURE_TIM2_DELAY_TICKS=6U",
+    "XE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+    "XE_NP_GENERATED_PROBE_CONFIG_INDEX=1U",
+    "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_ENABLE=1U",
+    "XE_NP_APP_GPIOE_QUAD_DMA_INTERLEAVE_BLOCK_BYTES=100U",
+    "XE_NP_APP_GPIOE_DUAL_DMA_INTERLEAVE_REPEAT_COUNT=624U",
+    "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_USB_ENABLE=1U",
+    "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_LINEAR_CHANNELS_ENABLE=1U",
+    "XE_NP_APP_EXPERIMENT_GPIOE_DUAL_DMA_INTERLEAVE_DELAYED_PWM2_ENABLE=1U",
+    "XE_NP_APP_CAPTURE_DMA_DEST_BURST_LENGTH=1U",
+    "XE_NP_APP_CAPTURE_DMA_DEST_ALLOCATED_PORT=DMA_DEST_ALLOCATED_PORT1",
+    "XE_NP_APP_EXPERIMENT_DMA_LINK_ALLOCATED_PORT=1U",
+    "NP_SD_STORE_V2=1U",
+    "NP_SD_RECORDING_CLOCK_POWER_SAVE=1U"
+  ],
+  "changed_files": [
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Src\\np_sd_control.inc",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_control.inc",
+      "parent_sha256": "658FA2871EEFDF7B3868731902A5716F1443669034EF0D6F36833C1C6664896F",
+      "candidate_sha256": "19B1AC81C4AD1E5DFF592FC680A3953BE081356F726BF240A3D74D8F169B420E"
+    },
+    {
+      "parent_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_source\\Core\\Inc\\np_ble_preview.h",
+      "candidate_path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_preview.h",
+      "parent_sha256": "4A06EB245CF4F21AB9FBA96AE56EBEA15E0C5EAC8991338A198CC015107585B2",
+      "candidate_sha256": "D13E8F8A3B61D0FD18B8781C65A8DB73AA4139160E04009181A8E8774AD6E591"
+    }
+  ],
+  "intentional_control_transform": "Exact CC50 np_sd_control.inc bytes: replace one ASCII prefix  NPL_RAW_PREVIEW|NPL_SCHEDULE with  0x08000000U|NPL_RAW_PREVIEW|NPL_SCHEDULE; byte-equal to canonical after sole capability delta.",
+  "preview_header_sha256": "D13E8F8A3B61D0FD18B8781C65A8DB73AA4139160E04009181A8E8774AD6E591",
+  "compact_kind": 5,
+  "capability_flag": "08000000",
+  "fast_crc_already_in_graph": true,
+  "unchanged_linked_objects": [
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/startup_sd_modes.o",
+      "sha256": "98AEB7C846490F127ECC5AD6A846B95DFBBE3637E65C1C934502E2F053BCEF44"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/main_syncbench.o",
+      "sha256": "2C018870C2BD456CF555DA1ACC60374C62D6D731E67DF2C34928E7C1306757C7"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_idle_sleep_20261016/app_r2/stm32u5xx_it_syncbench.o",
+      "sha256": "1CC5299DA8EE638ED06059053D805E0DC8E616AE5D5733B9D463B36A754EE02D"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_msp_sensors.o",
+      "sha256": "8A756141178E2D1557F5528466B6F414C8BA7B6D39738C11704929D726DFB0B5"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/base_string.o",
+      "sha256": "46E5DA799CA70000F83CD82A72B5F7277F841E163601C57828F3459CAF1892F5"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_command.o",
+      "sha256": "416666AC7402C0AFC3994BF2CDC8706C2E9644B26EB41C145F1DEACA1E521819"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_adc.o",
+      "sha256": "AE3FFF7D1DFCDE9AF0A4D4C586E9E91BCE686BE27BC56F40A8D52F7CB7C332DD"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_storage_hardening_20261017/app_r1/ce32_uart_intercom_npconfig.o",
+      "sha256": "16B59D8860E5B7EF1B31A616E425E5E9B177C5B19C35E4FF3A2D21A67984139D"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_hj580.o",
+      "sha256": "78DCCF2A5152D24793DBCBC3B483B337BA440EFE91CF85B256139730561DF1C9"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_bmx160_sensors.o",
+      "sha256": "AE033DDDC0C798EFAE61AD5AEC154F0F0D47CC3F587DC728BD091F0AC559C1F1"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_filesystem.o",
+      "sha256": "477A24AB4AE1EBC224C5007C85D132E621ECC3B54206D16C7CFE333BA5408DCB"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_submod.o",
+      "sha256": "CC66083E79E4EF7E7FBE2D785BEC3CD2A17ACB3000E549598158D6C7CFA94625"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_sync.o",
+      "sha256": "010FDCEC932FB4B08D5075BACAA3D09D61749B1EBA9422D7E78D93534D20ECBE"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_macro.o",
+      "sha256": "BBA9743326A8269FCF07B1DB9629CF17203D4ADDC851C52FAAAFCBAF64D29FA7"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_system_compat_sensors.o",
+      "sha256": "2926F59BE1D08795E9A5DC3CDDE67FBE3D93FA952B82017718334E4CBB5F7CAF"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/ce32_wire.o",
+      "sha256": "DBA79D741AD5860D5B1C090CD98B54EBB7F0B593A05AEFE53BBA1ED8B1A5864C"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/datamgr.o",
+      "sha256": "C25926966E23B7807920C9E117B66C67CABC4762BDB1A3867421ECDE8C9C6CD6"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/hd32_sd_driver.o",
+      "sha256": "D411A005DDFE37DB8EC1FDD1D7435DBF0144032BD7671ADD65E84325E40CC327"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_legacy_fs.o",
+      "sha256": "A136500FE018D3BB4831D30980864421C833242C70EEAFA1C90FC414FFAAFFFC"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_capture_syncbench.o",
+      "sha256": "9F0B8C24A685785118C945CFB97F09D19EF194F592E282C93EF73EDF2093655F"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_reliability_20261017/identity_app/xe_np_nric_syncbench.o",
+      "sha256": "C2A399E216234AE60CE80C361B198E8C8A8A9799168FBD7DD49FFE9D39A7D0DE"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_board_syncbench.o",
+      "sha256": "DB6BCEAD6A13A5BD7B10584ECE97B6D27FB35EDEC44704BC774B1D8A3C4EF3C8"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_psram_sensors.o",
+      "sha256": "EDB7B324186815A675DC871B79B866C3BFA5546941389CD571CDA33FC7E7D474"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_usb_stream_syncbench.o",
+      "sha256": "55DEE357591CDE27647984917AA808E80420D6F6DB00AE904C4A803A8FCFC846"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_runtime_syncbench.o",
+      "sha256": "5EB7B00FA7794387D727EDE40407638D64BD3F3A1FB12E59FC2A1ADAC54E7ACA"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_adc.o",
+      "sha256": "ECFA3F4CA385D040AC13D8EFFE28AEB2471CF43D6C455E278E4E529F639FCBE0"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_adc_ex.o",
+      "sha256": "67AB9A34B0AB1D30D980116AF503DA975295A0F0CA791A93719B9AD8D94EE384"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_dma.o",
+      "sha256": "E5460BBF1C882AA5C0713F71DB5FF1810169C824D56628F460427702BB303B75"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_dma_ex.o",
+      "sha256": "223063C033F52967B1F52FDA8B1825D784D31F99692FC368E94420FDED84E2F8"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal.o",
+      "sha256": "CD6E9B63EDD7EABA13EEC213DD7CD9EE1889BE81D35590FDC4F679594C09699E"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_i2c.o",
+      "sha256": "8921F055644D5A8C27A4475900F09F368FE73A8E1B2AB5A8B0AD3E2E2D2F23B5"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_i2c_ex.o",
+      "sha256": "41A296DB6138FC75933B3E2E9189E1406A417C210CA3037BD21647102CC08F43"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_rcc.o",
+      "sha256": "B1E81FC8F83F37F7F57AE13596EAAC8E33B6E999EFF784E4539F4C0BE8301EE6"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_rcc_ex.o",
+      "sha256": "FBAB0A2EBBDC2E1DE76C0DEDBEC07A6FF0BCE2A23FF5E340C48A18592F40E612"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_cortex.o",
+      "sha256": "2BF66E3E4640FFC60D1D5B9830E32BA098F80B05F1530CC69351D3B207EDC1B0"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_flash.o",
+      "sha256": "F9D30394ED99F6FBE8DB8DAE0FA41F0E58A8BD598FF6E35329640F70EFE772BF"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_flash_ex.o",
+      "sha256": "C97FF571DDF5C3B011DA663BE9FAA28B3755133548B69D9090464FE06564F7BB"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_gpio.o",
+      "sha256": "94539BD0D6B653F1F7A53C62C82983E0E2749C7E49872B208D251596385B4BC7"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_exti.o",
+      "sha256": "0683559FFBA05FAC94D5424CB27C0AEAF2DE8A75B1C0B5A6A36E3D30444BC822"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_pwr.o",
+      "sha256": "3EAFBE65FD42AB593150B53E6999F34A04F50AF7A9C6C23E693BB06F65E50010"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_pwr_ex.o",
+      "sha256": "080A7279AAA863301DC86183F699238287ED2EC44B910E874ED88DFB5DCB77E0"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_gtzc.o",
+      "sha256": "4BDB043DF7B4A40E39930C43E198BFD4F7D36CC6C28ED5A3FBEABEA1560C9AF5"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_icache.o",
+      "sha256": "508A69AB98ADCF4E575C646600AE97E4D7482E36752FBAA71E91530D26F4B313"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_dac.o",
+      "sha256": "5D7E612A20EB440B1CF9403A082945ED8566689EB03E41D8EEB201548825AC02"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_dac_ex.o",
+      "sha256": "FB729FC16EBFD7D5B151390F572B7930AA901EF6D6FAD66B58260D9FF9EC23DE"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_dcache.o",
+      "sha256": "E62B5EDA173D1DE75E60B16F04C4724C3BACF9D69C4E90FC37AA5961E5E26E2B"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_uart.o",
+      "sha256": "136A0064961C631F4724E5932AC30CCA7B83B60F77D77EC7FDCFA783A70A9C1F"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_uart_ex.o",
+      "sha256": "F413298C2CE1099B4F027843BEC99FEDB23DDB8C9996351E6E2555A8AFAACE39"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_ospi.o",
+      "sha256": "B8397E9A92403DA102B592AE9EF73CF03C16328054409E84938D102B89961327"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_ll_dlyb.o",
+      "sha256": "F4B936563C02EA476D8FF0CDC71C0F3DE866101244244CFC551F0EE181A7B5EE"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_opamp.o",
+      "sha256": "BA43B0C22D3F4DED09208EDDBE9166F60262BED15BE665253B2A8560F9600C52"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_opamp_ex.o",
+      "sha256": "96A70FBAF32E2A17D332B2466887A089F44FD569556EFD27ECB6FD5E29E6C02C"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_ll_sdmmc.o",
+      "sha256": "F234BD70D215325A58437657F652A26E82C68A742EC27F0F229B4CF4E3B45810"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/sd_vsc.o",
+      "sha256": "E0A98A2FD43BA8B8BA15F076B53A1A55876B3A9EA4445AC83D111204FA624073"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_sd_ex.o",
+      "sha256": "3AE1938450CE34981859A9C01531566774E754895351BBE72DD5FB17EEF45553"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_mmc.o",
+      "sha256": "58863109E35CD398021275580C4EF18342506FC538AFE9BCEBCA903B8703647B"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_mmc_ex.o",
+      "sha256": "5E6F9AB150AC59FD086450491DCE7C0911BC5AF80C73BE5B5D10B43D98641640"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_sdio.o",
+      "sha256": "B96D899F79D7E880C1EBCA9112AC6728429494E32DD828CA794BA183A43D52BC"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_spi.o",
+      "sha256": "62225E07622D74DDD20BAEED9220660D625138C8D3D62336B116445757AEB5E2"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_spi_ex.o",
+      "sha256": "66D2D6105A862AD93B5D39869F00E9BB260611DD1E163DAE5452C5694A2D8C93"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_tim.o",
+      "sha256": "5EE4BB57A6B2642712F9F8B0B7D1DFCD6460484EB0467933AD3E4974E20B137B"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_tim_ex.o",
+      "sha256": "A7B5881A23644DF7E609B42AA44E70C332ED9ADC93CBA912F3AB6B4F46DD7D39"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_pcd.o",
+      "sha256": "BE3186A39496A8A9BA6963129162800E66E00A104C53F61D162455466F51F9FE"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_hal_pcd_ex.o",
+      "sha256": "7F40C7C0E5D75307353334AB812AFFAC5224B6BEF2C079A06986146452C8B16C"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/stm32u5xx_ll_usb.o",
+      "sha256": "FE411C8737D47320EB8C0F17F8EFBB366B270FA51AEC0F898D2F4572EA6220FB"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/system_split.o",
+      "sha256": "5F28E651310A69EAF3920C74015F190A2C0145F1DC1271F39636A0539C05DB49"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_sensors_port_sensors.o",
+      "sha256": "3E13CFD81449763706C9997DCF1BF2F7844711293748BE67C32FEDF3C2169F56"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_bme_compensation_sensors.o",
+      "sha256": "040CB87BEDB16218DBFF6557CD92BCCBFC3A45297D0B0586A7E26F6FEC1C7F01"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/xe_np_bmm_compensation_sensors.o",
+      "sha256": "1FC709FA59FDBAFD5CD29E4D85810E9E715766A06A08FD5463DC38ACEF5B9ED8"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/boot_contract_split.o",
+      "sha256": "5DB0F4B9740A9A10FEB4C03387F222764E69FB9D3AD0FCD45AB4FCE75FD94DEF"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/np_config_npconfig.o",
+      "sha256": "A576B42C1AAF36778A52D823B182227B9231D7A6F681054D91B8AA45E6E0DEE6"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/np_config_port_npconfig.o",
+      "sha256": "ABBBAB26205C664C75ACE6D9335E2CC413477CB626670D5C752D437F96951E41"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_canonical_baseline_20261006/np_ble_dfu_npconfig.o",
+      "sha256": "136B9AC364EB0502371A0F25996CFC18DEC31DE9C1D268AFB38D1C5312479FFD"
+    },
+    {
+      "path": "C:/Frank/Code/XE_NP/_artifacts/v1_lifecycle_release_20261025/usb_build/xe_np_sensors.o",
+      "sha256": "5F2A1B4531CBF3074C726F0035A8C80BEB7E535EA8F560DFFB49E10128F3F637"
+    }
+  ],
+  "unchanged_linked_object_count": 74,
+  "parent_app_object": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_build\\xe_np_app.o",
+  "parent_app_object_sha256": "75C9DD1FD9091EB83001B8D1D22DF68A2C06C2203927CE8506B68152B9617F24",
+  "link_response": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\app_build\\lifecycle.lnp",
+  "link_response_sha256": "FE633C1BEE9FACE2590CD4344A193EF3FFF8BB88AA31E8A5234A51F2CCE65047",
+  "scatter": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\MDK-ARM\\app.sct",
+  "scatter_sha256": "9B38DFC80E4E58A37D1ABA509E5C12161E253636116E2F5D4849F8A5CC20BE61",
+  "reference_build_helper": "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UsbSensors\\build_app_lifecycle.ps1",
+  "reference_build_helper_sha256": "C377AD2259EBDB1D2773DA0B90B0ACE8B75F85A61CBC968A4D1CFF914B2D139C",
+  "toolchain": [
+    {
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\armclang.exe",
+      "sha256": "4BAB1EB17E3F647D2D4D1728657E4B5FD32D4E4AFB12AB03EBD3849D2281BDFF"
+    },
+    {
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\armlink.exe",
+      "sha256": "0B98C868B73F12D96B912A52A426409A8BC4DFEB5EE44AF0E29F8325F6148A61"
+    },
+    {
+      "path": "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\fromelf.exe",
+      "sha256": "71E77D34C057574B955A055347FD0AF45F50E0F8493FA9E25193126E70D80CD9"
+    }
+  ],
+  "limits": [
+    "Preparation only: no ARM compile/link/seal, hardware, version, package, Git or publication.",
+    "All non-header/control APP source bytes and all74 linked inputs remain exact CC50. USB components unchanged.",
+    "Old APP general-RAM headroom240bytes; preview state expected+112bytes. Only actual new link/map establishes fit; no new resource acceptance is claimed.",
+    "Main owns one incremental APP compile/link, subsequent resource review and any release decision."
+  ]
+}

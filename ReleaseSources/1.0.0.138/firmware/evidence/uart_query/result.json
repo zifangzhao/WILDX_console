@@ -1,0 +1,60 @@
+{
+  "uid": "001D00065942500B20313354",
+  "module_configuration_written": false,
+  "queries": [
+    {
+      "command": "<RD_SOFT_VERSION>",
+      "tx_hex": "3c52445f534f46545f56455253494f4e3e",
+      "tx_readback_hex": "3c52445f534f46545f56455253494f4e3e",
+      "wake": 0,
+      "route": 0,
+      "pre_ms": 100,
+      "gap_ms": 0,
+      "wake_after": 2,
+      "timeout_ms": 800,
+      "rx_hex": "",
+      "reply": "",
+      "errors": 0,
+      "status": 1,
+      "tick": 1008,
+      "tx_count": 17,
+      "uart_cr1": "0x2000000d",
+      "uart_brr": 1625,
+      "uart_isr": "0x8e000c0",
+      "gpioa": "0xe021",
+      "gpiob": "0xd0",
+      "gpiof": "0x4"
+    },
+    {
+      "command": "<RD_BAUD>",
+      "tx_hex": "3c52445f424155443e",
+      "tx_readback_hex": "3c52445f424155443e",
+      "wake": 0,
+      "route": 0,
+      "pre_ms": 100,
+      "gap_ms": 0,
+      "wake_after": 2,
+      "timeout_ms": 800,
+      "rx_hex": "",
+      "reply": "",
+      "errors": 0,
+      "status": 1,
+      "tick": 2029,
+      "tx_count": 9,
+      "uart_cr1": "0x2000000d",
+      "uart_brr": 1625,
+      "uart_isr": "0x8e000c0",
+      "gpioa": "0xe021",
+      "gpiob": "0xd0",
+      "gpiof": "0x4"
+    }
+  ],
+  "before_uart": {
+    "cr1": 536870941,
+    "brr": 1625
+  },
+  "typed_module_response": false,
+  "result": "NO_TYPED_MODULE_REPLY_KEEP_115200",
+  "reset_to_unchanged_app": "",
+  "debugger_disabled": true
+}

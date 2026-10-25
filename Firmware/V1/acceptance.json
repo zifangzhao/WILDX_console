@@ -1,180 +1,207 @@
 {
-  "result": "PASS bounded final V1 pair acceptance",
+  "result": "PASS bounded compact preview and full SD source-bit/export acceptance",
   "uid": "001D00065942500B20313354",
-  "host_version": "1.0.0.137",
-  "host_sha256": "7BA5BF055E5A4C3C7CD624DF77306622B1A6A5BD1519894C7450F086EF808ABC",
+  "host_version": "1.0.0.138",
+  "app_crc32": "82E51DEA",
   "usb_crc32": "4F7B521A",
-  "app_crc32": "CC50D8D2",
-  "runs": [
-    {
-      "folder": "usb108-20k",
-      "rate_hz": 20000,
-      "mask": 3,
-      "seconds": 70,
-      "status": "PASS bounded USB capture; no measured midstream gaps/errors",
-      "imu_samples": 13983,
-      "imu_max_gap_ms": 7,
-      "timing_points": 15,
-      "exact_dat_lengths": [
-        {
-          "file": "probe1/neuropixels_ap.dat",
-          "bytes": 1077126912
-        },
-        {
-          "file": "probe1/neuropixels_lfp.dat",
-          "bytes": 89760000
-        },
-        {
-          "file": "probe1/time.dat",
-          "bytes": 467500
-        },
-        {
-          "file": "probe2/neuropixels_ap.dat",
-          "bytes": 1077126912
-        },
-        {
-          "file": "probe2/neuropixels_lfp.dat",
-          "bytes": 89760000
-        },
-        {
-          "file": "probe2/time.dat",
-          "bytes": 467500
-        }
-      ],
-      "evidence_sha256": "D8C931175DA5A5EED0AB3977385666E48AD7D37FC3F487A4FDBE10CA3E23D3DA"
-    },
-    {
-      "folder": "usb108-30k",
-      "rate_hz": 30000,
-      "mask": 1,
-      "seconds": 60,
-      "status": "PASS bounded USB capture; no measured midstream gaps/errors",
-      "imu_samples": 12011,
-      "imu_max_gap_ms": 7,
-      "timing_points": 13,
-      "exact_dat_lengths": [
-        {
-          "file": "neuropixels_ap.dat",
-          "bytes": 1387673088
-        },
-        {
-          "file": "neuropixels_lfp.dat",
-          "bytes": 115638528
-        },
-        {
-          "file": "time.dat",
-          "bytes": 602284
-        }
-      ],
-      "evidence_sha256": "8230C63A808A29554B0D988F4230F8B8985C5BCCC9703C939BABC5A9146B4EF2"
-    }
-  ],
-  "ble_sd": {
-    "result": "PASS persisted UTC2/NPAR/session/row arithmetic and prior catalog",
-    "session": 1792905460,
-    "source_origin_edges": 155392,
-    "before_ms": 25977,
-    "after_ms": 25978,
-    "chunks": 264,
-    "prior_records_unchanged": 34,
-    "all_records": 35,
-    "clock_sha256": "88b07048a6e8ff6951e0863851245e0e97d0a9f7a3870d31ca7fd8a43122f789",
-    "pc_interval_width_us": [
-      48953,
-      48953,
-      48953,
-      48953
-    ],
-    "epoch_survived_app_to_usb_reset": true,
-    "hardware_access": false
-  },
-  "final_sd_binary_equivalence": [
-    {
-      "file": "analogin.dat",
-      "bytes": 135168,
-      "sha256": "C595DDD5110041EAFD6A30E9D756C3A83BBC24251BB51267E4207BEBBBFD3399"
-    },
-    {
-      "file": "CE_params.bin",
-      "bytes": 1536,
-      "sha256": "E8508547F6B74B672614768F273860895C0175AD2A49473E8F6B1230D50F144D"
-    },
-    {
-      "file": "descriptor.bin",
-      "bytes": 512,
-      "sha256": "09A8983CB1B970640AA6F78969B1396530858D57EB977D8DAAA3577DFD70661A"
-    },
-    {
-      "file": "footer.bin",
-      "bytes": 512,
-      "sha256": "D81E6389A6510875209FB8384FB25CB84BA03A80A51FD05F2E5709D2E4FE9E1C"
-    },
+  "session": 1792909659,
+  "committed_chunks": 16768,
+  "raw_extent_bytes": 1107296256,
+  "raw_extent_sha256": "23E5B9681C8A07C0AB71980757D49BE6F0464EC8D0EC4BEDCE219E5EA73FAC23",
+  "exact_dat_lengths": [
     {
       "file": "np1_ap.dat",
-      "bytes": 7984128,
-      "sha256": "FE4ACF4C8BC48154B60D4CF4744A1D871997A612D47F5E9EF2A2ABEC7EADEB68"
-    },
-    {
-      "file": "np1_ap.dat.timestamps.calibrated.dat",
-      "bytes": 83168,
-      "sha256": "99FFCE01CB65432ACCDC2D458FA39D2CAB577736F4CDE2EF0ABB8546A0ECD9F4"
+      "bytes": 507187200
     },
     {
       "file": "np1_lfp.dat",
-      "bytes": 664320,
-      "sha256": "DD40E47954C00781B4D712E5DABC4421E9B8EAB7B2ED3DA390679E3A8683ADBA"
-    },
-    {
-      "file": "np1_lfp.dat.timestamps.calibrated.dat",
-      "bytes": 6920,
-      "sha256": "B4C64C1BECFAA5B0ADBBF022FB980AA593B6DF6D0D5F6B0ADBC67CE2541A61DB"
+      "bytes": 42264576
     },
     {
       "file": "np2_ap.dat",
-      "bytes": 7984128,
-      "sha256": "C9AEE2775BBDE216582D4758B13F4ED4C52D42CEDFB7046130A1A145F2236CD9"
-    },
-    {
-      "file": "np2_ap.dat.timestamps.calibrated.dat",
-      "bytes": 83168,
-      "sha256": "AC43F8ACAEB0D0914FD9CEB81B5502A727B7C8A344C084A81B6A637D8174CE82"
+      "bytes": 507187200
     },
     {
       "file": "np2_lfp.dat",
-      "bytes": 664320,
-      "sha256": "27651FB09482114BC295EE17EDF9D47FCE12082D4D4C9DDECE7FB4828C1F7840"
-    },
-    {
-      "file": "np2_lfp.dat.timestamps.calibrated.dat",
-      "bytes": 6920,
-      "sha256": "5F63D80C1ACA8AC44954D61B03C2BD526D414555FBDB03DDF4F83909469ED585"
-    },
-    {
-      "file": "recorded_clock.bin",
-      "bytes": 512,
-      "sha256": "88B07048A6E8FF6951E0863851245E0E97D0A9F7A3870D31CA7FD8A43122F789"
-    },
-    {
-      "file": "sensors.bin",
-      "bytes": 43296,
-      "sha256": "7129CE2AE2276A2E334FEAFD8D832C53672CE1AE1DDA9A052535EF7CFB42F4F6"
+      "bytes": 42264576
     }
   ],
-  "final_setup": "P12/20k selected, stopped idle USB download; APP original P12/15k restored/preserved",
-  "boot_configuration_options_preserved": true,
-  "full_installed_flash_sha256": "C15739D30A83AF71DF891DF9DD709D73319A3A6BB07A5C1DAF29226F81AE1F5F",
-  "limits": [
-    "Bounded production-API tests, not full installed GUI, endurance, all-mode or physical ADC timing qualification.",
-    "USB P12/20k70s and P1/30k60s passed on exact final components/host137. Other modes were not requalified.",
-    "BLE/SD APPCC50 P12/15k short Start/Stop and full readback passed; final USB4F/host137 readback is byte-identical. No new 20k SD endurance claim.",
-    "APP is a disclosed maintained private5D66-derived alternative; exact missing published654 control preimage was not recovered.",
-    "Unclaimed native20k retention recovery remains best effort, with unknown-gap counters and host gap journaling; claimed-stage/DMA/ownership faults remain hard.",
-    "Earlier USB412D BADA000A/BADA0013 failures retained; final4F short passes do not establish the general BADA000A cause or guaranteed lossless capture.",
-    "Startup trimming and incomplete trailing bytes remain explicit. IMU is timestamped latest-value polling, not FIFO-lossless acquisition; environment error7 remains reported.",
-    "R2/UTC2 are digital software clock evidence under stated bounds, not physical ADC/filter synchronization.",
-    "43.5198 MB/s native payload export measured on USB412D/host137; final4F reuses unchanged download objects and passed small byte-identical readback, not another speed benchmark.",
-    "No V2, camera, audio, power, cable-fault or interrupted-storage qualification in this request.",
-    "Archive preserves admitted source bytes; unchanged linked objects are identified, not rebuilt; proprietary toolchain inputs are external references."
+  "prior_catalog_records_unchanged": 35,
+  "phases": [
+    {
+      "phase": "preview-off-before",
+      "seconds": 4.5344435,
+      "packets": 0,
+      "begin_chunks": 256,
+      "end_chunks": 2528,
+      "status_ms": [
+        114,
+        156,
+        111,
+        118
+      ]
+    },
+    {
+      "phase": "compact-ap",
+      "seconds": 10.4604471,
+      "packets": 301,
+      "begin_chunks": 2528,
+      "end_chunks": 7808,
+      "status_ms": [
+        95,
+        121,
+        187,
+        140,
+        158,
+        128,
+        114,
+        184,
+        233
+      ]
+    },
+    {
+      "phase": "compact-lfp",
+      "seconds": 10.2689808,
+      "packets": 194,
+      "begin_chunks": 7808,
+      "end_chunks": 13088,
+      "status_ms": [
+        123,
+        112,
+        116,
+        115,
+        159,
+        180,
+        118,
+        105,
+        114
+      ]
+    },
+    {
+      "phase": "preview-off-after",
+      "seconds": 4.4770857,
+      "packets": 0,
+      "begin_chunks": 13088,
+      "end_chunks": 15360,
+      "status_ms": [
+        86,
+        111,
+        113,
+        110
+      ]
+    }
   ],
+  "preview_valid_samples": 27163,
+  "preview_explicit_missing_samples": 4581,
+  "framed_compact_packets": 507,
+  "framed_crc_errors": 0,
+  "channel_comparisons": [
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 0,
+      "samples": 4167,
+      "missing": 665,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 24,
+      "samples": 4167,
+      "missing": 665,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 25,
+      "samples": 4167,
+      "missing": 665,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 383,
+      "samples": 4166,
+      "missing": 666,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 0,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 24,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 25,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 383,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    }
+  ],
+  "imu_valid_snapshots": 16768,
+  "uart_baud": 115200,
+  "higher_uart_promoted": false,
+  "limits": [
+    "One bounded P12/20k recording; four selected channels on P1, AP then LFP; not all ports/rates or endurance.",
+    "Preview remains best effort with explicit gaps; no claim of full-rate spike monitoring or physical ADC synchronization.",
+    "Observer r3 exit1 after successful Stop/catalog was post-restore status confirmation across a clock reset; fresh BLE identity/profile confirmation is separate.",
+    "No higher UART write/trial: module did not answer documented read queries;115200 unchanged.",
+    "USB streaming and speed evidence inherited unchanged from137/USB4F; not repeated for the APP-only preview change.",
+    "Faster UART remains blocked on confirmed module configuration access/rollback semantics; no higher-rate claim.",
+    "Source archive preserves admitted inputs and object identities; no full clean-rebuild claim."
+  ],
+  "host_sha256": "6E1A2E88B98E6DC55A2733082BECD8496913F91DA99A5C4A86876BC195B8DB86",
+  "source_archive_sha256": "28754D94A92D9D865427C90974028EE5F4D8D8A2881FA3DA3F26FE7B54804CCE",
+  "profile_restored_and_confirmed_on_fresh_ble_connection": true,
+  "final_setup": "stopped idle USB download; APP P12/15k restored; USB unchanged P12/20k",
+  "firmware_unchanged_boot_usb_configuration_options": true,
+  "firmware_rebuilt_during_packaging": false,
   "published": false
 }

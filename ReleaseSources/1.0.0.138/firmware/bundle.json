@@ -1,0 +1,227 @@
+{
+  "release": "V1_COMPACT4_PREVIEW_USB4F7B521A_APP82E51DEA_20261025",
+  "stage": "BOUNDED_HARDWARE_ACCEPTED_DIRECT_FUSED_READY_FOR_WILDX_PUBLICATION",
+  "files": [
+    {
+      "path": "acceptance.json",
+      "bytes": 5108,
+      "sha256": "2FBE3A08B9FA5F88168A9D8556AC9BAA568D0CFD1D7FACABD303F2A2C381C259"
+    },
+    {
+      "path": "app-identity.json",
+      "bytes": 2565,
+      "sha256": "05A645FD4971A6DA271904A425DF2D0541A6F779701A834912140AFA500C3D1E"
+    },
+    {
+      "path": "archive_manifest.json",
+      "bytes": 98046,
+      "sha256": "562EC97E9F1C24AC2CF3D7C98EB6897C437F51C193CD43186DF07A2E45858BE5"
+    },
+    {
+      "path": "evidence/app_build/build.json",
+      "bytes": 56398,
+      "sha256": "4BC3CF34210A3C5BCDCBC4C95058FB935120FD4C7FFB18A991ABBF751790D99C"
+    },
+    {
+      "path": "evidence/app_source/source_manifest.json",
+      "bytes": 91208,
+      "sha256": "634F923B611C308FEC95578504A4A5DE0C0568561FB1C158C06FE3AD80EE41FB"
+    },
+    {
+      "path": "evidence/build_preparation.json",
+      "bytes": 1932,
+      "sha256": "A14BB64EADCC18EB4B5A01184104674998535738E0194C5FDC72604B4FED4773"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r1/catalog-before.json",
+      "bytes": 3157,
+      "sha256": "F2CEAB2434CA75B01375562FC9E2E75FFFECB562FF80BFE067F6343427B41892"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r1/events.log",
+      "bytes": 2663,
+      "sha256": "4A2EA69C6F387DA4AC6DE1DFEFC38A940E27E04899DAD20FA4197BF616F1B255"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r1/failure.json",
+      "bytes": 477,
+      "sha256": "E849C0572D37EBA90248A3C6535B4784C47F801779A38A6AE720A23721B3391D"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r1/initial-status.json",
+      "bytes": 173,
+      "sha256": "17517916E1F72C43F220B601A090561F66BA1707DB30C473D4A1437A91B510FC"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/catalog-after.json",
+      "bytes": 3248,
+      "sha256": "9FF1D90C71EE7D36D408B1B9EFE9D3BABCEA3A9628A8AD58101EF2F28A4992E8"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/catalog-before.json",
+      "bytes": 3157,
+      "sha256": "F2CEAB2434CA75B01375562FC9E2E75FFFECB562FF80BFE067F6343427B41892"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/compact-ap.json",
+      "bytes": 244,
+      "sha256": "0BB8F3C30B447188DBECE367CA198EB7CB227996B60ADD9DD74273E66BA01A4B"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/compact-ap.png",
+      "bytes": 19697,
+      "sha256": "7198C75F5996D3F14E32904F27F444F71F3D27873B536C73DA435CB1AB4F35A4"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/compact-lfp.json",
+      "bytes": 246,
+      "sha256": "C8094D5D5A9EA5D6421CA98B7D7AE3801A4973F6746C351E3109C4FF917328A6"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/compact-lfp.png",
+      "bytes": 59895,
+      "sha256": "1119E18DD7577C381AA934F9DC0E8C3423E69960E6B2D54D667A820703D7BA5A"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/events.log",
+      "bytes": 22785,
+      "sha256": "6D720A2BC45F21F4F1E39304C9BEAFEAF0D7E708F7942A5DB1E030E2BA39CF22"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/failure.json",
+      "bytes": 2886,
+      "sha256": "0E4235BB8DD55860514E1A35F25D5074F5ABF9E53C50F0DAEFAE5A10C254BDC7"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/initial-status.json",
+      "bytes": 173,
+      "sha256": "298500A19A870B58DA945DE37F38313FBED1142EE23932FB725C320D232FDBDD"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/phase-results.json",
+      "bytes": 555,
+      "sha256": "BEB2E3AA5EF51CE09BB7741B43068662B93DF5662AAB915E2D5A293F8496CA55"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/recording-status.json",
+      "bytes": 174,
+      "sha256": "6097DDB40BCF7B4B9D5BB7B4940DA1D65D04A70207016181A65C4DB8B41E2CDA"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/restore-profile.json",
+      "bytes": 43,
+      "sha256": "90420BBAF9E52C419E8BCAE1F298CF01BD2CE595CBDBE01DD8965E617E078AE1"
+    },
+    {
+      "path": "evidence/hil/compact-sd-r3/stopped-status.json",
+      "bytes": 178,
+      "sha256": "96AF2819AA7F32BEC2500B2EDAB363887831F9C04D458C14D41ACDC714A7B89F"
+    },
+    {
+      "path": "evidence/hil/post-restore-return/events.log",
+      "bytes": 1318,
+      "sha256": "6D16FD7487FC6980E39188321BA75B4B408A21B97A7EDE0E98FEF5920F28A93C"
+    },
+    {
+      "path": "evidence/native-result.json",
+      "bytes": 489,
+      "sha256": "2B9EB4DFDBF99BD46241F4AE6C5DB52EF1B930FE3DF954EEBE56222F45AD381E"
+    },
+    {
+      "path": "evidence/readback/export/capture_status.txt",
+      "bytes": 1937,
+      "sha256": "80ED0B73BA94693811A7D8EE76F2460ED6F47FEEF459609661ED5CF5F559D6E2"
+    },
+    {
+      "path": "evidence/readback/preview_audit/result.json",
+      "bytes": 4500,
+      "sha256": "171335A766C47BF9E60FB3BB78D8A03F646DED2312BC7A8EF6E824391E642544"
+    },
+    {
+      "path": "evidence/readback/result.json",
+      "bytes": 6824,
+      "sha256": "5BE3490F21F401CF4277B634C4A1AAFBE11AC79E87F74FEADB984DB105C01A8E"
+    },
+    {
+      "path": "evidence/tools/LifecycleSdReadback.cs",
+      "bytes": 6428,
+      "sha256": "497BBC2A33F965EA34ADF358DF830B60CA4EBF5B174B5DEAB6B493BB44E9EEEE"
+    },
+    {
+      "path": "evidence/tools/package_compact_preview.py",
+      "bytes": 6312,
+      "sha256": "7A6070750B567C91E70E1D882C7D977D051DDD5F757E6CC77262DEBBDFAD707F"
+    },
+    {
+      "path": "evidence/tools/validate_compact_preview_hil.py",
+      "bytes": 5741,
+      "sha256": "922D116EDD508B5EA8474DCD9F97E30CE190EF8F8B1CE4B05A8B7C73DB5CA608"
+    },
+    {
+      "path": "evidence/uart_query/openocd.log",
+      "bytes": 3691,
+      "sha256": "6E31D47EE733AB16CA67D43B86C31ADBBF49A2DA3E1E7517C4EE384ACEA744A5"
+    },
+    {
+      "path": "evidence/uart_query/result.json",
+      "bytes": 1457,
+      "sha256": "6D7A997E2D8FC6945C689C22301FB646AEA21055EFCF6688EB866EFC00F180F2"
+    },
+    {
+      "path": "usb-identity.json",
+      "bytes": 2178,
+      "sha256": "BC740B2F3D401227620EAEDB4B9192FE288F64BC9043C4591718F5191434B7FE"
+    },
+    {
+      "path": "V1_APP_82E51DEA_compact4_preview_20261025.hex",
+      "bytes": 815508,
+      "sha256": "2945F6523C3187BB226472149F203847A1D37D8BE6B0D9E6F30052239AF3F174"
+    },
+    {
+      "path": "V1_compact_preview_sources_20261025.zip",
+      "bytes": 1044950,
+      "sha256": "28754D94A92D9D865427C90974028EE5F4D8D8A2881FA3DA3F26FE7B54804CCE"
+    },
+    {
+      "path": "V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
+      "bytes": 1044112,
+      "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F"
+    },
+    {
+      "path": "V1_fused_BOOT_USB4F7B521A_APP82E51DEA_compact4_preview_20261025.hex",
+      "bytes": 5745164,
+      "sha256": "63C60326FCB89A83D72862706E7D5406B2EE0F5FE8FE5A3F2217290D4C2093BE"
+    },
+    {
+      "path": "V1_USB_service_1.0.108_USB4F7B521A_lifecycle_20261025.hex",
+      "bytes": 728688,
+      "sha256": "0BDDFBEDDB1FE3F842E485732F0B1104AD75708EB8446A509AA26C943E5CCC2B"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 676,
+      "sha256": "DB791E53A85982C2B62D319072DD3C391BD5917859D9CD3B1A836AA89826118E"
+    }
+  ],
+  "app_crc32": "82E51DEA",
+  "usb_crc32": "4F7B521A",
+  "app_version": "build82E51DEA (compact four-channel BLE preview)",
+  "usb_version": "1.0.108",
+  "host_version": "1.0.0.138",
+  "merge_tool_sha256": "8893A47ED9D6048C00914942D6789F966051D470AF1A04007A9D941EF40AD43E",
+  "fused_lf_normalized": true,
+  "configuration_excluded": true,
+  "hardware_access_during_packaging": false,
+  "rebuilt": false,
+  "resealed": false,
+  "published": false,
+  "limits": [
+    "One bounded P12/20k recording; four selected channels on P1, AP then LFP; not all ports/rates or endurance.",
+    "Preview remains best effort with explicit gaps; no claim of full-rate spike monitoring or physical ADC synchronization.",
+    "Observer r3 exit1 after successful Stop/catalog was post-restore status confirmation across a clock reset; fresh BLE identity/profile confirmation is separate.",
+    "No higher UART write/trial: module did not answer documented read queries;115200 unchanged.",
+    "USB streaming and speed evidence inherited unchanged from137/USB4F; not repeated for the APP-only preview change.",
+    "Faster UART remains blocked on confirmed module configuration access/rollback semantics; no higher-rate claim.",
+    "Source archive preserves admitted inputs and object identities; no full clean-rebuild claim."
+  ]
+}

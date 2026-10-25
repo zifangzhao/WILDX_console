@@ -1,9 +1,9 @@
-# WILD-X 1.0.0.137
+# WILD-X 1.0.0.138
 
-[Download installer](WILDX_console-Setup-1.0.0.137.exe).
+[Download installer](WILDX_console-Setup-1.0.0.138.exe).
 
-Restores double-buffered SD-to-USB downloads. On the connected V1, the same recording exported at 43.52 MB/s versus 35.11 MB/s, with identical data hashes. No new firmware is needed for this speed fix.
+Adds up to four selected V1 BLE preview channels with the bundled APP firmware. AP and LFP preview passed a two-probe 20 kHz SD recording and full sample/readback comparison. Existing firmware retains single-channel preview.
 
-Includes the checked V1 USB 1.0.108 and APP lifecycle/timing bundle. V2 firmware is unchanged. Existing firmware remains supported.
+UART remains 115,200 baud. USB firmware, buffered downloads and V2 are unchanged.
 
-[Release details](../ReleaseSources/1.0.0.137/README.md) / [manifest](release-manifest.json).
+[Release details](../ReleaseSources/1.0.0.138/README.md) / [manifest](release-manifest.json).

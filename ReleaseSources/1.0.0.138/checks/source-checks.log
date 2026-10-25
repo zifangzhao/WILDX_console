@@ -1,0 +1,2 @@
+USB512_interface\USB512_interface\Ble\NpV1BlePreviewForm.cs(21,31): warning CS0649: Field 'NpV1BlePreviewForm.RecordingInfo' is never assigned to, and will always have its default value null
+PASS 13336 compact/legacy decode, actual firmware AP/LFP packets, CRC, fragmented/truncated framing, control priority, source offsets, four traces, selection and layout checks; fake radio, no hardware or app build.

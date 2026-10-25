@@ -1,0 +1,91 @@
+{
+  "role": "APP",
+  "label": "COMPACT4_20261025",
+  "abi": 258,
+  "image": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_sealed\\V1_APP_COMPACT4_20261025.hex",
+  "sha256": "2945F6523C3187BB226472149F203847A1D37D8BE6B0D9E6F30052239AF3F174",
+  "crc32": "82E51DEA",
+  "bytes": 296380,
+  "sp": "20017F70",
+  "pc": "0802038D",
+  "buildIdHex": "3561636438633237373132353430633533616633346134636662393632613738",
+  "manifest_address": "0801E000",
+  "manifest_hex": "584E50314D4E463101000000444C4156315050410100000000000208BC850400EA1DE582707F01208D0302083561636438633237373132353430633533616633346134636662393632613738000000000201000000000000000000000000000000000000000000000000000000000000000000000000000000000000E8AF4A90",
+  "input": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_build\\compact_preview_UNSEALED.hex",
+  "input_sha256": "1523D2DF7A2CB35573E3DCAB408365DFF5EFFFCC1A7A6616A5DD546C4D6CAF12",
+  "axf_sha256": "BB28EBC4A295309100AC2EA5D177DE862C0B62A41594B07E8BE35BD39CCF1EBF",
+  "execution_regions": [
+    {
+      "name": "ER_IROM1",
+      "base": 134348800,
+      "size": 278900,
+      "maximum": 1433600
+    },
+    {
+      "name": "RW_IRAM1",
+      "base": 536870912,
+      "size": 98160,
+      "maximum": 98304
+    },
+    {
+      "name": "RW_SD_INPUT",
+      "base": 536969216,
+      "size": 65536,
+      "maximum": 65536
+    },
+    {
+      "name": "RW_BLE_UART_RX",
+      "base": 537034752,
+      "size": 5132,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_SD_TRACE",
+      "base": 537042944,
+      "size": 1120,
+      "maximum": 24576
+    },
+    {
+      "name": "RW_SD_RU0",
+      "base": 537067520,
+      "size": 524288,
+      "maximum": 524288
+    },
+    {
+      "name": "RW_NOINIT",
+      "base": 537649152,
+      "size": 24,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_NP_LLI",
+      "base": 537657344,
+      "size": 384,
+      "maximum": 512
+    },
+    {
+      "name": "RW_CAMERA_STATE",
+      "base": 537657856,
+      "size": 4624,
+      "maximum": 65024
+    },
+    {
+      "name": "RW_NP_CAPTURE",
+      "base": 537722880,
+      "size": 752728,
+      "maximum": 786432
+    },
+    {
+      "name": "RW_SD_RU1",
+      "base": 538574848,
+      "size": 851968,
+      "maximum": 851968
+    }
+  ],
+  "known_stack_bytes": 5368,
+  "stack_allocation_bytes": 8192,
+  "stack_unknown": "Cycles, Untraceable Function Pointers",
+  "hardware_tested": false,
+  "published": false,
+  "fused": false
+}

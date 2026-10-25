@@ -35,6 +35,7 @@ namespace CE32_console {
   internal const uint CatalogReadOnly=0x01000000;
   // Versioned V1 filesystem, not the V2 logger board or payload format.
   internal const uint StoreV2=0x02000000,StoreV2Selected=0x04000000;
+  internal const uint CompactPreview=0x08000000;
   internal static bool HasReadOnlyCatalog(NpSdStatus s){return s!=null&&(s.Flags&CatalogReadOnly)!=0&&(s.Flags&16)==0&&s.Start==0&&s.Capacity>8192;}
   internal static bool IsMedia(NpSdStatus s){return s!=null&&s.Mask==0&&s.Hz==0&&(s.Flags&(MediaCapability|MediaSelected))==(MediaCapability|MediaSelected);}
   internal static bool TheoreticalMode(uint mask,uint hz){
@@ -253,6 +254,8 @@ namespace CE32_console {
   internal uint Id,Session,Hz,Kind,Probe,Channel,Band,ValidMask,Stride,Dropped;
   internal ulong FirstTick;
   internal byte[] Data;
+  internal ushort[] Channels,ValidMasks;
+  internal uint[] TickOffsets;
   int received;
   internal NpV1PreviewBurst(uint id){Id=id;}
   internal static byte[] Request(uint id,uint kind,uint probe,uint channel,uint phase,uint session,uint band){
@@ -262,6 +265,19 @@ namespace CE32_console {
    for(int i=0;i<w.Length;i++)Buffer.BlockCopy(BitConverter.GetBytes(w[i]),0,b,4*i,4);
    Buffer.BlockCopy(BitConverter.GetBytes(NpSdControl.Crc(b,60)),0,b,60,4);return b;
   }
+  internal static byte[] CompactRequest(uint id,uint kind,uint probe,uint[] channels,uint phase,uint session,uint band){
+   if((kind!=5&&kind!=3&&kind!=4)||channels==null||channels.Length<1||channels.Length>4)
+    throw new ArgumentException("Invalid compact V1 preview selection");
+   for(int i=0;i<channels.Length;i++){
+    if(channels[i]>=384)throw new ArgumentException("Invalid V1 channel");
+    for(int j=0;j<i;j++)if(channels[j]==channels[i])throw new ArgumentException("Select different preview channels");
+   }
+   byte[] b=Request(id,kind==5?2:kind,probe,channels[0],phase,session,band);
+   Buffer.BlockCopy(BitConverter.GetBytes(kind),0,b,8,4);
+   Buffer.BlockCopy(BitConverter.GetBytes((uint)channels.Length),0,b,36,4);
+   for(int i=1;i<channels.Length;i++)Buffer.BlockCopy(BitConverter.GetBytes(channels[i]),0,b,36+i*4,4);
+   Buffer.BlockCopy(BitConverter.GetBytes(NpSdControl.Crc(b,60)),0,b,60,4);return b;
+  }
   internal bool Accept(byte[] b){
    if(b==null||b.Length!=224||NpSdGeometry.U(b,0)!=Magic||NpSdGeometry.U(b,4)!=Id)return false;
    uint session=NpSdGeometry.U(b,8),hz=NpSdGeometry.U(b,12),range=NpSdGeometry.U(b,24),select=NpSdGeometry.U(b,28);
@@ -269,6 +285,7 @@ namespace CE32_console {
    ulong first=NpSdGeometry.U(b,16)|((ulong)NpSdGeometry.U(b,20)<<32);
    int at=(int)(range&65535),total=(int)(range>>16);
    uint stride=NpSdGeometry.U(b,192),dropped=NpSdGeometry.U(b,196);
+   if(kind==5)return AcceptCompact(b,session,hz,probe,band,channel,first,range,stride,dropped);
    if(session==0||probe<1||probe>3||!NpV1BleProtocol.TheoreticalMode(1U<<(int)(probe-1),hz)||channel>=384||band>1||
       (kind!=0&&kind!=2)||total!=(kind==0?1560:160)||
       stride!=(band==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))throw new IOException("Invalid V1 preview metadata");
@@ -279,6 +296,47 @@ namespace CE32_console {
       first!=FirstTick||stride!=Stride||dropped!=Dropped||total!=Data.Length)throw new IOException("Mixed/incomplete preview");
    int n=Math.Min(160,total-at);if(n<=0)throw new IOException("Repeated preview fragment");
    Buffer.BlockCopy(b,32,Data,at,n);received+=n;return received==Data.Length;
+  }
+  bool AcceptCompact(byte[] b,uint session,uint hz,uint probe,uint band,uint channel,ulong first,uint range,uint stride,uint dropped){
+   uint count=NpSdGeometry.U(b,200);
+   if(Data!=null||NpSdGeometry.U(b,220)!=NpSdControl.Crc(b,220)||session==0||probe<1||probe>3||
+      !NpV1BleProtocol.TheoreticalMode(1U<<(int)(probe-1),hz)||band>1||channel>=384||range!=((128U<<16)|16U)||
+      count<1||count>4||NpSdGeometry.U(b,204)!=1||NpSdGeometry.U(b,208)!=0||NpSdGeometry.U(b,212)!=0||NpSdGeometry.U(b,216)!=0||
+      stride!=(band==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))throw new IOException("Invalid compact V1 preview metadata");
+   var channels=new ushort[count];var masks=new ushort[count];var offsets=new uint[count];uint any=0,period=band==0?780U:9360U;
+   for(int i=0;i<4;i++){
+    ushort ch=BitConverter.ToUInt16(b,160+i*2),mask=BitConverter.ToUInt16(b,168+i*2);uint offset=NpSdGeometry.U(b,176+i*4);
+    if(i>=count){
+     if(ch!=0||mask!=0||offset!=0)throw new IOException("Nonzero unused V1 preview channel");
+     for(int n=0;n<32;n++)if(b[32+i*32+n]!=0)throw new IOException("Nonzero unused V1 preview samples");
+     continue;
+    }
+    if(ch>=384||offset>=period||first>ulong.MaxValue-offset-16UL*stride||(i==0&&(ch!=channel||offset!=0)))throw new IOException("Invalid compact V1 channel/time");
+    for(int j=0;j<i;j++)if(channels[j]==ch)throw new IOException("Repeated compact V1 channel");
+    for(int n=0;n<16;n++)if(BitConverter.ToUInt16(b,32+i*32+n*2)>1023)throw new IOException("Invalid compact V1 ADC code");
+    channels[i]=ch;masks[i]=mask;offsets[i]=offset;any|=mask;
+   }
+   if(any==0)throw new IOException("Empty compact V1 preview");
+   Data=new byte[128];Buffer.BlockCopy(b,32,Data,0,128);received=128;
+   Id=NpSdGeometry.U(b,4);Session=session;Hz=hz;Kind=5;Probe=probe;Band=band;Channel=channel;FirstTick=first;Stride=stride;Dropped=dropped;
+   Channels=channels;ValidMasks=masks;TickOffsets=offsets;return true;
+  }
+  internal static uint SourceOffset(uint channel,uint band,uint phase){
+   uint adc=(channel/24)*2+(channel&1),sample=(channel%24)/2,word=adc<30?adc%5:adc-30;
+   return phase+(band==0?(sample+1)*60:sample*780)+word*10;
+  }
+  internal double[][] DecodeCompact(uint phase){
+   if(Kind!=5||Data==null||received!=128||phase>=9360)throw new IOException("Complete compact V1 packet required");
+   uint period=Band==0?780U:9360U,origin=SourceOffset(Channel,Band,phase)%period;
+   if(FirstTick%period!=origin)throw new IOException("V1 preview phase/origin mismatch");
+   var values=new double[Channels.Length][];
+   for(int c=0;c<Channels.Length;c++){
+    uint offset=(SourceOffset(Channels[c],Band,phase)%period+period-origin)%period;
+    if(TickOffsets[c]!=offset)throw new IOException("V1 preview channel time mismatch");
+    values[c]=new double[16];
+    for(int n=0;n<16;n++)values[c][n]=(ValidMasks[c]&(1U<<n))==0?double.NaN:BitConverter.ToUInt16(Data,c*32+n*2);
+   }
+   return values;
   }
   int Word(int at,int line,int word){int v=0;for(int i=0;i<10;i++)v=(v<<1)|((Data[at+10*word+i]>>line)&1);return v;}
   internal int FindPhase(){

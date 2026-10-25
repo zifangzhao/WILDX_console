@@ -1,0 +1,15 @@
+{
+  "result": "PASS exact compact source ZIP read-back",
+  "zip": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\source_archive\\V1_compact_preview_sources_20261025.zip",
+  "sha256": "28754D94A92D9D865427C90974028EE5F4D8D8A2881FA3DA3F26FE7B54804CCE",
+  "bytes": 1044950,
+  "source_entries": 173,
+  "zip_entries": 174,
+  "source_bytes": 6575427,
+  "external_reference_count": 4,
+  "parent_archive_sha256": "E0240A26D18382C90D8983414E51ACA2068A418202E7D8D96D5685190E0176E7",
+  "manifest_sha256": "562EC97E9F1C24AC2CF3D7C98EB6897C437F51C193CD43186DF07A2E45858BE5",
+  "hardware_access": false,
+  "compiler_run": false,
+  "published": false
+}

@@ -36,6 +36,16 @@ namespace USB512_interface
                 }
                 int bodyLength=identity?192:command==0x95?4:native?512:preview?224:64;
                 int length = bodyLength+(lead == 0x3c ? 3 : 4);
+                if(preview && previewMagic==0x3156504eU && pending.Count-at>=34){
+                    int kind=pending[at+31]&15;
+                    if(kind!=0 && kind!=2 && kind!=5){at++;continue;}
+                }
+                bool v1Compact=preview && previewMagic==0x3156504eU && pending.Count-at>=34 && (pending[at+31]&15)==5;
+                if(v1Compact){
+                    bool impossible=false;
+                    for(int i=at+35;i<Math.Min(pending.Count,at+162);i+=2)if(pending[i]>=4){impossible=true;break;}
+                    if(impossible){at++;continue;}
+                }
                 if(preview && previewMagic==NpV2PreviewBurst.Magic && pending.Count-at>=34){
                     byte kind=pending[at+31];
                     if((kind&128)==0 && (kind&64)!=0 && (kind&63)<=2){
@@ -61,7 +71,7 @@ namespace USB512_interface
                 // Preview has its own fixed metadata/body contract and no payload CRC.
                 // B8/B9 remain independent fixed 64-byte, CRC-checked controls.
                 int crcAt=identity?188:60;
-                if (!tail || (!preview && !native && BitConverter.ToUInt32(body, crcAt) != NpSdControl.Crc(body, crcAt))) { at++; continue; }
+                if (!tail || (v1Compact && BitConverter.ToUInt32(body,220)!=NpSdControl.Crc(body,220)) || (!preview && !native && BitConverter.ToUInt32(body, crcAt) != NpSdControl.Crc(body, crcAt))) { at++; continue; }
                 frames.Add(Tuple.Create(command, body)); at += length;
             }
             if (at != 0) pending.RemoveRange(0, at);

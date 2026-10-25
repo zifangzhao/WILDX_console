@@ -1,0 +1,64 @@
+{
+  "result": "PASS same-extent production export equivalence",
+  "uid": "001D00065942500B20313354",
+  "usb_crc": "412D4D02",
+  "session": 1792385836,
+  "native_payload_bytes": 335544320,
+  "serial136_seconds": 9.5578863,
+  "prefetch137_seconds": 7.7101557,
+  "serial136_MB_s": 35.10654023996916,
+  "prefetch137_MB_s": 43.51978521004447,
+  "binary_files": [
+    {
+      "file": "analogin.dat",
+      "bytes": 2621440,
+      "sha256": "0160D16BE3AFB241304D1D53DD63A9F5C2EC3911F39D04AD5EF71B55CA931D44"
+    },
+    {
+      "file": "CE_params.bin",
+      "bytes": 1536,
+      "sha256": "FD483A1AE1957405F7BEC6ECD2F379F00AA6BD303FDEF3576ADAC1E101305239"
+    },
+    {
+      "file": "descriptor.bin",
+      "bytes": 512,
+      "sha256": "99EB2F619148E2BFE1D34E35F3C12F5EFED3B40B2EFD631FA46CDC43631CC59F"
+    },
+    {
+      "file": "footer.bin",
+      "bytes": 512,
+      "sha256": "6AE833AE603770053D5752A1951C2C20FA14128FD34BDDA52A121465DF0BEC11"
+    },
+    {
+      "file": "np1_ap.dat",
+      "bytes": 154865664,
+      "sha256": "A223329B6ADF2DFFDCCD1B7D99EF384ACA1EEB7A47B84620699960043C1018AB"
+    },
+    {
+      "file": "np1_lfp.dat",
+      "bytes": 12904704,
+      "sha256": "641203F9EE89C7094F0EB943772F0DEA828E7BA453F03B52143EF7697CFC07BA"
+    },
+    {
+      "file": "np2_ap.dat",
+      "bytes": 154865664,
+      "sha256": "704B89BA5D4BB673846ECBB9754FEAEEDA6C3B7F7589E9FE8B89EB8DBF82FEB3"
+    },
+    {
+      "file": "np2_lfp.dat",
+      "bytes": 12904704,
+      "sha256": "9922B7132C65BD4CF104D615EDF3CDE8D2A89A4AD11090FFD93F4B3D4AE54EB7"
+    },
+    {
+      "file": "recorded_clock.bin",
+      "bytes": 512,
+      "sha256": "24E0E2413DDC16E1703499488B52131CB00101DC486CFDF31F2D241E99AA39F5"
+    },
+    {
+      "file": "sensors.bin",
+      "bytes": 839680,
+      "sha256": "A7E05B7B90A41DC5313165FAFA5EBEB9243B736DC2A98CD1D20768FEF0A71B05"
+    }
+  ],
+  "limits": "One bounded existing extent; no SD writes. Counter time buckets overlap; not additive. No IMRO files existed in either export."
+}

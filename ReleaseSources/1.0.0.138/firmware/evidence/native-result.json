@@ -1,0 +1,10 @@
+{
+  "result": "PASS actual compact header and legacy regression",
+  "checks": 12170,
+  "packets": 121,
+  "fixture_sha256": "194EE3092C80E1BBE1861B4483876B6769309EFAF1E4B80CE9C1CD0E11521369",
+  "header_sha256": "D13E8F8A3B61D0FD18B8781C65A8DB73AA4139160E04009181A8E8774AD6E591",
+  "vectors_sha256": "664938E40BDA52A63F524F0B75E6ED73FC91D077ECBC175D5CDCA34C821A984C",
+  "compiler": "MSVC /std:c11 /O2 /W4 /WX; execution transcript retained in originating chat",
+  "hardware_access": false
+}

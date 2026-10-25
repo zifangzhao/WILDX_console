@@ -1,0 +1,73 @@
+{
+  "role": "USB",
+  "label": "1.0.108-lifecycle-recovery",
+  "abi": 258,
+  "image": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\usb_recovery_sealed\\V1_USB_1.0.108-lifecycle-recovery.hex",
+  "sha256": "0BDDFBEDDB1FE3F842E485732F0B1104AD75708EB8446A509AA26C943E5CCC2B",
+  "crc32": "4F7B521A",
+  "bytes": 264808,
+  "sp": "200186D0",
+  "pc": "0818038D",
+  "buildIdHex": "3634383838383933393633613764663131636134343462353837383563613936",
+  "manifest_address": "0817E000",
+  "manifest_hex": "584E50314D4E463101000000444C4156314253550100000000001808680A04001A527B4FD08601208D03180836343838383839333936336137646631316361343434623538373835636139360100000002010000000000000000000000000000000000000000000000000000000000000000000000000000000000006FD62596",
+  "input": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_lifecycle_release_20261025\\usb_recovery_build\\lifecycle_UNSEALED.hex",
+  "input_sha256": "019D4E9106368FDA61D54A8001EC9AB24F250871C02E97BFAC2A58910099693C",
+  "axf_sha256": "A28C4DEC12A75556A8264BD515B9F89EFA8B09C13DE66155BB5250117C446E03",
+  "execution_regions": [
+    {
+      "name": "ER_IROM1",
+      "base": 135790592,
+      "size": 237484,
+      "maximum": 524288
+    },
+    {
+      "name": "RW_IRAM1",
+      "base": 536870912,
+      "size": 100048,
+      "maximum": 114688
+    },
+    {
+      "name": "RW_USB_DMA",
+      "base": 536985600,
+      "size": 864,
+      "maximum": 16384
+    },
+    {
+      "name": "RW_NP_CAPTURE_SRAM1",
+      "base": 537001984,
+      "size": 593920,
+      "maximum": 647168
+    },
+    {
+      "name": "RW_NOINIT",
+      "base": 537649152,
+      "size": 4,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_NP_LLI",
+      "base": 537657344,
+      "size": 384,
+      "maximum": 512
+    },
+    {
+      "name": "RW_NP_CAPTURE",
+      "base": 537722880,
+      "size": 760408,
+      "maximum": 786432
+    },
+    {
+      "name": "RW_USB_DOWNLOAD1",
+      "base": 538574848,
+      "size": 524288,
+      "maximum": 524288
+    }
+  ],
+  "known_stack_bytes": 3016,
+  "stack_allocation_bytes": 4096,
+  "stack_unknown": "Cycles, Untraceable Function Pointers",
+  "hardware_tested": false,
+  "published": false,
+  "fused": false
+}

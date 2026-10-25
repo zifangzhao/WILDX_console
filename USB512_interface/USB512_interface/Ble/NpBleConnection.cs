@@ -480,7 +480,7 @@ namespace USB512_interface
         internal async Task<bool> TryWritePreview(byte[] request,int expectedEpoch,CancellationToken cancel)
         {
             if(request==null || request.Length!=64 || (BitConverter.ToUInt32(request,0)!=NpV2PreviewBurst.Magic && BitConverter.ToUInt32(request,0)!=NpV1PreviewBurst.Magic) ||
-                BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)>(BitConverter.ToUInt32(request,0)==NpV2PreviewBurst.Magic?5U:4U) || BitConverter.ToUInt32(request,12)==0 ||
+                BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)>5U || BitConverter.ToUInt32(request,12)==0 ||
                 BitConverter.ToUInt32(request,60)!=NpSdControl.Crc(request,60))throw new ArgumentException("Valid preview request required.");
             if(!await transaction.WaitAsync(0,cancel))return false; // Recording/status/clock controls take priority.
             try{await WriteFrame(NpBleWire.Frame(0xb9,request),expectedEpoch,cancel);return true;}

@@ -1,0 +1,18 @@
+2026-10-25T06:25:51.1327810Z version=1.0.0.138; uid=001D00065942500B20313354; action=record
+2026-10-25T06:25:53.1561608Z connect=address=F6D598CA53BA; 0ms begin | 37ms selected-address retained-type reuse; connection pending | 37ms FFF0 service discovery; cache_mode=Uncached | 1601ms FFF0 service discovery result=Success; cache_mode=Uncached; attempt=1 | 1603ms FFF1/FFF2 characteristic discovery; cache_mode=Uncached | 1664ms notification subscription | 2000ms connected
+2026-10-25T06:25:53.3413616Z initial={"Operation":0,"RequestId":280229891,"Error":0,"State":0,"Fault":0,"Mask":3,"Hz":15000,"Chunks":0,"Start":68386816,"End":0,"Capacity":500695040,"Flags":238583697,"LastId":0}
+2026-10-25T06:25:53.3684482Z uid_verified=001D00065942500B20313354
+2026-10-25T06:25:53.4672815Z catalog-before_count=35
+2026-10-25T06:25:53.4692811Z request=4E-4C-44-31-01-00-00-00-00-00-00-00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-1B-7D-75-6C
+2026-10-25T06:25:53.5470486Z reply=4E-4C-52-31-01-00-00-00-00-00-00-00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-03-00-00-00-98-3A-00-00-00-00-00-00-00-80-13-04-00-00-00-00-00-00-D8-1D-91-7F-38-0E-00-00-00-00-04-2F-B0-14
+2026-10-25T06:25:53.5470486Z request=4E-4C-44-31-01-00-00-00-01-00-00-00-02-00-00-00-03-00-00-00-20-4E-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-0D-29-EA-A4
+2026-10-25T06:25:53.6221948Z reply=4E-4C-52-31-01-00-00-00-01-00-00-00-02-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-03-00-00-00-20-4E-00-00-00-00-00-00-00-80-13-04-00-00-00-00-00-00-D8-1D-99-7F-38-0E-02-00-00-00-E4-1C-8C-99
+2026-10-25T06:25:53.6221948Z request=4E-4C-44-31-01-00-00-00-00-00-00-00-03-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-A3-A4-16-17
+2026-10-25T06:25:53.6977331Z reply=4E-4C-52-31-01-00-00-00-00-00-00-00-03-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-03-00-00-00-20-4E-00-00-00-00-00-00-00-80-13-04-00-00-00-00-00-00-D8-1D-99-7F-38-0E-02-00-00-00-35-0C-F1-CD
+2026-10-25T06:25:53.7025600Z FAIL=System.IO.IOException: V1 storage/recorder is not ready
+   at BleSuite.Call(Object o, String name, Object[] args)
+   at BleSuite.<Record>d__59.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at BleSuite.<Run>d__61.MoveNext()

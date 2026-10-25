@@ -1,0 +1,27 @@
+{
+  "stage": "SOURCE_AND_ONE_UNIT_BUILD_SCRIPT_READY_NOT_EXECUTED",
+  "parent_app_crc32": "CC50D8D2",
+  "source_manifest": "app_source/source_manifest.json",
+  "source_manifest_sha256": "634F923B611C308FEC95578504A4A5DE0C0568561FB1C158C06FE3AD80EE41FB",
+  "build_script": "Tools/V1Capture/UsbSensors/build_compact_preview.ps1",
+  "build_script_sha256": "91E58EB34FF4D452A6EC2F41419BBF7C3DA53390901F1FD8B7420D604BBB064A",
+  "preview_header_sha256": "D13E8F8A3B61D0FD18B8781C65A8DB73AA4139160E04009181A8E8774AD6E591",
+  "derived_control_sha256": "19B1AC81C4AD1E5DFF592FC680A3953BE081356F726BF240A3D74D8F169B420E",
+  "source_dependency_count": 159,
+  "changed_source_files": 2,
+  "unchanged_linked_objects_including_sensor": 74,
+  "accepted_source_delta": "Only matching compact-kind5 preview header and one 0x08000000U capability OR derived from exact frozen CC50 control bytes; all other retained source inputs verified unchanged. Fast CRC header already in the original dependency graph.",
+  "preparation_checks": [
+    "Every parent compiler dependency hash verified before copying.",
+    "All73 original reused object hashes and exact sensor object hash verified.",
+    "Derived control byte equality with the sole canonical capability delta verified.",
+    "Canonical/helper compact preview headers byte-identical.",
+    "One-unit build script PowerShell AST parse and whitespace checks passed without executing it."
+  ],
+  "build_outputs_when_main_executes": "_artifacts/v1_ble_compact_preview_20261025/app_build only",
+  "limits": "No ARM compiler, linker, seal, native-code test, hardware, version, package, Git or publication action performed here. Original CC50 scatter/options and74 linked objects remain pinned. Old240-byte RAM margin and expected112-byte state growth require actual new link-map review by main.",
+  "arm_build_performed": false,
+  "hardware_access": false,
+  "usb_changed": false,
+  "published": false
+}

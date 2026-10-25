@@ -1,0 +1,1 @@
+PASS actual138: 139 compact firmware-vector/CRC/lease assertions, 4251 legacy wire/phase/queue assertions, 18 V1 gain/layout assertions. No hardware.

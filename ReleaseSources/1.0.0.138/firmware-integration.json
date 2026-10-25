@@ -1,0 +1,18 @@
+{
+  "accepted": true,
+  "usb_crc32": "4F7B521A",
+  "app_crc32": "82E51DEA",
+  "usb_version": "1.0.108",
+  "usb_unchanged_from137": true,
+  "owner_bundle_sha256": "31070094FF8629E59FCC2EF8C90EDB309D1736DE91DACCB5F9C939066BC72858",
+  "acceptance_sha256": "2FBE3A08B9FA5F88168A9D8556AC9BAA568D0CFD1D7FACABD303F2A2C381C259",
+  "source_archive_sha256": "28754D94A92D9D865427C90974028EE5F4D8D8A2881FA3DA3F26FE7B54804CCE",
+  "fused": {
+    "path": "V1/V1_fused_BOOT_USB4F7B521A_APP82E51DEA_compact4_preview_20261025.hex",
+    "sha256": "63C60326FCB89A83D72862706E7D5406B2EE0F5FE8FE5A3F2217290D4C2093BE"
+  },
+  "uart_baud": 115200,
+  "higher_uart_promoted": false,
+  "preview_requires_new_app_firmware": true,
+  "scope": "Bounded P12/20k SD recording, four P1 AP/LFP channels, full source-bit/export/IMU readback. r3 observer cleanup timeout and separate successful fresh profile confirmation retained. No new USB/V2 changes or all-mode/endurance claim."
+}
