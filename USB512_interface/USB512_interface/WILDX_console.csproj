@@ -165,6 +165,7 @@
     <Compile Include="Ble\NpMediaExport.cs" />
     <Compile Include="Ble\WILD_VideoDecoder.cs" />
     <Compile Include="NpLogger\NpDownloadForm.cs" />
+    <Compile Include="NpLogger\NpDownloadPrefetchStream.cs" />
     <Compile Include="NpLogger\NpUsbCatalogRepair.cs" />
     <Compile Include="NpLogger\NpV2FirmwareForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

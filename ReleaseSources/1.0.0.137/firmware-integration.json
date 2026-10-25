@@ -1,0 +1,14 @@
+{
+  "accepted": true,
+  "usb_crc32": "4F7B521A",
+  "app_crc32": "CC50D8D2",
+  "usb_version": "1.0.108",
+  "owner_bundle_sha256": "B58F4806BD274418CE04968664ED4FE315A1189A0BCB24D64593278F180DFB29",
+  "acceptance_sha256": "1CA8EFEE1719D2BBEF99C152D5355CF5A6DDAB92293BC1D66DD5350D359ED841",
+  "source_archive_sha256": "E0240A26D18382C90D8983414E51ACA2068A418202E7D8D96D5685190E0176E7",
+  "fused": {
+    "path": "V1/V1_fused_BOOT_USB4F7B521A_APPCC50D8D2_lifecycle_20261025.hex",
+    "sha256": "2A87A27F58B48FFB7231CD3795D11AEAC061EDF8A6D074EF6081C10371253076"
+  },
+  "scope": "Bounded USB20k/30k, short BLE/SD15k and full new-record readback; exact owner receipts retained. Earlier412D failures retained in source evidence; no general DMA-fault or lossless/endurance claim."
+}

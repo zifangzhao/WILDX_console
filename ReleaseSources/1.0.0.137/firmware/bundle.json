@@ -1,0 +1,581 @@
+{
+  "release": "V1_LIFECYCLE_USB4F7B521A_APPCC50D8D2_20261025",
+  "stage": "CHECKED_COMPONENTS_DIRECT_FUSED_READY_FOR_WILDX_PUBLICATION",
+  "files": [
+    {
+      "path": "acceptance.json",
+      "bytes": 6499,
+      "sha256": "1CA8EFEE1719D2BBEF99C152D5355CF5A6DDAB92293BC1D66DD5350D359ED841"
+    },
+    {
+      "path": "app-identity.json",
+      "bytes": 2466,
+      "sha256": "815D5AC94CF4831CB6E31C733C4CAA49349F32A82D0CEF288C2B08BD775BF64F"
+    },
+    {
+      "path": "archive_manifest.json",
+      "bytes": 237884,
+      "sha256": "15514F1630135823F18DFEA2DB243DF0E726B96FA998FDC084C45B51BEEA211B"
+    },
+    {
+      "path": "evidence/_artifacts/v1_ble_remaining_20261025/ce32_stop_final/result.json",
+      "bytes": 342,
+      "sha256": "E7A69C72C47EDDFA4915D37A2C04AB4A71A555E9871098A9E8E1447C74A484CB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/anchor_validation.json",
+      "bytes": 508,
+      "sha256": "F9523F8ABC61A2467BBAD75D155C887161B3EDE020F44CFBE52FDEBDB75E96DB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/catalog.json",
+      "bytes": 5292,
+      "sha256": "5F4091CCA9D6FDA2B42101227C097AE727A63414A5A318B7600D28B36D8052B3"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/capture_status.txt",
+      "bytes": 1916,
+      "sha256": "50CA97B4A757BAAFEBBAC03A850E5CA71C342657B2E9E87CE2248C816F323943"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/first_sample_timestamps.json",
+      "bytes": 3081,
+      "sha256": "B14E2B007665F26B053F33E5C118037D422E81C0BAA5F53758E7B1794DBB2E24"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/probe_1.json",
+      "bytes": 760,
+      "sha256": "BD83B20D4B34C1BAAF9E2AAD13FB08C651B983C2B0E2EB3B6711F7DE60B5EC03"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/probe_2.json",
+      "bytes": 760,
+      "sha256": "987BEC8C9DD9A24A787642E9276D06B4CF5BA7A30A6B7A6EB5125522CB0DA0AD"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/probe_info.json",
+      "bytes": 744,
+      "sha256": "5F72D9C721983C40C13914EEE5B2C43D2227BC7EADD0B8AFC44F464F4567C5AC"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/recording_files.json",
+      "bytes": 1383,
+      "sha256": "F81F206006299D47679DFA5C5F7A1990EB292D06C6829009BED29DBA268E5312"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/recording_settings.json",
+      "bytes": 3718,
+      "sha256": "54D8ABAF24B69965CE8E2A41CB22AE346D0D4A7C5B7D875054BDBF467B55BA80"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/export/timestamp_calibration.json",
+      "bytes": 5185,
+      "sha256": "8642AF381B04F185F099537852E73270A9A428958BB61D7945862A9E15902064"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app-readback137-final/result.json",
+      "bytes": 6123,
+      "sha256": "210C683DFE7A1A37D4E8FF07B9D1AF3C71414531F6FF116947CBAC4DF8C0A9AA"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app_build/build.json",
+      "bytes": 51724,
+      "sha256": "95767E2664E449534E59C07588AE768625464207C9F6B93B2A6D70340FE7D314"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/app_native_check/r2/result.json",
+      "bytes": 3287,
+      "sha256": "E20E6C96402A8669B124152E5728A91C5CF09E7F69B662887B5AE1C8A436EA6F"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/catalog-after.json",
+      "bytes": 3157,
+      "sha256": "F2CEAB2434CA75B01375562FC9E2E75FFFECB562FF80BFE067F6343427B41892"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/catalog-before.json",
+      "bytes": 3066,
+      "sha256": "7B5721F6D6F31FCE3F36C6DCDC3F070AAE834F82641C6D4943F991255BB79B46"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/first_sample_timestamps.json",
+      "bytes": 2004,
+      "sha256": "D0805CD75BB420EF5CC4A86F6D35AEDC1DBEA912AF95BB75A634E5067DFF0CAB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/initial-status.json",
+      "bytes": 173,
+      "sha256": "09A6971C9A847AD2BA404A4E584DF475DE50DDD25069D445D7AC0ADD03267772"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/pc-sync.json",
+      "bytes": 134,
+      "sha256": "57872E6AC3E398755F3759E61AE43739202094A02DCD52955D05402839EED61C"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/recording_settings.json",
+      "bytes": 3969,
+      "sha256": "F41EFB739A1AFB87A3DEDF85D9134287D8D51687C656ADF4C602A30DB76900E8"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/ble-app-check/stopped-status.json",
+      "bytes": 176,
+      "sha256": "BAEB401E68535CF7ECB3E0545975A46F93A36FCFA9893C546257B867174436B0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/download-comparison.json",
+      "bytes": 2059,
+      "sha256": "E7C54E99C3E314D7258BB80299802D73316317D64D8E640139FE507EAA8BC2DA"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/acquisition_clock_queries.jsonl",
+      "bytes": 1567,
+      "sha256": "A94B9F4B1DE8CEE2CA379B0008F2E50868825AF71C99E2F80C017BECF5C8CAD1"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/experiment.json",
+      "bytes": 7100,
+      "sha256": "D8C931175DA5A5EED0AB3977385666E48AD7D37FC3F487A4FDBE10CA3E23D3DA"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/first_sample_timestamps.json",
+      "bytes": 15660,
+      "sha256": "9317D8697A8FEB9AD1194AAB055E8E19AB3FE02D8CE1FE7A15FC4FB21D5BA6FE"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/imu_native_samples_status.json",
+      "bytes": 384,
+      "sha256": "27E6E1EE41889F55743FC92172C77F934C632250ADB47FC51F63832F92DCE753"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/imu_timestamp_calibration.json",
+      "bytes": 1565,
+      "sha256": "A30C0CAC28F6B80515B04AE9A220B9A9E7BC2161DFC6AC5F7AAB9E7BC4CA6361"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/neuropixels_capture_status.txt",
+      "bytes": 3879,
+      "sha256": "3942A89D45F6109E74A78C322F13D7E2F5557D5D189DC0B3AE64C1C398D68D40"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/neuropixels_probe1_metadata.json",
+      "bytes": 726,
+      "sha256": "FE5AD277FCAD407B1CA57B90A1CEC74498C37E97AE0C846EE59DA03CB616C96E"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/neuropixels_probe2_metadata.json",
+      "bytes": 726,
+      "sha256": "9D9F90A5A6474E57EA83DC13B185699D6BCED53EC8AC87C93DF0F8590B7095CB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/neuropixels_probes.txt",
+      "bytes": 5083,
+      "sha256": "98FAE8FCD092FF743C21995E27B162AB28B45AB53C7903F6E1A7DE677AD42A9C"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/neuropixels_startup_admission.txt",
+      "bytes": 39,
+      "sha256": "FF888899797B3BBBFF6B0E833D2B49DB0CE6A3C8A4016ABD51E533D9C030E1A0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/timestamp_calibration.json",
+      "bytes": 8679,
+      "sha256": "F1465EDF2CE98DBA0B1E0468DEC48991630ED51BE8FA41B7EA9B029AF726D248"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/usb_timing_evidence.jsonl",
+      "bytes": 9737,
+      "sha256": "FB0DA536E017C1BAE4BA196CF8CBEF60F8E8E90712FD67EC77C657B199B1F348"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-20k/usb_timing_status.json",
+      "bytes": 199,
+      "sha256": "F0669BBB1AC27B5E8DC5A569795B9420A9316AA67608268C48C52ED2E7FF6E85"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/acquisition_clock_queries.jsonl",
+      "bytes": 1564,
+      "sha256": "61AC18FC74B116D01AD5D9916414118073CCC867EA331219FE6BF48523281E78"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/experiment.json",
+      "bytes": 7141,
+      "sha256": "8230C63A808A29554B0D988F4230F8B8985C5BCCC9703C939BABC5A9146B4EF2"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/first_sample_timestamps.json",
+      "bytes": 12157,
+      "sha256": "B681ECC3373F6266212AFA06477A2F7CB801336D7D20A0029FE0CBE3402CAFBD"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/imu_native_samples_status.json",
+      "bytes": 383,
+      "sha256": "96399197C0D665A0B93802AA246F6711FF2946C4419657F0FBB720653900DA0D"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/imu_timestamp_calibration.json",
+      "bytes": 1565,
+      "sha256": "389863F36BD2700200ABC2556EB35ECEC1A2C690E7870A068F35391C789E287F"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/neuropixels_capture_status.txt",
+      "bytes": 3930,
+      "sha256": "7AD295A8398C19F6B8BBCD3D95FC924F4E9265D9BDB4A341BF78DDD7AB9212B6"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/neuropixels_probe1_metadata.json",
+      "bytes": 726,
+      "sha256": "FE5AD277FCAD407B1CA57B90A1CEC74498C37E97AE0C846EE59DA03CB616C96E"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/neuropixels_probes.txt",
+      "bytes": 3244,
+      "sha256": "47395D7B6C87EA0754380D2FF0860A8C260A2E29E692D6091E8106E0D0975B5E"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/neuropixels_startup_admission.txt",
+      "bytes": 36,
+      "sha256": "B86D211954F2B32A9D24772E759154BBBCA86CE5BD6CAC56EBCB7A286665B9B5"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/timestamp_calibration.json",
+      "bytes": 4968,
+      "sha256": "01A73F2BA03A91AC016F27F45D99EABB8BC774B6C255B232AF943425143AAB5F"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/usb_timing_evidence.jsonl",
+      "bytes": 8592,
+      "sha256": "B5F31383A9284E4DD589D0E4C0512D81F152548A13DD393A90C15907AB1DD5EC"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb108-30k/usb_timing_status.json",
+      "bytes": 199,
+      "sha256": "F0669BBB1AC27B5E8DC5A569795B9420A9316AA67608268C48C52ED2E7FF6E85"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/acquisition_clock_queries.jsonl",
+      "bytes": 1567,
+      "sha256": "45057CBB06D8AF8E1580D44A6F6F9FFCA491A923888FDE22BDA8EABAB2128ABA"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/experiment.json",
+      "bytes": 7058,
+      "sha256": "BDA17BBB1C84B25F7564888B6992AF867B9EC8CCE9B57F8DB8FE86A8F1160C7C"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/first_sample_timestamps.json",
+      "bytes": 15727,
+      "sha256": "A03EC418BC216CDD98778A23EE67C51920115B8F3B6D1F60BC0B22D1E47D54C8"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/imu_native_samples_status.json",
+      "bytes": 384,
+      "sha256": "82A23DC580CBB735288D2D258FAC7AD39AEE6D9843290B4EB05CCAC58AE04BAA"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/imu_timestamp_calibration.json",
+      "bytes": 1565,
+      "sha256": "30C70B810303F379B2C8E99CBC949B87C235D4D9503F67879CC59A8F999681EA"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/neuropixels_capture_status.txt",
+      "bytes": 3877,
+      "sha256": "B5BF6D303E434BD77CE69101EAD25D778300D9F290DF6EF0234DF2F416849949"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/neuropixels_probe1_metadata.json",
+      "bytes": 726,
+      "sha256": "FE5AD277FCAD407B1CA57B90A1CEC74498C37E97AE0C846EE59DA03CB616C96E"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/neuropixels_probe2_metadata.json",
+      "bytes": 726,
+      "sha256": "9D9F90A5A6474E57EA83DC13B185699D6BCED53EC8AC87C93DF0F8590B7095CB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/neuropixels_probes.txt",
+      "bytes": 5083,
+      "sha256": "36FF731BCCDBC0B828489BC06FF5D54A7A2E26C525C5770ED3052B56F419467C"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/neuropixels_startup_admission.txt",
+      "bytes": 39,
+      "sha256": "FF888899797B3BBBFF6B0E833D2B49DB0CE6A3C8A4016ABD51E533D9C030E1A0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/timestamp_calibration.json",
+      "bytes": 8735,
+      "sha256": "2432AB501B5EC0E4756B583FB7DB0DF58F6A2E22C4BBD12652AF1D2D39DA6448"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/usb_timing_evidence.jsonl",
+      "bytes": 9738,
+      "sha256": "8727228643AC289C34FF398E78C454E0CC9F24E2F4D987B464511C84452C9E73"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-baseline40ab-r2/usb_timing_status.json",
+      "bytes": 199,
+      "sha256": "F0669BBB1AC27B5E8DC5A569795B9420A9316AA67608268C48C52ED2E7FF6E85"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/acquisition_clock_queries.jsonl",
+      "bytes": 782,
+      "sha256": "751FC0A078F90D9CA53ACC5F0F71E61931123C9891C85DFFF9B328B58F9BACE3"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/experiment.json",
+      "bytes": 5983,
+      "sha256": "F9B436AAF7C58403EF17E5AD2C3CC689A30917E9164D33CEC3F632629CF97821"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/first_sample_timestamps.json",
+      "bytes": 12120,
+      "sha256": "34FC6766C1DA279DF62AFAD711781FAC1C07A8B7572FA4DEDDDDCC9A233D6F1D"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/imu_native_samples_status.json",
+      "bytes": 381,
+      "sha256": "185EAA6EE412F34F9A30710B63BE24B0DAE41E42EFF7596320C4D8FFBF686F58"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/imu_timestamp_calibration.json",
+      "bytes": 1562,
+      "sha256": "D0E6096E97297AA385F7ED3CAC67031EB80E0CCED9EC7EDF6BB10AE68B1EC3BD"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/neuropixels_capture_status.txt",
+      "bytes": 4016,
+      "sha256": "C813D9A462D3DBF7897AEF5303CE1A12B5FA1ABEF1F489A0CA9D90C827B523FB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/neuropixels_probes.txt",
+      "bytes": 4176,
+      "sha256": "56FDD8EE809743E35F9A373DB5F4354DB5B2BDCC3E4619E5A559762FC818CAC2"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/neuropixels_startup_admission.txt",
+      "bytes": 39,
+      "sha256": "FF888899797B3BBBFF6B0E833D2B49DB0CE6A3C8A4016ABD51E533D9C030E1A0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/timestamp_calibration.json",
+      "bytes": 8525,
+      "sha256": "49E72AC2BCEF4925EA0FF8651CD0B214396232CFAD793CF943959F7B202228B5"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/usb_timing_evidence.jsonl",
+      "bytes": 6300,
+      "sha256": "58AC1563978FB97AF1707D070E6ED0E7340AF9051EAD51F289A42C6D00EA4428"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-diagnostic/usb_timing_status.json",
+      "bytes": 199,
+      "sha256": "F0669BBB1AC27B5E8DC5A569795B9420A9316AA67608268C48C52ED2E7FF6E85"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/acquisition_clock_queries.jsonl",
+      "bytes": 781,
+      "sha256": "0CA6D481E67005629694B9A340BB27F2EB2EC526110CD300979D4A22408CDE93"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/experiment.json",
+      "bytes": 5973,
+      "sha256": "150909C450AEF1D6E5C3509988F21298049A060019BA8C86CC3FE287CBBACCA6"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/first_sample_timestamps.json",
+      "bytes": 13298,
+      "sha256": "930602BD226828C5FC94DA368C08960C17ACC863D2050D46F7EAF79A994E00A3"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/imu_native_samples_status.json",
+      "bytes": 381,
+      "sha256": "029AA3FC181D6088ACEDB3E97C83C656961158322547FBCD085119E378D03C35"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/imu_timestamp_calibration.json",
+      "bytes": 1562,
+      "sha256": "8F54004E8F9C89D01F2EB72CF4943B1818D8D261873A9070029BA9345C256C06"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/neuropixels_capture_status.txt",
+      "bytes": 4013,
+      "sha256": "9A1F3AEC3B241332F7D5BE9720ABCC7CB7029FE2493245805D154DEBF1A36038"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/neuropixels_probes.txt",
+      "bytes": 4176,
+      "sha256": "9ED604BBAC1D3EAFA37536EDF5EE7545920A0A85952E4B1968F5B7695DD0BE6C"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/neuropixels_startup_admission.txt",
+      "bytes": 39,
+      "sha256": "FF888899797B3BBBFF6B0E833D2B49DB0CE6A3C8A4016ABD51E533D9C030E1A0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/timestamp_calibration.json",
+      "bytes": 8531,
+      "sha256": "C440BC55F23B1AC53E39A3A688EBB35FCABD71E2D7D3FF7611721F1F396636B0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/usb_timing_evidence.jsonl",
+      "bytes": 7445,
+      "sha256": "8F534DBB5B7A271BF6D1592C7E64D6FADED24413853170876E22E50CEB5FBE63"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-first/usb_timing_status.json",
+      "bytes": 199,
+      "sha256": "F0669BBB1AC27B5E8DC5A569795B9420A9316AA67608268C48C52ED2E7FF6E85"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/acquisition_clock_queries.jsonl",
+      "bytes": 1567,
+      "sha256": "DCFDC7D5D9102FB12E6CCCAFAC16A1F4FA015229E597B9534FE14F998F324E48"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/experiment.json",
+      "bytes": 6630,
+      "sha256": "1071A717BEB6F51DE026CB6C921D4C8D017F9BBB6F9E43EA8D9398C9360B0634"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/first_sample_timestamps.json",
+      "bytes": 5899,
+      "sha256": "FDEBF115296FEF6A8ED47BD1B36E73085F6CE620C7A7979C02D42F1727F34F3C"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/imu_native_samples_status.json",
+      "bytes": 384,
+      "sha256": "AADCB89226E327EF854FEBCFD701465131D8C5492108D0CDAA86184406ED8165"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/imu_timestamp_calibration.json",
+      "bytes": 1642,
+      "sha256": "4811940FCB591D656EA1B651354B27121E665FF89A74BED826B86540A05D761B"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/neuropixels_capture_status.txt",
+      "bytes": 3878,
+      "sha256": "B4F9D17A9BE18096DD43D5EF0F7609B022BC8B9369B3E616EBC8B1AE356ED8B3"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/neuropixels_probe1_metadata.json",
+      "bytes": 726,
+      "sha256": "FE5AD277FCAD407B1CA57B90A1CEC74498C37E97AE0C846EE59DA03CB616C96E"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/neuropixels_probe2_metadata.json",
+      "bytes": 726,
+      "sha256": "9D9F90A5A6474E57EA83DC13B185699D6BCED53EC8AC87C93DF0F8590B7095CB"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/neuropixels_probes.txt",
+      "bytes": 5081,
+      "sha256": "750FF06663346E52E385DDFEAE1430A4E89E0A756721A3B83F780CD485869DA7"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/neuropixels_startup_admission.txt",
+      "bytes": 39,
+      "sha256": "FF888899797B3BBBFF6B0E833D2B49DB0CE6A3C8A4016ABD51E533D9C030E1A0"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/timestamp_calibration.json",
+      "bytes": 8723,
+      "sha256": "CC080A4D0510618AC1D0CE7E4BFB9911823FBFD5CF03CAF76DAB69DE32B10734"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb20-gui-priority/usb_timing_status.json",
+      "bytes": 235,
+      "sha256": "A8B33459D8B13F31CB863E0B4E778F12DEE0E216FE11F6EA1603454409064216"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb_build/build.json",
+      "bytes": 19552,
+      "sha256": "E3BD0445DBCE14994F2282C5FCD20B4811B1551095B07A55B26534ECE782E6F2"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb_recovery_build/build.json",
+      "bytes": 21141,
+      "sha256": "FD3B91B812374072256A42C88E030CD5A9A07ECDF670783DE4A076B38962DBCD"
+    },
+    {
+      "path": "evidence/_artifacts/v1_lifecycle_release_20261025/usb_recovery_native/result.json",
+      "bytes": 1434,
+      "sha256": "A7BC6F65505FDB4E6461A4EFFCC7215065FB7E07C45C34B72FA2D614024AB2A1"
+    },
+    {
+      "path": "evidence/_artifacts/v1_sensor_lifecycle_20261025/after/result.json",
+      "bytes": 520,
+      "sha256": "9B5FE1BC55F6EFEC6358BA73DDE3CC22F25A761CD4BDCAA4C535003D0B0C5396"
+    },
+    {
+      "path": "evidence/_artifacts/v1_sensor_lifecycle_20261025/existing_suite/result.json",
+      "bytes": 1637,
+      "sha256": "A10D9D4EC5DF3503F7CCB93B189768356D9BB3CA108B3366AD6B7FDB36349F4B"
+    },
+    {
+      "path": "package_lifecycle.py",
+      "bytes": 11629,
+      "sha256": "EEEE82346040F35AD2B334BA58D4C50B7083DD76E99181809D70CEA891547268"
+    },
+    {
+      "path": "usb-identity.json",
+      "bytes": 2178,
+      "sha256": "BC740B2F3D401227620EAEDB4B9192FE288F64BC9043C4591718F5191434B7FE"
+    },
+    {
+      "path": "V1_APP_CC50D8D2_lifecycle_20261025.hex",
+      "bytes": 807764,
+      "sha256": "47235C80933F0FE7A24148899EDA61B1033FDFECD58BBA67B994FCB09417FA3E"
+    },
+    {
+      "path": "V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
+      "bytes": 1044112,
+      "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F"
+    },
+    {
+      "path": "V1_fused_BOOT_USB4F7B521A_APPCC50D8D2_lifecycle_20261025.hex",
+      "bytes": 5745164,
+      "sha256": "2A87A27F58B48FFB7231CD3795D11AEAC061EDF8A6D074EF6081C10371253076"
+    },
+    {
+      "path": "V1_lifecycle_sources_20261025.zip",
+      "bytes": 2165090,
+      "sha256": "E0240A26D18382C90D8983414E51ACA2068A418202E7D8D96D5685190E0176E7"
+    },
+    {
+      "path": "V1_USB_service_1.0.108_USB4F7B521A_lifecycle_20261025.hex",
+      "bytes": 728688,
+      "sha256": "0BDDFBEDDB1FE3F842E485732F0B1104AD75708EB8446A509AA26C943E5CCC2B"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 565,
+      "sha256": "0DE425C2C1EB71B3D545B96F6AB716E2835BA1811D07FD0A73DD940D4C323E1E"
+    }
+  ],
+  "usb_crc32": "4F7B521A",
+  "app_crc32": "CC50D8D2",
+  "usb_version": "1.0.108",
+  "app_version": "build CC50D8D2 (SD/BLE lifecycle + UTC2)",
+  "host_version": "1.0.0.137",
+  "merge_tool_sha256": "8893A47ED9D6048C00914942D6789F966051D470AF1A04007A9D941EF40AD43E",
+  "configuration_excluded": true,
+  "fused_lf_normalized": true,
+  "hardware_access_during_packaging": false,
+  "rebuilt": false,
+  "resealed": false,
+  "published": false,
+  "limits": [
+    "Bounded production-API tests, not full installed GUI, endurance, all-mode or physical ADC timing qualification.",
+    "USB P12/20k70s and P1/30k60s passed on exact final components/host137. Other modes were not requalified.",
+    "BLE/SD APPCC50 P12/15k short Start/Stop and full readback passed; final USB4F/host137 readback is byte-identical. No new 20k SD endurance claim.",
+    "APP is a disclosed maintained private5D66-derived alternative; exact missing published654 control preimage was not recovered.",
+    "Unclaimed native20k retention recovery remains best effort, with unknown-gap counters and host gap journaling; claimed-stage/DMA/ownership faults remain hard.",
+    "Earlier USB412D BADA000A/BADA0013 failures retained; final4F short passes do not establish the general BADA000A cause or guaranteed lossless capture.",
+    "Startup trimming and incomplete trailing bytes remain explicit. IMU is timestamped latest-value polling, not FIFO-lossless acquisition; environment error7 remains reported.",
+    "R2/UTC2 are digital software clock evidence under stated bounds, not physical ADC/filter synchronization.",
+    "43.5198 MB/s native payload export measured on USB412D/host137; final4F reuses unchanged download objects and passed small byte-identical readback, not another speed benchmark.",
+    "No V2, camera, audio, power, cable-fault or interrupted-storage qualification in this request.",
+    "Archive preserves admitted source bytes; unchanged linked objects are identified, not rebuilt; proprietary toolchain inputs are external references."
+  ]
+}

@@ -1,0 +1,1539 @@
+{
+  "version": "1.0.0.136",
+  "status": "private source/software-checked optional USB timing; no firmware image, hardware, installer or publication",
+  "gui_sha256": "7A3C28F3C752B01D8D5EB6671D86045CAF7B62DFF02E3AB153138BFFD33C4A77",
+  "sdk_sha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
+  "baseline_version": "1.0.0.135",
+  "sdk_source_baseline": "frozen115 with exact verifier/shared-helper changes",
+  "changed_gui_inputs": [
+    "XeNpWinUsb.cs",
+    "AssemblyInfo.cs",
+    "mainForm.cs",
+    "NpCaptureModes.cs",
+    "NpV2UsbConsole.cs",
+    "NpAcquisitionAnchor.cs",
+    "NpImuTimeCorrection.cs",
+    "NpUsbTimingWire.cs",
+    "NpUsbTimingEvidence.cs",
+    "NpUsbTimingSession.cs",
+    "NpUsbTimingOut.cs"
+  ],
+  "changed_sdk_inputs": [
+    "NpAcquisitionAnchor.cs",
+    "NpHostClock.cs",
+    "NpTimeCorrection.cs",
+    "NpUsbTimingEvidence.cs",
+    "NpUsbTimingWire.cs",
+    "NpV2UsbConsole.cs",
+    "TimingVersion.cs"
+  ],
+  "changed_runtime_files": [
+    "NpV2SdDatExport.dll",
+    "WILDX_console.exe",
+    "WILDX_console.pdb"
+  ],
+  "other_runtime_dependencies_and_bundled_firmware_unchanged": true,
+  "app_compilations_this_phase": 1,
+  "sdk_compilations_this_phase": 1,
+  "source_archive_sha256": "8BA2CC0AA8A51A7150EC121A89997FCB8098D2A5E7BA6F993B2899B4E9A34CBC",
+  "gui_sources": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\CameraPreviewForm.cs",
+      "sha256": "F68578ACE3248DE0A3C1D3BC5311303F5BFA37EB6D13A0E6A73E95322B8A88AD"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\USB512WinUsb.cs",
+      "sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\UsbHealth.cs",
+      "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\UsbHealthNative.cs",
+      "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\UsbQualityTest.cs",
+      "sha256": "537B02EF089A6D8BD3B925FF43198009501AC2F9FD1057BDCE4B9D78CCECBE89"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.UsbQuality.cs",
+      "sha256": "1BF3BEB4EC0D6D6849AA3299BB0FE839F3D30334F5B141F6BB6FA531D92A413F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Ce64MscProtocol.cs",
+      "sha256": "D567DB81EC1C737875F6AE0DE285BF845A4DCEBE3569FCF4BD6C447843D5E7FF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Ce64MscRawBlockDevice.cs",
+      "sha256": "6CF145013AE5DA8FE44236DFF110D11EFB384E5083921B6640EBEA3DAB73C82B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Ce64MscCompressedDecoder.cs",
+      "sha256": "1B9CE3BEC6085A0E403D783175FF78A082225696247249B8E655D26CE8682484"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Ce64MscDiscovery.cs",
+      "sha256": "6872C79E23F44AA84F2639E7358AE47337ADED6AD43CAD273BDDE20EF708C402"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\ImpedanceReportForm.cs",
+      "sha256": "5D978CCB484462BF88BCA9D9C834ECC3CA786B3578A3285294A8131C27C9334E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\EisSpectrumForm.cs",
+      "sha256": "6D7B596640960860CB81E236C7A2FEF910D58C1D5D97986E31BEB6831906ABFF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\XeNpWinUsb.cs",
+      "sha256": "C74BE3DF1D14169D3329E8DD589DF7BF5D9097329F0E44F115C8770E661F666C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpModeDialog.cs",
+      "sha256": "5A9ADB1338CC64A8853A0DDC29A07661FC60F2A6239F322C19430FAA6025F98D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpRecovery.cs",
+      "sha256": "9B03E3FE1BDC9A9AF464B04A5F59A4FDF11C3ACEF3997B8E5533DD9C2FC00408"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpGpioRtcLogger.cs",
+      "sha256": "4238ABE6B65AE5A8C53E9D754B19C07D6D08561D6108F0F376DBC74D9FB7FE52"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpFolderNaming.cs",
+      "sha256": "3BACD7C35DC69E146077EC6B571C301E88D6CC6A7C52BFA07943990A688F807E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbSensors.cs",
+      "sha256": "0A1710B7E878D64004D39EFACF63A44BAC176F91BAF68CEBDE2183A1419A4D36"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbSensorMonitor.cs",
+      "sha256": "2A99AADF5F6F5A8C35B081D4ACF3CE37C7F8ECABD054B443FA4539CD8D86F69C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpClockFit.cs",
+      "sha256": "E6A0ED0CA88AB92012557B6CBF305C911942F92B06C432BF470DD06AA489D724"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpClockJournal.cs",
+      "sha256": "1DF5E7959BA3EA4380B5781E7FF0A0643929D42BFA3A2093972FB82EB4F77705"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpConfigurationDialog.cs",
+      "sha256": "C52CD41EE0105BA12F0425CC9D767EF4246A14AC1A52987E868F0CC1663CF3E1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpConfigurationUsb.cs",
+      "sha256": "CDC563ECD97B052CDE266258B8D933534EE59444E09EB012E48BE5B27A4C7CF6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Np2ConfigurationClient.cs",
+      "sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Np2ConfigurationPreferences.cs",
+      "sha256": "374EA02A2691E22C6F984C2BA9FB9F8822CE020A268167A5F5002F4998F2230D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Np2ConfigurationUsb.cs",
+      "sha256": "378634A808E2C8C9109DF13ABBD8018A668B60CAFBFE873061EEBCABEE2FD08F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpProbeManifest.cs",
+      "sha256": "BCF39B04FD3DF61D0F5B3C9DBF0796CD4207C0E4B9298071586EE625DBFFDDAE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpRecordingSettings.cs",
+      "sha256": "112AC5DC933A2AD8BB213555B5C442464B6DB92705C0A7BA184413A6D9082BA7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpRecordingDialog.cs",
+      "sha256": "06380CED7223DAF0D3A82AAA8D6DED03EE586606DF93A91B103A89DE6F360E63"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpMediaUsbForm.cs",
+      "sha256": "23203AAAFB819546ED66D398BA6827DDBC7BA8EC18588346C1E441D9D4193231"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpAudioPreview.cs",
+      "sha256": "AE2D6F2596F372772EE9F46AB16107428B9D6E1A745038303E070D01A0AD75A0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpDiagnosticsForm.cs",
+      "sha256": "0706C3B52551831B81FC8AA254CBF43C65AF8DA740D98EB9F8C227A6B363814D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCalibrationForm.cs",
+      "sha256": "F06DF937F09DED6D42B0453531B4DC8BD63AE717CF6710A9570DF1A0C6FCE6B8"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpConfigClient.cs",
+      "sha256": "05ED74055A30AF9931CBCFED41EF66D52163B242FF68D6CC174CF0AD51BDEE2D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpDeviceConfigForm.cs",
+      "sha256": "D1F4CE6A4E6D7C0CBC8BBAE5733A407C739069A5DE1A5436D87C292AE697EFF7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\XeNpSdInfo.cs",
+      "sha256": "98EA60AD8E7D9402AC241C5987441D898B660590FF873DC0E5093A3A3D52D353"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpDownloadNative.cs",
+      "sha256": "272FDE1CE6F87B7E62D4C4FCC28116A6102142830630ACE83A2665737446AE7F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV1StoreV2.cs",
+      "sha256": "D2B1E7952C45081F95C3EA8A979D0C8C663E44CEE2E2AEF4A3CD07206319B124"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCatalogRecovery.cs",
+      "sha256": "14C4ED6400893F27E81CA7B676F4D0CC8BD22256ABD41E927C3785CA5682ABB1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSdDatMerge.cs",
+      "sha256": "D1F43359EDA2320E645DF34D5530B3A9C7468B7E034B5BA6F2A67EC4B0B49343"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSdGeometry.cs",
+      "sha256": "17693BF03EE2CBB0704F57F0B5DECD55ED1C10B40D921B2D4A0361DFABBD103A"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\RawBurst.cs",
+      "sha256": "A5F5DFAB8C10343F69525C0697FBAC4703A1FEC2072453CFAB59741F6AA64734"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpArchive.cs",
+      "sha256": "B7934764590869E603199FDC51CE5BFEE104332FD100A0FFD97231D4DBB663D6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV1Management.cs",
+      "sha256": "778FAFF45E1A8CBDDECDF44A456B59831237CD60F596980457EED3F73215C02F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpFirmwareImage.cs",
+      "sha256": "B1072F130126629EA391F40DDAEA3F077D88AF68BBA955F49885EA0B7B73A52D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpFirmwareFlash.cs",
+      "sha256": "BFD865EDAE374FB13463D5176F95AB69D3FCE011BA5ABB03813F00211DA45FD9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpLoggerForm.cs",
+      "sha256": "9CC4E65BEDCC802C986C5C4F42104888002DD2999B3BCFC7A9DA639CF2C96137"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpFirmwareForm.cs",
+      "sha256": "63778162FF802911F94B7F7FB0A226496DDD63B4EB3F4A8F8BE125EA8CBD8F36"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NeuropixelsPreviewForm.cs",
+      "sha256": "607157A2F2F6045C4C25827F265FF5B63D65FE9899982C587C3CAD7203096C37"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.SystemInfo.cs",
+      "sha256": "2B3B2E37F03C75082D8630540A2BE8385B62F1377A0F3B8DA2E12C222B0FC5B1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.NetworkTime.cs",
+      "sha256": "B3650DB2F53CE6A1F18F23953DE99704A8145B561957B3A37A9B21F40208289B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NetworkTimeClock.cs",
+      "sha256": "27AF992021B83A3F565A96A6F6B8B8EB60241CD05B194B8729E86EAF958189E2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSystemInfo.cs",
+      "sha256": "3EBD7F4B63F2F6E9E7A53A65A45331026F98A1120274E3CA7CEFB08B4851AC7D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.Designer.cs",
+      "sha256": "CA869F2C73FDE980F8965FFFED10415375C83F36D43A1F1F4E28A1ED5BAB2AAC"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Program.cs",
+      "sha256": "7167F57DC750D2CDD7D6B65BDD1F9B4F46DBB0010DC913F5F6BA209AB7394B42"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.WildX.cs",
+      "sha256": "E07D5FC0547AD5014F563563C442467BDFB52C69F079AD64FC4CC352B38487D7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.GpioRtc.cs",
+      "sha256": "28113066A69A1E3A4B219760367F6B3FB2928B7C00096441DF86BBCB7B55E28C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\WildXTheme.cs",
+      "sha256": "ABDAE77C0C6DA0B46135AACA15992B69F8658754A823DA0606AA44CF9A6D4026"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSdControl.cs",
+      "sha256": "C287D7C6990D1C52187E3101137E16A7B6ADA1BA6722D9CF47E4047197FDBA88"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV1BleProtocol.cs",
+      "sha256": "5C1F3F5A0122D7B38044A090B5598CFF998BDCF20467AC42CC66FAF7FA09069C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2SdControl.cs",
+      "sha256": "478056BA300A71664A6E6C7558B113C0F03D976FFD8B2E1AAA7C43E0AD5862FC"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2OnlineClock.cs",
+      "sha256": "D69BC693B27D4FE6E353983A00C70E0F4CC52B66D1665E4D41B2A17C602DC3D1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleWire.cs",
+      "sha256": "8D577F27EC65A9779E33167BE46232DF548322319EEF4D8FFBEF8C22434A4E09"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleConnection.cs",
+      "sha256": "56A9312D79A36FBC9657ED5BC1DF96D70DA9D2A365D30AB15C97E8B89A38BEF7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleConnection.Media.cs",
+      "sha256": "971094726089793A1868F7E3020DDD937FBAA19C1177EDA33B401604586AD308"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleConnection.Storage.cs",
+      "sha256": "9BE44D64FF999D76EE6768369203AAD84850826EBB788A63E92BE09BDAA29CCB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleForm.cs",
+      "sha256": "C9E46D9AA7282D8FD78CB9BA011A82953D95F2D68DBC8313DCBAABFE25DA7474"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleForm.Media.cs",
+      "sha256": "D65DAB8A4EAB5A8A8486BA30ACDD2BB1838E15BA20E47306D5B5595F944AFBD5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleForm.Storage.cs",
+      "sha256": "B883A29580E613094C1E62CD2686362C3DD5308331FFE33A9040BA397A3DDBE6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleStorage.cs",
+      "sha256": "DE2C238DB20750054D3C3458FB5295ADD9BDE509032AF02079CBDC2235E458F0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2BleCatalog.cs",
+      "sha256": "ACD4D96699E862BB9D43468C32616E1C97A4BF10324B3C42EC4F974879C600E5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleConfigurationReceipts.cs",
+      "sha256": "E6915BB7AFED12D2FCC330240FF2E80147BEA22B4EDFDE1B26BF64BD090CE0E9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleClock.cs",
+      "sha256": "2C3D5C5D0967E0B1B89F2B55657B000B0D0EA065DCB5282B9CC33DBC770AFE3A"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2Preview.cs",
+      "sha256": "9797873DC8C303D2312F89B39FF8E6F102E72E3979CECE9055AAC7D3BABE5B49"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2PreviewWire.cs",
+      "sha256": "B1E4A3BA8DBB4434EC0CB2354BD47ED42989841867E7905D9AFBA6DFDCDAC3D7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBlePreviewForm.cs",
+      "sha256": "83615A64F120CB69A729569BD9B2C47D48B34FBBCCC6756E94637DCE3CEDF766"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV1BlePreviewForm.cs",
+      "sha256": "90C652CA47AAAB854BFD64298AEC0BB958C4BAC3ED316246E5122E3D9909E798"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbCatalogRepair.cs",
+      "sha256": "4CF62061F3195BC284D40ED670FB3907F34DC68E1EB05FE2DEFFC5499EFE1947"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2FirmwareForm.cs",
+      "sha256": "D8B7DD2C9EB61EEB8A9BD60CB68577FE9A1D623A8294B941A0E033EC1CE662A9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\AssemblyInfo.cs",
+      "sha256": "B496565C1F1FCE16E697F44C772ADEFEB7008B48675F4EA81CC2AFAC4746F304"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\ScopeForm_drawbank.cs",
+      "sha256": "877D46ADD23EDDEE75F70FB38574DD9A841D98A68CB67BC1BF31747CC456ED41"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\ScopeForm_drawbank.Designer.cs",
+      "sha256": "F34BF29D39911877545375FE51082D78165EE332A1C30900FD8CC34AA66096CD"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Resources.Designer.cs",
+      "sha256": "F6C9832398230D197F8A72A87D3452526D7366414F3D3C0B091BEEEA2F040329"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\Settings.Designer.cs",
+      "sha256": "CFCA04B5E0B3109564A51432AE8C0C6389D7601B415109B3A2DF986DFF7D7DE6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpFirmwareCatalog.cs",
+      "sha256": "8033C296CD1502BB61B5D7F939444FD63D1F451C492C9C4BE583F045BF87E5DF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpMediaExport.cs",
+      "sha256": "0389D24078A6AD400DA27C14B2BAF5EA8A4673F318ADFA6BBA387F67372CD1ED"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\WILD_VideoDecoder.cs",
+      "sha256": "57F8DBFB7144CA8683230C439753859BE71CF69112C6585560BE48E274A7E4D5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpDownloadCatalog.cs",
+      "sha256": "0692045EC540E689DDC0F2ECB9165181E0C8C10D7485BBA6D776FDB987227956"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpDownloadForm.cs",
+      "sha256": "F766F9DA134118C88B5912BAAD48C7DDB64B51E51538331562D3B98E6F50FABB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpDownloadStream.cs",
+      "sha256": "02D62A9EC78DA8DF308082DECFCD141A0CE139C341808D0B6E940CBE79C62014"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCe64Decoder.cs",
+      "sha256": "4AF487B199FDD14E73F738DF57D9F1C65F6339CD530264E6C9C9077F7EE04CBC"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCe64Export.cs",
+      "sha256": "30A679FB9B1E8BEB74F1F988D9CCB4D7C2AC1F9BD84AC0DD656C770EF566AB1B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\mainForm.cs",
+      "sha256": "169A0DE452C5F8704229F1BA74841DB1358CF4FB8EEF556204E0567CBD7D378D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCaptureModes.cs",
+      "sha256": "23795A47C123E49CA9EE9F84973776BA26DE4500D50565001FC2529879939CA1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\XeNpStreamDecoder.cs",
+      "sha256": "7B2A4EB9A64D68D538C2CD6D8D5C41435438E1C94922CBA65D87C3347BB915CB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpV2UsbConsole.cs",
+      "sha256": "42403F864E5E6ED65C8137BEA141543B069BDB10874520954E9D39590E681263"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCalibrationBatch.cs",
+      "sha256": "C444B0F3EC833AF12E6A490601FE624DE2FD217E699F7558CFD52DA561637DBA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCalibrationBatchForm.cs",
+      "sha256": "E281AA8C5F84B39E21D2B2A2DAF7ED3996295760A4282EF966AB4B1AE09CCED6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpProbeIdentity.cs",
+      "sha256": "A1DADA32D1BD7755A15223740D9FD2FB44DB524ED8AC64843CBFED945C6D6AF1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleForm.Metadata.cs",
+      "sha256": "E19C833224E16202536E5353776792AD40E507693C38C27171EB305C72B7E9CA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCalibrationLibrary.cs",
+      "sha256": "DB0250575BC3CC4A3B843434875C78DE1C7D5E5627ABE9A272C1C2E1E07B9BFB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpCalibrationLibraryForm.cs",
+      "sha256": "9399A9A13BDCCAC4B490E218C46FFABACB431713691D8BAB5DC0E2F249869E59"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpProgressEstimate.cs",
+      "sha256": "6501BBA7C3EDA11ABF3821EE04F81A81D28D10C7A62691E3105C8089E69B0E80"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpAcquisitionAnchor.cs",
+      "sha256": "EF0F495D4720FF70FFBD58DA96CF884A7B8A090F1B81441AFE8C227AE192F7EC"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpTimeCorrection.cs",
+      "sha256": "9EF3541D984989E020522E0BAA8D753BD446EBB426A2E3DF9B94721CC7116AEA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpHostClock.cs",
+      "sha256": "D53E3DDE861D4762A0C75EE7AD1B7B4E90C830154533DCE89FC1564CBB208AC1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSdCardTest.cs",
+      "sha256": "F856D9B1A66188AEEADDC7197BA2828CA07C18EA9E9A9CD47EEA791D5BF10F11"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSdLoggerTest.cs",
+      "sha256": "EA43DFBE991EB61894ED9E13FD67E1E202A599935589A6D771D987C429D99ED7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpSdTestForm.cs",
+      "sha256": "FBBECB3C01FBAF33306775B7CE62639D95098E14157227D0851201E0657507A9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpGpioTimeCorrection.cs",
+      "sha256": "8CEA36BED3C742A4FF302E4652937849BB2E3D1397837C6396881292DE8B3408"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpImuTimeCorrection.cs",
+      "sha256": "D9A29C862BE0D123D18883F0CCCA0D04B64D394365B1FD15EBAD8973524F359D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleImu.cs",
+      "sha256": "0101BF8E1DDD5A427E545F45FEB69E2F1D6FDBCBFC5C592FF3173C3878C04B0F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleConnection.Imu.cs",
+      "sha256": "2ED48A963DD8E2F33E814D7F4EDD4BFCAF46291D6C70D2051BF2F4AB42D1C2CF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleForm.Imu.cs",
+      "sha256": "838630A71188E421828724BFF824B946D59AED7C175E30A1300EEC3514319DCB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleClockEvidence.cs",
+      "sha256": "AAD0E7B0079E193851F0063CA16BD46BC49994347FA3DFB5AA527AADEC6A5061"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleConnection.ClockEvidence.cs",
+      "sha256": "ECF7BAB990276CB68C270A230B80D702887A73B80F63597F00ABD7147FDE4390"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpBleForm.ClockEvidence.cs",
+      "sha256": "066421896241D116FC03F06533F3DA7A4BA48A48D318A17C0BB5C282D2CC1606"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbTimingWire.cs",
+      "sha256": "05C5A0C828BF92E735DAA50A9F7CF3786E01EBCFF6E7D387BEBB2E6E893206CB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbTimingEvidence.cs",
+      "sha256": "24533B3E17FBEABB68280311308C93A6184E178E8E8121A7E8C612F7088965F5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbTimingSession.cs",
+      "sha256": "7EBAFFC4F99341F5BD34EB2B6F814D5C46E042C59604C0F192842C2FE5BD9D64"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\source\\NpUsbTimingOut.cs",
+      "sha256": "AC11056BEEA96E7C5F767DA78DA7DD9C2C03A288EFEF746FDD9E364BCE6C6D60"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\compile-obj\\.NETFramework,Version=v4.8.1.AssemblyAttributes.cs",
+      "sha256": "4C500A42809CC8209244DD1DAF241A8E12D09085DA6185F850A5D66B33124A5A"
+    }
+  ],
+  "sdk_sources": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NeuropixelsPreviewForm.cs",
+      "sha256": "35870EA5E803A1E24C75F71B5BB9930652F492BCFF32DC5625ADEA4ECC6DFB6F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\Np2ConfigurationClient.cs",
+      "sha256": "F8EC860609FFACAD03AB5727B614FE024EB9CFF197F3C4D776FBD80101A453BA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpAcquisitionAnchor.cs",
+      "sha256": "EF0F495D4720FF70FFBD58DA96CF884A7B8A090F1B81441AFE8C227AE192F7EC"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpAdcCalibration.cs",
+      "sha256": "62749EAA50941760B07AEA01D2C06C77C67B5E7239B2787D0DE5E36E137267E9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpHostClock.cs",
+      "sha256": "D53E3DDE861D4762A0C75EE7AD1B7B4E90C830154533DCE89FC1564CBB208AC1"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpMetadataFile.cs",
+      "sha256": "6578CE6806FC38A3C04DE47E059A82FB44AE33CE98188A88C6F8BB53ED866A14"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpNeuroscopeXml.cs",
+      "sha256": "9BFC0C42467B06C3CD42BD0B5A85FE2CEF77B6157D6D7FEA7370367D87CEFE2D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpTimeCorrection.cs",
+      "sha256": "9EF3541D984989E020522E0BAA8D753BD446EBB426A2E3DF9B94721CC7116AEA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpUsbTimingEvidence.cs",
+      "sha256": "24533B3E17FBEABB68280311308C93A6184E178E8E8121A7E8C612F7088965F5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpUsbTimingWire.cs",
+      "sha256": "05C5A0C828BF92E735DAA50A9F7CF3786E01EBCFF6E7D387BEBB2E6E893206CB"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpV2SdDatExport.cs",
+      "sha256": "B333544647130560B260351A0E3CC01F711EBAA312A4B4AF07F76A528044FF28"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\NpV2UsbConsole.cs",
+      "sha256": "7C420CB48CAB2A68D90C696FA8EB623DF04CF91EE52C65FF20000AD7D4F49034"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\TimingVersion.cs",
+      "sha256": "373CC464BE5EFBD558CDB50BF9AFE82A324F99DCB5B9381F0B4F0B9AD7388E89"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\USB512WinUsb.cs",
+      "sha256": "5ECCC5D1500F298763268DFD5E9365AAC343B9151A724420F3356ABB46EE24E5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\UsbHealth.cs",
+      "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\UsbHealthNative.cs",
+      "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\sdk\\XeNpStreamDecoder.cs",
+      "sha256": "633D986FECDA3F67AF5B1BCD35C27618D510391423340299230FBB88058C3B5E"
+    }
+  ],
+  "references": [
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\system.runtime.windowsruntime\\4.6.0\\ref\\netstandard2.0\\System.Runtime.WindowsRuntime.dll",
+      "sha256": "1FD925CEB436A786904ECC25BBE8B9FBB9EEDDFC14267E77C7A8E0B1AA7D7CD4"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\system.runtime.windowsruntime.ui.xaml\\4.6.0\\ref\\netstandard2.0\\System.Runtime.WindowsRuntime.UI.Xaml.dll",
+      "sha256": "84443C96F94429941EC8D48737B7E3C0B11066F06AE19AEE7760CDD5839DE034"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Microsoft.CSharp.dll",
+      "sha256": "A9D342064CF6FF452DAD33995A0F44CFB8C271A53DEB4227EDFAF07ECDDA868F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\mscorlib.dll",
+      "sha256": "1EB7AB99447CEED5EC717C97B94C4AEC5DA1EDEEF9FE4989C287355E03A8F58F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\build136\\compile-bin\\NpV2SdDatExport.dll",
+      "sha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\packages\\OpenTK.3.3.3\\lib\\net20\\OpenTK.dll",
+      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\packages\\OpenTK.GLControl.1.1.2349.61993\\lib\\NET40\\OpenTK.GLControl.dll",
+      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Configuration.dll",
+      "sha256": "893CE0E2A131F4CCB460748C2AFD518C94304BBEFCFE15FEB7F89C48EC256D0F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Core.dll",
+      "sha256": "0C5A6F6527A4EBDA1D105809C48C0577B316D75D5FD04177A5A0E54F1E4CFF59"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Data.DataSetExtensions.dll",
+      "sha256": "1064D8D424C28A58F133F18B55AA80284420B99D655A0D255DAEF5B6FF5E44E8"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Data.dll",
+      "sha256": "666D08A03E0520F32C38624EBEE8594DB977E8B534BE9E5853BD01AC0AC763FB"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Deployment.dll",
+      "sha256": "3789D0608B633045060B7F47E52B566F606C0048272C1806192000197C5675B2"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.dll",
+      "sha256": "3FBA2C9AB7F1538D09D3A025730DA545F3DC24AF0B6B74EA5F92CC7768EDD5D5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Drawing.dll",
+      "sha256": "4223324EDFE6B7E5D23F819B0478B1641240A336801F03C8CEAD20A1F70BB09D"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Management.dll",
+      "sha256": "250ECA138486E7CEDFF35D48EBBCF824191A8F799BBE2681F97B958A4BBD551E"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Net.Http.dll",
+      "sha256": "90509D79006FF6F2A861097359BBB8EE049289709E11F3C4470872B05D192372"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Web.Extensions.dll",
+      "sha256": "FDB6FA2AEA90683C2E2C3CC0EA2CCBF0B9D7E6D4C98B4E354CFE9AA6C55E39A1"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Windows.Forms.dll",
+      "sha256": "363F1C21F7FEEE867BC49F5EBF383588CB233231B87411C5AD01ABEEA96ED078"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Xml.dll",
+      "sha256": "B452C9F5D45596397D061A72E4964F5644A046464FE31970FF49526B584142A5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\System.Xml.Linq.dll",
+      "sha256": "E17FB84639B1CDD12F0EF2C8D3A81D48DC08983EF3213D4656794A527115285F"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.AI.MachineLearning.MachineLearningContract.winmd",
+      "sha256": "14FCB2B9DF0091F73ADEAD4FC96CB65781257D3A2A9958782FF1DF6D6A24AD53"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.AI.MachineLearning.Preview.MachineLearningPreviewContract.winmd",
+      "sha256": "97D25BA7BF03B6A5E4B871D81D6D07A0BE8125B0C1DD9AFA4D7EEFAC20C865D4"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Activation.ActivatedEventsContract.winmd",
+      "sha256": "7086CC99255B54230AF3ED915D5207B5481FAF9695A54F4164A111095E7CC87A"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Activation.ActivationCameraSettingsContract.winmd",
+      "sha256": "71D9151217BFA8231455E1B4B14478738272F655FABC6D91AF711616283B6BC0"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Activation.ContactActivatedEventsContract.winmd",
+      "sha256": "610EC62B45870BF9CBB7E9AC02F75DFD6BCDF4792DFC956E18D53FC42B014D17"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Activation.WebUISearchActivatedEventsContract.winmd",
+      "sha256": "54F49A0A9C708BF92BE49678B5A8E397C33B7C8C1FFD1D73F1E4249F98F6C393"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Background.BackgroundAlarmApplicationContract.winmd",
+      "sha256": "D1EBD105B4D7685FF26E5C59219E68DA36A51FC8E367C33995438B1773812EC5"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Calls.Background.CallsBackgroundContract.winmd",
+      "sha256": "A17BD7E5E6570BCE6F82BFEF4219A871D28A6FA1EC8D3984D53382E6D995E23C"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Calls.CallsPhoneContract.winmd",
+      "sha256": "4A1F7BE64125B6565CEE9C604828FF1A30E5E6E619AB7A0B465F3C154EC6EB1D"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Calls.CallsVoipContract.winmd",
+      "sha256": "1AE2F3962A2D734249FF354AC8CBF0FB8BCEDB28C54EB55FA3BA67518A7AA8D7"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Calls.LockScreenCallContract.winmd",
+      "sha256": "7060640DFD8963C84D4D1FAAD7C173DD727564E0E621156FC2DC932A725375C4"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.CommunicationBlocking.CommunicationBlockingContract.winmd",
+      "sha256": "1B2D8927A44A631F02BDCC0863ED558BBBC3DE340CA1A3A76CC8C8A57A4BA226"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.FullTrustAppContract.winmd",
+      "sha256": "1620F945D8EDE1A0F52D8B3D1CAC559E833D92C674E31B90A424D529C5785F4C"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Preview.InkWorkspace.PreviewInkWorkspaceContract.winmd",
+      "sha256": "297434AE8F1FDB232052167A0556403962904853C6C4F13460226ABD7993EBD6"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Preview.Notes.PreviewNotesContract.winmd",
+      "sha256": "5833A512AD857B5327F360EA3141EE4BF8892F3E18B8C80AA57C9D0B11965636"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Resources.Management.ResourceIndexerContract.winmd",
+      "sha256": "E330F92DEB3E073E2215D937D17829E080505C2E46F712A8FFBC638D739857A0"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Search.Core.SearchCoreContract.winmd",
+      "sha256": "2E29EE594D6209EB9F789A90FC0F5DEDCBB195E69DD27A8E77E9743481862540"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Search.SearchContract.winmd",
+      "sha256": "B6ABEEBF7F349B31EE0239FFD25960CED7B36740BFE0C45D525D53AC36BFD79B"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.SocialInfo.SocialInfoContract.winmd",
+      "sha256": "9804A639B256A80564BCEDCC98F570133294AC04E5277F01D36EBD9E2A5DB91B"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.StartupTaskContract.winmd",
+      "sha256": "4228A7FAA148ECC011E3D55DBF1F3513D5EBCD99E0E4F7298E14773AC6D0F147"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.ApplicationModel.Wallet.WalletContract.winmd",
+      "sha256": "4C6C461C6B070F754D6BBAF32940AE135177876A75B0AFC43A5E50A805C6C460"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Custom.CustomDeviceContract.winmd",
+      "sha256": "568514E14CF8B1C04FC981F80D21D875FB63A7BF5839C8D92DBEDFC3F4ED1186"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.DevicesLowLevelContract.winmd",
+      "sha256": "0E93675CFE515EF104F11D500A8DA36AF14685EAB124E5B6D552582791F2FB3C"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Portable.PortableDeviceContract.winmd",
+      "sha256": "EA39CA9D968926F56F5BACFEABA95ADAEDCA9718CA351143963E30382B682C12"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Power.PowerGridApiContract.winmd",
+      "sha256": "7917CD926F4C308BE80604A6F04D585F4799AF3C017CE146D8622AA7F1839792"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Printers.Extensions.ExtensionsContract.winmd",
+      "sha256": "7EB30421F4B5625857F32D56E114BB5428B4702AC8B6E5DEB5C52E0D5A522CF5"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Printers.PrintersContract.winmd",
+      "sha256": "DAAB90ED9B118D6878567366D4EE422DB8CB474D30F8728777D77A0071EF1479"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Scanners.ScannerDeviceContract.winmd",
+      "sha256": "A44B6A6910BC9252B9053C3774DE1B3C1389C92C8C99965DA3CF0B81FBE21AB4"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.SmartCards.SmartCardBackgroundTriggerContract.winmd",
+      "sha256": "B24D938E4DE32B11221BA930A6E53457DA352276EAC708D935EEDC200DF758EE"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.SmartCards.SmartCardEmulatorContract.winmd",
+      "sha256": "7A594D7C5938DE5FA8206D7FD4170BDAF8A27E11AB7A1BE0B4F8F37CFE0F5BC0"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Devices.Sms.LegacySmsApiContract.winmd",
+      "sha256": "AE948A481F392217244767E30EADC079748CD2E9780CE1F128E089BB0B0D36B7"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Embedded.DeviceLockdown.DeviceLockdownContract.winmd",
+      "sha256": "BD2DA94ECA8FBC33C26087C72B60016D1B6DF95A9F84A9D2504E1BC2DEE2A7DF"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Foundation.FoundationContract.winmd",
+      "sha256": "919EC5013606DD9CC7F970FFDD0DBF8B44266169415E7D9A1858A2298C1F9B3C"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Foundation.UniversalApiContract.winmd",
+      "sha256": "C43F37305D311B8768CFF48BF48259643ABFCAB60DFA9E1BB5176BC0D0030AE7"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Gaming.Input.GamingInputPreviewContract.winmd",
+      "sha256": "3143DADCACED83E6A27D0ECBE8CD79046FB9878813B95EACCB9300506CAB985C"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Gaming.Preview.GamesEnumerationContract.winmd",
+      "sha256": "F038F9F92DAC98A0678C3FCA1D666B7B308B732155F7299BB11D85B4751C61E9"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Gaming.UI.GameChatOverlayContract.winmd",
+      "sha256": "0887735A5E027EBDB89C1397CFADF3DA0E3BB64B778404725FBF53D9BE9D0CAB"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Gaming.UI.GamingUIProviderContract.winmd",
+      "sha256": "F95D72D85AF785FE43867ED03BF0CA9D3EAD2B78EE3846CFC2ACC8465AD3B33D"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Gaming.XboxLive.StorageApiContract.winmd",
+      "sha256": "238EAFDEC5C461D124CE8C2DBA5150C5702180F86D9216BC5478BBFE21ED2E83"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Globalization.GlobalizationJapanesePhoneticAnalyzerContract.winmd",
+      "sha256": "6E2D831E51AB1BB0D8AB1C9F9A15D047D7BEF5295E00E63BBCBCBAF512016B81"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Graphics.Printing3D.Printing3DContract.winmd",
+      "sha256": "F9A9D381EA167D8E54E5B4940863508956C73D5C1F8911FF663E2B6F14E515C9"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Management.Deployment.Preview.DeploymentPreviewContract.winmd",
+      "sha256": "9BD3FEB6D7D7965A88E3895C09E4F8A0AC2881A2D5EAD036B7E7C7ECB4566606"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Management.Deployment.SharedPackageContainerContract.winmd",
+      "sha256": "0815998551A12151CFC6CA781FECF394C2DEBA3FA4FC95009C00C933672A6F99"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Management.Update.WindowsUpdateContract.winmd",
+      "sha256": "F8ACDFF60D8B75DDFDCC751963C30464258CCA88EA8D7D8D231617D9432B3E6C"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Management.Workplace.WorkplaceSettingsContract.winmd",
+      "sha256": "ACD890608175FDA633942D7FEFDF83EF79E7FF8D212697527F555135A637E638"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.AppBroadcasting.AppBroadcastingContract.winmd",
+      "sha256": "273CAADA774472E05DCCF6B44F5E991669BF8378643F6DC1124F61895E7B4919"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.AppRecording.AppRecordingContract.winmd",
+      "sha256": "BB26BAF72E7B99CAE1C9E8B49E217C96A1AAC4ADC5BD3D43294D4281CA765E7A"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Capture.AppBroadcastContract.winmd",
+      "sha256": "40FCBB6AA47674CF67328098F03FB7D502631B23DA59AC80EF5CF75FABD9B363"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Capture.AppCaptureContract.winmd",
+      "sha256": "5AA4841A006E39B59D351358645CC9B55AAA38F03943E066BE8F0CAC63A32AEF"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Capture.AppCaptureMetadataContract.winmd",
+      "sha256": "34FD98E53C39C63F29E444087948926C06EE5776DB9F0FA742DA676D5188CD19"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Capture.CameraCaptureUIContract.winmd",
+      "sha256": "A074B8950032C66CC54F17C7871D791271226140499795FE463BBD0A42C6F725"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Capture.GameBarContract.winmd",
+      "sha256": "1F2087B00950A6C02142B4F081D8C1CF0445EA4D07ED23496521218C580C2681"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Devices.CallControlContract.winmd",
+      "sha256": "BE931F1769C72536E00C7306F9861CFF8BC8BD1164A308734C19062EB70A921A"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.MediaControlContract.winmd",
+      "sha256": "669C96F6C401D1078EEA4568C83DC9AC0ABC4718F9AF33F8A5F8C70857A0F7C5"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Playlists.PlaylistsContract.winmd",
+      "sha256": "D179FF58465577742C9134DAA4BA0A5B3483841143DF0B4F2A882B2D0A11D80E"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Media.Protection.ProtectionRenewalContract.winmd",
+      "sha256": "8BE13EA8E3ED8002ED4DA4984C05A405A2E691DA08EA0BD79EC525A957CE3BE6"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Networking.Connectivity.WwanContract.winmd",
+      "sha256": "0F95D52E60A86C101A7BC7DA4885ED5A7CD7D912DCFA8718A6A61D883D8101B3"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Networking.NetworkOperators.LegacyNetworkOperatorsContract.winmd",
+      "sha256": "F1D2BBC0449121C073FF507C2C8B67E06283C697612AA902188A51AD655F61DF"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Networking.NetworkOperators.NetworkOperatorsFdnContract.WinMD",
+      "sha256": "95ADA086945A4468014FE99ED233B8DF6ADE22F9359F2F9D2BBDA127D852F2F1"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Networking.Sockets.ControlChannelTriggerContract.winmd",
+      "sha256": "085432489ABD65510304FC75F96F9AE84A01D9D27F25454E5176180F55DD4A30"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Networking.XboxLive.XboxLiveSecureSocketsContract.winmd",
+      "sha256": "2D73653D0B89DF0F7B19E5AD6FE814FC5CCFC8E306BAA43C1BCB2FEBEFBB110E"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Perception.Automation.Core.PerceptionAutomationCoreContract.winmd",
+      "sha256": "821C2A791B8722DFB6E68FB4232BBA28E05A513E5DCF8B77D33C39E62AECDF51"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Phone.PhoneContract.winmd",
+      "sha256": "F56BC7D2D68C22744BE0910A650919B6A3E0882DC051A07FCBB4718BD4ECEFF8"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Phone.StartScreen.DualSimTileContract.WinMD",
+      "sha256": "8D8137D130E7922022D827631D6B24B31E0CAEA6A02719162C786CE20D82EC50"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Security.EnterpriseData.EnterpriseDataContract.winmd",
+      "sha256": "22E708C0EF0ED3A17CB37151C9A395AB03B25F729ABFCE4F0EFE3B7381E0BD9E"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Security.ExchangeActiveSyncProvisioning.EasContract.winmd",
+      "sha256": "6FF13CB54D8D75CD7649328500256AD2F539BFE2D54E75D9BADED95EA183F7B7"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Security.Isolation.Isolatedwindowsenvironmentcontract.winmd",
+      "sha256": "202BBE0671DD16580ABA128A89144A1E9E0759BF155C31596379150C7F67D241"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Services.Maps.GuidanceContract.winmd",
+      "sha256": "7DCAC891FD16734E4DBECCD6D1D58F3FBAAB274A04F95AE8F357995ED6887031"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Services.Maps.LocalSearchContract.winmd",
+      "sha256": "C593BE714600D1B8F5791E8BE29688D3CFEF0EEFD4CE609DF0DB7E3AB0956380"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Services.Store.StoreContract.winmd",
+      "sha256": "ADCF0DD2CACEADF7E625346FBD3BE083FFAA5280DF003F0F2EFD2222E7E17279"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Services.TargetedContent.TargetedContentContract.winmd",
+      "sha256": "FC61DA09757DC610F9798B3EEB27BDCF8C87F9206D3BE5A9483EBFFE2B293F45"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Storage.Provider.CloudFilesContract.winmd",
+      "sha256": "43C3C697AF89B611D0E2649F59BA15BE4887684361BB10349A79D5152EEAFB9A"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\windows.system.profile.platformautomaticappsignincontract.winmd",
+      "sha256": "D7453604255B1AB9769B33BD47847EF893D058E43A8B2B3B14AA3ADACCAC1B8B"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.Profile.ProfileHardwareTokenContract.winmd",
+      "sha256": "0F0B86FC5F170F0E5B2695D2C6DAB7BCF7CB246BFCE6F4B48041E794149FE15F"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.Profile.ProfileRetailInfoContract.winmd",
+      "sha256": "840B93C6FEF98BEB39081F73B4C06A75F29D987FA0D90E8834EB5D4C4A598E04"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.Profile.ProfileSharedModeContract.winmd",
+      "sha256": "55970A8E0C3DFDCC7573F7BFDB961C0BE2C860141C09A6166C3960191D057D3A"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.Profile.SystemManufacturers.SystemManufacturersContract.winmd",
+      "sha256": "60F49AAEB9CA302569F80EAD3502DFBF67A16BA9F02DD59BAE800D7D9590D2EE"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.SystemManagementContract.winmd",
+      "sha256": "A0C6CE6AB7567CFE29A8AC087D5C3D322A960224137ECE9984D21098AA2B9EB7"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.UserProfile.UserProfileContract.winmd",
+      "sha256": "6BC6CCF70290EBA2204894160E2D674E6294B2C19A0F8CA789D68129F7DB00FC"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.System.UserProfile.UserProfileLockScreenContract.winmd",
+      "sha256": "325E336CFEFF6359C62E0DED76F01C1BCB9D4CAF7039F42A7962B5046480129F"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.ApplicationSettings.ApplicationsSettingsContract.winmd",
+      "sha256": "ADBF84923BE2B22D034C321A3291A380E5C3344CF0CE7DBF5CBBBB00DBDB9AE1"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.Core.AnimationMetrics.AnimationMetricsContract.winmd",
+      "sha256": "2C2C0B3D10DCF0806EE524C523E92C6C5815E28890C45DBC34445E4008ACDFAC"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.Core.CoreWindowDialogsContract.winmd",
+      "sha256": "793E83DC85053604DE54A49344544AE5E041C28BDF7DEBE809A7858599143E55"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.Shell.SecurityAppManagerContract.winmd",
+      "sha256": "785DB9AA0CBD49784B8C0C71BB87FD27DE82934B994DB9C9B10B13C2A8453980"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.Shell.WindowTabManagerContract.winmd",
+      "sha256": "2AED721DB1AB99DBB2BE8A6BF1DE8F68EED39F52655C5BF4689D01769B13D763"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.UIAutomation.UIAutomationContract.winmd",
+      "sha256": "A1A43349D6D6610E013E95B23C044AAEB3B2C9C6A230D326890BAD6E8FA48F9D"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.ViewManagement.ViewManagementViewScalingContract.winmd",
+      "sha256": "350634B57E79ED305E39BE2280AFB68F130EB493A706B6CAE6BFDD2E0CC2C2D7"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.WebUI.Core.WebUICommandBarContract.winmd",
+      "sha256": "7185C481F94B8F8FF46C883BD4A9116C604861C6737FE75B5AFA9137DDA1FAD1"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.Xaml.Core.Direct.XamlDirectContract.winmd",
+      "sha256": "78C36E4740AEE660E2C62EF80993F9E4C57EA162087759EF18B26FBDACA0C34D"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.UI.Xaml.Hosting.HostingContract.winmd",
+      "sha256": "5EDD5883AD00FF8D13FA3F125C101188E5743D3741061D869F5D1E33BA773877"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.Web.Http.Diagnostics.HttpDiagnosticsContract.winmd",
+      "sha256": "E2D0ACECA10D405CDF4DEE5B1109560DFD2112F91D72ADB653C92D1BFF47CD63"
+    },
+    {
+      "path": "C:\\Users\\antfe\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.26100.1742\\ref\\netstandard2.0\\Windows.WinMD",
+      "sha256": "249D4EBDCB399002F7B6DCB50384AD0DF3AB6A7CF7087161EDA4E43052128E6D"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\Microsoft.Win32.Primitives.dll",
+      "sha256": "FAD49E520D9EE0CE382B9961738562D298E5223193B9B048357016F75BA54F70"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\netstandard.dll",
+      "sha256": "EAF2023999E92E25B760002555176503E8067C2F1F306B7C667BBDAA8A96D523"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.AppContext.dll",
+      "sha256": "7F06B0E4801464986ED4853FB75AF7BB59EF2FB4342AF940F3216911D7DDCAE7"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Collections.Concurrent.dll",
+      "sha256": "ABC17217240CB30616BB0C7788C3674FAA1B5ABEE211160F73BD1EAC859EBCB2"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Collections.dll",
+      "sha256": "4E80B95505D66D99750AC4230056DA6EF666001ECCBBD779C64DC1C026523437"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Collections.NonGeneric.dll",
+      "sha256": "E7D6E1CDF2360500E31D3CC1C89809A5ED165E3C9EFDA9AC87D4F5710588C52D"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Collections.Specialized.dll",
+      "sha256": "8B87E4F682B5BD74FD4B380A073FA1952284FBBD4BBA9B8A0A482E95545DE1E6"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ComponentModel.Annotations.dll",
+      "sha256": "1EFCC395B3601F7641ADBA7BEA519C9834045B40821395ECFD0AFC4FB3FDDA6F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ComponentModel.dll",
+      "sha256": "13002BE811D2CB78EC8289297C3D790167572B4F8D2CAE266D8EE33B74C8D9BA"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ComponentModel.EventBasedAsync.dll",
+      "sha256": "71F5041701FB6876031C7B98F385646437FF37EF7AA2A637B608C3B26BF67849"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ComponentModel.Primitives.dll",
+      "sha256": "DAB888B44CDEA759A93C37D4F6EF6613E982A5B3FB6258C0A667EE9351F8DCAC"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ComponentModel.TypeConverter.dll",
+      "sha256": "3CA4E67034D8FE06F3FFC830308E5F909AFB36D603F58471A111F64D3D2BA9D9"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Console.dll",
+      "sha256": "E72DFB551DDB4F4CADD2796388A29FEB8050113B6CC06FEFBC7B73503DDA4DB9"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Data.Common.dll",
+      "sha256": "AB9984EE9DC65445D3371FA056520B5A59D4C680218B392CF72EDDDF087DD0A4"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.Contracts.dll",
+      "sha256": "C54AF8FF68C2F799F85F20A712726F892F8359DA90D80FE19D5DD6EE82A10BAB"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.Debug.dll",
+      "sha256": "81B5545634E5A216B7164EA7D6D2DB4A29C03124597C23764425FA9752BFCC73"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.FileVersionInfo.dll",
+      "sha256": "6F3D830B1E90C4CB3AD2A8330E5250A44E420BF7BD3988E27FEA671B8D889557"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.Process.dll",
+      "sha256": "9DCE5ABEA701F11B309788E9B23090F644187D563C37758F5C2F575D5BCBD3F5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.StackTrace.dll",
+      "sha256": "F90E3812FD6F6CAB88C2188458E958CE7AEE98DF84FE9F6AAB53276B3353E22E"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.TextWriterTraceListener.dll",
+      "sha256": "6FE8910BB422B6A392E7493923A726EAE648A49EEEC5BD8AD46B63B7D188A762"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.Tools.dll",
+      "sha256": "70B99A337FAC97D7677ED64E52896A5548824BB8B6AF3B6540E30C6304547EA4"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Diagnostics.TraceSource.dll",
+      "sha256": "D555FBB02AA6070E3BA0CAEF5B48529F4EE8903D7E7ED5ED51BA6D91D5C348E0"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Drawing.Primitives.dll",
+      "sha256": "C0EDFCFA075ABA1B3BF282356A68F6783765C8493BFDFFFE116FB89CE139692F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Dynamic.Runtime.dll",
+      "sha256": "D4C6C9D58ACD4B7F170CBA39D99B9EC5E8F8DC74DB1C4CDAD6F9B458CC6A950C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Globalization.Calendars.dll",
+      "sha256": "A25EEBAFA14FE49780866DC3CD95C3E4684130FA8AB9B78762C27B66882B944F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Globalization.dll",
+      "sha256": "7332186EE3F7530517D5393F0F116E7222FDA6284257515AB283F2EAA6881EA4"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Globalization.Extensions.dll",
+      "sha256": "EB788C9D8257809228FE8A8420FEE7C04E466E2A197CB8D2BFBC9E2E4181DEBE"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.Compression.ZipFile.dll",
+      "sha256": "287263075C14E104525F6A3780AD59EC3D79E02FD4896B813A442BD80C8B0E72"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.dll",
+      "sha256": "2F4EE175E4F22FE3BCAD212743DAF80516CDE1164C30C9B5C496E626342191E5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.FileSystem.dll",
+      "sha256": "0A6CB6260A1B3B0195C4985332D59DA4924A69C47E9649DB9197195C6E72635F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.FileSystem.DriveInfo.dll",
+      "sha256": "D96DA684F98239BA8D699235F0BF1A9F0F81ECB70D4780B6ADB6D919364FEBB9"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.FileSystem.Primitives.dll",
+      "sha256": "8721C71E44C8B671AC1FA78A4F8240E5A9BF181D8C7B64ECA958C0CD2B726C8C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.FileSystem.Watcher.dll",
+      "sha256": "7B188DA4B8A97B9D7DCEEC18352D665044D59F8E3DA194D47EE1E2F1C6DED996"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.IsolatedStorage.dll",
+      "sha256": "96944BBE7D1D897DFE98EA274A60352C79BF7E9F4F8BF5C1BA7D0B33E64626A1"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.MemoryMappedFiles.dll",
+      "sha256": "9FA5BFD0EB3D1148C55BB23E4429F428665EFAA566CABDDF548745337E340867"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.Pipes.dll",
+      "sha256": "BDB5878C021E1B42908C665731A9D85B3A229D8B61E1141C2870A7ECF006FE09"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.IO.UnmanagedMemoryStream.dll",
+      "sha256": "2AA71A4133C55F56530719349941885E4E3F35E182FAFD2DCAC33669FFD72F03"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Linq.dll",
+      "sha256": "17E5E9C6DF8E33CA85B004528FF8DE88B4B02B741605B0E817B00756D074CD57"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Linq.Expressions.dll",
+      "sha256": "CBC27D0081CC05CE60055E886686C72969BF5DAB90F5B90E0523B3D04C832C51"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Linq.Parallel.dll",
+      "sha256": "0BA4640FC1F8CD7F79EA3F43E61443ED72BB65C8B029A404D0430F7B34BB2229"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Linq.Queryable.dll",
+      "sha256": "A14AA9EC8AA34D7EF742364E70A68A52EF77326658A714A67DF2D7261F665862"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.Http.Rtc.dll",
+      "sha256": "6C5C94309BB0F6CE6476B1F175E5815F459279442609327B63EC1C40E02F2C0F"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.NameResolution.dll",
+      "sha256": "0DDE7FB252C2009AD8F66F18DD9D73D1912539326DF57CB81191955BD18D75CC"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.NetworkInformation.dll",
+      "sha256": "0A9D5AB6225009B926CC966BDB78AF4C89DC85BB1070195D5EE7B2FB0DAA4DBB"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.Ping.dll",
+      "sha256": "91F79AC07F3CA6E972F43B2AAC83C9E9B4DFE04EFD1562C80AAF5A6AD03722B4"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.Primitives.dll",
+      "sha256": "E04241E4842A4B60F52E05E9DCACB47BC83FE86544861342FBBA287840131C75"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.Requests.dll",
+      "sha256": "CAFB0617AF6D780A9453D0F319797CCF802B85D1EE3FAABA82C315A6E250D370"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.Security.dll",
+      "sha256": "096655ED29185DC247B67F70A345247E32FE4E2FFBB44111A6D31635BC0FB5CB"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.Sockets.dll",
+      "sha256": "7B1BF5AE16D59109AA2FB37B7F0CD9D41DEF39F6CB3CD01A5C43E4A0620E68BA"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.WebHeaderCollection.dll",
+      "sha256": "ED11BB7CCA31F2E4EDD5E1C7850E994E0646DB9C2837A0E45FAF8DC5FAD627C7"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.WebSockets.Client.dll",
+      "sha256": "BFA09A45FCB3B6AD62E91F422060F79B4AC27E50E0AEDE9C6A869E1CDEC398E5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Net.WebSockets.dll",
+      "sha256": "2EACFD24939827134EF9452BC9FFAC9A25FB6A84379C2C84F98BA22B8EDBEAC8"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ObjectModel.dll",
+      "sha256": "7F1CBC7A79D32BA1DE2DA718C8276812EF5B2EAB57950ACCA3BCE64EEE4DC917"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Reflection.dll",
+      "sha256": "05AAF948326CD37FDFE2B26F180B4146567F6776D5E3D386DABA2F18DA6B6C6E"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Reflection.Emit.dll",
+      "sha256": "58CB82F7852020885D96F9CBF02C6866AF0B840F38D771E8A89A386A15B7D86B"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "F2D71E7212B9643DA8E2C2059CAE6AA968E1EA366ABC0B43ED2A5054F2C9232C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "D5BE1A56D8C44B564D579328F72472799EDBB26788DD42758C87E27F479F29D6"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Reflection.Extensions.dll",
+      "sha256": "C298CAD677F5949533F26AEB2699DFE839C6ADF52735C0C60EE7C8B5E0D24AD1"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Reflection.Primitives.dll",
+      "sha256": "E7D438013AF63B06E69691E642EF71B054349FCCD2311AD5EBD5A47283B5E27C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Resources.Reader.dll",
+      "sha256": "B27ADC674278EC7E6943C26ED58ECA7A978F923390CEB2F58F9AF30A57174CA0"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Resources.ResourceManager.dll",
+      "sha256": "F8BFA7E63BFF383E2AC0574C5475F8AE104FEBBAD2F480EAC691522742341297"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Resources.Writer.dll",
+      "sha256": "A79C87BF8C40D519B5409AE62469B9B5E6743065D2EC3C021BD00AB53782BC6C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.CompilerServices.VisualC.dll",
+      "sha256": "5882C6D48FD0A64E9CC676A2FA4A44524D2523F790798B855F21FA8CF136AF4B"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.dll",
+      "sha256": "7C261C38BD4F8C01C1A1307F54512E87D15C83C8FAE64F30C7A12AA8B8D5BE0C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Extensions.dll",
+      "sha256": "6ABD06647C0EE316DFFE309278A863B625E7D77C4042A34B2C22C02CFE2B8B83"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Handles.dll",
+      "sha256": "9D4A1074A384C1E3FF2197F10CCCD157C5ADC6540877CFB38C1A75209A844741"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.InteropServices.dll",
+      "sha256": "9D2C063669C2A284C3A5AAF268E87D4AFE631B2EDEF52E0676A9E8CA39B9CA70"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.InteropServices.RuntimeInformation.dll",
+      "sha256": "4D79BF585AD50C789DD7EC1352BD93FDAA8CECAD89C0EB1B63E154E48C612274"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.InteropServices.WindowsRuntime.dll",
+      "sha256": "685E39FA47B73B47AD962EFA49EC08E2FFFDC10CC2246AC6715B5B2F3988DEFF"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Numerics.dll",
+      "sha256": "297697A3A275670AD526B128418F2579A230954A16BB41B024CA81ACC4A540DF"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Serialization.Formatters.dll",
+      "sha256": "AAF135F5CA2D99918807FCCD361EE9CD60AFA405BD6DC17C568282827133E65C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Serialization.Json.dll",
+      "sha256": "C60FF303CA15900E31606B6F641288AEC202CDB92BF4BD9D32510F287E997387"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Serialization.Primitives.dll",
+      "sha256": "84AF3C6940C3100E6D1BD3C040C856EF742CD0E2812F9AB69C5D718AE2589886"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Runtime.Serialization.Xml.dll",
+      "sha256": "37002C6205A1183B5DD23E3EA91DDA94E93F3171B448073F74E42D630A9B065D"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Claims.dll",
+      "sha256": "B5D373707BB7BE290645F960CB2B724B05E7C3ED7CB7AC3ADA0786A4A02472A4"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Cryptography.Algorithms.dll",
+      "sha256": "A3080DF636F4D7C99261D807E3E6655FF6F7192D668384CBC36C3651E91C732E"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Cryptography.Csp.dll",
+      "sha256": "4533F43D66941A230B3F98FEBBA2AE0822D085F4588D2303726B369727039882"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Cryptography.Encoding.dll",
+      "sha256": "B62F778C0B9D27B2B3AFF1B0AE5CF79D56E7180204EB1CD5252C87800AE638BB"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Cryptography.Primitives.dll",
+      "sha256": "EBB247E3ADCB1348C09289B89E946F9BD7D40D5BE5D77ACF12B1E650D22251A2"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Cryptography.X509Certificates.dll",
+      "sha256": "66A2C039B8AA4875AACDE6E0C2B68D0A2C6777A731E333A68D9A0317C450BC50"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.Principal.dll",
+      "sha256": "7267BCC0CF261C44C8F834F86A411A65292045EC29E5F7CCBCD4A13180C76716"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Security.SecureString.dll",
+      "sha256": "631C33535096192B9A6F1AB840B6E7B1F9C8A7D3B4DAB874F36A904F4C6027FE"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ServiceModel.Duplex.dll",
+      "sha256": "02DDC02EC36F994753A68623D2F103CF9EDBE414C74F33A21A19B3A7BBF98907"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ServiceModel.Http.dll",
+      "sha256": "6DD084A76BBEED377058ADF0C7FE8FF8F8EE7A5AAFCB154E22B0272728E1E07A"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ServiceModel.NetTcp.dll",
+      "sha256": "7465E50B30B9B9A5A564EB273A7BA6A2B7491FF1A376CBBBD6363EAC2DEFF7C1"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ServiceModel.Primitives.dll",
+      "sha256": "A5332BC4D22752995B29328D56229463B4C8998F8EC1FF254518203AA1560639"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ServiceModel.Security.dll",
+      "sha256": "104515CA1888682A8D9EF9090F5A27BDAB3FF0A0F058BE6A851D5B87BA7080AF"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Text.Encoding.dll",
+      "sha256": "12E865604BB782A4B6FE0BB217FA7B9E941E16F9B25B65E0C7E15C16C45F2CBC"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Text.Encoding.Extensions.dll",
+      "sha256": "6681C0DB9D5C60C0AD72A8433CC0BCB33186AA6B420456E1F551E84C6CA9637B"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Text.RegularExpressions.dll",
+      "sha256": "C408ED85530C80A6CCB471ACFA43B72FD719F0C0A416EC324B4D0799F6EA5981"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.dll",
+      "sha256": "17DD1D74FA6AE3831352E1626F3846D9A216B185EB471B82E0F141899FCCB465"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.Overlapped.dll",
+      "sha256": "2D6667D52882551A966205FF23F8198324F56770E84373CCE35D4B5ACCC12DB0"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.Tasks.dll",
+      "sha256": "26766901329C6DE0B8E8A353EEE4CA5A0A552E302626F4C8C61916122A5BDA3E"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.Tasks.Parallel.dll",
+      "sha256": "FD2E387BEBEB9F6E4E0C481706A2EACB7FF920237679AB20AE6B567533FE56ED"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.Thread.dll",
+      "sha256": "DE4462B99D0B14530381DA960870A00579718599AF2EF425480D7B936B600B12"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.ThreadPool.dll",
+      "sha256": "925C40129A186B966C23C1E86AE66CE9942ADE12EE858123B82C062356A56CE1"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Threading.Timer.dll",
+      "sha256": "654AA66E574A7CD10C6379F94B5553ED47FFB748364FEFBB1F0ED588EE31D428"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.ValueTuple.dll",
+      "sha256": "92F63056AC24203D555F87D409665E998E68FFC0E89C221A8DCE91E25E5EE66C"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Xml.ReaderWriter.dll",
+      "sha256": "A286FE8E5AF41B11CFD3D1C7C408148EF1EED6A2B0D88ECDDCD7D59C3DA5BA2B"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Xml.XDocument.dll",
+      "sha256": "410A95EF01078A6707FCAE4E7F4AE6A8F58EAC2388F1B3CB5717298CEE6C54B6"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Xml.XmlDocument.dll",
+      "sha256": "FFDB29C1558964DD7B81E684EBD262341B4AA257E9C88FF314945CFAE971DFDD"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Xml.XmlSerializer.dll",
+      "sha256": "5F49BB45E943465E675608C54829ADA8655D96002C91135D9BA0F3CD0C67ADD2"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Xml.XPath.dll",
+      "sha256": "7504E1B282F4BDC611D64BB036FDDD03D7104908B26C1BC6B2E63AC0F42C779A"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8.1\\Facades\\System.Xml.XPath.XDocument.dll",
+      "sha256": "4FDD617FA7D10650644638C3D3CB52FF2A8B3BF128692A1225BAFD88123EC249"
+    }
+  ],
+  "firmware_handoffs": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_timing_r2_20261024\\native_r2\\result.json",
+      "sha256": "86EDEC75DB557613A86EEEF9B834C1E04198E883130BD65B9DA7D6869D934CE2"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Note\\V1_USB_TIMING_R2_20261024.md",
+      "sha256": "1FCE118860E44540AF21ED6857C916E9AC77BC7020C6B24FF41646FE97D0F36C"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_timing_r2_20261024\\source_r2\\source_manifest.json",
+      "sha256": "BE407597087DEBBB3E878353D2782AB665B2F5542F5194432D8A2C423DD23400"
+    },
+    {
+      "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_timing_20261024\\software-check-receipt.json",
+      "sha256": "3AD310CC3A871AC1AEF5FDFDD12E76A9DA031B4E784F5FB028FEEB80F1052E6D"
+    },
+    {
+      "path": "D:\\Code\\XE_NP_V2\\Note\\V2_USB_TIMING_SIDEBAND_20261024.md",
+      "sha256": "54D8F14F9AA4403883365A7D97971D086ABB472BA5E3B784F52F6640F4F94C16"
+    }
+  ],
+  "owner_source_hashes_revalidated": true,
+  "test_logs": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\host-compiled-tests.log",
+      "sha256": "147E906DF6B7F4657AF1FD140D9CC29CBB85ED4A9744D536B7E6B3ED10FD5337"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\imu-regression.log",
+      "sha256": "86D8CC49E7D47CEB617DD97F48B216D58DB5122CB094CD1D920766633A611FE2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\anchor-regression.log",
+      "sha256": "9EE5C7E4A1E8E14DEA50A67220F6651CFB05332DBADCEA8EAAEF3357DA2E5B3E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\recording-regression.log",
+      "sha256": "12569AF63AC330D826C42F39327657AA3D4028FD9EB924A2C502F2C41C768692"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_timing_r2_20261024\\integration-sd-tests.log",
+      "sha256": "D47D1086C0847035738881D886976FCE3288FD75A58DB89C195B1F611347F8C1"
+    }
+  ],
+  "checks": {
+    "shared_wire": 134,
+    "source_and_actual_compiled_sessions_evidence_imu_start": 32,
+    "imu_correction": 54,
+    "actual_recording_workers": 30,
+    "actual_app_sdk_and_sd_start": 22,
+    "first_sample_anchor": "passed; generated bounds and legacy/failed-query cases",
+    "unchanged135_algorithm_checks": 598,
+    "unchanged135_source_anchor_merge_checks": 13,
+    "v1_owner_native": 490,
+    "v2_owner_actual_consumer": "PASS; receipt reused"
+  },
+  "warnings": [
+    "SDK subset CS0649 in unused fixture-facing fields; no reported GUI compile warnings"
+  ],
+  "firmware_source_changed": true,
+  "firmware_image_built": false,
+  "hardware_access": false,
+  "published": false,
+  "latest_published": "1.0.0.133",
+  "limitations": [
+    "V2 timing provider is HAL-ms only; no measured sub-ms accuracy",
+    "First source receipt is receiver-root/retained-row evidence, not physical ADC conversion",
+    "No hardware common start or GPIO/camera/exposure/filter-delay calibration",
+    "No missing historical clock evidence can be recovered by this upgrade",
+    "Firmware ARM compile/link/resource checks and matched HIL remain separate",
+    "Remote Win32 31/SD/frame-integrity causes remain open without incident evidence",
+    "V2 physical-access/SD292 full independent readback hold unchanged"
+  ]
+}

@@ -1,9 +1,9 @@
-# WILD-X 1.0.0.133
+# WILD-X 1.0.0.137
 
-[Download installer](WILDX_console-Setup-1.0.0.133.exe).
+[Download installer](WILDX_console-Setup-1.0.0.137.exe).
 
-Fixes overlapping BLE background polls and stale IMU readings, prioritizes IMU over waveform preview, and saves raw periodic clock observations. Includes the PC-time correction and SD-test workflow from128.
+Restores double-buffered SD-to-USB downloads. On the connected V1, the same recording exported at 43.52 MB/s versus 35.11 MB/s, with identical data hashes. No new firmware is needed for this speed fix.
 
-Existing firmware remains supported. BLE IMU needs compatible device firmware; the private V2 IMU APP and high-resolution timing firmware are not bundled. AP drift correction and joint physical NP/GPIO timing remain under development.
+Includes the checked V1 USB 1.0.108 and APP lifecycle/timing bundle. V2 firmware is unchanged. Existing firmware remains supported.
 
-All 43 packaged files were extracted and hash-verified. [Manifest](release-manifest.json) / [source and validation](../ReleaseSources/1.0.0.133/README.md).
+[Release details](../ReleaseSources/1.0.0.137/README.md) / [manifest](release-manifest.json).

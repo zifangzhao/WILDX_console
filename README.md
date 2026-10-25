@@ -1,8 +1,8 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.133**.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.137**.
 
-[Latest installer](LATEST_INSTALLERS/README.md) includes BLE IMU polling/freshness fixes and raw clock evidence collection. Existing firmware remains supported; compatible device firmware is required for BLE IMU. [Release details](ReleaseSources/1.0.0.133/README.md).
+[Latest installer](LATEST_INSTALLERS/README.md) restores buffered SD downloads and includes the checked V1 lifecycle/timing firmware. Existing firmware remains supported; V2 firmware is unchanged. [Release details](ReleaseSources/1.0.0.137/README.md).
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 

@@ -318,14 +318,17 @@ namespace CE32_console
                             " | Selected downloads: "+USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown)+" · "+elapsed.Elapsed+"\r\n"+output));
                     };
                     reportProgress(0);
+                    using(var prefetch=source.Usb?new NpDownloadPrefetchStream(stream,checked(r.Start*512),checked(r.End*512),()=>cancelled):null){
+                    Stream input=prefetch??stream;
                     if(recoverInterrupted&&r.PowerInterruptedRecovery){
-                        if(r.Media)NpMediaExport.ExportPowerInterruptedPrefix(stream,r.Start,r.End,output,()=>cancelled,reportProgress);
-                        else NpCe64Export.ExportPowerInterruptedPrefix(stream,r.Start,r.End,output,()=>cancelled,reportProgress);
+                        if(r.Media)NpMediaExport.ExportPowerInterruptedPrefix(input,r.Start,r.End,output,()=>cancelled,reportProgress);
+                        else NpCe64Export.ExportPowerInterruptedPrefix(input,r.Start,r.End,output,()=>cancelled,reportProgress);
                     }
                     else {
-                        var result=NpCe64Export.ExportCalibrated(stream,r.Start,r.End,output,()=>cancelled,reportProgress,calibration.Count==0?null:calibration);
+                        var result=NpCe64Export.ExportCalibrated(input,r.Start,r.End,output,()=>cancelled,reportProgress,calibration.Count==0?null:calibration);
                         string warning=NpCe64Export.V2RecordingWarning(result);
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);
+                    }
                     }
                     nativeDone+=(double)r.Chunks*(r.V2?46592:65536);nativeSeconds+=watch.Elapsed.TotalSeconds;
                     if(merge && !r.Media && (r.Chunks>0 || recoverInterrupted&&r.PowerInterruptedRecovery))NpSdDatMerge.ExportTimed(output,r.V2,(int)r.ProbeMask,(int)r.ApHz,()=>cancelled,
