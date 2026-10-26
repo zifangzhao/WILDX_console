@@ -1,17 +1,20 @@
 {
-  "version": "1.0.0.149",
-  "releaseId": "WILDX149_V1_LFP_PREVIEW_20261026",
-  "baselineVersion": "1.0.0.148",
+  "version": "1.0.0.150",
+  "releaseId": "WILDX150_USB_BYTE_RATE_20261026",
+  "baselineVersion": "1.0.0.149",
   "localGuiCompilationsThisTask": 1,
   "localHelperCompilationsThisTask": 0,
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "23C14A57ECBB59A7E487D73E6837EA1E8D140E401EE33B8A1A2455B945D0F225",
+  "guiSha256": "BE4C320DEECC1E28C4DACACAD6C2F2F65220B375B60A4E1080C43C1B3F118CF3",
   "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
   "configuratorSha256": "F30CD01DDC80DDE660C4FDFF1D0F4E5E12F1924E58027C2810E131E3B238D86B",
-  "sourceArchiveSha256": "515E3BD1EA582FFC36575126A569637F9173A678D6167F10A7501EF9B7D4C159",
+  "sourceArchiveSha256": "DB576BE7D72D4316E53AE29D246CE1E4E61A7FB350A04A97D1B8EF8B52FF18AF",
   "changedGuiSources": [
     "AssemblyInfo.cs",
-    "NpV1BlePreviewForm.cs"
+    "NpDownloadForm.cs",
+    "NpDownloadStream.cs",
+    "NpDownloadStream.Progress.cs",
+    "NpProgressEstimate.cs"
   ],
   "v1FirmwareChanged": false,
   "v2FirmwareChanged": false,
@@ -27,16 +30,16 @@
   "allModeOrEnduranceQualified": false,
   "acceptance": {
     "result": "software_checks_passed",
-    "production_source_checks": 13375,
-    "profile": "V1 BLE mask3/20k LFP; simulated radio",
-    "snapshot_renewal_cleanup_and_phase_cache_checked": true,
-    "hardware_preview_tested": false,
+    "production_transport_checks": 216,
+    "built_app_rate_checks": 254,
+    "built_app_eta_checks": 14,
+    "hardware_tested_this_fix": false,
     "production_build_warnings": 0
   },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.149.exe",
-    "bytes": 7350772,
-    "sha256": "3336BDFD96A9ACD33635A7715643A752BC4925EBF1561D589D6CB18CE59C1F6D"
+    "file": "WILDX_console-Setup-1.0.0.150.exe",
+    "bytes": 7351020,
+    "sha256": "67A9FE346F2472A8419A23D19AA2F7BE3B24983685029A430CFFE7713AD8D3C3"
   },
   "payload": [
     {
@@ -201,8 +204,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2031616,
-      "sha256": "23C14A57ECBB59A7E487D73E6837EA1E8D140E401EE33B8A1A2455B945D0F225"
+      "bytes": 2032128,
+      "sha256": "BE4C320DEECC1E28C4DACACAD6C2F2F65220B375B60A4E1080C43C1B3F118CF3"
     },
     {
       "path": "WILDX_console.exe.config",

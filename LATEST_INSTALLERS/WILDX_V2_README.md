@@ -1,5 +1,5 @@
 # WILD-X / V2
 
-[Install WILD-X 1.0.0.149](WILDX_console-Setup-1.0.0.149.exe). V2 APP C250DF48 / USB A71BDECC and the matching catalog are bundled. No separate update ZIP is required.
+[Install WILD-X 1.0.0.150](WILDX_console-Setup-1.0.0.150.exe). V2 APP C250DF48 / USB A71BDECC and the matching catalog are bundled. No separate update ZIP is required.
 
-[V1 LFP preview](../ReleaseSources/1.0.0.149/README.md).
+[USB byte-rate meter](../ReleaseSources/1.0.0.150/README.md).

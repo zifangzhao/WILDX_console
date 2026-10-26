@@ -11,6 +11,11 @@ namespace USB512_interface
         internal string Elapsed {get{return "Elapsed "+Duration(watch.Elapsed.TotalSeconds);}}
         internal string Describe(double done,double total,bool known=true){return Elapsed+" · "+Remaining(done,total,watch.Elapsed.TotalSeconds,known);}
         internal string Percent(int percent,bool known=true){return Describe(percent,100,known);}
+        internal static string TransferRate(long bytes,double seconds)
+        {
+            if(bytes<=0||seconds<0.25||Double.IsNaN(seconds)||Double.IsInfinity(seconds))return "Measuring speed…";
+            return (bytes/seconds/1e6).ToString("F1",CultureInfo.InvariantCulture)+" MB/s";
+        }
         internal static string Duration(double seconds)
         {
             if(Double.IsNaN(seconds)||Double.IsInfinity(seconds)||seconds<0||seconds>=TimeSpan.MaxValue.TotalSeconds)return "--:--:--";

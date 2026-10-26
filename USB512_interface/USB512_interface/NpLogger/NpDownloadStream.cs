@@ -321,6 +321,7 @@ namespace CE32_console
                 qualityRequestPending=false;
                 try {ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);USB512_interface.UsbHealth.Integrity(usb,0x81,false,"download header/sequence/payload CRC");}
                 catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
+                CountDownloadedPayload(got-32);
                 sequence++;
                 if(burst)CommitBurstReply(lba);
                 validatedRead=true;

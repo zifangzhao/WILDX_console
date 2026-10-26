@@ -307,12 +307,16 @@ namespace CE32_console
                     string name=USB512_interface.NpFolderNaming.DownloadName(label,NpDownloadCatalog.RecordingStartTime(stream,r),"NP_"+r.Session+"_LBA"+r.Start);
                     using(var destination=USB512_interface.NpFolderNaming.Reserve(root,name)) {
                     string output=destination.Path;int index=i;
+                    var download=stream as NpDownloadStream;
+                    long transferStart=download==null?0:download.DownloadedBytes;
                     var watch=System.Diagnostics.Stopwatch.StartNew();
                     Action<int> reportProgress=p=>{
                         double totalBytes=(double)r.Chunks*(r.V2?46592:65536),bytes=totalBytes*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
                         bool knownSize=!(recoverInterrupted&&r.PowerInterruptedRecovery);
                         int weight=r.Media&&makeMedia?75:merge&&!r.Media?70:100;int local=Math.Min(99,p*weight/100);
-                        string activity=knownSize?"native download ~"+(bytes/1073741824).ToString("F2")+" / "+(totalBytes/1073741824).ToString("F2")+" GiB · ~"+(bytes/seconds/1e6).ToString("F1")+" MB/s":"read-only prefix recovery";
+                        string speed=download==null?"~"+(bytes/seconds/1e6).ToString("F1")+" MB/s":
+                            USB512_interface.NpProgressEstimate.TransferRate(download.DownloadedBytes-transferStart,seconds);
+                        string activity=knownSize?"native download ~"+(bytes/1073741824).ToString("F2")+" / "+(totalBytes/1073741824).ToString("F2")+" GiB · "+speed:"read-only prefix recovery";
                         ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+" ("+(index+1)+"/"+chosen.Count+"): "+
                             (p>=100?"Finalizing recording files…":p+"% | "+activity+" | "+DownloadTimeRemaining(p,seconds,knownSize))+
                             " | Selected downloads: "+USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown)+" · "+elapsed.Elapsed+"\r\n"+output));

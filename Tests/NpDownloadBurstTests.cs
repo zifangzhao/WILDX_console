@@ -61,6 +61,11 @@ internal sealed partial class NpDownloadStream:Stream{
  static byte[] ReadBytes(NpDownloadStream s,int n){byte[] b=new byte[n];Need(s.Read(b,0,n)==n,"Short read");return b;}
  public static int Main(){
   const int packet=1020*512;
+  using(var s=Make()){s.Supported=false;ReadBytes(s,1);Need(s.DownloadedBytes==packet,"Validated legacy payload not counted");ReadBytes(s,17);s.Position=0;ReadBytes(s,1);Need(s.DownloadedBytes==packet,"Cache hits counted as USB transfers");s.Position=packet;ReadBytes(s,1);Need(s.DownloadedBytes==2L*packet,"Next legacy payload not counted");}
+  using(var s=Make()){s.BeginSequentialRange(0,4L*packet);ReadBytes(s,1);Need(s.DownloadedBytes==packet,"Burst payload not counted exactly once");ReadBytes(s,packet);Need(s.DownloadedBytes==2L*packet,"Next validated burst payload not counted");}
+  using(var s=Make()){s.CorruptFirst=true;s.BeginSequentialRange(0,4L*packet);Throws<InvalidDataException>(()=>ReadBytes(s,1));Need(s.DownloadedBytes==0,"Rejected CRC inflated download speed");}
+  using(var s=Make()){var field=typeof(NpDownloadStream).GetField("downloadedBytes",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);field.SetValue(s,8L*1024*1024*1024);Need(s.DownloadedBytes==8589934592L,"Byte count truncated above4GiB");}
+
   using(var s=Make()){s.Supported=false;s.BeginSequentialRange(0,4L*packet);ReadBytes(s,packet+3);Need(!s.Calls.Contains("66")&&!s.Calls.Contains("64"),"Legacy query failure armed a burst");Need(s.Calls.Count(x=>x=="61")==2,"Legacy request path changed");}
   using(var s=Make()){s.qualityTestSession=true;s.BeginSequentialRange(0,4L*packet);Need(s.Calls.Count==0,"Quality test negotiated burst");}
   using(var s=Make()){s.IsSynthetic=true;s.BeginSequentialRange(0,4L*packet);Need(s.Calls.Count==0,"Synthetic source negotiated burst");}

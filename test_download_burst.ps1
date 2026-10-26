@@ -1,9 +1,10 @@
+param([string]$SourceFile="$PSScriptRoot/USB512_interface/USB512_interface/NpLogger/NpDownloadStream.cs",[string]$OutputDirectory="$PSScriptRoot/_artifacts/download_burst_source_tests")
 # Software-only: extracted production methods and scripted transport, no device access.
 $ErrorActionPreference='Stop'
 $repo=$PSScriptRoot
-$out=Join-Path $repo '_artifacts/download_burst_source_tests'
+$out=[IO.Path]::GetFullPath($OutputDirectory)
 New-Item -ItemType Directory -Path $out -Force | Out-Null
-$reader=[IO.File]::ReadAllText((Join-Path $repo 'USB512_interface/USB512_interface/NpLogger/NpDownloadStream.cs'))
+$reader=[IO.File]::ReadAllText($SourceFile)
 function Slice([string]$start,[string]$end){
  $a=$reader.IndexOf($start,[StringComparison]::Ordinal)
  $b=$reader.IndexOf($end,$a,[StringComparison]::Ordinal)
@@ -22,7 +23,7 @@ $template=[IO.File]::ReadAllText((Join-Path $repo 'Tests/NpDownloadBurstTests.cs
 $framework='C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.8.1'
 $csc='C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/Roslyn/csc.exe'
 $exe=Join-Path $out 'NpDownloadBurstTests.exe'
-& $csc /nologo /target:exe /nostdlib+ "/reference:$framework/mscorlib.dll" "/reference:$framework/System.dll" "/reference:$framework/System.Core.dll" "/out:$exe" (Join-Path $out 'generated.cs') (Join-Path $repo 'USB512_interface/USB512_interface/NpLogger/NpDownloadBurst.cs')
+& $csc /nologo /target:exe /nostdlib+ "/reference:$framework/mscorlib.dll" "/reference:$framework/System.dll" "/reference:$framework/System.Core.dll" "/out:$exe" (Join-Path $out 'generated.cs') (Join-Path $repo 'USB512_interface/USB512_interface/NpLogger/NpDownloadBurst.cs') (Join-Path $repo 'USB512_interface/USB512_interface/NpLogger/NpDownloadStream.Progress.cs')
 if($LASTEXITCODE -ne 0){throw 'Burst source test compile failed'}
 & $exe
 if($LASTEXITCODE -ne 0){throw 'Burst source tests failed'}
