@@ -281,12 +281,17 @@ namespace CE32_console
                 // Host read completion may precede firmware's EP1 completion.
                 // Only a matching idle receipt permits the next request; never
                 // replay 0x61 after a failed control transfer.
-                if(validatedRead)WaitForDownloadReady();
-                if(qualityTestSession)qualityRequestPending=true;
-                Control(0x40,0x61,(ushort)lba,(ushort)(lba>>16),0);
+                bool burst=PrepareBurstRead(lba);
+                if(!burst){
+                    if(validatedRead)WaitForDownloadReady();
+                    if(qualityTestSession)qualityRequestPending=true;
+                    Control(0x40,0x61,(ushort)lba,(ushort)(lba>>16),0);
+                }
                 int expected=checked(32+(int)blocks*512);
                 if(wireBuffer==null)wireBuffer=new byte[32+maxBlocks*512];
                 byte[] reply=wireBuffer;int got=0;
+                if(burst)got=TakeBurstReply(lba,out reply);
+                else{
                 while(got<expected) {
                     if(qualityTestSession && Cancelled!=null && Cancelled())throw new OperationCanceledException();
                     // Normal full replies read directly into one reusable array.
@@ -312,10 +317,12 @@ namespace CE32_console
                     // Error response is deliberately a short header-only transfer.
                     if(got==32 && U(reply,16)!=0)break;
                 }
+                }
                 qualityRequestPending=false;
                 try {ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);USB512_interface.UsbHealth.Integrity(usb,0x81,false,"download header/sequence/payload CRC");}
                 catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
                 sequence++;
+                if(burst)CommitBurstReply(lba);
                 validatedRead=true;
                 cache=reply;cachePayloadCount=got-32;
                 cacheStart=(long)lba*512;
@@ -328,6 +335,7 @@ namespace CE32_console
                } catch(NativeBulkReadFailure failure) {
                     cache=null;cachePayloadCount=0;cacheStart=-1;wireBuffer=null;
                     ReadRecoveryDiagnostics="native bulk failure; recovered="+RecoveredReads+" retries="+ReadRecoveryAttempts+"; "+failure.Message;
+                    if(burstOwned)throw; // Retire the bounded session; never replay its packets.
                     if(!canRecoverReads || failure.NativeError==995 || failure.NativeError==1223)throw;
                     if(retry>=2) {
                         // Exhausted reads still own a firmware reply. Retire
@@ -343,7 +351,7 @@ namespace CE32_console
                     RecoverOwnedRead(lba,retry+1,failure);
                }
               }
-            } catch {faulted=true;cache=null;cachePayloadCount=0;wireBuffer=null;throw;}
+            } catch(Exception error) {if(burstOwned)burstFailure=error;faulted=true;cache=null;cachePayloadCount=0;wireBuffer=null;throw;}
         }
         public override int Read(byte[] b,int offset,int count) {
             if(usb==IntPtr.Zero)throw new ObjectDisposedException(GetType().Name);
@@ -360,6 +368,6 @@ namespace CE32_console
         public override long Length{get{return length;}} public override long Position{get{return position;}set{if(value<0 || value>length)throw new ArgumentOutOfRangeException();position=value;}}
         public override long Seek(long offset,SeekOrigin origin){Position=checked(offset+(origin==SeekOrigin.Begin?0:origin==SeekOrigin.Current?position:origin==SeekOrigin.End?length:throw new ArgumentOutOfRangeException()));return position;}
         public override void Flush(){} public override void SetLength(long v){throw new NotSupportedException();} public override void Write(byte[] b,int o,int n){throw new NotSupportedException();}
-        protected override void Dispose(bool disposing){if(usb!=IntPtr.Zero){NpDownloadNative.WinUsbFree(usb);usb=IntPtr.Zero;}if(file!=null){file.Dispose();file=null;}base.Dispose(disposing);}
+        protected override void Dispose(bool disposing){try{if(usb!=IntPtr.Zero)EndSequentialRange();}finally{if(usb!=IntPtr.Zero){NpDownloadNative.WinUsbFree(usb);usb=IntPtr.Zero;}if(file!=null){file.Dispose();file=null;}base.Dispose(disposing);}}
     }
 }

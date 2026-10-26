@@ -34,7 +34,7 @@ Session `407197060` stopped normally with 24,156 committed blocks, state5/fault0
 
 ## Download baseline
 
-The same complete existing session `407207722` was read throughout. All transfers used high-speed USB and production CRC validation. Six alternating exports produced identical DAT, IMRO, descriptor and footer bytes.
+The same complete existing session `407207722` was read throughout. All transfers used high-speed USB and production CRC validation. Six alternating exports produced identical DAT, descriptor and footer bytes. This selected session contains no exported IMRO, so those trials do not establish IMRO generation or equality.
 
 | Path | Throughput |
 | --- | ---: |
@@ -46,7 +46,7 @@ Buffered source reads occupied approximately 12.93 of 13.10 seconds, placing the
 
 The isolated USB CRC candidate `9C6B72A1` grouped register loads and fed eight words per loop. The generated bulk loop used 15 instructions per 32 bytes versus 24 in the released image. Native checksum equivalence passed 16,569 cases, including alignment, tails and full-size transfers.
 
-Hardware testing rejected this candidate. Raw throughput fell to 29.227 MB/s; serial and buffered export medians were 28.497 and 28.242 MB/s. Every exported DAT/IMRO/descriptor/footer hash matched the baseline, and firmware errors stayed zero. Median CRC time increased from 4245.5 to 5075.5 ms per export; SD time stayed near 8.62 s and overlapping USB time near 8.20 s. This candidate must not enter the bundled catalog.
+Hardware testing rejected this candidate. Raw throughput fell to 29.227 MB/s; serial and buffered export medians were 28.497 and 28.242 MB/s. Every exported DAT/descriptor/footer hash matched the baseline, and firmware errors stayed zero. Median CRC time increased from 4245.5 to 5075.5 ms per export; SD time stayed near 8.62 s and overlapping USB time near 8.20 s. This candidate must not enter the bundled catalog.
 
 The useful lesson is that instruction count does not describe peripheral-bus timing. Grouping memory reads can make the subsequent CRC writes slower even when fewer instructions execute.
 
@@ -67,3 +67,46 @@ Evidence: `ReleaseSources/1.0.0.140/checks/measurement-summary.json`, `catalog-p
 ## Delivery
 
 WILD-X 1.0.0.140 contains V2 USB13ED1F8E / APP8DE56637 and their matching catalog. V1 remains APP82E51DEA / USB4F7B521A. Firmware provenance is pinned to XE_NP V2 commit `c8b10f8e4ac831c86732627305c249faa6b9ae4a`. The single installer is 10,525,513 bytes, SHA256 `5C81231C7989E52F3F05FE17342EB3CE96EA8EFFDB33149B77D6C12A3FF85A14`; all 58 extracted payload files were hash-verified. No installer execution, new firmware build or extra hardware check accompanied packaging. Older deliverables are archived under legacy. No separate update ZIP is needed.
+
+## Further SD/CRC/USB pipeline work
+
+The next optimization targets overlap rather than another CRC loop variant. A fresh published140/USB13ED baseline read the same 409,221,120-byte extent in 12.5318 s (32.6547 MB/s), with zero firmware errors. Counters measured SD 8422 ms, CRC 4102 ms and overlapping USB 8402 ms. The board returned to exact idle USB mode2.
+
+The existing two-buffer path is approximately limited by `max(SD + CRC, USB)`: 12.524 s of preparation matches the measured 12.532 s. A complete three-stage pipeline would instead approach `max(SD, CRC, USB)`; the ideal bound is about 8.42 s for this extent, or 48.6 MB/s physical throughput. This is a ceiling from the measured stages, not a hardware speed promise; memory-bus contention and command/cache overhead can reduce it.
+
+The proposed firmware reuses a private portion of the existing raw source ring only in reset-separated download mode, and separates SD IDMA start/poll/retirement. SD can fill one packet while CPU CRC checks a second and USB transmits a third. Packet layout, CRC checks, high-speed USB and old host commands remain unchanged. APP/capture/IMU behavior must remain untouched. No new RAM reservation is planned.
+
+Source review found a HAL abort path with an effectively unbounded wait. The candidate must drain existing reads through genuine hardware retirement, suppress old-epoch responses, and retain busy/buffer ownership until safe. Completed speculative cache must be discardable so it cannot block mode exit indefinitely. The old host constructor already polls idle after 0x62 for about one second before resetting/flushing its pipe and issuing the next read.
+
+A read-only real-device cancellation observer was first validated on published 13ED. It saved immutable prefix hashes, cancelled a pending read at 0/12/25 ms, then reopened through the original 140 constructor at a different LBA. All three hashes matched; retirement took 14/15/15 ms. This baseline supports testing real endpoint/SD ownership in addition to source-extracted native cases. A targeted short P123/20kHz USB+IMU capture is required after the new loan is released.
+
+The first private pipeline candidate, USB `90822A54`, passed the expanded native ownership/cancellation checks and was installed under the V2 developer's exclusive hardware lease. Full flash readback verified that APP, recovery, options and settings were preserved. SD contents were not modified.
+
+The same physical extent took 11.8144 s (34.6374 MB/s), +6.07% over the fresh 13ED baseline. Its SD/CRC/USB counters remained approximately 8.61/4.16/8.42 s, so substantially less overlap was achieved than the planning bound. All 296 catalog entries and all DAT/descriptor/footer hashes in six exports matched the baseline. However, serial export median fell from 31.8196 to 31.1424 MB/s (-2.13%); buffered export rose from 31.4195 to 33.0257 MB/s (+5.11%). Metadata-seek SD time also increased from 13.112 to 19.580 s. These regressions hold this candidate from release while scheduling and speculative-read behavior are investigated. A lower instruction count or additional buffers alone do not establish a useful end-to-end improvement.
+
+The retained main object uses a tight download service loop; disassembly rules out a presumed one-millisecond main-loop wait. The focused source review instead identified full-packet cache cleaning after CRC, outside all three stage counters. Only the 32-byte header is modified by the CPU; the IDMA payload is invalidated and subsequently read-only. The next private repair will restrict cleaning to that header and retain the original one-ahead limit for unproven/nonsequential legacy reads. Full pipeline depth requires observed sequential progression or an explicit bounded read plan. This targets both hidden cache work and wasted catalog speculation.
+
+The focused candidate `A71BDECC` passed native checks and full USB-only flash readback. Its raw speed was 34.5540 MB/s (11.8429 s), with zero reported firmware errors and all 296 catalog entries preserved. Metadata-seek SD time returned to 13.307 s, close to the 13.112 s baseline. Header-only cleaning did not materially improve raw throughput; the hypothesis that full transmit cleaning accounted for most missing overlap is rejected. The candidate remains private pending a useful end-to-end gain.
+
+One read-only SWD trace collected 331 coarse asynchronous samples. Forty-three showed a CRC-pending bank with both physical SD and EP1 engines active. This establishes qualitative overlap, not atomic phase timing. The raw run recorded only 3 ms total header-clean time. The released host has no bounded-burst path: every packet uses a readiness query and a separate read request. A private probe will compare that path with the existing explicitly negotiated NBC1/0x66/0x64 burst extension, using 781 hashed packets, leaving space for legacy two-ahead reads within the preserved recording. Both paths validate production packet CRC/sequence/epoch/LBA and compare full payload SHA256. No GUI/SDK build or new firmware variant is needed for this diagnostic.
+
+Evidence is under `_artifacts/v2_download_pipeline_20261025`, including `candidate90822-summary.json`. USB13ED remains the published fallback until the accepted 141 bundle is published. The private 141 application has now passed the final export checks described below.
+
+## Accepted GUI and firmware pipeline
+
+The same-A71 host test improved from 33.4167 to 44.0185 MB/s (+31.73%) when one synchronous bulk-read task filled a second managed buffer while the previous packet received CRC and SHA256 validation. The complete 407,869,440-byte payload SHA256 matched the legacy reference. These physical-read figures include a test-only SHA256 pass and are distinct from logical export throughput.
+
+The actual 1.0.0.141 GUI uses the negotiated NBC1 extension only in its bounded export wrapper. It sends at most 32 full-packet requests per batch, within the selected recording's full-packet range. It keeps one native read active at most, validates every packet before publishing data, joins the worker before retirement/free, and never replays an ARM/START/CANCEL with an unknown outcome. Nonsequential seeks retire the owned session; the final partial extent uses the legacy reader. Unsupported firmware, synthetic sources and quality tests retain the original path. No new user setting is needed. Run `test_download_burst.ps1` for 183 software-only assertions covering fallback, range/tail behavior, cancellation, ownership and integrity errors.
+
+| Same-session logical export | Published 140 / USB13ED | GUI141 / USBA71 |
+| --- | ---: | ---: |
+| Buffered GUI export, median of three | 31.4195 MB/s | 43.3317 MB/s |
+| Unbuffered diagnostic path, median of three | 31.8196 MB/s | 31.1702 MB/s |
+
+The GUI's buffered path improves 37.91%. All six alternating full exports produced identical three-probe DAT, descriptor and footer hashes; the complete 296-entry catalog is unchanged. This selected session has no IMRO file. The unbuffered diagnostic path does not get the host optimization and remains slightly slower; it is not the GUI's normal download path. Measurements are specific to the connected board/card/PC and do not establish all-card or endurance performance.
+
+The A71 cancellation observer passed at 0/12/25 ms, followed by exact reopened-prefix hashes. A subsequent short P123/20 kHz USB capture verified all 7,280 blocks with zero reported raw/decoded drops. Each probe produced 186,367 rows; all 186 native IMU observations had valid AG+MAG, with 186 unique sensor sequences. The capture observer used GUI140; its capture/IMU code and SDK are identical in 141. The final download observer used the actual141 executable, SHA256 `37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268`. Final exact-device USB mode2/busy0/target0 was confirmed and all observers closed. No SD write, delete or format occurred.
+
+The practical lesson is to pipeline the complete path, including host command submission and validation. Adding a third firmware buffer alone gave about 6%; pairing it with bounded commands and host read/CRC overlap produced the useful end-to-end gain. The initial counter-derived ideal was a planning estimate, because those counters include service and scheduling effects rather than pure hardware durations.
+
+The accepted installer contains all 58 verified payload files, including the source-bound V2 catalog and components. Its size is 10,536,090 bytes, SHA256 `56AC6A67A8DDFC976D7A31023355CAA7B668F7D98309E8161DD0648291B5F0C4`. The extracted actual141 automatic Bundled catalog passed for the current V1/V2 pairs. V2 source is pinned to commit `661e9dd03b7d98c1a16bf50c07f93295537faad8`. Only one current installer is kept at the latest root; publication verification follows.

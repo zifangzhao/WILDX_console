@@ -1,20 +1,22 @@
-# V2 CRC-read improvement - 2026-10-25
+# V2 bounded SD download release - 2026-10-25
 
-Recovery6408DBB8 / USB13ED1F8E / BLE-SD APP8DE56637.
+Recovery 6408DBB8 / USB A71BDECC / BLE-SD APP 8DE56637.
 
-Fused HEX merges the exact checked USB with unchanged APP/recovery and omits
-retained configuration. Components retain their existing bytes/seals. New USB/fused HEX use LF; the
-unchanged legacy recovery HEX retains its existing CRLF formatting.
-No separate whole-fused flash test was run.
+Actual WILD-X141 buffered export median: 43.3317 MB/s versus previous 31.4195 MB/s
+(+37.91%). Six exports matched the reference DAT, descriptor and footer hashes;
+all 296 catalog entries matched; firmware errors 0, CRC self-test 1. The selected
+record contained no IMRO file. Legacy serial median was 31.1702 MB/s.
 
-WILD-X139 download comparison: serial export median30.41 to31.82MB/s; all six
-exports matched baseline hashes, firmware errors0 and CRC self-test1. SD time
-also improved, so the entire gain cannot be attributed solely to the CRC loop.
-No new neural capture/endurance test was added. Prior APP evidence is reused.
+Short three-probe/20 kHz USB capture on the unchanged actual140 capture graph:
+7280 received and verified blocks, zero raw/decoded drops, fresh AG and MAG in
+all 186 retained IMU observations. This is bounded qualification, not all-mode,
+all-card, endurance, analog-quality, physical-time or installed-UI qualification.
 
-These exact assets are intended for the single WILD-X140 installer. Its owner
-records final installer identity. No standalone update ZIP is required. The
-compiled-sources ZIP is source/build/evidence only, not an updater.
+Fused HEX directly merges exact checked components and omits configuration.
+APP/recovery stay byte-for-byte unchanged. New USB/fused HEX use LF; legacy
+recovery HEX retains CRLF. The fused image was not separately flashed as a whole.
 
-See package-receipt.json, acceptance.json, source-manifest.json and
-../../Note/V2_USB_TIMING_SIDEBAND_20261024.md for scope and provenance.
+The source ZIP contains incremental source/object/build/evidence provenance,
+not a standalone updater or full clean-tree reproduction. Historical main source
+preimage is unavailable; exact retained main.o is pinned. Existing APP limits
+and prior evidence remain in acceptance.json and package-receipt.json.

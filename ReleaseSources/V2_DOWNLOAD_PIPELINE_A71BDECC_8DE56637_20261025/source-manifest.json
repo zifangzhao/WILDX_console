@@ -1,0 +1,396 @@
+{
+  "usb_crc32": "A71BDECC",
+  "app_crc32": "8DE56637",
+  "source_scope": "Exact scoped incremental pipeline input snapshots, retained-object identities, final stream object, recipe/maps, native and hardware receipts; not a clean-tree reconstruction. Unchanged historical inputs are referenced by the parent source archive/build identities.",
+  "parent_release_commit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
+  "parent_source_archive_path": "ReleaseSources/V2_CRC_13ED1F8E_8DE56637_20261025/compiled-sources.zip",
+  "parent_source_archive_sha256": "3A4CBE0551612145F82D388658DD8D57348BBF7F2659F5CE48AA05BA069D2884",
+  "source_archive_path": "ReleaseSources/V2_BURST_A71BDECC_8DE56637_20261025/compiled-sources.zip",
+  "source_archive_sha256": "FAC59E0BAAC4050E2CAB414F75660B86562BB93B0E984D6B975A4CACEFD0C630",
+  "archive_inputs": {
+    "acceptance/acceptance.json": {
+      "sha256": "CCFB5EDE5740858F2F3053998F598EE05B9F76B15C2FF9BCEFD708AACD04074D",
+      "bytes": 8906
+    },
+    "acceptance/benchmark-selected.json": {
+      "sha256": "71D28720886477C14EB7AD918791AA9690F85F7322541FD3AEF911A9C7FA0905",
+      "bytes": 12249
+    },
+    "acceptance/readback.json": {
+      "sha256": "614D19BF4050A2E140E5211052B47560EE16A32804FC71D25C7AE1C75E07AAED",
+      "bytes": 593
+    },
+    "build/application.htm": {
+      "sha256": "C88CDD12D22A1FD735275DF0C66FB24AE19793BA36FAA820CF9F743609CB3512",
+      "bytes": 458427
+    },
+    "build/application.lnp": {
+      "sha256": "06B6222F8628AAB1D51505CD20CC09592E1F3E383D8B99361955E8A58FB3BF42",
+      "bytes": 7961
+    },
+    "build/application.map": {
+      "sha256": "8E1F3BEFF58B5B2E596654E8649557C17A104B352D898E54E647056CAB16073B",
+      "bytes": 1718066
+    },
+    "build/incremental-build.json": {
+      "sha256": "62FE3CE7349EE2E5014D89B6727F8FA6FDCD815B4F5BA07380DE182497E40623",
+      "bytes": 21569
+    },
+    "build/xe_np_usb_stream.o": {
+      "sha256": "55F3078703B3340DBCB3236CA8FD3E99034A1ED2BDF486F03BE2BAF92708A021",
+      "bytes": 1438428
+    },
+    "compiled-inputs/Core/Src/anchor_overlay.h": {
+      "sha256": "813EE9A2D6A1EA9EA7F2FBA3DBA02C328DFF847B062DC27832913730EA2D6B42",
+      "bytes": 103
+    },
+    "compiled-inputs/Core/Src/cycle_overlay.h": {
+      "sha256": "20DD48411AE52E9ABB408D84955FCDD2B3EAA058DB68B4D3E75739AAD9B6FC29",
+      "bytes": 224
+    },
+    "compiled-inputs/Core/Src/xe_np_acquisition_anchor.h": {
+      "sha256": "E951593AEC72B3D5CB5AE2117D6EA365596191BA22B76C82347999CF7873A125",
+      "bytes": 1878
+    },
+    "compiled-inputs/Core/Src/xe_np_cycle_clock.h": {
+      "sha256": "15F013AF7DE3F9F4C51483295CFAA00E9B665962FF19FB34CB455CB8D60E8328",
+      "bytes": 2179
+    },
+    "compiled-inputs/Core/Src/xe_np_np2_usb_stream.inc": {
+      "sha256": "6769FEBD5265A66C112368B67C982284887CEFE39816091A81895677F180AACC",
+      "bytes": 37942
+    },
+    "compiled-inputs/Core/Src/xe_np_np2_usb_wire.h": {
+      "sha256": "25699A267516D216D3FD0A333E3D1EC5A11A2B09798D961C27776BE812D180EC",
+      "bytes": 13142
+    },
+    "compiled-inputs/Core/Src/xe_np_online.h": {
+      "sha256": "7658A2DB3F8ABC5D5298637BFDF57411D38161D0F1E7E665B2194EACE9915A39",
+      "bytes": 451
+    },
+    "compiled-inputs/Core/Src/xe_np_online_impl.h": {
+      "sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "bytes": 2678
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_aux.h": {
+      "sha256": "E72351512117C20F2616158F3BC13680F4AEA6A2AB2131DCFA244F3A7990DCBB",
+      "bytes": 1328
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_catalog.inc": {
+      "sha256": "480D0F9AC9D36C1084F299AD69956F6CDDAB673A5CCF32B899579D5660F0F673",
+      "bytes": 14965
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_download_pipeline.inc": {
+      "sha256": "93E5B89742A4768CCD015EA4B9E6D1E53723CC86F564ADE6D87385BBF8B62DED",
+      "bytes": 15648
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_selftest.inc": {
+      "sha256": "693D068FB3767C2E7B79A0BB9A51B65910D693A8E2EEB091BDDA91712694753C",
+      "bytes": 9479
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_stream.c": {
+      "sha256": "362C9747785BEC45E03E06A6F585F388A102BA857093FCEAB8E41EF8FCFA827D",
+      "bytes": 158433
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_timing.h": {
+      "sha256": "78F1C2D90E7DC379087F8BC8DBB3C136C4B1257C6D65BD0E23CEBE661B22D97B",
+      "bytes": 3423
+    },
+    "compiled-inputs/Core/Src/xe_np_usb_unified.inc": {
+      "sha256": "617E87EB50FE96B98E962F25D220F5ED00E03D9448C096A34B11FB2605D64D05",
+      "bytes": 11768
+    },
+    "compiled-inputs/Tools/V1Capture/SdLogger/np_sd_usb_download.inc": {
+      "sha256": "06243EB98E15FC3554C45E70445127A5AC6585EBBC7D452AF9DADA66AE1D21CB",
+      "bytes": 12766
+    },
+    "recipe-and-evidence/build_pipeline.py": {
+      "sha256": "1A9373FFC15396CD3B91F1C88D8AD1ADF16BB3AD0EF3C516FE69325AAC8B16AE",
+      "bytes": 6301
+    },
+    "recipe-and-evidence/build_repair.py": {
+      "sha256": "E3BCF3049F57CB178D6FE2E1F9B8F3BB687203C0517970BED177D542253A968F",
+      "bytes": 3004
+    },
+    "recipe-and-evidence/final-comparison.json": {
+      "sha256": "0E1CF94C44C9D6D1D544A0FB709FCEC4C9BBC7592D7CAF0C78FA31D6AFE510BF",
+      "bytes": 3539
+    },
+    "recipe-and-evidence/package_checked.py": {
+      "sha256": "E3E9EE8BCFFFFA461556EF1DB737FF2437D04D0B7BA089CCBCBA5C8DFB8D67B5",
+      "bytes": 11266
+    },
+    "recipe-and-evidence/prepared-inputs.json": {
+      "sha256": "C86C1C955E8537C124DEC3237E035DAD4D649A79D809ACE8A68A6C880412CE13",
+      "bytes": 2191
+    },
+    "recipe-and-evidence/private-provenance.json": {
+      "sha256": "1EB5D956C5629FE1C73707F9484D49A32325ABCAB33621CC7699B48875CA7E8F",
+      "bytes": 4156
+    },
+    "recipe-and-evidence/source-inputs.json": {
+      "sha256": "3D7D2CE62FE8ECD1F9AFDA9C1CB996C59A4FB40ABAA2C5355172EA066D69940D",
+      "bytes": 2035
+    },
+    "regression/result.json": {
+      "sha256": "F62B6A145C0D45531727945F9CBC6D1ED9C9F258584EA86B570BFAA8296FC01B",
+      "bytes": 980
+    },
+    "regression/test_usb_download_pipeline.py": {
+      "sha256": "7271C07EC2E5822C302066E166006FED5883F169C4BDA6D533474E6EE4DAC380",
+      "bytes": 12476
+    }
+  },
+  "usb_build_receipt": {
+    "role": "USB",
+    "baseline_body_sha256": "04D13D0D9FA05792D6F5F8F5B376035433CD995881F5D16C98584B878067609A",
+    "compiler_args_by_unit": {
+      "xe_np_usb_stream": [
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_download_pipeline_20261025\\repair\\inputs\\Core\\Src",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_timing_20261024\\image_r2\\sources",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_np_cycle_clock_20261023\\sources",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_np_start_anchor_20261023\\checked\\usb-sources",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-xc",
+        "-std=c11",
+        "--target=arm-arm-none-eabi",
+        "-mcpu=cortex-m33",
+        "-mfpu=fpv5-sp-d16",
+        "-mfloat-abi=hard",
+        "-c",
+        "-funsigned-char",
+        "-fshort-enums",
+        "-fshort-wchar",
+        "-O3",
+        "-gdwarf-4",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wno-license-management",
+        "-DSTM32U595xx",
+        "-DUSE_HAL_DRIVER",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Bootloader\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\STM32U5xx_HAL_Driver\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Drivers\\CMSIS\\Include",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\USBX\\App",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\USBX\\Target",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Middlewares\\ST\\STM32_USB_Device_Library\\Core\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Middlewares\\ST\\STM32_USB_Device_Library\\Class\\MSC\\Inc",
+        "-I",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\MDK-ARM\\RTE\\_USB384_NP_BGA_MMC",
+        "-DXE_NP_IMAGE_ROLE=2U",
+        "-DVECT_TAB_OFFSET=0x00180000",
+        "-DXE_NP_USB_UNIFIED_ENABLE=1U",
+        "-DXE_NP_BOARD_ALLOW_NON_30KSPS_MCO=1U",
+        "-DXE_NP_BOARD_EXPERIMENT_DISABLE_SD_INIT=1U",
+        "-DXE_NP_BOARD_SD_WRITE_BENCH_IMAGE=0U",
+        "-DXE_NP_BOARD_NP1_SPI_TAP_ENABLE=0U",
+        "-DXE_NP_APP_RAW_SD_SINK_ENABLE=0U",
+        "-DXE_NP_APP_RAW_SD_WRITE_ENABLE=0U",
+        "-DXE_NP_APP_RAW_SD_PIPELINE_ENABLE=0U",
+        "-DXE_NP_APP_RAW_SD_LINKED_STREAM_ENABLE=0U",
+        "-DXE_NP_APP_EXPERIMENT_SD_STRESS_WRITER_ENABLE=0U",
+        "-DXE_NP_APP_LEGACY_FS_ENABLE=0U",
+        "-DXE_NP_APP_CAPTURE_STORAGE_BYTES=737280UL",
+        "-DXE_NP_USB_TX_PREEMPHASIS=3U",
+        "-DXE_NP_BOARD_USB_OTG_HS_INTERNAL_DMA=1U",
+        "-DXE_NP_BOARD_USB_OTG_HS_IDMA_SINGLE_BURST=0U",
+        "-DXE_NP_USB_STREAM_RX_FIFO_WORDS=320U",
+        "-DXE_NP_USB_STREAM_EP1_TX_FIFO_WORDS=448U",
+        "-DXE_NP_USB_DOWNLOAD_BLOCKS=1020U",
+        "-DXE_NP_BOARD_V2_NP2_CAPTURE_ENABLE=1U",
+        "-DXE_NP_NP2_USB_SOURCE_ENABLE=1U",
+        "-DXE_NP_NP2_CAPTURE_PORT_ENABLE=1U",
+        "-DXE_NP_USB_STREAM_CAPTURE_STAGING_DMA_ENABLE=0U",
+        "-DXE_NP_BOARD_EXPERIMENTAL_NP2_128MHZ_20KHZ_CORE=1U",
+        "-DXE_NP_NP2_USB_V3_ENABLE=1U",
+        "-DXE_NP_NP2_USB_PACKED_DUAL=0U",
+        "-DXE_NP_NP2_CAPTURE_16BIT_PSSI=0U",
+        "-DXE_NP_NP2_CAPTURE_BYTE_DMA=0U",
+        "-DXE_NP_NP2_USB_SERVICE_SPAN_TICKS=16384U",
+        "-DXE_NP_NP2_USB_EP_SEGMENT_BYTES=46592U",
+        "-DXE_NP_NP2_USB_EARLY_REARM=0U",
+        "-DXE_NP_NP2_SPI2_D8_DIAG_ENABLE=0U",
+        "-DXE_NP_NP2_SPI2_D8_WORD_COPY=0U",
+        "-DXE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+        "-DXE_NP_USB_TX_MPU_NONCACHEABLE=1U",
+        "-DXE_NP_NP2_NODE_BYTES=61440U",
+        "-DXE_NP_NP2_USB_V3_PROBE_MASK=7U",
+        "-DXE_NP_NP2_USB_V3_LIVE_PROBE_MASK=7U",
+        "-DXE_NP_NP2_SPI2_D8_CAPTURE_ENABLE=1U",
+        "-DXE_NP_BOARD_SD_PLL2Q_HZ=108000000UL",
+        "-DXE_NP_BOARD_SD_SDR50_ONLY=0U",
+        "-DXE_NP_BOARD_SD_SDR104_ONLY=1U",
+        "-DXE_NP_BOARD_SD_SDR50_TARGET_HZ=100000000UL",
+        "-DXE_NP_BOARD_SD_GPIO_SPEED=GPIO_SPEED_FREQ_VERY_HIGH",
+        "-DXE_NP_BOARD_SD_CLK_GPIO_SPEED=GPIO_SPEED_FREQ_VERY_HIGH",
+        "-DXE_NP_BOARD_SD_RX_CLOCK_TEST=2U",
+        "-DXE_NP_BOARD_SD_DMA_READ_POLLING_ENABLE=1U",
+        "-DXE_NP_BOARD_SD_RISING_EDGE_FIRST=0U",
+        "-DXE_NP_SD_PAD_HSLV_DISABLE=1U",
+        "-DXE_NP_BOARD_SENSOR_SERVICE_ENABLE=1U",
+        "-DXE_NP_USB_DOWNLOAD_IDMA_READ_ENABLE=1U",
+        "-DXE_NP_SD_USB_FUSED_CRC=0U",
+        "-DXE_NP_USB_IDLE_SLEEP_ENABLE=0U",
+        "-iquote",
+        "D:\\Code\\XE_NP_V2\\_artifacts\\v2_usb_format_20261022\\source-freeze\\Core\\Src",
+        "-DXE_NP_USB_CATALOG_REPAIR_ENABLE=1U",
+        "-DXE_NP_USB_SD_FORMAT_ENABLE=1U",
+        "-DNP_SD_USB_CRC_ALIGNED_BATCH=1",
+        "-DXE_NP_USB_DOWNLOAD_PIPELINE=1U"
+      ]
+    },
+    "source_sha256": {
+      "D:\\Code\\XE_NP_V2\\_artifacts\\v2_download_pipeline_20261025\\repair\\inputs\\Core\\Src\\xe_np_usb_stream.c": "362C9747785BEC45E03E06A6F585F388A102BA857093FCEAB8E41EF8FCFA827D",
+      "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_acquisition_anchor.h": "E951593AEC72B3D5CB5AE2117D6EA365596191BA22B76C82347999CF7873A125",
+      "D:\\Code\\XE_NP_V2\\Core\\Inc\\xe_np_np2_capture_port.h": "DAEC56BA27ABF18E8B5ADFA59FAF3A9C0B0E3FB903F91967AE54A7388A4692C9",
+      "D:\\Code\\XE_NP_V2\\Core\\Src\\xe_np_np2_usb_stream.inc": "EDFDC7F145830AC0B5E60A858C0EACCF2BAF6209AD9497B862BE9474A6E8E17D"
+    },
+    "reused_object_sha256": {
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/startup_stm32u595xx.o": "088EB7408FA97E740DF04D621F34CCEC3DA7EAA370494E9EE45C48AD0C7CBD5C",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_imu_sr_20261013/usb/main.o": "4DFDB1A929FFE48BAD5A8B9470BF3346D1350895B85EFEDD99F5E3D660B570C4",
+      "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/stm32u5xx_it.o": "7DF1EDB0F23D87D91881FCE0D7F6BED3154BA17409884D2569245D7FDBB0F787",
+      "D:/Code/XE_NP_V2/_artifacts/v2_psram_feed_20261013/usb-idma108/stm32u5xx_hal_msp.o": "61B46797F3432945E2BBD8D851E9E04028A74259AD405D534AB49975FD1ED647",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/base_string.o": "464D505DF42C486641923C9FD73896DC60F1B6B53A4CBAA738A7DAC39AB60DF5",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_command.o": "CFFA5B7C691A988F70F255DF18FC551E7602EA302EDE45B049C1BAB9EFE58781",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_adc.o": "0F1388336A4C6B9543FB86AA78CD1FEDD420B251A8342795B60214E6A04555B0",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_uart_intercom.o": "6837F7864A0AD1BEEC4F947021E332E16973DDB45B56A098607BA27555C3AF09",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/ce32_hj580.o": "E1738590207C75ACA4DE7DE60282F66F6F2984C4B7F70ADBBD58B95946542D17",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_bmx160.o": "20E2DB9054698554260DF1B011BE5265BEFC25D5B9C11BF26C638C22913E7996",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/ce32_filesystem.o": "ABE7104735ED72FDDCD7184DA054224657097C0C16CADAB08747C27469E3D98B",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_submod.o": "520CCBB31730033E60FF6A7EDA92F7DE68F3904D969F1A80779E8DE46504EA22",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_sync.o": "5C15E62A3FA412D699C07B6B1A4D0A9136FF024BD1EB5E094F91C1E847151FAC",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_macro.o": "BBA9743326A8269FCF07B1DB9629CF17203D4ADDC851C52FAAAFCBAF64D29FA7",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/ce32_system_compat.o": "FB09EAF21997144BE5D9B98371E9E03D6351B24E3426EF281216D68D9CBC79C1",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/ce32_wire.o": "97143D8DDB6E54761E954F36C46B151A5643FE5C183BEB9DCA0DAEB947DD14AD",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/datamgr.o": "FD563454A7B4BAFA054A5782E66C9C496A297098BB3938B790F683CB9091E143",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/hd32_sd_driver.o": "D00C9FA25BB57DDF97C780A43CE99A1943E2CAC46C4999B7B311CA643339AAEA",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_legacy_fs.o": "1279E48DEF48BBDA6C37EC8CE62F2FD879A8C9E5E877D0F9FA636DC976544111",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_capture.o": "3F3BDF86FEED8B2869D289B1B751BCB34BDF827CD24D625125D3016B9998F936",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_nric.o": "9AA992652FC98A2CAB838400170C9503A3A5CC9A42EB62395DE44C9609215031",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_app.o": "018E4034E25D0C083C36561E614FBC5E160CA7FC651FA413C78210E7F708EA54",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_imu_sr_20261013/usb/xe_np_board.o": "7C279F2150A1BA559D6CF996B575401D980F8E4596F183CCA22C122EDBDD7A75",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_psram.o": "89FB3CAC9734C8366F2840146E8B689CC9BF49A67B6227F4C1E48A7F75549918",
+      "D:/Code/XE_NP_V2/_artifacts/v2_release_overlay_20261025/usb/build-r1/usb/xe_np_np2_dual_sd_catalog.o": "D149B2D586A2C85398CE67EA648BD15F25F823A6C8772CCCBA245550346DE07E",
+      "D:/Code/XE_NP_V2/_artifacts/v2_release_overlay_20261025/usb/build-r1/usb/xe_np_np2_dual_sd_meta.o": "E55126FD28B54F43B48D6F302BAA864E927E2E2F2937CB716C06AD091D8DCC71",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_catalog_repair_20261019/build/xe_np_np2_dual_sd_run.o": "63D2BED825E91D2E1162D29AADF58954B633247B91C4EB001D0D561C62D040C7",
+      "D:/Code/XE_NP_V2/_artifacts/v2_download_pipeline_20261025/build/usb/xe_np_usb_stream.o": "EBEAEC421E3F7F01B5FABCC68220E07260F9F12ECF2AE3DEAB60F07C0CF20DE1",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_runtime.o": "6DBE1DCA19203D80D01D92A83D1DE132DEC7ABD0F5A3B932A27C596F4372EBBF",
+      "D:/Code/XE_NP_V2/_artifacts/v2_release_overlay_20261025/usb/build-r1/usb/xe_np_sensors.o": "33DF822BA64EC0D73ED7189D3EF564B64E7302A335A0341E3517C35958D2D590",
+      "D:/Code/XE_NP_V2/_artifacts/v2_release_overlay_20261025/usb/startup-port-build/usb/xe_np_sensors_port.o": "E3442E08224ED502255D8B8C715834C698785A5084CA93068F6EE81897D209B8",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_bme_compensation.o": "0DE7BB9556B989A6C1C65D676B3AB33C21990B92BA61503C3804B9D38CCB97B3",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_bmm_compensation.o": "C71249943F2A4C5A2EA80A474B2027EB3AAF532C987F107040BC36B62056E2C3",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_boot_contract.o": "4579CB1563D68A9ACC7012CEC7A0B9B17BFC9BCCEA64C813BA9EE9D0FFB704E9",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_adc.o": "BA1E7CA13E41272A64B0CFBF91C0270B3C00C079BCECD6EB92D21B7655EE208B",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_adc_ex.o": "E1D1B3934193CAFC80979A0EF25200EC30B733484E89DC27DD9ABD8EC4F6F24F",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dma.o": "A8478778BB036338F804FC6288C10E5B4937A82A7339F3B7F2530136046EC1CE",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dma_ex.o": "28F00957AA622480B48CB19BA12C4FFD2BCB509791F956EA391FA6F63CB14D5D",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal.o": "B0165F1083BB934A792FD2632DC6D4277D0CA616EBDF4DA4123125FEA65F44FC",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_i2c.o": "7EFB0F09C48C21D9C0BFBBC4690FF4FCDABA718AF55832628AED8119B29DE704",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_i2c_ex.o": "65F603F54D88F8361BD7411AD4311F5F3696908F781F323DED06014051BEEF35",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_rcc.o": "26F1AC8E7B94BB85A0D3BA30F932D6D2462BE7918C550E8E4774B150BC588D6C",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_rcc_ex.o": "A97CEE055D28A2B5DBBC1458A3B3DAE5D46CC7E97218437A1189B07C8084C6B6",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_cortex.o": "3B23E830CE07226C4CD13317F6859FF2D93A32EBE96B0ACB44B4E41088CA4134",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_flash.o": "FAA25B0DD60A459A7A15C88E657E2ADC9A02EAC0A39E421884F72A64F7FF9342",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_flash_ex.o": "6338BAC46E83884176EE6FEFE9567C86C35C5367A5B1AD55FFB425AC614293EA",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_gpio.o": "1C94CEAEA0CAAAD2478CD95C58FE0EA0E9081D0FCE47DF2B8537EB75E692DDF3",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_exti.o": "62873B1F9B8D08DB8A2553B3ABD3F6235FE2FE4278A3A912F3CFE125CAA0066B",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pwr.o": "657C92BEACC9C7EA3F6E919033414CF05A9734A96E0AAE4095BCE3E6FE709854",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pwr_ex.o": "25E90D58AED2D147A367F0E6C244A613CEACC438ACFD51D4CEFB966CF51469F1",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_gtzc.o": "4BDB043DF7B4A40E39930C43E198BFD4F7D36CC6C28ED5A3FBEABEA1560C9AF5",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_icache.o": "EEAEADD8FEF48F03BF11CB9FE27F5465CF7E0D3C3A1D8D0FACC22E4148F67D28",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dac.o": "F64A02D4321112FEC78ACD6F05F3ABD969A2E9D414E3B46F366AA365CBFD28F8",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dac_ex.o": "EEDB13116D0A4D0BE60C47CF013C57DEC2D2E8A57DCA5C4F9645B5C62381988D",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_dcache.o": "C5AE8C8F1FB157AA7BA7FFF96886567F26F9AC99FFC9D04392A23A98E7A92964",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_uart.o": "3E9452FD284DCBC391E8D5A109FF8CF2B23E18CFBFA5CFA4E8F7F68B00722618",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_uart_ex.o": "3A038F25F193633FF3CCCEAB946C8FD5119AF4339C177BC6A36EB5C750534BBB",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_ospi.o": "A967E6E53F1B482D5AC9DFE1774AD16673877F64FD07C993AEB16E02EA265FAB",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_ll_dlyb.o": "77AE5F386B2D0F20322564813B23D238980BEF984F4828512689E52DCB66D711",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_opamp.o": "706457C1C4E5A2B5FBBAD9DF492DD5A33C9D0885FB844FD22C7444C311F85CA0",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_opamp_ex.o": "CFBA9C3FA33F6AF8EFC0307EFF1775260C154438DB2979C8CCC107430D1291B4",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_ll_sdmmc.o": "6E626E24E1670B728ED791F33AAFE0CCCBDFAEB5708AF31A96E6A7EECF853795",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_sd.o": "64CF3CD7360AB2FD665F7E32637FE13F51A8B5CDF841ADF6C331BE1FCFD0558A",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_sd_ex.o": "48DED92C1645B1D5C24B1C5ACE8D8CDCB51ACF06D835D5EA059E2BAE079EFD7A",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_mmc.o": "58863109E35CD398021275580C4EF18342506FC538AFE9BCEBCA903B8703647B",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_mmc_ex.o": "5E6F9AB150AC59FD086450491DCE7C0911BC5AF80C73BE5B5D10B43D98641640",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_sdio.o": "B96D899F79D7E880C1EBCA9112AC6728429494E32DD828CA794BA183A43D52BC",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_spi.o": "C89593B3CD33AEA1E203A660302AE26A2741516EE7140F1418DE268DFBDDB2AF",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_spi_ex.o": "517FAC3E7834D1045D91BC679C912EF107E026A6FB83618DBDB85011FB8983E3",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_tim.o": "60A800D57A4192E91C4F694679EB00D26F26EAE612F8D194FD5310DDAA262216",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_tim_ex.o": "826F9D1F4C0373CCD6327DC0B7DB9AE5AC826524707511394E4F968BDE9A11CE",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pcd.o": "545852911E4CFF9D7635F4D4C8910EE1BA5981B881B40A5892DA88982A20BBE9",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_hal_pcd_ex.o": "005FDA55095961B28F2DB7406A71C96D72AFA5E0E3149BEAC9E2CC5AC7A250EE",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/stm32u5xx_ll_usb.o": "CFC5BCD94E334D79FB2799704BDC330DFD2572787E1BD1F33A167DB52A4D8186",
+      "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/system_stm32u5xx.o": "B2C6BAAAD7CA4294345D97D21B0512BA8BD81EF9CA03E0FA05C6C7577CFD2FD9",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_usb_fault.o": "6E149AB5D92875DCAE122E00ED6262DA47DAE88ED705F4E976445AFF3F21C5E2",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/xe_np_msc_bot.o": "07B166AAD7B95490DF74D80CB613AC4A61EFDB23D4D1E0FDAEE8A4E1ACF52E49",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_selftest_cache/xe_np_usb_msc.o": "A29EACFF7D0881EC61DAA259AB345AA7FCD8914075D2579F784EBA5763309FFA",
+      "D:/Code/XE_NP_V2/_artifacts/v2_partial_probe_usb_20261013/usb/xe_np_np2_usb_source.o": "9560300F11D8031D78165E1D282C8B72C57D8BF1F83BF63482AD7FDF964AF56E",
+      "D:/Code/XE_NP_V2/_artifacts/v2_np_cycle_clock_20261023/root-domain-guard/usb/xe_np_np2_capture_port.o": "E242D47E754CE7FC3C549B439917A194C1C387257819E95FC8E69F3AA0BBB8D9",
+      "D:/Code/XE_NP_V2/_artifacts/v2_usb_logging_20261010/usb/xe_np_np2_producer.o": "1770C6F3113CD30B3B5C1BE06993DBA108F3C28C34BBDFA6A14189C2F67DCBFA",
+      "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/xe_np_np2_transport.o": "F2A14F3F77E8A88EAEDA0D644C29F1738B0238CBE69BE880CE48FF0931B3E059",
+      "D:/Code/XE_NP_V2/_artifacts/v2_np2_configuration_20261010/usb/xe_np_np2_triple_transport.o": "683CDE0819DB410D0E59DA2B763F2CEF95E77FE01B870B7FAAA71E6C6BC3BA6B",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/usbd_msc_bot.o": "9100DE5AB566096EE71A61EE900969CA5489B0967619DC1C8115297F6231EF2A",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/usbd_msc_scsi.o": "5C484C08D807E10FED32E10985E7C910A407F287101B46578CD8F073086B29F4",
+      "D:/Code/XE_NP_V2/_artifacts/v2_ble_cold_start_20261007_build/usb/usbd_msc_data.o": "B582073821F0EEDC84DBD9B11B7FCDE8784EE96420268F372EEF0C4093453B5F",
+      "D:/Code/XE_NP_V2/_artifacts/v2_partial_probe_usb_20261013/usb/xe_np_np2_config.o": "663083E061316F657928123B5FA21C65FA55F4EDD142A34B563DADE6ED122654"
+    },
+    "body_sha256": "B75D8D19C83A0A9E325BF45B54F19DCC976B41114EAEB1996A7AEAD0DD228B09",
+    "body_crc32": "A71BDECC",
+    "body_bytes": 187716,
+    "ram_reservations": 8,
+    "anchor_state_bytes": 44,
+    "hardware_validated": false,
+    "published": false,
+    "scope": "Focused32B header clean and conservative metadata speculation; all non-stream objects/8RAM reservations retained; no clocks/pins/NP/IMU/APP/recovery/settings changes",
+    "hex_sha256": "FF89382337AC75918FE12979F0A659B2E4F5499427304F60A780676521CD93F6",
+    "manifest_sha256": "92A3C1CB7F67903A6620A62AD01034C1B9421DB2CD0EFD619BC95B59E630A674",
+    "source_inputs_sha256": "3D7D2CE62FE8ECD1F9AFDA9C1CB996C59A4FB40ABAA2C5355172EA066D69940D",
+    "native_receipt_sha256": "F62B6A145C0D45531727945F9CBC6D1ED9C9F258584EA86B570BFAA8296FC01B",
+    "exact_main_retained": true,
+    "installed": false
+  },
+  "canonical_source_equivalence_claimed": false,
+  "retained_main_object_sha256": "4DFDB1A929FFE48BAD5A8B9470BF3346D1350895B85EFEDD99F5E3D660B570C4",
+  "retained_main_source_limit": "Historical main source preimage unavailable; exact checked main.o reused unchanged.",
+  "build_time_flags_are_historical": "Build receipt hardware_validated=false remains immutable; subsequent acceptance is separate."
+}

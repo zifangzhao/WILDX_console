@@ -1,0 +1,31 @@
+{
+  "baseline": {
+    "bytes": 409221120,
+    "seconds": 12.5317838,
+    "MB_per_second": 32.6546584692915,
+    "before": "firmware requests=602 SD_ms=13112 CRC_ms=6262 USB_ms=6451 sectors=614040 CRC_selftest=1 errors=0 completions=602; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+    "after": "firmware requests=1386 SD_ms=21534 CRC_ms=10364 USB_ms=14853 sectors=1413720 CRC_selftest=1 errors=0 completions=1386; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+    "scope": "Same bounded recording extent through production CRC-validating stream; no export/file write; physical extent bytes including metadata/padding"
+  },
+  "focused_repair": {
+    "bytes": 409221120,
+    "seconds": 11.842948699999999,
+    "MB_per_second": 34.55398907537276,
+    "before": "firmware requests=602 SD_ms=13307 CRC_ms=6405 USB_ms=6434 sectors=614040 CRC_selftest=1 errors=0 completions=602; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+    "after": "firmware requests=1386 SD_ms=21922 CRC_ms=10588 USB_ms=14832 sectors=1413720 CRC_selftest=1 errors=0 completions=1386; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+    "scope": "Same bounded recording extent through production CRC-validating stream; no export/file write; physical extent bytes including metadata/padding"
+  },
+  "entire_catalog_equal": true,
+  "catalog_entries": 296,
+  "final_status": {
+    "Mode": 2,
+    "Busy": 0,
+    "Target": 0,
+    "Magic": 844320846,
+    "Abi": 4,
+    "Capabilities": 63,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "decision": "hold; no substantive extra raw gain; no further variants without diagnosis"
+}

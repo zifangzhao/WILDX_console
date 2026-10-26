@@ -1,0 +1,56 @@
+{
+  "result": "pass",
+  "catalog_equal": true,
+  "all_six_file_hashes_match": true,
+  "trials": [
+    {
+      "index": 0,
+      "prefetch": false,
+      "MB_s": 30.944788516340818
+    },
+    {
+      "index": 1,
+      "prefetch": true,
+      "MB_s": 43.25387599089717
+    },
+    {
+      "index": 2,
+      "prefetch": true,
+      "MB_s": 43.34413414616569
+    },
+    {
+      "index": 3,
+      "prefetch": false,
+      "MB_s": 31.178584891317353
+    },
+    {
+      "index": 4,
+      "prefetch": false,
+      "MB_s": 31.170217809589637
+    },
+    {
+      "index": 5,
+      "prefetch": true,
+      "MB_s": 43.3316747467346
+    }
+  ],
+  "final_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "baseline": {
+    "serial_median_MB_s": 31.81959898654034,
+    "buffered_median_MB_s": 31.41945376134945
+  },
+  "actual141": {
+    "serial_median_MB_s": 31.170217809589637,
+    "buffered_median_MB_s": 43.3316747467346
+  },
+  "gui_buffered_gain_percent": 37.91352031727215
+}

@@ -111,6 +111,7 @@
     <Compile Include="XeNpSdInfo.cs" />
     <Compile Include="NpLogger\NpDownloadNative.cs" />
     <Compile Include="NpLogger\NpDownloadStream.cs" />
+    <Compile Include="NpLogger\NpDownloadBurst.cs" />
     <Compile Include="NpLogger\NpDownloadCatalog.cs" />
     <Compile Include="NpLogger\NpV1StoreV2.cs" />
     <Compile Include="NpLogger\NpCatalogRecovery.cs" />

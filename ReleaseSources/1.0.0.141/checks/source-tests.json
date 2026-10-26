@@ -1,0 +1,24 @@
+{
+  "result": "pass",
+  "assertions": 183,
+  "software_only": true,
+  "product_compilations": 0,
+  "command": "./test_download_burst.ps1",
+  "coverage": [
+    "optional unsupported/unknown firmware fallback",
+    "quality/synthetic/full-speed exclusion",
+    "bounded32+3packet batches and legacytail",
+    "immutable buffers, one native read, join before cancel/free",
+    "nonsequential seek retirement",
+    "CRC and native read failure, no burst replay",
+    "unknown START and CANCEL outcomes",
+    "retirement epoch mismatch",
+    "user cancellation"
+  ],
+  "inputs": {
+    "test_download_burst.ps1": "FE96DF423EC645A9C9AD4EA5FFE70F7A5765DDC3A2E3CE2410818DE554E0A461",
+    "Tests\\NpDownloadBurstTests.cs": "A417C70DC106A92EBA63F1B4D42BB02E29712059A7D608A5F518F18EC49FCCE1",
+    "USB512_interface\\USB512_interface\\NpLogger\\NpDownloadStream.cs": "C728D2F5ABF71E2F917C790F068783E0414B6C21F2C9AFFADAAEF4243651A711",
+    "USB512_interface\\USB512_interface\\NpLogger\\NpDownloadBurst.cs": "05934F7AD51A6E5EC6A99D55036F1FE3519BB7A2C3E896FA8283B07DEB4E8775"
+  }
+}

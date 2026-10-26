@@ -1,0 +1,29 @@
+{
+  "baseline_version": "1.0.0.140",
+  "baseline_firmware": "USB13ED1F8E / APP8DE56637",
+  "uid": "001A0004434250062039314E",
+  "record_session": 407207722,
+  "physical_bytes": 409221120,
+  "physical_MB_s": 32.6546584692915,
+  "seconds": 12.5317838,
+  "firmware_counter_deltas": {
+    "requests": 784,
+    "SD_ms": 8422,
+    "CRC_ms": 4102,
+    "USB_ms": 8402,
+    "sectors": 799680,
+    "errors": 0,
+    "completions": 784
+  },
+  "interpretation": "USB timing overlaps SD/CRC. Existing two-buffer preparation serializes SD plus CPU CRC. Ideal complete three-stage overlap is bounded by the slower SD/USB stage; real contention must be measured.",
+  "final_status": {
+    "Mode": 2,
+    "Busy": 0,
+    "Target": 0,
+    "Magic": 844320846,
+    "Abi": 4,
+    "Capabilities": 63,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  }
+}

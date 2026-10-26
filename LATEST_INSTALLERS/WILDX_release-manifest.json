@@ -1,19 +1,21 @@
 {
-  "version": "1.0.0.140",
-  "releaseId": "WILDX140_V2_PREVIEW_DOWNLOAD_20261025",
-  "baselineVersion": "1.0.0.139",
+  "version": "1.0.0.141",
+  "releaseId": "WILDX141_V2_DOWNLOAD_PIPELINE_20261025",
+  "baselineVersion": "1.0.0.140",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB",
+  "guiSha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268",
   "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
   "changedGuiSources": [
     "AssemblyInfo.cs",
-    "NpBleConnection.cs"
+    "NpDownloadBurst.cs",
+    "NpDownloadPrefetchStream.cs",
+    "NpDownloadStream.cs"
   ],
-  "sourceArchiveSha256": "49FBB51D4E8FD03A535AA3A9434F70C3A5B38A34166E233D8716979A5BF2E473",
+  "sourceArchiveSha256": "FC8F7A9F13B1E69BF7363954175320546FFCC5138D8F5D5DFEECD1FABF6D42D8",
   "v1FirmwareChanged": false,
   "v2FirmwareChanged": true,
   "v2AppCrc32": "8DE56637",
-  "v2UsbCrc32": "13ED1F8E",
+  "v2UsbCrc32": "A71BDECC",
   "helpersChanged": false,
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
@@ -22,123 +24,50 @@
   "separateZipIncluded": false,
   "allModeOrEnduranceQualified": false,
   "acceptance": {
-    "preview140_pass": true,
+    "pipeline_pass": true,
     "hardware_readers_closed": true,
-    "bundled_v2_usb": "13ED1F8E",
+    "bundled_v2_usb": "A71BDECC",
     "bundled_v2_app": "8DE56637",
-    "v2_source_commit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
-    "v2_source_archive_sha256": "3A4CBE0551612145F82D388658DD8D57348BBF7F2659F5CE48AA05BA069D2884",
-    "gui_sha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB",
-    "preview": {
+    "bundled_v2_recovery": "6408DBB8",
+    "v2_source_commit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
+    "v2_source_archive_sha256": "FAC59E0BAAC4050E2CAB414F75660B86562BB93B0E984D6B975A4CACEFD0C630",
+    "gui_sha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268",
+    "download": {
       "result": "pass",
-      "version": "1.0.0.140",
-      "first_preview_ms": 3338,
-      "baseline_first_preview_ms": 27944,
-      "preview": [
+      "catalog_equal": true,
+      "all_six_file_hashes_match": true,
+      "trials": [
         {
-          "label": "probe1-channel0",
-          "checked": true,
-          "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
-          "packets": 46,
-          "channel": 0,
-          "probe": 1,
-          "phase": 199,
-          "session": 407197060,
-          "hz": 20000,
-          "legacy": false,
-          "gaps": 0,
-          "skipped": 2
+          "index": 0,
+          "prefetch": false,
+          "MB_s": 30.944788516340818
         },
         {
-          "label": "probe1-channel17",
-          "checked": true,
-          "info": "Preview \u00c2\u00b7 500 samples/s",
-          "packets": 42,
-          "channel": 17,
-          "probe": 1,
-          "phase": 199,
-          "session": 407197060,
-          "hz": 20000,
-          "legacy": false,
-          "gaps": 0,
-          "skipped": 0
+          "index": 1,
+          "prefetch": true,
+          "MB_s": 43.25387599089717
         },
         {
-          "label": "probe2-channel17",
-          "checked": true,
-          "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
-          "packets": 43,
-          "channel": 17,
-          "probe": 2,
-          "phase": 5,
-          "session": 407197060,
-          "hz": 20000,
-          "legacy": false,
-          "gaps": 0,
-          "skipped": 1
+          "index": 2,
+          "prefetch": true,
+          "MB_s": 43.34413414616569
+        },
+        {
+          "index": 3,
+          "prefetch": false,
+          "MB_s": 31.178584891317353
+        },
+        {
+          "index": 4,
+          "prefetch": false,
+          "MB_s": 31.170217809589637
+        },
+        {
+          "index": 5,
+          "prefetch": true,
+          "MB_s": 43.3316747467346
         }
       ],
-      "imu": {
-        "valid": 9,
-        "distinct_native_ticks": 9,
-        "skipped": 0,
-        "errors": 0
-      },
-      "stop_drain_ms": 40764,
-      "recorded_blocks": 24156,
-      "new_session": 407197060,
-      "full_payload_readback_pending": true,
-      "catalog_before": 295,
-      "catalog_after": 296,
-      "catalog_immutable_prefix_preserved": true,
-      "final_inventory": {
-        "executable_sha256": "5E0D29B8F97F169A4B71743E80B682E4A3BF8CE2E77C82B381886254336038CF",
-        "version": "1.0.0.139",
-        "devices": [
-          {
-            "path": "\\\\?\\usb#vid_1209&pid_b386#001a0004434250062039314e#{8f5a4a7b-0aa6-4f8e-a14f-a2f7b3c6aa4e}",
-            "uid": "001A0004434250062039314E",
-            "generation": 2,
-            "status": {
-              "Magic": 844320846,
-              "Abi": 4,
-              "Mode": 2,
-              "Capabilities": 63,
-              "Busy": 0,
-              "Target": 0,
-              "Uid0": 1703940,
-              "UidXor": 1669030216
-            },
-            "firmware": null
-          }
-        ],
-        "result": "pass"
-      }
-    },
-    "download": {
-      "candidate": "13ED1F8E",
-      "result": "speed_and_integrity_pass",
-      "raw_MB_s": 32.634251033627784,
-      "baseline_raw_MB_s": 31.137438016907492,
-      "serial_median_MB_s": 31.81959898654034,
-      "baseline_serial_median_MB_s": 30.414048536263657,
-      "serial_gain_percent": 4.621385569898062,
-      "buffered_median_MB_s": 31.41945376134945,
-      "baseline_buffered_median_MB_s": 30.094730718441774,
-      "buffered_gain_percent": 4.401843815455364,
-      "all_six_export_hashes_match_baseline": true,
-      "baseline_counter_medians": {
-        "SD_ms": 8606.5,
-        "CRC_ms": 4245.5,
-        "USB_ms": 8186.5,
-        "errors": 0.0
-      },
-      "candidate_counter_medians": {
-        "SD_ms": 8263.0,
-        "CRC_ms": 4025.0,
-        "USB_ms": 8170.5,
-        "errors": 0.0
-      },
       "final_status": {
         "Magic": 844320846,
         "Abi": 4,
@@ -149,17 +78,30 @@
         "Uid0": 1703940,
         "UidXor": 1669030216
       },
-      "scope": "Same preserved session407207722, actual139 source/decoder APIs; USB CRC feed only. App140 changes only disposable BLE preview wait."
+      "baseline": {
+        "serial_median_MB_s": 31.81959898654034,
+        "buffered_median_MB_s": 31.41945376134945
+      },
+      "actual141": {
+        "serial_median_MB_s": 31.170217809589637,
+        "buffered_median_MB_s": 43.3316747467346
+      },
+      "gui_buffered_gain_percent": 37.91352031727215
     },
-    "whole140_plus13ed_hardware_pair_tested": false,
-    "fused_whole_image_flashed": false,
+    "source_assertions": 183,
+    "cancel_reopen_pass": true,
+    "capture_imu_pass": true,
+    "capture_scope": "10s requested P123/20k USB using unchanged140 capture code;7280verifiedblocks,zero raw/decoded drops,186validfreshAG+MAG observations",
+    "final_actual141_download_observer_used": true,
+    "whole_fused_image_flashed": false,
+    "sd_writes_formats_deletes": false,
     "all_mode_or_endurance_qualified": false,
-    "qualification_scope": "Actual140 BLE/IMU/start-stop/catalog HIL on unchanged APP8DE with USB1D; actual139 download API HIL on USB13ED with APP8DE; host download code and SDK identical in140. USB CRC-only firmware diff; no APP/capture/settings changes."
+    "qualification_scope": "Actual141 GUI/SDK exports on A71; productionCRC/header validation;6fullhash comparisons and296catalogentries; cancellation/reopen and shortNP+freshIMU return; explicit unsupportedfirmware fallback software checks"
   },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.140.exe",
-    "bytes": 10525513,
-    "sha256": "5C81231C7989E52F3F05FE17342EB3CE96EA8EFFDB33149B77D6C12A3FF85A14"
+    "file": "WILDX_console-Setup-1.0.0.141.exe",
+    "bytes": 10536090,
+    "sha256": "56AC6A67A8DDFC976D7A31023355CAA7B668F7D98309E8161DD0648291B5F0C4"
   },
   "payload": [
     {
@@ -189,8 +131,8 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 17612,
-      "sha256": "5471B08F7250F9CEAAE136FF1E3AE9992C169A3793B6949B8364BEF8B499F30A"
+      "bytes": 17485,
+      "sha256": "D13F55FA67C24B2E60B06BB9E6CFAD5BE041A0899343E70432425958E68D4E3B"
     },
     {
       "path": "Firmware/V1/acceptance.json",
@@ -339,28 +281,28 @@
     },
     {
       "path": "Firmware/V2/acceptance.json",
-      "bytes": 5048,
-      "sha256": "219ABD02D00E582E3F758817A1EF5B0B651496A16B751D3B7BA79ED207326E83"
+      "bytes": 8906,
+      "sha256": "CCFB5EDE5740858F2F3053998F598EE05B9F76B15C2FF9BCEFD708AACD04074D"
     },
     {
       "path": "Firmware/V2/package-receipt.json",
-      "bytes": 5028,
-      "sha256": "4C1EFE0A0AB7FF36C4389985F834F284734649451F28AD7B417355E8CE3E0C00"
+      "bytes": 9553,
+      "sha256": "08E731E22491F761BDB6A2C5A66262A03DA157F22357970B5C72F72C50FBD55D"
     },
     {
       "path": "Firmware/V2/README.md",
-      "bytes": 1061,
-      "sha256": "8B2A031F93917CB23799DC58CDB5E10D8668EC9692FA704E646F13F0CBA4152F"
+      "bytes": 1283,
+      "sha256": "C08B28070E93A1F2F5B1C37B42B79226CC3571F439F5274E4C34F94E3B8C0F0F"
     },
     {
       "path": "Firmware/V2/SHA256SUMS.txt",
-      "bytes": 708,
-      "sha256": "FFA39B6FA75E384095D0875A886987D018660947EFBFE6F9C81F9CD13D9BF48C"
+      "bytes": 726,
+      "sha256": "83ED27C5C12CE235838A8EE2CF64A8943FCC18E92483E7B0FA232F0242E27A16"
     },
     {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_13ED1F8E_APP_8DE56637_CRC_READ_20261025.hex",
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_8DE56637_BURST_DOWNLOAD_20261025.hex",
       "bytes": 5711372,
-      "sha256": "5125EE3EB244E2CF23012035E950E62E6EF9A220CE7DF4ED1DBD84569BB071AE"
+      "sha256": "94F506B3E078FFD00766A3351854F212C227A3D63D48328DB4447B22665741DA"
     },
     {
       "path": "Firmware/V2/V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex",
@@ -378,14 +320,14 @@
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
     {
-      "path": "Firmware/V2/V2_USB_only_13ED1F8E_CRC_READ_20261025.hex",
-      "bytes": 508472,
-      "sha256": "DE68D67ECCC615720EF74EA002E2698803A4168BDE3840845950FC1FDB0666B3"
+      "path": "Firmware/V2/V2_USB_only_A71BDECC_BURST_DOWNLOAD_20261025.hex",
+      "bytes": 516656,
+      "sha256": "FF89382337AC75918FE12979F0A659B2E4F5499427304F60A780676521CD93F6"
     },
     {
-      "path": "Firmware/V2/V2_USB_update_13ED1F8E_CRC_READ_20261025.xenp",
-      "bytes": 184868,
-      "sha256": "CAA60B20DC8567B36BB0DC625FC8D63D6A89B3335511103B0FD7C1ACF79BD8EC"
+      "path": "Firmware/V2/V2_USB_update_A71BDECC_BURST_DOWNLOAD_20261025.xenp",
+      "bytes": 187844,
+      "sha256": "870C7DECE27308A031B319C187B170FFF8F9CAAAAED1F3BF951EA93727BA6D21"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -444,8 +386,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1960960,
-      "sha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB"
+      "bytes": 1965056,
+      "sha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268"
     },
     {
       "path": "WILDX_console.exe.config",

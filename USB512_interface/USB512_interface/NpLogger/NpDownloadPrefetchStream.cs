@@ -11,6 +11,7 @@ namespace CE32_console
     internal sealed class NpDownloadPrefetchStream : Stream
     {
         readonly Stream source;
+        readonly NpDownloadStream download;
         readonly Func<bool> cancelled;
         readonly long first,last,length;
         byte[] current,next;
@@ -28,6 +29,7 @@ namespace CE32_console
             if(bufferBytes<512||bufferBytes>4*1024*1024)throw new ArgumentOutOfRangeException("bufferBytes");
             this.source=source;this.first=first;this.last=last;this.cancelled=cancelled;length=source.Length;position=first;
             current=new byte[bufferBytes];next=new byte[bufferBytes];
+            download=source as NpDownloadStream;if(download!=null)download.BeginSequentialRange(first,last);
         }
         void Check()
         {
@@ -91,7 +93,7 @@ namespace CE32_console
         {
             if(disposed)return;
             try{if(pending!=null)Finish();}
-            finally{disposed=true;current=next=null;base.Dispose(disposing);}
+            finally{try{if(download!=null)download.EndSequentialRange();}finally{disposed=true;current=next=null;base.Dispose(disposing);}}
             // The caller keeps ownership of source, and can safely inspect or
             // reuse its USB handle only after the worker has joined here.
         }

@@ -1,0 +1,49 @@
+{
+  "samples": 331,
+  "crc_pending_and_sd_active": 58,
+  "crc_pending_and_ep1_active": 60,
+  "all_three_logical_stages_and_physical_SD_EP1_active": 43,
+  "pcsr_matches": {
+    "np_pipe_start": 0,
+    "np_pipe_transmit": 25,
+    "XE_NP_UsbStream_Service": 225,
+    "HAL_DCACHE_CleanByAddr": 0
+  },
+  "nonzero_pcsr": 331,
+  "request_states": {
+    "0": 20,
+    "3": 217,
+    "1": 94
+  },
+  "source": "Read-only coarse asynchronous SWD snapshots, qualitative concurrency only, not atomic/phase-duration estimates",
+  "diag_raw_delta": [
+    786,
+    0,
+    1,
+    0,
+    784,
+    3,
+    2,
+    784
+  ],
+  "entire_run_diag_before": [
+    1204,
+    0,
+    0,
+    0,
+    602,
+    0,
+    1204,
+    0
+  ],
+  "entire_run_diag_after": [
+    1990,
+    0,
+    1,
+    0,
+    1386,
+    3,
+    1206,
+    784
+  ]
+}
