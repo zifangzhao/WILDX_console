@@ -983,7 +983,7 @@ namespace USB512_interface
                         "HardwareState=NotVerifiedForThisRecording\r\nThis is the editor request, not an applied-device receipt.\r\n"+
                         "If supported by the firmware, the post-stop applied receipt is saved separately as neuropixels_probeN_metadata.json.\r\n");
                 }
-                if(npRecordingSettings!=null)npRecordingSettings.Write();
+                if(npRecordingSettings!=null){NpExplorationAttach(npRecordingSettings,runFolder);npRecordingSettings.Write();}
                 if(selectedDeviceKind!=DeviceKind.NpV2)OpenOutputFiles(runFolder);
             }
             catch (Exception ex)
@@ -1507,6 +1507,7 @@ namespace USB512_interface
                 // Cache callbacks once, not once per packet (~46,000/s).
                 parser.OnSamples=delegate(int probe,short[] ap,int apFrames,short[] lfp,int lfpFrames) {
                     Interlocked.Add(ref neuropixelsApRows,apFrames);
+                    NpExplorationSamples(probe,apFrames,parser.OutputApHz);
                     Interlocked.Add(ref neuropixelsLfpRows,lfpFrames);
                     NeuropixelsPreviewForm preview=neuropixelsPreview;
                     if(preview!=null)preview.PushSamples(probe,ap,apFrames,lfp,lfpFrames);
@@ -1600,6 +1601,7 @@ namespace USB512_interface
                 });
                 // Release only after decoder reset declarations, accepted-mode
                 // validation, file layout and preview preparation are complete.
+                NpExplorationAdmitted(parser.ProbeMask);
                 if(captureConfigurations.Count>0)
                     NpConfigurationUsb.ConfirmApplied(device,captureConfigurations,modeCaps.ActiveMask,runFolder);
                 if(settings!=null) {
@@ -4137,6 +4139,7 @@ namespace USB512_interface
 
         private void UpdateStartEnabled()
         {
+            explorationButton.Enabled=NpControlsAvailable && !usbQualityRunning && !String.IsNullOrWhiteSpace(saveFolder);
             if(calibrationButton!=null)calibrationButton.Enabled=!running && !firmwareManagementActive && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2);
             if(npAutoRecover!=null)npAutoRecover.Visible=selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2;
             if (btnNpLogger != null) btnNpLogger.Enabled = !running && !ztestRunning;
@@ -4213,6 +4216,7 @@ namespace USB512_interface
             catch(NpMetadataWriteException ex) {npRecoveryCancelled=true;message+="; metadata warning: "+NpRecordingSettings.ReportWriteFailure(runFolder,ex);}
             catch(Exception ex) {npRecoveryCancelled=true;message="Capture error: recovery journal failed: "+ex.Message;}
             FinishCapturePresentation(message);
+            NpExplorationFinished(message);
         }
 
         private void FinishCapturePresentation(string message)

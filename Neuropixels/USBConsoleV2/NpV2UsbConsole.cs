@@ -2994,7 +2994,7 @@ namespace USB512_interface
                     using (var device = NpV2UsbDevice.Open(devicePath)) requestedMask = device.GetProfileCapabilities().SelectedProbeMask;
                 NpV2ProfileCapabilities.RequireUsbBandwidth(requestedMask, npV2RequestedSampleHz);
                 NpV2UsbRoute route = NpV2UsbTopology.Inspect(devicePath);
-                if (route.HubCount != 0 && IsHandleCreated && !npRecoveryAttempt)
+                if (route.HubCount != 0 && IsHandleCreated && !npRecoveryAttempt && !NpExplorationActive)
                 {
                     DialogResult proceed = DialogResult.No;
                     Invoke((Action)delegate
@@ -3013,6 +3013,7 @@ namespace USB512_interface
                     NpV2ProfileCapabilities capabilities = device.GetProfileCapabilities();
                     uint mask = npV2RequestedProbeMask == 0U ? capabilities.SelectedProbeMask : npV2RequestedProbeMask;
                     capabilities = device.ConfigureProfile(mask, npV2RequestedSampleHz);
+                    NpExplorationAdmitted((int)capabilities.SelectedProbeMask);
                     HashSet<int> apply=NpV2ApplyRequestsForDevice(devicePath);
                     Dictionary<int,string> requested=NpV2RequestsForDevice(devicePath);
                     if(apply!=null)foreach(int connector in apply)
@@ -3075,6 +3076,7 @@ namespace USB512_interface
                     delegate(int probe, short[] row)
                     {
                         Interlocked.Increment(ref neuropixelsApRows);
+                        NpExplorationSamples(probe,1,(int)npV2RequestedSampleHz);
                         NeuropixelsPreviewForm preview = neuropixelsPreview;
                         if (preview != null) preview.PushSamples(probe, row, 1, Array.Empty<short>(), 0);
                     },
@@ -3084,6 +3086,7 @@ namespace USB512_interface
                         foreach(var request in stagedConfigurations)
                         {
                             Np2ConfigReply reply=Np2ConfigurationUsb.ConfirmApplied(device,request);
+                            if(NpExplorationActive && (reply.Verification&15)==3)throw new IOException("Exploration stopped: probe bank application is degraded/unverified.");
                             appliedVerification[request.Port]=reply.Verification;
                             string warning=Np2ConfigClient.AppliedWarning(reply);if(warning!=null)degradedWarnings.Add(warning);
                             receipts.Add("P"+(request.Port+1)+": applied; ID="+BitConverter.ToString(reply.ConfigurationId).Replace("-","")+"; CRC32="+reply.PayloadCrc.ToString("X8")+"; verification="+reply.Verification+"; transaction="+reply.Transaction+(warning==null?"":"; "+warning));

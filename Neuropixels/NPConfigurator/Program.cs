@@ -7,6 +7,9 @@ internal static class Program
     {
         try
         {
+            if(args.Length==4 && args[0]=="--scan-plan") {
+                ProbeBankScan.Write(args[1],args[2],int.Parse(args[3],System.Globalization.CultureInfo.InvariantCulture));return 0;
+            }
             if(args.Length==3 && args[0]=="--recording-imro") {
                 var bytes=StandardFormats.RecordingImro(StandardFormats.Load(args[1]),out string origin);
                 File.WriteAllBytes(args[2],bytes);Console.WriteLine(origin);return 0;

@@ -1,0 +1,6 @@
+PASS 12 sample-timed orchestration/cancellation/cleanup/failure tests; no hardware
+PASS 23118 scan coverage/routing/IMRO/device-payload/identity tests; no hardware
+USB512_interface\USB512_interface\NpExploration.cs(62,55): warning CS0649: Field 'NpExplorationResult.Message' is never assigned to, and will always have its default value null
+USB512_interface\USB512_interface\NpExploration.cs(62,48): warning CS0649: Field 'NpExplorationResult.Folder' is never assigned to, and will always have its default value null
+USB512_interface\USB512_interface\NpExploration.cs(62,23): warning CS0649: Field 'NpExplorationResult.Complete' is never assigned to, and will always have its default value false
+PASS 16 actual scan UI/default/plan/stop/close checks; fake recorder, no hardware

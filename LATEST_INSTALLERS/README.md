@@ -1,5 +1,5 @@
-# WILD-X 1.0.0.143
+# WILD-X 1.0.0.145
 
-[Download installer](WILDX_console-Setup-1.0.0.143.exe). Includes the accepted two-channel 500 Hz V2 preview firmware and matching V1/V2 catalog directly. No separate update ZIP is required.
+[Download installer](WILDX_console-Setup-1.0.0.145.exe). USB Mode → Explore… automatically scans consecutive probe windows, recording one minute each by default. Existing V1/V2 firmware and the two-channel 500 Hz V2 BLE preview are retained.
 
-[Measurements and limits](../ReleaseSources/1.0.0.143/README.md).
+[Usage and validation limits](../ReleaseSources/1.0.0.145/README.md). Software checks passed; a hardware bank sweep has not been run.

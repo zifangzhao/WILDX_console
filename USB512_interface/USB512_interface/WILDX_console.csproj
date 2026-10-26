@@ -97,6 +97,8 @@
     <Compile Include="NpProbeIdentity.cs" />
     <Compile Include="NpRecordingSettings.cs" />
     <Compile Include="NpRecordingDialog.cs" />
+    <Compile Include="NpExploration.cs" />
+    <Compile Include="mainForm.Exploration.cs" />
     <Compile Include="NpMediaUsbForm.cs" />
     <Compile Include="NpAudioPreview.cs" />
     <Compile Include="NpDiagnosticsForm.cs" />

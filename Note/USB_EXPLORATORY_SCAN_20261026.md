@@ -1,0 +1,13 @@
+# USB exploratory scan — WILD-X 1.0.0.145
+
+USB Mode → Explore… runs consecutive electrode windows, with **one minute of captured AP samples per window** by default. Change the duration before Start scan. Load/save a configuration for each selected probe once through Probe settings, review the generated plan, then Start scan. All selected probes scan in parallel; Stop scan ends the current recording cleanly and retains completed files.
+
+A probe has 384 acquisition channels but more physical electrode sites. NP1 uses three windows covering 957 selectable sites (three reserved reference contacts excluded). The supported NP2 four-shank model uses sixteen windows covering 5,120 sites. The last window on each shank overlaps earlier sites so every ordinary acquisition channel remains connected and a valid IMRO can be saved. Site numbering in the plan is zero based. Gains, references and configured probe identity stay attached to the template.
+
+Each window is a fresh timestamped recording under a timestamped exploration folder. The usual DAT, identity, calibration and recording metadata are retained, plus the exact generated configuration/IMRO and an exploration_step.json receipt. exploration_plan.json describes the sweep; exploration_manifest.json records the outcome. If factory correction is enabled, its companion IMRO follows the current bank. Requested maps and device-confirmed application remain distinct in recording metadata.
+
+The duration starts when every selected probe supplies AP samples, excluding configuration/startup time. Final drain can add a small amount beyond the target. Waveform preview is optional and does not control timing. A missing probe, rejected/degraded configuration, stalled samples, incomplete recording or cancellation stops the sweep. The next bank starts only after the previous capture has drained and finalized its files. Auto recovery is suspended during scanning so a failed bank cannot silently advance. Original host settings/maps are restored afterward and applied to hardware by the next normal recording start.
+
+This first implementation is USB only. Automatic bank changes use the existing configuration/verification protocol and therefore require firmware supporting that protocol. Ordinary recording on older firmware keeps its existing behavior; the scan never silently substitutes an unsupported routing operation.
+
+Validation: 12 orchestration, 23,118 routing/coverage/IMRO/payload and 16 actual-dialog checks passed using software fixtures. GUI 145 and the updated helper compiled successfully; SDK and bundled V1/V2 firmware are unchanged from 143. No hardware bank sweep was run. The software tests establish map coverage and sequencing, not physical electrode signal quality.

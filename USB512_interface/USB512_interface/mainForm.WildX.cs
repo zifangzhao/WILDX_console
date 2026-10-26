@@ -138,7 +138,7 @@ namespace USB512_interface
                 NpCalibrationStore.Show(this,devicePath,selectedDeviceKind==DeviceKind.NpV2,selectedDeviceKind==DeviceKind.NpV2?NpV2RequestsForDevice(devicePath):requests==null?null:requests.Values.ToDictionary(p=>p.Port+1,p=>p.Json));
             }};
             WildXTheme.Button(btnStart,true);WildXTheme.Button(btnStop,false,true);
-            var captureActions=ActionRow(btnStart,btnStop,btnStreams,calibrationButton);captureActions.Name="usbAcquisitionActions";capture.Controls.Add(captureActions,0,3);
+            var captureActions=ActionRow(btnStart,btnStop,btnStreams,calibrationButton,InitializeNpExploration());captureActions.Name="usbAcquisitionActions";capture.Controls.Add(captureActions,0,3);
             npAutoRecover.AutoSize=true;npAutoRecover.Margin=Padding.Empty;capture.Controls.Add(npAutoRecover,0,4);
             capture.Controls.Add(BuildGpioRtcControls(),0,5);
             var acquisitionCard=Card("USB acquisition",null,capture,true);acquisitionCard.Name="usbAcquisitionCard";capture.Dock=DockStyle.Top;online.Controls.Add(acquisitionCard,0,0);
@@ -350,7 +350,7 @@ namespace USB512_interface
                 "\r\nBundled: "+(NpFirmwareCatalog.Bundled.For(selectedDeviceKind==DeviceKind.XeNp?1U:2U)?.Versions??"Unavailable");
             if(advancedStorageSource!=null)advancedStorageSource.Text=downloadWorkspace.SelectedSourceDescription??"No storage source selected. Choose a card in Data Download.";
             if(DownloadBusy || BleInUse)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
-            bool usbBusy=running || ztestRunning || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled;
+            bool usbBusy=running || ztestRunning || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled || NpExplorationActive;
             if(gpioRtcDevices!=null)gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=!usbBusy && gpioRtcLogger==null;
             if(bleWorkspace!=null)bleWorkspace.SetHostBusy(usbBusy || DownloadBusy);
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
