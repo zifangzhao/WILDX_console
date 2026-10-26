@@ -13,6 +13,7 @@ namespace USB512_interface
     internal sealed class NpV1BlePreviewForm : Form
     {
         const int MaxWindowSeconds=10;
+        const uint PreviewBand=1; // V1 BLE preview is LFP; saved AP data is independent.
         readonly NpBleConnection connection;
         readonly Func<NpSdStatus> status;
         readonly Func<bool> controlsBusy;
@@ -24,7 +25,7 @@ namespace USB512_interface
         readonly NumericUpDown channel=new NumericUpDown{Minimum=0,Maximum=383,Width=65};
         readonly NumericUpDown traceCount=new NumericUpDown{Minimum=1,Maximum=4,Value=1,Width=45,AccessibleName="Number of preview channels"};
         readonly NumericUpDown[] extraChannels={new NumericUpDown{Maximum=383,Value=1,Width=65},new NumericUpDown{Maximum=383,Value=2,Width=65},new NumericUpDown{Maximum=383,Value=3,Width=65}};
-        readonly ComboBox band=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=75};
+        readonly Label band=new Label{Text="LFP",AutoSize=true};
         readonly CheckBox enabled=new CheckBox{Text="Preview",AutoSize=true,Checked=true};
         readonly NumericUpDown windowSeconds=new NumericUpDown{Minimum=0.1M,Maximum=MaxWindowSeconds,DecimalPlaces=1,Increment=0.1M,Value=4,Width=65,AccessibleName="BLE preview display window in seconds"};
         readonly NumericUpDown gainBox=new NumericUpDown{Minimum=0.1M,Maximum=100,DecimalPlaces=1,Increment=0.1M,Value=1,Width=65,AccessibleName="Preview display gain",AccessibleDescription="Display only; does not change probe gain or saved data."};
@@ -39,7 +40,9 @@ namespace USB512_interface
         readonly Queue<NpV1PreviewBurst> pending=new Queue<NpV1PreviewBurst>();
         readonly object gate=new object();
         static int sequence=Environment.TickCount;
-        bool busy,closed;uint activeId,activeProbe,activeChannel,activeBand,session,hz,phase;
+        // Probe -> (device session, AP Hz, validated origin phase), scoped to this BLE epoch.
+        readonly Dictionary<uint,Tuple<uint,uint,int>> phases=new Dictionary<uint,Tuple<uint,uint,int>>();
+        bool busy,closed,retryPending,activeFromCache;uint activeId,activeProbe,activeChannel,activeBand,session,hz,phase;
         bool activeCompact;uint[] activeChannels;
         int selectionVersion,activeSelection;
         Exception error;int dropped,packets;ulong previousEnd;long gaps;
@@ -51,15 +54,15 @@ namespace USB512_interface
             plots=new[]{plot,new Plot{Dock=DockStyle.Fill},new Plot{Dock=DockStyle.Fill},new Plot{Dock=DockStyle.Fill}};
             for(int i=0;i<plots.Length;i++){plots[i].Margin=Padding.Empty;traces.RowStyles.Add(new RowStyle(SizeType.Absolute,0));traces.Controls.Add(plots[i],0,i);}
             Text="WILD-X — V1 BLE Preview";Icon=NpPreviewTheme.ApplicationIcon;ClientSize=new Size(850,550);MinimumSize=new Size(700,450);StartPosition=FormStartPosition.CenterParent;
-            band.Items.AddRange(new object[]{"AP","LFP"});band.SelectedIndex=0;
+
             var active=readStatus==null?null:readStatus();
-            if(active!=null && (active.Flags&NpV1BleProtocol.CompactPreview)!=0)traceCount.Value=4;
+            // Start with one LFP channel; additional traces are optional BLE traffic.
             if(active!=null)for(int port=1;port<=3;port++)if((active.Mask&(1U<<(port-1)))!=0){probe.Value=port;break;}
             var controls=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,Padding=new Padding(10)};
             controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Traces",AutoSize=true},traceCount,new Label{Text="Channels",AutoSize=true},channel,extraChannels[0],extraChannels[1],extraChannels[2],band,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,new Label{Text="Gain (×)",AutoSize=true},gainBox,info});
             controls.SetFlowBreak(enabled,true);
             Controls.Add(traces);Controls.Add(controls);Controls.Add(recordingInfo);WildXTheme.Apply(this);info.ForeColor=recordingInfo.ForeColor=WildXTheme.Muted;
-            probe.ValueChanged+=delegate{SelectionChanged();};channel.ValueChanged+=delegate{SelectionChanged();};band.SelectedIndexChanged+=delegate{SelectionChanged();};
+            probe.ValueChanged+=delegate{SelectionChanged();};channel.ValueChanged+=delegate{SelectionChanged();};
             traceCount.ValueChanged+=delegate{UpdateChannelControls();SelectionChanged();};
             for(int i=0;i<extraChannels.Length;i++){extraChannels[i].AccessibleName="Preview channel "+(i+2);extraChannels[i].ValueChanged+=delegate{SelectionChanged();};}
             UpdateChannelControls();
@@ -68,7 +71,7 @@ namespace USB512_interface
             gainBox.ValueChanged+=delegate{foreach(var trace in plots)trace.SetGain((double)gainBox.Value);};
             connection.PreviewReceived+=Receive;timer.Tick+=async delegate{await Tick();};Shown+=delegate{timer.Start();};
         }
-        void SelectionChanged(){selectionVersion++;ClearPlots(0);SetPlotChannels(SelectedChannels());info.Text=enabled.Checked?"Switching preview…":"Paused";}
+        void SelectionChanged(){retryPending=false;selectionVersion++;ClearPlots(0);SetPlotChannels(SelectedChannels());info.Text=enabled.Checked?"Switching preview…":"Paused";}
         void ClearPlots(double rate){foreach(var trace in plots)trace.Clear(rate);}
         void SetPlotChannels(uint[] channels){for(int i=0;i<plots.Length;i++){bool visible=i<channels.Length;plots[i].Visible=visible;traces.RowStyles[i].SizeType=visible?SizeType.Percent:SizeType.Absolute;traces.RowStyles[i].Height=visible?100F/channels.Length:0;plots[i].ChannelLabel=visible?"Ch "+channels[i]+" · ":String.Empty;}}
         bool CompactSupported(){var s=status==null?null:status();return s!=null && (s.Flags&NpV1BleProtocol.CompactPreview)!=0;}
@@ -91,19 +94,43 @@ namespace USB512_interface
         async Task<NpV1PreviewBurst> Snapshot(uint p,uint c,uint b,uint rate)
         {
             var burst=new NpV1PreviewBurst(Next());var done=new TaskCompletionSource<NpV1PreviewBurst>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var sync=new object();bool complete=false,sent=false;var lease=Stopwatch.StartNew();
             Action<int,byte[]> receive=(generation,body)=>{
                 if(generation!=epoch)return;
-                try{if(burst.Accept(body)){
-                    if(burst.Kind!=0 || burst.Probe!=p || burst.Channel!=c || burst.Band!=b || burst.Hz!=rate)throw new IOException("Preview calibration selection/rate changed.");
+                try{lock(sync){if(burst.Accept(body)){
+                    if(burst.Kind!=0 || burst.Probe!=p || burst.Channel!=c || burst.Band!=b || burst.Hz!=rate)throw new IOException("Preview origin selection/rate changed.");
                     done.TrySetResult(burst);
-                }}catch(Exception ex){done.TrySetException(ex);}
+                }else if(burst.Data!=null && (burst.Kind!=0 || burst.Probe!=p || burst.Channel!=c || burst.Band!=b || burst.Hz!=rate))throw new IOException("Preview origin selection/rate changed.");}}
+                catch(Exception ex){done.TrySetException(ex);}
             };
             connection.PreviewReceived+=receive;
             try{
-                if(!await connection.TryWritePreview(NpV1PreviewBurst.Request(burst.Id,0,p,c,0,0,b),epoch,lifetime.Token))return null;
-                if(await Task.WhenAny(done.Task,Task.Delay(5000,lifetime.Token))!=done.Task){lifetime.Token.ThrowIfCancellationRequested();throw new IOException("No complete origin snapshot; recording pressure may suppress preview.");}
-                var result=await done.Task;if(!Current())throw new IOException("Preview connection/recording changed.");return result;
-            }finally{connection.PreviewReceived-=receive;}
+                sent=true;try{if(!await connection.TryWritePreview(NpV1PreviewBurst.Request(burst.Id,0,p,c,0,0,b),epoch,lifetime.Token)){sent=false;return null;}}catch{lease.Restart();throw;}lease.Restart();
+                var wait=Stopwatch.StartNew();
+                while(!done.Task.IsCompleted){
+                    lifetime.Token.ThrowIfCancellationRequested();
+                    if(!Current())throw new IOException("Preview connection/recording changed.");
+                    if(wait.ElapsedMilliseconds>=5000)throw new TimeoutException("LFP preview is waiting for a complete origin snapshot.");
+                    uint actualSession;lock(sync){actualSession=burst.Session;}
+                    // A partial response supplies the real session. Renew that
+                    // exact origin tuple so control/IMU traffic can take priority.
+                    if(actualSession!=0 && lease.ElapsedMilliseconds>=750)try{
+                        if(await connection.TryWritePreview(NpV1PreviewBurst.Request(burst.Id,4,p,c,0,actualSession,b),epoch,lifetime.Token))lease.Restart();
+                    }catch{lease.Restart();throw;}
+                    await Task.WhenAny(done.Task,Task.Delay(100,lifetime.Token));
+                }
+                var result=await done.Task;if(!Current())throw new IOException("Preview connection/recording changed.");complete=true;return result;
+            }finally{
+                connection.PreviewReceived-=receive;
+                if(sent && !complete){
+                    uint actualSession;lock(sync){actualSession=burst.Session;}
+                    if(actualSession!=0)try{await connection.TryWritePreview(NpV1PreviewBurst.Request(burst.Id,3,p,c,0,actualSession,b),epoch,CancellationToken.None);}catch{}
+                    // An origin owns its own request ID even while activeId=0.
+                    // Without a device ACK, let its last lease expire before retry.
+                    int remaining=Math.Max(0,2100-(int)lease.ElapsedMilliseconds);
+                    if(!closed && remaining!=0)try{await Task.Delay(remaining,lifetime.Token);}catch(OperationCanceledException){}
+                }
+            }
         }
         async Task StopPreview(bool waitForExpiry=false)
         {
@@ -119,17 +146,23 @@ namespace USB512_interface
         {
             if(closed)return;RefreshRecordingInfo();if(busy)return;busy=true;int generation=selectionVersion;
             try{
-                if(!Current()){await StopPreview();info.Text=enabled.Checked?"Waiting for an active probe recording…":"Paused";return;}
+                if(!Current()){phases.Clear();await StopPreview();info.Text=enabled.Checked?"Waiting for an active probe recording…":"Paused";return;}
                 if(activeId!=0 && activeSelection!=generation){await StopPreview(true);info.Text="Waiting for new preview selection…";return;}
                 bool controlBusy=controlsBusy();
                 if(activeId==0){
-                    if(controlBusy)return;
+                    if(controlBusy || retryPending && renew.ElapsedMilliseconds<1000)return;retryPending=false;
                     UpdateChannelControls();var selected=SelectedChannels();
                     for(int i=0;i<selected.Length;i++)for(int j=0;j<i;j++)if(selected[i]==selected[j]){info.Text="Select different preview channels.";return;}
-                    uint p=(uint)probe.Value,c=(uint)channel.Value,b=(uint)band.SelectedIndex,rate=status().Hz;
-                    info.Text="Preparing preview…";var origin=await Snapshot(p,c,b,rate);if(origin==null){info.Text="Waiting for controls…";return;}uint ph=(uint)await Task.Run(()=>origin.FindPhase(),lifetime.Token);
-                    if(generation!=selectionVersion || !Current() || controlsBusy() || probe.Value!=p || channel.Value!=c || band.SelectedIndex!=b)return;
-                    lock(gate){activeProbe=p;activeChannel=c;activeChannels=selected;activeCompact=CompactSupported();activeBand=b;activeSelection=generation;phase=ph;session=origin.Session;hz=origin.Hz;error=null;pending.Clear();dropped=packets=0;previousEnd=0;gaps=0;activeId=Next();silence.Restart();}
+                    uint p=(uint)probe.Value,c=(uint)channel.Value,b=PreviewBand,rate=status().Hz;
+                    Tuple<uint,uint,int> saved;bool cached=phases.TryGetValue(p,out saved)&&saved.Item2==rate;uint ph,sourceSession;
+                    if(cached){ph=(uint)saved.Item3;sourceSession=saved.Item1;}
+                    else{
+                        info.Text="Preparing LFP preview…";var origin=await Snapshot(p,c,b,rate);if(origin==null){info.Text="Waiting for controls…";return;}
+                        ph=(uint)await Task.Run(()=>origin.FindPhase(),lifetime.Token);sourceSession=origin.Session;
+                    }
+                    if(generation!=selectionVersion || !Current() || controlsBusy() || probe.Value!=p || channel.Value!=c)return;
+                    phases[p]=Tuple.Create(sourceSession,rate,(int)ph);activeFromCache=cached;
+                    lock(gate){activeProbe=p;activeChannel=c;activeChannels=selected;activeCompact=CompactSupported();activeBand=b;activeSelection=generation;phase=ph;session=sourceSession;hz=rate;error=null;pending.Clear();dropped=packets=0;previousEnd=0;gaps=0;activeId=Next();silence.Restart();}
                     if(!await connection.TryWritePreview(StreamRequest(activeId,activeCompact?5U:2U),epoch,lifetime.Token)){lock(gate){activeId=0;pending.Clear();}info.Text="Waiting for controls…";return;}
                     SetPlotChannels(selected);ClearPlots(hz*780.0);renew.Restart();
                 }
@@ -155,10 +188,20 @@ namespace USB512_interface
                 }
                 info.Text=(activeBand==0?"AP":"LFP")+" preview · "+(hz*780.0/((activeBand==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))).ToString("F1")+" samples/s per channel"+(!activeCompact?" · Legacy: one channel":"")+(gaps!=0 || hostDrops!=0?" · Preview gaps":"");
                 diagnostics.SetToolTip(info,"Subsampled preview; channel timestamps preserve their ADC offsets · gaps "+gaps+" · host drops "+hostDrops+" · packets "+packets);
-                if(idle>2500)throw new IOException("Preview expired. Recording continues independently; toggle Preview to retry.");
+                if(idle>5000)throw new TimeoutException("LFP preview is waiting for data.");
             }catch(OperationCanceledException){}
-            catch(Exception ex){if(!closed && generation==selectionVersion){enabled.Checked=false;await StopPreview();info.Text=ex.Message;}}
+            catch(TimeoutException ex){await RetryPreview(ex.Message,generation);}
+            catch(IOException ex){await RetryPreview(ex.Message,generation,true);}
+            catch(Exception ex){if(!closed && generation==selectionVersion){enabled.Checked=false;try{await StopPreview();}catch(OperationCanceledException){}info.Text=ex.Message;}}
             finally{busy=false;}
+        }
+        async Task RetryPreview(string message,int generation,bool revalidate=false)
+        {
+            if(closed || generation!=selectionVersion)return;
+            if(revalidate || activeFromCache)phases.Remove(activeProbe);
+            try{await StopPreview(true);}catch(OperationCanceledException){return;}
+            if(closed || generation!=selectionVersion)return;
+            ClearPlots(0);retryPending=true;renew.Restart();info.Text=message+" Retrying…";
         }
         void ClosePreview(){if(closed)return;closed=true;lifetime.Cancel();timer.Stop();connection.PreviewReceived-=Receive;ObserveStop();}
         async void ObserveStop(){await StopPreview();}

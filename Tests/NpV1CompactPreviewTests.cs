@@ -16,11 +16,12 @@ namespace USB512_interface {
   internal int Epoch=1;internal bool Connected=true,PreviewLowerPriorityBusy;
   internal readonly SemaphoreSlim transaction=new SemaphoreSlim(1,1);
   internal readonly List<byte[]> Requests=new List<byte[]>();
+  internal Action<byte[]> OnRequest;
   internal event Action<int,byte[]> PreviewReceived;
   internal void Emit(byte[] body,int epoch=1){if(PreviewReceived!=null)PreviewReceived(epoch,body);}
   Task WriteFrame(byte[] frame,int epoch,CancellationToken cancel){
    cancel.ThrowIfCancellationRequested();if(epoch!=Epoch||!Connected)throw new IOException("Connection changed");
-   var body=new byte[64];Buffer.BlockCopy(frame,2,body,0,64);Requests.Add(body);return Task.FromResult(true);
+   var body=new byte[64];Buffer.BlockCopy(frame,2,body,0,64);Requests.Add(body);if(OnRequest!=null)OnRequest(body);return Task.FromResult(true);
   }
  }
 }
@@ -117,23 +118,62 @@ static class NpV1CompactPreviewTests {
  static NpV1BlePreviewForm Arm(NpBleConnection radio,bool compact,Func<bool> busy){
   var status=new NpSdStatus{State=1,Flags=128|(compact?NpV1BleProtocol.CompactPreview:0),Mask=3,Hz=20000};
   var form=new NpV1BlePreviewForm(radio,()=>status,busy,null);
-  if(compact){var boxes=(NumericUpDown[])Get(form,"extraChannels");boxes[0].Value=127;boxes[1].Value=360;boxes[2].Value=383;}
+  if(compact){((NumericUpDown)Get(form,"traceCount")).Value=4;var boxes=(NumericUpDown[])Get(form,"extraChannels");boxes[0].Value=127;boxes[1].Value=360;boxes[2].Value=383;}
   Set(form,"activeSelection",(int)Get(form,"selectionVersion"));
-  Set(form,"activeId",91U);Set(form,"activeProbe",1U);Set(form,"activeChannel",0U);Set(form,"activeBand",0U);Set(form,"phase",37U);Set(form,"session",7U);Set(form,"hz",20000U);
+  Set(form,"activeId",91U);Set(form,"activeProbe",1U);Set(form,"activeChannel",0U);Set(form,"activeBand",1U);Set(form,"phase",37U);Set(form,"session",7U);Set(form,"hz",20000U);
   Set(form,"activeCompact",compact);var channels=compact?new uint[]{0,127,360,383}:new uint[]{0};Set(form,"activeChannels",channels);Call(form,"SetPlotChannels",(object)channels);Call(form,"ClearPlots",20000.0*780);
   return form;
+ }
+ static void Finish(Task task,int timeout=12000){var watch=System.Diagnostics.Stopwatch.StartNew();while(!task.IsCompleted&&watch.ElapsedMilliseconds<timeout){Application.DoEvents();Thread.Sleep(1);}Need(task.IsCompleted,"Preview task did not finish");task.GetAwaiter().GetResult();}
+ static void Word(byte[] data,int at,int line,int word,uint value){for(int bit=0;bit<10;bit++)if((value&(1U<<(9-bit)))!=0)data[at+word*10+bit]|=(byte)(1<<line);}
+ static List<byte[]> OriginPackets(byte[] request){
+  var packets=new List<byte[]>();
+  var raw=new byte[1560];for(int f=0;f<13;f++){int at=37+f*60;Word(raw,at,0,0,f==0?0x330U:0xcfU);Word(raw,at,7,2,0x11);Word(raw,at,7,3,(uint)(900+f)>>10);Word(raw,at,7,4,(uint)(900+f)&1023);}
+  for(int at=0;at<raw.Length;at+=160){var body=new byte[224];uint[] w={NpV1PreviewBurst.Magic,NpSdGeometry.U(request,12),7,20000,0,0,(1560U<<16)|(uint)at,1U|(1U<<12)};for(int i=0;i<w.Length;i++)Put(body,i*4,w[i]);Array.Copy(raw,at,body,32,Math.Min(160,raw.Length-at));Put(body,192,37440);packets.Add(body);}
+  return packets;
+ }
+ static void Origin(NpBleConnection radio,byte[] request){foreach(var body in OriginPackets(request))radio.Emit(body);}
+ static void OriginLeaseAndCache(){
+  var state=new NpSdStatus{State=1,Mask=3,Hz=20000,Flags=128|4|NpV1BleProtocol.CompactPreview};var radio=new NpBleConnection();
+  using(var form=new NpV1BlePreviewForm(radio,()=>state,()=>false,null)){
+   int origins=0;List<byte[]> pending=null;radio.OnRequest=request=>{
+    Need(NpSdGeometry.U(request,32)==1,"Origin lease requested AP");uint kind=NpSdGeometry.U(request,8);
+    if(kind==0){origins++;pending=OriginPackets(request);radio.Emit(pending[0]);}
+    else if(kind==4&&NpSdGeometry.U(request,24)==0){Need(NpSdGeometry.U(request,28)==7,"Origin renewal guessed session");foreach(var body in pending.GetRange(1,pending.Count-1))radio.Emit(body);pending=null;}
+    else if(kind==5){Need(NpSdGeometry.U(request,24)==37&&NpSdGeometry.U(request,28)==7,"Cached phase/session changed");var body=Packet(band:1,channels:new uint[]{NpSdGeometry.U(request,20)});Put(body,4,NpSdGeometry.U(request,12));Seal(body);radio.Emit(body);}
+   };
+   Finish((Task)Call(form,"Tick"));Need(origins==1&&radio.Requests.Exists(x=>NpSdGeometry.U(x,8)==4),"Partial origin was not renewed");Need((int)Get(Get(form,"plot"),"count")==16,"Renewed origin did not start LFP");
+   ((NumericUpDown)Get(form,"channel")).Value=1;Finish((Task)Call(form,"Tick"));Finish((Task)Call(form,"Tick"));Need(origins==1&&(int)Get(Get(form,"plot"),"count")==16,"Channel change did not reuse validated origin");
+  }
+  radio=new NpBleConnection();using(var form=new NpV1BlePreviewForm(radio,()=>state,()=>false,null)){
+   radio.OnRequest=request=>{if(NpSdGeometry.U(request,8)==0){radio.Emit(OriginPackets(request)[0]);throw new IOException("Simulated write outcome unknown");}};
+   Finish((Task)Call(form,"Tick"));Need(((CheckBox)Get(form,"enabled")).Checked&&(bool)Get(form,"retryPending"),"Partial write disabled Preview");
+   Need(radio.Requests.Count==2&&NpSdGeometry.U(radio.Requests[1],8)==3&&NpSdGeometry.U(radio.Requests[1],12)==NpSdGeometry.U(radio.Requests[0],12)&&NpSdGeometry.U(radio.Requests[1],24)==0&&NpSdGeometry.U(radio.Requests[1],28)==7&&NpSdGeometry.U(radio.Requests[1],32)==1,"Partial origin lease was not stopped by its exact tuple");
+  }
+ }
+ static void LfpStartupAndRetry(){
+  var radio=new NpBleConnection();var state=new NpSdStatus{State=1,Mask=3,Hz=20000,Flags=128|4|NpV1BleProtocol.CompactPreview};using(var form=new NpV1BlePreviewForm(radio,()=>state,()=>false,null)){
+   Need(Get(form,"band") is Label&&((Label)Get(form,"band")).Text=="LFP","V1 BLE offers AP preview");Need(((NumericUpDown)Get(form,"traceCount")).Value==1,"Initial preview uses excess BLE bandwidth");
+   radio.OnRequest=request=>{Need(NpSdGeometry.U(request,32)==1,"V1 preview requested AP");uint kind=NpSdGeometry.U(request,8);if(kind==0)Origin(radio,request);if(kind==5){var body=Packet(band:1,channels:new uint[]{0});Put(body,4,NpSdGeometry.U(request,12));Seal(body);radio.Emit(body);}};
+   Finish((Task)Call(form,"Tick"));Need((int)Get(Get(form,"plot"),"count")==16,"Two-probe20k LFP startup has no waveform");Need(radio.Requests.Count==2&&NpSdGeometry.U(radio.Requests[0],8)==0&&NpSdGeometry.U(radio.Requests[1],8)==5,"Unexpected recording/control command");
+   Thread.Sleep(5100);var retry=(Task)Call(form,"Tick");while(radio.Requests.Count<3){Application.DoEvents();Thread.Sleep(1);}form.Dispose();Finish(retry);Need(((CheckBox)Get(form,"enabled")).Checked,"Closing during a retry unchecked Preview");
+  }
+  radio=new NpBleConnection();using(var form=new NpV1BlePreviewForm(radio,()=>state,()=>false,null)){
+   Finish((Task)Call(form,"Tick"));Need(((CheckBox)Get(form,"enabled")).Checked&&(bool)Get(form,"retryPending"),"Origin timeout disabled Preview");Need(((Label)Get(form,"info")).Text.Contains("Retrying"),"Retry state is hidden");int sent=radio.Requests.Count;Finish((Task)Call(form,"Tick"));Need(radio.Requests.Count==sent,"Retry flooded BLE controls");
+   radio.OnRequest=request=>{Need(NpSdGeometry.U(request,32)==1,"Retry requested AP");uint kind=NpSdGeometry.U(request,8);if(kind==0)Origin(radio,request);if(kind==5){var body=Packet(band:1,channels:new uint[]{0});Put(body,4,NpSdGeometry.U(request,12));Seal(body);radio.Emit(body);}};Thread.Sleep(1100);Finish((Task)Call(form,"Tick"));Need(((CheckBox)Get(form,"enabled")).Checked&&(int)Get(Get(form,"plot"),"count")==16,"LFP did not recover after startup timeout");
+  }
  }
  static void Display(string output){
   foreach(bool compact in new[]{false,true}){
    var radio=new NpBleConnection();using(var form=Arm(radio,compact,()=>true)){
     Need(((NumericUpDown)Get(form,"traceCount")).Enabled==compact,"Legacy capabilities ignored");
-    radio.Emit(compact?Packet():Legacy(20000,0,37,0));((Task)Call(form,"Tick")).GetAwaiter().GetResult();
+    radio.Emit(compact?Packet(band:1):Legacy(20000,1,37,0));((Task)Call(form,"Tick")).GetAwaiter().GetResult();
     var plots=(Array)Get(form,"plots");
     for(int c=0;c<(compact?4:1);c++){
      var plot=plots.GetValue(c);Need((int)Get(plot,"count")==16,"Control-busy UI did not drain preview");
      Need((ulong)Get(plot,"displayEnd")== (ulong)Get(plots.GetValue(0),"displayEnd"),"Channels do not share a source-time axis");
      var values=(double[])Get(plot,"values");var ticks=(ulong[])Get(plot,"ticks");
-     for(int n=0;n<16;n++){Need(c==0&&n==15?Double.IsNaN(values[n]):values[n]==512-((c*271+n*67)&1023),"Displayed nominal sample changed");Need(ticks[n]==97UL+(compact?NpSdGeometry.U(Packet(),176+c*4):0U)+(ulong)n*31200,"Displayed channel timestamp changed");}
+     for(int n=0;n<16;n++){Need(c==0&&n==15?Double.IsNaN(values[n]):values[n]==512-((c*271+n*67)&1023),"Displayed nominal sample changed");Need(ticks[n]==37UL+(compact?NpSdGeometry.U(Packet(band:1),176+c*4):0U)+(ulong)n*37440,"Displayed channel timestamp changed");}
     }
     Need(radio.Requests.Count==0,"Preview display issued control traffic");
     ((NumericUpDown)Get(form,"gainBox")).Value=2;((NumericUpDown)Get(form,"windowSeconds")).Value=1;
@@ -165,5 +205,5 @@ static class NpV1CompactPreviewTests {
    form.Hide();
   }
  }
- [STAThread]static int Main(string[] args){try{Application.EnableVisualStyles();string output=args.Length==0?".":args[0];Directory.CreateDirectory(output);Protocol();Framing();FirmwareVectors(args[1]);Display(output);Console.WriteLine("PASS "+checks+" compact/legacy decode, actual firmware AP/LFP packets, CRC, fragmented/truncated framing, control priority, source offsets, four traces, selection and layout checks; fake radio, no hardware or app build.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
+ [STAThread]static int Main(string[] args){try{Application.EnableVisualStyles();string output=args.Length==0?".":args[0];Directory.CreateDirectory(output);Protocol();Framing();FirmwareVectors(args[1]);OriginLeaseAndCache();LfpStartupAndRetry();Display(output);Console.WriteLine("PASS "+checks+" compact/legacy decode, actual firmware AP/LFP packets, CRC, fragmented/truncated framing, control priority, source offsets, four traces, selection and layout checks; fake radio, no hardware or app build.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
 }

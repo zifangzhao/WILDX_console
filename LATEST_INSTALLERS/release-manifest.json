@@ -1,20 +1,17 @@
 {
-  "version": "1.0.0.148",
-  "releaseId": "WILDX148_SHARED_FIRMWARE_WINDOW_20261026",
-  "baselineVersion": "1.0.0.145",
-  "localGuiCompilationsThisTask": 3,
+  "version": "1.0.0.149",
+  "releaseId": "WILDX149_V1_LFP_PREVIEW_20261026",
+  "baselineVersion": "1.0.0.148",
+  "localGuiCompilationsThisTask": 1,
   "localHelperCompilationsThisTask": 0,
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "ED35C7BC6192BBFB2B8CE6244E6B09AE37429EEDE11EE7AC150075AAE311CA31",
+  "guiSha256": "23C14A57ECBB59A7E487D73E6837EA1E8D140E401EE33B8A1A2455B945D0F225",
   "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
   "configuratorSha256": "F30CD01DDC80DDE660C4FDFF1D0F4E5E12F1924E58027C2810E131E3B238D86B",
-  "sourceArchiveSha256": "9C97427945FCCAF3772C68F5FA966CC07D7C26674224F05937DC8350A83E0D6B",
+  "sourceArchiveSha256": "515E3BD1EA582FFC36575126A569637F9173A678D6167F10A7501EF9B7D4C159",
   "changedGuiSources": [
     "AssemblyInfo.cs",
-    "NpFirmwareForm.cs",
-    "NpFirmwareForm.Shared.cs",
-    "NpV2FirmwareForm.cs",
-    "NpFirmwareImage.cs"
+    "NpV1BlePreviewForm.cs"
   ],
   "v1FirmwareChanged": false,
   "v2FirmwareChanged": false,
@@ -24,21 +21,22 @@
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
   "extractedPayloadFilesVerified": 34,
-  "obsoletePayloadFilesRemoved": 25,
+  "obsoletePayloadFilesRemoved": 0,
   "standaloneUpdateRequired": false,
   "separateZipIncluded": false,
   "allModeOrEnduranceQualified": false,
   "acceptance": {
     "result": "software_checks_passed",
-    "actual_window_checks": 24,
-    "parser_and_guarded_dfu_model_checks": 130128,
-    "hardware_writes_tested": false,
+    "production_source_checks": 13375,
+    "profile": "V1 BLE mask3/20k LFP; simulated radio",
+    "snapshot_renewal_cleanup_and_phase_cache_checked": true,
+    "hardware_preview_tested": false,
     "production_build_warnings": 0
   },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.148.exe",
-    "bytes": 7349630,
-    "sha256": "CC0EAC74ED6CD8E21FFE621FA8A7032BC7A1F9C3A71DF164B689457F194B5354"
+    "file": "WILDX_console-Setup-1.0.0.149.exe",
+    "bytes": 7350772,
+    "sha256": "3336BDFD96A9ACD33635A7715643A752BC4925EBF1561D589D6CB18CE59C1F6D"
   },
   "payload": [
     {
@@ -203,8 +201,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2028544,
-      "sha256": "ED35C7BC6192BBFB2B8CE6244E6B09AE37429EEDE11EE7AC150075AAE311CA31"
+      "bytes": 2031616,
+      "sha256": "23C14A57ECBB59A7E487D73E6837EA1E8D140E401EE33B8A1A2455B945D0F225"
     },
     {
       "path": "WILDX_console.exe.config",
