@@ -1,0 +1,147 @@
+{
+  "baseline_gui": "1.0.0.139",
+  "uid": "001A0004434250062039314E",
+  "ble": "F5D68A6BCC7C",
+  "raw_source_MB_s": 31.137438016907492,
+  "export_trials": [
+    {
+      "index": 0,
+      "prefetch": false,
+      "MB_s": 30.21780041348661,
+      "seconds": 13.056577599999999
+    },
+    {
+      "index": 1,
+      "prefetch": true,
+      "MB_s": 30.143722767608082,
+      "seconds": 13.0886639
+    },
+    {
+      "index": 2,
+      "prefetch": true,
+      "MB_s": 30.072702587613684,
+      "seconds": 13.1195743
+    },
+    {
+      "index": 3,
+      "prefetch": false,
+      "MB_s": 30.463967829691327,
+      "seconds": 12.951072499999999
+    },
+    {
+      "index": 4,
+      "prefetch": false,
+      "MB_s": 30.414048536263657,
+      "seconds": 12.9723294
+    },
+    {
+      "index": 5,
+      "prefetch": true,
+      "MB_s": 30.094730718441774,
+      "seconds": 13.1099713
+    }
+  ],
+  "export_hashes_match_across_trials": true,
+  "baseline_observer_cleanup_race": "benchmark metrics passed, immediate final Single() raced USB enumeration; separate fresh inventory confirmed idleUSB2",
+  "preview": [
+    {
+      "label": "probe1-channel0",
+      "checked": true,
+      "info": "Preview \u00c2\u00b7 500 samples/s",
+      "packets": 49,
+      "channel": 0,
+      "probe": 1,
+      "phase": 875,
+      "session": 407757883,
+      "hz": 20000,
+      "legacy": false,
+      "gaps": 0,
+      "skipped": 0
+    },
+    {
+      "label": "probe1-channel17",
+      "checked": true,
+      "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
+      "packets": 100,
+      "channel": 17,
+      "probe": 1,
+      "phase": 875,
+      "session": 407757883,
+      "hz": 20000,
+      "legacy": false,
+      "gaps": 0,
+      "skipped": 2
+    },
+    {
+      "label": "probe2-channel17",
+      "checked": true,
+      "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
+      "packets": 152,
+      "channel": 17,
+      "probe": 2,
+      "phase": 661,
+      "session": 407757883,
+      "hz": 20000,
+      "legacy": false,
+      "gaps": 0,
+      "skipped": 3
+    }
+  ],
+  "initial_preview_ms": 27944,
+  "imu_valid_fresh": 3,
+  "imu_timeouts": 6,
+  "stop_to_complete_seconds": 108.866,
+  "new_session": 407757883,
+  "readback_result": "pass",
+  "readback_seconds": 97.88583899999999,
+  "readback_files": {
+    "\\descriptor.bin": {
+      "bytes": 512,
+      "sha256": "5082F6137A9FB5BB694CAA383ACE5F175FE0446CBBDAFBB4059595CD7B76D591"
+    },
+    "\\footer.bin": {
+      "bytes": 512,
+      "sha256": "5E9C5C14DC17B14E1771461CFDC8B1FB31EE5D7C1396B5606E249ACD2711842D"
+    },
+    "\\neuropixels_probe1_ap.dat": {
+      "bytes": 1271188224,
+      "sha256": "5894B57BDD69F270409940EEAC5EB8468A17F1341C23C8BA3BEE1640BB8AB3F7"
+    },
+    "\\neuropixels_probe2_ap.dat": {
+      "bytes": 1271188224,
+      "sha256": "0B0FC769ED5194C71F6A7D7DCAE7BBA377E0DE9F33B237FEF0CAD0ED8F6CF2DE"
+    },
+    "\\neuropixels_probe3_ap.dat": {
+      "bytes": 1271188224,
+      "sha256": "27526F5F36B057F42DB1033859EC2BCCF36B656FE4EA04FF06048253BD80AE6B"
+    }
+  },
+  "final_usb_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "catalog_preservation": {
+    "result": "pass",
+    "prior_count": 294,
+    "final_count": 295,
+    "ignored_live_flags": "Last/DeleteAllowed (bits16/17), which move to newly appended tail",
+    "new_record": {
+      "Id": 295,
+      "Start": 427401216,
+      "End": 433297200,
+      "Cookie": 3049000119,
+      "Session": 407757883,
+      "Hz": 20000,
+      "Mask": 7,
+      "Flags": 459532
+    }
+  },
+  "preview140_software_check": "Delayed2300ms delivery passes; released2s implementation fails; command ownership and cancellation pass",
+  "candidate_download_status": "pending exclusive V2 developer test"
+}

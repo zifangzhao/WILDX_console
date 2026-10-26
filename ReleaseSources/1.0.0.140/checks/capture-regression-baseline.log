@@ -1,0 +1,13 @@
+System.Exception: Preview expired before delayed fragments arrived
+   at NpBlePreviewCaptureTests.<Run>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at NpBlePreviewCaptureTests.Main()
+Preview capture regression failed
+At D:\Code\WILDX_console\WILDX_console\test_ble_preview_capture.ps1:22 char:19
++ if($LASTEXITCODE){throw 'Preview capture regression failed'}
++                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Preview capture regression failed:String) [], RuntimeException
+    + FullyQualifiedErrorId : Preview capture regression failed
+ 

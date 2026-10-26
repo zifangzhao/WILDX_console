@@ -276,27 +276,27 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_IMU_STARTUP_USB1D3262FB_APP8DE56637_20261025",
-      "sourceCommit": "3280df8fea774eb3fce1650a6fd1c84ce4383817",
-      "stage": "BOUNDED_USB_BLE_SD_IMU_READBACK_CHECKED",
+      "release": "V2_CRC_READ_USB13ED1F8E_APP8DE56637_20261025",
+      "sourceCommit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
+      "stage": "BOUNDED_CRC_DOWNLOAD_CHECKED_APP_UNCHANGED",
       "appVersion": "build 8DE56637 (IMU startup)",
-      "usbVersion": "build 1D3262FB (IMU startup)",
+      "usbVersion": "build 13ED1F8E (interleaved CRC download)",
       "recoveryVersion": "build 6408DBB8",
       "appCrc32": "8DE56637",
-      "usbCrc32": "1D3262FB",
+      "usbCrc32": "13ED1F8E",
       "recoveryCrc32": "6408DBB8",
       "app": {
         "path": "V2/V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp",
         "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
       },
       "full": {
-        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_1D3262FB_APP_8DE56637_IMU_STARTUP_20261025.hex",
-        "sha256": "784D27B1F3F0BBBDEC256FFBE4FA3534EEC56E3565A0F8E6D0992F8BDFBA667D"
+        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_13ED1F8E_APP_8DE56637_CRC_READ_20261025.hex",
+        "sha256": "5125EE3EB244E2CF23012035E950E62E6EF9A220CE7DF4ED1DBD84569BB071AE"
       },
       "files": [
         {
-          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_1D3262FB_APP_8DE56637_IMU_STARTUP_20261025.hex",
-          "sha256": "784D27B1F3F0BBBDEC256FFBE4FA3534EEC56E3565A0F8E6D0992F8BDFBA667D"
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_13ED1F8E_APP_8DE56637_CRC_READ_20261025.hex",
+          "sha256": "5125EE3EB244E2CF23012035E950E62E6EF9A220CE7DF4ED1DBD84569BB071AE"
         },
         {
           "path": "V2/V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex",
@@ -311,15 +311,15 @@
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_USB_only_1D3262FB_IMU_STARTUP_20261025.hex",
-          "sha256": "41543E24190C2AC3E395D0EBF69C28D1DCAF6A1963F36ED0D40E4986DD25DE76"
+          "path": "V2/V2_USB_only_13ED1F8E_CRC_READ_20261025.hex",
+          "sha256": "DE68D67ECCC615720EF74EA002E2698803A4168BDE3840845950FC1FDB0666B3"
         },
         {
-          "path": "V2/V2_USB_update_1D3262FB_IMU_STARTUP_20261025.xenp",
-          "sha256": "70FA53D3931A65FED12D85BB8314B8A0D8601ECF8247625AA45E093254C87707"
+          "path": "V2/V2_USB_update_13ED1F8E_CRC_READ_20261025.xenp",
+          "sha256": "CAA60B20DC8567B36BB0DC625FC8D63D6A89B3335511103B0FD7C1ACF79BD8EC"
         }
       ],
-      "limits": "Short selected modes on current board/card only. No all-card/all-mode/endurance/analog-quality/physical-time qualification. UTC1 lacks first-sample PC timing; GUI optional NPAQ times out5s. One USB return required cable reconnect; a subsequent final1D BLE-to-USB return passed. Fused assembled from exact checked components; not separately flashed as a whole.",
+      "limits": "Accepted USB SD-download path through actual WILDX139 APIs on current board/card. APP8DE and recovery reused byte-for-byte with prior evidence. No new NP capture, card write, APP flash, all-mode/endurance, whole-fused or WILDX140+13ED hardware qualification. Existing APP limits retained: UTC1 has no first-sample PC timing. Previous USB-return incident required cable reconnect; later1D return passed. Fused assembled from checked components, not separately flashed as a whole.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -334,8 +334,8 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 184740,
-        "codeCrc32": "1D3262FB",
-        "buildIdHex": "3339316561376634633466393534623737366539653137653433376631356138",
+        "codeCrc32": "13ED1F8E",
+        "buildIdHex": "6330383438373565383131316430643634643535623538393335653966633636",
         "manifestFlags": 3,
         "minimumLoaderAbi": 4,
         "generation": 4
@@ -396,6 +396,16 @@
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
+          "bytes": 184740,
+          "codeCrc32": "1D3262FB",
+          "buildIdHex": "3339316561376634633466393534623737366539653137653433376631356138",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
           "bytes": 176608,
           "codeCrc32": "B6099A0E",
           "buildIdHex": "6636396235343538613763616539306533633238646637666666643137623630",
@@ -427,12 +437,15 @@
       "sourceProvenance": {
         "publishedRepository": "zifangzhao/XE_NP",
         "publishedBranch": "V2",
-        "publishedCommit": "3280df8fea774eb3fce1650a6fd1c84ce4383817",
+        "publishedCommit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
         "ownerManifest": "V2/source-manifest.json",
-        "ownerManifestSha256": "91924D8646B990B21A64DBCB01AEF8CA055B7E4AE3424F44A780B733C4DB48C3",
-        "packageReceiptSha256": "5B8BF10BBDEB0EFC688025DD6A7664E9A2DE3EF2F2092B3CE2C922E11B72B90C",
-        "sourceArchive": "ReleaseSources/V2_IMU_1D3262FB_8DE56637_20261025/compiled-sources.zip",
-        "sourceArchiveSha256": "2F0C8F2C001B4A5D5ECDF2B1A7F426A2377516EBB03CA9EC0E05E637EFF5DF62",
+        "ownerManifestSha256": "ACD4D0DEA32C281832042F0270DD1CE986AA2513EE10AF626D98506E6B867FB0",
+        "packageReceiptSha256": "4C1EFE0A0AB7FF36C4389985F834F284734649451F28AD7B417355E8CE3E0C00",
+        "acceptance": "V2/acceptance.json",
+        "acceptanceSha256": "219ABD02D00E582E3F758817A1EF5B0B651496A16B751D3B7BA79ED207326E83",
+        "sourceArchive": "ReleaseSources/V2_CRC_13ED1F8E_8DE56637_20261025/compiled-sources.zip",
+        "sourceArchiveSha256": "3A4CBE0551612145F82D388658DD8D57348BBF7F2659F5CE48AA05BA069D2884",
+        "parentPublishedCommit": "3280df8fea774eb3fce1650a6fd1c84ce4383817",
         "canonicalSourceEquivalenceClaimed": false
       }
     }

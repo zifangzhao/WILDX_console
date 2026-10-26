@@ -1,0 +1,284 @@
+{
+  "executable_sha256": "5E0D29B8F97F169A4B71743E80B682E4A3BF8CE2E77C82B381886254336038CF",
+  "version": "1.0.0.139",
+  "devices": [
+    {
+      "path": "\\\\?\\usb#vid_1209&pid_b386#001a0004434250062039314e#{8f5a4a7b-0aa6-4f8e-a14f-a2f7b3c6aa4e}",
+      "uid": "001A0004434250062039314E",
+      "generation": 2,
+      "status": {
+        "Magic": 844320846,
+        "Abi": 4,
+        "Mode": 2,
+        "Capabilities": 63,
+        "Busy": 0,
+        "Target": 0,
+        "Uid0": 1703940,
+        "UidXor": 1669030216
+      },
+      "firmware": null
+    }
+  ],
+  "original_mode": 2,
+  "download_mode": {
+    "Busy": 0,
+    "Target": 0,
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 3,
+    "Capabilities": 63,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "transport": "High-speed USB; 510 KiB requests",
+  "card_bytes": 256666238976,
+  "selected_record": {
+    "Start": 425492480,
+    "End": 426291740,
+    "Session": 407207722,
+    "Chunks": 8468,
+    "ApHz": 20000,
+    "LfpHz": 0,
+    "State": 3,
+    "Fault": 0,
+    "ProbeMask": 7,
+    "LaneBytes": 11648,
+    "TicksPerBlock": 40960,
+    "FormatVersion": 12,
+    "CameraHz": 0,
+    "MicrophoneHz": 0,
+    "LogicalPrefixBlocks": 0,
+    "LogicalHighWaterBlocks": 0,
+    "ValidationError": null,
+    "CatalogEnd": 426291740,
+    "CommittedEnd": 426291740,
+    "OpenTail": false,
+    "RecoveryNotice": null
+  },
+  "trials": [
+    {
+      "index": 0,
+      "prefetch": false,
+      "logical_source_bytes": 394541056,
+      "seconds": 12.5077284,
+      "MB_per_second": 31.54378184291242,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "347B6475141E65C725D97DC8503A1B5CC375007761BBCC42E7A8B082763A918F"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "A23968C45F071F8E65789EADC22B76E8B017B584CAFA017F1530B3A722AC0FEB"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "5EB8E2FE21DCA3CCD5A1F21637ACCC34D2D7A9D8090FC16CCE3DB57A7AC77B60"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "A110C65C92CC3D58A853405928E816C8361CFB82DAA9813E14720B41E24C2A28"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "E38C706A8A569916D6B74B39C8D25B43B024B974D80A57C6C05058051ED245F0"
+        }
+      },
+      "source_read_seconds": null,
+      "consumer_wait_seconds": null,
+      "prefetch_source_bytes": null,
+      "firmware_before": "firmware requests=1386 SD_ms=21541 CRC_ms=10372 USB_ms=14819 sectors=1413720 CRC_selftest=1 errors=0 completions=1386; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+      "firmware_after": "firmware requests=2145 SD_ms=29766 CRC_ms=14365 USB_ms=22926 sectors=2187900 CRC_selftest=1 errors=0 completions=2145; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31)."
+    },
+    {
+      "index": 1,
+      "prefetch": true,
+      "logical_source_bytes": 394541056,
+      "seconds": 12.5399418,
+      "MB_per_second": 31.462750170020726,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "347B6475141E65C725D97DC8503A1B5CC375007761BBCC42E7A8B082763A918F"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "A23968C45F071F8E65789EADC22B76E8B017B584CAFA017F1530B3A722AC0FEB"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "5EB8E2FE21DCA3CCD5A1F21637ACCC34D2D7A9D8090FC16CCE3DB57A7AC77B60"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "A110C65C92CC3D58A853405928E816C8361CFB82DAA9813E14720B41E24C2A28"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "E38C706A8A569916D6B74B39C8D25B43B024B974D80A57C6C05058051ED245F0"
+        }
+      },
+      "source_read_seconds": 12.3541119,
+      "consumer_wait_seconds": 10.4991762,
+      "prefetch_source_bytes": 400832512,
+      "firmware_before": "firmware requests=2145 SD_ms=29766 CRC_ms=14365 USB_ms=22926 sectors=2187900 CRC_selftest=1 errors=0 completions=2145; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+      "firmware_after": "firmware requests=2916 SD_ms=38084 CRC_ms=18411 USB_ms=31163 sectors=2974320 CRC_selftest=1 errors=0 completions=2916; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31)."
+    },
+    {
+      "index": 2,
+      "prefetch": true,
+      "logical_source_bytes": 394541056,
+      "seconds": 12.576778,
+      "MB_per_second": 31.370598733634324,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "347B6475141E65C725D97DC8503A1B5CC375007761BBCC42E7A8B082763A918F"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "A23968C45F071F8E65789EADC22B76E8B017B584CAFA017F1530B3A722AC0FEB"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "5EB8E2FE21DCA3CCD5A1F21637ACCC34D2D7A9D8090FC16CCE3DB57A7AC77B60"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "A110C65C92CC3D58A853405928E816C8361CFB82DAA9813E14720B41E24C2A28"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "E38C706A8A569916D6B74B39C8D25B43B024B974D80A57C6C05058051ED245F0"
+        }
+      },
+      "source_read_seconds": 12.3859341,
+      "consumer_wait_seconds": 10.4525695,
+      "prefetch_source_bytes": 400832512,
+      "firmware_before": "firmware requests=2916 SD_ms=38084 CRC_ms=18416 USB_ms=31163 sectors=2974320 CRC_selftest=1 errors=0 completions=2916; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+      "firmware_after": "firmware requests=3687 SD_ms=46424 CRC_ms=22471 USB_ms=39391 sectors=3760740 CRC_selftest=1 errors=0 completions=3687; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31)."
+    },
+    {
+      "index": 3,
+      "prefetch": false,
+      "logical_source_bytes": 394541056,
+      "seconds": 12.350603699999999,
+      "MB_per_second": 31.945082652113598,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "347B6475141E65C725D97DC8503A1B5CC375007761BBCC42E7A8B082763A918F"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "A23968C45F071F8E65789EADC22B76E8B017B584CAFA017F1530B3A722AC0FEB"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "5EB8E2FE21DCA3CCD5A1F21637ACCC34D2D7A9D8090FC16CCE3DB57A7AC77B60"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "A110C65C92CC3D58A853405928E816C8361CFB82DAA9813E14720B41E24C2A28"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "E38C706A8A569916D6B74B39C8D25B43B024B974D80A57C6C05058051ED245F0"
+        }
+      },
+      "source_read_seconds": null,
+      "consumer_wait_seconds": null,
+      "prefetch_source_bytes": null,
+      "firmware_before": "firmware requests=3687 SD_ms=46424 CRC_ms=22476 USB_ms=39391 sectors=3760740 CRC_selftest=1 errors=0 completions=3687; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+      "firmware_after": "firmware requests=4446 SD_ms=54616 CRC_ms=26455 USB_ms=47489 sectors=4534920 CRC_selftest=1 errors=0 completions=4446; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31)."
+    },
+    {
+      "index": 4,
+      "prefetch": false,
+      "logical_source_bytes": 394541056,
+      "seconds": 12.3993095,
+      "MB_per_second": 31.81959898654034,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "347B6475141E65C725D97DC8503A1B5CC375007761BBCC42E7A8B082763A918F"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "A23968C45F071F8E65789EADC22B76E8B017B584CAFA017F1530B3A722AC0FEB"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "5EB8E2FE21DCA3CCD5A1F21637ACCC34D2D7A9D8090FC16CCE3DB57A7AC77B60"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "A110C65C92CC3D58A853405928E816C8361CFB82DAA9813E14720B41E24C2A28"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "E38C706A8A569916D6B74B39C8D25B43B024B974D80A57C6C05058051ED245F0"
+        }
+      },
+      "source_read_seconds": null,
+      "consumer_wait_seconds": null,
+      "prefetch_source_bytes": null,
+      "firmware_before": "firmware requests=4446 SD_ms=54616 CRC_ms=26460 USB_ms=47489 sectors=4534920 CRC_selftest=1 errors=0 completions=4446; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+      "firmware_after": "firmware requests=5205 SD_ms=62822 CRC_ms=30464 USB_ms=55602 sectors=5309100 CRC_selftest=1 errors=0 completions=5205; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31)."
+    },
+    {
+      "index": 5,
+      "prefetch": true,
+      "logical_source_bytes": 394541056,
+      "seconds": 12.557222,
+      "MB_per_second": 31.41945376134945,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "347B6475141E65C725D97DC8503A1B5CC375007761BBCC42E7A8B082763A918F"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "A23968C45F071F8E65789EADC22B76E8B017B584CAFA017F1530B3A722AC0FEB"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "5EB8E2FE21DCA3CCD5A1F21637ACCC34D2D7A9D8090FC16CCE3DB57A7AC77B60"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "A110C65C92CC3D58A853405928E816C8361CFB82DAA9813E14720B41E24C2A28"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 166487040,
+          "sha256": "E38C706A8A569916D6B74B39C8D25B43B024B974D80A57C6C05058051ED245F0"
+        }
+      },
+      "source_read_seconds": 12.3564592,
+      "consumer_wait_seconds": 10.3888594,
+      "prefetch_source_bytes": 400832512,
+      "firmware_before": "firmware requests=5205 SD_ms=62822 CRC_ms=30464 USB_ms=55602 sectors=5309100 CRC_selftest=1 errors=0 completions=5205; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+      "firmware_after": "firmware requests=5976 SD_ms=71123 CRC_ms=34517 USB_ms=63847 sectors=6095520 CRC_selftest=1 errors=0 completions=5976; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31)."
+    }
+  ],
+  "raw_source_read": {
+    "bytes": 409221120,
+    "seconds": 12.539620399999999,
+    "MB_per_second": 32.634251033627784,
+    "before": "firmware requests=602 SD_ms=13121 CRC_ms=6262 USB_ms=6440 sectors=614040 CRC_selftest=1 errors=0 completions=602; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+    "after": "firmware requests=1386 SD_ms=21541 CRC_ms=10367 USB_ms=14819 sectors=1413720 CRC_selftest=1 errors=0 completions=1386; guarded read recovery disabled: NP SD download control request 0x6B failed (Windows 31).",
+    "scope": "Same bounded recording extent through production CRC-validating stream; no export/file write; physical extent bytes including metadata/padding"
+  },
+  "restored": "Mode switch requested.",
+  "final_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "result": "pass"
+}

@@ -1,7 +1,5 @@
-# WILD-X 1.0.0.139
+# WILD-X 1.0.0.140
 
-[Download installer](WILDX_console-Setup-1.0.0.139.exe).
+[Download installer](WILDX_console-Setup-1.0.0.140.exe). Includes the BLE preview timeout fix and the accepted V1/V2 firmware with matching catalog directly. No separate update ZIP is required.
 
-Includes the latest V2 USB 1D3262FB / APP 8DE56637 firmware and matching catalog directly. No separate ZIP is needed. V1 firmware and the existing USB download/preview features remain included. After installation, use Firmware Update in the app to update a device when required.
-
-[Release details](../ReleaseSources/1.0.0.139/README.md) / [manifest](release-manifest.json).
+[Measurements and limits](../ReleaseSources/1.0.0.140/README.md).

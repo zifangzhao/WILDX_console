@@ -1,89 +1,165 @@
 {
-  "version": "1.0.0.139",
-  "releaseId": "WILDX139_BUNDLED_V2_IMU_20261025",
-  "baselineVersion": "1.0.0.138",
+  "version": "1.0.0.140",
+  "releaseId": "WILDX140_V2_PREVIEW_DOWNLOAD_20261025",
+  "baselineVersion": "1.0.0.139",
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "5E0D29B8F97F169A4B71743E80B682E4A3BF8CE2E77C82B381886254336038CF",
+  "guiSha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB",
   "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
   "changedGuiSources": [
-    "AssemblyInfo.cs"
+    "AssemblyInfo.cs",
+    "NpBleConnection.cs"
   ],
-  "sourceArchiveSha256": "7C39442EB675B3FCBF0019FE95ABBE709211B44B6068E6288BB3CB662E26EFC1",
+  "sourceArchiveSha256": "49FBB51D4E8FD03A535AA3A9434F70C3A5B38A34166E233D8716979A5BF2E473",
   "v1FirmwareChanged": false,
   "v2FirmwareChanged": true,
   "v2AppCrc32": "8DE56637",
-  "v2UsbCrc32": "1D3262FB",
-  "v2RecoveryCrc32": "6408DBB8",
-  "v2SourceCommit": "3280df8fea774eb3fce1650a6fd1c84ce4383817",
+  "v2UsbCrc32": "13ED1F8E",
   "helpersChanged": false,
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
   "extractedPayloadFilesVerified": 58,
   "standaloneUpdateRequired": false,
   "separateZipIncluded": false,
-  "hardwareTestsRepeatedForVersionOnlyBuild": false,
-  "firstSamplePcTimeAvailableOnV2LegacyUtc1": false,
   "allModeOrEnduranceQualified": false,
-  "scope": "Version-only GUI compilation from exact138 inputs. Bundle the accepted V2 pair and matching local catalog directly. V1, SDK and application behavior unchanged. No separate ZIP or updater needed.",
-  "v2Acceptance": {
-    "app_crc32": "8DE56637",
-    "usb_crc32": "1D3262FB",
-    "recovery_crc32": "6408DBB8",
-    "gui_version": "1.0.0.138",
-    "gui_installer_sha256": "CABD0D9810DA4FC0DF4C3373E0EFB1C7CC9AF33222E7D24B16CCB0727DC90779",
-    "gui_installer_bytes": 10465768,
-    "gui_distribution": "Unchanged published138 installer alongside standalone new firmware; installer itself retains its old bundled firmware catalog. Do not accept a stale bundled firmware downgrade.",
-    "files": {
-      "V2_fused_RECOVERY_6408DBB8_USB_1D3262FB_APP_8DE56637_IMU_STARTUP_20261025.hex": {
-        "bytes": 5711372,
-        "sha256": "784D27B1F3F0BBBDEC256FFBE4FA3534EEC56E3565A0F8E6D0992F8BDFBA667D"
+  "acceptance": {
+    "preview140_pass": true,
+    "hardware_readers_closed": true,
+    "bundled_v2_usb": "13ED1F8E",
+    "bundled_v2_app": "8DE56637",
+    "v2_source_commit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
+    "v2_source_archive_sha256": "3A4CBE0551612145F82D388658DD8D57348BBF7F2659F5CE48AA05BA069D2884",
+    "gui_sha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB",
+    "preview": {
+      "result": "pass",
+      "version": "1.0.0.140",
+      "first_preview_ms": 3338,
+      "baseline_first_preview_ms": 27944,
+      "preview": [
+        {
+          "label": "probe1-channel0",
+          "checked": true,
+          "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
+          "packets": 46,
+          "channel": 0,
+          "probe": 1,
+          "phase": 199,
+          "session": 407197060,
+          "hz": 20000,
+          "legacy": false,
+          "gaps": 0,
+          "skipped": 2
+        },
+        {
+          "label": "probe1-channel17",
+          "checked": true,
+          "info": "Preview \u00c2\u00b7 500 samples/s",
+          "packets": 42,
+          "channel": 17,
+          "probe": 1,
+          "phase": 199,
+          "session": 407197060,
+          "hz": 20000,
+          "legacy": false,
+          "gaps": 0,
+          "skipped": 0
+        },
+        {
+          "label": "probe2-channel17",
+          "checked": true,
+          "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
+          "packets": 43,
+          "channel": 17,
+          "probe": 2,
+          "phase": 5,
+          "session": 407197060,
+          "hz": 20000,
+          "legacy": false,
+          "gaps": 0,
+          "skipped": 1
+        }
+      ],
+      "imu": {
+        "valid": 9,
+        "distinct_native_ticks": 9,
+        "skipped": 0,
+        "errors": 0
       },
-      "V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex": {
-        "bytes": 564648,
-        "sha256": "D45DA210D8AD9B768A427A0B64E35E774F9B88042BD210E875A75C5B732640B3"
-      },
-      "V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp": {
-        "bytes": 205292,
-        "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
-      },
-      "V2_recovery_only_6408DBB8_20261012.hex": {
-        "bytes": 84090,
-        "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-      },
-      "V2_USB_only_1D3262FB_IMU_STARTUP_20261025.hex": {
-        "bytes": 508472,
-        "sha256": "41543E24190C2AC3E395D0EBF69C28D1DCAF6A1963F36ED0D40E4986DD25DE76"
-      },
-      "V2_USB_update_1D3262FB_IMU_STARTUP_20261025.xenp": {
-        "bytes": 184868,
-        "sha256": "70FA53D3931A65FED12D85BB8314B8A0D8601ECF8247625AA45E093254C87707"
+      "stop_drain_ms": 40764,
+      "recorded_blocks": 24156,
+      "new_session": 407197060,
+      "full_payload_readback_pending": true,
+      "catalog_before": 295,
+      "catalog_after": 296,
+      "catalog_immutable_prefix_preserved": true,
+      "final_inventory": {
+        "executable_sha256": "5E0D29B8F97F169A4B71743E80B682E4A3BF8CE2E77C82B381886254336038CF",
+        "version": "1.0.0.139",
+        "devices": [
+          {
+            "path": "\\\\?\\usb#vid_1209&pid_b386#001a0004434250062039314e#{8f5a4a7b-0aa6-4f8e-a14f-a2f7b3c6aa4e}",
+            "uid": "001A0004434250062039314E",
+            "generation": 2,
+            "status": {
+              "Magic": 844320846,
+              "Abi": 4,
+              "Mode": 2,
+              "Capabilities": 63,
+              "Busy": 0,
+              "Target": 0,
+              "Uid0": 1703940,
+              "UidXor": 1669030216
+            },
+            "firmware": null
+          }
+        ],
+        "result": "pass"
       }
     },
-    "firmware_source_archive_path": "ReleaseSources/V2_IMU_1D3262FB_8DE56637_20261025/compiled-sources.zip",
-    "firmware_source_archive_sha256": "2F0C8F2C001B4A5D5ECDF2B1A7F426A2377516EBB03CA9EC0E05E637EFF5DF62",
-    "settings_omitted": true,
-    "omitted_ranges": [
-      "0801C000-0801DFFF",
-      "081FD000-081FFFFF"
-    ],
-    "validation": {
-      "USB": "Final1D P123/20k9.328s and packedP1/30k9.664s after software restart/rate change, no reported drops/errors,186/189 valid fresh IMU records; startup/SD-download/BLE-return exercised",
-      "BLE_SD": "APP8DE P123/20k10.83904s,8468blocks,216780rows/probe; actual138 full export plus independent framing/length/hash/loss checks; four during-recording B9 AG+MAG views replayed through actual138 display/session; STOP15.147s; catalog292prior records preserved",
-      "software": "83587 driver assertions; actual port/core/consumer role1+2 regression; exact empty-cancel catalog fixtures with publication cuts; static RAM/stack/entry and manifests",
-      "limits": "Short selected modes on current board/card only. No all-card/all-mode/endurance/analog-quality/physical-time qualification. UTC1 lacks first-sample PC timing; GUI optional NPAQ times out5s. One USB return required cable reconnect; a subsequent final1D BLE-to-USB return passed. Fused assembled from exact checked components; not separately flashed as a whole."
+    "download": {
+      "candidate": "13ED1F8E",
+      "result": "speed_and_integrity_pass",
+      "raw_MB_s": 32.634251033627784,
+      "baseline_raw_MB_s": 31.137438016907492,
+      "serial_median_MB_s": 31.81959898654034,
+      "baseline_serial_median_MB_s": 30.414048536263657,
+      "serial_gain_percent": 4.621385569898062,
+      "buffered_median_MB_s": 31.41945376134945,
+      "baseline_buffered_median_MB_s": 30.094730718441774,
+      "buffered_gain_percent": 4.401843815455364,
+      "all_six_export_hashes_match_baseline": true,
+      "baseline_counter_medians": {
+        "SD_ms": 8606.5,
+        "CRC_ms": 4245.5,
+        "USB_ms": 8186.5,
+        "errors": 0.0
+      },
+      "candidate_counter_medians": {
+        "SD_ms": 8263.0,
+        "CRC_ms": 4025.0,
+        "USB_ms": 8170.5,
+        "errors": 0.0
+      },
+      "final_status": {
+        "Magic": 844320846,
+        "Abi": 4,
+        "Mode": 2,
+        "Capabilities": 63,
+        "Busy": 0,
+        "Target": 0,
+        "Uid0": 1703940,
+        "UidXor": 1669030216
+      },
+      "scope": "Same preserved session407207722, actual139 source/decoder APIs; USB CRC feed only. App140 changes only disposable BLE preview wait."
     },
-    "pair_hardware_validated": true,
-    "installed_components": true,
-    "fused_whole_flash_tested": false,
-    "published": false,
-    "hardware_pair_scope": "Exact published GUI138/SDK production API capture/control/export on004B; installer was not executed and manual/visual installed-pair qualification was not performed.",
-    "installer_executed_here": false,
-    "visual_or_installed_pair_qualified": false
+    "whole140_plus13ed_hardware_pair_tested": false,
+    "fused_whole_image_flashed": false,
+    "all_mode_or_endurance_qualified": false,
+    "qualification_scope": "Actual140 BLE/IMU/start-stop/catalog HIL on unchanged APP8DE with USB1D; actual139 download API HIL on USB13ED with APP8DE; host download code and SDK identical in140. USB CRC-only firmware diff; no APP/capture/settings changes."
   },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.139.exe",
-    "bytes": 10538939,
-    "sha256": "D21E380529CEF2D4FB27549A06869A86CF57F7890F9A10BDE648F97C104927F1"
+    "file": "WILDX_console-Setup-1.0.0.140.exe",
+    "bytes": 10525513,
+    "sha256": "5C81231C7989E52F3F05FE17342EB3CE96EA8EFFDB33149B77D6C12A3FF85A14"
   },
   "payload": [
     {
@@ -113,8 +189,8 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 16929,
-      "sha256": "D06B9C997C5591DF95A46B3F9A70C50D81D16330EE96F5411D38A1F048887385"
+      "bytes": 17612,
+      "sha256": "5471B08F7250F9CEAAE136FF1E3AE9992C169A3793B6949B8364BEF8B499F30A"
     },
     {
       "path": "Firmware/V1/acceptance.json",
@@ -262,29 +338,29 @@
       "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
     },
     {
+      "path": "Firmware/V2/acceptance.json",
+      "bytes": 5048,
+      "sha256": "219ABD02D00E582E3F758817A1EF5B0B651496A16B751D3B7BA79ED207326E83"
+    },
+    {
       "path": "Firmware/V2/package-receipt.json",
-      "bytes": 3290,
-      "sha256": "5B8BF10BBDEB0EFC688025DD6A7664E9A2DE3EF2F2092B3CE2C922E11B72B90C"
+      "bytes": 5028,
+      "sha256": "4C1EFE0A0AB7FF36C4389985F834F284734649451F28AD7B417355E8CE3E0C00"
     },
     {
       "path": "Firmware/V2/README.md",
-      "bytes": 873,
-      "sha256": "82452910ADB59B7653E5091FAEDD466AAFA4451BD582ABD9B7DE7FF8625C3F57"
+      "bytes": 1061,
+      "sha256": "8B2A031F93917CB23799DC58CDB5E10D8668EC9692FA704E646F13F0CBA4152F"
     },
     {
       "path": "Firmware/V2/SHA256SUMS.txt",
-      "bytes": 717,
-      "sha256": "617DDCFA350C29150C97D5785A170BFD8944C99DD58CE7342DB0A6438E9D8C05"
+      "bytes": 708,
+      "sha256": "FFA39B6FA75E384095D0875A886987D018660947EFBFE6F9C81F9CD13D9BF48C"
     },
     {
-      "path": "Firmware/V2/source-manifest.json",
-      "bytes": 229690,
-      "sha256": "91924D8646B990B21A64DBCB01AEF8CA055B7E4AE3424F44A780B733C4DB48C3"
-    },
-    {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_1D3262FB_APP_8DE56637_IMU_STARTUP_20261025.hex",
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_13ED1F8E_APP_8DE56637_CRC_READ_20261025.hex",
       "bytes": 5711372,
-      "sha256": "784D27B1F3F0BBBDEC256FFBE4FA3534EEC56E3565A0F8E6D0992F8BDFBA667D"
+      "sha256": "5125EE3EB244E2CF23012035E950E62E6EF9A220CE7DF4ED1DBD84569BB071AE"
     },
     {
       "path": "Firmware/V2/V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex",
@@ -302,14 +378,14 @@
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
     {
-      "path": "Firmware/V2/V2_USB_only_1D3262FB_IMU_STARTUP_20261025.hex",
+      "path": "Firmware/V2/V2_USB_only_13ED1F8E_CRC_READ_20261025.hex",
       "bytes": 508472,
-      "sha256": "41543E24190C2AC3E395D0EBF69C28D1DCAF6A1963F36ED0D40E4986DD25DE76"
+      "sha256": "DE68D67ECCC615720EF74EA002E2698803A4168BDE3840845950FC1FDB0666B3"
     },
     {
-      "path": "Firmware/V2/V2_USB_update_1D3262FB_IMU_STARTUP_20261025.xenp",
+      "path": "Firmware/V2/V2_USB_update_13ED1F8E_CRC_READ_20261025.xenp",
       "bytes": 184868,
-      "sha256": "70FA53D3931A65FED12D85BB8314B8A0D8601ECF8247625AA45E093254C87707"
+      "sha256": "CAA60B20DC8567B36BB0DC625FC8D63D6A89B3335511103B0FD7C1ACF79BD8EC"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -369,7 +445,7 @@
     {
       "path": "WILDX_console.exe",
       "bytes": 1960960,
-      "sha256": "5E0D29B8F97F169A4B71743E80B682E4A3BF8CE2E77C82B381886254336038CF"
+      "sha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB"
     },
     {
       "path": "WILDX_console.exe.config",

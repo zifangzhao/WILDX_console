@@ -1,0 +1,135 @@
+{
+  "preview140_pass": true,
+  "hardware_readers_closed": true,
+  "bundled_v2_usb": "13ED1F8E",
+  "bundled_v2_app": "8DE56637",
+  "v2_source_commit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
+  "v2_source_archive_sha256": "3A4CBE0551612145F82D388658DD8D57348BBF7F2659F5CE48AA05BA069D2884",
+  "gui_sha256": "88EE24A0C8AEAAB62E7B57787AD5AC7B02277FE4C9C37AF8D3FB8DCDD1073BBB",
+  "preview": {
+    "result": "pass",
+    "version": "1.0.0.140",
+    "first_preview_ms": 3338,
+    "baseline_first_preview_ms": 27944,
+    "preview": [
+      {
+        "label": "probe1-channel0",
+        "checked": true,
+        "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
+        "packets": 46,
+        "channel": 0,
+        "probe": 1,
+        "phase": 199,
+        "session": 407197060,
+        "hz": 20000,
+        "legacy": false,
+        "gaps": 0,
+        "skipped": 2
+      },
+      {
+        "label": "probe1-channel17",
+        "checked": true,
+        "info": "Preview \u00c2\u00b7 500 samples/s",
+        "packets": 42,
+        "channel": 17,
+        "probe": 1,
+        "phase": 199,
+        "session": 407197060,
+        "hz": 20000,
+        "legacy": false,
+        "gaps": 0,
+        "skipped": 0
+      },
+      {
+        "label": "probe2-channel17",
+        "checked": true,
+        "info": "Preview \u00c2\u00b7 500 samples/s \u00c2\u00b7 Preview gaps",
+        "packets": 43,
+        "channel": 17,
+        "probe": 2,
+        "phase": 5,
+        "session": 407197060,
+        "hz": 20000,
+        "legacy": false,
+        "gaps": 0,
+        "skipped": 1
+      }
+    ],
+    "imu": {
+      "valid": 9,
+      "distinct_native_ticks": 9,
+      "skipped": 0,
+      "errors": 0
+    },
+    "stop_drain_ms": 40764,
+    "recorded_blocks": 24156,
+    "new_session": 407197060,
+    "full_payload_readback_pending": true,
+    "catalog_before": 295,
+    "catalog_after": 296,
+    "catalog_immutable_prefix_preserved": true,
+    "final_inventory": {
+      "executable_sha256": "5E0D29B8F97F169A4B71743E80B682E4A3BF8CE2E77C82B381886254336038CF",
+      "version": "1.0.0.139",
+      "devices": [
+        {
+          "path": "\\\\?\\usb#vid_1209&pid_b386#001a0004434250062039314e#{8f5a4a7b-0aa6-4f8e-a14f-a2f7b3c6aa4e}",
+          "uid": "001A0004434250062039314E",
+          "generation": 2,
+          "status": {
+            "Magic": 844320846,
+            "Abi": 4,
+            "Mode": 2,
+            "Capabilities": 63,
+            "Busy": 0,
+            "Target": 0,
+            "Uid0": 1703940,
+            "UidXor": 1669030216
+          },
+          "firmware": null
+        }
+      ],
+      "result": "pass"
+    }
+  },
+  "download": {
+    "candidate": "13ED1F8E",
+    "result": "speed_and_integrity_pass",
+    "raw_MB_s": 32.634251033627784,
+    "baseline_raw_MB_s": 31.137438016907492,
+    "serial_median_MB_s": 31.81959898654034,
+    "baseline_serial_median_MB_s": 30.414048536263657,
+    "serial_gain_percent": 4.621385569898062,
+    "buffered_median_MB_s": 31.41945376134945,
+    "baseline_buffered_median_MB_s": 30.094730718441774,
+    "buffered_gain_percent": 4.401843815455364,
+    "all_six_export_hashes_match_baseline": true,
+    "baseline_counter_medians": {
+      "SD_ms": 8606.5,
+      "CRC_ms": 4245.5,
+      "USB_ms": 8186.5,
+      "errors": 0.0
+    },
+    "candidate_counter_medians": {
+      "SD_ms": 8263.0,
+      "CRC_ms": 4025.0,
+      "USB_ms": 8170.5,
+      "errors": 0.0
+    },
+    "final_status": {
+      "Magic": 844320846,
+      "Abi": 4,
+      "Mode": 2,
+      "Capabilities": 63,
+      "Busy": 0,
+      "Target": 0,
+      "Uid0": 1703940,
+      "UidXor": 1669030216
+    },
+    "scope": "Same preserved session407207722, actual139 source/decoder APIs; USB CRC feed only. App140 changes only disposable BLE preview wait."
+  },
+  "whole140_plus13ed_hardware_pair_tested": false,
+  "fused_whole_image_flashed": false,
+  "all_mode_or_endurance_qualified": false,
+  "qualification_scope": "Actual140 BLE/IMU/start-stop/catalog HIL on unchanged APP8DE with USB1D; actual139 download API HIL on USB13ED with APP8DE; host download code and SDK identical in140. USB CRC-only firmware diff; no APP/capture/settings changes."
+}

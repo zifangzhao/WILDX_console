@@ -1,7 +1,20 @@
-# V2 USB 1D3262FB / APP 8DE56637
+# V2 CRC-read improvement - 2026-10-25
 
-Included with its matching firmware catalog in [WILD-X 1.0.0.139](../../LATEST_INSTALLERS/README.md). Install the console update, then use Firmware Update in WILD-X to update the device. No separate ZIP is required.
+Recovery6408DBB8 / USB13ED1F8E / BLE-SD APP8DE56637.
 
-The accepted components and source receipts come from XE_NP commit3280df8fea774eb3fce1650a6fd1c84ce4383817 (branchV2). Bounded USB/SD/BLE/IMU checks passed with138;139 changes only the application version and bundles these exact firmware files.
+Fused HEX merges the exact checked USB with unchanged APP/recovery and omits
+retained configuration. Components retain their existing bytes/seals. New USB/fused HEX use LF; the
+unchanged legacy recovery HEX retains its existing CRLF formatting.
+No separate whole-fused flash test was run.
 
-First-sample PC time is unavailable for legacyUTC1 recordings. One earlier USB return required cable reconnect; a later final-image return passed. The fused image was assembled from checked components, not separately flashed whole. These checks do not establish all-card/all-mode endurance. [Evidence](../../ReleaseSources/V2_IMU_1D3262FB_8DE56637_20261025/README.md).
+WILD-X139 download comparison: serial export median30.41 to31.82MB/s; all six
+exports matched baseline hashes, firmware errors0 and CRC self-test1. SD time
+also improved, so the entire gain cannot be attributed solely to the CRC loop.
+No new neural capture/endurance test was added. Prior APP evidence is reused.
+
+These exact assets are intended for the single WILD-X140 installer. Its owner
+records final installer identity. No standalone update ZIP is required. The
+compiled-sources ZIP is source/build/evidence only, not an updater.
+
+See package-receipt.json, acceptance.json, source-manifest.json and
+../../Note/V2_USB_TIMING_SIDEBAND_20261024.md for scope and provenance.

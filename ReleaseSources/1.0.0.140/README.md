@@ -1,0 +1,13 @@
+# WILD-X 1.0.0.140
+
+V2 BLE preview now allows five seconds for its complete calibration response. In the bounded three-probe / 20 kHz test, the first waveform appeared after 3.338 seconds, compared with 27.944 seconds in the preceding run. P1/P2 preview, channel/probe changes, display window/gain, nine fresh IMU observations, Stop and the recordings list passed. This is one measured comparison, not an all-link latency guarantee or endurance qualification. P3 BLE waveform selection is outside the current firmware contract.
+
+V2 USB firmware 13ED1F8E preserves the original CRC load/store interleaving while reducing loop overhead. Six downloads of the same preserved recording produced identical DAT/IMRO/descriptor/footer hashes with zero firmware errors. Serial export median improved from 30.414 to 31.820 MB/s (+4.62%); buffered median improved from 30.095 to 31.419 MB/s (+4.40%). Validated physical reads improved from 31.137 to 32.634 MB/s. SD stage variability also contributed, so the whole gain is not attributed solely to instruction count.
+
+The grouped-load CRC experiment was rejected: fewer instructions nevertheless increased CRC time and slowed export by about 6%. This illustrates why peripheral access order and hardware measurements matter alongside software benchmarks. Details and exact measurement summaries are under checks/ and in [the project note](../../Note/V2_PREVIEW_DOWNLOAD_20261025.md).
+
+The GUI was compiled once from the exact 139 source graph; only the preview deadline in NpBleConnection.cs and the version in AssemblyInfo.cs changed. The SDK, configurator and firmware updater were reused byte-for-byte. V1 firmware remains APP82E51DEA / USB4F7B521A. The installer directly includes V2 APP8DE56637 / USB13ED1F8E and the matching firmware catalog. No separate update ZIP is required. The Run WILD-X finish option is retained.
+
+The preceding complete recording on the unchanged APP passed all 64,656 native-block checks and produced 1,655,193 AP rows per probe with no reported source gaps, producer discards or physical overflow events. The new 140 preview session407197060 has catalog/terminal-state confirmation but no full payload readback. The download change is limited to USB CRC feeding; APP/capture, recovery and settings were preserved during the test. Final USB mode2 was freshly confirmed idle. Whole-fused-image flashing and all-mode/endurance tests were not performed for this update.
+
+Legacy UTC1 remains a capture-start bracket and does not establish first-ADC-sample PC timing. Short checks do not establish analog quality or all-card/all-mode reliability. See the package verification and firmware acceptance receipts for exact identities and scope.

@@ -83,8 +83,9 @@ namespace USB512_interface
         }
         void CloseClockJournal()
         {
-            NpClockJournal retired;
-            lock(clockJournalLock){retired=clockJournal;clockJournal=null;}
+            CancelRecordingClock();NpClockJournal retired;
+            lock(clockJournalLock){retired=clockJournal;clockJournal=null;clockContext=null;
+                if(retired!=null)retired.ClockClosed(Stopwatch.GetTimestamp(),"BLE connection ended; next connection has a separate epoch");}
             // Close/fit away from receive/control callbacks; no recording backpressure.
             if(retired!=null)try {Task.Run(delegate {try{retired.Dispose();}catch{}});}catch{}
         }
@@ -349,6 +350,11 @@ namespace USB512_interface
                 try { NpV1MediaStatus.Parse(response);return true; }catch(IOException){return false;}
             }
             uint magic = BitConverter.ToUInt32(request, 0);
+            if(command==0xb9 && magic==NpAcquisitionAnchor.RequestMagic) {
+                uint version=(BitConverter.ToUInt32(response,12)>>8)&255;if(version==0)version=1;
+                try {NpAcquisitionAnchor.Parse(response,BitConverter.ToUInt32(request,8),(int)version);return true;}catch(InvalidDataException){return false;}
+            }
+            if(command==0xb9 && magic==NpBleImu.RequestMagic)return NpBleImu.Matches(request,response);
             if (command == 0xb8) {
                 try {
                     uint transaction=BitConverter.ToUInt32(request,8);
@@ -394,7 +400,8 @@ namespace USB512_interface
             var status=ParseStatus(await exchange(0xb9,request,CancellationToken.None),version,0,id);
             return Tuple.Create(version,status);
         }
-        internal async Task<byte[]> ExchangeAsync(byte command, byte[] request, CancellationToken cancel)
+        internal Task<byte[]> ExchangeAsync(byte command, byte[] request, CancellationToken cancel) {return ExchangeAsync(command,request,cancel,false);}
+        async Task<byte[]> ExchangeAsync(byte command, byte[] request, CancellationToken cancel,bool opportunistic)
         {
             byte[] frame;
             if(command==0x82){
@@ -404,9 +411,14 @@ namespace USB512_interface
                 if(request==null || request.Length!=0)throw new ArgumentException("Firmware identity is a read-only short request.");
                 frame=new byte[]{0x3c,command,0x3e};
             }else frame=NpBleWire.Frame(command, request);
-            await transaction.WaitAsync(cancel);
+            bool backgroundClock=opportunistic && IsReadOnlyClockRequest(command,request);
+            if(backgroundClock && ImuPending)return null;
+            if(opportunistic){if(!await transaction.WaitAsync(0,cancel))return null;}
+            else await transaction.WaitAsync(cancel);
             TaskCompletionSource<byte[]> waiting = null;
+            NpClockJournal observationJournal=null;NpBleClockAttempt clockAttempt=null;byte[] clockResponse=null;Exception clockFailure=null;long clockReceiveQpc=0;
             try {
+                if(backgroundClock && ImuPending)return null;
                 if (!Connected) throw new IOException("Connect the selected BLE device before sending a command.");
                 int generation;
                 lock (receiveLock) {
@@ -414,23 +426,30 @@ namespace USB512_interface
                     waiting = receipt = new TaskCompletionSource<byte[]>(TaskCreationOptions.RunContinuationsAsynchronously);
                     matches = (id, body) => Matches(command, request, id, body);
                 }
-                NpClockJournal observationJournal=IsReadOnlyClockRequest(command,request)?ClockJournal(generation):null;
+                observationJournal=IsReadOnlyClockRequest(command,request)?ClockJournal(generation):null;
                 long clockStart=observationJournal==null?0:observationJournal.NowMicroseconds;
-                await WriteFrame(frame,generation,cancel);
+                lock(clockJournalLock)if(observationJournal!=null && clockJournal==observationJournal)
+                    clockAttempt=observationJournal.BeginExchange(request,Stopwatch.GetTimestamp(),generation,clockContext);
+                // Finish an optional fixed command frame before honoring cancellation.
+                // Leaving half a UART frame must never delay the following Stop.
+                await WriteFrame(frame,generation,opportunistic?CancellationToken.None:cancel);
+                cancel.ThrowIfCancellationRequested();
                 if (await Task.WhenAny(waiting.Task, Task.Delay(5000, cancel)) != waiting.Task) {
                     cancel.ThrowIfCancellationRequested();
                     if(!Connected || Epoch!=generation)throw new IOException("Connection changed while waiting for the firmware receipt.");
                     throw MissingReceipt(command,request);
                 }
                 byte[] response = await waiting.Task;
+                clockResponse=response;clockReceiveQpc=Stopwatch.GetTimestamp();
                 long clockEnd=observationJournal==null?0:observationJournal.NowMicroseconds;
                 if (!Connected || epoch != generation) throw new IOException("Connection changed; the old receipt was discarded.");
                 lock(clockJournalLock)if(clockJournal==observationJournal && clockJournalEpoch==generation)
                     ReadOnlyClockObservation(observationJournal,command,request,response,clockStart,clockEnd);
                 return response;
             }
-            catch {if(command==NpFirmwareIdentity.BleCommand)Disconnect();throw;}
+            catch(Exception ex) {clockFailure=ex;if(command==NpFirmwareIdentity.BleCommand)Disconnect();throw;}
             finally {
+                if(observationJournal!=null)try {lock(clockJournalLock)observationJournal.FinishExchange(clockAttempt,clockResponse,clockReceiveQpc==0?Stopwatch.GetTimestamp():clockReceiveQpc,clockFailure);}catch{}
                 lock (receiveLock) { if (receipt == waiting) { receipt = null; matches = null; } }
                 transaction.Release();
             }
@@ -482,8 +501,9 @@ namespace USB512_interface
             if(request==null || request.Length!=64 || (BitConverter.ToUInt32(request,0)!=NpV2PreviewBurst.Magic && BitConverter.ToUInt32(request,0)!=NpV1PreviewBurst.Magic) ||
                 BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)>5U || BitConverter.ToUInt32(request,12)==0 ||
                 BitConverter.ToUInt32(request,60)!=NpSdControl.Crc(request,60))throw new ArgumentException("Valid preview request required.");
+            if(PreviewLowerPriorityBusy)return false; // Waveform is below recording controls and IMU.
             if(!await transaction.WaitAsync(0,cancel))return false; // Recording/status/clock controls take priority.
-            try{await WriteFrame(NpBleWire.Frame(0xb9,request),expectedEpoch,cancel);return true;}
+            try{if(PreviewLowerPriorityBusy)return false;await WriteFrame(NpBleWire.Frame(0xb9,request),expectedEpoch,cancel);return true;}
             finally{transaction.Release();}
         }
         internal async Task RescueReset(CancellationToken cancel)
@@ -513,7 +533,9 @@ namespace USB512_interface
             PreviewReceived+=receive;
             try{
                 if(!await TryWritePreview(NpV2PreviewBurst.Request(id,0,probe,channel,0,0),expectedEpoch,cancel))throw new NpV2PreviewUnavailableException(129); // Confirmed not submitted; safe to defer this display request.
-                if(await Task.WhenAny(done.Task,Task.Delay(2000,cancel))!=done.Task){cancel.ThrowIfCancellationRequested();throw new NpV2PreviewUnavailableException(128);}
+                // Seventeen UART fragments can consume almost 2 s before BLE
+                // scheduling. This listener holds no control/IMU transaction.
+                if(await Task.WhenAny(done.Task,Task.Delay(5000,cancel))!=done.Task){cancel.ThrowIfCancellationRequested();throw new NpV2PreviewUnavailableException(128);}
                 var complete=await done.Task;
                 if(!Connected || Epoch!=expectedEpoch)throw new IOException("Preview connection changed; discard.");
                 return complete;

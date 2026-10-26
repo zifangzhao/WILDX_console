@@ -1,0 +1,21 @@
+{
+  "candidate": "9C6B72A1",
+  "result": "rejected_slower",
+  "raw_MB_s": 29.227365195307144,
+  "serial_median_MB_s": 28.49663217498067,
+  "prefetch_median_MB_s": 28.241647210172733,
+  "all_export_hashes_match_baseline": true,
+  "baseline_counter_medians": {
+    "SD_ms": 8606.5,
+    "CRC_ms": 4245.5,
+    "USB_ms": 8186.5,
+    "errors": 0.0
+  },
+  "candidate_counter_medians": {
+    "SD_ms": 8623.0,
+    "CRC_ms": 5075.5,
+    "USB_ms": 8198.5,
+    "errors": 0.0
+  },
+  "scope": "Readback integrity passed, speed acceptance failed. Not a released firmware."
+}

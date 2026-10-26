@@ -1,0 +1,36 @@
+{
+  "candidate": "13ED1F8E",
+  "result": "speed_and_integrity_pass",
+  "raw_MB_s": 32.634251033627784,
+  "baseline_raw_MB_s": 31.137438016907492,
+  "serial_median_MB_s": 31.81959898654034,
+  "baseline_serial_median_MB_s": 30.414048536263657,
+  "serial_gain_percent": 4.621385569898062,
+  "buffered_median_MB_s": 31.41945376134945,
+  "baseline_buffered_median_MB_s": 30.094730718441774,
+  "buffered_gain_percent": 4.401843815455364,
+  "all_six_export_hashes_match_baseline": true,
+  "baseline_counter_medians": {
+    "SD_ms": 8606.5,
+    "CRC_ms": 4245.5,
+    "USB_ms": 8186.5,
+    "errors": 0.0
+  },
+  "candidate_counter_medians": {
+    "SD_ms": 8263.0,
+    "CRC_ms": 4025.0,
+    "USB_ms": 8170.5,
+    "errors": 0.0
+  },
+  "final_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "scope": "Same preserved session407207722, actual139 source/decoder APIs; USB CRC feed only. App140 changes only disposable BLE preview wait."
+}

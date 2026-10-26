@@ -1,0 +1,16 @@
+{
+  "result": "pass",
+  "prior_count": 294,
+  "final_count": 295,
+  "ignored_live_flags": "Last/DeleteAllowed (bits16/17), which move to newly appended tail",
+  "new_record": {
+    "Id": 295,
+    "Start": 427401216,
+    "End": 433297200,
+    "Cookie": 3049000119,
+    "Session": 407757883,
+    "Hz": 20000,
+    "Mask": 7,
+    "Flags": 459532
+  }
+}
