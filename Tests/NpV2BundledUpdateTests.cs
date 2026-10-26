@@ -51,6 +51,14 @@ static class NpV2BundledUpdateTests {
   var v1app=Call(T("NpFirmwareImage"),"Load",Call(catalog,"CheckedPath",Get(v1,"app")));Need(!(bool)Get(v1app,"Full"),"Existing V1 APP-only image no longer admitted");
   var before=new byte[4*1024*1024];for(int n=0;n<before.Length;n++)before[n]=(byte)(n*13+n/257);var expected=(byte[])Call(image,"ExpectedFlash",before);
   Need(expected.Skip(0x1c000).Take(8192).SequenceEqual(before.Skip(0x1c000).Take(8192)),"V2 config changed");Need(expected.Skip(0x200000).SequenceEqual(before.Skip(0x200000)),"V2 upper physical flash changed");
+  var presence=(BitArray)Get(image,"present");Need(Enumerable.Range(0,presence.Length).Where(i=>!presence[i]).All(i=>expected[i]==before[i]),"V2 omitted flash bytes changed");Need(Enumerable.Range(0x1fd000,0x3000).All(i=>!presence[i]&&expected[i]==before[i]),"Current V2 omitted tail not preserved");
+  foreach(uint missing in new[]{0x08000000U,0x0801e000U,0x08180000U}){
+   uint upper=0;bool removed=false;var lines=new List<string>();foreach(string line in File.ReadAllLines(path)){
+    int type=Int32.Parse(line.Substring(7,2),System.Globalization.NumberStyles.HexNumber);if(type==4)upper=UInt32.Parse(line.Substring(9,4),System.Globalization.NumberStyles.HexNumber)<<16;
+    uint address=upper+UInt32.Parse(line.Substring(3,4),System.Globalization.NumberStyles.HexNumber);if(type==0&&address==missing){removed=true;continue;}lines.Add(line);
+   }
+   Need(removed,"Missing-record test did not remove required bytes");string broken=Path.Combine(root,"missing-"+missing.ToString("X8")+".hex");File.WriteAllLines(broken,lines,System.Text.Encoding.ASCII);string digest;using(var h=System.Security.Cryptography.SHA256.Create())digest=BitConverter.ToString(h.ComputeHash(File.ReadAllBytes(broken))).Replace("-","");Refuse(()=>Call(T("NpFirmwareImage"),"LoadBundledV2",broken,digest),"Missing required recovery/APP/USB bytes admitted");
+  }
   var model=new Model{Flash=(byte[])before.Clone()};Need(Execute(model,image,"success").Contains("Verified full firmware")&&model.Requests==1&&model.Writes==1&&model.Starts==1,"Full V2 flow failed");Need(model.Flash.SequenceEqual(expected),"Full V2 readback differs from expected/preserved bytes");
   model=new Model{Flash=(byte[])before.Clone(),WrongUid=true};Refuse(()=>Execute(model,image,"wrong-uid"),"Wrong V2 MCU UID accepted");Need(model.Writes==0&&model.Starts==0,"Wrong UID caused write/exit");
   model=new Model{Flash=(byte[])before.Clone(),CorruptReadback=true};Refuse(()=>Execute(model,image,"bad-readback"),"Corrupted preserved config accepted");Need(model.Writes==1&&model.Starts==0,"Bad readback exited DFU");

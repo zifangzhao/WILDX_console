@@ -1,46 +1,44 @@
 {
-  "version": "1.0.0.145",
-  "releaseId": "WILDX145_USB_EXPLORATION_20261026",
-  "baselineVersion": "1.0.0.143",
-  "localGuiCompilationsThisTask": 2,
-  "localHelperCompilationsThisTask": 1,
+  "version": "1.0.0.148",
+  "releaseId": "WILDX148_SHARED_FIRMWARE_WINDOW_20261026",
+  "baselineVersion": "1.0.0.145",
+  "localGuiCompilationsThisTask": 3,
+  "localHelperCompilationsThisTask": 0,
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "229AB68130503BE71373E3F34B85F0F9BF494F256E6B04E1959E9B90152E99E9",
+  "guiSha256": "ED35C7BC6192BBFB2B8CE6244E6B09AE37429EEDE11EE7AC150075AAE311CA31",
   "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
   "configuratorSha256": "F30CD01DDC80DDE660C4FDFF1D0F4E5E12F1924E58027C2810E131E3B238D86B",
-  "sourceArchiveSha256": "F504692B68C92E910645F64DA1915B68820C2975883C797374B2F595DB323CEE",
+  "sourceArchiveSha256": "9C97427945FCCAF3772C68F5FA966CC07D7C26674224F05937DC8350A83E0D6B",
   "changedGuiSources": [
     "AssemblyInfo.cs",
-    "mainForm.cs",
-    "mainForm.WildX.cs",
-    "NpV2UsbConsole.cs",
-    "mainForm.Exploration.cs",
-    "NpExploration.cs"
+    "NpFirmwareForm.cs",
+    "NpFirmwareForm.Shared.cs",
+    "NpV2FirmwareForm.cs",
+    "NpFirmwareImage.cs"
   ],
   "v1FirmwareChanged": false,
   "v2FirmwareChanged": false,
   "v2AppCrc32": "C250DF48",
   "v2UsbCrc32": "A71BDECC",
-  "helpersChanged": true,
+  "helpersChanged": false,
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
-  "extractedPayloadFilesVerified": 59,
+  "extractedPayloadFilesVerified": 34,
+  "obsoletePayloadFilesRemoved": 25,
   "standaloneUpdateRequired": false,
   "separateZipIncluded": false,
   "allModeOrEnduranceQualified": false,
   "acceptance": {
     "result": "software_checks_passed",
-    "orchestration_checks": 12,
-    "routing_checks": 23118,
-    "actual_dialog_checks": 16,
-    "hardware_scan_tested": false,
-    "preview_off_sample_count_path_reviewed": true,
+    "actual_window_checks": 24,
+    "parser_and_guarded_dfu_model_checks": 130128,
+    "hardware_writes_tested": false,
     "production_build_warnings": 0
   },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.145.exe",
-    "bytes": 10586653,
-    "sha256": "9771FEC624F9DBF7B30840E49DA9E19516C1B3557AA9F1B395657BCDF52D9DA1"
+    "file": "WILDX_console-Setup-1.0.0.148.exe",
+    "bytes": 7349630,
+    "sha256": "CC0EAC74ED6CD8E21FFE621FA8A7032BC7A1F9C3A71DF164B689457F194B5354"
   },
   "payload": [
     {
@@ -59,11 +57,6 @@
       "sha256": "7C1A38CE78C8E0D3F11164FD3E9434761327E2483D3B6E14B50D6752A8800AD9"
     },
     {
-      "path": "Firmware/owner-confirmation-20261017.json",
-      "bytes": 1975,
-      "sha256": "1375EB0416FEF31E6B65CB305868CA15A32D22A5E7D2A50E277BDDAD24A78EB3"
-    },
-    {
       "path": "Firmware/README.md",
       "bytes": 232,
       "sha256": "B48C7B519E494D33D540C9BF931A7ABB56FDFD0D8AE18DA9A543AAE3733AB543"
@@ -74,94 +67,9 @@
       "sha256": "F67B3271C3FBB2D9C7E297107B2619CB402669F029FA68020F36BA9EE1681F92"
     },
     {
-      "path": "Firmware/V1/acceptance.json",
-      "bytes": 5108,
-      "sha256": "2FBE3A08B9FA5F88168A9D8556AC9BAA568D0CFD1D7FACABD303F2A2C381C259"
-    },
-    {
-      "path": "Firmware/V1/app-identity.json",
-      "bytes": 2565,
-      "sha256": "05A645FD4971A6DA271904A425DF2D0541A6F779701A834912140AFA500C3D1E"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_APP82_compact4/acceptance.json",
-      "bytes": 6499,
-      "sha256": "1CA8EFEE1719D2BBEF99C152D5355CF5A6DDAB92293BC1D66DD5350D359ED841"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_APP82_compact4/app-identity.json",
-      "bytes": 2466,
-      "sha256": "815D5AC94CF4831CB6E31C733C4CAA49349F32A82D0CEF288C2B08BD775BF64F"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_APP82_compact4/README.md",
-      "bytes": 571,
-      "sha256": "254F151B23EDD5775B3ECBF4C44B15FEAB259206A63E9D08132AB5D4AAD009E8"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_APP82_compact4/usb-identity.json",
-      "bytes": 2178,
-      "sha256": "BC740B2F3D401227620EAEDB4B9192FE288F64BC9043C4591718F5191434B7FE"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_APP82_compact4/V1_APP_CC50D8D2_lifecycle_20261025.hex",
-      "bytes": 807764,
-      "sha256": "47235C80933F0FE7A24148899EDA61B1033FDFECD58BBA67B994FCB09417FA3E"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_APP82_compact4/V1_fused_BOOT_USB4F7B521A_APPCC50D8D2_lifecycle_20261025.hex",
-      "bytes": 5745164,
-      "sha256": "2A87A27F58B48FFB7231CD3795D11AEAC061EDF8A6D074EF6081C10371253076"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/download-acceptance.json",
-      "bytes": 32034,
-      "sha256": "2D341DBEC1B32362FE44B1DC0C462022532EC369EC603361C7E42CB5B4C310E5"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/download-init-manifest.json",
-      "bytes": 55253,
-      "sha256": "A7DA54B154A64713DFCF0F6059ED62907314FA06F86DF20B5C7D93357D0296E8"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/README.md",
-      "bytes": 903,
-      "sha256": "6816953D1C3DFA0464225B0AB2AE6181985C4485B70E8284F3969B79CD7D06CB"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/usb30-source-delta.patch",
-      "bytes": 2605,
-      "sha256": "3EF8E797651D700502F1B9C7C5C550082B4BE3FB1B9BF590194C3C2322874C8E"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/V1_DFU_boot_USBF2D80C4F_usb30_startup_20261020.hex",
-      "bytes": 999392,
-      "sha256": "BE9122F07CDA4169A7E8C49B0D40A6B033FB4648D362A5F3A299DE752C8C7E3B"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/V1_fused_BOOT_USBF2D80C4F_APP654824DE_usb30_startup_20261020.hex",
-      "bytes": 5745164,
-      "sha256": "0B38F0ECF60A7D9B99DEF8C6DE3C430063627636ACD770D0579A3EC9BE78F995"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/V1_SD_BLE_app_only_store2_rc1.hex",
-      "bytes": 804887,
-      "sha256": "26C36C71A58CA7C05E7FBDDD68348C844C8603465D4123A77047FAB38A6B32AF"
-    },
-    {
-      "path": "Firmware/V1/legacy/20261025_before_USB4F7B_APPCC50/V1_USB_service_F2D80C4F_usb30_startup_20261020.hex",
-      "bytes": 683968,
-      "sha256": "141B8E99DE4FC13E955C601008F9E7F5869EBEFFF62F15A259CB7717AC7057A5"
-    },
-    {
       "path": "Firmware/V1/README.md",
       "bytes": 660,
       "sha256": "B54FE9E535949FA64976CA4466085ECEBE51FCC90CDE30C39C1506602792C5F4"
-    },
-    {
-      "path": "Firmware/V1/usb-identity.json",
-      "bytes": 2178,
-      "sha256": "BC740B2F3D401227620EAEDB4B9192FE288F64BC9043C4591718F5191434B7FE"
     },
     {
       "path": "Firmware/V1/V1_APP_82E51DEA_compact4_preview_20261025.hex",
@@ -194,21 +102,6 @@
       "sha256": "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC"
     },
     {
-      "path": "Firmware/V1Camera/source-manifest.json",
-      "bytes": 12122,
-      "sha256": "7C5AB9585FCF62376EC72B39A4A163EC20B280A4E1379B504CF3BD43F339E056"
-    },
-    {
-      "path": "Firmware/V1Camera/source-README.md",
-      "bytes": 3601,
-      "sha256": "6DD320D9D98CB82781720FE84A60D93EB7FE4B4B20223EA433DDE0F3AE13056F"
-    },
-    {
-      "path": "Firmware/V1Camera/source-validation.md",
-      "bytes": 5338,
-      "sha256": "EFCEF24060A7D22BD831E751F681E992EE00D962B8D2D3B4ED20E1034BADAFB8"
-    },
-    {
       "path": "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
       "bytes": 5875757,
       "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
@@ -219,29 +112,9 @@
       "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
     },
     {
-      "path": "Firmware/V2/acceptance.json",
-      "bytes": 7894,
-      "sha256": "33C3D8C07676861A5D8AB48263B7FA5318A7B80BC992720A224E3F1544EB71D8"
-    },
-    {
-      "path": "Firmware/V2/package-receipt.json",
-      "bytes": 11877,
-      "sha256": "B7F5D0BD1947257B1BB5DA474AD8EF741DE2F7E36EEF04D8CD3A9BFB4BA40C2D"
-    },
-    {
       "path": "Firmware/V2/README.md",
       "bytes": 1636,
       "sha256": "22B276DC2A5959CFF72513BFB1877C6418C5C702C428D255AD350E7A0FFB0531"
-    },
-    {
-      "path": "Firmware/V2/SHA256SUMS.txt",
-      "bytes": 732,
-      "sha256": "9E85E18F1E3D7762721CA95D9998337CD42DE9D941F6F10C7975A9E318DE3B0B"
-    },
-    {
-      "path": "Firmware/V2/source-manifest.json",
-      "bytes": 13100,
-      "sha256": "25C996732D8F08A388A3BF61C96C5BC52E417B90D0F2D5175B87503DD24B2F33"
     },
     {
       "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_C250DF48_TWO500_PREVIEW_20261026.hex",
@@ -330,8 +203,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2028032,
-      "sha256": "229AB68130503BE71373E3F34B85F0F9BF494F256E6B04E1959E9B90152E99E9"
+      "bytes": 2028544,
+      "sha256": "ED35C7BC6192BBFB2B8CE6244E6B09AE37429EEDE11EE7AC150075AAE311CA31"
     },
     {
       "path": "WILDX_console.exe.config",

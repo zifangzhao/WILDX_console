@@ -10,45 +10,48 @@ using System.Windows.Forms;
 
 namespace USB512_interface
 {
-    internal sealed class NpFirmwareForm : Form
+    internal partial class NpFirmwareForm : Form
     {
-        readonly ComboBox devices=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
-        readonly ComboBox firmwareTarget=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill,AccessibleName="V1 firmware target"};
+        protected readonly ComboBox devices=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
+        readonly ComboBox firmwareTarget=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill,AccessibleName="Bundled firmware"};
         readonly NpFirmwareRelease cameraTarget;
         readonly string cameraTargetError;
-        readonly Label status=new Label{Text="Refresh to discover V1 loggers (identified by MCU UID).",AutoSize=true,MaximumSize=new Size(810,0)};
+        protected readonly Label status=new Label{Text="Refresh to discover V1/V2 loggers (identified by MCU UID).",AutoSize=true,MaximumSize=new Size(810,0)};
         readonly Label progressText=new Label{AutoSize=true,Text="Idle",MaximumSize=new Size(850,0)};
         readonly ProgressBar progress=new ProgressBar{Dock=DockStyle.Fill};
         readonly TextBox log=new TextBox{Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
         readonly Button refresh=new Button{Text="Refresh",AutoSize=true};
         readonly Button inspect=new Button{Text="Read status",AutoSize=true};
-        readonly Button update=new Button{Text="Update SD app…",AutoSize=true};
+        readonly Button update=new Button{Text="Update APP file…",AutoSize=true};
         readonly Button abortUpdate=new Button{Text="Abort APP update…",AutoSize=true};
         readonly Button romDfu=new Button{Text="Request ROM DFU…",AutoSize=true};
         readonly Button flash=new Button{Text="Flash firmware…",AutoSize=true};
         readonly Button locateCli=new Button{Text="Locate CubeProgrammer…",AutoSize=true};
-        readonly Button bundledApp=new Button{Text="Use bundled APP…",AutoSize=true};
+        readonly Button bundledApp=new Button{Text="Update bundled firmware…",AutoSize=true};
         readonly Button firmwareFiles=new Button{Text="Bundled firmware files…",AutoSize=true};
         readonly Button exitRecovery=new Button{Text="Exit update / recovery…",AutoSize=true};
         readonly Button[] modeButtons=new Button[1];
         readonly System.Windows.Forms.Timer timer=new System.Windows.Forms.Timer{Interval=100};
         readonly object progressLock=new object();
         NpV1Management.Status deviceStatus;
-        NpFirmwareIdentity firmwareIdentity;
+        protected NpFirmwareIdentity firmwareIdentity;
         string selectedUid,pendingText;
         int pendingPercent;
         bool working;
         ushort updateReturnMode;
         string programmerPath=NpFirmwareFlash.DefaultCli();
 
-        internal NpFirmwareForm(string selectedPath)
+        internal NpFirmwareForm(string selectedPath):this(selectedPath,1){}
+        protected NpFirmwareForm(string selectedPath,uint preferredFamily)
         {
-            selectedUid=NpV1Management.UidFromPath(selectedPath);
-            Text="NP V1 — Firmware Update";
+            selectedFamily=NpV1Management.UidFromPath(selectedPath)!=null?1U:NpV2FirmwareForm.Uid(selectedPath)!=null?2U:preferredFamily;
+            selectedUid=NpV1Management.UidFromPath(selectedPath)??NpV2FirmwareForm.Uid(selectedPath);
+            Text="Firmware update";
             Icon=NpPreviewTheme.ApplicationIcon;
             ClientSize=new Size(900,560);MinimumSize=new Size(780,510);StartPosition=FormStartPosition.CenterParent;
             try{cameraTarget=ReadCameraTarget();}catch(Exception error){cameraTargetError=error.Message;}
-            firmwareTarget.Items.AddRange(new object[]{"V1 NP (91k/91k)","V1 Camera40 — candidate"});firmwareTarget.SelectedIndex=0;
+            SetFirmwareTargets();
+            bundledPart.Items.AddRange(new object[]{"APP only","Full bundle: APP + USB + boot"});bundledPart.SelectedIndex=0;
             var layout=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(12),ColumnCount=1,RowCount=7};
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
             for(int i=0;i<7;i++)layout.RowStyles.Add(new RowStyle(i==6?SizeType.Percent:SizeType.AutoSize,i==6?100:0));
@@ -58,7 +61,7 @@ namespace USB512_interface
             layout.Controls.Add(top,0,0);
             var targetRow=new TableLayoutPanel{Dock=DockStyle.Fill,AutoSize=true,ColumnCount=2};
             targetRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));targetRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-            targetRow.Controls.Add(WildXTheme.Label("Firmware target"),0,0);targetRow.Controls.Add(firmwareTarget,1,0);
+            targetRow.Controls.Add(WildXTheme.Label("Bundled firmware"),0,0);targetRow.Controls.Add(firmwareTarget,1,0);
             layout.Controls.Add(targetRow,0,1);layout.Controls.Add(status,0,2);
             var actions=new FlowLayoutPanel{AutoSize=true,Dock=DockStyle.Fill,WrapContents=true};
             string[] names={"Recovery"};ushort[] modes={4};
@@ -66,34 +69,26 @@ namespace USB512_interface
                 ushort mode=modes[i];string name=names[i];var button=new Button{Text=name,AutoSize=true};
                 modeButtons[i]=button;actions.Controls.Add(button);button.Click+=async delegate{await SwitchMode(mode,name);};
             }
-            actions.Controls.Add(flash);actions.Controls.Add(update);actions.Controls.Add(bundledApp);actions.Controls.Add(firmwareFiles);actions.Controls.Add(abortUpdate);actions.Controls.Add(exitRecovery);actions.Controls.Add(romDfu);actions.Controls.Add(locateCli);layout.Controls.Add(actions,0,3);
+            actions.Controls.Add(bundledPart);actions.Controls.Add(bundledApp);actions.Controls.Add(update);actions.Controls.Add(flash);actions.Controls.Add(firmwareFiles);actions.Controls.Add(abortUpdate);actions.Controls.Add(exitRecovery);actions.Controls.Add(romDfu);actions.Controls.Add(locateCli);layout.Controls.Add(actions,0,3);
             layout.Controls.Add(progressText,0,4);layout.Controls.Add(progress,0,5);layout.Controls.Add(log,0,6);Controls.Add(layout);
             refresh.Click+=delegate{Discover();};inspect.Click+=async delegate{await InspectStatus();};
-            devices.SelectedIndexChanged+=delegate{var selected=devices.SelectedItem as NpV1Target;if(selected!=null){if(!String.Equals(selectedUid,selected.Uid,StringComparison.OrdinalIgnoreCase)){updateReturnMode=0;firmwareTarget.SelectedIndex=0;}selectedUid=selected.Uid;}deviceStatus=null;firmwareIdentity=null;status.Text="Read status before updating or changing mode on this device."+FirmwareVersions();UpdateControls();};
+            devices.SelectedIndexChanged+=delegate{SelectDevice();};
             firmwareTarget.SelectedIndexChanged+=delegate{status.Text=(deviceStatus==null?"Read status before updating or changing mode on this device.":deviceStatus.Description)+FirmwareVersions();UpdateControls();};
             update.Click+=async delegate{await UpdateApp();};abortUpdate.Click+=async delegate{await AbortUpdate();};romDfu.Click+=async delegate{await RequestRomDfu();};
-            exitRecovery.Click+=async delegate{await SwitchMode(2,"USB streaming");};
+            exitRecovery.Click+=async delegate{if(IsV2)await V2Mode("--stream");else await SwitchMode(2,"USB streaming");};
             flash.Click+=async delegate{await FlashFirmware();};locateCli.Click+=delegate{LocateCli();};
-            bundledApp.Click+=async delegate{try{await UseBundledApp(release=>NpFirmwareNotice.SelectAppPath(this,release),path=>UpdateApp(path));}catch(Exception ex){MessageBox.Show(this,ex.Message,"Bundled firmware");}};
+            bundledApp.Click+=async delegate{try{await UpdateBundledFirmware();}catch(Exception ex){MessageBox.Show(this,ex.Message,"Bundled firmware");}};
+            bundledPart.SelectedIndexChanged+=delegate{UpdateControls();};
             firmwareFiles.Click+=delegate{try{NpFirmwareNotice.OpenFiles();}catch(Exception ex){MessageBox.Show(this,ex.Message,"Bundled firmware");}};
             FormClosing+=delegate(object sender,FormClosingEventArgs e){if(working){e.Cancel=true;MessageBox.Show(this,"Wait for the firmware operation to finish. Do not disconnect the logger during an update.");}};
             timer.Tick+=delegate{lock(progressLock){if(pendingText!=null){progressText.Text=pendingText;progress.Value=pendingPercent;pendingText=null;}}};timer.Start();
             Resize+=delegate{status.MaximumSize=progressText.MaximumSize=new Size(Math.Max(200,ClientSize.Width-40),0);};
             Shown+=async delegate{Discover();if(devices.SelectedItem!=null)await InspectStatus();};UpdateControls();
-            WildXTheme.Apply(this);WildXTheme.Button(update,true);WildXTheme.Button(abortUpdate,false,true);WildXTheme.Button(romDfu,false,true);
+            WildXTheme.Apply(this);WildXTheme.Button(bundledApp,true);WildXTheme.Button(abortUpdate,false,true);WildXTheme.Button(romDfu,false,true);
             status.ForeColor=progressText.ForeColor=WildXTheme.Muted;status.Text+=FirmwareVersions();
         }
-        void Discover()
-        {
-            if(working)return;
-            devices.Items.Clear();var found=NpV1Management.Enumerate();foreach(var target in found)devices.Items.Add(target);
-            if(selectedUid!=null && found.FindAll(t=>String.Equals(t.Uid,selectedUid,StringComparison.OrdinalIgnoreCase)).Count==0){
-                var pending=new NpV1Target{Uid=selectedUid};found.Add(pending);devices.Items.Add(pending);
-            }
-            devices.SelectedIndex=NpV1Management.SelectionAfterRefresh(found,selectedUid);deviceStatus=null;
-            status.Text=(devices.Items.Count==0?"No V1 logger enumerated. Generic WILDX / V2 boards are deliberately excluded.":devices.SelectedIndex<0 && selectedUid!=null?"Selected logger "+selectedUid+" is not uniquely connected. Another logger will not be substituted.":"Select the exact UID, then read status.")+FirmwareVersions();UpdateControls();
-        }
-        NpFirmwareRelease SelectedFirmwareTarget {get{return firmwareTarget.SelectedIndex==0?NpFirmwareCatalog.Bundled.For(1):firmwareTarget.SelectedIndex==1?cameraTarget:null;}}
+        void Discover(){DiscoverDevices();}
+        NpFirmwareRelease SelectedFirmwareTarget {get{return IsV2?NpFirmwareCatalog.Bundled.For(2):firmwareTarget.SelectedIndex==0?NpFirmwareCatalog.Bundled.For(1):firmwareTarget.SelectedIndex==1?cameraTarget:null;}}
         static NpFirmwareRelease ReadCameraTarget()
         {
             var catalog=NpFirmwareCatalog.Bundled;
@@ -110,15 +105,17 @@ namespace USB512_interface
                 file.path="V1Camera/"+file.path;catalog.CheckedPath(file);
             }
             release.app=release.files.Single(file=>Path.GetFileName(file.path).StartsWith("V1_SD_BLE_app_only_",StringComparison.Ordinal));
-            release.board="V1 Camera40 — candidate; physical camera board only, not the NP 91k/91k target";
+            release.full=release.files.Single(file=>Path.GetFileName(file.path).StartsWith("V1_fused_",StringComparison.Ordinal));
+            release.board="V1 Camera";
             release.recoveryVersion="Included in fused HEX; version not reported";
             return release;
         }
-        string FirmwareVersions()
+        protected string FirmwareVersions()
         {
             var release=SelectedFirmwareTarget;
-            return "\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed(1,firmwareIdentity)+"\r\nBundled: "+(release==null?"Unavailable":release.Versions)+
-                (release==null?"\r\n"+(firmwareTarget.SelectedIndex==1?cameraTargetError:NpFirmwareCatalog.Bundled.Error):"");
+            return "\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed(selectedFamily,firmwareIdentity)+"\r\nBundled: "+(release==null?"Unavailable":release.Versions)+
+                (release==null?"\r\n"+(!IsV2&&firmwareTarget.SelectedIndex==1?cameraTargetError:NpFirmwareCatalog.Bundled.Error):"")+
+                (firmwareIdentity==null?"\r\nVersion comparison unavailable; installed firmware does not report image versions.":"");
         }
         async Task UseBundledApp(Func<NpFirmwareRelease,string> selectApp,Func<string,Task> applyApp)
         {
@@ -130,13 +127,14 @@ namespace USB512_interface
         }
         void UpdateControls()
         {
-            firmwareTarget.Enabled=devices.Enabled=refresh.Enabled=!working;inspect.Enabled=!working && devices.SelectedItem!=null;
+            firmwareTarget.Enabled=bundledPart.Enabled=devices.Enabled=refresh.Enabled=!working;inspect.Enabled=!working && devices.SelectedItem!=null;
+            if(IsV2){UpdateV2Controls();return;}
             bool manage=!working && deviceStatus!=null && deviceStatus.Split && deviceStatus.Busy==0 && deviceStatus.PendingMode==0;
             foreach(var button in modeButtons)button.Enabled=manage;
             exitRecovery.Enabled=manage && deviceStatus.Role==4;
             modeButtons[0].Text=deviceStatus!=null && !deviceStatus.Recovery && (deviceStatus.Capabilities&64U)!=0?"APP update mode":"Recovery";
             update.Enabled=!working && NpV1Management.CanUpdateApp(deviceStatus);
-            bundledApp.Enabled=update.Enabled && SelectedFirmwareTarget!=null;firmwareFiles.Enabled=!working;
+            bundledApp.Enabled=SelectedFirmwareTarget!=null && (bundledPart.SelectedIndex==0?update.Enabled:!working && SelectedFirmwareTarget.full!=null && devices.SelectedItem is NpV1Target && (((NpV1Target)devices.SelectedItem).Path==null || NpV1Management.CanEnterRomDfu(deviceStatus)));firmwareFiles.Enabled=!working;
             abortUpdate.Enabled=!working && NpV1Management.CanAbortAppUpdate(deviceStatus);
             romDfu.Enabled=!working && NpV1Management.CanEnterRomDfu(deviceStatus);
             var target=devices.SelectedItem as NpV1Target;
@@ -149,20 +147,22 @@ namespace USB512_interface
         {
             if(working)return;working=true;UpdateControls();
             try{await operation();}
-            catch(Exception ex){deviceStatus=null;Report("Stopped: "+ex.Message,0);Append(ex.ToString());MessageBox.Show(this,ex.Message+"\n\nNo automatic retry was performed. Refresh and read the device status before proceeding.","NP firmware",MessageBoxButtons.OK,MessageBoxIcon.Error);}
+            catch(Exception ex){deviceStatus=null;Report("Stopped: "+ex.Message,0);Append(ex.Message);MessageBox.Show(this,ex.Message+"\n\nNo automatic retry was performed. Refresh and read the device status before proceeding.","NP firmware",MessageBoxButtons.OK,MessageBoxIcon.Error);}
             finally{working=false;UpdateControls();}
         }
         async Task InspectStatus()
         {
+            if(IsV2){await ReadV2Status();return;}
             var target=devices.SelectedItem as NpV1Target;if(target==null || target.Path==null)return;deviceStatus=null;
             await Run(async ()=>{var result=await Task.Run(()=>{using(var manager=new NpV1Management(target))return manager.ReadStatus();});deviceStatus=result;
                 firmwareIdentity=null;
                 if(!result.Recovery && result.Busy==0 && result.PendingMode==0 && (result.Capabilities&NpFirmwareIdentity.UsbCapability)!=0)
                     try{firmwareIdentity=await Task.Run(()=>NpFirmwareIdentity.ReadUsb(target.Path,1));}catch(Exception ex){Append("Firmware identity unavailable: "+ex.Message);}
-                status.Text=result.Description+FirmwareVersions();Append(target+": "+result.Description);});
+                SuggestFullBundle();status.Text=result.Description+FirmwareVersions();Append(target+": "+result.Description);});
         }
         async Task SwitchMode(ushort mode,string name)
         {
+            if(IsV2){await V2Mode(mode==4?"--recovery":NpV2FirmwareForm.UsbModeOperation(mode));return;}
             var target=devices.SelectedItem as NpV1Target;if(target==null)return;
             bool sameInterface=NpV1Management.UsesInPlaceTransition(deviceStatus,mode);
             string warning=mode==1?"The SD app disconnects USB. Automatic return to USB is not implemented; SWD may be required. Enter the SD application?":sameInterface?"Switch this V1 to APP update mode on the same USB interface?":"Switch this V1 to "+name+"? The USB mode will be verified for this UID; changing personality may re-enumerate USB.";
@@ -172,6 +172,7 @@ namespace USB512_interface
         }
         async Task UpdateApp(string bundledPath=null)
         {
+            if(IsV2){await UpdateV2App(bundledPath);return;}
             var target=devices.SelectedItem as NpV1Target;if(target==null || !NpV1Management.CanUpdateApp(deviceStatus))return;
             string path=bundledPath;if(path==null)using(var dialog=new OpenFileDialog{Filter="V1 SD/BLE APP-only HEX (*.hex)|*.hex|Legacy V1 app package (*.xenp)|*.xenp",Title="Select APP-only HEX — not factory or APP+USB"}){if(dialog.ShowDialog(this)!=DialogResult.OK)return;path=dialog.FileName;}
             try{NpV1Management.ValidatePackage(path);}catch(Exception error){MessageBox.Show(this,error.Message,"Package rejected");return;}
@@ -199,6 +200,7 @@ namespace USB512_interface
         }
         async Task RequestRomDfu()
         {
+            if(IsV2){await V2Mode("--dfu");return;}
             var target=devices.SelectedItem as NpV1Target;if(target==null || !NpV1Management.CanEnterRomDfu(deviceStatus))return;
             if(MessageBox.Show(this,"Request guarded ROM DFU on V1 "+target.Uid+"?\n\nUSB will disconnect. No firmware is programmed by this command. Verify the DFU device identity in STM32CubeProgrammer before uploading.\n\nThe fused image rewrites the recovery bootloader and is NOT implant-update-qualified. Never use mass erase or change option bytes.","Request ROM DFU",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
             await Run(()=>Task.Run(()=>{
@@ -215,13 +217,14 @@ namespace USB512_interface
                 programmerPath=dialog.FileName;Append("STM32CubeProgrammer location: "+programmerPath);return true;
             }
         }
-        async Task FlashFirmware()
+        async Task FlashFirmware(string bundledPath=null,string expectedSha=null)
         {
             var target=devices.SelectedItem as NpV1Target;if(target==null || working)return;
-            string path;using(var dialog=new OpenFileDialog{Filter="V1 firmware HEX (*.hex)|*.hex",Title="Select complete fused V1 firmware or APP-only HEX"}){if(dialog.ShowDialog(this)!=DialogResult.OK)return;path=dialog.FileName;}
+            string path=bundledPath;if(path==null)using(var dialog=new OpenFileDialog{Filter="V1 firmware HEX (*.hex)|*.hex",Title="Select complete fused V1 firmware or APP-only HEX"}){if(dialog.ShowDialog(this)!=DialogResult.OK)return;path=dialog.FileName;}
             await Run(async ()=>{
                 Report("Validating firmware addresses, manifests, vectors and CRCs",0);
                 var image=await Task.Run(()=>NpFirmwareImage.Load(path));
+                if(expectedSha!=null&&!image.SourceSha256.Equals(expectedSha,StringComparison.OrdinalIgnoreCase))throw new IOException("Bundled firmware changed before loading; no update was started.");
                 bool resident=!image.Full && target.Path!=null && NpV1Management.CanUpdateApp(deviceStatus);
                 if(!resident && target.Path!=null && !NpV1Management.CanEnterRomDfu(deviceStatus))
                     throw new IOException("This V1 role does not advertise guarded ROM DFU. Select idle USB streaming or SD download, read status, then try again. No mode request was sent.");

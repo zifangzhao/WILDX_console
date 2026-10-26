@@ -96,8 +96,12 @@ namespace USB512_interface
                 if(start.HasValue && (start.Value&~1U)!=(U(app,4)&~1U))throw new InvalidDataException("APP HEX entry does not match its reset vector.");
                 return image;
             }
-            if(image.count!=FlashBytes-PageBytes)throw new InvalidDataException("Select complete fused V1 firmware or pure APP-only HEX. Partial APP+USB and service-only images are ambiguous.");
-            image.Read(FlashBase,(int)(ConfigBase-FlashBase));image.Read(AppManifest,(int)(FlashLimit-AppManifest));
+            if(family==1 && image.count!=FlashBytes-PageBytes)throw new InvalidDataException("Select complete fused V1 firmware or pure APP-only HEX. Partial APP+USB and service-only images are ambiguous.");
+            image.Read(FlashBase,(int)(ConfigBase-FlashBase));
+            // The SHA-checked V2 bundle deliberately omits unused tail flash.
+            // Required APP/USB bytes are checked by their manifests below;
+            // ExpectedFlash preserves every address absent from the HEX.
+            if(family==1)image.Read(AppManifest,(int)(FlashLimit-AppManifest));
             if(family==1)ValidateRecovery(image.flash);
             ValidateVector(image.flash,0,FlashBase,(int)(ConfigBase-FlashBase));
             image.ValidateManifest(UsbManifest,0x55534231,UsbBase,FlashLimit);

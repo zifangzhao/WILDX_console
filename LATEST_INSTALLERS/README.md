@@ -1,5 +1,5 @@
-# WILD-X 1.0.0.145
+# WILD-X 1.0.0.148
 
-[Download installer](WILDX_console-Setup-1.0.0.145.exe). USB Mode → Explore… automatically scans consecutive probe windows, recording one minute each by default. Existing V1/V2 firmware and the two-channel 500 Hz V2 BLE preview are retained.
+[Download installer](WILDX_console-Setup-1.0.0.148.exe). One shared V1/V2 firmware update window selects the matching bundled firmware by device. The package excludes obsolete firmware history and developer output. Existing recording, exploration and BLE preview are retained.
 
-[Usage and validation limits](../ReleaseSources/1.0.0.145/README.md). Software checks passed; a hardware bank sweep has not been run.
+[Usage and validation limits](../ReleaseSources/1.0.0.148/README.md). Software window/parser/update-model checks passed; no hardware was flashed.

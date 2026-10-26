@@ -1,0 +1,2 @@
+PASS 24 shared V1/V2 window, bundle/UID selection, unsupported-command and layout checks; no discovery or hardware writes.
+PASS 130128 actual-app V2 bundle/parser/guarded DFU model/UI checks; fake programmer only, no device access or real firmware writes.

@@ -128,6 +128,7 @@
     <Compile Include="NpLogger\NpFirmwareFlash.cs" />
     <Compile Include="NpLogger\NpLoggerForm.cs" />
     <Compile Include="NpLogger\NpFirmwareForm.cs" />
+    <Compile Include="NpLogger\NpFirmwareForm.Shared.cs" />
     <Compile Include="NeuropixelsPreviewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -227,8 +228,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NpLogger\NpFirmwareCatalog.cs" />
-    <Content Include="..\..\Firmware\**\*">
-      <Link>Firmware\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <Content Include="..\..\Firmware\releases.json;..\..\Firmware\README.md">
+      <Link>Firmware\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Firmware\V1\*.hex;..\..\Firmware\V1\README.md">
+      <Link>Firmware\V1\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Firmware\V2\*.hex;..\..\Firmware\V2\*.xenp;..\..\Firmware\V2\README.md">
+      <Link>Firmware\V2\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Firmware\V1Camera\*.hex;..\..\Firmware\V1Camera\release.json;..\..\Firmware\V1Camera\README.md">
+      <Link>Firmware\V1Camera\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
