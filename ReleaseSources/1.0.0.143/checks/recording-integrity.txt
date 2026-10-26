@@ -1,0 +1,40 @@
+Export complete: True
+Stored terminal state: Complete
+Recording complete: True
+Stored state: 3
+Stored fault: 0
+Session: 407110382
+Sample rate Hz: 20000
+Committed blocks: 28956
+Source ticks: 1186037760
+Lossless: True
+Source gaps advertised: True
+Source gap count: 0
+Missing source ticks: 0
+Dropped source blocks: 0
+Elapsed source ticks: 1186037760
+Footer source ticks are stored tick quantity, not elapsed source span.
+Stopped loss statistics: present
+Physical overflow events: 0
+Producer discarded raw ticks: 0
+Physical event/raw-discard counts are not inferred from stored source gaps.
+Segment 0: first_stored_block=0; stored_blocks=28956; source_start_tick=0; source_end_tick=1186037760
+Segment 0 probe 1: row_offset=0; rows=741272; first_source_tick=1201
+Segment 0 probe 2: row_offset=0; rows=741272; first_source_tick=1359
+Segment 0 probe 3: row_offset=0; rows=741272; first_source_tick=1453
+Format: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts
+sample_encoding=np2_signed_nominal_v1
+sample_transform=2048 - raw12
+sample_range=-2047..2048
+sample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone
+No gain/comparator calibration or microvolt conversion. Legacy DAT before WILDX 1.0.0.9 contains unsigned raw 12-bit codes; existing DAT files are not rewritten.
+Checks: descriptor/footer CRC32, exact immutable headers/dense sequence, source ticks contiguous or explicitly marked whole-block forward gaps, native SuperSync in every block, exact segment row/file lengths
+No ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.
+Boundary policy: trim incomplete leading/trailing AP rows in each contiguous source segment; do not pad. Probe rows have independent source-tick origins; use segment offsets for alignment.
+Time base: source ticks / 32000000 Hz; AP step=1600/32000000 seconds (exact rational).
+Configuration: configuration.bin; N2IMRO2 kind3; staged_selection_mask=0x0; identity/request-CRC fingerprints only, NOT full maps or applied-mapping proof. Physical electrode geometry unavailable.
+Probe 1: file=neuropixels_probe1_ap.dat; rows=741272; phase=399; first_source_tick=1201; trailing_ticks=1359; SHA256=EC6E5F98E7658EC51BA9D63C7895359E1FA52AF1D796A5D140B3ADBBC325E2F9
+Probe 2: file=neuropixels_probe2_ap.dat; rows=741272; phase=241; first_source_tick=1359; trailing_ticks=1201; SHA256=A7D38BEC2ADAA0F9D103BD522CC6615F031C1A707490199B91A73BB38CAC1DE4
+Probe 3: file=neuropixels_probe3_ap.dat; rows=741272; phase=147; first_source_tick=1453; trailing_ticks=1107; SHA256=4B94535DEF3B97C8A43F1EE9C9C274EB0D787319F243B0E296AC6A2F91E3BEB4
+SHA256 scope: emitted DAT bytes, computed during writing; flush/length checks, no second disk-readback pass.
+UTC: validated utc.bin; capture-start bracket only, not ADC synchronization

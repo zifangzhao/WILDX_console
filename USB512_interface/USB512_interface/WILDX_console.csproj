@@ -162,6 +162,8 @@
     <Compile Include="Ble\NpV2Preview.cs" />
     <Compile Include="Ble\NpV2PreviewWire.cs" />
     <Compile Include="Ble\NpBlePreviewForm.cs" />
+    <Compile Include="Ble\NpBlePreviewForm.Multi.cs" />
+    <Compile Include="Ble\NpV2MultiPreviewWire.cs" />
     <Compile Include="Ble\NpV1BlePreviewForm.cs" />
     <Compile Include="Ble\NpMediaExport.cs" />
     <Compile Include="Ble\WILD_VideoDecoder.cs" />

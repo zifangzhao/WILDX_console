@@ -276,22 +276,22 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_BURST_DOWNLOAD_USBA71BDECC_APP8DE56637_20261025",
-      "sourceCommit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
-      "stage": "BOUNDED_ACTUAL141_EXPORT_P12320K_IMU_CHECKED",
-      "appVersion": "build 8DE56637 (IMU startup)",
+      "release": "V2_TWO500_PREVIEW_APPC250DF48_USBA71BDECC_20261026",
+      "sourceCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
+      "stage": "BOUNDED_TWO500_SD_READBACK_CHECKED",
+      "appVersion": "build C250DF48 (two-channel500Hz filtered BLE preview)",
       "usbVersion": "build A71BDECC (bounded pipelined SD download)",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "8DE56637",
+      "appCrc32": "C250DF48",
       "usbCrc32": "A71BDECC",
       "recoveryCrc32": "6408DBB8",
       "app": {
-        "path": "V2/V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp",
-        "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
+        "path": "V2/V2_logger_APP_update_C250DF48_TWO500_PREVIEW_20261026.xenp",
+        "sha256": "B9FC57821D7C244197CCD50D7BEE8C25286B64CC7D7D60D36E7517B058E5A18D"
       },
       "full": {
-        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_8DE56637_BURST_DOWNLOAD_20261025.hex",
-        "sha256": "94F506B3E078FFD00766A3351854F212C227A3D63D48328DB4447B22665741DA"
+        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_C250DF48_TWO500_PREVIEW_20261026.hex",
+        "sha256": "DCA7644FC18BFD977BB8AD91BBC9326067217937266569422F5BFD1F6CBBF6BE"
       },
       "files": [
         {
@@ -303,29 +303,29 @@
           "sha256": "870C7DECE27308A031B319C187B170FFF8F9CAAAAED1F3BF951EA93727BA6D21"
         },
         {
-          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_8DE56637_BURST_DOWNLOAD_20261025.hex",
-          "sha256": "94F506B3E078FFD00766A3351854F212C227A3D63D48328DB4447B22665741DA"
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_C250DF48_TWO500_PREVIEW_20261026.hex",
+          "sha256": "DCA7644FC18BFD977BB8AD91BBC9326067217937266569422F5BFD1F6CBBF6BE"
         },
         {
-          "path": "V2/V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex",
-          "sha256": "D45DA210D8AD9B768A427A0B64E35E774F9B88042BD210E875A75C5B732640B3"
+          "path": "V2/V2_logger_APP_only_C250DF48_TWO500_PREVIEW_20261026.hex",
+          "sha256": "0FB8C724AF6045D0A6F08E71DA76E0D7D1723EF96F4E21C671F3737CF280D884"
         },
         {
-          "path": "V2/V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp",
-          "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
+          "path": "V2/V2_logger_APP_update_C250DF48_TWO500_PREVIEW_20261026.xenp",
+          "sha256": "B9FC57821D7C244197CCD50D7BEE8C25286B64CC7D7D60D36E7517B058E5A18D"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         }
       ],
-      "limits": "Actual141 SDK six exports of one preserved record on current DelkinV90/current board. Short actual140 P123/20k capture on unchanged capture/IMU graph; no drops, fresh AG+MAG. APP8DE/recovery reused exactly with prior evidence. No all-mode/card/endurance/analog-quality/physical-time/installed-UI or whole-fused flash qualification. Existing APP timing/BLE limits retained in acceptance.json; fused not separately flashed as a whole.",
+      "limits": "Two selected P1/P2 channels500Hz during oneP12320k SD recording, oneforcedPCpacketdrop/replay, selectionchange,15freshAG+MAGviews,Stop/catalog/fullreadback. Old-firmware fallback/V1compact admission softwarechecked; V1 firmware and logging bytes unchanged.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 205164,
-        "codeCrc32": "8DE56637",
-        "buildIdHex": "3065323336356162653238356433313438356133653061363664623065373031",
+        "bytes": 212364,
+        "codeCrc32": "C250DF48",
+        "buildIdHex": "3662616531323266386465343434373165646632646234323430323834343264",
         "manifestFlags": 0,
         "minimumLoaderAbi": 4,
         "generation": 4
@@ -341,6 +341,16 @@
         "generation": 4
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 205164,
+          "codeCrc32": "8DE56637",
+          "buildIdHex": "3065323336356162653238356433313438356133653061363664623065373031",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -447,15 +457,15 @@
       "sourceProvenance": {
         "publishedRepository": "zifangzhao/XE_NP",
         "publishedBranch": "V2",
-        "publishedCommit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
-        "parentPublishedCommit": "c8b10f8e4ac831c86732627305c249faa6b9ae4a",
+        "publishedCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
+        "parentPublishedCommit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
         "ownerManifest": "V2/source-manifest.json",
-        "ownerManifestSha256": "9057C3069B06A6F26D5D3E172645C3671F5E83A8C6E29B9BD47E1455E013BC23",
-        "packageReceiptSha256": "08E731E22491F761BDB6A2C5A66262A03DA157F22357970B5C72F72C50FBD55D",
+        "ownerManifestSha256": "25C996732D8F08A388A3BF61C96C5BC52E417B90D0F2D5175B87503DD24B2F33",
+        "packageReceiptSha256": "B7F5D0BD1947257B1BB5DA474AD8EF741DE2F7E36EEF04D8CD3A9BFB4BA40C2D",
         "acceptance": "V2/acceptance.json",
-        "acceptanceSha256": "CCFB5EDE5740858F2F3053998F598EE05B9F76B15C2FF9BCEFD708AACD04074D",
-        "sourceArchive": "ReleaseSources/V2_BURST_A71BDECC_8DE56637_20261025/compiled-sources.zip",
-        "sourceArchiveSha256": "FAC59E0BAAC4050E2CAB414F75660B86562BB93B0E984D6B975A4CACEFD0C630",
+        "acceptanceSha256": "33C3D8C07676861A5D8AB48263B7FA5318A7B80BC992720A224E3F1544EB71D8",
+        "sourceSnapshotDirectory": "ReleaseSources/V2_TWO500_C250DF48_A71BDECC_20261026",
+        "sourceIndexSha256": "86F51C24ADEF36C5D5425ABE467723F023C7340896D7E2AAAC4B2F6095B87CBF",
         "canonicalSourceEquivalenceClaimed": false
       }
     }

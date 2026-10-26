@@ -1,0 +1,51 @@
+{
+  "result": "pass",
+  "wire_packets": 340,
+  "duplicates_identical": [
+    [
+      365081363,
+      119
+    ],
+    [
+      365081363,
+      120
+    ],
+    [
+      365081363,
+      121
+    ]
+  ],
+  "terminal_statuses": [],
+  "subscriptions": [
+    {
+      "id": 365081363,
+      "packets": 221,
+      "rows_per_channel": 8840,
+      "first_tick": 130660800,
+      "last_tick": 693860800,
+      "source_step_per_packet": 2560000,
+      "descriptors": [
+        0,
+        513
+      ],
+      "rate_per_channel": 500,
+      "sequence_gaps": 0,
+      "source_tick_gaps": 0
+    },
+    {
+      "id": 365081365,
+      "packets": 116,
+      "rows_per_channel": 4640,
+      "first_tick": 806286400,
+      "last_tick": 1100686400,
+      "source_step_per_packet": 2560000,
+      "descriptors": [
+        895,
+        128
+      ],
+      "rate_per_channel": 500,
+      "sequence_gaps": 0,
+      "source_tick_gaps": 0
+    }
+  ]
+}

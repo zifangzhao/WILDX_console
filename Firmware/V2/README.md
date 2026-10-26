@@ -1,22 +1,26 @@
-# V2 bounded SD download release - 2026-10-25
+# V2 two-channel500Hz BLE preview â€” checked release
 
-Recovery 6408DBB8 / USB A71BDECC / BLE-SD APP 8DE56637.
+APP C250DF48 / USB A71BDECC / recovery6408DBB8; matching console WILDX143.
 
-Actual WILD-X141 buffered export median: 43.3317 MB/s versus previous 31.4195 MB/s
-(+37.91%). Six exports matched the reference DAT, descriptor and footer hashes;
-all 296 catalog entries matched; firmware errors 0, CRC self-test 1. The selected
-record contained no IMRO file. Legacy serial median was 31.1702 MB/s.
+Two selected P1/P2 channels at500Hz, fixed-point anti-alias filtering before
+rate reduction,32packet/2.56s bounded replay. Preview band0â€“200Hz;200â€“300Hz
+transition. P3 preview is not added. Raw NP recording data is unchanged.
 
-Short three-probe/20 kHz USB capture on the unchanged actual140 capture graph:
-7280 received and verified blocks, zero raw/decoded drops, fresh AG and MAG in
-all 186 retained IMU observations. This is bounded qualification, not all-mode,
-all-card, endurance, analog-quality, physical-time or installed-UI qualification.
+GUI143 hardware check: two continuous subscriptions, selection change and forced
+packet-drop recovery; zero CRC/sequence/source-tick gaps or preview terminalerrors.
+P123/20k SD recording session407110382/28956blocks passed full export/readback:
+threeDATs,LosslessTrue,zero sourcegaps/rawdiscards/overflow. Fifteen freshAG+MAG
+views had no errors/skips. Catalog prior entries preserved; originalP12/20k
+profile restored, finalUSBidle2. Stopped verifier/drain took48.373s; no faster
+Stop claim. Native gather/filter cost9.2566% of a fully-active5.032s DWT window;
+this excludes TX/CRC and is not whole-system CPU use.
 
-Fused HEX directly merges exact checked components and omits configuration.
-APP/recovery stay byte-for-byte unchanged. New USB/fused HEX use LF; legacy
-recovery HEX retains CRLF. The fused image was not separately flashed as a whole.
+Fused HEX directly merges exact components and excludes retained configuration;
+USB/recovery and all nonAPP addresses stay exact. APPHEX retains its checkedCRLF
+bytes; newfused usesLF. No separate whole-fused flash was performed. No all-mode,
+all-card,endurance,analog-quality or arbitraryRF-outage continuity guarantee.
 
-The source ZIP contains incremental source/object/build/evidence provenance,
-not a standalone updater or full clean-tree reproduction. Historical main source
-preimage is unavailable; exact retained main.o is pinned. Existing APP limits
-and prior evidence remain in acceptance.json and package-receipt.json.
+Source/evidence snapshots are under ReleaseSources/V2_TWO500_C250DF48_A71BDECC_20261026.
+They establish scoped incremental provenance with preserved historical objects,
+not a full clean-tree rebuild. No ZIP is generated. See acceptance.json,
+package-receipt.json and source-manifest.json for exact scope and identities.

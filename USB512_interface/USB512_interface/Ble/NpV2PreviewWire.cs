@@ -65,10 +65,12 @@ namespace CE32_console {
    int n=Math.Min(192,total-offset);if(n<=0)throw new IOException("Repeated preview fragment");
    Buffer.BlockCopy(b,32,Data,offset,n);received+=n;return received==Data.Length;
   }
-  internal int FindPhase(){
+  internal int FindPhase(){return FindPhaseFor(Probe);}
+  internal int FindPhaseFor(uint probe){
+   if(probe<1||probe>2)throw new ArgumentOutOfRangeException("probe");
    if(Kind!=0||Data==null||received!=3200)throw new IOException("Complete calibration snapshot required");
    byte[] sync={0xd3,0x6a,0x59,0xc5,0x3e,0xa7,0x1d,0xe4,0xb2,0x4f,0x78,0x96};
-   int found=-1,shift=((int)Probe-1)*3;
+   int found=-1,shift=((int)probe-1)*3;
    for(int phase=0;phase<1600;phase++){
     bool valid=true;int position=(int)(FirstTick%1600)+(int)phase;position%=1600;
     for(int i=0;i<Data.Length;i++,position=(position+1)%1600){

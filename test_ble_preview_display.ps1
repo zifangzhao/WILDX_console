@@ -24,14 +24,15 @@ $previewWrite=Slice $connection '        internal async Task<bool> TryWritePrevi
 $geometry=Slice (Get-Content -LiteralPath "$source/NpLogger/NpSdGeometry.cs" -Raw) ' internal static class NpSdGeometry {' '  internal static void Validate'
 $dependencies=Join-Path $OutputDirectory 'production-display-dependencies.cs'
 [IO.File]::WriteAllText($dependencies,"using System;using System.IO;using System.Drawing;using System.Windows.Forms;using System.Threading;using System.Threading.Tasks;using CE32_console;namespace USB512_interface{`n"+$theme+$filters+'internal static class NpV2SampleDecoder{'+$nominal.Value+'}internal sealed partial class NpBleConnection{'+$previewWrite+'}}namespace CE32_console{internal static class NpV1PreviewBurst{internal const uint Magic=0x3156504e;}'+$geometry+'}}',[Text.UTF8Encoding]::new($false))
-$inputs=@("$PSScriptRoot/Tests/NpBlePreviewDisplayTests.cs",$dependencies,
+$inputs=@("$PSScriptRoot/Tests/NpBlePreviewDisplayTests.cs","$PSScriptRoot/Tests/NpBleMultiPreviewDisplayTests.cs",$dependencies,
  "$source/NpAdcCalibration.cs","$source/WildXTheme.cs","$source/Ble/NpV2Preview.cs",
- "$source/Ble/NpV2PreviewWire.cs","$source/Ble/NpBleWire.cs","$source/Ble/NpV2SdControl.cs","$source/Ble/NpSdControl.cs")
+ "$source/Ble/NpV2PreviewWire.cs","$source/Ble/NpBlePreviewForm.Multi.cs","$source/Ble/NpV2MultiPreviewWire.cs","$source/Ble/NpBleWire.cs","$source/Ble/NpV2SdControl.cs","$source/Ble/NpSdControl.cs")
 foreach($kind in @('baseline','fixed')){
  if($kind-eq'baseline'-and!$BaselineForm){continue}
  $form=if($kind-eq'baseline'){[IO.Path]::GetFullPath($BaselineForm)}else{"$source/Ble/NpBlePreviewForm.cs"}
  $exe=Join-Path $OutputDirectory ("NpBlePreviewDisplayTests-$kind.exe")
- & $Compiler /nologo /optimize+ /target:exe /main:NpBlePreviewDisplayTests /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll "/out:$exe" @inputs $form
+ $kindInputs=if($kind-eq'baseline'){@($inputs | Where-Object {$_ -notlike '*NpBlePreviewForm.Multi.cs'})}else{$inputs}
+ & $Compiler /nologo /optimize+ /target:exe /main:NpBlePreviewDisplayTests /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll "/out:$exe" @kindInputs $form
  if($LASTEXITCODE){throw "Actual-source $kind display fixture did not compile"}
  if($kind-eq'baseline'){& $exe --baseline}else{& $exe $OutputDirectory}
  if($LASTEXITCODE){throw "Actual-source $kind display fixture failed"}

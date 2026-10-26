@@ -17,6 +17,18 @@ namespace USB512_interface
             var frame = new byte[67]; frame[0] = 0x3c; frame[1] = command; frame[66] = 0x3e;
             Buffer.BlockCopy(body, 0, frame, 2, 64); return frame;
         }
+        int CheckedControlAfter(int start)
+        {
+            for(int i=start;i+67<=pending.Count;i++){
+                byte lead=pending[i],cmd=pending[i+1];
+                if((lead!=0x3c&&lead!=0xad)||(cmd!=0xb8&&cmd!=0xb9))continue;
+                int length=lead==0xad?68:67;if(i+length>pending.Count)continue;
+                if(lead==0xad?(pending[i+66]!=0xda||pending[i+67]!=0xda):pending[i+66]!=0x3e)continue;
+                var body=pending.GetRange(i+2,64).ToArray();
+                if(BitConverter.ToUInt32(body,60)==NpSdControl.Crc(body,60))return i;
+            }
+            return -1;
+        }
         internal List<Tuple<byte, byte[]>> Feed(byte[] bytes)
         {
             pending.AddRange(bytes);
@@ -65,10 +77,19 @@ namespace USB512_interface
                         if(impossible){at++;continue;}
                     }
                 }
-                if (pending.Count - at < length) break;
+                if (pending.Count - at < length) {
+                    // A truncated binary preview must not hold a later short
+                    // CRC-checked recording receipt indefinitely. Full preview
+                    // packets retain their fixed framing; lost data is replayed.
+                    if(preview && previewMagic==NpV2PreviewBurst.Magic && pending.Count-at>=34 && (pending[at+31]==6 || pending[at+31]==8)){
+                        int next=CheckedControlAfter(at+2);
+                        if(next>=0){at=next;continue;}
+                    }
+                    break;
+                }
                 bool tail = lead == 0x3c ? pending[at+bodyLength+2] == 0x3e : pending[at+bodyLength+2] == 0xda && pending[at+bodyLength+3] == 0xda;
                 var body = pending.GetRange(at + 2, bodyLength).ToArray();
-                // Preview has its own fixed metadata/body contract and no payload CRC.
+                // Each preview profile validates its own metadata/body and CRC contract.
                 // B8/B9 remain independent fixed 64-byte, CRC-checked controls.
                 int crcAt=identity?188:60;
                 if (!tail || (v1Compact && BitConverter.ToUInt32(body,220)!=NpSdControl.Crc(body,220)) || (!preview && !native && BitConverter.ToUInt32(body, crcAt) != NpSdControl.Crc(body, crcAt))) { at++; continue; }

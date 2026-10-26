@@ -1,0 +1,3 @@
+Captured successful actual-assembly catalog smoke run:
+PASS actual143 V1 catalog/hash/current-pair: APP 82E51DEA / USB 4F7B521A
+PASS actual143 V2 catalog/hash/current-pair: APP C250DF48 / USB A71BDECC

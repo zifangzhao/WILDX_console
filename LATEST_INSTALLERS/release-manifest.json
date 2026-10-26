@@ -1,107 +1,228 @@
 {
-  "version": "1.0.0.141",
-  "releaseId": "WILDX141_V2_DOWNLOAD_PIPELINE_20261025",
-  "baselineVersion": "1.0.0.140",
+  "version": "1.0.0.143",
+  "releaseId": "WILDX143_V2_TWO500_PREVIEW_20261026",
+  "baselineVersion": "1.0.0.141",
+  "localGuiCompilationsThisTask": 2,
   "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268",
+  "firmwareSourceCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
+  "guiSha256": "A762E8C20986481999EF4D9714CB537B93BA68DC92A55AA7AB4347311BB17830",
   "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
   "changedGuiSources": [
     "AssemblyInfo.cs",
-    "NpDownloadBurst.cs",
-    "NpDownloadPrefetchStream.cs",
-    "NpDownloadStream.cs"
+    "NpBlePreviewForm.cs",
+    "NpBlePreviewForm.Multi.cs",
+    "NpV2MultiPreviewWire.cs",
+    "NpV2PreviewWire.cs",
+    "NpBleConnection.cs",
+    "NpBleWire.cs"
   ],
-  "sourceArchiveSha256": "FC8F7A9F13B1E69BF7363954175320546FFCC5138D8F5D5DFEECD1FABF6D42D8",
+  "sourceArchiveSha256": "6CD0072498A1ADB1121D79F935F45A7D7EA837503402946FF1BB3DFBCE69D28E",
   "v1FirmwareChanged": false,
   "v2FirmwareChanged": true,
-  "v2AppCrc32": "8DE56637",
+  "v2AppCrc32": "C250DF48",
   "v2UsbCrc32": "A71BDECC",
   "helpersChanged": false,
   "installerExecuted": false,
   "installerPayloadExtractedAndVerified": true,
-  "extractedPayloadFilesVerified": 58,
+  "extractedPayloadFilesVerified": 59,
   "standaloneUpdateRequired": false,
   "separateZipIncluded": false,
   "allModeOrEnduranceQualified": false,
   "acceptance": {
-    "pipeline_pass": true,
-    "hardware_readers_closed": true,
+    "result": "pass",
+    "version": "1.0.0.143",
+    "gui_sha256": "A762E8C20986481999EF4D9714CB537B93BA68DC92A55AA7AB4347311BB17830",
+    "sdk_sha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
+    "v2_uid": "001A0004434250062039314E",
+    "bundled_v2_app": "C250DF48",
     "bundled_v2_usb": "A71BDECC",
-    "bundled_v2_app": "8DE56637",
     "bundled_v2_recovery": "6408DBB8",
-    "v2_source_commit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
-    "v2_source_archive_sha256": "FAC59E0BAAC4050E2CAB414F75660B86562BB93B0E984D6B975A4CACEFD0C630",
-    "gui_sha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268",
-    "download": {
+    "preview": {
       "result": "pass",
-      "catalog_equal": true,
-      "all_six_file_hashes_match": true,
-      "trials": [
-        {
-          "index": 0,
-          "prefetch": false,
-          "MB_s": 30.944788516340818
-        },
-        {
-          "index": 1,
-          "prefetch": true,
-          "MB_s": 43.25387599089717
-        },
-        {
-          "index": 2,
-          "prefetch": true,
-          "MB_s": 43.34413414616569
-        },
-        {
-          "index": 3,
-          "prefetch": false,
-          "MB_s": 31.178584891317353
-        },
-        {
-          "index": 4,
-          "prefetch": false,
-          "MB_s": 31.170217809589637
-        },
-        {
-          "index": 5,
-          "prefetch": true,
-          "MB_s": 43.3316747467346
-        }
+      "wire_packets": 340,
+      "duplicates_identical": [
+        [
+          365081363,
+          119
+        ],
+        [
+          365081363,
+          120
+        ],
+        [
+          365081363,
+          121
+        ]
       ],
-      "final_status": {
-        "Magic": 844320846,
-        "Abi": 4,
-        "Mode": 2,
-        "Capabilities": 63,
-        "Busy": 0,
-        "Target": 0,
-        "Uid0": 1703940,
-        "UidXor": 1669030216
-      },
-      "baseline": {
-        "serial_median_MB_s": 31.81959898654034,
-        "buffered_median_MB_s": 31.41945376134945
-      },
-      "actual141": {
-        "serial_median_MB_s": 31.170217809589637,
-        "buffered_median_MB_s": 43.3316747467346
-      },
-      "gui_buffered_gain_percent": 37.91352031727215
+      "terminal_statuses": [],
+      "subscriptions": [
+        {
+          "id": 365081363,
+          "packets": 221,
+          "rows_per_channel": 8840,
+          "first_tick": 130660800,
+          "last_tick": 693860800,
+          "source_step_per_packet": 2560000,
+          "descriptors": [
+            0,
+            513
+          ],
+          "rate_per_channel": 500,
+          "sequence_gaps": 0,
+          "source_tick_gaps": 0
+        },
+        {
+          "id": 365081365,
+          "packets": 116,
+          "rows_per_channel": 4640,
+          "first_tick": 806286400,
+          "last_tick": 1100686400,
+          "source_step_per_packet": 2560000,
+          "descriptors": [
+            895,
+            128
+          ],
+          "rate_per_channel": 500,
+          "sequence_gaps": 0,
+          "source_tick_gaps": 0
+        }
+      ]
     },
-    "source_assertions": 183,
-    "cancel_reopen_pass": true,
-    "capture_imu_pass": true,
-    "capture_scope": "10s requested P123/20k USB using unchanged140 capture code;7280verifiedblocks,zero raw/decoded drops,186validfreshAG+MAG observations",
-    "final_actual141_download_observer_used": true,
-    "whole_fused_image_flashed": false,
-    "sd_writes_formats_deletes": false,
+    "replay": {
+      "dropped": 1,
+      "sequence": 119,
+      "acknowledged": 219,
+      "missing": 0
+    },
+    "imu": {
+      "valid": 15,
+      "distinct_native_ticks": 15,
+      "skipped": 0,
+      "errors": 0
+    },
+    "imu_required_fresh_AG_and_MAG": true,
+    "recording": {
+      "session": 407110382,
+      "blocks": 28956,
+      "rate_hz": 20000,
+      "probe_mask": 7,
+      "files": {
+        "\\descriptor.bin": {
+          "bytes": 512,
+          "sha256": "E6CD060DCDA57724BF6D8B1FF0A1126C1DA7521189E5A8244E3D62DFB6DB37B0"
+        },
+        "\\footer.bin": {
+          "bytes": 512,
+          "sha256": "BC7715DE6105AFE0740F6780FBAFADEE2959F01C677D9189C32C9DF50A49EAF4"
+        },
+        "\\neuropixels_probe1_ap.dat": {
+          "bytes": 569296896,
+          "sha256": "EC6E5F98E7658EC51BA9D63C7895359E1FA52AF1D796A5D140B3ADBBC325E2F9"
+        },
+        "\\neuropixels_probe2_ap.dat": {
+          "bytes": 569296896,
+          "sha256": "A7D38BEC2ADAA0F9D103BD522CC6615F031C1A707490199B91A73BB38CAC1DE4"
+        },
+        "\\neuropixels_probe3_ap.dat": {
+          "bytes": 569296896,
+          "sha256": "4B94535DEF3B97C8A43F1EE9C9C274EB0D787319F243B0E296AC6A2F91E3BEB4"
+        }
+      },
+      "integrity": "Export complete: True\nStored terminal state: Complete\nRecording complete: True\nStored state: 3\nStored fault: 0\nSession: 407110382\nSample rate Hz: 20000\nCommitted blocks: 28956\nSource ticks: 1186037760\nLossless: True\nSource gaps advertised: True\nSource gap count: 0\nMissing source ticks: 0\nDropped source blocks: 0\nElapsed source ticks: 1186037760\nFooter source ticks are stored tick quantity, not elapsed source span.\nStopped loss statistics: present\nPhysical overflow events: 0\nProducer discarded raw ticks: 0\nPhysical event/raw-discard counts are not inferred from stored source gaps.\nSegment 0: first_stored_block=0; stored_blocks=28956; source_start_tick=0; source_end_tick=1186037760\nSegment 0 probe 1: row_offset=0; rows=741272; first_source_tick=1201\nSegment 0 probe 2: row_offset=0; rows=741272; first_source_tick=1359\nSegment 0 probe 3: row_offset=0; rows=741272; first_source_tick=1453\nFormat: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts\nsample_encoding=np2_signed_nominal_v1\nsample_transform=2048 - raw12\nsample_range=-2047..2048\nsample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone\nNo gain/comparator calibration or microvolt conversion. Legacy DAT before WILDX 1.0.0.9 contains unsigned raw 12-bit codes; existing DAT files are not rewritten.\nChecks: descriptor/footer CRC32, exact immutable headers/dense sequence, source ticks contiguous or explicitly marked whole-block forward gaps, native SuperSync in every block, exact segment row/file lengths\nNo ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.\nBoundary policy: trim incomplete leading/trailing AP rows in each contiguous source segment; do not pad. Probe rows have independent source-tick origins; use segment offsets for alignment.\nTime base: source ticks / 32000000 Hz; AP step=1600/32000000 seconds (exact rational).\nConfiguration: configuration.bin; N2IMRO2 kind3; staged_selection_mask=0x0; identity/request-CRC fingerprints only, NOT full maps or applied-mapping proof. Physical electrode geometry unavailable.\nProbe 1: file=neuropixels_probe1_ap.dat; rows=741272; phase=399; first_source_tick=1201; trailing_ticks=1359; SHA256=EC6E5F98E7658EC51BA9D63C7895359E1FA52AF1D796A5D140B3ADBBC325E2F9\nProbe 2: file=neuropixels_probe2_ap.dat; rows=741272; phase=241; first_source_tick=1359; trailing_ticks=1201; SHA256=A7D38BEC2ADAA0F9D103BD522CC6615F031C1A707490199B91A73BB38CAC1DE4\nProbe 3: file=neuropixels_probe3_ap.dat; rows=741272; phase=147; first_source_tick=1453; trailing_ticks=1107; SHA256=4B94535DEF3B97C8A43F1EE9C9C274EB0D787319F243B0E296AC6A2F91E3BEB4\nSHA256 scope: emitted DAT bytes, computed during writing; flush/length checks, no second disk-readback pass.\nUTC: validated utc.bin; capture-start bracket only, not ADC synchronization\n",
+      "readback_seconds": 30.256292499999997
+    },
+    "catalog": {
+      "before": 298,
+      "after": 299,
+      "existing_entries_preserved": true,
+      "original_pretest_records": 296
+    },
+    "stop": {
+      "sent_once": true,
+      "confirmed_fault_zero": true,
+      "drain_ms": 48373,
+      "limits": "Retained stopped verifier runs during drain; no faster Stop claim."
+    },
+    "preview_native_tap_measurement": {
+      "result": "pass",
+      "uid": "001A0004434250062039314E",
+      "before": {
+        "time": 365085.796,
+        "perf": [
+          2654,
+          12026430,
+          8471,
+          30,
+          0,
+          0,
+          0
+        ],
+        "dwt": [
+          1073741825,
+          2927144320
+        ]
+      },
+      "after": {
+        "time": 365090.828,
+        "perf": [
+          15726,
+          71547063,
+          8471,
+          92,
+          0,
+          0,
+          0
+        ],
+        "dwt": [
+          1073741825,
+          3570152224
+        ]
+      },
+      "seconds": 5.032000000006519,
+      "delta": [
+        13072,
+        59520633,
+        0,
+        62,
+        0,
+        0,
+        0
+      ],
+      "cycle_delta": 643007904,
+      "tap_cycle_fraction": 0.09256594301521992,
+      "mean_tap_cycles": 4553.291998164014,
+      "maximum_tap_cycles_since_boot": 8471,
+      "scope": "Native preview Tap extraction/filter only; excludes foreground CRC/TX and all other firmware work. Non-halting read-only SWD; not whole-system CPU usage."
+    },
+    "software": {
+      "codec_assertions": 303,
+      "multi_gui_assertions": 219,
+      "legacy_gui_assertions": 6107,
+      "firmware_actual_C_checks": 2486
+    },
+    "original_profile_restored": {
+      "mask": 3,
+      "hz": 20000
+    },
+    "final_usb_status": {
+      "Magic": 844320846,
+      "Abi": 4,
+      "Mode": 2,
+      "Capabilities": 63,
+      "Busy": 0,
+      "Target": 0,
+      "Uid0": 1703940,
+      "UidXor": 1669030216
+    },
+    "hardware_readers_closed": true,
     "all_mode_or_endurance_qualified": false,
-    "qualification_scope": "Actual141 GUI/SDK exports on A71; productionCRC/header validation;6fullhash comparisons and296catalogentries; cancellation/reopen and shortNP+freshIMU return; explicit unsupportedfirmware fallback software checks"
+    "whole_fused_flash_tested": false,
+    "qualification_scope": "Two selected P1/P2 channels500Hz during oneP12320k SD recording, oneforcedPCpacketdrop/replay, selectionchange,15freshAG+MAGviews,Stop/catalog/fullreadback. Old-firmware fallback/V1compact admission softwarechecked; V1 firmware and logging bytes unchanged."
   },
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.141.exe",
-    "bytes": 10536090,
-    "sha256": "56AC6A67A8DDFC976D7A31023355CAA7B668F7D98309E8161DD0648291B5F0C4"
+    "file": "WILDX_console-Setup-1.0.0.143.exe",
+    "bytes": 10568272,
+    "sha256": "08106485355A97E386D3D836843DA8BE1C7D7D51C852F828754F3BA181D82229"
   },
   "payload": [
     {
@@ -131,8 +252,8 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 17485,
-      "sha256": "D13F55FA67C24B2E60B06BB9E6CFAD5BE041A0899343E70432425958E68D4E3B"
+      "bytes": 18128,
+      "sha256": "F67B3271C3FBB2D9C7E297107B2619CB402669F029FA68020F36BA9EE1681F92"
     },
     {
       "path": "Firmware/V1/acceptance.json",
@@ -281,38 +402,43 @@
     },
     {
       "path": "Firmware/V2/acceptance.json",
-      "bytes": 8906,
-      "sha256": "CCFB5EDE5740858F2F3053998F598EE05B9F76B15C2FF9BCEFD708AACD04074D"
+      "bytes": 7894,
+      "sha256": "33C3D8C07676861A5D8AB48263B7FA5318A7B80BC992720A224E3F1544EB71D8"
     },
     {
       "path": "Firmware/V2/package-receipt.json",
-      "bytes": 9553,
-      "sha256": "08E731E22491F761BDB6A2C5A66262A03DA157F22357970B5C72F72C50FBD55D"
+      "bytes": 11877,
+      "sha256": "B7F5D0BD1947257B1BB5DA474AD8EF741DE2F7E36EEF04D8CD3A9BFB4BA40C2D"
     },
     {
       "path": "Firmware/V2/README.md",
-      "bytes": 1283,
-      "sha256": "C08B28070E93A1F2F5B1C37B42B79226CC3571F439F5274E4C34F94E3B8C0F0F"
+      "bytes": 1636,
+      "sha256": "22B276DC2A5959CFF72513BFB1877C6418C5C702C428D255AD350E7A0FFB0531"
     },
     {
       "path": "Firmware/V2/SHA256SUMS.txt",
-      "bytes": 726,
-      "sha256": "83ED27C5C12CE235838A8EE2CF64A8943FCC18E92483E7B0FA232F0242E27A16"
+      "bytes": 732,
+      "sha256": "9E85E18F1E3D7762721CA95D9998337CD42DE9D941F6F10C7975A9E318DE3B0B"
     },
     {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_8DE56637_BURST_DOWNLOAD_20261025.hex",
+      "path": "Firmware/V2/source-manifest.json",
+      "bytes": 13100,
+      "sha256": "25C996732D8F08A388A3BF61C96C5BC52E417B90D0F2D5175B87503DD24B2F33"
+    },
+    {
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_C250DF48_TWO500_PREVIEW_20261026.hex",
       "bytes": 5711372,
-      "sha256": "94F506B3E078FFD00766A3351854F212C227A3D63D48328DB4447B22665741DA"
+      "sha256": "DCA7644FC18BFD977BB8AD91BBC9326067217937266569422F5BFD1F6CBBF6BE"
     },
     {
-      "path": "Firmware/V2/V2_logger_APP_only_8DE56637_IMU_STARTUP_20261025.hex",
-      "bytes": 564648,
-      "sha256": "D45DA210D8AD9B768A427A0B64E35E774F9B88042BD210E875A75C5B732640B3"
+      "path": "Firmware/V2/V2_logger_APP_only_C250DF48_TWO500_PREVIEW_20261026.hex",
+      "bytes": 597735,
+      "sha256": "0FB8C724AF6045D0A6F08E71DA76E0D7D1723EF96F4E21C671F3737CF280D884"
     },
     {
-      "path": "Firmware/V2/V2_logger_APP_update_8DE56637_IMU_STARTUP_20261025.xenp",
-      "bytes": 205292,
-      "sha256": "9D2BE68DB164AA15C83876628C962649F305590480CEEACBDB9545AFA4870875"
+      "path": "Firmware/V2/V2_logger_APP_update_C250DF48_TWO500_PREVIEW_20261026.xenp",
+      "bytes": 212492,
+      "sha256": "B9FC57821D7C244197CCD50D7BEE8C25286B64CC7D7D60D36E7517B058E5A18D"
     },
     {
       "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -386,8 +512,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 1965056,
-      "sha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268"
+      "bytes": 1985024,
+      "sha256": "A762E8C20986481999EF4D9714CB537B93BA68DC92A55AA7AB4347311BB17830"
     },
     {
       "path": "WILDX_console.exe.config",

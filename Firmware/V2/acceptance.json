@@ -1,248 +1,191 @@
 {
-  "accepted_usb_crc32": "A71BDECC",
-  "unchanged_app_crc32": "8DE56637",
-  "unchanged_recovery_crc32": "6408DBB8",
-  "comparison": {
-    "decision": "accept_A71_actual141_bounded_download_and_short_capture",
-    "gui_version": "1.0.0.141",
-    "gui_sha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268",
-    "previous_usb_crc32": "13ED1F8E",
-    "usb_crc32": "A71BDECC",
-    "baseline_prefetch_median_MBps": 31.41945376134945,
-    "candidate_prefetch_median_MBps": 43.3316747467346,
-    "prefetch_gain_percent": 37.91352031727215,
-    "baseline_serial_median_MBps": 31.81959898654034,
-    "candidate_serial_median_MBps": 31.170217809589637,
-    "candidate_raw_MBps": 35.08345199749953,
-    "all_six_hash_dictionaries_match": true,
-    "catalog_entries": 296,
-    "all_catalog_metadata_match": true,
-    "firmware_errors": 0,
-    "crc_selftest": 1,
-    "final_status": {
-      "Magic": 844320846,
-      "Abi": 4,
-      "Mode": 2,
-      "Capabilities": 63,
-      "Busy": 0,
-      "Target": 0,
-      "Uid0": 1703940,
-      "UidXor": 1669030216
+  "result": "pass",
+  "version": "1.0.0.143",
+  "gui_sha256": "A762E8C20986481999EF4D9714CB537B93BA68DC92A55AA7AB4347311BB17830",
+  "sdk_sha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
+  "v2_uid": "001A0004434250062039314E",
+  "bundled_v2_app": "C250DF48",
+  "bundled_v2_usb": "A71BDECC",
+  "bundled_v2_recovery": "6408DBB8",
+  "preview": {
+    "result": "pass",
+    "wire_packets": 340,
+    "duplicates_identical": [
+      [
+        365081363,
+        119
+      ],
+      [
+        365081363,
+        120
+      ],
+      [
+        365081363,
+        121
+      ]
+    ],
+    "terminal_statuses": [],
+    "subscriptions": [
+      {
+        "id": 365081363,
+        "packets": 221,
+        "rows_per_channel": 8840,
+        "first_tick": 130660800,
+        "last_tick": 693860800,
+        "source_step_per_packet": 2560000,
+        "descriptors": [
+          0,
+          513
+        ],
+        "rate_per_channel": 500,
+        "sequence_gaps": 0,
+        "source_tick_gaps": 0
+      },
+      {
+        "id": 365081365,
+        "packets": 116,
+        "rows_per_channel": 4640,
+        "first_tick": 806286400,
+        "last_tick": 1100686400,
+        "source_step_per_packet": 2560000,
+        "descriptors": [
+          895,
+          128
+        ],
+        "rate_per_channel": 500,
+        "sequence_gaps": 0,
+        "source_tick_gaps": 0
+      }
+    ]
+  },
+  "replay": {
+    "dropped": 1,
+    "sequence": 119,
+    "acknowledged": 219,
+    "missing": 0
+  },
+  "imu": {
+    "valid": 15,
+    "distinct_native_ticks": 15,
+    "skipped": 0,
+    "errors": 0
+  },
+  "imu_required_fresh_AG_and_MAG": true,
+  "recording": {
+    "session": 407110382,
+    "blocks": 28956,
+    "rate_hz": 20000,
+    "probe_mask": 7,
+    "files": {
+      "\\descriptor.bin": {
+        "bytes": 512,
+        "sha256": "E6CD060DCDA57724BF6D8B1FF0A1126C1DA7521189E5A8244E3D62DFB6DB37B0"
+      },
+      "\\footer.bin": {
+        "bytes": 512,
+        "sha256": "BC7715DE6105AFE0740F6780FBAFADEE2959F01C677D9189C32C9DF50A49EAF4"
+      },
+      "\\neuropixels_probe1_ap.dat": {
+        "bytes": 569296896,
+        "sha256": "EC6E5F98E7658EC51BA9D63C7895359E1FA52AF1D796A5D140B3ADBBC325E2F9"
+      },
+      "\\neuropixels_probe2_ap.dat": {
+        "bytes": 569296896,
+        "sha256": "A7D38BEC2ADAA0F9D103BD522CC6615F031C1A707490199B91A73BB38CAC1DE4"
+      },
+      "\\neuropixels_probe3_ap.dat": {
+        "bytes": 569296896,
+        "sha256": "4B94535DEF3B97C8A43F1EE9C9C274EB0D787319F243B0E296AC6A2F91E3BEB4"
+      }
     },
-    "capture": {
-      "uid": "001A0004434250062039314E",
-      "mask": 7,
-      "sample_hz": 20000,
-      "blocks_requested": 0,
-      "complete": true,
-      "error": null,
-      "warning": null,
-      "received": 7280,
-      "verified": 7280,
-      "dat_rows": 559101,
-      "dat_probe_mask": 7,
-      "raw_drops": 0,
-      "decoded_drops": 0,
-      "wire_bytes": 339189760,
-      "data_seconds": 9.335,
-      "total_seconds": 28.0329674,
-      "power": false,
-      "power_markers": 0,
-      "power_stop_failed_return": false,
-      "raw_saved": true,
-      "final_capture": [
-        827667022,
-        1,
-        4,
-        0,
-        7280,
-        7280,
-        7280,
-        7280,
-        298188800,
-        0,
-        298199040,
-        0,
-        0,
-        9707,
-        153600,
-        0,
-        393703,
-        412082,
-        421417,
-        32000000,
-        511,
-        3,
-        11,
-        0,
-        7,
-        7,
-        20000,
-        1,
-        1,
+    "integrity": "Export complete: True\nStored terminal state: Complete\nRecording complete: True\nStored state: 3\nStored fault: 0\nSession: 407110382\nSample rate Hz: 20000\nCommitted blocks: 28956\nSource ticks: 1186037760\nLossless: True\nSource gaps advertised: True\nSource gap count: 0\nMissing source ticks: 0\nDropped source blocks: 0\nElapsed source ticks: 1186037760\nFooter source ticks are stored tick quantity, not elapsed source span.\nStopped loss statistics: present\nPhysical overflow events: 0\nProducer discarded raw ticks: 0\nPhysical event/raw-discard counts are not inferred from stored source gaps.\nSegment 0: first_stored_block=0; stored_blocks=28956; source_start_tick=0; source_end_tick=1186037760\nSegment 0 probe 1: row_offset=0; rows=741272; first_source_tick=1201\nSegment 0 probe 2: row_offset=0; rows=741272; first_source_tick=1359\nSegment 0 probe 3: row_offset=0; rows=741272; first_source_tick=1453\nFormat: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts\nsample_encoding=np2_signed_nominal_v1\nsample_transform=2048 - raw12\nsample_range=-2047..2048\nsample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone\nNo gain/comparator calibration or microvolt conversion. Legacy DAT before WILDX 1.0.0.9 contains unsigned raw 12-bit codes; existing DAT files are not rewritten.\nChecks: descriptor/footer CRC32, exact immutable headers/dense sequence, source ticks contiguous or explicitly marked whole-block forward gaps, native SuperSync in every block, exact segment row/file lengths\nNo ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.\nBoundary policy: trim incomplete leading/trailing AP rows in each contiguous source segment; do not pad. Probe rows have independent source-tick origins; use segment offsets for alignment.\nTime base: source ticks / 32000000 Hz; AP step=1600/32000000 seconds (exact rational).\nConfiguration: configuration.bin; N2IMRO2 kind3; staged_selection_mask=0x0; identity/request-CRC fingerprints only, NOT full maps or applied-mapping proof. Physical electrode geometry unavailable.\nProbe 1: file=neuropixels_probe1_ap.dat; rows=741272; phase=399; first_source_tick=1201; trailing_ticks=1359; SHA256=EC6E5F98E7658EC51BA9D63C7895359E1FA52AF1D796A5D140B3ADBBC325E2F9\nProbe 2: file=neuropixels_probe2_ap.dat; rows=741272; phase=241; first_source_tick=1359; trailing_ticks=1201; SHA256=A7D38BEC2ADAA0F9D103BD522CC6615F031C1A707490199B91A73BB38CAC1DE4\nProbe 3: file=neuropixels_probe3_ap.dat; rows=741272; phase=147; first_source_tick=1453; trailing_ticks=1107; SHA256=4B94535DEF3B97C8A43F1EE9C9C274EB0D787319F243B0E296AC6A2F91E3BEB4\nSHA256 scope: emitted DAT bytes, computed during writing; flush/length checks, no second disk-readback pass.\nUTC: validated utc.bin; capture-start bracket only, not ADC synchronization\n",
+    "readback_seconds": 30.256292499999997
+  },
+  "catalog": {
+    "before": 298,
+    "after": 299,
+    "existing_entries_preserved": true,
+    "original_pretest_records": 296
+  },
+  "stop": {
+    "sent_once": true,
+    "confirmed_fault_zero": true,
+    "drain_ms": 48373,
+    "limits": "Retained stopped verifier runs during drain; no faster Stop claim."
+  },
+  "preview_native_tap_measurement": {
+    "result": "pass",
+    "uid": "001A0004434250062039314E",
+    "before": {
+      "time": 365085.796,
+      "perf": [
+        2654,
+        12026430,
+        8471,
+        30,
         0,
         0,
         0
       ],
-      "final_source": [
-        827535950,
-        1,
-        11,
-        0,
-        3,
-        393703,
-        421401,
-        0,
-        5559,
-        0,
-        0,
-        128000000,
-        128000000,
-        620757007,
-        32,
-        64,
-        200,
-        0,
-        6,
-        0,
-        0,
-        0,
-        128,
-        128,
-        128,
-        128,
-        128,
-        128,
-        42,
-        7,
-        537722880,
-        737280
+      "dwt": [
+        1073741825,
+        2927144320
       ]
     },
-    "imu": {
-      "records": 186,
-      "samples": 186,
-      "error": null,
-      "display_callbacks": 39,
-      "valid_AG_callbacks": 39
+    "after": {
+      "time": 365090.828,
+      "perf": [
+        15726,
+        71547063,
+        8471,
+        92,
+        0,
+        0,
+        0
+      ],
+      "dwt": [
+        1073741825,
+        3570152224
+      ]
     },
-    "imu_native_valid_AG_MAG": 186,
-    "imu_native_distinct_mag": 185,
-    "cancel_trials": [
-      {
-        "delay_ms": 0,
-        "before_state": 2,
-        "before_epoch": 5,
-        "after_epoch": 6,
-        "retirement_ms": 14,
-        "next_lba": 425496560,
-        "sha256": "E6B5E274CE500E2A412AF9E9277CC71DB8586DBE4F167260A53B0EFB898AA56E"
-      },
-      {
-        "delay_ms": 12,
-        "before_state": 2,
-        "before_epoch": 8,
-        "after_epoch": 9,
-        "retirement_ms": 14,
-        "next_lba": 425496560,
-        "sha256": "E6B5E274CE500E2A412AF9E9277CC71DB8586DBE4F167260A53B0EFB898AA56E"
-      },
-      {
-        "delay_ms": 25,
-        "before_state": 3,
-        "before_epoch": 11,
-        "after_epoch": 12,
-        "retirement_ms": 0,
-        "next_lba": 425496560,
-        "sha256": "E6B5E274CE500E2A412AF9E9277CC71DB8586DBE4F167260A53B0EFB898AA56E"
-      }
+    "seconds": 5.032000000006519,
+    "delta": [
+      13072,
+      59520633,
+      0,
+      62,
+      0,
+      0,
+      0
     ],
-    "hardware_lease_returned": true,
-    "scope": "Actual141 SDK six exports of one preserved record on current DelkinV90/current board. Short actual140 P123/20k capture on unchanged capture/IMU graph; no drops, fresh AG+MAG. APP8DE/recovery reused exactly with prior evidence. No all-mode/card/endurance/analog-quality/physical-time/installed-UI or whole-fused flash qualification."
+    "cycle_delta": 643007904,
+    "tap_cycle_fraction": 0.09256594301521992,
+    "mean_tap_cycles": 4553.291998164014,
+    "maximum_tap_cycles_since_boot": 8471,
+    "scope": "Native preview Tap extraction/filter only; excludes foreground CRC/TX and all other firmware work. Non-halting read-only SWD; not whole-system CPU usage."
   },
-  "usb_install_readback": {
-    "uid": "001A0004434250062039314E",
-    "serial": "004B00213532511131333430",
-    "app_crc32": "8DE56637",
-    "usb_crc32": "A71BDECC",
-    "scope": "Authorized USB-only pipeline candidate; APP/recovery/settings/SD preserved; independent full readback before controlled reset",
-    "body_hashes": [
-      "B75D8D19C83A0A9E325BF45B54F19DCC976B41114EAEB1996A7AEAD0DD228B09"
-    ],
-    "full_flash_sha256": "2EF6C7A3EF82D6DACD6174D7E2CBC42EF52B0548D0E8D6560238F30DF39AE099",
-    "full_flash_exact": true,
-    "options_unchanged": true,
-    "recovery_and_config_preserved": true,
-    "sd_access": false
+  "software": {
+    "codec_assertions": 303,
+    "multi_gui_assertions": 219,
+    "legacy_gui_assertions": 6107,
+    "firmware_actual_C_checks": 2486
   },
-  "native_pipeline": {
-    "schema": 1,
-    "status": "PASS",
-    "command": "py -B -m unittest Tools.V2Usb.tests.test_usb_download_pipeline",
-    "fixture_sha256": "7271C07EC2E5822C302066E166006FED5883F169C4BDA6D533474E6EE4DAC380",
-    "pipeline_sha256": "93E5B89742A4768CCD015EA4B9E6D1E53723CC86F564ADE6D87385BBF8B62DED",
-    "coverage": [
-      "SD DMA pre-clean remains full payload and transmit helper is called once with an aligned 32-byte header",
-      "first unproven legacy request starts one-ahead; observed next-LBA request promotes sequential staging; backward seek demotes it",
-      "explicit bounded three-request plan occupies exactly USB READY READING stages",
-      "cancel clears sequential proof; CPU-CRC and READY cancellation retain actual SD/EP loans until retirement; maintenance retired-cache discard increments epoch and immediate next demand reopens"
-    ],
-    "limitations": [
-      "host-native extracted source model only",
-      "no firmware build or USB hardware exercised"
-    ]
+  "original_profile_restored": {
+    "mask": 3,
+    "hz": 20000
   },
-  "baseline_pair_validation": {
-    "download": {
-      "decision": "accept_interleaved_13ED_download_path_only",
-      "baseline_usb": "1D3262FB",
-      "candidate_usb": "13ED1F8E",
-      "baseline_serial_median_MBps": 30.414048536263657,
-      "candidate_serial_median_MBps": 31.81959898654034,
-      "serial_gain_percent": 4.621385569898062,
-      "baseline_raw_MBps": 31.137438016907492,
-      "candidate_raw_MBps": 32.634251033627784,
-      "baseline_prefetch_median_MBps": 30.094730718441774,
-      "candidate_prefetch_median_MBps": 31.41945376134945,
-      "baseline_first_serial_counters": {
-        "requests": 759,
-        "SD_ms": 8558,
-        "CRC_ms": 4221,
-        "USB_ms": 8136,
-        "errors": 0
-      },
-      "candidate_first_serial_counters": {
-        "requests": 759,
-        "SD_ms": 8225,
-        "CRC_ms": 3993,
-        "USB_ms": 8107,
-        "errors": 0
-      },
-      "all_six_hash_dictionaries_match": true,
-      "crc_selftest": 1,
-      "firmware_errors": 0,
-      "final_status": {
-        "Magic": 844320846,
-        "Abi": 4,
-        "Mode": 2,
-        "Capabilities": 63,
-        "Busy": 0,
-        "Target": 0,
-        "Uid0": 1703940,
-        "UidXor": 1669030216
-      },
-      "scope": "Same preserved record/board/card through actual139; source/other-object preservation, native CRC equivalence and download-only hardware comparison. No new NP recording/APP/storage write/whole-fused/140installed-pair/endurance qualification."
-    },
-    "prior_unchanged_app": {
-      "USB": "Final1D P123/20k9.328s and packedP1/30k9.664s after software restart/rate change, no reported drops/errors,186/189 valid fresh IMU records; startup/SD-download/BLE-return exercised",
-      "BLE_SD": "APP8DE P123/20k10.83904s,8468blocks,216780rows/probe; actual138 full export plus independent framing/length/hash/loss checks; four during-recording B9 AG+MAG views replayed through actual138 display/session; STOP15.147s; catalog292prior records preserved",
-      "software": "83587 driver assertions; actual port/core/consumer role1+2 regression; exact empty-cancel catalog fixtures with publication cuts; static RAM/stack/entry and manifests",
-      "limits": "Short selected modes on current board/card only. No all-card/all-mode/endurance/analog-quality/physical-time qualification. UTC1 lacks first-sample PC timing; GUI optional NPAQ times out5s. One USB return required cable reconnect; a subsequent final1D BLE-to-USB return passed. Fused assembled from exact checked components; not separately flashed as a whole."
-    }
+  "final_usb_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
   },
-  "scope": "Actual141 SDK six exports of one preserved record on current DelkinV90/current board. Short actual140 P123/20k capture on unchanged capture/IMU graph; no drops, fresh AG+MAG. APP8DE/recovery reused exactly with prior evidence. No all-mode/card/endurance/analog-quality/physical-time/installed-UI or whole-fused flash qualification.",
-  "hardware_lease_returned": true,
-  "fused_whole_flash_tested": false,
-  "new_build_or_hardware_during_packaging": false,
-  "learning": "Device overlap alone exposed per-packet host command latency. Explicit bounded batches plus a single native read worker overlapping CRC/decoding improved actual GUI exports. Preserve checksums and physical loan retirement."
+  "hardware_readers_closed": true,
+  "all_mode_or_endurance_qualified": false,
+  "whole_fused_flash_tested": false,
+  "qualification_scope": "Two selected P1/P2 channels500Hz during oneP12320k SD recording, oneforcedPCpacketdrop/replay, selectionchange,15freshAG+MAGviews,Stop/catalog/fullreadback. Old-firmware fallback/V1compact admission softwarechecked; V1 firmware and logging bytes unchanged."
 }

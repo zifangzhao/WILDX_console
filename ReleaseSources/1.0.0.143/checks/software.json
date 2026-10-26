@@ -1,0 +1,10 @@
+{
+  "result": "pass",
+  "codec_replay_assertions": 303,
+  "actual_source_multi_gui_assertions": 219,
+  "legacy_gui_assertions": 6107,
+  "product_version": "1.0.0.143",
+  "firmware_candidate_app_crc": "C250DF48",
+  "hardware_acceptance": "passed bounded combined test",
+  "scope": "Radio doubled; native firmware regression is recorded by the firmware source owner."
+}

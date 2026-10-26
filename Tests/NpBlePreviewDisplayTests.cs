@@ -16,9 +16,12 @@ namespace USB512_interface {
     internal sealed partial class NpBleConnection {
         internal int Epoch=1,Writes,Captures;
         internal bool Connected=true;
+        internal bool ImuPending;
+        internal bool PreviewLowerPriorityBusy {get{return ImuPending;}}
         internal readonly List<byte[]> Requests=new List<byte[]>();
         internal readonly List<uint[]> Calibrations=new List<uint[]>();
         internal TaskCompletionSource<bool> PendingWrite;
+        internal Action<byte[]> OnWrite;
         internal Func<uint,uint,uint,uint,Task<NpV2PreviewBurst>> Calibration;
         internal readonly SemaphoreSlim transaction=new SemaphoreSlim(1,1);
         internal event Action<int,byte[]> PreviewReceived;
@@ -26,7 +29,7 @@ namespace USB512_interface {
         Task WriteFrame(byte[] data,int generation,CancellationToken cancel){
             cancel.ThrowIfCancellationRequested();if(generation!=Epoch || !Connected)throw new IOException("Stale/disconnected test epoch");
             if(data.Length!=67 || data[0]!=0x3c || data[1]!=0xb9 || data[66]!=0x3e)throw new IOException("Invalid preview frame");
-            var body=new byte[64];Buffer.BlockCopy(data,2,body,0,64);Writes++;Requests.Add(body);return PendingWrite==null?Task.FromResult(true):PendingWrite.Task;
+            var body=new byte[64];Buffer.BlockCopy(data,2,body,0,64);Writes++;Requests.Add(body);if(OnWrite!=null)OnWrite(body);return PendingWrite==null?Task.FromResult(true):PendingWrite.Task;
         }
         internal Task<NpV2PreviewBurst> CapturePreview(uint id,uint probe,uint channel,uint hz,CancellationToken cancel){
             Captures++;Calibrations.Add(new[]{id,probe,channel,hz});
@@ -93,7 +96,7 @@ static class NpBlePreviewDisplayTests {
     static byte[] Join(byte[] a,byte[] b,int prefix=-1){if(prefix<0)prefix=a.Length;var result=new byte[prefix+b.Length];Buffer.BlockCopy(a,0,result,0,prefix);Buffer.BlockCopy(b,0,result,prefix,b.Length);return result;}
     static NpBlePreviewForm Arm(NpBleConnection connection,uint hz,uint selectedProbe=1,uint selectedChannel=0,bool compact=false,Func<bool> ownerBusy=null){
         var status=new NpSdStatus{State=3,Mask=3,Hz=hz,Flags=128};
-        var form=new NpBlePreviewForm(connection,()=>status,ownerBusy??(()=>true));
+        var form=new NpBlePreviewForm(connection,()=>status,ownerBusy??(()=>true));if(form.GetType().GetField("multiSupport",All)!=null)Set(form,"multiSupport",-1);
         ((NumericUpDown)Get(form,"probe")).Value=selectedProbe;
         ((NumericUpDown)Get(form,"channel")).Value=selectedChannel;
         ((CheckBox)Get(form,"enabled")).Checked=true;
@@ -244,11 +247,14 @@ static class NpBlePreviewDisplayTests {
         }
         var radio=new NpBleConnection();var request=NpV2PreviewBurst.Request(91,5,2,383,1599,7);
         Need(radio.TryWritePreview(request,1,CancellationToken.None).GetAwaiter().GetResult() && radio.Writes==1,"Actual transport rejected V2compact kind5");
+        radio.ImuPending=true;
+        Need(!radio.TryWritePreview(request,1,CancellationToken.None).GetAwaiter().GetResult() && radio.Writes==1,"Waveform request bypassed IMU priority");
+        radio.ImuPending=false;
         radio.transaction.Wait();try{Need(!radio.TryWritePreview(request,1,CancellationToken.None).GetAwaiter().GetResult() && radio.Writes==1,"Preview queued ahead of an active control");}finally{radio.transaction.Release();}
-        foreach(var damage in new Action<byte[]>[]{b=>Put(b,8,6),b=>Put(b,0,0x3156504e),b=>Put(b,4,2),b=>Put(b,12,0),b=>Put(b,0,0),b=>b[20]^=1}){
+        foreach(var damage in new Action<byte[]>[]{b=>Put(b,8,6),b=>{Put(b,0,0x3156504e);Put(b,8,6);},b=>Put(b,4,2),b=>Put(b,12,0),b=>Put(b,0,0),b=>b[20]^=1}){
             var bad=(byte[])request.Clone();damage(bad);if(bad[20]==request[20])Put(bad,60,NpSdControl.Crc(bad,60));
             bool rejected=false;try{radio.TryWritePreview(bad,1,CancellationToken.None).GetAwaiter().GetResult();}catch(ArgumentException){rejected=true;}
-            Need(rejected && radio.Writes==1,"Actual transport admitted invalid opcode/version/id/CRC or V1kind5");
+            Need(rejected && radio.Writes==1,"Actual transport admitted invalid opcode/version/id/CRC or V1kind6");
         }
         var v1=NpV2PreviewBurst.Request(91,4,1,0,0,7);Put(v1,0,0x3156504e);Put(v1,60,NpSdControl.Crc(v1,60));
         Need(radio.TryWritePreview(v1,1,CancellationToken.None).GetAwaiter().GetResult() && radio.Writes==2,"V1control kind4 admission changed");
@@ -415,6 +421,7 @@ static class NpBlePreviewDisplayTests {
             s=PressureStatus();s.Flags=flags;
             var admission=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4))};
             using(var form=new NpBlePreviewForm(admission,()=>s,()=>false)){
+            Set(form,"multiSupport",-1);
                 AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
                 Need(admission.Captures==((flags&8U)==0?1:0),"Active recording must allow calibration; pending SD command must defer it");
             }
@@ -422,6 +429,7 @@ static class NpBlePreviewDisplayTests {
         s=PressureStatus();
         var radio=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4))};
         using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+            Set(form,"multiSupport",-1);
             var enabled=(CheckBox)Get(form,"enabled");
             for(int attempt=0;attempt<8;attempt++){
                 ExpireCalibrationBackoff(form);Finish((Task)Call(form,"Tick"));
@@ -441,6 +449,7 @@ static class NpBlePreviewDisplayTests {
         s=PressureStatus();radio=new NpBleConnection();
         radio.Calibration=(id,p,c,h)=>radio.Captures==1?Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(4)):Task.FromResult(Calibration(id,p,c,h));
         using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+            Set(form,"multiSupport",-1);
             AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
             ownerBusy=true;ExpireCalibrationBackoff(form);Tick(form);
             Need(radio.Captures==1 && radio.Writes==0,"Pressure retry overtook recording/control ownership");
@@ -458,6 +467,7 @@ static class NpBlePreviewDisplayTests {
         foreach(var failure in failures){
             s=PressureStatus();radio=new NpBleConnection{Calibration=(id,p,c,h)=>Task.FromException<NpV2PreviewBurst>(failure)};
             using(var form=new NpBlePreviewForm(radio,()=>s,()=>false)){
+            Set(form,"multiSupport",-1);
                 AdmitCalibration(form);Finish((Task)Call(form,"Tick"));ExpireCalibrationBackoff(form);Tick(form);
                 Need(radio.Captures==1 && radio.Writes==0 && !((CheckBox)Get(form,"enabled")).Checked,"Non-pressure refusal/uncertainty retried calibration");
                 Need(!(bool)Get(form,"legacyPreview"),"Calibration error triggered legacy fallback");
@@ -467,6 +477,7 @@ static class NpBlePreviewDisplayTests {
             s=PressureStatus();radio=new NpBleConnection();var pending=new TaskCompletionSource<NpV2PreviewBurst>();
             radio.Calibration=(id,p,c,h)=>pending.Task;
             using(var form=new NpBlePreviewForm(radio,()=>s,()=>false)){
+            Set(form,"multiSupport",-1);
                 AdmitCalibration(form);var task=(Task)Call(form,"Tick");Need(!task.IsCompleted,"Calibration fixture did not remain in flight");
                 if(changed=="channel")((NumericUpDown)Get(form,"channel")).Value=128;
                 else if(changed=="probe")((NumericUpDown)Get(form,"probe")).Value=2;
@@ -490,6 +501,7 @@ static class NpBlePreviewDisplayTests {
                 Task.FromException<NpV2PreviewBurst>(new NpV2PreviewUnavailableException(reason)):
                 Task.FromResult(Calibration(id,p,c,h));
             using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+            Set(form,"multiSupport",-1);
                 AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
                 Need(((CheckBox)Get(form,"enabled")).Checked && radio.Captures==1 && radio.Writes==0,"Triple20 startup disabled preview on transient reason "+reason);
                 Need((uint)Get(form,"hz")==20000 && (uint)Get(form,"calibrationMask")==7,"Retry lost triple20 recording context");
@@ -537,6 +549,7 @@ static class NpBlePreviewDisplayTests {
                 return Task.FromResult(Calibration(id,p,c,h));
             };
             using(var form=new NpBlePreviewForm(radio,()=>s,()=>ownerBusy)){
+            Set(form,"multiSupport",-1);
                 AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
                 Need(((CheckBox)Get(form,"enabled")).Checked && radio.Captures==1 && radio.Writes==0 && Get(form,"stream")==null && (uint)Get(form,"session")==7,"Control ownership discarded a completed triple20 phase snapshot");
                 ownerBusy=false;if(controlRace)radio.transaction.Release();AdmitCalibration(form);Finish((Task)Call(form,"Tick"));
@@ -652,6 +665,6 @@ static class NpBlePreviewDisplayTests {
     [STAThread]static int Main(string[] args){try{
         Application.EnableVisualStyles();bool baseline=args.Length!=0 && args[0]=="--baseline";
         BusyDrain(baseline);if(baseline){Console.WriteLine("PASS: frozen production form reproduces control-busy display stall; no radio opened.");return 0;}
-        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();CalibrationPressure();TripleRecordingRetry();RetryDuringLeaseWrite();ControlsAfterPhase();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/calibration-pressure/triple20-recovery/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
+        Profiles();WindowAndGaps();CompactProtocol();LegacyDecode();WireAndAdmission();CompactDisplay();Compatibility();SelectionSwitch();InFlightSelection();CalibrationPressure();TripleRecordingRetry();RetryDuringLeaseWrite();ControlsAfterPhase();RecordingHeader();StableSweep(args.Length==0?null:args[0]);PacedSweep();NpBleMultiPreviewDisplayTests.Run(args.Length==0?null:args[0]);Console.WriteLine("PASS "+checks+" actual-source BLE compact/legacy protocol/display/control/window/gap/compatibility/selection-lease/calibration-pressure/triple20-recovery/recording-header/fixed-paced-sweep checks; fake radio only, no discovery, device or recording.");return 0;
     }catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

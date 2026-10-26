@@ -1,0 +1,43 @@
+{
+  "recording_readback": "pass",
+  "preview_acceptance": "fail-pressure6",
+  "session": 406903257,
+  "chunks": 12284,
+  "files": {
+    "\\descriptor.bin": {
+      "bytes": 512,
+      "sha256": "89F0D62991BA3D14C1AAE6234CF85C40FB113F6CC5621384C43A9803AEB16553"
+    },
+    "\\footer.bin": {
+      "bytes": 512,
+      "sha256": "F22EE60E24E4DAC2CB9ABEF27D75B125324869D9CE7235935D4B4BC715135444"
+    },
+    "\\neuropixels_probe1_ap.dat": {
+      "bytes": 241512192,
+      "sha256": "4727643718E2B4D18F10C328D0158FCFE0192F7E40780DD20089A58D88B2FC64"
+    },
+    "\\neuropixels_probe2_ap.dat": {
+      "bytes": 241512192,
+      "sha256": "C227B8C08B8FE5AEAC7ECA0EA4CB66EE02AAD0EDE690FE5FEEC393DE6AEFF80F"
+    },
+    "\\neuropixels_probe3_ap.dat": {
+      "bytes": 241512192,
+      "sha256": "C2BCAD10BD74EAB9FCAA57BD35E4D13D2CC0D9BA3B5022910AD9D996C22D935B"
+    }
+  },
+  "seconds": 13.1595196,
+  "integrity": "Export complete: True\nStored terminal state: Complete\nRecording complete: True\nStored state: 3\nStored fault: 0\nSession: 406903257\nSample rate Hz: 20000\nCommitted blocks: 12284\nSource ticks: 503152640\nLossless: True\nSource gaps advertised: True\nSource gap count: 0\nMissing source ticks: 0\nDropped source blocks: 0\nElapsed source ticks: 503152640\nFooter source ticks are stored tick quantity, not elapsed source span.\nStopped loss statistics: present\nPhysical overflow events: 0\nProducer discarded raw ticks: 0\nPhysical event/raw-discard counts are not inferred from stored source gaps.\nSegment 0: first_stored_block=0; stored_blocks=12284; source_start_tick=0; source_end_tick=503152640\nSegment 0 probe 1: row_offset=0; rows=314469; first_source_tick=753\nSegment 0 probe 2: row_offset=0; rows=314469; first_source_tick=947\nSegment 0 probe 3: row_offset=0; rows=314469; first_source_tick=1031\nFormat: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts\nsample_encoding=np2_signed_nominal_v1\nsample_transform=2048 - raw12\nsample_range=-2047..2048\nsample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone\nNo gain/comparator calibration or microvolt conversion. Legacy DAT before WILDX 1.0.0.9 contains unsigned raw 12-bit codes; existing DAT files are not rewritten.\nChecks: descriptor/footer CRC32, exact immutable headers/dense sequence, source ticks contiguous or explicitly marked whole-block forward gaps, native SuperSync in every block, exact segment row/file lengths\nNo ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.\nBoundary policy: trim incomplete leading/trailing AP rows in each contiguous source segment; do not pad. Probe rows have independent source-tick origins; use segment offsets for alignment.\nTime base: source ticks / 32000000 Hz; AP step=1600/32000000 seconds (exact rational).\nConfiguration: configuration.bin; N2IMRO2 kind3; staged_selection_mask=0x0; identity/request-CRC fingerprints only, NOT full maps or applied-mapping proof. Physical electrode geometry unavailable.\nProbe 1: file=neuropixels_probe1_ap.dat; rows=314469; phase=847; first_source_tick=753; trailing_ticks=1487; SHA256=4727643718E2B4D18F10C328D0158FCFE0192F7E40780DD20089A58D88B2FC64\nProbe 2: file=neuropixels_probe2_ap.dat; rows=314469; phase=653; first_source_tick=947; trailing_ticks=1293; SHA256=C227B8C08B8FE5AEAC7ECA0EA4CB66EE02AAD0EDE690FE5FEEC393DE6AEFF80F\nProbe 3: file=neuropixels_probe3_ap.dat; rows=314469; phase=569; first_source_tick=1031; trailing_ticks=1209; SHA256=C2BCAD10BD74EAB9FCAA57BD35E4D13D2CC0D9BA3B5022910AD9D996C22D935B\nSHA256 scope: emitted DAT bytes, computed during writing; flush/length checks, no second disk-readback pass.\nUTC: validated utc.bin; capture-start bracket only, not ADC synchronization\n",
+  "final_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "hardware_handles_closed": true,
+  "harness_initial_failure_preserved": "ble142",
+  "real_pressure_failure": "ble142-r2"
+}

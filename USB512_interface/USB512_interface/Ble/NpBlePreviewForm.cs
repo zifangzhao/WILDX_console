@@ -48,7 +48,7 @@ namespace USB512_interface
         public void Dispose(){lock(gate){if(disposed)return;disposed=true;pending.Clear();}connection.PreviewReceived-=Receive;}
     }
 
-    internal sealed class NpBlePreviewForm : Form
+    internal sealed partial class NpBlePreviewForm : Form
     {
         const int MaxWindowSeconds=10;
         const int LeaseRetireMilliseconds=2250; // Firmware lease2s, plus host scheduling margin.
@@ -97,7 +97,7 @@ namespace USB512_interface
             windowSeconds.ValueChanged+=delegate{plot.SetWindowSeconds((double)windowSeconds.Value);};
             gainBox.ValueChanged+=delegate{plot.SetGain((double)gainBox.Value);};
             controls.Controls.AddRange(new Control[]{new Label{Text="Probe",AutoSize=true},probe,new Label{Text="Channel",AutoSize=true},channel,enabled,new Label{Text="Window (s)",AutoSize=true},windowSeconds,new Label{Text="Gain (×)",AutoSize=true},gainBox,highPass,info});
-            Controls.Add(plot);Controls.Add(controls);Controls.Add(recordingInfo);WildXTheme.Apply(this);info.ForeColor=recordingInfo.ForeColor=WildXTheme.Muted;
+            Controls.Add(plot);InitializeMulti(controls);Controls.Add(controls);Controls.Add(recordingInfo);WildXTheme.Apply(this);info.ForeColor=recordingInfo.ForeColor=WildXTheme.Muted;
             probe.ValueChanged+=delegate{RetirePreview();};channel.ValueChanged+=delegate{RetirePreview();};
             enabled.CheckedChanged+=delegate{RetirePreview();};
             timer.Tick+=async delegate{await Tick();};Shown+=delegate{timer.Start();};
@@ -110,7 +110,7 @@ namespace USB512_interface
         void ResetDisplayRate(){previewHz=0;plot.SetSampleRate(0);highPass.SampleRate=0;}
         void DropStream(){var old=stream;stream=null;session=hz=previewHz=0;previousEnd=0;if(old!=null)old.Dispose();}
         void RetirePreview(){
-            selectionGeneration++;
+            selectionGeneration++;RetireMulti();
             calibrationPressureRetries=0;calibrationPressureRetry.Reset();calibrationStart=calibrationCommand=calibrationMask=0;
             if(stream!=null || busy)rearmAfter=Math.Max(rearmAfter,clock.ElapsedMilliseconds+LeaseRetireMilliseconds);
             DropStream();ResetDisplayRate();retry.Restart();
@@ -140,10 +140,10 @@ namespace USB512_interface
                 recordingInfo.Visible=recordingInfo.Text.Length!=0;
             }catch(Exception ex){recordingInfo.Text="Recording information unavailable: "+ex.Message;recordingInfo.Visible=true;}
         }
-        protected override void OnFormClosing(FormClosingEventArgs e){closed=true;lifetime.Cancel();DropStream();base.OnFormClosing(e);}
+        protected override void OnFormClosing(FormClosingEventArgs e){closed=true;CloseMulti();lifetime.Cancel();DropStream();base.OnFormClosing(e);}
         protected override void Dispose(bool disposing)
         {
-            if(disposing && !closed){closed=true;lifetime.Cancel();DropStream();}
+            if(disposing && !closed){closed=true;CloseMulti();lifetime.Cancel();DropStream();}
             if(disposing){timer.Stop();timer.Dispose();lifetime.Dispose();diagnostics.Dispose();}
             base.Dispose(disposing);
         }
@@ -151,6 +151,7 @@ namespace USB512_interface
         {
             if(closed)return;
             RefreshRecordingInfo(); // Cached PC state only; never waits for BLE/control ownership.
+            if(await TickMulti())return;
             if(!Current(hz)){if(stream!=null || busy || session!=0)RetirePreview();info.Text=enabled.Checked?"Waiting for recording…":"Paused";return;}
             // Already-received display data never waits for a status/time RPC
             // or an in-flight preview write. Only new wire work yields to controls.
@@ -266,7 +267,7 @@ namespace USB512_interface
             readonly NpDisplayHighPass highPass=new NpDisplayHighPass(1);
             readonly short[] displayRow=new short[1];
             internal Func<int,short,short> CorrectSample;
-            int count,write,selectedChannel;uint sampleHz;ulong stride,playbackOrigin;long playbackStarted;double windowSeconds=4,gain=1;
+            int count,write,selectedChannel;internal double Units=1,LeadSeconds;internal string TraceLabel;uint sampleHz;ulong stride,playbackOrigin;long playbackStarted;double windowSeconds=4,gain=1;
             const double ReferenceCounts=256; // Match the USB NP2 display at 1×.
             internal Plot(){DoubleBuffered=true;BackColor=WildXTheme.Dark;ForeColor=Color.LightGreen;}
             internal void SetGain(double value){if(Double.IsNaN(value)||Double.IsInfinity(value)||value<0.1||value>100)throw new ArgumentOutOfRangeException("value");gain=value;Invalidate();}
@@ -282,7 +283,7 @@ namespace USB512_interface
             {
                 // One received burst supplies the display's initial lead. Pace its
                 // original samples at the declared Fs; never interpolate a gap.
-                if(count==0){playbackOrigin=first;playbackStarted=Stopwatch.GetTimestamp();}
+                if(count==0){playbackOrigin=first;playbackStarted=Stopwatch.GetTimestamp()+(long)(LeadSeconds*Stopwatch.Frequency);}
                 stride=step;for(int i=0;i<data.GetLength(0);i++){
                     if((valid&(1UL<<i))==0)continue;ticks[write]=first+(ulong)i*step;
                     short value=NpV2SampleDecoder.NominalCount(data[i,data.GetLength(1)==1?0:selectedChannel/128]);
@@ -291,8 +292,18 @@ namespace USB512_interface
                     values[write]=displayRow[0];write=(write+1)%Capacity;if(count<Capacity)count++;
                 }Invalidate();
             }
+            internal void AppendFiltered(NpV2MultiPreview.Frame frame,int selected){
+                if(count==0){playbackOrigin=frame.FirstTick+frame.WordOffsets[selected];playbackStarted=Stopwatch.GetTimestamp()+(long)(LeadSeconds*Stopwatch.Frequency);}
+                stride=frame.Step;
+                for(int row=0;row<frame.Samples.GetLength(0);row++){
+                    ticks[write]=frame.FirstTick+frame.WordOffsets[selected]+(ulong)row*stride;
+                    displayRow[0]=frame.Samples[row,selected];
+                    highPass.Apply(displayRow,0,displayRow,0,checked((long)(ticks[write]/stride)));
+                    values[write]=displayRow[0];write=(write+1)%Capacity;if(count<Capacity)count++;
+                }
+            }
             internal int VisibleSamples(long now){
-                if(count==0 || stride==0 || sampleHz==0)return 0;
+                if(count==0 || stride==0 || sampleHz==0 || now<playbackStarted)return 0;
                 double elapsedSamples=Math.Max(0,(now-playbackStarted)/(double)Stopwatch.Frequency*sampleHz);
                 int visible=count,start=(write-count+Capacity)%Capacity;
                 while(visible>0 && (ticks[(start+visible-1)%Capacity]-playbackOrigin)/(double)stride>elapsedSamples)visible--;
@@ -308,7 +319,7 @@ namespace USB512_interface
             protected override void OnPaint(PaintEventArgs e)
             {
                 base.OnPaint(e);
-                e.Graphics.DrawString("Ch "+selectedChannel+(CorrectSample==null?" · nominal counts ±":" · calibrated counts ±")+(ReferenceCounts/gain).ToString("0.##")+" · "+gain.ToString("0.#")+"×",Font,Brushes.LightGray,10,5);
+                e.Graphics.DrawString((TraceLabel??("Ch "+selectedChannel))+(CorrectSample==null?" · nominal counts ±":" · calibrated counts ±")+(ReferenceCounts/gain).ToString("0.##")+" · "+gain.ToString("0.#")+"×",Font,Brushes.LightGray,10,5);
                 using(var zero=new Pen(Color.DimGray)){zero.DashStyle=System.Drawing.Drawing2D.DashStyle.Dot;e.Graphics.DrawLine(zero,15,Height/2,Math.Max(15,Width-15),Height/2);}
                 int visible=VisibleSamples(Stopwatch.GetTimestamp());if(visible==0)return;
                 ulong latest=ticks[(write-count+visible-1+Capacity)%Capacity];double window=WindowTicks;
@@ -323,7 +334,7 @@ namespace USB512_interface
                         // Break at missing data AND sweep wrap; never invent a join.
                         float x=XForTick(tick);
                         if(segment.Count>0 && (tick-prev!=stride || x<previousX))DrawSegment(e.Graphics,pen,segment);
-                        segment.Add(new PointF(x,ValueY(values[at])));prev=tick;previousX=x;
+                        segment.Add(new PointF(x,ValueY(values[at]/Units)));prev=tick;previousX=x;
                     }
                     DrawSegment(e.Graphics,pen,segment);
                     using(var cursor=new Pen(Color.FromArgb(100,Color.LightGreen))){

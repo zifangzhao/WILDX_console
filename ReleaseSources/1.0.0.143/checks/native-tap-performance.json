@@ -1,0 +1,51 @@
+{
+  "result": "pass",
+  "uid": "001A0004434250062039314E",
+  "before": {
+    "time": 365085.796,
+    "perf": [
+      2654,
+      12026430,
+      8471,
+      30,
+      0,
+      0,
+      0
+    ],
+    "dwt": [
+      1073741825,
+      2927144320
+    ]
+  },
+  "after": {
+    "time": 365090.828,
+    "perf": [
+      15726,
+      71547063,
+      8471,
+      92,
+      0,
+      0,
+      0
+    ],
+    "dwt": [
+      1073741825,
+      3570152224
+    ]
+  },
+  "seconds": 5.032000000006519,
+  "delta": [
+    13072,
+    59520633,
+    0,
+    62,
+    0,
+    0,
+    0
+  ],
+  "cycle_delta": 643007904,
+  "tap_cycle_fraction": 0.09256594301521992,
+  "mean_tap_cycles": 4553.291998164014,
+  "maximum_tap_cycles_since_boot": 8471,
+  "scope": "Native preview Tap extraction/filter only; excludes foreground CRC/TX and all other firmware work. Non-halting read-only SWD; not whole-system CPU usage."
+}
