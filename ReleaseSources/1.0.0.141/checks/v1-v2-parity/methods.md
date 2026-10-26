@@ -1,0 +1,13 @@
+# V1/V2 download parity, 2026-10-25
+
+Both devices used the published WILD-X 1.0.0.141 GUI, SHA256 `37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268`, unchanged SDK and the same PC. Runs were sequential. Three reads per device consumed exactly 268,435,456 bytes from a preserved recording through the production bounded prefetch wrapper. Header, payload CRC, sequence, epoch and LBA checks remained enabled; an identical SHA256 consumer checked repeatability. No decoding or output-file writing enters the transport timer. NPB1 transport headers are excluded; stored metadata/padding inside the SD extent is included. The final transport-cache packet is fully validated even when only part is consumed; its payload byte count is also recorded in each report.
+
+V1 UID001D00065942500B20313354 used complete P12/20k session1792385836, LBA[62128128,62799872),5120nativechunks. V2 UID001A0004434250062039314E used complete P123/20k session407207722, LBA[425492480,426291740),8468nativeblocks. Both ranges have room for the unchanged legacy read-ahead around the fixed prefix.
+
+V1 additionally ran six alternating serial/buffered production SDK exports. DAT and stored descriptor/footer hashes matched across all six; no IMRO file was present in the selected V1 output. The V2 export median comes from the immediately preceding accepted actual141 six-export run, whose checked data hashes also matched. Export rates use logical native record bytes, never the sum of expanded DAT sizes; V1/V2 source formats differ.
+
+V1 freshly advertised NBC1 version1/max4096/1020sectors and idle remaining0. Optional USB firmware CRC identity was not advertised by either inventory path, so these observations do not independently attest installed APP/USB CRCs through that query. Source owners retain the published firmware/object provenance. No firmware changes were needed for this comparison.
+
+The first V1 observer completed all payload/export/catalog checks, then its final status check incorrectly looked for V2's Target field on V1. The original failed report is retained. The private observer was corrected to use PendingMode; independent fresh inventories confirmed exact V1 Role3/Busy0/PendingMode0. Transfers were not repeated. V2's corrected observer completed normally and confirmed exact Mode2/Busy0/Target0. All handles closed and the exclusive leases were returned.
+
+No SD payload write, new recording, card reset/repair/format/delete, firmware build/flash, SWD, BLE or wiring action occurred. The production GUI, SDK, installer and firmware were not rebuilt or repackaged. Different onboard cards and source formats remain a limitation: these results establish near-parity on the connected setup, not identical speed for every card/PC.

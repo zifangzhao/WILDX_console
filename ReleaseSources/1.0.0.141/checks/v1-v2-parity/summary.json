@@ -1,0 +1,60 @@
+{
+  "app_version": "1.0.0.141",
+  "gui_sha256": "37A35A19B29D9F348D4D59BAEDAFB8E92270B89A4FB115F30F0E5E8A5E0E5268",
+  "sdk_sha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
+  "matched_transport_bytes_per_trial": 268435456,
+  "transport_trials_per_device": 3,
+  "transport_includes": "Production CRC/header validation plus same SHA256 consumer; physical SD payload extent, excluding NPB1 headers; no decoding/output writes",
+  "v1_transport_MB_s": 46.56844901557604,
+  "v2_transport_MB_s": 45.16732046308763,
+  "transport_difference_percent_of_v2": 3.1020847332165147,
+  "v1_buffered_export_MB_s": 44.8292592214599,
+  "v2_buffered_export_MB_s": 43.3316747467346,
+  "export_difference_percent_of_v2": 3.4560964547952544,
+  "v1_catalog_entries": 36,
+  "v2_catalog_entries": 296,
+  "catalogs_preserved": true,
+  "v1_six_export_hashes_match": true,
+  "transport_prefix_hashes_repeat": true,
+  "v1_live_nbc1_capability": {
+    "words": [
+      826491470,
+      1,
+      4096,
+      1020,
+      0,
+      22,
+      0,
+      0
+    ],
+    "confirmed": true
+  },
+  "v1_final_status": {
+    "Split": true,
+    "Recovery": false,
+    "Download": true,
+    "AppValid": false,
+    "Role": 3,
+    "Busy": 0,
+    "LoaderAbi": 0,
+    "Capabilities": 31,
+    "PendingMode": 0,
+    "Description": "V1 USB ABI 258; SD download; busy=0; pending mode=0; APP update via recovery; ROM DFU advertised"
+  },
+  "v2_final_status": {
+    "Magic": 844320846,
+    "Abi": 4,
+    "Mode": 2,
+    "Capabilities": 63,
+    "Busy": 0,
+    "Target": 0,
+    "Uid0": 1703940,
+    "UidXor": 1669030216
+  },
+  "all_hardware_handles_closed": true,
+  "app_or_firmware_rebuilt": false,
+  "sd_writes_recordings_formats_deletes": false,
+  "fw_crc_identity_usb_not_advertised_this_inventory": true,
+  "observer_limit": "V1 payload/export/catalog checks passed; final observer status mistakenly requested V2 Target field. Original report retains that failure. Corrected observer and independent final V1 inventory confirmed Role3/Busy0/PendingMode0; no transfers repeated.",
+  "scope": "Same current141sharedhost/PC, differentdevicecards. V2 export median reused from immediatelypreceding accepted141run; same-size transport trials freshlyrunsequentiallyonboth. Performance near-parity, not exact all-card speed guarantee."
+}
