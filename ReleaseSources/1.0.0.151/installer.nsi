@@ -1,0 +1,100 @@
+Unicode true
+RequestExecutionLevel user
+!include "MUI2.nsh"
+!define APP_NAME "WILD-X Neuropixels Console"
+!define APP_EXE "WILDX_console.exe"
+!ifndef APP_PAYLOAD_DIR
+!define APP_PAYLOAD_DIR "USB512_interface\bin\Release"
+!endif
+!getdllversion "${APP_PAYLOAD_DIR}\${APP_EXE}" VER_
+!define APP_VERSION "${VER_1}.${VER_2}.${VER_3}.${VER_4}"
+Name "${APP_NAME} ${APP_VERSION}"
+OutFile "${APP_PAYLOAD_DIR}\WILDX_console-Setup-${APP_VERSION}.exe"
+InstallDir "$LOCALAPPDATA\WILDX_console"
+InstallDirRegKey HKCU "Software\WILDX_console" "InstallDir"
+VIProductVersion "${APP_VERSION}"
+VIAddVersionKey /LANG=1033 "ProductName" "${APP_NAME}"
+VIAddVersionKey /LANG=1033 "FileVersion" "${APP_VERSION}"
+VIAddVersionKey /LANG=1033 "FileDescription" "${APP_NAME} installer"
+VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright (c) 2025"
+!define MUI_ICON "USB512_interface\Resources\Waveform.ico"
+!define MUI_UNICON "USB512_interface\Resources\Waveform.ico"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
+!define MUI_FINISHPAGE_RUN_TEXT "Run WILD-X"
+!define MUI_FINISHPAGE_RUN_FUNCTION LaunchWildX
+!insertmacro MUI_PAGE_FINISH
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_LANGUAGE "English"
+Function LaunchWildX
+  SetOutPath "$INSTDIR"
+  ClearErrors
+  ; Shell launch honors the application's requireAdministrator manifest.
+  ExecShell "open" "$INSTDIR\${APP_EXE}"
+  IfErrors 0 done
+    MessageBox MB_OK|MB_ICONEXCLAMATION "WILD-X was installed, but could not start. Open it from the Start menu and approve the Windows permission prompt." /SD IDOK
+  done:
+FunctionEnd
+Section "WILD-X"
+  SetOutPath "$INSTDIR"
+  File "${APP_PAYLOAD_DIR}\${APP_EXE}"
+  File "${APP_PAYLOAD_DIR}\${APP_EXE}.config"
+  File "${APP_PAYLOAD_DIR}\Correct-RecordingTime.ps1"
+  File "${APP_PAYLOAD_DIR}\*.dll"
+  SetOutPath "$INSTDIR\NPConfigurator"
+  File "${APP_PAYLOAD_DIR}\NPConfigurator\NPConfigurator.exe"
+  File "${APP_PAYLOAD_DIR}\NPConfigurator\NPConfigurator.dll"
+  File "${APP_PAYLOAD_DIR}\NPConfigurator\NPConfigurator.deps.json"
+  File "${APP_PAYLOAD_DIR}\NPConfigurator\NPConfigurator.runtimeconfig.json"
+  SetOutPath "$INSTDIR\FirmwareUpdater"
+  File "${APP_PAYLOAD_DIR}\FirmwareUpdater\XeNpFirmwareUpdater.exe"
+  File "${APP_PAYLOAD_DIR}\FirmwareUpdater\XeNpFirmwareUpdater.dll"
+  File "${APP_PAYLOAD_DIR}\FirmwareUpdater\XeNpFirmwareUpdater.deps.json"
+  File "${APP_PAYLOAD_DIR}\FirmwareUpdater\XeNpFirmwareUpdater.runtimeconfig.json"
+  SetOutPath "$INSTDIR\Firmware"
+  File /r "${APP_PAYLOAD_DIR}\Firmware\*.*"
+  SetOutPath "$INSTDIR"
+  SetOutPath "$INSTDIR\docs"
+  File "${APP_PAYLOAD_DIR}\docs\*.md"
+  SetOutPath "$INSTDIR"
+  WriteUninstaller "$INSTDIR\Uninstall.exe"
+  WriteRegStr HKCU "Software\WILDX_console" "InstallDir" "$INSTDIR"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WILDX_console" "DisplayName" "${APP_NAME}"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WILDX_console" "DisplayVersion" "${APP_VERSION}"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WILDX_console" "UninstallString" '$\"$INSTDIR\Uninstall.exe$\"'
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WILDX_console" "DisplayIcon" "$INSTDIR\${APP_EXE}"
+  CreateDirectory "$SMPROGRAMS\${APP_NAME}"
+  CreateShortCut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+SectionEnd
+Section "Uninstall"
+  Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"
+  RMDir "$SMPROGRAMS\${APP_NAME}"
+  Delete "$INSTDIR\${APP_EXE}"
+  Delete "$INSTDIR\${APP_EXE}.config"
+  Delete "$INSTDIR\Correct-RecordingTime.ps1"
+  Delete "$INSTDIR\OpenTK.dll"
+  Delete "$INSTDIR\OpenTK.GLControl.dll"
+  Delete "$INSTDIR\NpV2SdDatExport.dll"
+  Delete "$INSTDIR\System.Runtime.WindowsRuntime.dll"
+  Delete "$INSTDIR\System.Runtime.InteropServices.WindowsRuntime.dll"
+  Delete "$INSTDIR\NPConfigurator\NPConfigurator.exe"
+  Delete "$INSTDIR\NPConfigurator\NPConfigurator.dll"
+  Delete "$INSTDIR\NPConfigurator\NPConfigurator.deps.json"
+  Delete "$INSTDIR\NPConfigurator\NPConfigurator.runtimeconfig.json"
+  RMDir "$INSTDIR\NPConfigurator"
+  Delete "$INSTDIR\FirmwareUpdater\XeNpFirmwareUpdater.exe"
+  Delete "$INSTDIR\FirmwareUpdater\XeNpFirmwareUpdater.dll"
+  Delete "$INSTDIR\FirmwareUpdater\XeNpFirmwareUpdater.deps.json"
+  Delete "$INSTDIR\FirmwareUpdater\XeNpFirmwareUpdater.runtimeconfig.json"
+  RMDir "$INSTDIR\FirmwareUpdater"
+  RMDir /r "$INSTDIR\Firmware"
+  Delete "$INSTDIR\docs\recording-time-correction.md"
+  Delete "$INSTDIR\docs\imu-time-correction.md"
+  RMDir "$INSTDIR\docs"
+  Delete "$INSTDIR\Uninstall.exe"
+  RMDir "$INSTDIR"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WILDX_console"
+  DeleteRegKey HKCU "Software\WILDX_console"
+SectionEnd

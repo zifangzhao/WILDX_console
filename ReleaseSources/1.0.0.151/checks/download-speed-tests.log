@@ -1,0 +1,13 @@
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,59): warning CS0649: Field 'NpDownloadStream.Timing.ReadTicks' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,69): warning CS0649: Field 'NpDownloadStream.Timing.ReadySleepTicks' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,120): warning CS0649: Field 'NpDownloadStream.Timing.ValidationTicks' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,39): warning CS0649: Field 'NpDownloadStream.Timing.BulkCalls' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,93): warning CS0649: Field 'NpDownloadStream.Timing.SourceBytes' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,85): warning CS0649: Field 'NpDownloadStream.Timing.Replies' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,29): warning CS0649: Field 'NpDownloadStream.Timing.BulkBytes' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,49): warning CS0649: Field 'NpDownloadStream.Timing.BulkTicks' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(21,105): warning CS0649: Field 'NpDownloadStream.Timing.ValidatedBytes' is never assigned to, and will always have its default value 0
+_artifacts\download_headroom_20261026\compiled-checks\transport\generated.cs(24,48): warning CS0414: The field 'NpDownloadStream.qualityRequestPending' is assigned but its value is never used
+PASS production burst/Fill/validator tests: 790 assertions
+PASS 254 actual-byte rate/startup/stall/large-file checks; no hardware
+PASS 14 built-application download ETA checks; no hardware access.

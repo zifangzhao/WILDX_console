@@ -1,0 +1,22 @@
+{
+  "actual_150_crc_MB_s_median": 1990.558749861812,
+  "prior_149_actual_v2_MB_s": 46.01425952813114,
+  "prior_raw_accepted_sectors_bytes": 1650800640,
+  "prior_firmware_delta": {
+    "requests": 3161,
+    "SD_ms": 34083,
+    "CRC_ms": 16708,
+    "USB_ms": 34014,
+    "sectors": 3224220,
+    "CRC_selftest": 0,
+    "errors": 0,
+    "completions": 3161
+  },
+  "isolated_stage_payload_MB_s": {
+    "SD_ms": 48.43472229557257,
+    "CRC_ms": 98.8030069427819,
+    "USB_ms": 48.53297583348033
+  },
+  "max_headroom_to_slowest_measured_stage_percent": 5.260244959416682,
+  "caution": "Stage times overlap. This is a planning ceiling from one existing run, not achieved extra throughput; SD card variability can change it. Larger batch A/B is prepared but not run: V2 is leased elsewhere and V1 handoff is unconfirmed."
+}

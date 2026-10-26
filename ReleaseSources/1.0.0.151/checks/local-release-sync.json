@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0.151",
+  "runtime_files_verified": 34,
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.151.exe",
+    "bytes": 7409594,
+    "sha256": "54C3E0A58391278D07DC8DB49229731388465F4604E9DBE535357800098820FE"
+  },
+  "installed_application_touched": false,
+  "superseded_local_files_archived": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\download_headroom_20261026\\local150-before"
+}

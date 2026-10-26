@@ -1,8 +1,8 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.150**.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.151**.
 
-[Latest installer](LATEST_INSTALLERS/README.md) uses actual validated USB byte counts for the V1/V2 download speed display. Recording, exploration, shared firmware updating and BLE preview are retained. [Usage and validation](ReleaseSources/1.0.0.150/README.md).
+[Latest installer](LATEST_INSTALLERS/README.md) uses larger negotiated batches to reduce V1/V2 SD-USB download command overhead. Recording, exploration, shared firmware updating and BLE preview are retained. [Usage and validation](ReleaseSources/1.0.0.151/README.md).
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 

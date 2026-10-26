@@ -1,0 +1,21 @@
+# SD-USB download batch overhead — WILD-X 1.0.0.151
+
+The shared bounded V1/V2 reader uses up to 256 packets per command batch, limited by the firmware-advertised maximum and the selected recording's full-packet extent. Previously it capped batches at 32. This reduces readiness/ARM/START boundaries without changing payload format, two-buffer memory use, one-native-read ownership, firmware or clocks. Every header/payload CRC, sequence, epoch and LBA check remains enabled. Smaller-capability or unsupported older firmware retains its existing bounded/legacy fallback; partial tails still use the legacy reader.
+
+V1's same 256 MiB physical SD prefix improved from a median 46.178 to 47.431 MB/s (+2.71%) across six alternating trials. Six full production-SDK exports improved from 44.451 to 45.459 MB/s (+2.27%). Each prefix SHA256 repeated; all DAT/descriptor/footer hashes matched across exports; firmware error deltas were zero and the catalog was unchanged. This recording has no IMRO, so the experiment makes no IMRO equality claim. Logical native export bytes and physical SD-prefix bytes are different denominators; compare only within each pair.
+
+V1 early retirement completed in 48.87 ms (32 packets) and 44.44 ms (256), with zero pending packets and exact reopened-prefix hashes. Original idle download mode (role 3 / busy 0 / pending 0) returned and all handles closed. The V1 lease was explicitly returned. No new recording, card write, format/delete, device reset, SWD, firmware build or flash was performed.
+
+V2's six alternating full production-SDK exports improved from a median 43.589 to 45.311 MB/s (+3.95%), with identical DAT/descriptor/footer hashes, zero firmware error deltas and all 314 catalog entries preserved. Early retirement/reopen checks passed in 52.37 ms (32 packets) and 42.05 ms (256); original idle USB mode 2 / busy 0 / target 0 returned. Hardware ownership was explicitly returned afterward. These V2 trials used the actual compiled version 151 and an existing complete three-probe recording; no new recording was made.
+
+V2's separate 256 MiB transport-only comparison was variable and did not improve: median 44.225 versus 43.213 MB/s (-2.29%), spanning 42.17–44.55 MB/s overall. This negative result is retained. The release's useful measured claim is end-to-end SDK export on both connected boards, not a universal increase in physical USB/SD speed. No causal claim explains that transport-only variation; card/host variability remains a limit.
+
+The one GUI compilation produced version 151 with zero warnings/errors. The SDK, helpers and bundled V1/V2 firmware/catalog are unchanged from 150. Focused checks passed: 790 production-method transport/ownership/range assertions (including smaller negotiated maxima), 254 actual compiled-application byte-rate checks and 14 ETA checks. V1 hardware trials used actual version 150 with only its private batch limit set at runtime; version 151 compiles the same change as the default. No installed-GUI or all-mode/endurance qualification is claimed.
+
+Host CRC measured about 1,991 MB/s on this PC, so weakening integrity checks would not address this bottleneck. Existing V2 counters measured overlapping SD and USB stages near 48.4/48.5 MB/s versus 46.0 MB/s total. Their times must not be added. The remaining gain is consequently expected to be modest on this card/PC; it is not a promise of faster throughput on every setup.
+
+The first V1 observer attempt tried opening a second exclusive control handle and failed with AccessDenied before a throughput trial. It restored idle mode. The corrected observer uses the owned stream's Control method; all reported comparisons are from that corrected run.
+
+Evidence: `_artifacts/download_headroom_20261026` contains the exact observer/generator, CPU measurements, source checks, build receipt and individual trials. The compact final evidence is retained in `ReleaseSources/1.0.0.151/checks`.
+
+The initial V2 observer launch lacked the bundled helper beside its own executable, so the normal mode-switch path stopped before a transfer trial. The unchanged FirmwareUpdater was placed beside the observer; subsequent checks restored and freshly observed the original idle mode. This was an experiment launch-path error, not a missing helper in the installer.

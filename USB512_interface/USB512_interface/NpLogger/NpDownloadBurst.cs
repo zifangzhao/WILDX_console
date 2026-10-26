@@ -30,7 +30,7 @@ namespace CE32_console
             if(info.Length!=32||U(info,0)!=0x3143424e||U(info,4)!=1||U(info,8)<2||
                U(info,8)>4096||U(info,12)!=1020||U(info,24)!=0||U(info,28)!=0)return;
             if(U(info,16)!=0||U(info,20)!=epoch)throw new IOException("SD burst service changed before export; no burst started.");
-            burstMaximum=Math.Min(32U,U(info,8));burstRangeEnd=last;
+            burstMaximum=Math.Min(256U,U(info,8));burstRangeEnd=last;
         }
         internal void EndSequentialRange()
         {

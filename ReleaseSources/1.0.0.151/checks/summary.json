@@ -1,0 +1,66 @@
+{
+  "v1": {
+    "transport": {
+      "batch32_MB_s": 46.178017309033194,
+      "batch256_MB_s": 47.43061379546748,
+      "gain_percent": 2.7125384748583725,
+      "result": "pass",
+      "catalog_preserved": true,
+      "application_version": "1.0.0.150"
+    },
+    "export": {
+      "batch32_MB_s": 44.45124777380661,
+      "batch256_MB_s": 45.45888099759513,
+      "gain_percent": 2.2668277590675023,
+      "result": "pass",
+      "catalog_preserved": true,
+      "application_version": "1.0.0.150"
+    },
+    "cancel": [
+      {
+        "batch": 32,
+        "retirement_ms": 48.8731,
+        "pending": 0,
+        "sha256": "8B47DA98462099D8A2AB95A2C45F6BFF5EA14025DCE8AB8EA867AC6D45C16E69"
+      },
+      {
+        "batch": 256,
+        "retirement_ms": 44.4435,
+        "pending": 0,
+        "sha256": "8B47DA98462099D8A2AB95A2C45F6BFF5EA14025DCE8AB8EA867AC6D45C16E69"
+      }
+    ]
+  },
+  "v2": {
+    "transport": {
+      "batch32_MB_s": 44.225272762553615,
+      "batch256_MB_s": 43.213467324180165,
+      "gain_percent": -2.287844427338759,
+      "result": "pass",
+      "catalog_preserved": true,
+      "application_version": "1.0.0.151"
+    },
+    "export": {
+      "batch32_MB_s": 43.588785685239806,
+      "batch256_MB_s": 45.31074348341113,
+      "gain_percent": 3.9504605854492114,
+      "result": "pass",
+      "catalog_preserved": true,
+      "application_version": "1.0.0.151"
+    },
+    "cancel": [
+      {
+        "batch": 32,
+        "retirement_ms": 52.3722,
+        "pending": 0,
+        "sha256": "8BD9A0BD22D0374AEA5D3A819F4D019322CFC6F11A024F9CFB663F09831FC1BD"
+      },
+      {
+        "batch": 256,
+        "retirement_ms": 42.0537,
+        "pending": 0,
+        "sha256": "8BD9A0BD22D0374AEA5D3A819F4D019322CFC6F11A024F9CFB663F09831FC1BD"
+      }
+    ]
+  }
+}

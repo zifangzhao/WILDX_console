@@ -20,11 +20,11 @@ static class NpDownloadNative{
 internal sealed partial class NpDownloadStream:Stream{
  class Timing{internal long BulkBytes,BulkCalls,BulkTicks,ReadTicks,ReadySleepTicks,Replies,SourceBytes,ValidatedBytes,ValidationTicks;}
  readonly Timing timing=new Timing();
- SafeFileHandle file;IntPtr usb=(IntPtr)1;long position,length=100L*1024*1024,cacheStart=-1;byte[] cache,wireBuffer;int cachePayloadCount;uint epoch=7,sequence,maxBlocks=1020;
+ SafeFileHandle file;IntPtr usb=(IntPtr)1;long position,length=256L*1024*1024,cacheStart=-1;byte[] cache,wireBuffer;int cachePayloadCount;uint epoch=7,sequence,maxBlocks=1020;
  bool faulted,validatedRead,qualityTestSession,qualityRequestPending,canRecoverReads=true;internal bool IsSynthetic;internal string TransportDescription="High-speed USB";
  internal Func<bool> Cancelled;internal int RecoveredReads,ReadRecoveryAttempts=0;internal string ReadRecoveryDiagnostics="test";
  internal readonly List<string> Calls=new List<string>();readonly List<int> Plans=new List<int>();readonly List<byte[]> Buffers=new List<byte[]>();
- bool Supported=true,CorruptFirst,FailFirst,StartUnknown,CancelUnknown,BadRetirementEpoch;uint capVersion=1,deviceEpoch=7,deviceSequence,deviceRemaining,deviceLba,armed;
+ bool Supported=true,CorruptFirst,FailFirst,StartUnknown,CancelUnknown,BadRetirementEpoch;uint capVersion=1,capMaximum=4096,deviceEpoch=7,deviceSequence,deviceRemaining,deviceLba,armed;
  int reads;internal int nativeActive,FreeCalls;internal readonly ManualResetEventSlim GateStarted=new ManualResetEventSlim(),GateContinue=new ManualResetEventSlim();int BlockRead;
  static int checks;
  sealed class NativeBulkReadFailure:IOException{internal int NativeError;internal NativeBulkReadFailure(string m,int e):base(m){NativeError=e;}}
@@ -33,7 +33,7 @@ internal sealed partial class NpDownloadStream:Stream{
  void RetireOwnedRead(uint lba,int retry,NativeBulkReadFailure e){throw new Exception("Unexpected legacy retirement");}
  byte[] Control(byte type,byte request,ushort value,ushort index,ushort size){
   Calls.Add(request.ToString("X2"));byte[] b=new byte[32];
-  if(request==0x67){if(!Supported)throw new IOException("Unsupported optional query");Put(b,0,0x3143424e);Put(b,4,capVersion);Put(b,8,4096);Put(b,12,1020);Put(b,16,deviceRemaining);Put(b,20,deviceEpoch);return b;}
+  if(request==0x67){if(!Supported)throw new IOException("Unsupported optional query");Put(b,0,0x3143424e);Put(b,4,capVersion);Put(b,8,capMaximum);Put(b,12,1020);Put(b,16,deviceRemaining);Put(b,20,deviceEpoch);return b;}
   if(request==0x60){Put(b,0,0x3144504e);Put(b,4,1);Put(b,8,(uint)(length/512));Put(b,12,1020);Put(b,16,deviceRemaining==0?0U:3U);Put(b,20,deviceSequence);Put(b,24,deviceEpoch+(BadRetirementEpoch?1U:0));Put(b,28,1);return b;}
   if(request==0x66){armed=(uint)value|((uint)index<<16);return new byte[0];}
   if(request==0x64){deviceLba=armed;deviceRemaining=value;Plans.Add(value);if(StartUnknown)throw new IOException("START outcome unknown");return new byte[0];}
@@ -72,7 +72,8 @@ internal sealed partial class NpDownloadStream:Stream{
   using(var s=Make()){s.TransportDescription="Full-speed USB";s.BeginSequentialRange(0,4L*packet);Need(s.Calls.Count==0,"Full-speed source negotiated burst");}
   using(var s=Make()){s.capVersion=2;s.BeginSequentialRange(0,4L*packet);ReadBytes(s,1);Need(!s.Calls.Contains("64"),"Unknown NBC1 version started burst");}
   using(var s=Make()){Throws<ArgumentOutOfRangeException>(()=>s.BeginSequentialRange(-1,100));Need(s.Calls.Count==0,"Invalid range sent a query");}
-  using(var s=Make()){long end=35L*packet+600L*512;s.BeginSequentialRange(0,end);byte[] b=new byte[1024*1024];long total=0;while(total<end){int n=s.Read(b,0,(int)Math.Min(b.Length,end-total));Need(n>0,"Unexpected end");total+=n;}s.EndSequentialRange();Need(s.Plans.SequenceEqual(new[]{32,3}),"Burst count crossed batch/range bound");Need(s.Calls.Count(x=>x=="61")==1,"Legacy tail not used");Need(s.Calls.Count(x=>x=="62")==0,"Completed batches were unnecessarily cancelled");}
+  using(var s=Make()){long end=259L*packet+600L*512;s.BeginSequentialRange(0,end);byte[] b=new byte[1024*1024];long total=0;while(total<end){int n=s.Read(b,0,(int)Math.Min(b.Length,end-total));Need(n>0,"Unexpected end");total+=n;}s.EndSequentialRange();Need(s.Plans.SequenceEqual(new[]{256,3}),"Burst count crossed batch/range bound");Need(s.Calls.Count(x=>x=="61")==1,"Legacy tail not used");Need(s.Calls.Count(x=>x=="62")==0,"Completed batches were unnecessarily cancelled");}
+  using(var s=Make()){s.capMaximum=2;s.BeginSequentialRange(0,5L*packet);ReadBytes(s,5*packet);s.EndSequentialRange();Need(s.Plans.SequenceEqual(new[]{2,2}),"Negotiated smaller maximum exceeded");Need(s.Calls.Count(x=>x=="61")==1,"Smaller maximum lost the legacy tail");}
   using(var s=Make()){s.BeginSequentialRange(0,4L*packet);s.BlockRead=2;ReadBytes(s,1);Need(s.GateStarted.Wait(1000),"No overlapping read");Need(s.Buffers.Count==1,"Blocked worker wrote buffer early");byte[] immutable=s.cache;uint before=Crc(immutable,32,packet);var end=Task.Run(()=>s.EndSequentialRange());Thread.Sleep(30);Need(!end.IsCompleted&&!s.Calls.Contains("62"),"Retirement ran before worker join");s.GateContinue.Set();Need(end.Wait(2000),"Worker was not joined");Need(Crc(immutable,32,packet)==before,"Prefetch overwrote immutable cache");Need(!Object.ReferenceEquals(s.Buffers[0],s.Buffers[1]),"Buffers alias");Need(s.Calls.Count(x=>x=="62")==1,"Cancellation count differs");}
   using(var s=Make()){s.BeginSequentialRange(0,8L*packet);ReadBytes(s,1);s.Position=7L*packet+5;ReadBytes(s,20);Need(s.Calls.Count(x=>x=="62")==1,"Seek did not retire active burst once");Need(s.Calls.Count(x=>x=="61")==1,"Short seek tail did not fall back");}
   using(var s=Make()){s.BeginSequentialRange(0,4L*packet);s.CorruptFirst=true;byte[] output=new byte[4];Throws<InvalidDataException>(()=>s.Read(output,0,4));Need(output.All(x=>x==0),"Invalid payload was published");s.EndSequentialRange();Need(s.Calls.Count(x=>x=="62")==1,"CRC failure session was not retired");Need(s.Calls.Count(x=>x=="64")==1,"CRC failure replayed burst");}
