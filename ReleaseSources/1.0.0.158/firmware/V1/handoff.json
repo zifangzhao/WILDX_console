@@ -1,0 +1,40 @@
+{
+  "release": "V1_IMU100_BLE_USB4F7B521A_APPB1758369_20261028",
+  "stage": "SOFTWARE_CHECKED_CANDIDATE_NO_NEW_HIL",
+  "files": [
+    {
+      "path": "catalog_entry.json",
+      "sha256": "3B289E681B02A047805E4A54C0C363DF50092F948B07D826AF1D18A8BBD44BBD",
+      "bytes": 9494
+    },
+    {
+      "path": "imu_candidate_acceptance.json",
+      "sha256": "67C1AC32BA7E5154BC42EEAF5670854D98803AA7FA65E7218604390C6607589A",
+      "bytes": 2751
+    },
+    {
+      "path": "V1_APP_B1758369_IMU100_BLE_20261028.hex",
+      "sha256": "4E509A9D5AB0DC134B08B2583EFC47CEB30F148CDCC648334DB54B1717417A59",
+      "bytes": 820700
+    },
+    {
+      "path": "V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
+      "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F",
+      "bytes": 1044112
+    },
+    {
+      "path": "V1_fused_BOOT_USB4F7B521A_APPB1758369_IMU100_BLE_20261028.hex",
+      "sha256": "085BFB32F8614B0122BDE1750731A9FA0D008D458385C8C45FA0C95C716BB394",
+      "bytes": 5745164
+    },
+    {
+      "path": "V1_USB_service_1.0.108_USB4F7B521A_lifecycle_20261025.hex",
+      "sha256": "0BDDFBEDDB1FE3F842E485732F0B1104AD75708EB8446A509AA26C943E5CCC2B",
+      "bytes": 728688
+    }
+  ],
+  "build_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_imu_fast_release_20261028\\build.json",
+  "build_receipt_sha256": "BAFE77A590D355C5DD5ACAC7E25E00EAAA52CBD347CF49213BEBED94B4BD7E49",
+  "hardware_tested": false,
+  "published": false
+}

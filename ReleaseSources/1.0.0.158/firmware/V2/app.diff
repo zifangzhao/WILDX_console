@@ -1,0 +1,74 @@
+--- C250/app
++++ IMU-Stop/app
+@@ -260,17 +260,7 @@
+     xe_np_np2_dual_sd_app_mailbox.committed_blocks=
+         xe_np_np2_live_sd_mailbox.written_rus*4U;
+ }
+-static int checkpoint_written(uint32_t blocks)
+-{
+-#if XE_NP_NP2_SD_APPEND_ORDER_TEST
+-    if(reservation_append){
+-        /* Exact drain admitted VERIFYING, but readback is still pending. */
+-        XE_NP_Np2SdAppendCounts counts={blocks,blocks,blocks};
+-        return XE_NP_Np2DualSdCatalogPort_CheckpointAppend(&counts);
+-    }
+-#endif
+-    return XE_NP_Np2DualSdCatalogPort_CheckpointWritten(blocks);
+-}
++
+ #if XE_NP_NP2_SD_BACKUP_FAULT_TEST
+ static void backup_writer_fault(void)
+ {
+@@ -408,8 +398,10 @@
+     }
+ #endif
+     if(state==XE_NP_NP2_DUAL_SD_META_COMPLETE &&
+-       (committed!=xe_np_np2_live_sd_mailbox.target_blocks ||
+-        committed!=xe_np_np2_dual_sd_app_mailbox.writer_verified_blocks)){
++       (xe_np_np2_live_sd_mailbox.state!=XE_NP_NP2_LIVE_SD_COMPLETE ||
++        xe_np_np2_live_sd_mailbox.error || !committed ||
++        committed!=xe_np_np2_live_sd_mailbox.target_blocks ||
++        xe_np_np2_live_sd_mailbox.written_rus*XE_NP_NP2_DUAL_SD_BLOCKS_PER_RU!=committed)){
+         state=XE_NP_NP2_DUAL_SD_META_FAILED;error=XE_NP_NP2_DUAL_SD_ERROR_WRITER;
+     }
+ #if XE_NP_NP2_SD_FIRST_FAULT_TEST
+@@ -693,7 +685,10 @@
+ #endif
+                 ))return;
+     command();
+-    if(!started || finished){sd_app_idle_sleep();return;}
++    if(!started || finished){
++
++        sd_app_idle_sleep();return;
++    }
+     if(stop_pending && xe_np_np2_live_sd_mailbox.state==XE_NP_NP2_LIVE_SD_CONFIGURING){
+         int cancelled=XE_NP_Np2LiveSd_CancelPrepared();
+         if(cancelled==0){
+@@ -717,26 +712,11 @@
+                     xe_np_np2_live_sd_mailbox.target_blocks;
+             stop_pending=0U;
+         }
+-    }else if(state==XE_NP_NP2_LIVE_SD_DRAINING || state==XE_NP_NP2_LIVE_SD_VERIFYING){
++    }else if(state==XE_NP_NP2_LIVE_SD_DRAINING){
+         /* Snapshot only phase transitions, never each capture/service iteration. */
+         if(xe_np_np2_dual_sd_app_mailbox.writer_state!=state){
+             xe_np_np2_dual_sd_app_mailbox.state=XE_NP_NP2_DUAL_SD_FINALIZING;
+             writer_snapshot();
+-            if(state==XE_NP_NP2_LIVE_SD_VERIFYING){
+-                /* Source is off and all SD writes drained. This happens ONCE
+-                 * per session, never in capture/DMA/SD-write services. Do not
+-                 * lose the known written extent if reset interrupts the long
+-                 * media verification; it remains explicitly INCOMPLETE. */
+-                uint32_t blocks=xe_np_np2_dual_sd_app_mailbox.committed_blocks;
+-                if(!blocks || xe_np_np2_live_sd_mailbox.error ||
+-                   blocks!=xe_np_np2_live_sd_mailbox.target_blocks ||
+-                   save_time() || checkpoint_written(blocks)){
+-                    finished=1U;
+-                    xe_np_np2_dual_sd_app_mailbox.error=XE_NP_NP2_DUAL_SD_ERROR_FINALIZE;
+-                    xe_np_np2_dual_sd_app_mailbox.state=XE_NP_NP2_DUAL_SD_FAILED;
+-                    return;
+-                }
+-            }
+         }
+     }else if(state==XE_NP_NP2_LIVE_SD_COMPLETE){
+         terminal(XE_NP_NP2_DUAL_SD_META_COMPLETE,0U);

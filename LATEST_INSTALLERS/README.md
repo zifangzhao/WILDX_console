@@ -1,5 +1,7 @@
-# WILD-X 1.0.0.151
+# WILD-X 1.0.0.158
 
-[Download installer](WILDX_console-Setup-1.0.0.151.exe). Reduces command pauses with larger negotiated V1/V2 USB download batches. Same recordings, unchanged firmware and all integrity checks retained. The clean payload, shared updater, recording, exploration and BLE preview are retained.
+[Download installer](WILDX_console-Setup-1.0.0.158.exe). Adds V1/V2 BLE/SD IMU support and removes V2's full payload reread after Stop. Essential write finalization and PC download validation remain.
 
-[Usage and validation limits](../ReleaseSources/1.0.0.151/README.md). Matched existing-recording V1/V2 comparisons, early retirement/reopen integrity, unchanged catalogs and focused software checks passed. See the measured results and limits; no firmware upgrade is needed.
+After installing, use **Advanced → Firmware update → Use bundled APP** on each logger. V1 APP B1758369 and V2 APP EC5C2198 are included; USB/boot are retained. No separate update ZIP.
+
+[Usage and software-check limits](../ReleaseSources/1.0.0.158/README.md). New firmware is software checked; hardware testing is pending. Pre-arm and NP-start-byte synchronization follow separately.

@@ -1,42 +1,37 @@
 {
-  "version": "1.0.0.151",
-  "releaseId": "WILDX151_USB_BURST_20261026",
-  "baselineVersion": "1.0.0.150",
-  "localGuiCompilationsThisTask": 1,
-  "localHelperCompilationsThisTask": 0,
-  "applicationRebuiltDuringPackaging": false,
-  "guiSha256": "023D19C256109965E97C0E0787FD53E271D169C8F6C033AF6A97157EA0DC5EFE",
-  "sdkSha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF",
-  "configuratorSha256": "F30CD01DDC80DDE660C4FDFF1D0F4E5E12F1924E58027C2810E131E3B238D86B",
-  "sourceArchiveSha256": "38A8B1D9E96CAB6F31B15306A1B28714D67F2FA5F64D4A3DF113FD32B0CA3C43",
-  "changedGuiSources": [
-    "AssemblyInfo.cs",
-    "NpDownloadBurst.cs"
-  ],
-  "v1FirmwareChanged": false,
-  "v2FirmwareChanged": false,
-  "v2AppCrc32": "C250DF48",
-  "v2UsbCrc32": "A71BDECC",
-  "helpersChanged": false,
+  "version": "1.0.0.158",
+  "baselineVersion": "1.0.0.151",
+  "releaseId": "WILDX158_IMU_FINALIZATION_20261028",
+  "guiSha256": "2576F380B58F783EC4B087B335FC79132A476E0472BB9FC7EB40C844799CDBCC",
+  "sdkSha256": "454F35A9EE2071637D01EDCC0E80FBE91442552888B39AC63807CA14D9BDDD07",
+  "sourceArchiveSha256": "CC41C5002D23BC081AC135E76987F2992551C767F25AC5FD36B03EF0041B38D9",
   "installerExecuted": false,
+  "hardwareTestedThisUpdate": false,
+  "preparationEnabled": false,
+  "firstSyncEnabled": false,
   "installerPayloadExtractedAndVerified": true,
   "extractedPayloadFilesVerified": 34,
-  "obsoletePayloadFilesRemoved": 0,
   "standaloneUpdateRequired": false,
   "separateZipIncluded": false,
   "allModeOrEnduranceQualified": false,
-  "acceptance": {
-    "result": "software_checks_passed",
-    "production_transport_checks": 790,
-    "built_app_rate_checks": 254,
-    "built_app_eta_checks": 14,
-    "hardware_tested_this_fix": true,
-    "production_build_warnings": 0
-  },
+  "firmware": [
+    {
+      "family": 1,
+      "app": "B1758369",
+      "usb": "4F7B521A",
+      "stage": "SOFTWARE_CHECKED_CANDIDATE_NO_NEW_HIL"
+    },
+    {
+      "family": 2,
+      "app": "EC5C2198",
+      "usb": "A71BDECC",
+      "stage": "SOFTWARE_CHECKED_NOT_HARDWARE_TESTED"
+    }
+  ],
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.151.exe",
-    "bytes": 7409594,
-    "sha256": "54C3E0A58391278D07DC8DB49229731388465F4604E9DBE535357800098820FE"
+    "file": "WILDX_console-Setup-1.0.0.158.exe",
+    "bytes": 7129405,
+    "sha256": "01C82CEAD2D8C3870CD5F7F5740A37743A0D96DBE484F09D340D8DB369064C89"
   },
   "payload": [
     {
@@ -56,23 +51,23 @@
     },
     {
       "path": "Firmware/README.md",
-      "bytes": 232,
-      "sha256": "B48C7B519E494D33D540C9BF931A7ABB56FDFD0D8AE18DA9A543AAE3733AB543"
+      "bytes": 473,
+      "sha256": "644EA25E3509A4370636643060E9312FC7466AFD731942787883324830BA1A20"
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 18128,
-      "sha256": "F67B3271C3FBB2D9C7E297107B2619CB402669F029FA68020F36BA9EE1681F92"
+      "bytes": 19142,
+      "sha256": "9DBEA4BBE67E75DE3351BD3DAE1B9417D4F4A454F3E19D56F2E2D55C065DDF67"
     },
     {
       "path": "Firmware/V1/README.md",
-      "bytes": 660,
-      "sha256": "B54FE9E535949FA64976CA4466085ECEBE51FCC90CDE30C39C1506602792C5F4"
+      "bytes": 949,
+      "sha256": "1E66A3D948BF9755B95E7B1040498D869B800AA321ADDF21DAF519AD96809FC0"
     },
     {
-      "path": "Firmware/V1/V1_APP_82E51DEA_compact4_preview_20261025.hex",
-      "bytes": 815508,
-      "sha256": "2945F6523C3187BB226472149F203847A1D37D8BE6B0D9E6F30052239AF3F174"
+      "path": "Firmware/V1/V1_APP_B1758369_IMU100_BLE_20261028.hex",
+      "bytes": 820700,
+      "sha256": "4E509A9D5AB0DC134B08B2583EFC47CEB30F148CDCC648334DB54B1717417A59"
     },
     {
       "path": "Firmware/V1/V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
@@ -80,9 +75,9 @@
       "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F"
     },
     {
-      "path": "Firmware/V1/V1_fused_BOOT_USB4F7B521A_APP82E51DEA_compact4_preview_20261025.hex",
+      "path": "Firmware/V1/V1_fused_BOOT_USB4F7B521A_APPB1758369_IMU100_BLE_20261028.hex",
       "bytes": 5745164,
-      "sha256": "63C60326FCB89A83D72862706E7D5406B2EE0F5FE8FE5A3F2217290D4C2093BE"
+      "sha256": "085BFB32F8614B0122BDE1750731A9FA0D008D458385C8C45FA0C95C716BB394"
     },
     {
       "path": "Firmware/V1/V1_USB_service_1.0.108_USB4F7B521A_lifecycle_20261025.hex",
@@ -111,23 +106,23 @@
     },
     {
       "path": "Firmware/V2/README.md",
-      "bytes": 1636,
-      "sha256": "22B276DC2A5959CFF72513BFB1877C6418C5C702C428D255AD350E7A0FFB0531"
+      "bytes": 1132,
+      "sha256": "724BA66193A9C10A5F9520844906FD4F0813BCF155488E7B1CBBA10B8230D9D0"
     },
     {
-      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_C250DF48_TWO500_PREVIEW_20261026.hex",
-      "bytes": 5711372,
-      "sha256": "DCA7644FC18BFD977BB8AD91BBC9326067217937266569422F5BFD1F6CBBF6BE"
+      "path": "Firmware/V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+      "bytes": 581896,
+      "sha256": "593EF1C4D15BBA26DA156B0FF4E2AACF6168E1437CB5F137E5199C07CA9F9919"
     },
     {
-      "path": "Firmware/V2/V2_logger_APP_only_C250DF48_TWO500_PREVIEW_20261026.hex",
-      "bytes": 597735,
-      "sha256": "0FB8C724AF6045D0A6F08E71DA76E0D7D1723EF96F4E21C671F3737CF280D884"
+      "path": "Firmware/V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp",
+      "bytes": 211564,
+      "sha256": "A6F412DA77CACF05E31208D9FC1797B0BC6E8D50298AF4920F640C2F36C00983"
     },
     {
-      "path": "Firmware/V2/V2_logger_APP_update_C250DF48_TWO500_PREVIEW_20261026.xenp",
-      "bytes": 212492,
-      "sha256": "B9FC57821D7C244197CCD50D7BEE8C25286B64CC7D7D60D36E7517B058E5A18D"
+      "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+      "bytes": 2350152,
+      "sha256": "FAEE373FF33E60DF78536E0C4F46F85C3FB5A3C8350059125854E81DD056DD95"
     },
     {
       "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -152,12 +147,12 @@
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
       "bytes": 55808,
-      "sha256": "24AA1EF7F27FB900FD6A69077A335BEF3491F17757E2598FB0BB773E9B3097DF"
+      "sha256": "DBAE6148E779E713F3EB79E4528A4382C930B8BAF65F050E03815994D70C84C9"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
       "bytes": 152064,
-      "sha256": "F6D31C088D09D760F6279CE44152D51233646E08C534B2E6709D82862B4E2297"
+      "sha256": "3E90266BCCC4D3D5CA26B15CC373E77267C033B232F8DED1CDB14D02D0BC0A58"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
@@ -172,12 +167,12 @@
     {
       "path": "NPConfigurator/NPConfigurator.dll",
       "bytes": 375808,
-      "sha256": "F30CD01DDC80DDE660C4FDFF1D0F4E5E12F1924E58027C2810E131E3B238D86B"
+      "sha256": "940E663BC39A6A2A3066310EE12A6EF27244BFB445EC3DB8BA44063DBC5879F6"
     },
     {
       "path": "NPConfigurator/NPConfigurator.exe",
       "bytes": 151552,
-      "sha256": "ACC93A69D93B200B69360AD4EA8E597744A62E57DC4742FA533F3E0D658AE146"
+      "sha256": "6F1D0B5E67AC8EFF03D191E97D85AB449CCF676662BBBCF7283DCD7A241487B4"
     },
     {
       "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
@@ -186,8 +181,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 339968,
-      "sha256": "79ADB2EA8AE32A0446EB72D5906F917251F94C89FC905AA69F942E365850F4AF"
+      "bytes": 388608,
+      "sha256": "454F35A9EE2071637D01EDCC0E80FBE91442552888B39AC63807CA14D9BDDD07"
     },
     {
       "path": "OpenTK.dll",
@@ -201,8 +196,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2198016,
-      "sha256": "023D19C256109965E97C0E0787FD53E271D169C8F6C033AF6A97157EA0DC5EFE"
+      "bytes": 2237440,
+      "sha256": "2576F380B58F783EC4B087B335FC79132A476E0472BB9FC7EB40C844799CDBCC"
     },
     {
       "path": "WILDX_console.exe.config",

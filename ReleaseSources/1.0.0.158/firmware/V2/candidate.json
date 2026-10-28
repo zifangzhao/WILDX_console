@@ -1,0 +1,51 @@
+{
+  "stage": "SOFTWARE_CHECKED_NOT_HARDWARE_TESTED",
+  "role": "V2",
+  "app_crc32": "EC5C2198",
+  "usb_crc32": "A71BDECC",
+  "recovery_crc32": "6408DBB8",
+  "app_bytes": 211436,
+  "app_body_sha256": "3F8AF47A7F6185469394FC19C58F811EB48491342ECA1CCD39B7EA7E44828E89",
+  "app_hex": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_imu_stop_fast_20261028\\package\\V2_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+  "app_update": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_imu_stop_fast_20261028\\package\\V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp",
+  "fused_hex": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_imu_stop_fast_20261028\\package\\V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+  "app_abi": 4,
+  "settings_included": false,
+  "prearm_enabled": false,
+  "first_sync_enabled": false,
+  "closed_loop_enabled": false,
+  "app_imu_profile": "AG200Hz +/-8g +/-2000dps MAG100Hz sparseSNS2; native ticks retained",
+  "retained_usb_imu_profile": "Original A71BDECC AG200Hz MAG25Hz",
+  "automatic_postrecord_payload_readback": false,
+  "host_download_verification_retained": true,
+  "hardware_tested": false,
+  "installed": false,
+  "published": false,
+  "source_manifest_sha256": "4016C1DB72C26AE998F0E1F29098FDFDD853DCD32208B7E50666E73344E4DB05",
+  "files": {
+    "V2_APP_EC5C2198_IMU_STOP_FAST_20261028.hex": {
+      "bytes": 581896,
+      "sha256": "593EF1C4D15BBA26DA156B0FF4E2AACF6168E1437CB5F137E5199C07CA9F9919"
+    },
+    "V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp": {
+      "bytes": 211564,
+      "sha256": "A6F412DA77CACF05E31208D9FC1797B0BC6E8D50298AF4920F640C2F36C00983"
+    },
+    "V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex": {
+      "bytes": 2350152,
+      "sha256": "FAEE373FF33E60DF78536E0C4F46F85C3FB5A3C8350059125854E81DD056DD95"
+    },
+    "V2_recovery_only_6408DBB8_20261012.hex": {
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    "V2_USB_only_A71BDECC_BURST_DOWNLOAD_20261025.hex": {
+      "bytes": 516656,
+      "sha256": "FF89382337AC75918FE12979F0A659B2E4F5499427304F60A780676521CD93F6"
+    },
+    "V2_USB_update_A71BDECC_BURST_DOWNLOAD_20261025.xenp": {
+      "bytes": 187844,
+      "sha256": "870C7DECE27308A031B319C187B170FFF8F9CAAAAED1F3BF951EA93727BA6D21"
+    }
+  }
+}

@@ -1,5 +1,3 @@
-# WILD-X / V2
+# WILD-X V2
 
-[Install WILD-X 1.0.0.151](WILDX_console-Setup-1.0.0.151.exe). V2 APP C250DF48 / USB A71BDECC and the matching catalog are bundled. No separate update ZIP is required.
-
-[USB download throughput](../ReleaseSources/1.0.0.151/README.md).
+[Install 1.0.0.158](WILDX_console-Setup-1.0.0.158.exe), then apply bundled APP EC5C2198 for SD IMU and faster Stop finalization. USB A71BDECC and recovery 6408DBB8 remain unchanged. [Scope and checks](../ReleaseSources/1.0.0.158/README.md).

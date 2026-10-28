@@ -1,7 +1,7 @@
-# V1 USB 1.0.108 / APP 82E51DEA
+# V1 USB 1.0.108 / APP B1758369
 
-Adds compact BLE preview for up to four selected channels with WILD-X 1.0.0.138. Older clients retain single-channel preview. USB firmware, SD format and UART baud (115,200) are unchanged.
+Adds cached, capability-advertised BLE IMU access and finishes sensor initialization before SD capture. Existing compact preview and recording paths are retained. APP accelerometer/gyro: 200 Hz, ±8 g / ±2000 degrees/s; magnetometer: 100 Hz. Unchanged USB retains its existing 25 Hz magnetometer profile.
 
-A bounded P12/20 kHz SD recording passed complete readback, valid IMU snapshots and exact comparison of 27,163 valid AP/LFP preview samples. Preview gaps remain explicit. This is not all-mode or endurance qualification.
+The APP was incrementally compiled, linked and sealed with focused native checks. It has not been flashed or hardware-tested for this update. Pre-arm, new first-sync and closed-loop firmware are excluded. V1's writable SD path already had no automatic full payload reread after Stop; critical finalization and host validation remain.
 
-Includes matching fused and separate component images, excluding configuration. Exact identities and limits are in acceptance.json; admitted source and build evidence are in ReleaseSources/1.0.0.138/firmware.
+Includes matching fused/component images with retained configuration excluded. Exact current identities and limits are in the catalog and [release evidence](../../ReleaseSources/1.0.0.158/firmware/V1/). The older acceptance.json describes the previous APP82 release.

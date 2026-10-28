@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0.158",
+  "hardware_tested_this_update": false,
+  "usb_imu_counts_and_grid": 6040,
+  "sd_imu_parser_and_grid": 170,
+  "sd_imu_actual_export_and_neural_parity": 203,
+  "actual_assembly_ble_imu": 371,
+  "actual_assembly_ble_workflow_ui": 4541,
+  "fake_gatt_transactions": 17,
+  "simulated_v2_catalog": 2331,
+  "sd_stop_ownership_policy": 142,
+  "source_ble_recording_flow": 119,
+  "default_cold_compatibility": 5,
+  "preparation_enabled": false,
+  "np_sample_lock_enabled": false,
+  "canonical_utc_checks": 37,
+  "actual_assembly_media_utc_checks": 11,
+  "limitations": [
+    "Software checks only; new APP images have not been flashed or hardware-tested.",
+    "1250 Hz analog grid repeats held sensor values; NP-byte-origin synchronization is deferred.",
+    "Critical write draining/footer/catalog finalization remains; host/download integrity checks remain."
+  ],
+  "extracted_bundle_catalog_checks": 592
+}

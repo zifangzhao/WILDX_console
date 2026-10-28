@@ -1,0 +1,191 @@
+{
+  "reservations_unchanged": true,
+  "regions": {
+    "ER_IROM1": {
+      "base": "0x08020000",
+      "used": 191432,
+      "reserved": 1433600,
+      "free": 1242168
+    },
+    "RW_IRAM1": {
+      "base": "0x20000000",
+      "used": 13184,
+      "reserved": 16384,
+      "free": 3200
+    },
+    "RW_LIVE_RU0": {
+      "base": "0x20004000",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU1": {
+      "base": "0x20031800",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU2": {
+      "base": "0x2005F000",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU3": {
+      "base": "0x2008C800",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_IRAM_SPARE": {
+      "base": "0x200BA000",
+      "used": 13224,
+      "reserved": 16384,
+      "free": 3160
+    },
+    "RW_NOINIT": {
+      "base": "0x200BE000",
+      "used": 552,
+      "reserved": 8192,
+      "free": 7640
+    },
+    "RW_NP2_DESC": {
+      "base": "0x200C0000",
+      "used": 1216,
+      "reserved": 65536,
+      "free": 64320
+    },
+    "RW_NP_CAPTURE": {
+      "base": "0x200D0000",
+      "used": 755808,
+      "reserved": 772096,
+      "free": 16288
+    },
+    "RW_LIVE_RU4": {
+      "base": "0x2018C800",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU5": {
+      "base": "0x201BA000",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU6": {
+      "base": "0x201E7800",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU7": {
+      "base": "0x20215000",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    },
+    "RW_LIVE_RU8": {
+      "base": "0x20242800",
+      "used": 186368,
+      "reserved": 186368,
+      "free": 0
+    }
+  },
+  "stack_reserved": 8192,
+  "stack_known_max": 4856,
+  "stack_limit": "Unknown cycles, IRQ and indirect targets remain; not hardware high-water",
+  "vectors": {
+    "sp": "0x200BD3A8",
+    "reset": "0x08020379"
+  },
+  "source_manifest_sha256": "4016C1DB72C26AE998F0E1F29098FDFDD853DCD32208B7E50666E73344E4DB05",
+  "baseline_body_sha256": "6BAE122F8DE44471EDF2DB424028442D9F75017D6DA2E9A08A58F88312DE9557",
+  "rebuilt_units": [
+    "xe_np_sensors",
+    "xe_np_sensors_port",
+    "xe_np_np2_live_sd",
+    "xe_np_np2_dual_sd_app"
+  ],
+  "hardware_tested": false,
+  "fixed_capture_preview_uart_symbols": [
+    {
+      "name": "ru0",
+      "address": "0x20004000",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU0)"
+    },
+    {
+      "name": "ru1",
+      "address": "0x20031800",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU1)"
+    },
+    {
+      "name": "ru2",
+      "address": "0x2005f000",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU2)"
+    },
+    {
+      "name": "ru3",
+      "address": "0x2008c800",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU3)"
+    },
+    {
+      "name": "ring",
+      "address": "0x200d0000",
+      "bytes": 737280,
+      "owner": "xe_np_np2_usb_source.o(NP_CAPTURE)"
+    },
+    {
+      "name": "preview",
+      "address": "0x20184000",
+      "bytes": 3384,
+      "owner": "xe_np_np2_sd_ble.o(NP_CAPTURE)"
+    },
+    {
+      "name": "np2_uart",
+      "address": "0x20184d38",
+      "bytes": 5148,
+      "owner": "xe_np_np2_sd_ble.o(NP_CAPTURE)"
+    },
+    {
+      "name": "preview_tx",
+      "address": "0x20186160",
+      "bytes": 256,
+      "owner": "xe_np_np2_sd_ble.o(NP_CAPTURE)"
+    },
+    {
+      "name": "ru4",
+      "address": "0x2018c800",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU4)"
+    },
+    {
+      "name": "ru5",
+      "address": "0x201ba000",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU5)"
+    },
+    {
+      "name": "ru6",
+      "address": "0x201e7800",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU6)"
+    },
+    {
+      "name": "ru7",
+      "address": "0x20215000",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU7)"
+    },
+    {
+      "name": "ru8",
+      "address": "0x20242800",
+      "bytes": 186368,
+      "owner": "xe_np_np2_live_sd.o(NP2_LIVE_RU8)"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+--- C250/writer
++++ IMU-Stop/writer
+@@ -1,3 +1,4 @@
++#include "xe_np_sensors_port.h"
+ #include "xe_np_np2_live_sd.h"
+ #include "xe_np_np2_dual_sd_run.h"
+ #include "xe_np_np2_dual_sd_app.h"
+@@ -5414,8 +5415,10 @@
+ static uint8_t expected(uint32_t position);
+ #endif
+ 
++static uint32_t sensor_tail_publication,sensor_tail_seen;
+ static int configure_format(void)
+ {
++    sensor_tail_publication=0U;sensor_tail_seen=0U;
+     memset(&format,0,sizeof(format));
+     format.mclk_hz=record_mclk_hz;format.sample_hz=record_sample_hz;
+     format.probe_mask=format.live_probe_mask=LIVE_PROBE_MASK;
+@@ -5423,6 +5426,7 @@
+         XE_NP_NP2_USB_V3_FLAG_NO_PAYLOAD_CRC|
+         XE_NP_NP2_USB_V3_FLAG_HOST_SYNC_CHECK|
+         XE_NP_NP2_USB_V3_FLAG_NO_HEADER_CRC;
++    format.flags|=XE_NP_NP2_USB_V3_FLAG_SD_SENSOR_TAIL;
+ #if XE_NP_NP2_SD_DRAIN_OVERFLOW_TEST
+     format.flags|=XE_NP_NP2_USB_V3_FLAG_SOURCE_GAPS;
+ #endif
+@@ -5487,6 +5491,16 @@
+     uint32_t sequence=xe_np_np2_live_sd_mailbox.produced_blocks;
+     XE_NP_Np2Usb_Put64(block+24U,sequence);
+     XE_NP_Np2Usb_Put64(block+32U,first_tick);
++#if XE_NP_NP2_SD_SENSOR_SNAPSHOT_ENABLE
++    /* The sensor port owns packet construction and publication. This path only
++     * copies a fresh immutable SNS2 packet into a CPU-owned header. */
++    uint32_t publication=0U;
++    const uint8_t *packet=XE_NP_SensorsPort_GetSdPacket(&publication);
++    if(packet && (!sensor_tail_seen || publication!=sensor_tail_publication)){
++        memcpy(block+XE_NP_NP2_USB_SD_SENSOR_OFFSET,packet,XE_NP_NP2_USB_SD_SENSOR_BYTES);
++        sensor_tail_publication=publication;sensor_tail_seen=1U;
++    }else memset(block+XE_NP_NP2_USB_SD_SENSOR_OFFSET,0,XE_NP_NP2_USB_SD_SENSOR_BYTES);
++#endif
+     xe_np_np2_live_sd_mailbox.produced_blocks++;
+     partial_ticks=0U;fill_blocks++;
+     if(fill_blocks==BLOCKS_PER_RU){
+@@ -6704,11 +6718,17 @@
+          * before replacing the old geometry or publishing a new session. */
+ #if XE_NP_NP2_SD_DRAIN_OVERFLOW_TEST
+         if(active_target_blocks &&
+-           xe_np_np2_live_sd_mailbox.verified_blocks==active_target_blocks &&
++           !xe_np_np2_live_sd_mailbox.error &&
++           xe_np_np2_live_sd_mailbox.target_blocks==active_target_blocks &&
++           xe_np_np2_live_sd_mailbox.produced_blocks==active_target_blocks &&
++           xe_np_np2_live_sd_mailbox.written_rus==active_target_rus &&
+            XE_NP_Np2CapturePort_RetireStoppedTail(next_tick))return -1;
+ #else
+         if(LIVE_PROBE_MASK==7U && active_target_blocks &&
+-           xe_np_np2_live_sd_mailbox.verified_blocks==active_target_blocks &&
++           !xe_np_np2_live_sd_mailbox.error &&
++           xe_np_np2_live_sd_mailbox.target_blocks==active_target_blocks &&
++           xe_np_np2_live_sd_mailbox.produced_blocks==active_target_blocks &&
++           xe_np_np2_live_sd_mailbox.written_rus==active_target_rus &&
+            XE_NP_Np2CapturePort_RetireStoppedTail((uint64_t)active_target_blocks*STREAM_TICKS))return -1;
+ #endif
+ #endif
+@@ -7449,7 +7469,9 @@
+         }
+     }
+     if(xe_np_np2_live_sd_mailbox.state==XE_NP_NP2_LIVE_SD_DRAINING &&
+-       !dma_active && ready_ru()<0 && xe_np_np2_live_sd_mailbox.written_rus==active_target_rus
++       !dma_active && ready_ru()<0 && xe_np_np2_live_sd_mailbox.written_rus==active_target_rus &&
++       card_idle() && card->Context==SD_CONTEXT_NONE && !(card->Instance->DCTRL&SDMMC_DCTRL_DTEN) &&
++       !(card->Instance->STA&SDMMC_STA_BUSYD0)
+ #if XE_NP_NP2_LIVE_SD_FIXED_SECTORS_TEST
+        && fixed_confirmed_blocks==active_target_rus*RU_BLOCKS
+ #endif
+@@ -7481,14 +7503,10 @@
+             fail(XE_NP_NP2_LIVE_SD_ERROR_STOP,0xD843U);return;
+         }
+ #endif
+-        copy_cost_freeze(); /* Capture/drain complete; verification may lower HCLK. */
+-#if XE_NP_NP2_SD_APPEND_ORDER_TEST
+-        if(SESSION_APPEND && append_begin_verify(spill_address(0U),XE_NP_PSRAM_SIZE_BYTES)){
+-            fail(XE_NP_NP2_LIVE_SD_ERROR_RING,0xD942U);return;
+-        }
+-#endif
+-        verify_started_ms=HAL_GetTick();verify_ru=0U;
+-        xe_np_np2_live_sd_mailbox.state=XE_NP_NP2_LIVE_SD_VERIFYING;
++        copy_cost_freeze(); /* Capture/drain complete; no media reread is implied. */
++        /* All issued writes, overflow owners and source DMA are retired above.
++         * COMPLETE means this durable write drain, not payload reread-verified. */
++        xe_np_np2_live_sd_mailbox.state=XE_NP_NP2_LIVE_SD_COMPLETE;
+         publish();
+     }
+ #if XE_NP_NP2_LIVE_SD_IDLE_SLEEP

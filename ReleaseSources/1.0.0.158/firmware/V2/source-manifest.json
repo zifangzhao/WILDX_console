@@ -1,0 +1,16 @@
+{
+  "scope": "APP SNS2/MAG100 + no automatic postrecord reread. UTC1/catalog/capture/clock/USB/recovery retained. Prearm/first-sync/CL off.",
+  "sources": {
+    "sources\\Inc\\xe_np_np2_usb_wire.h": "4DAFB7DC90974D90558111912218B3BC950FF38D5C35659C99D7FD5D0F4C7D31",
+    "sources\\Inc\\xe_np_sensors.h": "A6353C35BC3CE8D60CA5E83B2893243C7F67157B6A2310B3AEC3D88BB27AF8AA",
+    "sources\\Inc\\xe_np_sensors_port.h": "4275D4A50E233A53C4B1B98B9FD8C4FD1AAB684E8C305E3FCD733AF7C8C37871",
+    "sources\\Src\\xe_np_np2_dual_sd_app.c": "DA9A3B8F55331D365FA15244F5A21CCA901EC0DD6F08652A20C02F4A3F4E7376",
+    "sources\\Src\\xe_np_np2_live_sd.c": "AB6B4A92C86B8953B5D8504D05DC505DF8B6FFCD86F53DFF8D63BFFC4F02468E",
+    "sources\\Src\\xe_np_sensors.c": "6954D83B9067ADB6134C2E4CB0156676C15B981F0B94BDACA82205E3891BCDF5",
+    "sources\\Src\\xe_np_sensors_port.c": "BE7A62BB3EA19B78B121AA30022CF921D83E235037EB72770ACE7A34D23FC07E"
+  },
+  "preimages": {
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_sd_copied_counted_window_20261021\\app-append-pipeline16-ready-first-r1\\writer_counted_window.c": "CECCD584614AB7B017E0123EADCE46412924B96D46725EAC0668FA097E456600",
+    "D:\\Code\\XE_NP_V2\\_artifacts\\v2_release_overlay_20261025\\app\\input-v9\\Core\\Src\\xe_np_np2_dual_sd_app.c": "ED0DCDEE9234377F1A7132F7F8D492FF0462EE951BEC6C91B6A4DA74E91909FD"
+  }
+}

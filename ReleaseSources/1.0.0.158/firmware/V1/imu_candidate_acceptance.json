@@ -1,0 +1,93 @@
+{
+  "stage": "SOFTWARE_CHECKED_CANDIDATE_NO_NEW_HIL",
+  "app_crc32": "B1758369",
+  "usb_crc32_unchanged": "4F7B521A",
+  "compiled_units": [
+    "xe_np_app.c",
+    "xe_np_sensors.c"
+  ],
+  "reused_production_objects": 73,
+  "sensor_driver_native_checks": 160557,
+  "sensor_query_checks": "PASS cached/coherent, invalid/stale/expired/disabled, source ownership and waveform noninterference",
+  "native_evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_sensor_query_20261028\\final",
+  "link_regions": [
+    {
+      "name": "ER_IROM1",
+      "base": 134348800,
+      "size": 280796,
+      "maximum": 1433600
+    },
+    {
+      "name": "RW_IRAM1",
+      "base": 536870912,
+      "size": 98160,
+      "maximum": 98304
+    },
+    {
+      "name": "RW_SD_INPUT",
+      "base": 536969216,
+      "size": 65536,
+      "maximum": 65536
+    },
+    {
+      "name": "RW_BLE_UART_RX",
+      "base": 537034752,
+      "size": 5132,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_SD_TRACE",
+      "base": 537042944,
+      "size": 1312,
+      "maximum": 24576
+    },
+    {
+      "name": "RW_SD_RU0",
+      "base": 537067520,
+      "size": 524288,
+      "maximum": 524288
+    },
+    {
+      "name": "RW_NOINIT",
+      "base": 537649152,
+      "size": 24,
+      "maximum": 8192
+    },
+    {
+      "name": "RW_NP_LLI",
+      "base": 537657344,
+      "size": 384,
+      "maximum": 512
+    },
+    {
+      "name": "RW_CAMERA_STATE",
+      "base": 537657856,
+      "size": 4624,
+      "maximum": 65024
+    },
+    {
+      "name": "RW_NP_CAPTURE",
+      "base": 537722880,
+      "size": 752728,
+      "maximum": 786432
+    },
+    {
+      "name": "RW_SD_RU1",
+      "base": 538574848,
+      "size": 851968,
+      "maximum": 851968
+    }
+  ],
+  "known_stack_bytes": 5368,
+  "stack_allocation_bytes": 8192,
+  "unknown_stack_scope": "Cycles, Untraceable Function Pointers",
+  "hardware_tested": false,
+  "installed_pair_tested": false,
+  "flashed": false,
+  "published": false,
+  "sd_contents_modified": false,
+  "usb_boot_rebuilt": false,
+  "cl_prearm_firstsync_included": false,
+  "fuse_scope": "Direct verified input partition/manifest/vector/bounds merge, retained configuration excluded",
+  "limits": "IMU-only software-checked candidate from production APP82/USB4F. No new hardware or installed-pair test. APP AG200Hz/MAG100Hz, cached sparse BLE query; unchanged USB retains MAG25Hz. 1250Hz analogin is host held-value compatibility, not native sensor rate. No prearm/first-sync/CL code. V1 writable SD already had no automatic full post-Stop payload readback; durable finalization/metadata checks and host verification retained. No new all-mode/endurance qualification."
+}

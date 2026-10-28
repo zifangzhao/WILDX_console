@@ -1,0 +1,223 @@
+{
+  "family": 2,
+  "boardIds": [],
+  "board": "WILD-X V2 / NP2",
+  "release": "V2_IMU_STOP_APPEC5C2198_USBA71BDECC_20261028",
+  "sourceCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
+  "stage": "SOFTWARE_CHECKED_NOT_HARDWARE_TESTED",
+  "appVersion": "build EC5C2198 (IMU and write-drain Stop)",
+  "usbVersion": "build A71BDECC (bounded pipelined SD download)",
+  "recoveryVersion": "build 6408DBB8",
+  "appCrc32": "EC5C2198",
+  "usbCrc32": "A71BDECC",
+  "recoveryCrc32": "6408DBB8",
+  "app": {
+    "path": "V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp",
+    "sha256": "A6F412DA77CACF05E31208D9FC1797B0BC6E8D50298AF4920F640C2F36C00983"
+  },
+  "full": {
+    "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+    "sha256": "FAEE373FF33E60DF78536E0C4F46F85C3FB5A3C8350059125854E81DD056DD95"
+  },
+  "files": [
+    {
+      "path": "V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+      "sha256": "593EF1C4D15BBA26DA156B0FF4E2AACF6168E1437CB5F137E5199C07CA9F9919"
+    },
+    {
+      "path": "V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp",
+      "sha256": "A6F412DA77CACF05E31208D9FC1797B0BC6E8D50298AF4920F640C2F36C00983"
+    },
+    {
+      "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
+      "sha256": "FAEE373FF33E60DF78536E0C4F46F85C3FB5A3C8350059125854E81DD056DD95"
+    },
+    {
+      "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "V2/V2_USB_only_A71BDECC_BURST_DOWNLOAD_20261025.hex",
+      "sha256": "FF89382337AC75918FE12979F0A659B2E4F5499427304F60A780676521CD93F6"
+    },
+    {
+      "path": "V2/V2_USB_update_A71BDECC_BURST_DOWNLOAD_20261025.xenp",
+      "sha256": "870C7DECE27308A031B319C187B170FFF8F9CAAAAED1F3BF951EA93727BA6D21"
+    }
+  ],
+  "limits": "Software/link checked hotfix; no new hardware qualification. APP AG200Hz +/-8g +/-2000dps, MAG100Hz, sparse timestamped SNS2 SD data; no automatic post-Stop payload reread. Durable drain/footer/catalog and host verification retained. USB A71BDECC and recovery6408DBB8 unchanged; retained USB MAG25Hz. Existing capture/clock/catalog/UTC1 ABI retained. Prearm, new first-sync and closed-loop off. Physical first-sample alignment and updated IMU recording integrity await hardware validation.",
+  "appIdentity": {
+    "imageId": 1095782449,
+    "baseAddress": 134348800,
+    "bytes": 211436,
+    "codeCrc32": "EC5C2198",
+    "buildIdHex": "3366386166343761376636313835343639333934666331396335386638313165",
+    "manifestFlags": 0,
+    "minimumLoaderAbi": 4,
+    "generation": 4
+  },
+  "usbIdentity": {
+    "imageId": 1431519793,
+    "baseAddress": 135790592,
+    "bytes": 187716,
+    "codeCrc32": "A71BDECC",
+    "buildIdHex": "6237356438643139633833613061396533323562663435623534663139646363",
+    "manifestFlags": 3,
+    "minimumLoaderAbi": 4,
+    "generation": 4
+  },
+  "previousApps": [
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 211436,
+      "codeCrc32": "EC5C2198",
+      "buildIdHex": "3366386166343761376636313835343639333934666331396335386638313165",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 212364,
+      "codeCrc32": "C250DF48",
+      "buildIdHex": "3662616531323266386465343434373165646632646234323430323834343264",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 205164,
+      "codeCrc32": "8DE56637",
+      "buildIdHex": "3065323336356162653238356433313438356133653061363664623065373031",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 189740,
+      "codeCrc32": "D44907A5",
+      "buildIdHex": "3764353638633737326438376661653530356231316636633730363864313864",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 184716,
+      "codeCrc32": "660A6DA4",
+      "buildIdHex": "3831626561303066323366383536393438343834616237326434636639393834",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 3
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 181680,
+      "codeCrc32": "15FAE47B",
+      "buildIdHex": "6161353261646565316163316662306439343561323666643966343731316133",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 3
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 172400,
+      "codeCrc32": "B60291EE",
+      "buildIdHex": "3935343863363038383263383531373731646136666161323639323265363636",
+      "manifestFlags": 0,
+      "minimumLoaderAbi": 4,
+      "generation": 2
+    },
+    {
+      "imageId": 1095782449,
+      "baseAddress": 134348800,
+      "bytes": 172400,
+      "codeCrc32": "136172A5",
+      "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
+      "manifestFlags": 1,
+      "minimumLoaderAbi": 4,
+      "generation": 0
+    }
+  ],
+  "previousUsb": [
+    {
+      "imageId": 1431519793,
+      "baseAddress": 135790592,
+      "bytes": 184740,
+      "codeCrc32": "13ED1F8E",
+      "buildIdHex": "6330383438373565383131316430643634643535623538393335653966633636",
+      "manifestFlags": 3,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1431519793,
+      "baseAddress": 135790592,
+      "bytes": 184740,
+      "codeCrc32": "1D3262FB",
+      "buildIdHex": "3339316561376634633466393534623737366539653137653433376631356138",
+      "manifestFlags": 3,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1431519793,
+      "baseAddress": 135790592,
+      "bytes": 176608,
+      "codeCrc32": "B6099A0E",
+      "buildIdHex": "6636396235343538613763616539306533633238646637666666643137623630",
+      "manifestFlags": 3,
+      "minimumLoaderAbi": 4,
+      "generation": 4
+    },
+    {
+      "imageId": 1431519793,
+      "baseAddress": 135790592,
+      "bytes": 172512,
+      "codeCrc32": "E323A06A",
+      "buildIdHex": "6465633132346261313030393634363735366335383836323330306432653938",
+      "manifestFlags": 3,
+      "minimumLoaderAbi": 4,
+      "generation": 3
+    },
+    {
+      "imageId": 1431519793,
+      "baseAddress": 135790592,
+      "bytes": 159296,
+      "codeCrc32": "2E07799E",
+      "buildIdHex": "6563333565636665343430343235373164376566303065616437393465323738",
+      "manifestFlags": 1,
+      "minimumLoaderAbi": 4,
+      "generation": 0
+    }
+  ],
+  "sourceProvenance": {
+    "publishedRepository": "zifangzhao/XE_NP",
+    "publishedBranch": "V2",
+    "publishedCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
+    "parentPublishedCommit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
+    "ownerManifest": "V2/source-manifest.json",
+    "ownerManifestSha256": "25C996732D8F08A388A3BF61C96C5BC52E417B90D0F2D5175B87503DD24B2F33",
+    "packageReceiptSha256": "B7F5D0BD1947257B1BB5DA474AD8EF741DE2F7E36EEF04D8CD3A9BFB4BA40C2D",
+    "acceptance": "V2/acceptance.json",
+    "acceptanceSha256": "33C3D8C07676861A5D8AB48263B7FA5318A7B80BC992720A224E3F1544EB71D8",
+    "sourceSnapshotDirectory": "ReleaseSources/V2_TWO500_C250DF48_A71BDECC_20261026",
+    "sourceIndexSha256": "86F51C24ADEF36C5D5425ABE467723F023C7340896D7E2AAAC4B2F6095B87CBF",
+    "canonicalSourceEquivalenceClaimed": false
+  },
+  "sourceCommitScope": "Retained production baseline commit; exact hotfix overlay and retained-object provenance are bound by sourceInputs.",
+  "sourceInputs": {
+    "baselineRelease": "APPC250DF48",
+    "sourceOverlaySha256": "61D5E2EB756DE2A4245ECFEBF87C9780D4B8B9CE0773BD5C88D38E9A4F8D25D2",
+    "evidence": "ReleaseSources/1.0.0.158/firmware/V2"
+  }
+}
