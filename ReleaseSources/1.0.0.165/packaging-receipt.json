@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0.165",
+  "guiCompiledDuringPackaging": false,
+  "firmwareCompiledDuringPackaging": false,
+  "packagePassesThisSession": 2,
+  "firstPackagePublished": false,
+  "firstPackageDisposition": "Rejected private as-built staging contained five superseded unreferenced firmware assets; retained privately. Final staging pruned only those five assets and was repackaged.",
+  "installerExecuted": false,
+  "finalInstallerSha256": "B19AD0D3C7F59FE67F355AB0EF56D176F68BCF699E4054D57CB099E5CF8FB581",
+  "compiler": "NSIS 3.11",
+  "payloadExtraction": "7-Zip 22.01",
+  "payloadFilesVerified": 48,
+  "sourceProvenance": "Controlled source bridge; AssemblyInfo version reconstructed in snapshot only; not an as-built forensic or byte-rebuild proof. See source-freeze.json.",
+  "firmwareSourceProvenance": "../1.0.0.158/firmware/",
+  "firmwareBytesChangedFrom158": false
+}

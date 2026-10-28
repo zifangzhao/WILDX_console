@@ -1,0 +1,20 @@
+Command line defined: "APP_PAYLOAD_DIR=D:\Code\WILDX_console\WILDX_console\_artifacts\v2_handover_release_20261028\candidate165"
+Processing config: C:\Program Files (x86)\NSIS\nsisconf.nsh
+Processing script file: "D:\Code\WILDX_console\WILDX_console\USB512_interface\WILDX_console.nsi" (ACP)
+
+Processed 1 file, writing output (x86-unicode):
+
+Output: "D:\Code\WILDX_console\WILDX_console\_artifacts\v2_handover_release_20261028\candidate165\WILDX_console-Setup-1.0.0.165.exe"
+Install: 3 pages (192 bytes), 1 section (2072 bytes), 378 instructions (10584 bytes), 235 strings (9120 bytes), 1 language table (290 bytes).
+Uninstall: 2 pages (192 bytes), 1 section (2072 bytes), 76 instructions (2128 bytes), 123 strings (4332 bytes), 1 language table (250 bytes).
+
+Using zlib compression.
+
+EXE header size:              152576 / 39936 bytes
+Install code:                   4797 / 22722 bytes
+Install data:                7032286 / 28383459 bytes
+Uninstall code+data:           25979 / 115078 bytes
+CRC (0xAEECED4E):                  4 / 4 bytes
+
+Total size:                  7215642 / 28561199 bytes (25.2%)
+

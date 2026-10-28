@@ -1,8 +1,8 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.158**.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.165**.
 
-[Latest installer](LATEST_INSTALLERS/README.md) adds V1/V2 BLE/SD IMU support and removes V2's automatic full payload reread after Stop. Apply the bundled APP firmware after installing the console. Essential finalization and PC download checks remain. [Usage and software-check limits](ReleaseSources/1.0.0.158/README.md).
+[Latest installer](LATEST_INSTALLERS/README.md) includes V1/V2 BLE/SD IMU support and the shorter Stop finalization. V2's actual BLE-to-USB-to-download route and short three-probe 20 kHz recordings passed without an SWD reset. The matching firmware and catalog are included. [Results, source provenance and limits](ReleaseSources/1.0.0.165/README.md). Pre-arm and first-sample synchronization remain disabled while testing continues.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -63,15 +63,13 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILDX1.0.0.60](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.60.exe). Bundled firmware matches the prior V1USB30k release; V2/camera firmware are unchanged. [Scope and validation](Note/RELEASE_1.0.0.60_20261020.md).
+The current installer is [WILD-X 1.0.0.165](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.165.exe). V2 APP EC5C2198, USB A71BDECC and recovery 6408DBB8 are included; V1 and camera bundles remain unchanged from release 158. No separate update ZIP is needed. [Scope and validation](ReleaseSources/1.0.0.165/README.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 
 [Release manifest](LATEST_INSTALLERS/release-manifest.json) records the installer, every extracted runtime/firmware file, firmware publication provenance and outstanding hardware qualification.
 
-A separate [V1 NP identity-parity candidate](Firmware/V1/README.md), APP `8FD89229` / unchanged USB `40D39075`, is available for parallel user validation. It accepts both NP1 part variants and retains EEPROM-less NRIC support. Software/build checks and APP readback passed; BLE recording and fused programming remain unvalidated. This candidate is not in the 1.0.0.37 installer.
-
-The bundled V2 development firmware is APP `136172A5`, resident USB `2E07799E`, loader `6408DBB8`; the earlier `F4057C04` SD pairing remains historical evidence in the archived 1.0.0.33 release. The 1.0.0.37 installer bundles V1 Neuropixels APP `BC6B506E` / USB `40D39075`; V1 camera firmware is a separate explicitly selected candidate. These firmware owners reconfirmed the artifacts on 2026-10-17. Device-applied NP2013 requests require advertised capability and matching receipts. Degraded selected-shank receipts retain the requested configuration with explicit unverified mapping metadata. V2 auto recovery requires a clean verified prefix and creates a new timestamped recording with an unknown gap. This does not establish uninterrupted capture or fix WinUSB error 31. New installer-pair, endurance and implant qualification remain outstanding.
+Earlier installer and firmware identities remain in [archived releases](LATEST_INSTALLERS/legacy/). The current bundle's exact file identities and qualification scope are recorded in its manifest and release notes.
 
 Requirements:
 

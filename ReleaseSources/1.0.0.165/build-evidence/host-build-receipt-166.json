@@ -1,0 +1,107 @@
+{
+  "scope": "Unpublished local software builds only; no installer, firmware or device action.",
+  "created_utc": "2026-10-28T20:42:59.7018925Z",
+  "published_release": "1.0.0.158",
+  "default_first_sync_enabled": false,
+  "enabled_property": "EnableNpFirstSync=true",
+  "outputs": [
+    {
+      "configuration": "default165",
+      "file": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\first_sync_host_20261028\\default165\\WILDX_console.exe",
+      "version": "1.0.0.165",
+      "bytes": 2350080,
+      "sha256": "2A776C032C2DB84EFE7A5D44281E02245C2B98F3AC61147A8AAC7B2593425881"
+    },
+    {
+      "configuration": "default165",
+      "file": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\first_sync_host_20261028\\default165\\NpV2SdDatExport.dll",
+      "version": "0.0.0.0",
+      "bytes": 446464,
+      "sha256": "4638FD2DBA09BC673DB0D0BFA5174DB1BF2609B684E736D74A4D406C297AD526"
+    },
+    {
+      "configuration": "enabled166",
+      "file": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\first_sync_host_20261028\\enabled166\\WILDX_console.exe",
+      "version": "1.0.0.166",
+      "bytes": 2357248,
+      "sha256": "56C22D8D058871EE0DDC5806B165784237EF2778372C229921C4F435EF27B136"
+    },
+    {
+      "configuration": "enabled166",
+      "file": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\first_sync_host_20261028\\enabled166\\NpV2SdDatExport.dll",
+      "version": "0.0.0.0",
+      "bytes": 446976,
+      "sha256": "C36CE507DD25D26BE4E5B8F58F4F7C658A1C0F8432E62CF72B863BDAE807CD58"
+    }
+  ],
+  "source_hashes_after_166": [
+    {
+      "file": "USB512_interface/USB512_interface/NpFirstSyncSdClient.cs",
+      "sha256": "025903153482B8EA39DC44CBFF57075A1749DDC705B8ACBB3217C8F43F517A4C"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/NpFirstSyncSdAttemptEvidence.cs",
+      "sha256": "CB5DFA2163AACD0079A7EFE0FDF14C8F29BB8BA88F233F11E15BABB1FEB4E0EF"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/Ble/NpBleForm.FirstSync.cs",
+      "sha256": "65167C8B9DB46E4803ECF9005243FC58410679CE4D2AF1819994AFD6E8786954"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/Ble/NpBleForm.Metadata.cs",
+      "sha256": "9CF95BC322F505D072645E10682912D71EB04AB250B0EE4B2990975C18709F25"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+      "sha256": "38BD1998639D9E7D77C323A27127BE0B3523F5D66D46062222FAE402DDA09003"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/WILDX_console.csproj",
+      "sha256": "DDC5D6365E6DC10C5E71456DAF531721C97D9010B5C6FC694FCDEA00C78E778B"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/NpFirstSyncSdUtc.cs",
+      "sha256": "3E5D7AC212FC8074342C2F290D8677600DFCEED52D339FE7DAC42F56A97CDF79"
+    },
+    {
+      "file": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+      "sha256": "7DC58C42B6E3B8B67FAA30DA8D522337E23DF01806E82AA78014F287FB78D67B"
+    },
+    {
+      "file": "Tests/NpFirstSyncSdAttemptEvidenceTests.cs",
+      "sha256": "FA463C0AEB08092FEBBC5FCDC81FEF86CBFE63DE40507899909D8059F9CA24B5"
+    },
+    {
+      "file": "test_first_sync_sd_attempt_evidence.ps1",
+      "sha256": "727B246F27FA2DBC00BF845264A4C45427E2B6C32B79FF0F64A3CE3097DC4177"
+    }
+  ],
+  "checks": {
+    "sd_attempt_persistence": 63,
+    "sd_client": 231,
+    "actual_ble_flow": 94,
+    "matcher_default": 48,
+    "matcher_enabled": 48,
+    "wire": 134,
+    "compiled_legacy_default": 32,
+    "compiled_legacy_enabled": 32,
+    "sd_save_refresh_default": 10,
+    "sd_save_refresh_enabled": 202
+  },
+  "failed_builds": [
+    {
+      "version": "1.0.0.164",
+      "reason": "Missing app project compile entry for NpFirstSyncSdAttemptEvidence.cs; fixed before165/166",
+      "log": "build164.log"
+    }
+  ],
+  "build_warnings": "Two existing SDK CS0649 fields; helper builds clean",
+  "frozen_hil_hosts_unchanged": [
+    "default161",
+    "enabled162"
+  ],
+  "source_clock_qualified": false,
+  "physical_sample_lock_qualified": false,
+  "sd_record_autoassociation": false,
+  "limits": "Host attempt file is not proof of recording, stored identity, T0 or phase. A missing card extension on another PC still cannot identify an opted-in attempt. Settings pointer persists at next normal metadata write."
+}

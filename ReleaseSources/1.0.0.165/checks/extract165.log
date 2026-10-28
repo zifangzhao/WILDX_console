@@ -1,0 +1,22 @@
+
+7-Zip 25.01 (x64) : Copyright (c) 1999-2025 Igor Pavlov : 2025-08-03
+
+Scanning the drive for archives:
+1 file, 7215642 bytes (7047 KiB)
+
+Extracting archive: D:\Code\WILDX_console\WILDX_console\_artifacts\v2_handover_release_20261028\candidate165\WILDX_console-Setup-1.0.0.165.exe
+--
+Path = D:\Code\WILDX_console\WILDX_console\_artifacts\v2_handover_release_20261028\candidate165\WILDX_console-Setup-1.0.0.165.exe
+Type = Nsis
+Physical Size = 7215642
+Method = Deflate
+Solid = -
+Headers Size = 22694
+Embedded Stub Size = 152576
+SubType = NSIS-3 Unicode BadCmd=13
+
+Everything is Ok
+
+Files: 51
+Size:       28383247
+Compressed: 7215642

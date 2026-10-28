@@ -1,37 +1,45 @@
 {
-  "version": "1.0.0.158",
-  "baselineVersion": "1.0.0.151",
-  "releaseId": "WILDX158_IMU_FINALIZATION_20261028",
-  "guiSha256": "2576F380B58F783EC4B087B335FC79132A476E0472BB9FC7EB40C844799CDBCC",
-  "sdkSha256": "454F35A9EE2071637D01EDCC0E80FBE91442552888B39AC63807CA14D9BDDD07",
-  "sourceArchiveSha256": "CC41C5002D23BC081AC135E76987F2992551C767F25AC5FD36B03EF0041B38D9",
+  "version": "1.0.0.165",
+  "baselineVersion": "1.0.0.158",
+  "releaseId": "WILDX165_V2_SD_USB_HANDOVER_20261028",
+  "guiSha256": "2A776C032C2DB84EFE7A5D44281E02245C2B98F3AC61147A8AAC7B2593425881",
+  "sdkSha256": "4638FD2DBA09BC673DB0D0BFA5174DB1BF2609B684E736D74A4D406C297AD526",
+  "catalogSha256": "9DBEA4BBE67E75DE3351BD3DAE1B9417D4F4A454F3E19D56F2E2D55C065DDF67",
+  "sourceArchiveSha256": "947DA77FCD9DF9F2378A856B5458E27207C1AD0253F0AC5FF85822880703BA6A",
+  "packagingResourcesSha256": "083E9C9981D795E4914B73C561807876104EEC5D410EABCF6F709A3A63438E2C",
   "installerExecuted": false,
-  "hardwareTestedThisUpdate": false,
+  "hardwareTestedThisUpdate": true,
+  "hardwareTestScope": "V2 only: short triple-probe20k USB/SD and actual165 BLE2-to-USB2-to-download3 production route; no SWD attach/reset or physical replug in corrected handover scope. V1 has no new release hardware qualification.",
   "preparationEnabled": false,
   "firstSyncEnabled": false,
+  "closedLoopFirmwareIncluded": false,
   "installerPayloadExtractedAndVerified": true,
-  "extractedPayloadFilesVerified": 34,
+  "extractedPayloadFilesVerified": 48,
   "standaloneUpdateRequired": false,
   "separateZipIncluded": false,
   "allModeOrEnduranceQualified": false,
+  "firmwareRuntimeChangedFrom158": false,
   "firmware": [
     {
       "family": 1,
       "app": "B1758369",
       "usb": "4F7B521A",
-      "stage": "SOFTWARE_CHECKED_CANDIDATE_NO_NEW_HIL"
+      "stage": "UNCHANGED158_SOFTWARE_CHECKED_NO_NEW_RELEASE_HIL"
     },
     {
       "family": 2,
       "app": "EC5C2198",
       "usb": "A71BDECC",
-      "stage": "SOFTWARE_CHECKED_NOT_HARDWARE_TESTED"
+      "recovery": "6408DBB8",
+      "stage": "SCOPED_TRIPLE20K_HARDWARE_VALIDATED_COMPONENTS"
     }
   ],
+  "validation": "../ReleaseSources/1.0.0.165/validation-summary.json",
+  "sourceProvenance": "../ReleaseSources/1.0.0.165/source-freeze.json",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.158.exe",
-    "bytes": 7129405,
-    "sha256": "01C82CEAD2D8C3870CD5F7F5740A37743A0D96DBE484F09D340D8DB369064C89"
+    "file": "WILDX_console-Setup-1.0.0.165.exe",
+    "bytes": 7215642,
+    "sha256": "B19AD0D3C7F59FE67F355AB0EF56D176F68BCF699E4054D57CB099E5CF8FB581"
   },
   "payload": [
     {
@@ -40,14 +48,84 @@
       "sha256": "25D1B74B2E963857BF438C25427C8C3E4FE610E8D6BBF4FBA90C085151DAD2E2"
     },
     {
+      "path": "docs/adc-calibration.md",
+      "bytes": 8165,
+      "sha256": "D2F284DFD3F5201331AD59D30B6426198518D8A2E20FEF2CD1675844B6354FFD"
+    },
+    {
+      "path": "docs/catalog-maintenance.md",
+      "bytes": 2971,
+      "sha256": "E0B1EC25981601002DB05E391D65F64C09CEA5E839F3E36FEFF3A6DA8A08F81A"
+    },
+    {
+      "path": "docs/folder-naming.md",
+      "bytes": 1787,
+      "sha256": "161545C86D66CE0D1492C6930C94D110DFC302223B448A24788435D1579B5DEC"
+    },
+    {
       "path": "docs/imu-time-correction.md",
       "bytes": 11391,
       "sha256": "35BFDA2F5DF6941FFBDF6CDC4B31E9170030C143DFEF76EB5AECBB0AE34B1400"
     },
     {
+      "path": "docs/network-time.md",
+      "bytes": 2338,
+      "sha256": "D88F3AFF026D8D5CBD4260E9B0E94040DEDDAA561A23A0E7F22220B77BED4288"
+    },
+    {
+      "path": "docs/recording-bundles.md",
+      "bytes": 2619,
+      "sha256": "1D7BA3E3425156382AE8CA9FEE7C520DE82393FAF82677145D6B163E1FA2771E"
+    },
+    {
       "path": "docs/recording-time-correction.md",
       "bytes": 13077,
       "sha256": "7C1A38CE78C8E0D3F11164FD3E9434761327E2483D3B6E14B50D6752A8800AD9"
+    },
+    {
+      "path": "docs/universal-workflow.md",
+      "bytes": 9843,
+      "sha256": "07B88B3A29BF44A2138A99A678361C821645BC707E7A4857CDF5DAFD33E29E55"
+    },
+    {
+      "path": "docs/usb-media-preview.md",
+      "bytes": 4615,
+      "sha256": "D585A7BA0F0FA758A16456C1A921BDC7B95487EEBB406980C7A215E12C25DEE8"
+    },
+    {
+      "path": "docs/v2-ble-connect-cancel.md",
+      "bytes": 2895,
+      "sha256": "537416966B77F0933B93BEDDBA0580277030C13D3E602C7BC1196D892B60897F"
+    },
+    {
+      "path": "docs/v2-ble-frame-write.md",
+      "bytes": 3126,
+      "sha256": "AC7F50EDE1226CD506CB02BD3F09EE164F189F80C433E89059C9DF756A916AD6"
+    },
+    {
+      "path": "docs/v2-ble-integration.md",
+      "bytes": 6510,
+      "sha256": "59ACC33B61ABEB14150859E4148BA2100BA3B6BC0A5AD5071365A24093FA18BF"
+    },
+    {
+      "path": "docs/v2-ble-sync16.md",
+      "bytes": 4088,
+      "sha256": "0530FB17827A7F3616777A6AC9389126328E2DE8004748C5E05017F1A05013CA"
+    },
+    {
+      "path": "docs/v2-ble-warm-timeout.md",
+      "bytes": 2779,
+      "sha256": "E995C310FE1A989D65700C68C26D3317325094B26E3C74B632A43A968DFF97BD"
+    },
+    {
+      "path": "docs/v2-sd-v12.md",
+      "bytes": 5442,
+      "sha256": "89AE2AAF5BA86150A2458AEACF5621BA55CD00AC2FD8889D12090ABA1A848EE9"
+    },
+    {
+      "path": "docs/v2-usb-selftest-integration.md",
+      "bytes": 5210,
+      "sha256": "B757D7D3B938FE1680F717F983BAC476F1D032CD08026547AFF5952905297ADA"
     },
     {
       "path": "Firmware/README.md",
@@ -147,12 +225,12 @@
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
       "bytes": 55808,
-      "sha256": "DBAE6148E779E713F3EB79E4528A4382C930B8BAF65F050E03815994D70C84C9"
+      "sha256": "52747A9EB499DF4B073E0650F1DB6FE03919531655CFC1E3D871AF31BFB77AED"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
       "bytes": 152064,
-      "sha256": "3E90266BCCC4D3D5CA26B15CC373E77267C033B232F8DED1CDB14D02D0BC0A58"
+      "sha256": "D447396DDF0004BD78F7DE04109CB80CEC3AE3D02709096265CAD1B55BA453E4"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
@@ -167,12 +245,12 @@
     {
       "path": "NPConfigurator/NPConfigurator.dll",
       "bytes": 375808,
-      "sha256": "940E663BC39A6A2A3066310EE12A6EF27244BFB445EC3DB8BA44063DBC5879F6"
+      "sha256": "455969EA12B1F556A7A592960DE8BAB86E66E5366D93A7E7548C471CE6121E3F"
     },
     {
       "path": "NPConfigurator/NPConfigurator.exe",
       "bytes": 151552,
-      "sha256": "6F1D0B5E67AC8EFF03D191E97D85AB449CCF676662BBBCF7283DCD7A241487B4"
+      "sha256": "957FC197FEABFCE7EC4673B55C425BEC38260401CFEDE891263EAA0246E396B3"
     },
     {
       "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
@@ -181,8 +259,8 @@
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 388608,
-      "sha256": "454F35A9EE2071637D01EDCC0E80FBE91442552888B39AC63807CA14D9BDDD07"
+      "bytes": 446464,
+      "sha256": "4638FD2DBA09BC673DB0D0BFA5174DB1BF2609B684E736D74A4D406C297AD526"
     },
     {
       "path": "OpenTK.dll",
@@ -196,8 +274,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2237440,
-      "sha256": "2576F380B58F783EC4B087B335FC79132A476E0472BB9FC7EB40C844799CDBCC"
+      "bytes": 2350080,
+      "sha256": "2A776C032C2DB84EFE7A5D44281E02245C2B98F3AC61147A8AAC7B2593425881"
     },
     {
       "path": "WILDX_console.exe.config",

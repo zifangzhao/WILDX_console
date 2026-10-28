@@ -1,0 +1,24 @@
+D:\Code\WILDX_console\WILDX_console\USB512_interface\USB512_interface\XeNpStreamDecoder.cs(33,36): warning CS0649: Field 'XeNpStreamDecoder.Gap' is never assigned to, and will always have its default value null [D:\Code\WILDX_console\WILDX_console\Neuropixels\SD\NpV2SdDatExport.csproj]
+D:\Code\WILDX_console\WILDX_console\USB512_interface\USB512_interface\NeuropixelsPreviewForm.cs(445,31): warning CS0649: Field 'NeuropixelsPreviewForm.RecordingInfo' is never assigned to, and will always have its default value null [D:\Code\WILDX_console\WILDX_console\Neuropixels\SD\NpV2SdDatExport.csproj]
+  NpV2SdDatExport -> D:\Code\WILDX_console\WILDX_console\_artifacts\first_sync_host_20261028\enabled166\NpV2SdDatExport.dll
+  Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
+  1.0.0.166
+  WILDX_console -> D:\Code\WILDX_console\WILDX_console\_artifacts\first_sync_host_20261028\enabled166\WILDX_console.exe
+    Determining projects to restore...
+    All projects are up-to-date for restore.
+    NPConfigurator -> D:\Code\WILDX_console\WILDX_console\_artifacts\first_sync_host_20261028\enabled166\NPConfigurator\NPConfigurator.dll
+  
+  Build succeeded.
+      0 Warning(s)
+      0 Error(s)
+  
+  Time Elapsed 00:00:00.57
+    Determining projects to restore...
+    All projects are up-to-date for restore.
+    XeNpFirmwareUpdater -> D:\Code\WILDX_console\WILDX_console\_artifacts\first_sync_host_20261028\enabled166\FirmwareUpdater\XeNpFirmwareUpdater.dll
+  
+  Build succeeded.
+      0 Warning(s)
+      0 Error(s)
+  
+  Time Elapsed 00:00:00.56

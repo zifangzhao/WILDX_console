@@ -1,0 +1,27 @@
+[
+  {
+    "path": "Firmware/V1/V1_APP_82E51DEA_compact4_preview_20261025.hex",
+    "sha256": "2945F6523C3187BB226472149F203847A1D37D8BE6B0D9E6F30052239AF3F174",
+    "reason": "Superseded firmware absent from current catalog; immutable as-built original retained privately"
+  },
+  {
+    "path": "Firmware/V1/V1_fused_BOOT_USB4F7B521A_APP82E51DEA_compact4_preview_20261025.hex",
+    "sha256": "63C60326FCB89A83D72862706E7D5406B2EE0F5FE8FE5A3F2217290D4C2093BE",
+    "reason": "Superseded firmware absent from current catalog; immutable as-built original retained privately"
+  },
+  {
+    "path": "Firmware/V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_C250DF48_TWO500_PREVIEW_20261026.hex",
+    "sha256": "DCA7644FC18BFD977BB8AD91BBC9326067217937266569422F5BFD1F6CBBF6BE",
+    "reason": "Superseded firmware absent from current catalog; immutable as-built original retained privately"
+  },
+  {
+    "path": "Firmware/V2/V2_logger_APP_only_C250DF48_TWO500_PREVIEW_20261026.hex",
+    "sha256": "0FB8C724AF6045D0A6F08E71DA76E0D7D1723EF96F4E21C671F3737CF280D884",
+    "reason": "Superseded firmware absent from current catalog; immutable as-built original retained privately"
+  },
+  {
+    "path": "Firmware/V2/V2_logger_APP_update_C250DF48_TWO500_PREVIEW_20261026.xenp",
+    "sha256": "B9FC57821D7C244197CCD50D7BEE8C25286B64CC7D7D60D36E7517B058E5A18D",
+    "reason": "Superseded firmware absent from current catalog; immutable as-built original retained privately"
+  }
+]

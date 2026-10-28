@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "release": "1.0.0.165",
+  "publication_status": "Final release validation summary",
+  "created_utc": "2026-10-28T22:32:52.180343Z",
+  "sanitization": "Whitelisted results only. Local paths, full device UID, BLE address, card identity, previous-record identifiers, raw wire and payload arrays omitted. Original receipts are identified by hash.",
+  "installer": {
+    "file": "WILDX_console-Setup-1.0.0.165.exe",
+    "bytes": 7215642,
+    "sha256": "B19AD0D3C7F59FE67F355AB0EF56D176F68BCF699E4054D57CB099E5CF8FB581",
+    "extraction_tool": "7-Zip 22.01",
+    "runtime_files_matched": 48,
+    "unexpected_runtime_files": 0,
+    "stale_unreferenced_firmware_absent": true,
+    "installer_executed": false,
+    "app_or_firmware_recompiled_for_package": false
+  },
+  "host": {
+    "gui_sha256": "2A776C032C2DB84EFE7A5D44281E02245C2B98F3AC61147A8AAC7B2593425881",
+    "sdk_sha256": "4638FD2DBA09BC673DB0D0BFA5174DB1BF2609B684E736D74A4D406C297AD526",
+    "first_sync_opt_in_enabled": false,
+    "preparation_entrypoints_enabled": false
+  },
+  "firmware": {
+    "v2_app_crc32": "EC5C2198",
+    "v2_usb_crc32": "A71BDECC",
+    "v2_recovery_crc32": "6408DBB8",
+    "runtime_changed_for_handover": false,
+    "whole_fused_image_freshly_flashed": false,
+    "v1_and_camera_bundle_changed": false,
+    "new_v1_release_hil": false
+  },
+  "handover": {
+    "actual_console165_handlers": true,
+    "ble_mode_handler_ack": true,
+    "ble_disconnected_after_ack": true,
+    "fresh_npc2_caps_ports": [
+      0,
+      1,
+      2
+    ],
+    "uid_family_peer_epoch_binding_verified": true,
+    "caps_supported_model": 4,
+    "caps_available_mask": 7,
+    "caps_errors": 0,
+    "observed_after_ble_usb_service_mode": 2,
+    "actual_download_list_handler_passed": true,
+    "listed_record_count": 321,
+    "expected_owned_record_present": true,
+    "high_speed_usb": true,
+    "route": "Actual SdTestDownloadMode BLE USB2 acknowledgement -> same-device USB2 -> actual ListAsync/EnsureDownload EP0 USB3 -> saved native DAT export",
+    "correction": "Earlier private HIL mislabeled BLE UPDATE1 as USB. Corrected HIL uses USB_STREAM2; production165 callers were already correct. No firmware fix claimed.",
+    "swd_attach_count": 0,
+    "swd_reset_count": 0,
+    "physical_reconnect_or_power_cycle_count": 0,
+    "final_service_mode": 2,
+    "final_service_busy": 0
+  },
+  "usb_test": {
+    "profile": "3 probes at 20,000 samples/s",
+    "complete": true,
+    "received_blocks": 7280,
+    "verified_transfers": 7280,
+    "raw_drops": 0,
+    "decoded_drops": 0,
+    "wire_bytes": 339189760,
+    "data_seconds": 9.331,
+    "scope": "Short capture; transfer/decoder observations do not certify every ADC bit or all profiles/cards/endurance"
+  },
+  "sd_test": {
+    "profile": "3 probes at 20,000 samples/s",
+    "committed_blocks": 7812,
+    "ap_rows_per_probe": [
+      199986,
+      199986,
+      199986
+    ],
+    "stored_complete": true,
+    "sdk_lossless_reported": true,
+    "observed_source_loss": false,
+    "source_gaps": 0,
+    "missing_source_ticks": 0,
+    "dropped_blocks": 0,
+    "overflow_events": 0,
+    "producer_discarded_ticks": 0,
+    "prior_catalog_entries_preserved": 320,
+    "new_owned_complete_record_retained": true,
+    "readback_scope": "Production exporter completed exact metadata/header/sequence/source-span/native SuperSync/segment-row checks. Arbitrary ADC bit errors and whole-superframe loss are not excluded.",
+    "raw_transport_read_only": {
+      "bytes": 395433984,
+      "seconds": 8.345,
+      "MB_per_second": 47.383,
+      "scope": "One measured native raw-transfer window; not a sustained throughput guarantee"
+    }
+  },
+  "imu": {
+    "saved_sns2_packets": 1925,
+    "crc_valid": 1925,
+    "valid_ag": 1925,
+    "distinct_mag": 967,
+    "ag_sequence_span": 1924,
+    "mag_sequence_span": 966,
+    "observed_span_ms": 9999,
+    "maximum_saved_ag_gap_ms": 7,
+    "maximum_saved_mag_gap_ms": 18,
+    "imu_error_values": [
+      0
+    ],
+    "environment_error_values": [
+      7
+    ],
+    "environment_sensing_qualified": false,
+    "saved_grid_hz": 1250,
+    "saved_held_grid_rows": 12500,
+    "held_grid_complete": true,
+    "scope": "Saved producer observations and CRC/counters, with held-value compatibility grid; no physical FIFO/native-conversion coverage or NP phase lock"
+  },
+  "stop_and_validation": {
+    "footer_offset112_written_rus": 1953,
+    "footer112_verified_blocks_claim": false,
+    "normal_stop": "Accepted writes drained, footer/catalog committed; unchanged no automatic full payload reread policy",
+    "automatic_reread_current_run_counter_claim": false,
+    "owner_evidence": "Not exposed at footer112 (written RUs). Same exact EC5 body independently measured verify_ms0/verified_blocks0 in prior baseline; source behavior unchanged.",
+    "independent_pc_export_completed": true
+  },
+  "timing": {
+    "first_sample_utc_qualified": false,
+    "physical_sample_lock_qualified": false,
+    "native_imu_conversion_phase_locked": false,
+    "held_grid_np_byte_or_utc_alignment_qualified": false
+  },
+  "source_provenance": {
+    "source_files": 192,
+    "source_bytes": 3407219.0,
+    "packaging_documents": 16,
+    "controlled_source_bridge": true,
+    "as_built_forensic_claim": false,
+    "assembly_info_reconstruction": {
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+      "kind": "EXPLICIT_VERSION_ATTRIBUTE_RECONSTRUCTION_ONLY",
+      "original_workspace_version": "1.0.0.166",
+      "reconstructed_snapshot_version": "1.0.0.165",
+      "attribute_replacements": 2,
+      "original166_sha256": "7DC58C42B6E3B8B67FAA30DA8D522337E23DF01806E82AA78014F287FB78D67B",
+      "reconstructed165_sha256": "6DAFEB8E1ECD1D1F28E3CE1DC27388C639C5E46A8CE9C0AFF3077F4DC285AC05",
+      "workspace_file_modified": false,
+      "claim": "Controlled source bridge; not a recovered as-built source artifact"
+    },
+    "recorded166_source_pins_checked": 10,
+    "source_zip_sha256": "947DA77FCD9DF9F2378A856B5458E27207C1AD0253F0AC5FF85822880703BA6A",
+    "packaging_resources_zip_sha256": "083E9C9981D795E4914B73C561807876104EEC5D410EABCF6F709A3A63438E2C"
+  },
+  "limits": [
+    "Short triple20k tests on this DelkinV90; not all modes/cards/endurance",
+    "Sparse USB native observations; SD observed updates not physical conversion completeness",
+    "Held1250Hz grid has unknown NP byte/UTC alignment",
+    "Whole fused image not freshly flashed; exact checked components used",
+    "Recovery/BLE1 not qualified by these USB2 tests",
+    "One V2 logger and one Delkin V90 card, short tests only",
+    "V1 receives no new release HIL qualification",
+    "Automatic reread cannot be inferred from footer offset112",
+    "Installer was extracted and compared, not executed"
+  ],
+  "receipts": [
+    {
+      "source": "v2-handover/functional-acceptance.json",
+      "sha256": "C599D87EAD097573209F58888B5D2A01C22660EA62AC9E561CDBA1AB87DB3353",
+      "bytes": 3761
+    },
+    {
+      "source": "v2-handover/sd165-export/saved-imu-check.json",
+      "sha256": "8D53EB8593BEF5FD4CE64CD087975D5383BFCA04BB4B0ABD2F4804ABAA121FCF",
+      "bytes": 694
+    },
+    {
+      "source": "v2-handover/sd165-export/readback.json",
+      "sha256": "62AC23C4E3209B6F93D537B174B0AB09655943B4455AA9B96EA4F97077DA0AA8",
+      "bytes": 7185
+    },
+    {
+      "source": "v2-handover/actual-sdtest-handoff-r2/handover.json",
+      "sha256": "64EB52A34F788BDD0EDB2C56A1625F8DFE2E3495272571D157F62D64D81530FF",
+      "bytes": 3255
+    },
+    {
+      "source": "v2-handover/actual-download-list-observed-path/handover.json",
+      "sha256": "014BA2904A15661B0CA8E051DE2C9C19FBA4E8BD7A223191A0DD561DBB109386",
+      "bytes": 190706
+    },
+    {
+      "source": "v2-handover/actual-post-record-usb-status/before.json",
+      "sha256": "64F32FCF0F2FF77136AFA8F0AC6D0CA6B4A29F72B9575464519E857EBB258496",
+      "bytes": 301
+    },
+    {
+      "source": "v2-handover/final-usb-status-ready/before.json",
+      "sha256": "7084D51165CCDE22FA20EC610386A95004146584EBB85FC814C33D9765FCC194",
+      "bytes": 303
+    },
+    {
+      "source": "v2-handover/sd165-triple20k-ready/report.json",
+      "sha256": "255EF732EF87AE03B6D320020536324E4736C34CFB111447C3FDB6B9C0275C8A",
+      "bytes": 3174
+    },
+    {
+      "source": "console165/source165/source-freeze.json",
+      "sha256": "8FE4CA8E39A4084B530605B82F0323422FE66ACEE67C3AAA7DA663A825E55F52",
+      "bytes": 101049
+    },
+    {
+      "source": "console165/source165/compiled-sources.zip",
+      "sha256": "947DA77FCD9DF9F2378A856B5458E27207C1AD0253F0AC5FF85822880703BA6A",
+      "bytes": 943187
+    },
+    {
+      "source": "console165/source165/packaging-resources.zip",
+      "sha256": "083E9C9981D795E4914B73C561807876104EEC5D410EABCF6F709A3A63438E2C",
+      "bytes": 43091
+    },
+    {
+      "source": "console165/console165-freeze.json",
+      "sha256": "5129BE9748099D6D74F933DF1E6DA366516D91AF91E6921E0B9CE3FB16884CE6",
+      "bytes": 9080
+    },
+    {
+      "source": "console165/installer165-verification.json",
+      "sha256": "C8168967524249C1EABF26748D8DC0BD584E47A8F816E2867DE4C1CA387E9EEE",
+      "bytes": 8996
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+    "scope":  "Offline actual165 catalog/asset validation only; no device or installer action",
+    "utc":  "2026-10-28T22:31:44.8461100Z",
+    "console_sha256":  "2A776C032C2DB84EFE7A5D44281E02245C2B98F3AC61147A8AAC7B2593425881",
+    "catalog_sha256":  "9DBEA4BBE67E75DE3351BD3DAE1B9417D4F4A454F3E19D56F2E2D55C065DDF67",
+    "actual_loader":  "USB512_interface.NpFirmwareCatalog.Load",
+    "powershell_edition":  "Desktop",
+    "result":  "PASS",
+    "firmware_status":  "Existing158 catalog and component bytes; V2 hardware scope recorded separately in release validation"
+}
