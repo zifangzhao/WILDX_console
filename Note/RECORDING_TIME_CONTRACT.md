@@ -2,6 +2,14 @@
 
 2026-10-29. Implements the user's single-start-time direction for USB and BLE-controlled SD recordings. This is the shared development contract; it is not a claim that either new recording path has passed validation.
 
+Current scope: the user paused new IMU-grid/buffer work, builds, tests and hardware. The separately requested source-only removal of optional sensor fine timestamps and synchronization of this plan may proceed. The grid below is deferred design, not authorization to resume it.
+
+## Remove optional sensor fine timestamps
+
+Remove the per-observation fine-timestamp producer, its calls and carrier/sidecar packing from new firmware. A default-off feature flag is insufficient for the user's revised request; do not keep a diagnostic switch that reactivates this mechanism. Preserve existing sensor core ABIs, sequence/validity/error fields, relative indices and sparse gaps. Keep historical files and readers intact.
+
+Retain the independent one-time RTC/T0 and accepted PC-anchor proof, including the kind5 source-root record required by the existing wire contract. Removing sensor-observation timing does not remove the recording origin. No new grid, buffer allocation or recording-format extension is part of this source-removal slice.
+
 ## One recording origin
 
 - `T0` is the first validated NP STARTBYTE of the lowest selected probe, mapped to the MCU hardware RTC. The RTC uses HSE-derived timekeeping; no silent LSI substitution qualifies this clock.
@@ -20,7 +28,7 @@ For each file, store its layout, exact rational rate and genuine first source of
 
 Do not assign new independent UTC clocks to each stream. Keep enough relative offset/index information to locate gaps and streams that actually begin later. A camera/audio or external GPIO source with an independent clock needs a demonstrated counter/edge relationship; a nominal rate alone cannot prove that relationship.
 
-## IMU snapshot grid
+## Deferred IMU snapshot grid
 
 - Target **1250 Hz**, matching the user's WILD-compatible request: one slot every 800 µs. NP rates 7.5/15/20/30 kHz contain respectively 6/12/16/24 NP samples per slot. A 250 Hz producer proposal does not replace this target.
 - Sample the latest cached IMU values at a real HSE-derived slot boundary. Repeated or missed underlying BMX160 conversions are acceptable, as the user confirmed. This grid timestamps the cached snapshot, not physical sensor conversion.
@@ -34,13 +42,13 @@ One shared slot layout/capability declaration must be agreed before firmware add
 
 ## Host output and compatibility
 
-Normal exports use the shared origin plus file/rate/index/gap metadata. Make redundant raw timing journals and per-observation timing CSVs an explicit diagnostic option after their callers are audited; preserve historical files and readers. Do not delete existing recordings or test evidence.
+Normal exports use the shared origin plus file/rate/index/gap metadata. New recordings must not produce per-observation fine-timestamp archives from the removed mechanism. Retain historical readers for existing files. Any retained one-time recording-origin diagnostics are distinct from the removed sensor producer; preserve existing recordings and test evidence.
 
 Both USB and SD exporters consume the same validated origin. Old firmware and old recordings retain their current explicitly labeled estimates/unknown timing. Neither Start-click time nor packet arrival time substitutes for missing device evidence.
 
 ## Parallel ownership and development acceptance
 
-- V1 owner: existing startup/APP readiness issue, one-time origin emission, default-off optional observation timestamp work, and platform grid/timer/buffer fit.
-- V2 owner: one-time HSE/RTC origin, grid/timer/buffer fit and the common slot carrier proposal.
+- V1 owner: authorized source-only removal of the optional observation timestamp mechanism, preserving one-time origin emission. Startup/APP validation and grid/timer/buffer work remain paused.
+- V2 owner: coordinate the same removal and retained HSE/RTC origin contract. New grid/timer/buffer and carrier work remain paused.
 - WILDX integrator: shared field semantics, normal export/diagnostic selection, index-based reconstruction and old-recording compatibility. Binary packing changes require this common agreement once, not separate incompatible V1/V2 versions.
 - During development, validate the affected USB/SD recording paths using [the recording checklist](RECORDING_VALIDATION.md): NP continuity, actual grid cadence/slot gaps, no NP impact, correct one-time anchor and PC provenance. Reuse existing raw recordings for parser corrections. Publication reuses the completed evidence.
