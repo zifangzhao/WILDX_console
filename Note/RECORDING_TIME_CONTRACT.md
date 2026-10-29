@@ -2,7 +2,7 @@
 
 2026-10-29. Implements the user's single-start-time direction for USB and BLE-controlled SD recordings. This is the shared development contract; it is not a claim that either new recording path has passed validation.
 
-Current scope: the user explicitly resumed V1 deterministic scheduling development and validation in the V1 chat. V1 can complete the authorized implementation and scoped validation work package with its existing device/data protections. V2 currently has a separate source-only sensor-timestamp removal request; V2 grid integration and hardware do not resume implicitly. Coordinate shared serialization before either implementation changes a binary format.
+Current scope: the user resumed coordination to finish deterministic timing development for V1 and V2. Both owners can implement and validate the affected recording paths under the existing lab-device authorization. Source/build work proceeds concurrently; shared hardware leases remain exclusive and existing recordings/settings must be preserved. Coordinate shared serialization before either implementation changes a binary format.
 
 ## Remove optional sensor fine timestamps
 
@@ -53,7 +53,7 @@ There is no accepted new wire carrier yet. Internal slot bookkeeping is separate
 
 ### V1 control and wrapper reservation
 
-This reservation is for V1 only; it does not claim those selectors are free in V2 or resume V2 implementation.
+This reservation is for V1 only; it does not claim those selectors are free in V2. V2 development is resumed, but must establish its own compatible control and carrier before use.
 
 - USB vendor request `0x81`: `C0`, value/index0, length32 returns `NSGC`, u32 version1 at4, flags at8 (supported1, selected2, capture-frozen4), UID words at12/16/20, control revision at24, CRC32 over bytes0..27 at28. `40`, value0/1, index0, length0 selects legacy/NSG1 while actually idle. All other tuples are rejected. The existing `0x80` timing INFO feature selections remain unchanged.
 - BLE V1 `NLD1` version1 operation10 selects mode0/1 in word4; words5..14 are zero, word3 is a nonzero transaction ID, CRC is at60. Use the existing matching `NLR1` receipt. STATUS flags reserve supported `0x20000000` and selected `0x40000000`; closed-loop `0x80000000` remains unchanged. Missing/unsupported read-only capability does not select grid. A lost mutation receipt is unknown and needs state reconciliation, not assumed failure or blind replay.
@@ -68,6 +68,8 @@ These interfaces require a matched new host/writer and targeted development vali
 
 Header: magic `NSG1` at0, version1 at4, encoding1 at5, header size48 at6, first slot u64 at8, slot count u16 at16, row bytes36 at18, observed/AG-valid/MAG-valid/AG-repeat/MAG-repeat/error u16 masks at20/22/24/26/28/30, payload bytes u32 at32, zero flags at36, nonzero capture generation at40, CRC32 at44. CRC covers bytes0..43 then payload48..end. Only observed rows occur in the payload, in ascending mask-bit order. Unknown mask bits, invalid subsets, overflow, wrong lengths and CRC failures are rejected. UID/token, parent generation and allowed NP source window remain carrier/importer admission checks; the codec cannot establish a clock origin by itself.
 
+One session-level `NSGP` v1 companion carries the grid phase bound, not an additional UTC or per-slot timestamps. Its 84-byte little-endian body has magic at0, version u16 at4, size u16 at6, UID12 at8, session/generation/source-epoch/counter-domain u32 at20/24/28/32, token u64 at36, first accepted slot u64 at44, lower/upper NP-source-tick offset numerators i64 at52/60, common denominator u32 at68, maximum relative slot-jitter ticks u32 at72, flags u32 at76 and CRC32 over bytes0..79 at80. Flags1/2 independently attest interval/jitter validity. Unknown interval uses `Int64.MinValue` for both bounds and denominator0; unknown jitter uses `UInt32.MaxValue`. Valid bounds are nonnegative and ordered. The host binds all identity/context fields to the final NPSTART/kind5 and preserves the phase interval separately from RTC-to-NP uncertainty. Missing or unproven phase remains unknown and cannot imply sample-zero lock. One NSGP may precede NSG1 batches in the declared grid carrier.
+
 The pure codec passed 49 managed checks, 291 native checks and 34 shared vectors with exact byte agreement. No application/SDK build, producer integration, timer or hardware validation is implied. Transport declaration and carrier parsers are separate development work.
 
 ## Host output and compatibility
@@ -79,6 +81,6 @@ Both USB and SD exporters consume the same validated origin. Old firmware and ol
 ## Parallel ownership and development acceptance
 
 - V1 owner: resumed deterministic scheduler/queue development and scoped validation, plus startup/APP readiness and the retained one-time origin proof. Keep the optional observation timestamp mechanism removed.
-- V2 owner: source-only sensor timestamp removal and retained HSE/RTC origin compatibility. Shared format review may continue; V2 grid implementation and hardware need their own resumed scope.
+- V2 owner: deterministic grid implementation and scoped validation, preserving sensor timestamp removal and the retained HSE/RTC origin contract. Establish transport capacity and compatible controls before activation.
 - WILDX integrator: shared field semantics, normal export/diagnostic selection, index-based reconstruction and old-recording compatibility. Binary packing changes require this common agreement once, not separate incompatible V1/V2 versions.
 - During development, validate the affected USB/SD recording paths using [the recording checklist](RECORDING_VALIDATION.md): NP continuity, actual grid cadence/slot gaps, no NP impact, correct one-time anchor and PC provenance. Reuse existing raw recordings for parser corrections. Publication reuses the completed evidence.

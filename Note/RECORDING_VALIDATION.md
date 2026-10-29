@@ -26,15 +26,17 @@ A relevant failure sends the change back to development. Software checks or anot
 
 Snapshot from owner reports on 2026-10-29. Estimates are planning allowances, not measured completion promises. This documentation correction does not start hardware work.
 
-The user subsequently resumed V1 deterministic scheduling development and validation. V1 proceeds as one authorized work package; it does not resume V2 grid/hardware work. V2's current request is source-only sensor timestamp removal. Pending estimates are planning allowances, not running countdowns. Current shared scope and carrier constraints are recorded in the [time contract](RECORDING_TIME_CONTRACT.md).
+The user resumed coordination to finish deterministic timing development for V1 and V2. Each owner proceeds as one authorized work package. Source/build work can overlap; hardware retains the existing shared lease. Pending estimates are planning allowances, not running countdowns. Current shared scope and carrier constraints are recorded in the [time contract](RECORDING_TIME_CONTRACT.md).
+
+V2's TIM3 source edit is currently blocked by automatic approval review, which reports that its earlier paused/review-only scope still applies even after the user's affirmative reply. The user has been asked for a direct explicit resume statement in the V2 chat. V1 and independent host work continue. No V2 timer edit or hardware change has occurred.
 
 | Item | State | Remaining estimate / checkpoint |
 |---|---|---|
 | V2 USB helper build/self-test | Done: actual embedded self-test passed without device access | 0; measured build/self-test work package 0.682 s |
-| V2 USB NP + IMU + RTC | Paused; three probes/20 kHz/60 s plan prepared, hardware run not started | No active countdown; prior 12–20 min estimate applies only after resume |
+| V2 USB NP + IMU + RTC | Resumed; three probes/20 kHz/60 s plan prepared, new-grid hardware run not started | Completion ETA depends on carrier implementation and shared hardware availability |
 | V1 deterministic scheduling and startup | Resumed by the user; private 32-slot bookkeeping helper native-tested, actual timer/carrier not integrated. Normal-reset candidate USB worked; SD/APP readiness remains unresolved. | Completion ETA unknown until timer/carrier fit and affected startup path are resolved; report a bounded development checkpoint |
 | V1 USB + SD RTC validation | USB60 completed with no reported continuity-counter errors and valid IMU observations; startup/terminal tails disclosed, lossless=false. Required kind5 source-root record was absent, so RTC remained unqualified. No host bypass is justified; SD capture did not start. | Reuse USB data for analysis. Remaining implementation follows the single-origin plan; no new completion ETA until the affected fix is ready |
-| V2 SD NP + IMU + RTC | Exact R6 pair passed 30 s at three probes/20 kHz; NP/IMU readback passed; RTC-to-NP full interval 120 µs | 0; reuse [recorded evidence](../ReleaseSources/1.0.0.189/validation-summary.json) |
+| V2 SD NP + IMU + RTC | Previous exact R6 pair passed 30 s at three probes/20 kHz; RTC-to-NP full interval 120 µs. New grid remains unvalidated. | Reuse [R6 evidence](../ReleaseSources/1.0.0.189/validation-summary.json) for unchanged behavior; validate changed grid |
 | Remaining stream physical alignment | Camera/audio/ADC/external-GPIO timing coverage incomplete | No credible completion ETA; define a bounded experiment per affected stream |
 
 ## Reduce validation time
