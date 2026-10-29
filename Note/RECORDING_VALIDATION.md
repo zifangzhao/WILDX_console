@@ -26,13 +26,13 @@ A relevant failure sends the change back to development. Software checks or anot
 
 Snapshot from owner reports on 2026-10-29. Estimates are planning allowances, not measured completion promises. This documentation correction does not start hardware work.
 
-The user subsequently paused the new grid/buffer, build/test and hardware work. Its estimates below are not running countdowns. Source-only removal of optional sensor fine timestamps and coordination of the shared plan are separately authorized; they do not resume recording validation.
+The user subsequently resumed V1 deterministic scheduling development and validation. V1 proceeds as one authorized work package; it does not resume V2 grid/hardware work. V2's current request is source-only sensor timestamp removal. Pending estimates are planning allowances, not running countdowns. Current shared scope and carrier constraints are recorded in the [time contract](RECORDING_TIME_CONTRACT.md).
 
 | Item | State | Remaining estimate / checkpoint |
 |---|---|---|
 | V2 USB helper build/self-test | Done: actual embedded self-test passed without device access | 0; measured build/self-test work package 0.682 s |
 | V2 USB NP + IMU + RTC | Paused; three probes/20 kHz/60 s plan prepared, hardware run not started | No active countdown; prior 12–20 min estimate applies only after resume |
-| V1 RTC startup fix | Paused; normal reset activated candidate USB, SD/APP readiness unresolved. Originals/settings/catalog restored. | Completion ETA unknown; diagnosis checkpoint on resume |
+| V1 deterministic scheduling and startup | Resumed by the user; private 32-slot bookkeeping helper native-tested, actual timer/carrier not integrated. Normal-reset candidate USB worked; SD/APP readiness remains unresolved. | Completion ETA unknown until timer/carrier fit and affected startup path are resolved; report a bounded development checkpoint |
 | V1 USB + SD RTC validation | USB60 completed with no reported continuity-counter errors and valid IMU observations; startup/terminal tails disclosed, lossless=false. Required kind5 source-root record was absent, so RTC remained unqualified. No host bypass is justified; SD capture did not start. | Reuse USB data for analysis. Remaining implementation follows the single-origin plan; no new completion ETA until the affected fix is ready |
 | V2 SD NP + IMU + RTC | Exact R6 pair passed 30 s at three probes/20 kHz; NP/IMU readback passed; RTC-to-NP full interval 120 µs | 0; reuse [recorded evidence](../ReleaseSources/1.0.0.189/validation-summary.json) |
 | Remaining stream physical alignment | Camera/audio/ADC/external-GPIO timing coverage incomplete | No credible completion ETA; define a bounded experiment per affected stream |
