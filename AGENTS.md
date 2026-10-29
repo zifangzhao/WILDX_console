@@ -2,7 +2,8 @@
 
 Deliver the requested result and help the user understand the important decisions and limits.
 
-- Follow [the release pre-flight checklist](Note/RELEASE_PREFLIGHT.md). Publication, packaging and engineering qualification are separate work scopes.
+- Run the [recording validation checklist](Note/RECORDING_VALIDATION.md) during development of affected recording behavior. Complete its build, targeted checks and applicable device tests as one development work package; do not defer them to release pre-flight.
+- Release pre-flight is limited to [artifact identity and publication checks](Note/RELEASE_PREFLIGHT.md). Reuse recording validation evidence already produced during development.
 - A push-only request publishes the existing checked release: check its identity, intended staged paths and remote commit. Do not start new builds, tests, agents or hardware work to push it.
 - A packaging request reuses checked binaries and recorded qualification. Stage an explicit runtime/firmware allowlist, package once and verify one fresh extraction. Do not recursively copy repository firmware archives into an installer.
 - For changed software, use one incremental build per changed component and one relevant regression set. Increment the application version on every application compilation. Reuse passing evidence for unchanged bytes and conditions.

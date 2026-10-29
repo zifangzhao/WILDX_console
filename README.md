@@ -87,7 +87,7 @@ NP1 firmware operation records are saved under `%LOCALAPPDATA%\WILDX_console\Fir
 
 ## Build and offline checks
 
-Use the [release pre-flight checklist](Note/RELEASE_PREFLIGHT.md) to select the checks required for the change. An existing checked release can be pushed without rebuilding or repeating qualification. Packaging and publication target 3–5 minutes once artifacts and acceptance evidence are ready.
+Use the [recording validation checklist](Note/RECORDING_VALIDATION.md) during development to select and complete checks for affected recording behavior. [Release pre-flight](Note/RELEASE_PREFLIGHT.md) only verifies the resulting artifacts and publication. Packaging and publication target 3–5 minutes once development artifacts and evidence are ready.
 
 Install Visual Studio / Build Tools with MSBuild and the .NET Framework 4.8.1 targeting pack, plus the .NET 8 SDK. NSIS is required only for installer generation. Restore requires the Windows SDK contracts / WinRT packages or their local NuGet cache; the existing OpenTK packages are retained locally.
 
