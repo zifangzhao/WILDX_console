@@ -87,6 +87,8 @@ NP1 firmware operation records are saved under `%LOCALAPPDATA%\WILDX_console\Fir
 
 ## Build and offline checks
 
+Use the [release pre-flight checklist](Note/RELEASE_PREFLIGHT.md) to select the checks required for the change. An existing checked release can be pushed without rebuilding or repeating qualification. Packaging and publication target 3–5 minutes once artifacts and acceptance evidence are ready.
+
 Install Visual Studio / Build Tools with MSBuild and the .NET Framework 4.8.1 targeting pack, plus the .NET 8 SDK. NSIS is required only for installer generation. Restore requires the Windows SDK contracts / WinRT packages or their local NuGet cache; the existing OpenTK packages are retained locally.
 
 ```powershell
@@ -99,7 +101,9 @@ The main project is `USB512_interface\USB512_interface\WILDX_console.csproj`; `W
 
 `test.ps1` checks fragmented / corrupt / stale BLE receipts, automatic device-version detection and its fresh read-only confirmation, stopped-only clock commits, read-only clock checks, preview framing / ADC decoding / session admission / cancellation, exact-device selection, NP1 / NP2 busy and mode gates, native NP2 catalogs, failed and truncated extents, UI layout, the NP1 resident update flow, management forms, NP1 startup decoding and NP2 SD-to-DAT export. UI tests render controls in an offscreen host without invoking device discovery handlers. These checks do not scan BLE, connect devices, record, flash firmware or access a physical disk.
 
-## Hardware qualification still required
+## Hardware qualification coverage
+
+The following areas describe ongoing qualification coverage, not a checklist to rerun before every installer. Select affected modes and claims for each engineering change and reuse existing evidence for unchanged artifacts.
 
 - NP1 and NP2 sustained USB recordings: startup, sample / timestamp integrity, previews, Stop and reconnect.
 - BLE cold connect, fragmented receipts, profile application, SD start / stop / drain, disconnect / reconnect, time sync and every mode handoff.
