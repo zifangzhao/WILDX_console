@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "version": "1.0.0.189",
+  "scope": "Archive existing immutable source189 and existing build receipt; no reconstruction/source change/compile/test",
+  "source_snapshot": "_artifacts/utc_alignment_20261028/source189",
+  "source_files": 185,
+  "host_build_receipt_sha256": "6B446A4193408D91DC5FD694D134D96A810B0A6F2DC3FBBC228AB5AD7018567C",
+  "compiled_sources": {
+    "sha256": "E827C88C2FF36F7A88A29B9C9840BAC345CDC95F8E8B2015D8512AB9FFB5CA75",
+    "bytes": 912163,
+    "path": "compiled-sources.zip"
+  },
+  "packaging_resources": {
+    "sha256": "D94C3F4B67ED4E2EC9B7D42F93875C7CDB9AEB222994A5B4FE635920A29B2829",
+    "bytes": 43557,
+    "path": "packaging-resources.zip",
+    "scope": "docs/*.md snapshot only, matching165 archive layout"
+  },
+  "installer_nsi_sha256": "380337771F2F203BBAEF279C8EE125F9669DAFB5EDBEF9683ECCE72D9BED7A33",
+  "gui_sha256": "78E5F0012BF835916F0BC68A1A63A9CABAD1AC32348CE49847A9A7F97CAC0191",
+  "sdk_sha256": "5553F1972319433C07356D7567D61E19A3C9CB1838CED0B69292F3EA0B47DE82",
+  "firmware": "Root-owned integration; no Firmware files copied by this task"
+}

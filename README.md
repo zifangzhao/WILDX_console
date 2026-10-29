@@ -1,8 +1,8 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.165**.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.189**.
 
-[Latest installer](LATEST_INSTALLERS/README.md) includes V1/V2 BLE/SD IMU support and the shorter Stop finalization. V2's actual BLE-to-USB-to-download route and short three-probe 20 kHz recordings passed without an SWD reset. The matching firmware and catalog are included. [Results, source provenance and limits](ReleaseSources/1.0.0.165/README.md). Pre-arm and first-sample synchronization remain disabled while testing continues.
+[Latest installer](LATEST_INSTALLERS/README.md) includes V1/V2 IMU support, shorter Stop finalization, saved first-sample timing evidence and the checked V2 hardware RTC firmware. A V2 SD recording with three probes at 20 kHz passed neural/IMU readback and bounded the first NP start to a 120 µs full interval relative to its RTC. [Results, source provenance and limits](ReleaseSources/1.0.0.189/README.md). Pre-arm remains disabled; V1 RTC and all-stream alignment testing continues.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -63,7 +63,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILD-X 1.0.0.165](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.165.exe). V2 APP EC5C2198, USB A71BDECC and recovery 6408DBB8 are included; V1 and camera bundles remain unchanged from release 158. No separate update ZIP is needed. [Scope and validation](ReleaseSources/1.0.0.165/README.md).
+The current installer is [WILD-X 1.0.0.189](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.189.exe). V2 APP 46DF5009, USB 62910614 and recovery 6408DBB8 are included; V1 and camera bundles remain unchanged. No separate update ZIP is needed. [Scope and validation](ReleaseSources/1.0.0.189/README.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 

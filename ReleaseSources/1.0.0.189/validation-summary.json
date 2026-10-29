@@ -1,0 +1,61 @@
+{
+  "release": "1.0.0.189",
+  "host": {
+    "first_sync_enabled": true,
+    "prearm_enabled": false,
+    "software_checks_passed": {
+      "clock": 363,
+      "setup": 281,
+      "native_order": 509
+    }
+  },
+  "bundled_firmware": {
+    "v2": {
+      "app_crc32": "46DF5009",
+      "usb_crc32": "62910614",
+      "recovery_crc32": "6408DBB8",
+      "revision": "R6"
+    },
+    "v1": {
+      "app_crc32": "B1758369",
+      "usb_crc32": "4F7B521A",
+      "bundle_build": 165,
+      "unchanged": true,
+      "new_rtc_qualification": false
+    }
+  },
+  "v2_hardware_validation": {
+    "mode": "BLE-controlled SD recording",
+    "duration_seconds": 30,
+    "probe_count": 3,
+    "sample_rate_hz": 20000,
+    "session": 3268315904,
+    "neural_rows_per_probe": 600063,
+    "reported_loss_counters": 5,
+    "all_reported_loss_counters_zero": true,
+    "saved_imu_ag_observations": 5780,
+    "saved_imu_mag_observations": 2890,
+    "device_hardware_rtc_to_first_np_start": {
+      "full_interval_us": 120,
+      "half_interval_us": 60
+    },
+    "separate_pc_calibration": {
+      "declared_uncertainty_us": 20594,
+      "included_in_local_rtc_np_interval": false
+    },
+    "original_firmware_restored": true
+  },
+  "recording_behavior": {
+    "post_stop_full_payload_scan": false,
+    "saved_imu_grid_hz": 1250,
+    "saved_imu_grid_semantics": "Holds latest sensor values; not physical conversion-phase proof."
+  },
+  "not_qualified": [
+    "V2 R6 USB acquisition",
+    "Full fused-image flash",
+    "Alignment of every stream",
+    "New V1 RTC behavior",
+    "Physical IMU conversion phase"
+  ],
+  "scope": "Existing software and V2 SD evidence only; no new hardware actions or checks were performed for this documentation."
+}

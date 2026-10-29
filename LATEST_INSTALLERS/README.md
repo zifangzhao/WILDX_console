@@ -1,9 +1,9 @@
-# WILD-X 1.0.0.165
+# WILD-X 1.0.0.189
 
-[Download installer](WILDX_console-Setup-1.0.0.165.exe). Includes the matching V1/V2 firmware and catalog; no separate update ZIP.
+[Download installer](WILDX_console-Setup-1.0.0.189.exe). Matching firmware and catalog are included; no separate update ZIP is needed.
 
-V2 passed short USB and SD recordings with three probes at 20 kHz, IMU export, and the app's BLE-to-USB-to-download switching path without an SWD reset. The earlier switching failure came from an incorrect mode selector in the private test helper; production callers already selected USB correctly.
+Includes the V2 hardware RTC update (APP 46DF5009, USB 62910614, recovery 6408DBB8), saved first-sample timing evidence, IMU export and shorter Stop finalization. A 30-second SD recording with three probes at 20 kHz passed neural and IMU checks. The first NP start was bounded to a 120 µs full interval relative to the device RTC; PC synchronization uncertainty is separate.
 
-V2 APP EC5C2198, USB A71BDECC and recovery 6408DBB8 are included. V1 and camera firmware remain unchanged. Install the console, then use **Advanced → Firmware update → Use bundled APP** where needed; installation alone does not flash devices.
+V1 firmware remains APP B1758369 / USB 4F7B521A while its new RTC firmware is tested. Installing the console does not flash devices. Use **Advanced → Firmware update** to select the bundled firmware.
 
-[Test scope and source provenance](../ReleaseSources/1.0.0.165/README.md). Pre-arm and first-sample synchronization remain disabled while testing continues.
+[Validation and limits](../ReleaseSources/1.0.0.189/README.md). V2 USB acquisition with this firmware and alignment of every stream remain under investigation.

@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0.189",
+  "guiCompiledDuringPackaging": false,
+  "firmwareCompiledDuringPackaging": false,
+  "installerExecuted": false,
+  "packagePasses": 2,
+  "finalInstallerSha256": "D096E95623E9FCE8422F83F3025DCA496255333443D868A241184EA63FA1C919",
+  "payloadFilesVerified": 52,
+  "newV2FusedImageFlashed": false,
+  "firstPackageDisposition": "Rejected private package included repository legacy firmware; final package contains only current runtime assets. No rejected installer published."
+}

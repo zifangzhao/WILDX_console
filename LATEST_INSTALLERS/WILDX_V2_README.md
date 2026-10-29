@@ -1,7 +1,7 @@
-# WILD-X V2
+# V2 firmware in WILD-X 1.0.0.189
 
-[Install 1.0.0.165](WILDX_console-Setup-1.0.0.165.exe). The installer includes APP EC5C2198, USB A71BDECC, recovery 6408DBB8 and the matching catalog.
+The installer contains APP 46DF5009, USB 62910614 and recovery 6408DBB8, with matching component and fused images and catalog. No separate update ZIP is required.
 
-The app's BLE USB-mode handoff, Data Download listing and native DAT export passed on V2 with three probes at 20 kHz, without SWD attachment/reset or a physical reconnect. Saved SD IMU data was also checked. These are short tests on one logger/card; [results and limits](../ReleaseSources/1.0.0.165/validation-summary.json) are included.
+The checked 30-second SD recording used three probes at 20 kHz. Neural and IMU readback passed, and saved first-NP timing had a 120 µs full interval relative to the hardware RTC. PC synchronization uncertainty is separate. V2 USB acquisition with this pair and the complete fused-image flashing path were not newly hardware tested.
 
-Use **Advanced → Firmware update → Use bundled APP** if the device needs the bundled APP. The firmware bytes are unchanged from release 158; no separate update ZIP is needed.
+[Detailed results and scope](../ReleaseSources/1.0.0.189/README.md).

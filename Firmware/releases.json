@@ -284,71 +284,90 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_IMU_STOP_FAST_APPEC5C2198_USBA71BDECC_20261028",
-      "sourceCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
-      "stage": "SOFTWARE_CHECKED_NOT_HARDWARE_TESTED",
-      "appVersion": "build EC5C2198",
-      "usbVersion": "build A71BDECC (bounded pipelined SD download)",
+      "release": "V2_RTC_FIRST_SAMPLE_APP46DF5009_USB62910614_20261029",
+      "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
+      "stage": "SD_TRIPLE20K_30S_CHECKED_USB_ACQUISITION_UNTESTED",
+      "appVersion": "build 46DF5009",
+      "usbVersion": "build 62910614",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "EC5C2198",
-      "usbCrc32": "A71BDECC",
+      "appCrc32": "46DF5009",
+      "usbCrc32": "62910614",
       "recoveryCrc32": "6408DBB8",
+      "limits": "Validated one 30-second P1+P2+P3/20kHz SD run on Delkin V90: full 1092116480-byte readback, 23440 chunks, 600063 DAT rows/probe, all five reported loss counters zero. Saved IMU 5780 AG/2890 MAG observations, observed sequence gaps zero; not every physical conversion. Independent local RTC-to-first-NP full interval120us; pre-record PC calibration generation2 confirmed and bound. PC declared setup uncertainty20594us and separate stopped readback phase interval[-36669,+41237]us are not the120us local interval or a verified absolute PC-error guarantee. R6 USB acquisition/USB IMU physical recording remains untested. Normal SD-to-USB2/download3/full export passed. No all-mode/card/endurance/analog-quality or arbitrary ADC-bit-checksum guarantee. Whole fused image not newly flashed; exact checked components merged without rebuild. Lab originals restored after test.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "baseAddress": 134348800,
+        "bytes": 279852,
+        "codeCrc32": "46DF5009",
+        "buildIdHex": "3638656433343063666236633234623534353830366364306136616562396562",
+        "manifestFlags": 0,
+        "minimumLoaderAbi": 4,
+        "generation": 3
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "baseAddress": 135790592,
+        "bytes": 237668,
+        "codeCrc32": "62910614",
+        "buildIdHex": "6364666230316562333162633565303534643232613332656330303235666430",
+        "manifestFlags": 3,
+        "minimumLoaderAbi": 4,
+        "generation": 3
+      },
       "app": {
-        "path": "V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp",
-        "sha256": "A6F412DA77CACF05E31208D9FC1797B0BC6E8D50298AF4920F640C2F36C00983"
+        "path": "V2/V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.xenp",
+        "sha256": "060BC91098B46F78EA97237AA2C3D0ED37F2AF69E53A75F1D78A8E1A8E70908F"
       },
       "full": {
-        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
-        "sha256": "FAEE373FF33E60DF78536E0C4F46F85C3FB5A3C8350059125854E81DD056DD95"
+        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_62910614_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex",
+        "sha256": "22817BD623D7D73657202251E40419979DCB89FA8D3CFF1FE3451562BE1F8914"
       },
       "files": [
         {
-          "path": "V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
-          "sha256": "593EF1C4D15BBA26DA156B0FF4E2AACF6168E1437CB5F137E5199C07CA9F9919"
+          "path": "V2/V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex",
+          "sha256": "912BCA1508570A8D792E94E5CF76C97D0AD696BB984BCCB5F24BBC333C8C80D0"
         },
         {
-          "path": "V2/V2_APP_EC5C2198_IMU_STOP_FAST_20261028.xenp",
-          "sha256": "A6F412DA77CACF05E31208D9FC1797B0BC6E8D50298AF4920F640C2F36C00983"
+          "path": "V2/V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.xenp",
+          "sha256": "060BC91098B46F78EA97237AA2C3D0ED37F2AF69E53A75F1D78A8E1A8E70908F"
         },
         {
-          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_A71BDECC_APP_EC5C2198_IMU_STOP_FAST_20261028.hex",
-          "sha256": "FAEE373FF33E60DF78536E0C4F46F85C3FB5A3C8350059125854E81DD056DD95"
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_62910614_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex",
+          "sha256": "22817BD623D7D73657202251E40419979DCB89FA8D3CFF1FE3451562BE1F8914"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_USB_only_A71BDECC_BURST_DOWNLOAD_20261025.hex",
-          "sha256": "FF89382337AC75918FE12979F0A659B2E4F5499427304F60A780676521CD93F6"
+          "path": "V2/V2_USB_62910614_RTC_FIRST_SAMPLE_20261029.hex",
+          "sha256": "683A8F4BA40B7E3384F75EE00508D44563C3CAE92AB98A541CD4094BC6793714"
         },
         {
-          "path": "V2/V2_USB_update_A71BDECC_BURST_DOWNLOAD_20261025.xenp",
-          "sha256": "870C7DECE27308A031B319C187B170FFF8F9CAAAAED1F3BF951EA93727BA6D21"
+          "path": "V2/V2_USB_62910614_RTC_FIRST_SAMPLE_20261029.xenp",
+          "sha256": "8963CBB6BF5C9656E2054FEBE19085C56BAC0A6C544516660AE51345D5BB0922"
         }
       ],
-      "limits": "APP IMU/SD finalization software-checked update; no new hardware test. APP AG200Hz/MAG100Hz with sparse SNS2 SD snapshots. Essential drain/footer/catalog retained; automatic full postrecord payload reread removed, PC verification retained. USB/boot unchanged (USB MAG25Hz). Prearm/NPSTART/closed-loop firmware excluded.",
-      "appIdentity": {
-        "imageId": 1095782449,
-        "baseAddress": 134348800,
-        "bytes": 211436,
-        "codeCrc32": "EC5C2198",
-        "buildIdHex": "3366386166343761376636313835343639333934666331396335386638313165",
-        "manifestFlags": 0,
-        "minimumLoaderAbi": 4,
-        "generation": 4
-      },
-      "usbIdentity": {
-        "imageId": 1431519793,
-        "baseAddress": 135790592,
-        "bytes": 187716,
-        "codeCrc32": "A71BDECC",
-        "buildIdHex": "6237356438643139633833613061396533323562663435623534663139646363",
-        "manifestFlags": 3,
-        "minimumLoaderAbi": 4,
-        "generation": 4
+      "sourceCommitScope": "Retained published baseline only; exact R6 incremental/retained-object source identities are bound by source-manifest.json and checked ARM review receipts.",
+      "sourceProvenance": {
+        "ownerManifest": "V2/source-manifest.json",
+        "ownerManifestSha256": "E7C59BE394AD42F62EE30664C52776AACF12FDDB8D4E9957A0620EB610A89A62",
+        "packageReceiptSha256": "7AAADAEF80C75A2FC1D56725733D3D1022926FC3C93D35F0EA2B303ECCEDBF71",
+        "acceptance": "V2/acceptance.json",
+        "acceptanceSha256": "7320E7A89DAFACDF053D5A855806E7F910CA0F3A545D1771F91D23E52001F96C",
+        "canonicalSourceEquivalenceClaimed": false
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 211436,
+          "codeCrc32": "EC5C2198",
+          "buildIdHex": "3366386166343761376636313835343639333934666331396335386638313165",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -424,6 +443,16 @@
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
+          "bytes": 187716,
+          "codeCrc32": "A71BDECC",
+          "buildIdHex": "6237356438643139633833613061396533323562663435623534663139646363",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
           "bytes": 184740,
           "codeCrc32": "13ED1F8E",
           "buildIdHex": "6330383438373565383131316430643634643535623538393335653966633636",
@@ -471,27 +500,7 @@
           "minimumLoaderAbi": 4,
           "generation": 0
         }
-      ],
-      "sourceProvenance": {
-        "publishedRepository": "zifangzhao/XE_NP",
-        "publishedBranch": "V2",
-        "publishedCommit": "b60d85e5accb07bef1314e04c020037d3a1816ed",
-        "parentPublishedCommit": "661e9dd03b7d98c1a16bf50c07f93295537faad8",
-        "ownerManifest": "V2/source-manifest.json",
-        "ownerManifestSha256": "25C996732D8F08A388A3BF61C96C5BC52E417B90D0F2D5175B87503DD24B2F33",
-        "packageReceiptSha256": "B7F5D0BD1947257B1BB5DA474AD8EF741DE2F7E36EEF04D8CD3A9BFB4BA40C2D",
-        "acceptance": "V2/acceptance.json",
-        "acceptanceSha256": "33C3D8C07676861A5D8AB48263B7FA5318A7B80BC992720A224E3F1544EB71D8",
-        "sourceSnapshotDirectory": "ReleaseSources/V2_TWO500_C250DF48_A71BDECC_20261026",
-        "sourceIndexSha256": "86F51C24ADEF36C5D5425ABE467723F023C7340896D7E2AAAC4B2F6095B87CBF",
-        "canonicalSourceEquivalenceClaimed": false
-      },
-      "sourceCommitScope": "Retained production baseline commit; exact hotfix overlay and retained-object provenance are bound by sourceInputs.",
-      "sourceInputs": {
-        "baselineRelease": "APPC250DF48",
-        "sourceOverlaySha256": "61D5E2EB756DE2A4245ECFEBF87C9780D4B8B9CE0773BD5C88D38E9A4F8D25D2",
-        "evidence": "ReleaseSources/1.0.0.158/firmware/V2"
-      }
+      ]
     }
   ]
 }
