@@ -1,0 +1,46 @@
+# Shared V1/V2 recording-time plan
+
+2026-10-29. Implements the user's single-start-time direction for USB and BLE-controlled SD recordings. This is the shared development contract; it is not a claim that either new recording path has passed validation.
+
+## One recording origin
+
+- `T0` is the first validated NP STARTBYTE of the lowest selected probe, mapped to the MCU hardware RTC. The RTC uses HSE-derived timekeeping; no silent LSI substitution qualifies this clock.
+- Retain the existing `recording_start_utc.json`, `schema: 1`, `format: neuropixels.recording_start_utc`. Reuse `recording_start_unix_us`, `utc_valid`, `uncertainty_us`, `clock_reference`, and source/probe identity fields. A point and its uncertainty describe one origin; uncertainty bounds are not additional recording clocks.
+- Store the accepted PC synchronization anchor once under `pc_sync_anchor`, with `schema: 1`, `transport`, `pc_time_sent_unix_us`, `device_rtc_at_apply_unix_us`, `calibration_generation`, `declared_uncertainty_us`, `value_semantics`. The PC value is the exact value carried by the accepted synchronization message. Use `value_semantics: payload_reference_utc` when that value refers to the payload's apply/reference instant rather than actual host send time. Unknown values stay null. Reuse the frozen UTC2/+5 mapping and the one-time RTC/+7 evidence where available; do not add periodic-anchor logging to implement this initial contract.
+- BLE supplies the requested PC anchor. Preserve existing USB/legacy calibration where needed for compatibility, explicitly label its actual transport, and never invent BLE evidence. An unavailable BLE anchor must not become a new USB recording Start gate.
+- Calibrate before recording. Freeze the selected anchor for the session; do not adjust the device clock during capture. PC/network error is separate from local RTC-to-NP uncertainty. Periodic in-recording calibration is outside this plan.
+
+The current wire receipts already carry the one-time RTC/source context. Reuse them before adding any new wire layout. The existing kind5 final source-root attestation remains required for that wire contract: emit it after the NPSTART receipt pages and before RTC pages. Kind2 NPAR and kind3 NPHR are not replacements. Removing per-observation timestamps must not remove this one-time origin proof.
+
+## Sample indices replace repeated absolute timestamps
+
+For each file, store its layout, exact rational rate and genuine first source offset once. Preserve NP block sequence/source counters, per-probe fixed phase and sparse discontinuities. Derive time using:
+
+`sample_time = T0 + first_source_offset + segment_offset + sample_index / sample_rate`
+
+Do not assign new independent UTC clocks to each stream. Keep enough relative offset/index information to locate gaps and streams that actually begin later. A camera/audio or external GPIO source with an independent clock needs a demonstrated counter/edge relationship; a nominal rate alone cannot prove that relationship.
+
+## IMU snapshot grid
+
+- Target **1250 Hz**, matching the user's WILD-compatible request: one slot every 800 µs. NP rates 7.5/15/20/30 kHz contain respectively 6/12/16/24 NP samples per slot. A 250 Hz producer proposal does not replace this target.
+- Sample the latest cached IMU values at a real HSE-derived slot boundary. Repeated or missed underlying BMX160 conversions are acceptable, as the user confirmed. This grid timestamps the cached snapshot, not physical sensor conversion.
+- The slot handler performs bounded cached copies and bookkeeping only: no I2C, RTC/calendar reads, serialization, CRC scans or storage waits. NP acquisition keeps priority. Carry a slot ordinal and compact validity/repeat/missing information; no per-slot wall-clock timestamp.
+- Align slot phase to the recording origin. If T0 becomes known after early slot instants, mark the unavailable prefix and start at its true ordinal; do not backfill values or label a block-finalization snapshot as a historical slot-edge sample. Store any genuine fixed phase offset once.
+- Reuse existing buffers/carriers where possible. V1 has tight ordinary RAM headroom, so assess buffer ownership and worst-case slot batching at every supported NP rate before choosing packing. Do not take capacity from the NP capture pool without evidence that recording remains intact.
+- Preserve the current fine-timer ownership. In particular, adding TIM5 compare interrupts would violate V2's present DIER/CCMR/CCER qualification. Choose an isolated HSE timer or explicitly update that owner's contract and targeted checks.
+- Keep `analogin.dat`'s 16-word little-endian stride and current WILD-equivalent scaling. Relative indices and gap metadata determine timing; do not add new per-sample timestamp files. Review the legacy in-row local-time words before changing their interpretation.
+
+One shared slot layout/capability declaration must be agreed before firmware adds a new format. The normal legacy 140/164/512-byte sensor cores and readers remain supported. A firmware version lacking a real fixed-slot producer must not be labeled as having one merely because the host can create a held-value display grid.
+
+## Host output and compatibility
+
+Normal exports use the shared origin plus file/rate/index/gap metadata. Make redundant raw timing journals and per-observation timing CSVs an explicit diagnostic option after their callers are audited; preserve historical files and readers. Do not delete existing recordings or test evidence.
+
+Both USB and SD exporters consume the same validated origin. Old firmware and old recordings retain their current explicitly labeled estimates/unknown timing. Neither Start-click time nor packet arrival time substitutes for missing device evidence.
+
+## Parallel ownership and development acceptance
+
+- V1 owner: existing startup/APP readiness issue, one-time origin emission, default-off optional observation timestamp work, and platform grid/timer/buffer fit.
+- V2 owner: one-time HSE/RTC origin, grid/timer/buffer fit and the common slot carrier proposal.
+- WILDX integrator: shared field semantics, normal export/diagnostic selection, index-based reconstruction and old-recording compatibility. Binary packing changes require this common agreement once, not separate incompatible V1/V2 versions.
+- During development, validate the affected USB/SD recording paths using [the recording checklist](RECORDING_VALIDATION.md): NP continuity, actual grid cadence/slot gaps, no NP impact, correct one-time anchor and PC provenance. Reuse existing raw recordings for parser corrections. Publication reuses the completed evidence.

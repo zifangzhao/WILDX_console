@@ -13,7 +13,7 @@ Select affected families, modes and claims once. Complete implementation, one in
 | [ ] USB recording | Bounded capture after first data; save NP continuity, expected channel layout, sample counts, sizes and loss counters. Include V2 three probes/20 kHz for the current work. | 60 s capture |
 | [ ] BLE-controlled SD recording | Start is device-confirmed; NP/IMU are saved; Stop commits accepted writes/footer/catalog; recording can be listed and downloaded. Preserve incomplete recordings for recovery. | 30 s capture |
 | [ ] NP and IMU data | PC validates the bounded output. Check NP continuity and independent IMU validity/cadence; IMU must not add NP losses. Distinguish the 1250 Hz held-value grid from physical sensor conversion rate/phase. | 3–5 min readback/analysis |
-| [ ] First sample and stream alignment | Same-session UID/token/source/generation evidence maps first NP STARTBYTE to MCU hardware RTC within the supported <1 ms interval. PC uncertainty is separate. Check origins/coordinates for enabled auxiliary streams; leave unmeasured physical phase unknown. | 1–2 min analysis; new physical experiments budgeted separately |
+| [ ] First sample and stream alignment | Follow the [single-origin contract](RECORDING_TIME_CONTRACT.md): one HSE-derived RTC T0 for NP STARTBYTE, one accepted PC sync anchor, exact rates/relative offsets and slot/sample indices. Check the <1 ms local interval separately from PC uncertainty. Do not require separate stream UTC timestamps or infer physical sensor conversion lock. | 1–2 min analysis; new physical experiments budgeted separately |
 | [ ] Stop/restart and metadata | Confirm Stop/drain and affected interruption/restart behavior. Saved timestamps, probe IDs/IMRO and calibration-applied metadata match the data. No automatic full on-device payload scan after Stop. | Reuse the captures above; 1–2 min for an affected restart/metadata check |
 | [ ] Legacy and preview behavior | Relevant old-firmware fallbacks pass. Preview failure cannot stop/degrade recording; NP and IMU retain priority. Physically test preview when affected. | Reuse focused software evidence; state any physical test budget |
 | [ ] Safe finish and handoff | Required restoration/idle/data-preservation checks complete. One short result records artifacts, actual elapsed/queue times, passed checks and remaining limits. | 2–4 min when restoration is needed |
@@ -28,10 +28,10 @@ Snapshot from owner reports on 2026-10-29. Estimates are planning allowances, no
 
 | Item | State | Remaining estimate / checkpoint |
 |---|---|---|
-| V2 USB helper build/self-test | Cleanup-fixture fix source-ready; actual embedded self-test not run | 3–5 min |
+| V2 USB helper build/self-test | Done: actual embedded self-test passed without device access | 0; measured build/self-test work package 0.682 s |
 | V2 USB NP + IMU + RTC | Three probes/20 kHz/60 s plan prepared; hardware run not started | 12–20 min after helper acceptance, assuming normal setup/restoration |
-| V1 RTC startup fix | Original firmware/data restored; owner investigating candidate activation | Completion ETA unknown; finding/fix-decision checkpoint within 20 min of resumed work |
-| V1 USB + SD RTC validation | Waiting for a working candidate activation path | 20–30 min after the fix is ready; diagnosis excluded |
+| V1 RTC startup fix | Normal reset activated candidate USB; SD/APP readiness remains unresolved. Originals/settings/catalog restored. | Completion ETA unknown; next bounded diagnosis checkpoint required |
+| V1 USB + SD RTC validation | USB60 completed with no reported continuity-counter errors and valid IMU observations; startup/terminal tails disclosed, lossless=false. Required kind5 source-root record was absent, so RTC remained unqualified. No host bypass is justified; SD capture did not start. | Reuse USB data for analysis. Remaining implementation follows the single-origin plan; no new completion ETA until the affected fix is ready |
 | V2 SD NP + IMU + RTC | Exact R6 pair passed 30 s at three probes/20 kHz; NP/IMU readback passed; RTC-to-NP full interval 120 µs | 0; reuse [recorded evidence](../ReleaseSources/1.0.0.189/validation-summary.json) |
 | Remaining stream physical alignment | Camera/audio/ADC/external-GPIO timing coverage incomplete | No credible completion ETA; define a bounded experiment per affected stream |
 
