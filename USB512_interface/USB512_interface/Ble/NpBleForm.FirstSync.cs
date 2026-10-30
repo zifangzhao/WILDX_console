@@ -81,6 +81,16 @@ namespace USB512_interface {
                     using(var deadline=CancellationTokenSource.CreateLinkedTokenSource(warm.Token)){
                         deadline.CancelAfter(750);await client.ReadFineCounter64CapabilitiesAsync(deadline.Token);
                     }
+                    if(same()&&family==2&&(client.FineCounter64SupportedFeatures&29)==29){
+                        using(var deadline=CancellationTokenSource.CreateLinkedTokenSource(warm.Token)){
+                            deadline.CancelAfter(750);
+                            try{await client.ReadGrid16CapabilitiesAsync(deadline.Token);}
+                            catch(OperationCanceledException) when(!warm.IsCancellationRequested&&same()){
+                                // An old provider's optional local timeout must
+                                // not suppress already-supported v3 RTC warmup.
+                            }
+                        }
+                    }
                     if(same()&&client.FineCounter64SupportedFeatures!=0)await WarmBleHardwareRtc(client,warm.Token);
                 }catch(Exception){/* Optional discovery never prevents ordinary connection/legacy recording. */}
                 finally{if(ReferenceEquals(bleFirstSyncWarmCancel,warm))bleFirstSyncWarmCancel=null;}

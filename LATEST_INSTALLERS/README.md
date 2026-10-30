@@ -1,7 +1,9 @@
-# WILD-X1.0.0.199
+# WILD-X1.0.0.204
 
-[Download the installer](WILDX_console-Setup-1.0.0.199.exe).
+[Download the installer](WILDX_console-Setup-1.0.0.204.exe).
 
-The installer includes the matching V1 and V2 firmware. USB60-second and BLE-to-SD30-second tests at20kHz passed with saved IMU data and zero reported NP continuity faults. Full device-local RTC-to-first-NP intervals: V1 111microseconds in both modes; V2 120microseconds USB and121microseconds SD. PC synchronization uncertainty is separate.
+This update includes the checked application and new V1 firmware (APPFFF283D9 / USB1E73A743). V1 two-probe20kHz USB60 and BLE-to-SD30 tests passed with saved1250Hz scheduled IMU copies and no reported midstream NP errors. Local RTC-to-first-NP interval widths were112us/111us; PC calibration uncertainty is separate. One initial missing IMU slot is explicit, and physical sensor conversion phase and SD terminal coverage remain unqualified.
 
-The experimental V2 hardware IMU grid remains disabled. Detailed scope, initial IMU-slot and timing limits are in the release manifest and ReleaseSources/1.0.0.199. Earlier installers are recoverable under legacy; this root contains one current installer and no separate firmware ZIP.
+V2 retains the checked1.0.0.199 firmware (APP194D9B94 / USB74A9B98B / recovery6408DBB8). Its new deterministic SD scheduler is still being corrected and is excluded from this installer. V1Camera assets are unchanged.
+
+Firmware update uses the shared Advanced window. Select the exact device and matching bundled family, choose Full bundle: APP + USB + boot, then Update bundled firmware. Detailed scope and source records are in ReleaseSources/1.0.0.204. Earlier installers remain under legacy; this root contains one current installer and no separate firmware update ZIP.

@@ -1359,8 +1359,9 @@ namespace USB512_interface
             NpCaptureRequest requestedMode=npRequestedMode;
             string modeResolution="firmware default";
             NpUsbSensors sensors=null;
+            bool imuGridSelected=false;
 #if NP_IMU_GRID_ENABLE && NP_FIRST_SYNC_ENABLE
-            NpImuGridUsb imuGrid=null;bool imuGridSelected=false;
+            NpImuGridUsb imuGrid=null;
 #endif
             WildNpClosedLoop.NpClosedLoopLog closedLoop=null;
             NpUsbTimingSession usbTiming=null;
@@ -1627,10 +1628,11 @@ namespace USB512_interface
                     // NSGC readiness is tied to the confirmed feature15 token.
                     // This callback is stopped, after clock configuration and
                     // before RequestStart; no sensor file is opened twice.
-                    imuGridSelected=NpImuGridControl.PrepareUsb(device.GetImuGridControl,device.SelectImuGrid,
+                    var gridSelection=NpImuGridControl.PrepareUsbSelection(device.GetImuGridControl,device.SelectImuGrid,
                         NpV1Management.UidFromPath(devicePath),npRecordMiscSignals&&usbTiming!=null&&usbTiming.Enabled&&usbTiming.RtcEnabled);
-                    if(settings!=null)settings.Context("imu_grid_selected",imuGridSelected);
-                    if(imuGridSelected)imuGrid=new NpImuGridUsb(runFolder,NpV1Management.UidFromPath(devicePath),()=>profile.SessionId,()=>usbTiming==null?null:usbTiming.FineRoot);
+                    imuGridSelected=gridSelection.Selected;
+                    if(settings!=null){settings.Context("imu_grid_selected",imuGridSelected);settings.Context("imu_grid_control_version",gridSelection.Version);settings.Context("imu_grid_enforced_schedule",gridSelection.EnforcedScheduleVerified);}
+                    if(imuGridSelected)imuGrid=new NpImuGridUsb(runFolder,NpV1Management.UidFromPath(devicePath),()=>profile.SessionId,()=>usbTiming==null?null:usbTiming.FineRoot,gridSelection.EnforcedScheduleVerified);
                     if(npRecordMiscSignals)sensors=new NpUsbSensors(runFolder,true,devicePath,null,0,0,!imuGridSelected);
                     if(sensors!=null&&!imuGridSelected)sensors.ConfigureFine(NpV1Management.UidFromPath(devicePath),()=>usbTiming==null?null:usbTiming.FineRoot);
                     if(!running)throw new OperationCanceledException("Recording stopped before capture started.");
@@ -1888,7 +1890,7 @@ namespace USB512_interface
                     sensors.CompleteFine(sourceEnd>0?(ulong)sourceEnd:0,fineComplete);
                 }catch(Exception ex){System.Diagnostics.Trace.WriteLine("Optional USB sensor grid: "+ex.Message);}
 #endif
-                if(sensors!=null)NpImuTimeCorrection.Automatic(runFolder);
+                if(sensors!=null&&!imuGridSelected)NpImuTimeCorrection.Automatic(runFolder);
                 if(camera!=null)try{camera.Dispose();}catch(Exception ex){ cleanupSafe=timelineClosureSafe=false;if(failure==null)failure="Camera recording flush failed: "+ex.Message;}
                 CloseOutputFiles();
                 if(settings!=null)try {

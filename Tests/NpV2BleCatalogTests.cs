@@ -17,12 +17,12 @@ static class NpV2BleCatalogTests
         internal uint Count=3,Token=0,Cid=0,Flags=NpV2BleCatalog.Capability|128U|17U,State=1,LastId=40,Fault,PendingFault;
         internal int Infos,Entries,Deletes,StatusReads,PendingPolls=1,TokenChangeAt,RemoveCount=1;
         internal bool Pending,LoseAck,ChangedEpoch,ChangeEpochOnRead,ChangeCidOnDelete,ChangePrefixOnDelete,DeleteOff,WrongAck;
-        internal uint TailState=3,CookieShift;
+        internal uint TailState=3,CookieShift,Format=13,PrefixFormat;
         internal const uint Capacity=8388608;
         uint Next{get{return Count==0?8192:Count*32768;}}
         uint Start(uint ordinal){return ordinal==0?8192:ordinal*32768;}
         uint Cookie(uint ordinal){return (ordinal==2?0:ordinal*13)+CookieShift;}
-        uint EntryFlags(uint ordinal){bool last=ordinal==Count-1;return 13U|((last?TailState:3U)<<8)|NpV2BleCatalog.MetadataValid|(last?NpV2BleCatalog.Last:0U)|(last && !DeleteOff && (TailState==3||TailState==4)?NpV2BleCatalog.DeleteAllowed:0U);}
+        uint EntryFlags(uint ordinal){bool last=ordinal==Count-1;uint state=last?TailState:3U;uint format=ordinal<2&&PrefixFormat!=0?PrefixFormat:Format;return format|(state<<8)|NpV2BleCatalog.MetadataValid|((format==14||format==15||format==16)&&state!=3?NpV2BleCatalog.Incomplete:0U)|(last?NpV2BleCatalog.Last:0U)|(last && !DeleteOff && (state==3||state==4&&format!=15&&format!=16)?NpV2BleCatalog.DeleteAllowed:0U);}
         internal Task<NpSdStatus> Status()
         {
             StatusReads++;
@@ -101,5 +101,91 @@ static class NpV2BleCatalogTests
         var full=new Device{Flags=NpV2BleCatalog.Capability|128|17|65536};var fullClient=full.Client();var fullCatalog=fullClient.Read().GetAwaiter().GetResult();fullClient.Delete(fullCatalog).GetAwaiter().GetResult();Need(full.Deletes==1,"FULL alone prevented deleting the last entry");
         var recovery=new Device{Flags=NpV2BleCatalog.Capability|128|17|NpV2BleCatalog.CatalogRecovery|NpV2BleCatalog.CatalogRecoverable,DeleteOff=true};var recoveryClient=recovery.Client();var recoveryCatalog=recoveryClient.Read().GetAwaiter().GetResult();Need(!recoveryCatalog.CanDeleteLast,"Recovery catalog last entry deletable");Reject(()=>recoveryClient.Delete(recoveryCatalog).GetAwaiter().GetResult(),"Recovery catalog deleted");Need(recovery.Deletes==0,"Recovery attempted a delete");
     }
-    static int Main(){try{Codec();Flows();Console.WriteLine("PASS "+checks+" production-source V2 BLE catalog contract/queued-delete checks; simulated firmware only.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
+    static void Append14()
+    {
+        foreach(uint format in new uint[]{11,12,13,14})foreach(uint state in new uint[]{1,3,4}){
+            var d=new Device{Format=format,TailState=state};var catalog=d.Client().Read().GetAwaiter().GetResult();
+            var record=catalog.Records[catalog.Records.Count-1];
+            Need((record.Flags&255)==format&&((record.Flags>>8)&255)==state,"BLE catalog relabeled format/stored state");
+            Need(NpV2BleCatalog.RecordStatus(record)==(format==14?(state==3?"Complete*":"Incomplete"):state==3?"Complete":state==4?"Failed":"Reserved"),"Stored v14/legacy diagnostic changed");
+            Need(d.Deletes==0&&!d.Pending,"Read/diagnostic mutated or started storage");
+            Need(d.Flags==(NpV2BleCatalog.Capability|128U|17U),"Catalog diagnostics fabricated a Start/recovery gate");
+        }
+        var device=new Device{Format=14};var info=NpV2BleCatalog.ParseInfo(device.Info(81),81);
+        foreach(uint flags in new uint[]{14U|(3U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last|NpV2BleCatalog.Incomplete,
+            14U|(4U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last,
+            14U|(1U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last,
+            14U|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last}){
+            var bad=device.Entry(82,2);Put(bad,56,flags);Seal(bad);
+            Reject(()=>NpV2BleCatalog.ParseEntry(bad,82,info,2,65536),"Contradictory v14 summary promoted");
+        }
+        var unverified=device.Entry(82,2);Put(unverified,56,14U|(3U<<8)|NpV2BleCatalog.Last);Seal(unverified);
+        var unknown=NpV2BleCatalog.ParseEntry(unverified,82,info,2,65536);
+        Need(NpV2BleCatalog.RecordStatus(unknown)=="Unverified","Unverified v14 footer labeled complete");
+        var defensive=new NpBleRecord{Flags=14U|(3U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Incomplete};
+        Need(NpV2BleCatalog.RecordStatus(defensive)=="Incomplete","Incomplete v14 flag lost in diagnostics");
+        Need(NpV2BleCatalog.AppendDiagnostic.Contains("metadata only")&&NpV2BleCatalog.AppendDiagnostic.Contains("may contain gaps")&&
+            NpV2BleCatalog.AppendDiagnostic.Contains("counts are not reported"),"BLE summary invented prefix/high-water/coverage proof");
+        foreach(uint state in new uint[]{1,3,4}){
+            var ready=new Device{Format=14,TailState=state,Flags=NpV2BleCatalog.Capability|128|17|NpV2SdControl.Live7500};
+            Need(NpV2SdControl.CanStart(ready.Status().GetAwaiter().GetResult()),"Ready-device fixture cannot start");
+            ready.Client().Read().GetAwaiter().GetResult();
+            Need(NpV2SdControl.CanStart(ready.Status().GetAwaiter().GetResult())&&ready.Deletes==0,"V14 historical catalog entry created a false Start gate/mutation");
+        }
+        device=new Device{Format=17};Reject(()=>device.Client().Read().GetAwaiter().GetResult(),"Unknown future format fell back to old decoding");
+        device=new Device{Format=14,DeleteOff=true,TailState=4,Flags=NpV2BleCatalog.Capability|128|17|NpV2BleCatalog.CatalogRecovery};
+        var client=device.Client();var incomplete=client.Read().GetAwaiter().GetResult();
+        Need(NpV2BleCatalog.RecordStatus(incomplete.Records[2])=="Incomplete"&&!incomplete.CanDeleteLast,"Incomplete recovery entry promoted/delete enabled");
+        Reject(()=>client.Delete(incomplete).GetAwaiter().GetResult(),"V14 recovery delete bypassed guards");Need(device.Deletes==0,"V14 recovery refusal sent mutation");
+        device=new Device{Format=14};client=device.Client();var confirmed=client.Read().GetAwaiter().GetResult();
+        device.Format=13;Reject(()=>client.Delete(confirmed).GetAwaiter().GetResult(),"Format changed after confirmation but delete proceeded");Need(device.Deletes==0,"Changed format reached mutation transport");
+    }
+    static void ClosedLoop15()
+    {
+        foreach(uint state in new uint[]{1,3,4}){
+            var d=new Device{Format=15,PrefixFormat=13,TailState=state};var client=d.Client();var catalog=client.Read().GetAwaiter().GetResult();
+            var tail=catalog.Records[2];
+            Need((tail.Flags&255)==15&&((tail.Flags>>8)&255)==state,"Closed-loop summary lost its actual format/state");
+            Need(NpV2BleCatalog.RecordStatus(tail)==(state==3?"Complete*":"Incomplete"),"V15 summary inferred payload validation");
+            Need(catalog.CanDeleteLast==(state==3),"Incomplete V15 tail became deletable");
+            if(state==3){
+                var result=client.Delete(catalog).GetAwaiter().GetResult();
+                Need(result.Records.Count==2&&d.Deletes==1,"Completed V15 tail was not removed exactly once");
+                for(int i=0;i<2;i++)Need(NpV2BleCatalog.SameRecord(catalog.Records[i],result.Records[i],false)&&(result.Records[i].Flags&255)==13,"Deleting V15 changed a prior legacy recording");
+            }else{
+                Reject(()=>client.Delete(catalog).GetAwaiter().GetResult(),"Incomplete V15 delete was sent");Need(d.Deletes==0,"Incomplete V15 reached mutation transport");
+            }
+        }
+        var device=new Device{Format=15};var info=NpV2BleCatalog.ParseInfo(device.Info(81),81);
+        foreach(uint flags in new uint[]{
+            15U|(3U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last|NpV2BleCatalog.Incomplete,
+            15U|(4U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last,
+            15U|(1U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last,
+            15U|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last,
+            15U|(4U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last|NpV2BleCatalog.Incomplete|NpV2BleCatalog.DeleteAllowed}){
+            var bad=device.Entry(82,2);Put(bad,56,flags);Seal(bad);
+            Reject(()=>NpV2BleCatalog.ParseEntry(bad,82,info,2,65536),"Contradictory/deletable incomplete V15 summary accepted");
+        }
+        var unverified=device.Entry(82,2);Put(unverified,56,15U|(3U<<8)|NpV2BleCatalog.Last);Seal(unverified);
+        Need(NpV2BleCatalog.RecordStatus(NpV2BleCatalog.ParseEntry(unverified,82,info,2,65536))=="Unverified","V15 missing metadata proof labeled complete");
+        var stale=new Device{Format=15,PrefixFormat=13};var staleClient=stale.Client();var confirmed=staleClient.Read().GetAwaiter().GetResult();
+        stale.Format=14;Reject(()=>staleClient.Delete(confirmed).GetAwaiter().GetResult(),"Changed V15 confirmation deleted another format");Need(stale.Deletes==0,"Changed V15 format reached mutation transport");
+    }
+    static void Grid16(){
+        foreach(uint state in new uint[]{1,3,4}){
+            var d=new Device{Format=16,PrefixFormat=13,TailState=state};var client=d.Client();var snapshot=client.Read().GetAwaiter().GetResult();
+            Need(NpV2BleCatalog.RecordStatus(snapshot.Records[2])==(state==3?"Complete*":"Incomplete"),"SD16 metadata was labeled payload-verified");
+            Need(snapshot.CanDeleteLast==(state==3),"SD16 incomplete delete eligibility");
+            if(state==3){var after=client.Delete(snapshot).GetAwaiter().GetResult();Need(d.Deletes==1&&after.Records.Count==2,"SD16 DeleteLast not exactly once");for(int i=0;i<2;i++)Need(NpV2BleCatalog.SameRecord(snapshot.Records[i],after.Records[i],false),"SD16 deletion changed old prefix");}
+            else {Reject(()=>client.Delete(snapshot).GetAwaiter().GetResult(),"Incomplete SD16 delete admitted");Need(d.Deletes==0,"Incomplete SD16 sent a mutation");}
+        }
+        var device=new Device{Format=16};var info=NpV2BleCatalog.ParseInfo(device.Info(91),91);
+        foreach(uint flags in new[]{16U|(3U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last|NpV2BleCatalog.Incomplete,
+            16U|(4U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last,
+            16U|(4U<<8)|NpV2BleCatalog.MetadataValid|NpV2BleCatalog.Last|NpV2BleCatalog.Incomplete|NpV2BleCatalog.DeleteAllowed}){
+            var bad=device.Entry(92,2);Put(bad,56,flags);Seal(bad);Reject(()=>NpV2BleCatalog.ParseEntry(bad,92,info,2,65536),"Contradictory/deletable incomplete SD16 accepted");}
+        var stale=new Device{Format=16,PrefixFormat=13};var c=stale.Client();var prior=c.Read().GetAwaiter().GetResult();stale.Format=15;
+        Reject(()=>c.Delete(prior).GetAwaiter().GetResult(),"Changed SD16 confirmation deleted another format");Need(stale.Deletes==0,"Changed SD16 reached mutation transport");
+    }
+    static int Main(){try{Codec();Flows();Append14();ClosedLoop15();Grid16();Console.WriteLine("PASS "+checks+" production-source V2 BLE catalog contract/queued-delete/v14/v15/v16 diagnostic checks; simulated firmware only.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

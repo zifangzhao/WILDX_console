@@ -21,11 +21,12 @@ namespace USB512_interface {
         internal static bool SdDeclared(byte[] h){
             Need(h!=null&&h.Length==512,"SD metadata extent");uint magic=U(h,104),version=U(h,108);
             if(magic==0&&version==0)return false;
-            Need(U(h,8)==6&&magic==NpImuGridWire.Magic&&version==1,"SD declaration/version");return true;
+            Need(U(h,8)==6&&magic==NpImuGridWire.Magic&&(version==1||version==2),"SD declaration/version");return true;
         }
         internal static bool SdMetadata(byte[] h,byte[] f){
             bool selected=SdDeclared(h);Need(SdDeclared(f)==selected&&U(h,104)==U(f,104)&&U(h,108)==U(f,108)&&U(h,124)==0&&U(f,124)==0,"SD header/footer declaration");return selected;
         }
+        internal static bool SdEnforcedSchedule(byte[] h,byte[] f){return SdMetadata(h,f)&&U(h,108)==2;}
         // Global descriptor/padding integrity is neural framing, not an
         // optional inner-frame error. Caller checks the metadata sector CRC.
         internal static int SdSpan(byte[] h,byte[] descriptor){

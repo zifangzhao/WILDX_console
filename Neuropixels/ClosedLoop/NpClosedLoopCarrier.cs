@@ -111,7 +111,7 @@ namespace WildNpClosedLoop
         public static NpClosedLoopControl ReadV2Configuration(byte[] b,byte[] descriptor)
         {
             Bounds(b,0,2048);Bounds(descriptor,0,512);const int o=1888;
-            if(U(descriptor,8)!=15||(U(descriptor,96)&128)==0){
+            if((U(descriptor,8)!=15&&U(descriptor,8)!=16)||(U(descriptor,96)&128)==0){
                 if(!Zero(b,o,160))throw new InvalidDataException("Unadvertised closed-loop configuration extension.");return null;
             }
             var p=Slice(b,o,160);var q=NpClosedLoopControl.Parse(Slice(p,32,64));uint hz=U(p,24),flags=U(p,120);

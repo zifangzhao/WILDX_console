@@ -190,15 +190,19 @@ namespace CE32_console
                             if(result.ImuFineTimingStatusFile!=null){settings.Context("imu_fine_timing_status_file",result.ImuFineTimingStatusFile);
                                 settings.Context("imu_native_fine_timestamps_file",result.ImuNativeFineTimestampsFile);}
                             if(result.ImuAnalogGridComplete){
-                                settings.Context("dat_files","neuropixels_probeN_ap.dat in recorded physical probe order; analogin.dat (1250 Hz held-value compatibility grid)");
+                                settings.Context("dat_files",result.ScheduledImuGrid?"neuropixels_probeN_ap.dat in recorded physical probe order; analogin.dat (1250 Hz scheduled cached-copy slots)":"neuropixels_probeN_ap.dat in recorded physical probe order; analogin.dat (1250 Hz held-value compatibility grid)");
                                 settings.Context("misc_output",USB512_interface.NpRecordingSettings.Fields(
                                     "present",true,"file","analogin.dat","sample_rate_hz",1250,"record_bytes",32,"words_per_record",16,
                                     "sample_format","headerless little-endian 16-bit words; sensor words contain CE64-equivalent counts",
                                     "encoding_file","analogin_encoding.txt","validity_file","analogin_validity.dat","rows",result.ImuAnalogGridRows,
-                                    "sampling_semantics","800 us grid; zero-order hold or unavailable values; not 1250 Hz native sensor acquisition",
+                                    "sampling_semantics",result.ScheduledImuGrid?"800 us scheduled cached-copy slots; missing ordinals remain unavailable; not 1250 Hz native sensor conversion":"800 us grid; zero-order hold or unavailable values; not 1250 Hz native sensor acquisition",
                                     "np_sample_grid_locked",result.ImuAnalogGridNpLocked,"native_sensor_conversion_phase_locked",false,
                                     "origin_evidence",result.ImuAnalogGridOriginEvidence));
                             }
+                            if(result.ScheduledImuGrid){settings.Context("imu_grid_np_source_window_verified",result.ImuGridSourceWindowVerified);
+                                settings.Context("imu_grid_metadata_schema",result.ImuGridMetadataSchema);settings.Context("imu_grid_tail_stats_valid",result.ImuGridTailStatsValid);
+                                settings.Context("imu_grid_known_accepted_rows_not_persisted_lower_bound",result.ImuGridKnownUnsavedRows);
+                                settings.Context("imu_grid_pending_record_rows_unknown",result.ImuGridPendingRecordRowsUnknown);settings.Context("imu_grid_tail_stats_error",result.ImuGridTailError);}
                             settings.Context("source_gap_count",result.SourceGapCount);
                             settings.Context("missing_source_ticks",result.MissingSourceTicks);
                             settings.Context("dropped_source_blocks",result.DroppedBlocks);
@@ -326,7 +330,7 @@ namespace CE32_console
                         fineCapture=USB512_interface.NpFineSdArchive.Read(output,gridClock,1,U(h,12),U(h,24),mask,()=>NpDownloadCatalog.Sector(card,start+6));
                         if(fineCapture==null)throw new InvalidDataException("Grid parent first-source receipt is unavailable.");
                         USB512_interface.NpFirstSyncWire.ValidateSourceAnchor(fineCapture.Anchor,fineCapture.Bound.Receipt.Raw);
-                        indexedGrid=new USB512_interface.NpImuGridWriter(output,fineCapture.Bound.Receipt.Generation);
+                        indexedGrid=new USB512_interface.NpImuGridWriter(output,fineCapture.Bound.Receipt.Generation,USB512_interface.NpImuGridCarrier.SdEnforcedSchedule(h,f));
                     }catch(Exception ex) when(SensorFailure(ex)){gridDisabled=true;sensorIoError("Indexed grid: "+ex.Message);}
                     report.AppendLine("imu_grid_carrier=NSG1; rate_hz=1250; legacy_chunk_misc=analogin.dat.legacy_chunk");
                 }
@@ -481,8 +485,32 @@ namespace CE32_console
                     if(trim!=null)restorePoint(trim);
                     prefixFinished=prefixError==null;
                 }
-                for(int p=0;p<3;p++)if(decoders[p]!=null && chunks>0){if(!recoverPowerCut)decoders[p].Complete();string name="np"+(p+1);
-                    sampleLoss|=!decoders[p].Lossless;
+                // Resolve the original optional recording root before classifying
+                // startup. Legacy/no-root exports keep their historical verdict.
+                byte[] timingClock=gridClock;
+                try{
+                    timingClock=timingClock??NpDownloadCatalog.Sector(card,start+5);
+                    if(!gridDeclared)fineCapture=USB512_interface.NpFineSdArchive.Read(output,timingClock,1,U(h,12),U(h,24),mask,()=>NpDownloadCatalog.Sector(card,start+6));
+                    USB512_interface.NpRtcSdArchive.Capture(output,timingClock,fineCapture,()=>NpDownloadCatalog.Sector(card,start+7));
+                }catch { }
+                var startupAlignmentCertified=new bool[3];
+                for(int p=0;p<3;p++)if(decoders[p]!=null && chunks>0){if(!recoverPowerCut)decoders[p].Complete();string name="np"+(p+1);var d=decoders[p];
+                    if(!recoverPowerCut&&U(h,8)==6&&gridStartLossOrderKnown&&fineCapture!=null&&d.StartupDiscardedBytes>0&&
+                        d.FrameErrors==0&&d.CounterErrors==0&&d.Resynchronizations==0&&d.GapEvents==0&&d.RecoveryDiscardedBytes==0&&
+                        d.MissingApRows==0&&d.MissingLfpRows==0&&d.LfpPhaseErrors==0&&d.ApRowsEmitted==apRows[p]){
+                        try{
+                            var r=fineCapture.Bound.Receipt;
+                            // Complete also verifies any whole frames remaining
+                            // in the incomplete final superframe. Count only its
+                            // sub-frame remainder here, never add Origin again.
+                            bool wholeExtent=nativeBytes[p]-d.StartupDiscardedBytes==checked(d.FramesChecked*60+d.IncompleteTailBytes%60)&&
+                                aps[p].Length==checked(apRows[p]*768)&&lfps[p].Length==checked(lfpRows[p]*768);
+                            startupAlignmentCertified[p]=wholeExtent&&r.Mask==mask&&r.Session==U(h,12)&&r.ApHz==U(h,24)&&r.SourceHz==U(h,24)*780U&&
+                                USB512_interface.NpImuGridWriter.FirstSourceMatches(r,p+1,d.StartupDiscardedBytes,d.FirstSuperframeCounter,apRows[p],d.FramesChecked,nativeBytes[p]);
+                        }catch(Exception ex) when(SensorFailure(ex)){sensorIoError("Startup first-source proof: "+ex.Message);}
+                    }
+                    sampleLoss|=!d.Lossless&&!startupAlignmentCertified[p];
+                    report.AppendLine(name+"_startup_alignment_certified="+startupAlignmentCertified[p]);
                     report.AppendLine(name+"_fixed_word="+decoders[p].ExpectedFixedWord).AppendLine(name+(recoverPowerCut?"_frames_scanned=":"_frames=")+decoders[p].FramesChecked).AppendLine(name+"_ap_rows="+apRows[p]).AppendLine(name+"_lfp_rows="+lfpRows[p])
                         .AppendLine(name+(recoverPowerCut?"_scanned_frame_errors=":"_frame_errors=")+decoders[p].FrameErrors).AppendLine(name+(recoverPowerCut?"_scanned_counter_errors=":"_counter_errors=")+decoders[p].CounterErrors)
                         .AppendLine(name+"_relocks="+decoders[p].Resynchronizations).AppendLine(name+"_startup_discarded_bytes="+decoders[p].StartupDiscardedBytes)
@@ -499,10 +527,7 @@ namespace CE32_console
                     firstRows.Add(new USB512_interface.NpFirstSampleRow(p+1,"lfp",lfp,U(h,24),"LFP cycle start; serialized channel slots.").ForData("np"+(p+1)+"_lfp.dat",384,lfpRows[p],U(h,24),12));
                 }
                 try {
-                    byte[] clock=gridClock??NpDownloadCatalog.Sector(card,start+5);
-                    if(!gridDeclared)fineCapture=USB512_interface.NpFineSdArchive.Read(output,clock,1,U(h,12),U(h,24),mask,()=>NpDownloadCatalog.Sector(card,start+6));
-                    USB512_interface.NpRtcSdArchive.Capture(output,clock,fineCapture,()=>NpDownloadCatalog.Sector(card,start+7));
-                    USB512_interface.NpAcquisitionTiming.SaveSd(output,clock,U(h,12),1,U(h,24),firstRows);
+                    USB512_interface.NpAcquisitionTiming.SaveSd(output,timingClock??NpDownloadCatalog.Sector(card,start+5),U(h,12),1,U(h,24),firstRows);
                 }catch { }
                 report.AppendLine("missing_saved_imu_publications="+imuGaps);
                 report.AppendLine("imu_valid="+(validCounts[0]>0)).AppendLine("valid_imu_snapshots="+validCounts[0])
@@ -566,7 +591,7 @@ namespace CE32_console
                     catch(Exception ex) when(SensorFailure(ex)){gridDisabled=true;sensorIoError("Indexed grid finalization: "+ex.Message);indexedGrid.Report(sensorError);}
                     finally{try{indexedGrid.Dispose();}catch(Exception ex) when(SensorFailure(ex)){gridDisabled=true;sensorIoError("Indexed grid close: "+ex.Message);indexedGrid.Report(sensorError);}}
                 }
-                if(gridDeclared)try{File.WriteAllLines(Path.Combine(output,"imu_grid_status.txt"),new[]{"selected=true","carrier=NSG1","final_parent_verified="+(fineExtentVerified&&!gridDisabled),"source_window_verified="+(indexedGrid!=null&&indexedGrid.PhaseQualified&&!gridDisabled),"first_slot_phase_valid="+(indexedGrid!=null&&indexedGrid.FirstSlotPhaseValid&&!gridDisabled),"first_slot_phase_scope=start_only; no full-record clock or tail claim","rows="+(indexedGrid==null?0:indexedGrid.Rows),"grid_phase_bound=see analogin_encoding.txt; RTC-to-NP interval is independent","error="+(sensorError??"none")});}catch(Exception ex) when(SensorFailure(ex)){sensorIoError("Indexed grid status: "+ex.Message);}
+                if(gridDeclared)try{File.WriteAllLines(Path.Combine(output,"imu_grid_status.txt"),new[]{"selected=true","carrier=NSG1","final_parent_verified="+(fineExtentVerified&&!gridDisabled),"enforced_schedule_verified="+(indexedGrid!=null&&indexedGrid.EnforcedScheduleVerified&&!gridDisabled),"grid_phase_qualified="+(indexedGrid!=null&&indexedGrid.PhaseQualified&&!gridDisabled),"source_window_verified="+(indexedGrid!=null&&indexedGrid.SourceWindowVerified&&!gridDisabled),"first_slot_phase_valid="+(indexedGrid!=null&&indexedGrid.FirstSlotPhaseValid&&!gridDisabled),"first_slot_phase_scope=start_only; no full-record clock or tail claim","rows="+(indexedGrid==null?0:indexedGrid.Rows),"grid_phase_bound=see analogin_encoding.txt; RTC-to-NP interval is independent","error="+(sensorError??"none")});}catch(Exception ex) when(SensorFailure(ex)){sensorIoError("Indexed grid status: "+ex.Message);}
                 if(!gridDeclared&&fineCapture!=null&&fineCapture.FineCounter64){
                     fineGrid=USB512_interface.NpSdFineAnalog.Export(output,1,fineCapture.Bound.Receipt.Session,fineCapture.Bound.Receipt.ApHz,
                         fineCapture.Bound.Receipt.Mask,fineEnd,fineExpected,fineExtentVerified&&!sensorWriteDisabled&&!fineWriteDisabled&&sensorInvalidRecords==0&&sensorIoErrors==0,cancelled);

@@ -15,8 +15,9 @@ namespace USB512_interface {
         internal ushort Version;
         internal uint Result,Supported,RecordFeatures,Session,Generation,SourceEpoch,ProfileCrc;
         // Association may still be pending; this never means recording/running.
-        internal bool Associated {get{return Result==0 && (Version==1 && RecordFeatures==1 || Version==2 && RecordFeatures==9 || Version==3 && RecordFeatures==25);}}
-        internal bool FineCounter64 {get{return Associated && Version==3;}}
+        internal bool Associated {get{return Result==0 && (Version==1 && RecordFeatures==1 || Version==2 && RecordFeatures==9 || (Version==3 || Version==4) && RecordFeatures==25);}}
+        internal bool FineCounter64 {get{return Associated && (Version==3 || Version==4);}}
+        internal bool Grid16 {get{return Associated && Version==4;}}
     }
     internal sealed class NpFirstSyncSdBound {
         internal string Uid;
@@ -47,7 +48,7 @@ namespace USB512_interface {
         static void Seal(byte[] b){Put(b,b.Length-4,NpFirstSyncWire.Crc(b,b.Length-4));}
         static NpFirstSyncSdRequest CheckRequest(byte[] b,int family,string uid,bool admit){
             Require(b!=null && b.Length==64 && (family==1 || family==2),"request size/family");UidWords(uid);
-            Require(U(b,0)==RequestMagic && (H(b,4)==1 || H(b,4)==2 || H(b,4)==3) && U(b,8)!=0 && String.Equals(ReadUid(b,12),uid,StringComparison.OrdinalIgnoreCase) &&
+            Require(U(b,0)==RequestMagic && (H(b,4)==1 || H(b,4)==2 || H(b,4)==3 || H(b,4)==4 && family==2) && U(b,8)!=0 && String.Equals(ReadUid(b,12),uid,StringComparison.OrdinalIgnoreCase) &&
                 U(b,60)==NpFirstSyncWire.Crc(b,60),"request tag/version/ID/UID/CRC");
             ushort op=H(b,6);ulong token=L(b,24);Require(op<=Scheduled,"request operation");
             if(op==Caps)Require(token==0 && Zero(b,32,28),"CAPS token/payload");
@@ -74,6 +75,9 @@ namespace USB512_interface {
         internal static byte[] QueryFineCounter64(ushort op,uint id,int family,string uid,ulong token=0){
             return QueryVersion(3,op,id,family,uid,token);
         }
+        internal static byte[] QueryGrid16(ushort op,uint id,int family,string uid,ulong token=0){
+            return QueryVersion(4,op,id,family,uid,token);
+        }
         static byte[] QueryVersion(ushort version,ushort op,uint id,int family,string uid,ulong token){
             Require(op==Caps || op==Status,"use legacy START wrapper");var b=new byte[64];Put(b,0,RequestMagic);Put(b,4,version|((uint)op<<16));Put(b,8,id);PutUid(b,12,uid);Put64(b,24,token);Seal(b);
             ParseRequest(b,family,uid);return b;
@@ -93,6 +97,9 @@ namespace USB512_interface {
         internal static byte[] WrapLegacyFineCounter64(byte[] legacy,int family,string uid,ulong token,ulong lastToken=0){
             return WrapLegacyVersion(3,legacy,family,uid,token,lastToken);
         }
+        internal static byte[] WrapLegacyGrid16(byte[] legacy,int family,string uid,ulong token,ulong lastToken=0){
+            return WrapLegacyVersion(4,legacy,family,uid,token,lastToken);
+        }
         static byte[] WrapLegacyVersion(ushort version,byte[] legacy,int family,string uid,ulong token,ulong lastToken){
             Legacy(legacy,family);var b=new byte[64];Put(b,0,RequestMagic);Put(b,4,version|((U(legacy,8)==4?3U:1U)<<16));Put(b,8,U(legacy,12));PutUid(b,12,uid);Put64(b,24,token);
             Buffer.BlockCopy(legacy,16,b,32,28);Seal(b);Require(FreshStart(b,family,uid,lastToken),"new START token was reused");return b;
@@ -107,11 +114,11 @@ namespace USB512_interface {
             Require(b!=null && b.Length==64 && U(b,0)==ReplyMagic && U(b,60)==NpFirstSyncWire.Crc(b,60),"reply tag/size/CRC");
             for(int i=4;i<32;i++)Require(b[i]==request[i],"reply operation/ID/UID/token mismatch");
             var r=new NpFirstSyncSdReply{Version=q.Version,Result=U(b,32),Supported=U(b,36),RecordFeatures=U(b,40),Session=U(b,44),Generation=U(b,48),SourceEpoch=U(b,52),ProfileCrc=U(b,56)};
-            uint recordFeatures=q.Version==3?25U:q.Version==2?9U:1U,allowed=(family==1?5U:7U)|(q.Version>=2?FeatureFineAux|FeatureFineCounter64:0);
+            uint recordFeatures=q.Version>=3?25U:q.Version==2?9U:1U,allowed=(family==1?5U:7U)|(q.Version>=2?FeatureFineAux|FeatureFineCounter64:0);
             Require(r.Result<=5 && (r.Supported&~allowed)==0 && ((r.Supported&6)==0 || (r.Supported&1)!=0) &&
                 ((r.Supported&FeatureFineAux)==0 || (r.Supported&13)==13) && ((r.Supported&FeatureFineCounter64)==0 || (r.Supported&29)==29) &&
                 (r.RecordFeatures&~recordFeatures)==0,"reply result/features");
-            if(q.Version>=2 && r.Result==0)Require((r.Supported&(q.Version==3?29U:13U))==(q.Version==3?29U:13U),"fine AUX/continuous64 protocol support dependencies");
+            if(q.Version>=2 && r.Result==0)Require((r.Supported&(q.Version>=3?29U:13U))==(q.Version>=3?29U:13U),"fine AUX/continuous64 protocol support dependencies");
             if(r.Result!=0 || q.Operation==Caps)Require(r.RecordFeatures==0 && r.Session==0 && r.Generation==0 && r.SourceEpoch==0 && r.ProfileCrc==UInt32.MaxValue,"error/CAPS cannot expose record context");
             else Require(r.RecordFeatures==recordFeatures && (r.Supported&1)!=0 && (q.Operation!=Scheduled || family==2 && (r.Supported&2)!=0),"successful record association/features");
             return r;

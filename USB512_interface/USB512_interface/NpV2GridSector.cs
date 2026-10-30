@@ -44,6 +44,14 @@ namespace USB512_interface {
             Need(batch.CaptureGeneration==generation,"inner generation mismatch");
             return batch;
         }
+        // Only the declared SD16 fixed-stride layout permits empty positions.
+        // A padding sector is not a missing sample or an ordinal advance.
+        internal static byte[] ReadSd16Data(byte[] sector,uint generation,ulong precedingBlock){
+            var raw=Payload(sector,generation,precedingBlock);
+            if(raw.Length!=0)Need(NpImuGridWire.Parse(raw).CaptureGeneration==generation,"inner generation mismatch");
+            return raw;
+        }
+        internal static byte[] PackSd16Empty(uint generation,ulong precedingBlock){return Wrap(generation,precedingBlock,new byte[0]);}
         // This validates one NSGP proof against independent expected context;
         // a transport consumer owns once-per-session and phase-before-row policy.
         internal static byte[] PackPhase(uint generation,ulong precedingBlock,NpImuGridPhaseRecord phase,NpImuGridPhaseBinding expected){

@@ -24,6 +24,9 @@ namespace USB512_interface
     // Startup may seek alignment; a recording never silently resynchronizes.
     internal sealed class XeNpStreamDecoder
     {
+        // Internal lab hook only; ordinary callers leave the factory null.
+        internal static Func<XeNpStreamDecoder,Action<byte[],int,int>> DiagnosticInputFactory=null;
+        private readonly Action<byte[],int,int> diagnosticInput;
         internal const int Channels=384;
         private const int SuperframeBytes=780;
         private const int StartupBytes=2*SuperframeBytes;
@@ -85,6 +88,8 @@ namespace USB512_interface
         internal XeNpStreamDecoder(XeNpLaneLayout layout=XeNpLaneLayout.Auto) {
             if(layout<XeNpLaneLayout.Auto || layout>XeNpLaneLayout.GpioV1Quad)throw new ArgumentOutOfRangeException("layout");
             Layout=layout;
+            var diagnosticFactory=DiagnosticInputFactory;
+            if(diagnosticFactory!=null)diagnosticInput=diagnosticFactory(this);
         }
         internal void DeclareFixedWord(ushort value) {
             if(value!=0x11 && value!=0x22)throw new IOException("Unsupported NP model fixed word");
@@ -235,6 +240,7 @@ namespace USB512_interface
         {
             if(failed || completed)throw new InvalidOperationException("NP1 decoder session is closed.");
             if(lanes==null || offset<0 || count<0 || offset>lanes.Length-count)throw new ArgumentOutOfRangeException("count");
+            if(diagnosticInput!=null)diagnosticInput(lanes,offset,count);
             for(int i=0;i<count;i++)pending.Add(lanes[offset+i]);
             if(!locked) {
                 if(pending.Count<StartupBytes)return;

@@ -7,44 +7,44 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
-      "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "USB and SD recording checked",
-      "appVersion": "build 87109990",
-      "usbVersion": "build 9D595E4D",
+      "release": "V1_DETERMINISTIC_IMU_APPFFF283D9_USB1E73A743_20261030",
+      "sourceCommit": "23edae6de84869b1b9edcf9e52074649c0579cbb",
+      "stage": "USB60 and BLE-to-SD30 recording checked",
+      "appVersion": "build FFF283D9",
+      "usbVersion": "build 1E73A743",
       "recoveryVersion": "Unchanged bootloader / ABI258",
-      "appCrc32": "87109990",
-      "usbCrc32": "9D595E4D",
+      "appCrc32": "FFF283D9",
+      "usbCrc32": "1E73A743",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_APP_87109990_RTC_IMU_20261029.hex",
-        "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
+        "path": "V1/V1_APP_FFF283D9_deterministic_IMU_20261030.hex",
+        "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
       },
       "files": [
         {
-          "path": "V1/V1_APP_87109990_RTC_IMU_20261029.hex",
-          "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
+          "path": "V1/V1_APP_FFF283D9_deterministic_IMU_20261030.hex",
+          "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
         },
         {
-          "path": "V1/V1_USB_service_9D595E4D_RTC_IMU_20261029.hex",
-          "sha256": "9BB9DB094C81C8F2FEAD4ABE253430E4A280547C2B8EB45B94820DC82A133199"
+          "path": "V1/V1_USB_service_1E73A743_deterministic_IMU_20261030.hex",
+          "sha256": "74D7D5C886A4DDDBEA88EC907AA0291F90F824C700D91DFB827B0AF277B5F271"
         },
         {
-          "path": "V1/V1_BOOT_DFU_unchanged_20261029.hex",
+          "path": "V1/V1_BOOT_DFU_unchanged_20261030.hex",
           "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
         },
         {
-          "path": "V1/V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
-          "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9"
+          "path": "V1/V1_fused_BOOT_USB1E73A743_APPFFF283D9_deterministic_IMU_20261030.hex",
+          "sha256": "5D89FB6E25235867DD2E47F900228A57D60DB56C60BE6358BD624EF713BAFC9C"
         }
       ],
-      "limits": "USB and BLE-to-SD checked at two probes / 20kHz. PC uncertainty is separate from local RTC alignment. See acceptance.json for scope and initial IMU-slot limits.",
+      "limits": "Two probes / 20kHz checked in USB60 and BLE-to-SD30. Enforced 1250Hz cached IMU grid; one initial missing slot. Local RTC intervals112us USB/111us SD, PC uncertainty separate. SD source overlap, terminal tail and physical conversion phase remain unqualified. See acceptance.json.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 365520,
-        "codeCrc32": "87109990",
-        "buildIdHex": "3663643136636432326464303164303534316566653032326333336336306139",
+        "bytes": 366296,
+        "codeCrc32": "FFF283D9",
+        "buildIdHex": "3866366237323165306263343265323636326338366262656236373135666139",
         "manifestFlags": 0,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -53,13 +53,23 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 330344,
-        "codeCrc32": "9D595E4D",
-        "buildIdHex": "6361636435353064306662323333616665313839306537393536636531303962",
+        "codeCrc32": "1E73A743",
+        "buildIdHex": "3466353665396462373865613166373362376366666233656531323639663630",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 365520,
+          "codeCrc32": "87109990",
+          "buildIdHex": "3663643136636432326464303164303534316566653032326333336336306139",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -142,6 +152,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 330344,
+          "codeCrc32": "9D595E4D",
+          "buildIdHex": "6361636435353064306662323333616665313839306537393536636531303962",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -284,28 +304,51 @@
         }
       ],
       "historySources": [
+        "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
         "e831a5f10c28c1df596766b195d4a48aeb38991d",
         "72c432b59002d394e4d396b1dd078e203547981a",
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
       "sourceInputs": {
-        "baselineRelease": "APP82E51DEA",
-        "sourceOverlaySha256": "102D0F6B7ED7DC59AEA302FF4D9DD5CB208249EE0C3AC498BD5F3A99BBC35135",
-        "evidence": "ReleaseSources/1.0.0.158/firmware/V1"
+        "archive": "ReleaseSources/1.0.0.204/V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
+        "sha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35",
+        "changedProductionCUnits": 5,
+        "uniqueSourceDependencyFiles": 426,
+        "fullHistoricalRebuildSourceClosureClaimed": false
       },
       "full": {
-        "path": "V1/V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
-        "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9"
+        "path": "V1/V1_fused_BOOT_USB1E73A743_APPFFF283D9_deterministic_IMU_20261030.hex",
+        "sha256": "5D89FB6E25235867DD2E47F900228A57D60DB56C60BE6358BD624EF713BAFC9C"
       },
-      "sourceCommitScope": "Exact incremental inputs and retained objects are identified by source-manifest.json; scoped USB and SD checks use these unchanged component bytes.",
+      "sourceCommitScope": "The resolved commit publishes the exact incremental source/dependency archive and metadata; it is not asserted to be a canonical clean-build firmware tree. Qualified component HEX bytes and retained binary provenance are separately identified.",
       "sourceProvenance": {
         "ownerManifest": "V1/source-manifest.json",
-        "ownerManifestSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
-        "packageReceiptSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+        "ownerManifestSha256": "042D4A49CB60C8449DF5A7537D6732921B893A5E464D4795A11E66386380D148",
+        "packageReceiptSha256": "9F2692AD25032FC4AE9C0EE49666EF9F565CBBF96B03CDD41329251D69F77BB4",
         "acceptance": "V1/acceptance.json",
-        "acceptanceSha256": "DAF895B31EEB3B6C876E3906D76EFB51E15DDF7811BD40F5CEE8D954A680D346",
+        "acceptanceSha256": "5C079AB670882A95E4858D51A8C8AACA663B21DDDE63F841F6D63AABEE0BA715",
+        "sourceArchive": "ReleaseSources/1.0.0.204/V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
+        "sourceArchiveSha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35",
         "canonicalSourceEquivalenceClaimed": false
+      },
+      "sourceCommitRole": "incremental_source_archive_publication",
+      "retainedBaselineProvenance": {
+        "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
+        "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+        "sourceInputs": {
+          "baselineRelease": "APP82E51DEA",
+          "sourceOverlaySha256": "102D0F6B7ED7DC59AEA302FF4D9DD5CB208249EE0C3AC498BD5F3A99BBC35135",
+          "evidence": "ReleaseSources/1.0.0.158/firmware/V1"
+        },
+        "sourceProvenance": {
+          "ownerManifest": "V1/source-manifest.json",
+          "ownerManifestSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+          "packageReceiptSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+          "acceptance": "V1/acceptance.json",
+          "acceptanceSha256": "DAF895B31EEB3B6C876E3906D76EFB51E15DDF7811BD40F5CEE8D954A680D346",
+          "canonicalSourceEquivalenceClaimed": false
+        }
       }
     },
     {

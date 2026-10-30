@@ -11,12 +11,13 @@ namespace CE32_console
     internal sealed class NpDownloadRecord {
         internal long Start,End;internal uint Session,Chunks,ApHz,LfpHz,State,Fault,ProbeMask,LaneBytes,TicksPerBlock;
         internal uint FormatVersion,UnderlyingFormatVersion,CameraHz,MicrophoneHz,LogicalPrefixBlocks,LogicalHighWaterBlocks;
+        internal ulong PhysicalSectors;
         internal string ValidationError;
         internal long CatalogEnd,CommittedEnd;
         internal bool OpenTail;
         internal string RecoveryNotice;
         internal bool Downloadable{get{return string.IsNullOrEmpty(ValidationError);}}
-        internal bool V2{get{return FormatVersion==11 || FormatVersion==12 || FormatVersion==13 || FormatVersion==14 || FormatVersion==15;}}
+        internal bool V2{get{return FormatVersion==11 || FormatVersion==12 || FormatVersion==13 || FormatVersion==14 || FormatVersion==15 || FormatVersion==16;}}
         internal bool Media{get{return (FormatVersion==7 || FormatVersion==8) && ProbeMask==0 && ApHz==0;}}
         internal bool Complete{get{return State==3 && Fault==0 && Chunks>0;}}
         internal bool PowerInterruptedRecovery{get{return Downloadable && (FormatVersion==6 && State>=1 && State<=4 || Media && State==1 && Fault==0) && Chunks==0 && !Complete;}}
@@ -24,7 +25,7 @@ namespace CE32_console
         internal double V2DurationSeconds{get{return ApHz==0||TicksPerBlock==0?0:Chunks*(double)TicksPerBlock/(ApHz*1600.0);}}
         internal string RecordedSize{get{
             if(PowerInterruptedRecovery)return "size unknown";
-            double size=(ulong)Chunks*(V2?46592UL:65536UL);int unit=0;
+            double size=FormatVersion==16?PhysicalSectors*512UL:(ulong)Chunks*(V2?46592UL:65536UL);int unit=0;
             string[] units={"B","KiB","MiB","GiB","TiB"};
             while(size>=1024 && unit<units.Length-1){size/=1024;unit++;}
             return size.ToString(unit==0?"N0":"N2")+" "+units[unit]+(Chunks==0?" committed":"");
@@ -233,7 +234,7 @@ namespace CE32_console
                                 NpDownloadStream.U(h,72)==s.Length/512 && NpDownloadStream.U(h,68)<=s.Length/512;
                             if(end<NpDownloadStream.U(f,116) || end>NpDownloadStream.U(h,68))throw new InvalidDataException("NP2 extent mismatch: catalog="+end+", payload="+NpDownloadStream.U(h,60)+", committed="+NpDownloadStream.U(f,116)+", reserved="+NpDownloadStream.U(h,68)+", state="+state+", fault="+NpDownloadStream.U(f,104)+", blocks="+NpDownloadStream.U(f,108)+".");}
                         catch(InvalidDataException ex){failure=ex.Message;}
-                        return new NpDownloadRecord{ValidationError=failure,CatalogEnd=end,CommittedEnd=NpDownloadStream.U(f,116),OpenTail=openTail,FormatVersion=NpDownloadStream.U(h,8),UnderlyingFormatVersion=NpDownloadStream.U(h,8)==15?NpDownloadStream.U(h,136):NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104),LogicalPrefixBlocks=NpDownloadStream.U(f,132),LogicalHighWaterBlocks=NpDownloadStream.U(f,136)};
+                        return new NpDownloadRecord{ValidationError=failure,CatalogEnd=end,CommittedEnd=NpDownloadStream.U(f,116),OpenTail=openTail,FormatVersion=NpDownloadStream.U(h,8),UnderlyingFormatVersion=NpDownloadStream.U(h,8)==16?NpDownloadStream.U(h,220):NpDownloadStream.U(h,8)==15?NpDownloadStream.U(h,136):NpDownloadStream.U(h,8),PhysicalSectors=NpDownloadStream.U(h,8)==16?BitConverter.ToUInt64(f,256):(ulong)NpDownloadStream.U(f,108)*91,ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104),LogicalPrefixBlocks=NpDownloadStream.U(f,132),LogicalHighWaterBlocks=NpDownloadStream.U(f,136)};
                     }
                     return ReadV1Record(start,end,h,f,available);
         }

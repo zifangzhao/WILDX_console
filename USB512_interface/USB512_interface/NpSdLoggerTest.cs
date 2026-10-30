@@ -100,6 +100,8 @@ namespace USB512_interface
                 var added=after.Records.Last();
                 if(added.Start!=result.StartLba || result.Session!=0&&added.Session!=0&&result.Session!=added.Session)throw new IOException("The new catalog extent does not match the requested test.");
                 if(added.Session!=0)result.Session=added.Session;
+                // BLE's catalog summary has no storage-version/stride field.
+                // Keep the neural byte count until USB proves physical bytes.
                 result.EndLba=added.End;result.WrittenBytes=(long)result.Chunks*(V2?46592:65536);
                 if(result.Chunks!=result.ExpectedChunks)throw new IOException("Recorded blocks do not match the finite test target.");
                 result.RecordingCompleted=true;result.Status="Recording completed — USB readback required";
@@ -181,7 +183,8 @@ namespace USB512_interface
                     uint maximum=BitConverter.ToUInt32(footer,76);result.MaxWriteMs=maximum==0?(double?)null:maximum;
                     result.Details+="\r\nLongest recorded write transaction: "+(result.MaxWriteMs.HasValue?result.MaxWriteMs.Value.ToString("F1")+" ms":"not reported")+" (not a CMD25 histogram).";
                 }
-                result.VerifiedBytes=(long)record.Chunks*(record.V2?46592:65536);result.ReadSeconds=clock.Elapsed.TotalSeconds;
+                result.VerifiedBytes=record.FormatVersion==16?checked((long)record.PhysicalSectors*512):(long)record.Chunks*(record.V2?46592:65536);result.ReadSeconds=clock.Elapsed.TotalSeconds;
+                if(record.FormatVersion==16)result.WrittenBytes=result.VerifiedBytes;
                 result.Status=result.LossCountersAvailable?"Passed committed stored continuity":"Stored checks passed — loss counters unavailable";
                 result.Details+="\r\nFull stored-data framing readback: "+(result.VerifiedBytes/1048576.0).ToString("F1")+" MiB.\r\n"+
                     "USB readback is matched by MCU (where reported), session, profile and extent; it is not a reusable card certification.";

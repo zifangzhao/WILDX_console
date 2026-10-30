@@ -1,0 +1,883 @@
+{
+  "schema": 1,
+  "status": "artifact_composition_ready_for_root_release_validation",
+  "version": "1.0.0.199",
+  "uid_tested": "001D00065942500B20313354",
+  "abi": 258,
+  "app": {
+    "role": "APP",
+    "abi": 258,
+    "generation": 1,
+    "manifest_address": "0801E000",
+    "base": "08020000",
+    "limit_exclusive": "0817E000",
+    "bytes": 365520,
+    "crc32": "87109990",
+    "sp": "20017F70",
+    "pc": "0802038D",
+    "buildIdHex": "3663643136636432326464303164303534316566653032326333336336306139",
+    "buildIdAscii": "6cd16cd22dd01d0541efe022c33c60a9",
+    "manifest_flags": 0,
+    "manifest_reserved": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "manifest_crc32": "CB880588",
+    "manifest_hex": "584E50314D4E463101000000444C4156315050410100000000000208D093050090991087707F01208D0302083663643136636432326464303164303534316566653032326333336336306139000000000201000000000000000000000000000000000000000000000000000000000000000000000000000000000000880588CB",
+    "input": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\test_only\\V1_APP_RTC_PENDING_HIL_ONLY.hex",
+      "bytes": 1028517,
+      "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
+    },
+    "identity_source": {
+      "role": "APP",
+      "abi": 258,
+      "manifest_address": "0801E000",
+      "image": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\test_only\\V1_APP_RTC_PENDING_HIL_ONLY.hex",
+      "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321",
+      "input_sha256": "18AF56D1F3FE181477400FEF19A640FE641650F2EA8452AB8AC3365FB05CEFBC",
+      "axf_sha256": "9E0F1A08352B4065BAE668BBAB9235172C21CCA52A9980A23AE961CD0DF3A4AF",
+      "test_only": true,
+      "published": false
+    }
+  },
+  "usb": {
+    "role": "USB",
+    "abi": 258,
+    "generation": 1,
+    "manifest_address": "0817E000",
+    "base": "08180000",
+    "limit_exclusive": "08200000",
+    "bytes": 330344,
+    "crc32": "9D595E4D",
+    "sp": "200186F0",
+    "pc": "0818038D",
+    "buildIdHex": "6361636435353064306662323333616665313839306537393536636531303962",
+    "buildIdAscii": "cacd550d0fb233afe1890e7956ce109b",
+    "manifest_flags": 1,
+    "manifest_reserved": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "manifest_crc32": "7BB79DFA",
+    "manifest_hex": "584E50314D4E463101000000444C4156314253550100000000001808680A05004D5E599DF08601208D0318086361636435353064306662323333616665313839306537393536636531303962010000000201000000000000000000000000000000000000000000000000000000000000000000000000000000000000FA9DB77B",
+    "input": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\test_only\\V1_USB_RTC_PENDING_HIL_ONLY.hex",
+      "bytes": 929591,
+      "sha256": "9BB9DB094C81C8F2FEAD4ABE253430E4A280547C2B8EB45B94820DC82A133199"
+    },
+    "identity_source": {
+      "role": "USB",
+      "abi": 258,
+      "manifest_address": "0817E000",
+      "image": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\test_only\\V1_USB_RTC_PENDING_HIL_ONLY.hex",
+      "sha256": "9BB9DB094C81C8F2FEAD4ABE253430E4A280547C2B8EB45B94820DC82A133199",
+      "input_sha256": "106C4B2AB4E0D76C8BB194A9583413281534AEAB6B606E927DA3BBE940EEFA7A",
+      "axf_sha256": "50F930113281279127C435CB0C67A5865ADEDB05E61A869EE53FC4836CD49A71",
+      "test_only": true,
+      "published": false
+    }
+  },
+  "boot": {
+    "role": "BOOT",
+    "unchanged": true,
+    "base": "08000000",
+    "limit_exclusive": "0801C000",
+    "bytes": 114688,
+    "sp": "20001B90",
+    "pc": "0800031D",
+    "crc32": "7AD4D631",
+    "raw_sha256": "03CBCA29117EA3C54F797F5CD9698E786BC5D0FFA73853FEBAD3431B425E3A7F",
+    "source": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Firmware\\V1\\V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
+      "bytes": 1044112,
+      "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F"
+    },
+    "source_ranges": [
+      {
+        "start": "08000000",
+        "end_exclusive": "0801C000",
+        "bytes": 114688
+      },
+      {
+        "start": "0817E000",
+        "end_exclusive": "0817E080",
+        "bytes": 128
+      },
+      {
+        "start": "08180000",
+        "end_exclusive": "081C0A68",
+        "bytes": 264808
+      }
+    ],
+    "removed_old_usb_bytes": 264936,
+    "preserved_loader_bytes": 114688
+  },
+  "files": {
+    "app": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1_release199_compose\\V1_APP_87109990_RTC_IMU_20261029.hex",
+      "bytes": 1028517,
+      "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321",
+      "ranges": [
+        {
+          "start": "0801E000",
+          "end_exclusive": "0801E080",
+          "bytes": 128
+        },
+        {
+          "start": "08020000",
+          "end_exclusive": "080793D0",
+          "bytes": 365520
+        }
+      ]
+    },
+    "usb": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1_release199_compose\\V1_USB_service_9D595E4D_RTC_IMU_20261029.hex",
+      "bytes": 929591,
+      "sha256": "9BB9DB094C81C8F2FEAD4ABE253430E4A280547C2B8EB45B94820DC82A133199",
+      "ranges": [
+        {
+          "start": "0817E000",
+          "end_exclusive": "0817E080",
+          "bytes": 128
+        },
+        {
+          "start": "08180000",
+          "end_exclusive": "081D0A68",
+          "bytes": 330344
+        }
+      ]
+    },
+    "boot": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1_release199_compose\\V1_BOOT_DFU_unchanged_20261029.hex",
+      "bytes": 322607,
+      "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9",
+      "ranges": [
+        {
+          "start": "08000000",
+          "end_exclusive": "0801C000",
+          "bytes": 114688
+        }
+      ]
+    },
+    "fused": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1_release199_compose\\V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
+      "bytes": 2280672,
+      "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9",
+      "ranges": [
+        {
+          "start": "08000000",
+          "end_exclusive": "0801C000",
+          "bytes": 114688
+        },
+        {
+          "start": "0801E000",
+          "end_exclusive": "0801E080",
+          "bytes": 128
+        },
+        {
+          "start": "08020000",
+          "end_exclusive": "080793D0",
+          "bytes": 365520
+        },
+        {
+          "start": "0817E000",
+          "end_exclusive": "0817E080",
+          "bytes": 128
+        },
+        {
+          "start": "08180000",
+          "end_exclusive": "081D0A68",
+          "bytes": 330344
+        }
+      ]
+    }
+  },
+  "authoritative_tools": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\UnifiedUsb\\package_reset_service.py",
+      "bytes": 2752,
+      "sha256": "D33E595829584B87084028D31A1E6C5C785DCA8FF611E01312821FCD2FAC4573"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Tools\\V1Capture\\Split\\package.py",
+      "bytes": 2789,
+      "sha256": "75BAB5EE8E8281DAFB37368A4C4F098A7D0FF503CCEB33ED0EB36BE68FBFF434"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Tools\\package_xe_np_firmware.py",
+      "bytes": 10334,
+      "sha256": "848B494B8FB9907C626A14AE58B752448AA49ECD1AA76E3A2B318F7967E4AB33"
+    }
+  ],
+  "partition_checks": {
+    "config_page_absent": true,
+    "no_component_overlap": true,
+    "exact_sealed_manifest_and_code_bytes": true,
+    "hex_roundtrip_equal": true,
+    "boot_matches_original_installed_restored_USB_and_SD_backups": true
+  },
+  "owner_flash_proofs": [
+    {
+      "role": "rtc_host199_hil_r1",
+      "snapshot": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_host199_hil_r1\\original_flash.bin",
+        "bytes": 2097152,
+        "sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75"
+      },
+      "boot_partition_bytes_equal": true,
+      "exact_sealed_component_equal": false,
+      "owner_verification": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_host199_hil_r1\\restore_verified.json",
+        "bytes": 207,
+        "sha256": "9EB9B26543ED1449E7A2B311BFB009AB877FF6AA8CD9FB7D68800ED74B329AC1"
+      }
+    },
+    {
+      "role": "rtc_host199_hil_r1",
+      "snapshot": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_host199_hil_r1\\restore_flash.bin",
+        "bytes": 2097152,
+        "sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75"
+      },
+      "boot_partition_bytes_equal": true,
+      "exact_sealed_component_equal": false,
+      "owner_verification": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_host199_hil_r1\\restore_verified.json",
+        "bytes": 207,
+        "sha256": "9EB9B26543ED1449E7A2B311BFB009AB877FF6AA8CD9FB7D68800ED74B329AC1"
+      }
+    },
+    {
+      "role": "rtc_host199_hil_r1",
+      "snapshot": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_host199_hil_r1\\install_flash.bin",
+        "bytes": 2097152,
+        "sha256": "E4C02B3371F0BEC7C734BB7022D351455B71D2D730F66AE7BFAACB13A6283425"
+      },
+      "boot_partition_bytes_equal": true,
+      "exact_sealed_component_equal": true,
+      "owner_verification": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_host199_hil_r1\\install_verified.json",
+        "bytes": 207,
+        "sha256": "A99B8F25C23D7CE9656EEB08D8547F6F08CBD801F0F8CC8A1C76F344AD5A9423"
+      }
+    },
+    {
+      "role": "rtc_app_hil_r1",
+      "snapshot": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\original_flash.bin",
+        "bytes": 2097152,
+        "sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75"
+      },
+      "boot_partition_bytes_equal": true,
+      "exact_sealed_component_equal": false,
+      "owner_verification": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_verified.json",
+        "bytes": 383,
+        "sha256": "6CC3DA1E64B567D3E6017F2F919313C8071A9075DCC1D215795A87C71F6A01B4"
+      }
+    },
+    {
+      "role": "rtc_app_hil_r1",
+      "snapshot": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_flash.bin",
+        "bytes": 2097152,
+        "sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75"
+      },
+      "boot_partition_bytes_equal": true,
+      "exact_sealed_component_equal": false,
+      "owner_verification": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_verified.json",
+        "bytes": 383,
+        "sha256": "6CC3DA1E64B567D3E6017F2F919313C8071A9075DCC1D215795A87C71F6A01B4"
+      }
+    },
+    {
+      "role": "rtc_app_hil_r1",
+      "snapshot": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\install_flash.bin",
+        "bytes": 2097152,
+        "sha256": "73293FB13BAFA1DC8E3C5F4F1A2A61A484F63EB79934D2817C5281CE373CA268"
+      },
+      "boot_partition_bytes_equal": true,
+      "exact_sealed_component_equal": true,
+      "owner_verification": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\install_verified.json",
+        "bytes": 383,
+        "sha256": "79DE6925AE3F5D7FB5C54673BD12945972B5959F53DB9B47810DE383503437E5"
+      }
+    }
+  ],
+  "compile_flags_audit": [
+    {
+      "role": "app",
+      "compile_receipt": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\compile_receipt.json",
+        "bytes": 10866,
+        "sha256": "E2DFF98AFF9E00EA1A37D51052E2468E97AB35DEBC75907DD3AA78C7504AC2B8"
+      },
+      "build_receipt": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\build.json",
+        "bytes": 2143,
+        "sha256": "D96BEB4AC36C29FC71A824635C1A997340C1BD676A8E573F74CC00EE3B9FD306"
+      },
+      "linked_axf": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\candidate.axf",
+        "bytes": 2734404,
+        "sha256": "9E0F1A08352B4065BAE668BBAB9235172C21CCA52A9980A23AE961CD0DF3A4AF"
+      },
+      "units": [
+        {
+          "unit": "np_v1_rtc",
+          "source": {
+            "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\np_v1_rtc\\437c20964068_np_v1_rtc.c",
+            "bytes": 16369,
+            "sha256": "F210EF944AE441AF6A8477C22A74956222387421C3D9F76448856A184B5C784D"
+          },
+          "defines": [
+            "NP_SD_IDLE_SLEEP_ENABLE=1U",
+            "NP_BATTERY_DIVIDER_TOP_KOHM=91U",
+            "NP_BATTERY_DIVIDER_BOTTOM_KOHM=91U",
+            "__UVISION_VERSION=537",
+            "_RTE_",
+            "STM32U595xx",
+            "USE_HAL_DRIVER",
+            "NP_SD_SLOTS=128U",
+            "NP_SD_VSC=1U",
+            "NP_SD_VSC_ERASE=0U",
+            "NP_SD_CE64=1U",
+            "NP_SD_SENSORS=1U",
+            "NP_SD_BME_WIRING_CONFIRMED=0U",
+            "NP_SD_ALLOW_WRITES=1U",
+            "NP_SD_PROBE_MASK=2U",
+            "NP_SD_AP_HZ=15000U",
+            "XE_NP_BOARD_EXPERIMENT_DISABLE_SD_INIT=0U",
+            "XE_NP_APP_QUAD_USB_PACED=1U",
+            "XE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+            "XE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+            "XE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+            "XE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+            "XE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+            "XE_NP_CAPTURE_DMA_NODE_BYTES=7680UL",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+            "XE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+            "XE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+            "XE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_RISING_EDGE=0U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_FILTER=0U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_DELAY_TICKS=6U",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+            "XE_NP_GENERATED_PROBE_CONFIG_INDEX=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_ENABLE=1U",
+            "XE_NP_APP_GPIOE_QUAD_DMA_INTERLEAVE_BLOCK_BYTES=100U",
+            "XE_NP_APP_GPIOE_DUAL_DMA_INTERLEAVE_REPEAT_COUNT=624U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_USB_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_LINEAR_CHANNELS_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_DUAL_DMA_INTERLEAVE_DELAYED_PWM2_ENABLE=1U",
+            "XE_NP_APP_CAPTURE_DMA_DEST_BURST_LENGTH=1U",
+            "XE_NP_APP_CAPTURE_DMA_DEST_ALLOCATED_PORT=DMA_DEST_ALLOCATED_PORT1",
+            "XE_NP_APP_EXPERIMENT_DMA_LINK_ALLOCATED_PORT=1U",
+            "NP_SD_STORE_V2=1U",
+            "NP_SD_RECORDING_CLOCK_POWER_SAVE=1U",
+            "NP_FIRST_SYNC_ENABLE=1",
+            "NP_CL_ENABLE=0",
+            "NP_SD_APP=1",
+            "NP_FINE_COUNTER64_ENABLE=1",
+            "HAL_RTC_MODULE_ENABLED",
+            "NP_HARDWARE_RTC_ENABLE=1"
+          ],
+          "synthetic_or_first_slot_defaults": []
+        },
+        {
+          "unit": "xe_np_app",
+          "source": {
+            "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\46f3ab701f21_xe_np_app.c",
+            "bytes": 592306,
+            "sha256": "8ABCE4DA404AFD4F4B54D25E9085DBEA58F72C67596E4CBEA7B2FABAFD862B71"
+          },
+          "defines": [
+            "NP_SD_IDLE_SLEEP_ENABLE=1U",
+            "NP_BATTERY_DIVIDER_TOP_KOHM=91U",
+            "NP_BATTERY_DIVIDER_BOTTOM_KOHM=91U",
+            "__UVISION_VERSION=537",
+            "_RTE_",
+            "STM32U595xx",
+            "USE_HAL_DRIVER",
+            "NP_SD_SLOTS=128U",
+            "NP_SD_VSC=1U",
+            "NP_SD_VSC_ERASE=0U",
+            "NP_SD_CE64=1U",
+            "NP_SD_SENSORS=1U",
+            "NP_SD_BME_WIRING_CONFIRMED=0U",
+            "NP_SD_ALLOW_WRITES=1U",
+            "NP_SD_PROBE_MASK=2U",
+            "NP_SD_AP_HZ=15000U",
+            "XE_NP_BOARD_EXPERIMENT_DISABLE_SD_INIT=0U",
+            "XE_NP_APP_QUAD_USB_PACED=1U",
+            "XE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+            "XE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+            "XE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+            "XE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+            "XE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+            "XE_NP_CAPTURE_DMA_NODE_BYTES=7680UL",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+            "XE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+            "XE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+            "XE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_RISING_EDGE=0U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_FILTER=0U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_DELAY_TICKS=6U",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=752640UL",
+            "XE_NP_GENERATED_PROBE_CONFIG_INDEX=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_ENABLE=1U",
+            "XE_NP_APP_GPIOE_QUAD_DMA_INTERLEAVE_BLOCK_BYTES=100U",
+            "XE_NP_APP_GPIOE_DUAL_DMA_INTERLEAVE_REPEAT_COUNT=624U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_USB_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_LINEAR_CHANNELS_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_DUAL_DMA_INTERLEAVE_DELAYED_PWM2_ENABLE=1U",
+            "XE_NP_APP_CAPTURE_DMA_DEST_BURST_LENGTH=1U",
+            "XE_NP_APP_CAPTURE_DMA_DEST_ALLOCATED_PORT=DMA_DEST_ALLOCATED_PORT1",
+            "XE_NP_APP_EXPERIMENT_DMA_LINK_ALLOCATED_PORT=1U",
+            "NP_SD_STORE_V2=1U",
+            "NP_SD_RECORDING_CLOCK_POWER_SAVE=1U",
+            "NP_CL_ENABLE=0",
+            "NP_FIRST_SYNC_ENABLE=1",
+            "NP_FINE_COUNTER64_ENABLE=1",
+            "NP_HARDWARE_RTC_ENABLE=1",
+            "NP_SD_APP=1",
+            "NP_CAPTURE_START_DIAG_ENABLE=0",
+            "NP_SENSOR_GRID_ENABLE=1",
+            "NP_SENSOR_GRID_READY=1",
+            "NP_GRID_LIFETIME_DIAG=1"
+          ],
+          "synthetic_or_first_slot_defaults": []
+        }
+      ],
+      "retained_objects": "Unchanged parent objects; authoritative LNP/compile receipt retained by firmware owner",
+      "test_only_identity_tag": "Local provenance tag only; no automatic synthetic/injection activation found in actual role compile argv/default guards",
+      "enabled_diagnostics": "NP_GRID_LIFETIME_DIAG=1 and real NSG grid runtime retained; diagnostic counter evidence is not synthetic sensor/NP injection"
+    },
+    {
+      "role": "usb",
+      "compile_receipt": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\compile_receipt.json",
+        "bytes": 15537,
+        "sha256": "03EDBD01239BFC2DA1CF2EBA608DF789E9C33C38B4D46B3B2D69D2280B7CEC44"
+      },
+      "build_receipt": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\build.json",
+        "bytes": 1786,
+        "sha256": "4D67B5882D64B3C1E4B9CC956863A35A9130A899292AD71498C47B00313490FC"
+      },
+      "linked_axf": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\candidate.axf",
+        "bytes": 2570192,
+        "sha256": "50F930113281279127C435CB0C67A5865ADEDB05E61A869EE53FC4836CD49A71"
+      },
+      "units": [
+        {
+          "unit": "np_v1_rtc",
+          "source": {
+            "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_pending_incremental_r1\\np_v1_rtc\\437c20964068_np_v1_rtc.c",
+            "bytes": 16407,
+            "sha256": "C1CB4FF1C5A668DB8F9FF93D5699C804DEBE14897D43BA03342388B085567A2D"
+          },
+          "defines": [
+            "__UVISION_VERSION=537",
+            "_RTE_",
+            "STM32U595xx",
+            "USE_HAL_DRIVER",
+            "XE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+            "XE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+            "XE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+            "XE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+            "XE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+            "XE_NP_CAPTURE_DMA_NODE_BYTES=23040UL",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=760320UL",
+            "XE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+            "XE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+            "XE_NP_USB_STREAM_PACKETS_PER_TRANSFER=116U",
+            "XE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_RISING_EDGE=1U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_FILTER=0U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_DELAY_TICKS=7U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_ENABLE=1U",
+            "XE_NP_APP_GPIOE_QUAD_DMA_INTERLEAVE_BLOCK_BYTES=90U",
+            "XE_NP_APP_GPIOE_DUAL_DMA_INTERLEAVE_REPEAT_COUNT=704U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_USB_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_LINEAR_CHANNELS_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_DUAL_DMA_INTERLEAVE_DELAYED_PWM2_ENABLE=1U",
+            "NP_FIRST_SYNC_ENABLE=1",
+            "NP_CL_ENABLE=0",
+            "NP_SD_APP=0",
+            "NP_FINE_COUNTER64_ENABLE=1",
+            "XE_NP_SENSOR_AG_ODR_HZ=200U",
+            "HAL_RTC_MODULE_ENABLED",
+            "NP_HARDWARE_RTC_ENABLE=1"
+          ],
+          "synthetic_or_first_slot_defaults": []
+        },
+        {
+          "unit": "xe_np_app",
+          "source": {
+            "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_incremental_r1\\xe_np_app\\ca29aa290488_xe_np_app.c",
+            "bytes": 581137,
+            "sha256": "E9FB9BB30FEF715C77D0386FFE0D553B200280DE62F69F9925722EB9780D782B"
+          },
+          "defines": [
+            "__UVISION_VERSION=537",
+            "_RTE_",
+            "STM32U595xx",
+            "USE_HAL_DRIVER",
+            "XE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+            "XE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+            "XE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+            "XE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+            "XE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+            "XE_NP_CAPTURE_DMA_NODE_BYTES=23040UL",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=760320UL",
+            "XE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+            "XE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+            "XE_NP_USB_STREAM_PACKETS_PER_TRANSFER=116U",
+            "XE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_RISING_EDGE=1U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_FILTER=0U",
+            "XE_NP_APP_GPIOE_CAPTURE_TIM2_DELAY_TICKS=7U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_ENABLE=1U",
+            "XE_NP_APP_GPIOE_QUAD_DMA_INTERLEAVE_BLOCK_BYTES=90U",
+            "XE_NP_APP_GPIOE_DUAL_DMA_INTERLEAVE_REPEAT_COUNT=704U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_INTERLEAVE_USB_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_QUAD_DMA_LINEAR_CHANNELS_ENABLE=1U",
+            "XE_NP_APP_EXPERIMENT_GPIOE_DUAL_DMA_INTERLEAVE_DELAYED_PWM2_ENABLE=1U",
+            "NP_CL_ENABLE=0",
+            "XE_NP_SENSOR_AG_ODR_HZ=200U",
+            "NP_FIRST_SYNC_ENABLE=1",
+            "NP_FINE_COUNTER64_ENABLE=1",
+            "NP_HARDWARE_RTC_ENABLE=1",
+            "NP_SD_APP=0",
+            "NP_CAPTURE_START_DIAG_ENABLE=0",
+            "NP_SENSOR_GRID_ENABLE=1",
+            "NP_SENSOR_GRID_READY=1",
+            "NP_GRID_LIFETIME_DIAG=1"
+          ],
+          "synthetic_or_first_slot_defaults": []
+        },
+        {
+          "unit": "xe_np_usb_stream",
+          "source": {
+            "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\5275409b7caf_stream.c",
+            "bytes": 141094,
+            "sha256": "F01405EAAEAFB62B3813405618D69CD5D806F4F2DE61F07AE84F2755F51FDC04"
+          },
+          "defines": [
+            "__UVISION_VERSION=537",
+            "_RTE_",
+            "STM32U595xx",
+            "USE_HAL_DRIVER",
+            "XE_NP_APP_QUAD_USB_WORD_EXPORT=1U",
+            "XE_NP_APP_QUAD_DMA_LLI_SRAM2=1U",
+            "XE_NP_APP_QUAD_DMA_PACK_WORDS=1U",
+            "XE_NP_APP_QUAD_DMA_STAGGER_ENABLE=1U",
+            "XE_NP_APP_QUAD_DMA_DAR_ONLY_ENABLE=1U",
+            "XE_NP_CAPTURE_DMA_NODE_BYTES=23040UL",
+            "XE_NP_APP_CAPTURE_STORAGE_BYTES=760320UL",
+            "XE_NP_BOARD_EXPERIMENT_MCO_DIVIDER=4U",
+            "XE_NP_BOARD_EXPERIMENT_EXPECTED_MCO_HZ=46800000UL",
+            "XE_NP_USB_STREAM_PACKETS_PER_TRANSFER=116U",
+            "XE_NP_CAPTURE_SRAM3_MPU_NONCACHEABLE=1U",
+            "XE_NP_USB_STREAM_QUAD_STAGING_DMA_ENABLE=1U",
+            "XE_NP_USB_STREAM_INTERLEAVED_STAGING_DMA_CHANNEL=14U",
+            "NP_CL_ENABLE=0",
+            "XE_NP_SENSOR_AG_ODR_HZ=200U",
+            "NP_FIRST_SYNC_ENABLE=1",
+            "NP_FINE_COUNTER64_ENABLE=1",
+            "NP_HARDWARE_RTC_ENABLE=1",
+            "NP_SD_APP=0",
+            "NP_CAPTURE_START_DIAG_ENABLE=0",
+            "NP_SENSOR_GRID_ENABLE=1",
+            "NP_SENSOR_GRID_READY=1",
+            "NP_GRID_LIFETIME_DIAG=1"
+          ],
+          "synthetic_or_first_slot_defaults": [
+            {
+              "name": "XE_NP_USB_STREAM_REAL_CAPTURE_SYNTHETIC_PAYLOAD_ENABLE",
+              "default": "0U",
+              "override": null,
+              "effective": "0U"
+            },
+            {
+              "name": "XE_NP_USB_STREAM_SYNTHETIC_ENABLE_NP_VCC_TEST",
+              "default": "0U",
+              "override": null,
+              "effective": "0U"
+            },
+            {
+              "name": "XE_NP_USB_STREAM_REAL_CAPTURE_SYNTHETIC_DETACH_PORT_ENABLE",
+              "default": "0U",
+              "override": null,
+              "effective": "0U"
+            },
+            {
+              "name": "XE_NP_USB_STREAM_REAL_CAPTURE_RESTART_SYNTHETIC_ENABLE",
+              "default": "0U",
+              "override": null,
+              "effective": "0U"
+            },
+            {
+              "name": "XE_NP_USB_STREAM_REAL_EXPORT_SYNTHETIC_PACKET_ENABLE",
+              "default": "0U",
+              "override": null,
+              "effective": "0U"
+            }
+          ]
+        }
+      ],
+      "retained_objects": "Unchanged parent objects; authoritative LNP/compile receipt retained by firmware owner",
+      "test_only_identity_tag": "Local provenance tag only; no automatic synthetic/injection activation found in actual role compile argv/default guards",
+      "enabled_diagnostics": "NP_GRID_LIFETIME_DIAG=1 and real NSG grid runtime retained; diagnostic counter evidence is not synthetic sensor/NP injection"
+    }
+  ],
+  "acceptance": {
+    "source": "Exact independently frozen root review receipts rehashed and passed fields checked; no new hardware or neural payload scan by this composition.",
+    "usb": "NewUSB individually exercised through actual199 GUI P1+P2/20k60s; localRTC-to-firstNP111us, zero reported neural frame/counter errors and native IMU queue overflow/sequence gaps; one initial grid gap disclosed.",
+    "sd": "Exact APP exercised via actual199 TestSdRecording P1+P2/20k30s; stored readback/localRTC/nativeIMU/NSG acceptance reported passed by root. SDdownload used OLD4F7B521A USB service.",
+    "new_usb_download_validation": "Download implementation retained; newUSB individual streaming test passed, but this SDreadback was through old4F7B521A. Newpair download path not newly HIL-qualified.",
+    "whole_fused_flashed": false,
+    "full_record_phase_qualified": false,
+    "native_conversion_phase_qualified": false,
+    "all_stream_alignment_verified": false,
+    "evidence": [
+      {
+        "role": "USB19960s",
+        "receipt": {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\rtc_imu_acceptance_20261029\\v1-ordinary199\\review.json",
+          "bytes": 28102,
+          "sha256": "DA11021CF409CEC6D741F4160E2BD5C0066D26D7B81D0B0FF843D3AAACB39FA4"
+        },
+        "scope": "Actual ordinary production V1 GUI USB60, host199; file-only independent review",
+        "rtc": {
+          "lower_us": 1793325591509375,
+          "pc_calibration_generation": 1,
+          "qualified": true,
+          "upper_us": 1793325591509486,
+          "pc_in_local_interval": false,
+          "single_commit_confirmed": true,
+          "full_width_us": 111,
+          "pc_declared_uncertainty_us": 3018
+        },
+        "np": {
+          "actual_first_byte_counter_bound": true,
+          "reported_frame_counter_gap_drop_faults": 0,
+          "incomplete_unexported_tail_bytes": {
+            "probe2": 116,
+            "probe1": 96
+          },
+          "asic_payload_checksum_claim": false,
+          "lfp_rows_total": 200192,
+          "rows": [
+            {
+              "first_source_tick": 216,
+              "probe": 1,
+              "rows": 1201166,
+              "band": "ap"
+            },
+            {
+              "first_source_tick": 5676,
+              "probe": 1,
+              "rows": 100096,
+              "band": "lfp"
+            },
+            {
+              "first_source_tick": 196,
+              "probe": 2,
+              "rows": 1201166,
+              "band": "ap"
+            },
+            {
+              "first_source_tick": 5656,
+              "probe": 2,
+              "rows": 100096,
+              "band": "lfp"
+            }
+          ],
+          "ap_rows_total": 2402332,
+          "best_effort_policy_remains": true
+        },
+        "native_imu": {
+          "success": true,
+          "retained": 11967,
+          "ag_valid": 11967,
+          "mag_valid": 11967,
+          "span_ms": 60037,
+          "max_observed_gap_ms": 7,
+          "reported_sequence_gaps": 0,
+          "native_conversion_phase_locked": false,
+          "sparse_observation_not_lossless_conversion_claim": true
+        },
+        "nsg": {
+          "missing_before_first_observed": 1,
+          "strict_unknown_nsgp_binding": true,
+          "physical_conversion_phase_locked": false,
+          "first_slot_phase_qualified": false,
+          "raw_carrier_replay": false,
+          "whole_grid_phase_qualified": false,
+          "terminal_tail": "Unknown; no final scheduled ordinal/end marker",
+          "missing_after_first_observed": 0,
+          "observed": 75051,
+          "missing": 1,
+          "rows": 75052,
+          "first_observed_slot": 1,
+          "last_observed_slot": 75051
+        },
+        "catalog": null,
+        "source_binding": {
+          "generation": 4,
+          "source_hz": 15600000,
+          "family": 1,
+          "session": 4,
+          "mask": 3,
+          "ap_hz": 20000,
+          "token_hex": "47AF8A3BEDA2143F"
+        },
+        "installed_firmware": null,
+        "restoration": {
+          "saved_idle_receipt_verified": true,
+          "lease_release": "Hardware-owner handoff; not independently queried",
+          "installed_full_sha256": "E4C02B3371F0BEC7C734BB7022D351455B71D2D730F66AE7BFAACB13A6283425",
+          "restored_options_sha256": "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+          "restored_full_sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+          "live_reviewer_query": false,
+          "exact_uid": "001D00065942500B20313354"
+        }
+      },
+      {
+        "role": "SD19930s",
+        "receipt": {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\rtc_imu_acceptance_20261029\\v1-sd199\\review.json",
+          "bytes": 30973,
+          "sha256": "F9883F7FCB3D74747B3C10E2E8A2B3D5932936D022C25BE38A4A8B43BDEC611D"
+        },
+        "scope": "V1 actual199 BLE-to-SD30 + stored USB readback; independent metadata review",
+        "rtc": {
+          "pc_declared_uncertainty_us": 23033,
+          "qualified": true,
+          "full_width_us": 111,
+          "upper_us": 1793326539585533,
+          "pc_calibration_generation": 1,
+          "lower_us": 1793326539585422,
+          "pc_in_local_interval": false
+        },
+        "np": {
+          "verified_bytes": 1006632960,
+          "reported_continuity_loss_faults": 0,
+          "boundary_trims_disclosed": "V1 \u00b7 P1+P2 \u00b7 20,000 samples/s\r\n30.0 s recorded \u00b7 960.0 MiB \u00b7 start LBA 83230720\r\nFirmware: APP Not reported  |  USB Not reported  |  Boot Not reported\r\nnp1: startup alignment 724 bytes; terminal partial AP row 596 bytes (including 56 incomplete frame bytes); initial partial LFP 6 AP rows; terminal partial LFP 8 AP rows.\r\nnp2: startup alignment 744 bytes; terminal partial AP row 576 bytes (including 36 incomplete frame bytes); initial partial LFP 6 AP rows; terminal partial LFP 8 AP rows.\r\nBoundary trims are disclosed separately; stored continuity does not prove every physical sample was captured.\r\nLongest recorded write transaction: 67.0 ms (not a CMD25 histogram).\r\nFull stored-data framing readback: 960.0 MiB.\r\nUSB readback is matched by MCU (where reported), session, profile and extent; it is not a reusable card certification.",
+          "actual_saved_first_byte_counter_matches_receipt": true,
+          "asic_payload_checksum_claim": false,
+          "chunks": 15360,
+          "per_stream_timestamp_metadata_populated": false,
+          "rows": [
+            {
+              "per_stream_source_tick_populated": false,
+              "probe": 1,
+              "rows": 604946,
+              "band": "ap"
+            },
+            {
+              "per_stream_source_tick_populated": false,
+              "probe": 1,
+              "rows": 50411,
+              "band": "lfp"
+            },
+            {
+              "per_stream_source_tick_populated": false,
+              "probe": 2,
+              "rows": 604946,
+              "band": "ap"
+            },
+            {
+              "per_stream_source_tick_populated": false,
+              "probe": 2,
+              "rows": 50411,
+              "band": "lfp"
+            }
+          ]
+        },
+        "native_imu": {
+          "physical_conversion_phase_locked": false,
+          "phase_qualified": false,
+          "sequence_resets": 0,
+          "raw_snapshots": 15360,
+          "valid_mag": 15352,
+          "fine_sidecar_present": false,
+          "grid_rows": 37800,
+          "missing_after_first_observed": 0,
+          "valid_ag": 15354,
+          "advancing_sequences": 6028,
+          "observed": 37799,
+          "missing_initial_slot0": 1,
+          "tail_qualified": false
+        },
+        "nsg": null,
+        "catalog": {
+          "all_prior_immutable_fields_preserved": true,
+          "before": 46,
+          "owned_session_retained": true,
+          "card_capacity_sectors": 500695040,
+          "after": 47
+        },
+        "source_binding": null,
+        "installed_firmware": [
+          {
+            "body_bytes": 365520,
+            "body_crc": "87109990",
+            "source": "Saved installed wholeflash; not BLE reported version",
+            "body_sha256": "6CD16CD22DD01D0541EFE022C33C60A9405F7F2C91075EA380CBCD923175237B",
+            "role": "APP"
+          },
+          {
+            "body_bytes": 264808,
+            "body_crc": "4F7B521A",
+            "source": "Saved installed wholeflash; not BLE reported version",
+            "body_sha256": "64888893963A7DF11CA444B58785CA96C24FDE2372BE5017AF057579DA35ECC4",
+            "role": "USB"
+          }
+        ],
+        "restoration": {
+          "reviewer_live_query": false,
+          "original_usb_profile": "P1+P2+P3/7500",
+          "lease_release": "Owner handoff, no reviewer query",
+          "options_sha256": "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+          "fullflash_sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+          "idle_saved_proof": true,
+          "exact_uid": "001D00065942500B20313354"
+        }
+      }
+    ]
+  },
+  "actions": {
+    "hardware": false,
+    "build": false,
+    "reseal": false,
+    "c_source_writes": false,
+    "git_mutation": false,
+    "existing_firmware_changed": false
+  },
+  "outputs_include": "Only four canonical HEX files and this provenance JSON/script; no device backups/options/calibration/SDdata copied."
+}

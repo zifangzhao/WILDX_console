@@ -8,13 +8,14 @@ namespace USB512_interface {
  // No device ownership/thread and no EP0 transfer during bulk acquisition.
  internal sealed class NpUsbSensorMonitor : IDisposable {
   readonly string folder,uid;readonly Action<NpImuDisplay> display;readonly bool saving;
-  NpUsbSensors sensors;NpClockJournal journal;FileStream raw;
+  NpUsbSensors sensors;NpClockJournal journal;FileStream raw;NpMisc1250 legacyAnalog;
+  readonly NpSdImuGridOrigin analogOrigin;byte[] legacySnapshot;bool analogResolved,gridOwnsAnalog;
   bool disposed,sensorDisabled;long records,samples,nextDisplay;
   bool fineSnapshotUsed;
 #if NP_FIRST_SYNC_ENABLE
   NpUsbFineSensors fine;
   internal void ConfigureFine(Func<NpFirstSyncUsbFineRoot> source){if(saving&&fine==null)try{fine=new NpUsbFineSensors(folder,2,uid,source);}catch(InvalidDataException){/* Unknown legacy identity keeps the ordinary sensor path. */}}
-  internal void CompleteFine(ulong sourceEnd,bool evidenceComplete){if(fine!=null)fine.Complete(sourceEnd,evidenceComplete&&!sensorDisabled&&sensors!=null&&sensors.OptionalRejectedRecords==0);}
+  internal void CompleteFine(ulong sourceEnd,bool evidenceComplete){if(fine!=null&&!gridOwnsAnalog)fine.Complete(sourceEnd,evidenceComplete&&!sensorDisabled&&sensors!=null&&sensors.OptionalRejectedRecords==0);}
 #endif
   internal volatile string Error;
   internal long Records {get{return Interlocked.Read(ref records);}}
@@ -28,19 +29,33 @@ namespace USB512_interface {
   }
   void Reject(byte[] b,int offset,int length,Exception ex) {
    if(sensors!=null){sensors.ReportOptionalFailure(b,offset,length,ex.Message);LastDisplay=sensors.GetDisplay();}
+   if(legacyAnalog!=null)legacyAnalog.Invalidate();
    ReportError(ex);
   }
   // Preserve callers/idle diagnostic signature; never retain the borrowed handle.
   internal NpUsbSensorMonitor(NpV2UsbDevice captureDevice,string directory,string deviceUid,bool saveSensors,Action<NpImuDisplay> onDisplay):
    this(captureDevice,directory,deviceUid,saveSensors,onDisplay,null,0,0) {}
+  internal NpUsbSensorMonitor(NpV2UsbDevice captureDevice,string directory,string deviceUid,bool saveSensors,Action<NpImuDisplay> onDisplay,bool deferLegacyAnalog):
+   this(captureDevice,directory,deviceUid,saveSensors,onDisplay,null,0,0,deferLegacyAnalog) {}
   internal NpUsbSensorMonitor(NpV2UsbDevice captureDevice,string directory,string deviceUid,bool saveSensors,Action<NpImuDisplay> onDisplay,
-   NpSdImuGridOrigin origin,uint sourceHz,uint generation) {
-   folder=directory;uid=deviceUid;display=onDisplay;saving=saveSensors;
+   NpSdImuGridOrigin origin,uint sourceHz,uint generation):this(captureDevice,directory,deviceUid,saveSensors,onDisplay,origin,sourceHz,generation,false) {}
+  NpUsbSensorMonitor(NpV2UsbDevice captureDevice,string directory,string deviceUid,bool saveSensors,Action<NpImuDisplay> onDisplay,
+   NpSdImuGridOrigin origin,uint sourceHz,uint generation,bool deferLegacyAnalog) {
+   folder=directory;uid=deviceUid;display=onDisplay;saving=saveSensors;analogOrigin=origin;
    try {
     if(saving)journal=new NpClockJournal(folder,uid,Guid.NewGuid().ToString("N"));
-    sensors=new NpUsbSensors(folder,saving,uid,origin,sourceHz,generation);
+    sensors=new NpUsbSensors(folder,saving,uid,origin,sourceHz,generation,legacyGrid:false);
     if(saving)raw=new FileStream(Path.Combine(folder,"imu_snapshots.bin"),FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);
+    if(!deferLegacyAnalog)ResolveAnalogOwner(false);
    }catch(Exception ex) when(ex is IOException || ex is InvalidDataException || ex is UnauthorizedAccessException){ReportError(ex);sensorDisabled=true;}
+  }
+  // Configuration owner calls this before arm/any sensor delivery. The native
+  // parser/journal/display remain active regardless of the analog file owner.
+  internal void ResolveAnalogOwner(bool gridSelected) {
+   if(disposed||records!=0)throw new InvalidOperationException("IMU analog owner must be resolved before data arrives.");
+   if(analogResolved){if(gridOwnsAnalog!=gridSelected)throw new InvalidOperationException("IMU analog owner is already fixed.");return;}
+   analogResolved=true;gridOwnsAnalog=gridSelected;
+   if(saving&&!gridSelected){legacyAnalog=new NpMisc1250(folder,analogOrigin);legacySnapshot=new byte[140];}
   }
   // Only caller-owned stopped/control-only windows may invoke this method.
   // Host bulk-arrival time is NEVER a precision-clock observation.
@@ -84,6 +99,8 @@ namespace USB512_interface {
     if(sensors==null)return;
     uint observedMs=BitConverter.ToUInt32(snapshot,offset+16);
     if(raw!=null)raw.Write(snapshot,offset,140);sensors.FeedSnapshot(snapshot,offset,observedMs);
+    if(!analogResolved)ReportError(new InvalidOperationException("IMU analog owner was not resolved before data; no late fallback was created."));
+    if(legacyAnalog!=null){Buffer.BlockCopy(snapshot,offset,legacySnapshot,0,140);Buffer.BlockCopy(BitConverter.GetBytes(sensors.Valid),0,legacySnapshot,12,4);legacyAnalog.FeedSnapshot(legacySnapshot,0,observedMs);}
     Interlocked.Exchange(ref samples,sensors.ImuSamples);Interlocked.Increment(ref records);
     long now=journal==null?DateTime.UtcNow.Ticks/10:journal.NowMicroseconds;
     if(now>=nextDisplay){nextDisplay=now+200000;LastDisplay=sensors.GetDisplay();if(display!=null)try{display(LastDisplay);}catch{}}
@@ -98,6 +115,7 @@ namespace USB512_interface {
   public void Dispose() {
    if(disposed)return;disposed=true;
    try{if(sensors!=null)sensors.Dispose();}catch(Exception ex){Error=ex.Message;}
+   try{if(legacyAnalog!=null)legacyAnalog.Dispose();}catch(Exception ex){Error=ex.Message;}
    try{if(raw!=null)raw.Dispose();}catch(Exception ex){Error=ex.Message;}
 #if NP_FIRST_SYNC_ENABLE
    if(fine!=null)fine.Dispose();
@@ -115,7 +133,8 @@ namespace USB512_interface {
     "rejected_optional_records="+(sensors==null?0:sensors.OptionalRejectedRecords).ToString(CultureInfo.InvariantCulture),
     "first_rejected_raw_file="+(sensors==null||sensors.OptionalRejectedRecords==0?"none":NpUsbSensors.RejectedFileName),
     "native_sample_journal="+NpImuSampleJournal.FileName,"native_journal_error="+(sensors==null?"unavailable":sensors.NativeJournalError??"none"),
-    "analogin.dat is a held-value compatibility grid, not lossless native IMU sampling",
+    "analogin_owner="+(gridOwnsAnalog?"NSG1 indexed scheduled cache copies":analogResolved?"legacy held-value compatibility":"unresolved; no analog output"),
+    "native IMU conversion phase is unknown; compatibility repeats are not new conversions",
     NpClockFitResult.Limitation});}catch(Exception ex){Error=ex.Message;}
   }
  }

@@ -28,6 +28,7 @@
     <Compile Include="../../USB512_interface/USB512_interface/NpImuGridPhase.cs" />
     <Compile Include="../../USB512_interface/USB512_interface/NpImuGridCarrier.cs" />
     <Compile Include="../../USB512_interface/USB512_interface/NpImuGridWriter.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpV2GridSector.cs" />
     <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncWire.cs" />
     <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsb.cs" />
     <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsbEvidence.cs" />
@@ -60,6 +61,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Web.Extensions" />
     <Compile Include="NpV2SdDatExport.cs" />
+    <Compile Include="NpV2SdGrid.cs" />
     <Compile Include="NpSdImuExport.cs" />
     <Compile Include="..\ClosedLoop\NpClosedLoopEvent.cs" />
     <Compile Include="..\ClosedLoop\NpClosedLoopControl.cs" />

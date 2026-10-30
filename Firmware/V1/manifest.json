@@ -1,0 +1,293 @@
+{
+  "schema": 1,
+  "status": "qualified_v1_components_composed_for_root_release204_handoff",
+  "version": "1.0.0.204",
+  "family": 1,
+  "abi": 258,
+  "app": {
+    "role": "APP",
+    "abi": 258,
+    "generation": 1,
+    "manifest_address": "0801E000",
+    "base": "08020000",
+    "limit_exclusive": "0817E000",
+    "body_bytes": 366296,
+    "body_crc32": "FFF283D9",
+    "body_sha256": "8F6B721E0BC42E2662C86BBEB6715FA912CF609C0DACD5EA705D0649B0A9F810",
+    "manifest_crc32": "107636EC",
+    "manifest_hex": "584E50314D4E463101000000444C4156315050410100000000000208D8960500D983F2FF707F01208D0302083866366237323165306263343265323636326338366262656236373135666139000000000201000000000000000000000000000000000000000000000000000000000000000000000000000000000000EC367610",
+    "manifest_flags": 0,
+    "initial_sp": "20017F70",
+    "reset_pc": "0802038D",
+    "build_id_ascii": "8f6b721e0bc42e2662c86bbeb6715fa9",
+    "input": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_production_incremental_r1\\test_only\\V1_APP_RTC_PENDING_HIL_ONLY.hex",
+      "bytes": 1030706,
+      "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
+    },
+    "file": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\V1_APP_FFF283D9_deterministic_IMU_20261030.hex",
+      "bytes": 1030706,
+      "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
+    },
+    "identity_receipt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_production_incremental_r1\\test_only\\identity.json",
+      "bytes": 528,
+      "sha256": "A0612DCB542CEF14B5FC681DB096078CA8E7CFE2D4BE09A924CA1AF2A3CC100B"
+    },
+    "build_receipt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_production_incremental_r1\\build.json",
+      "bytes": 2147,
+      "sha256": "9B50663F599D90789F74EAE2B18C0EE54A4A67ECE4D09E1D448EE09A5EFB121E"
+    },
+    "compile_receipt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_production_incremental_r1\\compile_receipt.json",
+      "bytes": 119379,
+      "sha256": "C5503540EF97D3B473E13A8D35197FE4E5DDB5C0C003AE207D1616D9BF32EC96"
+    },
+    "link_response": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_production_incremental_r1\\candidate.lnp",
+      "bytes": 7366,
+      "sha256": "B96742971F6229E690825C1F44E71642A65B23AF441442A952DE0E5172CECA4F"
+    },
+    "existing_static_fit": {
+      "ER_IROM1": {
+        "base": "0x08020000",
+        "size": 348648,
+        "limit": 1433600,
+        "headroom": 1084952
+      },
+      "RW_IRAM1": {
+        "base": "0x20000000",
+        "size": 98160,
+        "limit": 98304,
+        "headroom": 144
+      },
+      "RW_SD_INPUT": {
+        "base": "0x20018000",
+        "size": 65536,
+        "limit": 65536,
+        "headroom": 0
+      },
+      "RW_BLE_UART_RX": {
+        "base": "0x20028000",
+        "size": 5212,
+        "limit": 8192,
+        "headroom": 2980
+      },
+      "RW_SD_TRACE": {
+        "base": "0x2002a000",
+        "size": 8712,
+        "limit": 24576,
+        "headroom": 15864
+      },
+      "RW_SD_RU0": {
+        "base": "0x20030000",
+        "size": 524288,
+        "limit": 524288,
+        "headroom": 0
+      },
+      "RW_NOINIT": {
+        "base": "0x200be000",
+        "size": 24,
+        "limit": 8192,
+        "headroom": 8168
+      },
+      "RW_NP_LLI": {
+        "base": "0x200c0000",
+        "size": 384,
+        "limit": 512,
+        "headroom": 128
+      },
+      "RW_CAMERA_STATE": {
+        "base": "0x200c0200",
+        "size": 4624,
+        "limit": 65024,
+        "headroom": 60400
+      },
+      "RW_NP_CAPTURE": {
+        "base": "0x200d0000",
+        "size": 752728,
+        "limit": 786432,
+        "headroom": 33704
+      },
+      "RW_SD_RU1": {
+        "base": "0x201a0000",
+        "size": 851968,
+        "limit": 851968,
+        "headroom": 0
+      }
+    },
+    "ranges": [
+      {
+        "start": "0801E000",
+        "end_exclusive": "0801E080",
+        "bytes": 128
+      },
+      {
+        "start": "08020000",
+        "end_exclusive": "080796D8",
+        "bytes": 366296
+      }
+    ]
+  },
+  "usb": {
+    "role": "USB",
+    "abi": 258,
+    "generation": 1,
+    "manifest_address": "0817E000",
+    "base": "08180000",
+    "limit_exclusive": "08200000",
+    "body_bytes": 330344,
+    "body_crc32": "1E73A743",
+    "body_sha256": "4F56E9DB78EA1F73B7CFFB3EE1269F6084168283E4179C16848B3F548D1BDA12",
+    "manifest_crc32": "6446B7D0",
+    "manifest_hex": "584E50314D4E463101000000444C4156314253550100000000001808680A050043A7731EF08601208D0318083466353665396462373865613166373362376366666233656531323639663630010000000201000000000000000000000000000000000000000000000000000000000000000000000000000000000000D0B74664",
+    "manifest_flags": 1,
+    "initial_sp": "200186F0",
+    "reset_pc": "0818038D",
+    "build_id_ascii": "4f56e9db78ea1f73b7cffb3ee1269f60",
+    "input": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_production_incremental_r1\\test_only\\V1_USB_RTC_PENDING_HIL_ONLY.hex",
+      "bytes": 929591,
+      "sha256": "74D7D5C886A4DDDBEA88EC907AA0291F90F824C700D91DFB827B0AF277B5F271"
+    },
+    "file": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\V1_USB_service_1E73A743_deterministic_IMU_20261030.hex",
+      "bytes": 929591,
+      "sha256": "74D7D5C886A4DDDBEA88EC907AA0291F90F824C700D91DFB827B0AF277B5F271"
+    },
+    "identity_receipt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_production_incremental_r1\\test_only\\identity.json",
+      "bytes": 528,
+      "sha256": "82950EC58EF58BE7C046F12CA0ED67A35706AB798C10CE9564A76F87CDD4814A"
+    },
+    "build_receipt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_production_incremental_r1\\build.json",
+      "bytes": 1781,
+      "sha256": "0F9727A21F52E033B47289453C3BF513007DCD370E9EBFF358D414A461A93EA8"
+    },
+    "compile_receipt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_production_incremental_r1\\compile_receipt.json",
+      "bytes": 164679,
+      "sha256": "BFB72717C62CB46B612E922B2BD78353E9C8325DB607FB1296E9897E50A4F8EE"
+    },
+    "link_response": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_production_incremental_r1\\candidate.lnp",
+      "bytes": 5243,
+      "sha256": "C1A8A5C1118E39F5E3DB8BC7065BBC7E870C1E56B7C0F2C1FB6BD15FB7682088"
+    },
+    "existing_static_fit": {
+      "ER_IROM1": {
+        "base": "0x08180000",
+        "size": 303324,
+        "limit": 524288,
+        "headroom": 220964
+      },
+      "RW_IRAM1": {
+        "base": "0x20000000",
+        "size": 100080,
+        "limit": 114688,
+        "headroom": 14608
+      },
+      "RW_USB_DMA": {
+        "base": "0x2001c000",
+        "size": 864,
+        "limit": 16384,
+        "headroom": 15520
+      },
+      "RW_NP_CAPTURE_SRAM1": {
+        "base": "0x20020000",
+        "size": 593920,
+        "limit": 647168,
+        "headroom": 53248
+      },
+      "RW_NOINIT": {
+        "base": "0x200be000",
+        "size": 4,
+        "limit": 8192,
+        "headroom": 8188
+      },
+      "RW_NP_LLI": {
+        "base": "0x200c0000",
+        "size": 384,
+        "limit": 512,
+        "headroom": 128
+      },
+      "RW_NP_CAPTURE": {
+        "base": "0x200d0000",
+        "size": 760408,
+        "limit": 786432,
+        "headroom": 26024
+      },
+      "RW_USB_DOWNLOAD1": {
+        "base": "0x201a0000",
+        "size": 524288,
+        "limit": 524288,
+        "headroom": 0
+      }
+    },
+    "ranges": [
+      {
+        "start": "0817E000",
+        "end_exclusive": "0817E080",
+        "bytes": 128
+      },
+      {
+        "start": "08180000",
+        "end_exclusive": "081D0A68",
+        "bytes": 330344
+      }
+    ]
+  },
+  "boot": {
+    "role": "BOOT",
+    "unchanged": true,
+    "source": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Firmware\\V1\\V1_BOOT_DFU_unchanged_20261029.hex",
+      "bytes": 322607,
+      "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
+    },
+    "file": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\V1_BOOT_DFU_unchanged_20261030.hex",
+      "bytes": 322607,
+      "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
+    },
+    "ranges": [
+      {
+        "start": "08000000",
+        "end_exclusive": "0801C000",
+        "bytes": 114688
+      }
+    ],
+    "raw_crc32": "7AD4D631"
+  },
+  "fused": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\V1_fused_BOOT_USB1E73A743_APPFFF283D9_deterministic_IMU_20261030.hex",
+    "bytes": 5745164,
+    "sha256": "5D89FB6E25235867DD2E47F900228A57D60DB56C60BE6358BD624EF713BAFC9C",
+    "ranges": [
+      {
+        "start": "08000000",
+        "end_exclusive": "0801C000",
+        "bytes": 114688
+      },
+      {
+        "start": "0801E000",
+        "end_exclusive": "08200000",
+        "bytes": 1974272
+      }
+    ],
+    "retained_configuration_excluded": true
+  },
+  "acceptance": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\acceptance.json",
+    "bytes": 4659,
+    "sha256": "5C079AB670882A95E4858D51A8C8AACA663B21DDDE63F841F6D63AABEE0BA715"
+  },
+  "source_manifest": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\source-manifest.json",
+    "bytes": 225153,
+    "sha256": "042D4A49CB60C8449DF5A7537D6732921B893A5E464D4795A11E66386380D148"
+  }
+}

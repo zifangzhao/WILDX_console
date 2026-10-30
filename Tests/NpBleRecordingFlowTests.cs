@@ -26,6 +26,7 @@ namespace System.Diagnostics {
   internal static Stopwatch StartNew(){return new Stopwatch();}
   internal void Restart(){started=Environment.TickCount;reads=0;}
   internal TimeSpan Elapsed{get{if(expireOnRead>0 && ++reads>=expireOnRead)return TimeSpan.FromSeconds(60);return TimeSpan.FromMilliseconds(unchecked((uint)(Environment.TickCount-started)));}}
+  internal long ElapsedMilliseconds{get{return (long)Elapsed.TotalMilliseconds;}}
  }
 }
 
@@ -37,15 +38,17 @@ namespace WildNpConfiguration {
  class NpConfigClient {
   internal static readonly List<NpConfigRequest> Staged=new List<NpConfigRequest>();
   internal NpConfigClient(object transport){}
-  internal Task StageForCaptureAsync(IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel){foreach(var request in requests)if((mask&(1<<request.Port))!=0)Staged.Add(request);return Task.CompletedTask;}
+  internal static bool ReuseMatching;
+  internal Task StageForCaptureAsync(IEnumerable<NpConfigRequest> requests,int mask,CancellationToken cancel,bool reuseMatching=false){ReuseMatching=reuseMatching;foreach(var request in requests)if((mask&(1<<request.Port))!=0)Staged.Add(request);return Task.CompletedTask;}
  }
  class Np2ConfigClient {
   internal Np2ConfigClient(object transport){}
-  internal Task StageAsync(Np2ConfigRequest request,CancellationToken cancel){return Task.CompletedTask;}
+  internal Task StageAsync(Np2ConfigRequest request,CancellationToken cancel,bool reuseMatching=false){return Task.CompletedTask;}
  }
 }
 namespace USB512_interface {
  using WildNpConfiguration;
+ static class NpSdLoggerTest { ACTUAL_SD_TEST_BLOCKS }
  static class MessageBox {
   internal static int Warnings;internal static Action OnWarning;
   internal static DialogResult Show(IWin32Window owner,string text,string title,MessageBoxButtons buttons,MessageBoxIcon icon){
@@ -54,38 +57,71 @@ namespace USB512_interface {
   }
  }
  class NpConfigurationDialog {internal static Np2ConfigRequest PrepareV2Request(string json,int port){return new Np2ConfigRequest();}}
- class NpBleConfigurationReceipts {internal void Reset(){}internal void Expect(IEnumerable<Np2ConfigRequest> requests){}}
- class NpBleForm {
+ static class NpClosedLoopSettings {
+  internal static Task<object> Prepare(bool v2,uint mask,uint hz,Func<byte[],CancellationToken,Task<byte[]>> exchange,CancellationToken cancel,Action<string> report){return Task.FromResult<object>(null);}
+ }
+ class NpBleConfigurationReceipts {internal int Pending;internal void Reset(){Pending=0;}internal void Expect(IEnumerable<Np2ConfigRequest> requests){Pending=requests.Count();}}
+ internal sealed partial class NpBleForm {
   sealed class Profile {internal uint Mask,Hz;}
-  sealed class Connection {internal bool Connected=true;internal int Epoch=1;}
-  sealed class ConfigTransport {internal ConfigTransport(Connection connection){}}
+  sealed class Connection {
+   internal bool Connected=true;internal int Epoch=1;
+   internal Func<byte[],CancellationToken,Task<byte[]>> OptionalExchange;
+   internal Task<byte[]> ExchangeAsync(byte command,byte[] request,CancellationToken cancel){if(command==0xb8&&OptionalExchange!=null)return OptionalExchange(request,cancel);throw new Exception("Unexpected optional control transfer in recording-flow test");}
+#if NP_FIRST_SYNC_ENABLE
+   internal void ClearRecordingFineClock(){}
+   internal bool ConfigureRecordingFineClock(NpFirstSyncSdClient client,NpFirstSyncSdAttempt attempt,Func<bool> current){return false;}
+#endif
+  }
+  sealed class ConfigTransport {internal ConfigTransport(Connection connection,Action<byte[]> progress=null){}}
   sealed class Clock {internal bool Synchronized=true;}
   readonly ComboBox profiles=new ComboBox();readonly TextBox address=new TextBox{Text="123456789ABC"};
   readonly CheckBox mediaCamera=new CheckBox(),mediaMicrophone=new CheckBox();readonly NumericUpDown mediaRate=new NumericUpDown();
   IWin32Window DialogOwner{get{return null;}}
   readonly Label configurationStatus=new Label(),clockStatus=new Label(),state=new Label();readonly Connection connection=new Connection();readonly Clock clock=new Clock();
   readonly NpBleConfigurationReceipts configurationReceipts=new NpBleConfigurationReceipts();
+  readonly HashSet<Tuple<uint,uint,uint>> acknowledgedSdProfiles=new HashSet<Tuple<uint,uint,uint>>();
   readonly Dictionary<ulong,Dictionary<int,string>> np2HostConfigurations=new Dictionary<ulong,Dictionary<int,string>>();
   readonly Dictionary<ulong,Dictionary<byte,NpConfigRequest>> v1HostConfigurations=new Dictionary<ulong,Dictionary<byte,NpConfigRequest>>();
   ulong connectedAddress=0x123456789ABCUL;
 ACTUAL_V1_CONFIGURATIONS
   readonly List<byte[]> writes=new List<byte[]>();
   readonly List<string> messages=new List<string>();
+  // Preparation transport/lost-ACK behavior is covered by preparation host
+  // tests; these scenarios begin with no outstanding preparation job.
+  sealed class PreparationAttempt {internal bool Unknown,StopIssued;}
+  PreparationAttempt probePreparationAttempt;
+  bool UnknownBlePreparation {get{return probePreparationAttempt!=null&&probePreparationAttempt.Unknown;}}
+  Task CancelBleProbePreparation(){return Task.CompletedTask;}
+  Task<bool> PrepareBleHardwareRtc(NpSdStatus status){return Task.FromResult(false);} // RTC has its own actual-partial fixture.
+  void CancelBleRtc(){}
+  void ResetBleRtc(){}
+  void BeginBleRtcSettingsSetup(NpSdStatus status){}
+  void BeginBleRtcRecordingSetup(NpSdStatus status){}
+#if NP_FIRST_SYNC_ENABLE
+  int rtcWarmCalls;
+  Task WarmBleHardwareRtc(NpFirstSyncSdClient client,CancellationToken cancel){rtcWarmCalls++;return Task.CompletedTask;}
+#endif
+  Task StopUnknownBlePreparation(NpSdStatus status){throw new Exception("Unexpected unknown preparation in legacy recording-flow scenario");}
+  object bleClosedLoopSetup;
   System.Diagnostics.Stopwatch pendingStop;int pendingStopEpoch;ulong pendingStopPeer;bool pendingStopAcknowledged,finishOnStopAck;
   readonly List<uint> statusIds=new List<uint>();readonly Queue<Action> statusSteps=new Queue<Action>();
   NpSdStatus current;string configurationReadError;bool V2,loseSelectReceipt,failConfirmation,mediaSettingsChanged,stopRequested,stopping,loseStopReceipt,cancelDuringSelect,wrongReceiptId,genericTimeout,changeEpochOnTimeout,cancelOnTimeout,changePeerOnTimeout,rejectSelect,mismatchSelectAck;bool selectPendingAck=true;int pending,receiptTimeouts;uint operation,sequence;
   void UpdateControls(){}
   bool StartEnabled(bool ready){return ACTUAL_START_BUTTON_EXPRESSION;}
   uint Next(){return current.LastId+1;}
-  HashSet<int> Np2ApplyRequests(ulong peer){return null;}
+  HashSet<int> np2Apply;
+  HashSet<int> Np2ApplyRequests(ulong peer){return np2Apply;}
   void Append(string text){messages.Add(text);}
   void BeginBleRecordingMetadata(NpSdStatus before,byte[] request){}
-  int clockSyncs;bool failClockSync,cancelClockSync;
-  Task SyncClock(){clockSyncs++;if(cancelClockSync)stopRequested=true;if(failClockSync)throw new IOException("simulated clock failure");return Task.CompletedTask;}
+  int clockSyncs;uint clockObservations;bool failClockSync,cancelClockSync,unconfirmedClockSync;
+  Task SyncClock(uint observations=16){clockSyncs++;clockObservations=observations;if(cancelClockSync)stopRequested=true;if(unconfirmedClockSync)clock.Synchronized=false;if(failClockSync)throw new IOException("simulated clock failure");return Task.CompletedTask;}
   Task VerifyV1Media(){throw new Exception("Unexpected media path");}
   Task ApplyV1Media(){throw new Exception("Unexpected media path");}
   async Task<NpSdStatus> ReadStatus(){
    await Task.CompletedTask;
+#if NP_FIRST_SYNC_ENABLE
+   firstSyncNormalReads++;if(firstSyncFailNextStatus){firstSyncFailNextStatus=false;throw new IOException("simulated unavailable normal status");}
+#endif
    sequence++;
    if(operation==1){statusIds.Add(sequence);if(statusSteps.Count>0){statusSteps.Dequeue()();return current;}}
    if(pending>0 && receiptTimeouts>0){receiptTimeouts--;if(changeEpochOnTimeout)connection.Epoch++;if(cancelOnTimeout)stopRequested=true;if(changePeerOnTimeout)address.Text="FEDCBA987654";if(genericTimeout)throw new TimeoutException("simulated write timeout");throw new NpV1ReceiptTimeout(0,wrongReceiptId?sequence+1:sequence);}
@@ -93,9 +129,17 @@ ACTUAL_V1_CONFIGURATIONS
    state.Text="Device state "+current.State;ObservePendingStop(current);return current;
   }
   Task<NpSdStatus> Send(byte[] request){
+#if NP_FIRST_SYNC_ENABLE
+   uint candidate=BitConverter.ToUInt32(request,12),candidateOp=BitConverter.ToUInt32(request,8);
+   if(candidateOp==3&&firstSyncRejectStop){
+    writes.Add(request);current.Operation=3;current.RequestId=candidate;current.Error=2;
+    throw new NpSdCommandException(V2?2:1,current);
+   }
+   if(candidateOp==3)current.Error=0;
+#endif
    writes.Add(request);uint op=BitConverter.ToUInt32(request,8);operation=op;current.Operation=op;current.RequestId=current.LastId=BitConverter.ToUInt32(request,12);
    if(op==1){if(rejectSelect)throw new IOException("simulated SELECT rejection");current.Mask=BitConverter.ToUInt32(request,16);current.Hz=BitConverter.ToUInt32(request,20);if(mismatchSelectAck)current.Hz=15000;if(selectPendingAck)current.Flags|=8;pending=2;if(loseSelectReceipt)throw new TimeoutException("simulated lost SELECT receipt");}
-   if(op==2){if(current.Error!=0)throw new IOException("Device rejected operation 2: error "+current.Error+"; fault "+current.Fault+".");current.Fault=0;current.State=V2?3U:1U;current.Flags|=4U;}
+   if(op==2){if(current.Error!=0)throw new NpSdCommandException(V2?2:1,current);current.Fault=0;current.State=V2?3U:1U;current.Flags|=4U;}
    if(op==3){current.Flags|=8U;pending=2;if(current.Fault==0)current.State=V2?4U:2U;if(finishOnStopAck){pending=0;current.Flags&=~12U;current.State=5;}if(loseStopReceipt)throw new TimeoutException("simulated lost STOP receipt");}
    return Task.FromResult(current);
   }
@@ -107,16 +151,41 @@ ACTUAL_RECORDING_METHODS
    form.profiles.Items.Add(new Profile{Mask=3,Hz=20000});form.profiles.SelectedIndex=0;return form;
   }
   static async Task Tests(){
+   var unsyncedTest=New(true,false);unsyncedTest.unconfirmedClockSync=true;bool rejectedClock=false;
+   try{await unsyncedTest.StartRecordingCore(10);}catch(IOException){rejectedClock=true;}
+   Need(rejectedClock&&unsyncedTest.writes.Count==0,"Finite SD test sent START after swallowed clock failure");
+   foreach(bool v2 in new[]{false,true}){
+    var bounded=New(v2,false);byte[] prepared=null;
+    await bounded.StartRecordingCore(10,(status,request)=>prepared=request);
+    Need(prepared!=null && bounded.writes.Count==1 && Object.ReferenceEquals(prepared,bounded.writes[0]),"Finite test callback does not identify the sent request");
+    Need(BitConverter.ToUInt32(prepared,v2?24:28)>0,"Finite recording test sent an unbounded START");
+    if(v2)Need(BitConverter.ToUInt32(prepared,24)%4==0,"V2 finite extent is not aligned");
+    else Need(BitConverter.ToUInt32(prepared,28)>bounded.current.Start && BitConverter.ToUInt32(prepared,28)<=bounded.current.Capacity,"V1 finite extent is outside free card space");
+    if(v2)Need(bounded.clockSyncs==1,"V2 finite test did not freshly synchronize after selection");
+   }
    MessageBox.Warnings=0;
    var unqualified=New(false,false);unqualified.current.Flags&=~2U;await unqualified.StartRecording();
    Need(MessageBox.Warnings==1 && unqualified.writes.Count==1,"Unqualified profile did not warn once and continue without a checkbox");
    Need(BitConverter.ToUInt32(unqualified.writes[0],36)==1U,"Unqualified START did not retain firmware acceptance flag");
+   await unqualified.StopRecording();await unqualified.StartRecording();
+   Need(MessageBox.Warnings==1 && BitConverter.ToUInt32(unqualified.writes.Last(),36)==1U,"Same profile repeated the warning or lost the legacy acceptance flag");
+   await unqualified.StopRecording();unqualified.current.Capacity+=16384;await unqualified.StartRecording();
+   Need(MessageBox.Warnings==2,"Changed card capacity did not warn again");
+   await unqualified.StopRecording();unqualified.acknowledgedSdProfiles.Clear();await unqualified.StartRecording();
+   Need(MessageBox.Warnings==3,"A new connection did not require warning acknowledgment again");
+   await unqualified.StopRecording();unqualified.ObserveSdProfileContext(new NpSdStatus{Capacity=unqualified.current.Capacity,Flags=unqualified.current.Flags});
+   Need(unqualified.acknowledgedSdProfiles.Count==1,"Ordinary status polling discarded profile acknowledgment");
+   unqualified.ObserveSdProfileContext(new NpSdStatus{Capacity=unqualified.current.Capacity,Flags=unqualified.current.Flags&~16U});
+   Need(unqualified.acknowledgedSdProfiles.Count==0,"Loss of mounted storage kept the previous profile acknowledgment");
+   var highRate=New(false,false);highRate.current.Hz=30000;highRate.profiles.Items.Clear();highRate.profiles.Items.Add(new Profile{Mask=3,Hz=30000});highRate.profiles.SelectedIndex=0;
+   int priorWarnings=MessageBox.Warnings;await highRate.StartRecording();
+   Need(MessageBox.Warnings==priorWarnings+1,"Known-risk V1 dual30 profile did not warn when firmware qualification bit was set");
    var warningCanceled=New(false,false);warningCanceled.current.Flags&=~2U;MessageBox.OnWarning=()=>warningCanceled.stopRequested=true;bool canceledAtWarning=false;
    try{await warningCanceled.StartRecording();}catch(OperationCanceledException){canceledAtWarning=true;}finally{MessageBox.OnWarning=null;}
    Need(canceledAtWarning && warningCanceled.writes.Count==0 && warningCanceled.clockSyncs==0,"Stop during warning released START or clock synchronization");
    foreach(bool failedSync in new[]{false,true}){
     var timed=New(false,false);timed.current.Flags|=NpV1BleProtocol.Clock;timed.failClockSync=failedSync;await timed.StartRecording();
-    Need(timed.clockSyncs==1 && timed.writes.Count==1 && BitConverter.ToUInt32(timed.writes[0],8)==2,"V1 clock sync missing, replayed START or blocked capture");
+    Need(timed.clockSyncs==1 && timed.clockObservations==8 && timed.writes.Count==1 && BitConverter.ToUInt32(timed.writes[0],8)==2,"V1 quick clock sync missing, replayed START or blocked capture");
     Need(timed.clockStatus.Text==(failedSync?"Recording time unavailable":"PC time synced"),"Recording clock result hidden");
    }
    var clockCanceled=New(false,false);clockCanceled.current.Flags|=NpV1BleProtocol.Clock;clockCanceled.cancelClockSync=true;bool stoppedDuringClock=false;
@@ -132,6 +201,11 @@ ACTUAL_RECORDING_METHODS
    var firmwareRejected=New(true,false);firmwareRejected.current.Error=2;bool rejectedStart=false;
    try{await firmwareRejected.StartRecording();}catch(IOException ex){rejectedStart=ex.Message.Contains("operation 2: error 2");}
    Need(rejectedStart&&firmwareRejected.writes.Count==1&&firmwareRejected.current.State==1,"Firmware rejection hidden, START replayed or running fabricated.");
+   var stagedRejected=New(true,false);stagedRejected.current.Error=8;
+   stagedRejected.np2Apply=new HashSet<int>{1,2};stagedRejected.np2HostConfigurations.Add(stagedRejected.connectedAddress,new Dictionary<int,string>{{1,"map1"},{2,"map2"}});
+   bool storageRejected=false;try{await stagedRejected.StartRecording();}catch(NpSdCommandException){storageRejected=true;}
+   Need(storageRejected && stagedRejected.configurationReceipts.Pending==0 && stagedRejected.configurationStatus.Text.Contains("recording was rejected"),"Rejected START retained false applied-map checks or hid the rejected capture");
+   Need(stagedRejected.writes.Count==1 && stagedRejected.current.State==1,"Storage rejection retried START or fabricated recording");
    foreach(bool v2 in new[]{false,true})foreach(bool changed in new[]{false,true}){
     var form=New(v2,changed);await form.StartRecording();
     Need(form.writes.Count==(changed?2:1),"Unexpected command count");
@@ -161,7 +235,7 @@ ACTUAL_RECORDING_METHODS
    }
    var longStop=New(true,false);longStop.current.State=3;longStop.current.Flags|=4U;System.Diagnostics.Stopwatch.ExpireOnRead=1;await longStop.StopRecording();
    longStop.pending=100;for(int read=0;read<3;read++)await longStop.ReadStatus();
-   Need(longStop.pendingStop!=null&&longStop.state.Text.Contains("60 s elapsed")&&longStop.state.Text.Contains("finalizing / verifying SD"),"More than30s finalization became a timeout or lost elapsed status");
+   Need(longStop.pendingStop!=null&&longStop.state.Text.Contains("60 s elapsed")&&longStop.state.Text.Contains("finalizing SD"),"More than30s finalization became a timeout or lost elapsed status");
    Need(!longStop.StartEnabled(true),"A pending Stop allowed another START");bool blockedStart=false;
    try{await longStop.StartRecording();}catch(IOException ex){blockedStart=ex.Message.Contains("Stop completion");}
    Need(blockedStart&&longStop.writes.Count==1,"Actual START bypassed pending Stop or sent a command");
@@ -235,7 +309,14 @@ ACTUAL_RECORDING_METHODS
    Need(NpConfigClient.Staged.Count==1&&Object.ReferenceEquals(NpConfigClient.Staged[0],requestB),"Actual START did not stage only peerB's own map");await peers.StopRecording();
    peers.connectedAddress=0x123456789ABCUL;peers.address.Text="123456789ABC";NpConfigClient.Staged.Clear();await peers.StartRecording();
    Need(NpConfigClient.Staged.Count==1&&Object.ReferenceEquals(NpConfigClient.Staged[0],requestA),"Actual START after returning to peerA staged another peer's map");
+   Need(NpConfigClient.ReuseMatching,"Actual BLE START did not enable fresh resident-map reuse");
   }
-  [STAThread]static int Main(){try{var task=Tests();while(!task.IsCompleted){Application.DoEvents();Thread.Sleep(2);}task.GetAwaiter().GetResult();Console.WriteLine("PASS "+checks+" actual-source BLE Apply/Start checks; fake transport only.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
+  [STAThread]static int Main(){try{
+#if NP_FIRST_SYNC_ENABLE
+   var task=FirstSyncTests();
+#else
+   var task=Tests();
+#endif
+   while(!task.IsCompleted){Application.DoEvents();Thread.Sleep(2);}task.GetAwaiter().GetResult();Console.WriteLine("PASS "+checks+" actual-source BLE Apply/Start checks; fake transport only.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
  }
 }

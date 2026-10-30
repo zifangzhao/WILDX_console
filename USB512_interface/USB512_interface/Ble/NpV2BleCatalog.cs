@@ -94,21 +94,21 @@ namespace USB512_interface
             var entry=new NpBleRecord{Id=ordinal+1,Start=NpSdGeometry.U(body,32),End=NpSdGeometry.U(body,36),Cookie=NpSdGeometry.U(body,40),Session=NpSdGeometry.U(body,44),Hz=NpSdGeometry.U(body,48),Mask=NpSdGeometry.U(body,52),Flags=NpSdGeometry.U(body,56)};
             uint format=entry.Flags&255,state=(entry.Flags>>8)&255;bool last=ordinal==info.Count-1;
             if(entry.Start!=expectedStart || entry.End<=(ulong)entry.Start+4 || entry.End>info.Capacity || (entry.Flags&0xfff00000U)!=0 ||
-                (format!=0 && format!=8 && format!=11 && format!=12 && format!=13 && format!=14 && format!=15) || (state!=0 && state!=1 && state!=3 && state!=4) ||
+                (format!=0 && format!=8 && format!=11 && format!=12 && format!=13 && format!=14 && format!=15 && format!=16) || (state!=0 && state!=1 && state!=3 && state!=4) ||
                 ((entry.Flags&Last)!=0)!=last)throw new IOException("Invalid V2 catalog entry geometry/flags.");
             if((entry.Flags&MetadataValid)!=0 && (format==0 || entry.Session==0 || (format==8?entry.Hz!=0 || entry.Mask!=0:!NpV2SdControl.IsProfile(entry.Mask,entry.Hz))))throw new IOException("Invalid V2 recording metadata summary.");
-            if((format==14 || format==15) && (entry.Flags&MetadataValid)!=0 &&
+            if((format==14 || format==15 || format==16) && (entry.Flags&MetadataValid)!=0 &&
                 (state==0 || (state==3)==((entry.Flags&Incomplete)!=0)))
                 throw new IOException("Contradictory V2 stored state/incomplete flags. Refresh recordings; no payload completion was inferred.");
             if((entry.Flags&DeleteAllowed)!=0 && (!last || (entry.Flags&MetadataValid)==0 || (state!=3 && state!=4) || (info.Flags&~CatalogFull)!=0))throw new IOException("Invalid V2 delete eligibility.");
-            if(format==15 && (entry.Flags&DeleteAllowed)!=0 && (state!=3 || (entry.Flags&Incomplete)!=0))throw new IOException("Incomplete V2 closed-loop recordings cannot be deleted through this catalog.");
+            if((format==15 || format==16) && (entry.Flags&DeleteAllowed)!=0 && (state!=3 || (entry.Flags&Incomplete)!=0))throw new IOException("Incomplete V2 extended recordings cannot be deleted through this catalog.");
             if(last && (entry.Start!=info.LastStart || entry.End!=info.LastEnd || entry.Cookie!=info.LastCookie))throw new IOException("V2 catalog tail cookie/extent changed.");
             return entry;
         }
         internal static string RecordStatus(NpBleRecord record)
         {
             uint state=(record.Flags>>8)&255;
-            if((record.Flags&255)==14 || (record.Flags&255)==15){
+            if((record.Flags&255)==14 || (record.Flags&255)==15 || (record.Flags&255)==16){
                 if((record.Flags&MetadataValid)==0)return "Unverified";
                 return state==3 && (record.Flags&Incomplete)==0?"Complete*":"Incomplete";
             }

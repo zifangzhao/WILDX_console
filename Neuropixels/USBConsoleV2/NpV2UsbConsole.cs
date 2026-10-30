@@ -1083,6 +1083,8 @@ namespace USB512_interface
         internal DateTime FirstReceiveUtc, LastReceiveUtc;
 #if !NP2_CONSOLE_STANDALONE
         internal long OptionalImuRecords,OptionalImuSamples;
+        internal ulong ImuGridRows,ImuGridObserved;
+        internal bool ImuGridSelected,ImuGridEnforcedSchedule,ImuGridPhaseQualified,ImuGridSourceWindowVerified;
         internal string OptionalImuError;
         internal NpImuDisplay OptionalImuDisplay;
 #endif
@@ -2145,7 +2147,7 @@ namespace USB512_interface
 #if !NP2_CONSOLE_STANDALONE
             NpUsbSensorMonitor sensorMonitor=null;
 #if NP_FIRST_SYNC_ENABLE && NP_IMU_GRID_ENABLE
-            var auxGridLab=NpV2AuxLabSession.ForLab(folder,NpV2FirmwareForm.Uid(devicePath));
+            var auxGridLab=NpV2AuxLabSession.ForRecording(folder,NpV2FirmwareForm.Uid(devicePath),saveSensors);
 #endif
             NpUsbTimingSession usbTiming=null;
             NpClosedLoopSettings.Setup closedLoopSetup=null;
@@ -2241,7 +2243,11 @@ namespace USB512_interface
                         if (advertised.Format == 3U) NpV2ProfileCapabilities.RequireUsbBandwidth(advertised.ProbeMask, advertised.SampleHz);
 #if !NP2_CONSOLE_STANDALONE
                         if(advertised.Format==3U)try {
-                            sensorMonitor=new NpUsbSensorMonitor(device,folder,NpV2FirmwareForm.Uid(devicePath),saveSensors,sensorDisplay);
+                            sensorMonitor=new NpUsbSensorMonitor(device,folder,NpV2FirmwareForm.Uid(devicePath),saveSensors,sensorDisplay
+#if NP_FIRST_SYNC_ENABLE && NP_IMU_GRID_ENABLE
+                                ,auxGridLab!=null
+#endif
+                                );
 #if NP_FIRST_SYNC_ENABLE
                             sensorMonitor.ConfigureFine(()=>usbTiming==null?null:usbTiming.FineRoot);
 #endif
@@ -2342,6 +2348,8 @@ namespace USB512_interface
 #if NP_FIRST_SYNC_ENABLE && NP_IMU_GRID_ENABLE
                         if(auxGridLab!=null)auxGridLab.AfterTiming(device,()=>usbTiming==null?null:usbTiming.FineRoot,
                             usbTiming!=null&&usbTiming.FineRootEnabled&&usbTiming.RtcEnabled);
+                        if(sensorMonitor!=null)try{sensorMonitor.ResolveAnalogOwner(auxGridLab!=null&&auxGridLab.Selected);}
+                            catch(Exception ex) when(ex is IOException||ex is UnauthorizedAccessException||ex is InvalidOperationException){result.OptionalImuError=ex.Message;}
 #endif
                         if(closedLoopSetup!=null&&BitConverter.ToUInt32(closedLoopSetup.Request,32)!=0)
                             closedLoop=new NpClosedLoopV2UsbLog(folder,NpV2FirmwareForm.Uid(devicePath),usbTiming.Enabled?usbTiming.Token:0,closedLoopSetup.Request);
@@ -2656,6 +2664,9 @@ namespace USB512_interface
             if(auxGridLab!=null){
                 ulong gridSourceEnd=result.Verifier.Blocks==0?0:checked(result.Verifier.LastSourceTick+(ulong)result.Verifier.TicksPerBlock);
                 auxGridLab.Complete(gridSourceEnd,result.Complete,result.Verifier,dat);
+                result.ImuGridSelected=auxGridLab.Selected;result.ImuGridEnforcedSchedule=auxGridLab.EnforcedScheduleVerified;
+                result.ImuGridRows=auxGridLab.Rows;result.ImuGridObserved=auxGridLab.Observed;
+                result.ImuGridPhaseQualified=auxGridLab.PhaseQualified;result.ImuGridSourceWindowVerified=auxGridLab.SourceWindowVerified;
                 if(auxGridLab.Error!=null)result.OptionalImuError=result.OptionalImuError??auxGridLab.Error;
             }
 #endif
@@ -2666,7 +2677,7 @@ namespace USB512_interface
             }catch(Exception ex){result.OptionalImuError=result.OptionalImuError??ex.Message;}
 #endif
             if(dat!=null)dat.WriteCalibratedTimes();
-            NpImuTimeCorrection.Automatic(folder);
+            if(!result.ImuGridSelected)NpImuTimeCorrection.Automatic(folder);
 #endif
             result.ReceivedBlocks = received; result.VerifiedBlocks = result.Verifier.Blocks;
             result.PayloadBytes = checked((long)received * (NpV2UsbDevice.BlockBytes - 512)); result.Seconds = clock.Elapsed.TotalSeconds;
@@ -3380,8 +3391,8 @@ namespace USB512_interface
                         settings.Streams(false,null,false);
                         settings.Context("misc_signals_requested",npRecordMiscSignals);
                         settings.Context("raw_usb_saved",false);
-                        settings.Context("imu_delivery",npRecordMiscSignals?"sparse verified bulk snapshots are monitored and saved; not lossless native 200 Hz acquisition":"sparse verified bulk snapshots are monitored only; saving disabled by recording settings");
-                        settings.Context("imu_timing","IMU I2C completion tick; analogin.dat is a 1250 Hz held-value grid from the first valid IMU snapshot, not AP sample zero");
+                        settings.Context("imu_delivery",npRecordMiscSignals?"Native snapshots retained; requested scheduled grid selected only with explicit supported capability, otherwise legacy held-value output":"sparse verified bulk snapshots are monitored only; saving disabled by recording settings");
+                        settings.Context("imu_timing","Final analog owner and source binding are recorded after capture; native conversion phase is unknown");
                         settings.Context("clock_observations_file",npRecordMiscSignals?"clock_observations.csv; offline linear fit on Stop; RAW/AP samples are not retimed":"not written; monitoring uses sparse verified bulk snapshots only");
                         var stagedPorts=new List<int>();
                         var hostOnlyPorts=new List<int>();
@@ -3478,8 +3489,15 @@ namespace USB512_interface
                 PostToUi(delegate { NpV2ObserveReceive(result.FirstReceiveUtc, result.LastReceiveUtc, completedFolder); });
                 complete=result.Complete;metadataFailure=result.Error??(result.Complete?null:result.Warning);
                 if(settings!=null) {
-                    settings.Streams(npRecordMiscSignals && result.OptionalImuSamples>0,npRecordMiscSignals && result.OptionalImuSamples>0,false);
+                    settings.Streams(npRecordMiscSignals&&(result.ImuGridSelected?result.ImuGridRows>0:result.OptionalImuSamples>0),
+                        npRecordMiscSignals&&(result.OptionalImuSamples>0||result.ImuGridObserved>0),false);
                     settings.Context("optional_imu_snapshots",result.OptionalImuRecords);
+                    settings.Context("imu_analog_owner",result.ImuGridSelected?"NSG1 scheduled cache copies":"legacy held-value grid");
+                    settings.Context("imu_grid_rows",result.ImuGridRows);settings.Context("imu_grid_observed",result.ImuGridObserved);
+                    settings.Context("imu_grid_enforced_schedule_verified",result.ImuGridEnforcedSchedule);
+                    settings.Context("imu_grid_phase_qualified",result.ImuGridPhaseQualified);settings.Context("imu_grid_source_window_verified",result.ImuGridSourceWindowVerified);
+                    settings.Context("imu_timing",result.ImuGridSelected?"1250 Hz indexed scheduled cache-copy grid; actual phase/source-window qualification in analogin_encoding.txt; native conversion phase and terminal tail remain separate":
+                        "IMU I2C completion tick; analogin.dat is a 1250 Hz held-value grid from the first valid IMU snapshot, not AP sample zero");
                     settings.Context("optional_imu_error",result.OptionalImuError??"none");
                     settings.Context("np2_cancelled_before_capture",result.CancelledBeforeCapture);
                     if(result.DecodedDatSampleHz!=0 && result.DecodedDatProbeMask!=0)

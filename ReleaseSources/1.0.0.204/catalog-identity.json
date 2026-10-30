@@ -1,0 +1,10 @@
+{
+    "status":  "actual204_catalog_load_passed",
+    "families":  2,
+    "v1_app":  "FFF283D9",
+    "v1_usb":  "1E73A743",
+    "v2_app":  "194D9B94",
+    "v2_usb":  "74A9B98B",
+    "file_hashes_validated_by_actual_loader":  true,
+    "hardware_access":  false
+}

@@ -1,0 +1,168 @@
+{
+  "version": "1.0.0.204",
+  "scope": "Checked host and V1 update; published199 V2 firmware retained",
+  "application_sha256": "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E",
+  "sdk_sha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
+  "focused_checks": 806,
+  "legacy_checks": 637,
+  "v1": {
+    "schema": 1,
+    "status": "qualified_components_for_release204",
+    "uid_tested": "001D00065942500B20313354",
+    "host_sha256": "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E",
+    "sdk_sha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
+    "usb": {
+      "crc32": "1E73A743",
+      "profile": "P1+P2/20000/60seconds",
+      "passed": true,
+      "ap_rows_total": 2402494,
+      "observed_grid_slots": 75057,
+      "missing_initial_slots": 1,
+      "relative_copy_bound_us": 42,
+      "local_rtc_interval_us": 112,
+      "pc_calibration_uncertainty_us": 4593,
+      "source_window_verified": true,
+      "other_component": "original APP82E51DEA",
+      "evidence": [
+        {
+          "path": "F:\\Neuropixel\\V1_PRODUCTION_USB204_20261030_R2\\experiment.json",
+          "bytes": 18184,
+          "sha256": "2B1F4399A47E0A5A5A944A977D96EF71AC9C314390A49D76E2FB349089962FB1"
+        },
+        {
+          "path": "F:\\Neuropixel\\V1_PRODUCTION_USB204_20261030_R2\\ordinary-independent-check.json",
+          "bytes": 16952,
+          "sha256": "CC5CFD60D70AFFB9EADB2EDB5740B3956905270A8E55298262229A81A1902679"
+        }
+      ]
+    },
+    "sd": {
+      "crc32": "FFF283D9",
+      "profile": "P1+P2/20000/30seconds",
+      "passed": true,
+      "session": 1793344023,
+      "verified_bytes": 1006632960,
+      "chunks": 15360,
+      "stored_neural_continuity_verified": true,
+      "observed_grid_slots": 37799,
+      "missing_initial_slots": 1,
+      "relative_copy_bound_us": 42,
+      "local_rtc_interval_us": 111,
+      "pc_calibration_uncertainty_us": 20866,
+      "source_window_verified": false,
+      "other_component": "original USB4F7B521A for recording and readback",
+      "evidence": [
+        {
+          "path": "F:\\Neuropixel\\V1_GRID_PRODUCTION_SD204_REEXPORT_20261030_R1\\hil.json",
+          "bytes": 21688,
+          "sha256": "A512691E56517DC2938735C64A192DF67A8893CECC06099F9CF8B049636F5C08"
+        },
+        {
+          "path": "F:\\Neuropixel\\V1_GRID_PRODUCTION_SD204_REEXPORT_20261030_R1\\imu-grid-independent-check.json",
+          "bytes": 5939,
+          "sha256": "1F741C50C3245F5D372F6FD009DFBBF2993455FC60FA0B023EFE42630040FB55"
+        },
+        {
+          "path": "F:\\Neuropixel\\V1_GRID_PRODUCTION_SD204_REEXPORT_20261030_R1\\physical-imu-check.json",
+          "bytes": 1039,
+          "sha256": "CB209BEEC71787FB56DA27269FAD38E3D6234D80D21EC6D37A575FCD5BAE94BF"
+        }
+      ]
+    },
+    "restoration": [
+      {
+        "full_flash_options": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_usb_production_hil_r2\\restore_verified.json",
+          "bytes": 207,
+          "sha256": "9EB9B26543ED1449E7A2B311BFB009AB877FF6AA8CD9FB7D68800ED74B329AC1"
+        },
+        "idle_profile": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_usb_production_hil_r2\\restored_idle.json",
+          "bytes": 1328,
+          "sha256": "0B70ACFB211EF1B95BD12320C2FCF04C723F112AD03045CAE3413E7492F4E929"
+        },
+        "result": "original flash/options and 3-probe 7.5kHz profile restored and verified"
+      },
+      {
+        "full_flash_options": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_app_production_hil_r1\\restore_verified.json",
+          "bytes": 383,
+          "sha256": "D03013724969545F7DFBEB72F2A5AB66647D84BC2F2EF4DFB8DC64A948794FE5"
+        },
+        "idle_profile": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_app_production_hil_r1\\restored_idle.json",
+          "bytes": 1328,
+          "sha256": "FC522F50D2FCBC77947BBD6A89AA2788FC28399FCB6C87ABD3417024258472D4"
+        },
+        "result": "original flash/options and 3-probe 7.5kHz profile restored and verified"
+      }
+    ],
+    "hardware_leases_released": "reported by hardware owner; no new device query in staging",
+    "retained_observed_grid": "1250Hz/800us HSE-scheduled cached snapshots, explicitly enforced configured deadline; repeats allowed and gaps preserved",
+    "limits": {
+      "best_effort_neural_policy": true,
+      "physical_adc_payload_checksum_claim": false,
+      "native_sensor_conversion_phase_locked": false,
+      "sample0_lock": false,
+      "terminal_tail_qualified": false,
+      "whole_clock_lifetime_qualified": false,
+      "all_stream_alignment_verified": false,
+      "new_components_installed_together": false,
+      "post_stop_full_payload_scan": false
+    },
+    "composition_scope": "Fused image is the direct checked-component merge required for delivery; acceptance is reused from the separate USB60 and SD30 components. No new hardware qualification is added by packaging."
+  },
+  "v2_reused": {
+    "uid": "001A0004434250062039314E",
+    "host_version": "1.0.0.199",
+    "app_crc32": "194D9B94",
+    "usb_crc32": "74A9B98B",
+    "recovery_crc32": "6408DBB8",
+    "normal_usb": {
+      "configuration": "3 NP2 / 20 kHz / 60.425 s",
+      "received_verified_blocks": 47196,
+      "host_raw_drops": 0,
+      "host_decoded_lane_drops": 0,
+      "firmware_capture_producer_source_errors": [
+        0,
+        0,
+        0
+      ],
+      "legacy_imu_fresh_ag_and_mag": 1200,
+      "legacy_held_rows": 75369,
+      "rtc_local_interval_us": 120,
+      "pc_calibration_uncertainty_us": 1099,
+      "proof_sha256": "16BA7048927A70CB87252713BC56715A3CB9A20F678F9E9EF2647731EBDDC9C1"
+    },
+    "ble_sd": {
+      "configuration": "3 NP2 / 20 kHz / 30.0032 s",
+      "verified_bytes": 1092116480,
+      "rows_each_probe": 600063,
+      "source_gaps": 0,
+      "missing_ticks": 0,
+      "dropped_blocks": 0,
+      "producer_discarded_ticks": 0,
+      "overflow_events": 0,
+      "valid_ag_mag_snapshots": 5741,
+      "rtc_local_interval_us": 121,
+      "pc_calibration_uncertainty_us": 20060,
+      "proof_sha256": "8B160B8BFC2A73636A62ACDD6CCCDCAE947B2E04D33AA829F246547344E98C32"
+    },
+    "all_modes_or_endurance_qualified": false,
+    "experimental_grid_enabled": false,
+    "limits": [
+      "A1 catalog inspection was rejected; ordinary catalog listing and exact-session readback passed",
+      "BLE and USB firmware-identity capabilities absent during SD HIL: externally verified whole-flash proof, not device-reported CRC",
+      "Legacy USB IMU is held-value compatibility; no native conversion completeness or phase guarantee",
+      "RTC bound covers first validated NP only; PC uncertainty separate; whole-record clock continuity and terminal grid tail not established",
+      "APP changed from published R6 by five rebuilt units/removal of optional sensor fine archive; not equivalent to prior EC5",
+      "Experimental grid 600 s run failed at 205.310 s due producer retention; not enabled or qualified in ordinary USB profile",
+      "Fused file assembled from individually verified components and was not flashed as a whole"
+    ]
+  },
+  "v2_new_scheduler": "Not included; its long test failed. Development and safe recovery continue separately.",
+  "all_profile_or_endurance_qualified": false,
+  "new_recording_tests_during_packaging": 0,
+  "package_invocations": 1,
+  "fresh_extractions": 1
+}

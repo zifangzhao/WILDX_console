@@ -35,11 +35,56 @@ internal static class NpV2AuxCaptureTests {
         internal readonly Queue<byte[]> Inputs=new Queue<byte[]>();internal readonly ManualResetEvent ReadGate=new ManualResetEvent(true),AbortGate=new ManualResetEvent(true);
         internal int StopCalls,AbortCalls,RetireCalls,ReleaseCalls,DisposeCalls;internal bool Verified,FailAbort,FailRetire,HoldRead;internal byte AbortPipe;
         internal int Read(byte[] into){if(HoldRead)ReadGate.WaitOne();byte[] b=null;lock(Inputs){if(Inputs.Count!=0)b=Inputs.Dequeue();}if(b==null){Thread.Sleep(1);return 0;}Buffer.BlockCopy(b,0,into,0,b.Length);return b.Length;}
-        internal NpV2AuxCapture Start(Action<NpV2AuxPacket> sink){return new NpV2AuxCapture(false,sink,Read,()=>StopCalls++,()=>{AbortCalls++;AbortPipe=0x82;AbortGate.WaitOne();if(FailAbort)throw new IOException("Injected AUX abort failure");},()=>{RetireCalls++;if(FailRetire)throw new IOException("Injected incomplete native harvest");Verified=true;},()=>Verified,()=>ReleaseCalls++,()=>DisposeCalls++);}
+        internal NpV2AuxCapture Start(Action<NpV2AuxPacket> sink,bool grid=false){return new NpV2AuxCapture(grid,sink,Read,()=>StopCalls++,()=>{AbortCalls++;AbortPipe=0x82;AbortGate.WaitOne();if(FailAbort)throw new IOException("Injected AUX abort failure");},()=>{RetireCalls++;if(FailRetire)throw new IOException("Injected incomplete native harvest");Verified=true;},()=>Verified,()=>ReleaseCalls++,()=>DisposeCalls++);}
     }
     const string Uid="112233445566778899AABBCC";
-    static byte[] Control(uint flags=0,uint revision=1){var b=new byte[32];Encoding.ASCII.GetBytes("NSGC").CopyTo(b,0);Put(b,4,1);Put(b,8,flags);Put(b,12,0x11223344);Put(b,16,0x55667788);Put(b,20,0x99AABBCC);Put(b,24,revision);Put(b,28,NpImuGridCarrier.Crc(b,0,28));return b;}
-    static byte[] AuxStatus(){var b=new byte[128];Put(b,0,0x32535641);Put(b,4,1);Put(b,8,1);Put(b,16,4);Put(b,112,0x11223344);Put(b,116,0x55667788);Put(b,120,0x99AABBCC);return b;}
+    static byte[] Control(uint flags=0,uint revision=1,uint version=1,string uid=Uid){var b=new byte[32];Encoding.ASCII.GetBytes("NSGC").CopyTo(b,0);Put(b,4,version);Put(b,8,flags);var words=NpFirstSyncUsb.UidWords(uid);for(int i=0;i<3;i++)Put(b,12+i*4,words[i]);Put(b,24,revision);Put(b,28,NpImuGridCarrier.Crc(b,0,28));return b;}
+    static byte[] AuxStatus(){return AuxStatus(4,Uid);}
+    static byte[] AuxStatus(uint mask,string uid){var b=new byte[128];Put(b,0,0x32535641);Put(b,4,1);Put(b,8,1);Put(b,16,mask);var words=NpFirstSyncUsb.UidWords(uid);for(int i=0;i<3;i++)Put(b,112+i*4,words[i]);return b;}
+    static void ProductionSelection(string repo){
+        string prior=Environment.GetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB");Environment.SetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB",null);
+        try{
+            Check(NpV2AuxLabSession.ForRecording("unused",Uid,false)==null,"Unrequested IMU allocated an AUX owner");
+            int configured=0,selected=0,reads=0;var s=NpV2AuxLabSession.ForRecording("unused",Uid,true);
+            Check(s!=null,"Requested ordinary IMU still requires LAB environment");
+            s.BeforeConfiguration(true,()=>Control(version:2),()=>configured++,AuxStatus);
+            s.AfterTiming(()=>++reads==1?Control(1,1,2):Control(3,2,2),v=>{Check(v,"V2 request did not select grid");selected++;},()=>null,true);
+            Check(s.Configured&&s.Selected&&s.EnforcedScheduleVerified&&configured==1&&selected==1&&reads==2,"Actual NSGC2 production selection was not one-shot/enforced");
+            foreach(uint flags in new[]{1U,3U}){
+                s=NpV2AuxLabSession.ForRecording("unused",Uid,true);configured=selected=reads=0;
+                s.BeforeConfiguration(true,()=>Control(flags),()=>configured++,AuxStatus);
+                s.AfterTiming(()=>++reads==1?Control(flags):Control(1,2),v=>{Check(!v,"Legacy capability was selected as deterministic");selected++;},()=>null,true);
+                Check(!s.Selected&&!s.EnforcedScheduleVerified&&configured==0&&selected==(flags==3?1:0),"Legacy v1 did not retain honest fallback/deselect");
+            }
+            foreach(uint mask in new[]{1U,2U,5U,7U,8U,512U,516U,1024U}){
+                s=NpV2AuxLabSession.ForRecording("unused",Uid,true);configured=selected=0;
+                s.BeforeConfiguration(true,()=>Control(version:2),()=>configured++,()=>AuxStatus(mask,Uid));s.AfterTiming(()=>Control(1,1,2),v=>selected++,()=>null,true);
+                Check(!s.Configured&&!s.Selected&&configured==0&&selected==0,"Existing camera/ADC/AV-only/unknown configuration was overwritten or gained a second reader");
+            }
+            s=NpV2AuxLabSession.ForRecording("unused",Uid,true);configured=selected=0;
+            s.BeforeConfiguration(true,()=>{throw new System.ComponentModel.Win32Exception(31);},()=>configured++,AuxStatus);s.AfterTiming(()=>Control(1,1,2),v=>selected++,()=>null,true);
+            Check(s.Error==null&&!s.Selected&&configured==0&&selected==0,"Old unsupported firmware became a Start gate/error instead of legacy fallback");
+            s=NpV2AuxLabSession.ForRecording("unused",Uid,true);s.BeforeConfiguration(true,()=>Control(version:2),()=>{},AuxStatus);reads=selected=0;
+            s.AfterTiming(()=>++reads==1?Control(1,1,2):Control(3,2,1),v=>selected++,()=>null,true);
+            Check(!s.Selected&&!s.EnforcedScheduleVerified&&s.Error!=null&&selected==1,"Capability downgrade silently qualified or replayed selection");
+            s=NpV2AuxLabSession.ForRecording("unused",Uid,true);int aux=0;selected=0;
+            s.BeforeConfiguration(true,()=>Control(version:2),()=>{throw new IOException("Lost configuration ACK");},()=>++aux==1?AuxStatus():new byte[128]);s.AfterTiming(()=>Control(1,1,2),v=>selected++,()=>null,true);
+            Check(!s.Selected&&s.Error!=null&&selected==0,"Failed production AUX setup became a SELECT/NP Start gate");
+            s=NpV2AuxLabSession.ForRecording("unused",Uid,true);s.BeforeConfiguration(true,()=>Control(version:2),()=>{throw new IOException("Lost configuration ACK");},AuxStatus);reads=selected=0;
+            s.AfterTiming(()=>++reads==1?Control(1,1,2):Control(3,2,2),v=>selected++,()=>null,true);
+            Check(s.Selected&&s.EnforcedScheduleVerified&&s.Error==null&&selected==1,"Reconciled configuration lost-ACK was replayed or retained as an unknown fault");
+            s=NpV2AuxLabSession.ForRecording("unused",Uid,true);s.BeforeConfiguration(true,()=>Control(version:2),()=>{},AuxStatus);reads=selected=0;
+            s.AfterTiming(()=>{if(++reads==1)return Control(1,1,2);throw new IOException("Unknown SELECT");},v=>selected++,()=>null,true);
+            Check(!s.Selected&&!s.EnforcedScheduleVerified&&s.Error!=null&&selected==1&&reads==2,"Unknown production SELECT was replayed/guessed or escaped optional scope");
+            string overflow=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"production-pending-overflow");Directory.CreateDirectory(overflow);File.WriteAllBytes(Path.Combine(overflow,"neural.dat"),new byte[]{1,3,5});
+            s=NpV2AuxLabSession.ForRecording(overflow,Uid,true);s.BeforeConfiguration(true,()=>Control(version:2),()=>{},AuxStatus);reads=0;s.AfterTiming(()=>++reads==1?Control(1,1,2):Control(3,2,2),v=>{},()=>null,true);
+            var native=new Native();var bytes=new List<byte>();for(uint i=0;i<33;i++){byte[] body=NpImuGridWire.Pack(new NpImuGridBatch{CaptureGeneration=1,FirstSlot=i,SlotCount=1,ObservedMask=1,AgValid=1,Rows=new[]{new int[9]}});byte[] packet=Packet(5,i+1,body);Put(packet,44,1250);Put64(packet,24,i);bytes.AddRange(packet);}bytes.AddRange(Packet(4,34,new byte[0]));native.Inputs.Enqueue(bytes.ToArray());
+            s.AfterArm((selectedMode,sink)=>native.Start(sink,selectedMode));var active=(NpV2AuxCapture)typeof(NpV2AuxLabSession).GetField("capture",BindingFlags.NonPublic|BindingFlags.Instance).GetValue(s);Wait(()=>active.WorkerExited,"Bounded pending-root worker did not finish");s.StopAndRetire();s.Complete(0,false);
+            Check(s.Error!=null&&s.Error.Contains("bounded pending")&&!File.Exists(Path.Combine(overflow,"analogin.dat"))&&native.ReleaseCalls==1&&File.ReadAllBytes(Path.Combine(overflow,"neural.dat")).SequenceEqual(new byte[]{1,3,5}),"Pending-root overflow grew storage, fabricated output/fallback, cancelled NN or leaked retired owner");
+            string source=File.ReadAllText(Path.Combine(repo,"Neuropixels/USBConsoleV2/NpV2UsbConsole.cs"));int choose=source.IndexOf("auxGridLab.AfterTiming",StringComparison.Ordinal),resolve=source.IndexOf("sensorMonitor.ResolveAnalogOwner",choose,StringComparison.Ordinal),arm=source.IndexOf("device.ArmCapture()",resolve,StringComparison.Ordinal);
+            Check(source.Contains("NpV2AuxLabSession.ForRecording(folder,NpV2FirmwareForm.Uid(devicePath),saveSensors)")&&choose>0&&resolve>choose&&arm>resolve,"Production request or single analog ownership was not fixed before arm");
+        }finally{Environment.SetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB",prior);}
+    }
     static void LabOrdering(string repo){
         string previous=Environment.GetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB");
         try {
@@ -48,7 +93,7 @@ internal static class NpV2AuxCaptureTests {
             lab.BeforeConfiguration(true,()=>{throw new System.ComponentModel.Win32Exception(31);},()=>configure++,AuxStatus);lab.AfterTiming(()=>Control(1),s=>select++,()=>null,true);Check(!lab.Configured&&!lab.Selected&&configure==0&&select==0,"Unsupported optional control gated NP or mutated AUX");
             lab=NpV2AuxLabSession.ForLab("unused",Uid);lab.BeforeConfiguration(true,()=>Control(),()=>{configure++;throw new IOException("Lost config ACK");},AuxStatus);Check(lab.Configured&&configure==1,"One lost configuration ACK was replayed instead of reconciled");
             lab.AfterTiming(()=>++reads==1?Control(1):Control(3,2),s=>select++,()=>null,true);Check(lab.Selected&&select==1&&reads==2,"Ready/pre-arm selection was not one-shot reconciled");
-            lab=NpV2AuxLabSession.ForLab("unused",Uid);configure=select=reads=0;lab.BeforeConfiguration(true,()=>Control(),()=>{configure++;throw new IOException("Configure failed");},()=>new byte[128]);lab.AfterTiming(()=>Control(1),s=>select++,()=>null,true);Check(!lab.Configured&&!lab.Selected&&configure==1&&select==0,"Failed optional config caused SELECT or a thrown Start gate");
+            lab=NpV2AuxLabSession.ForLab("unused",Uid);configure=select=reads=0;int auxReads=0;lab.BeforeConfiguration(true,()=>Control(),()=>{configure++;throw new IOException("Configure failed");},()=>++auxReads==1?AuxStatus():new byte[128]);lab.AfterTiming(()=>Control(1),s=>select++,()=>null,true);Check(!lab.Configured&&!lab.Selected&&configure==1&&select==0,"Failed optional config caused SELECT or a thrown Start gate");
             lab=NpV2AuxLabSession.ForLab("unused",Uid);lab.BeforeConfiguration(true,()=>Control(),()=>{},AuxStatus);lab.AfterTiming(()=>{if(++reads==1)return Control(1);throw new IOException("Selection outcome unknown");},s=>select++,()=>null,true);Check(!lab.Selected&&select==1&&reads==2&&lab.Error!=null,"Ambiguous SELECT was guessed/replayed or escaped optional scope");
             lab=NpV2AuxLabSession.ForLab("unused",Uid);select=0;lab.BeforeConfiguration(true,()=>Control(),()=>{},AuxStatus);lab.AfterTiming(()=>Control(1),s=>select++,()=>null,false);Check(!lab.Selected&&select==0,"Grid selected without feature15");
             string source=File.ReadAllText(Path.Combine(repo,"Neuropixels/USBConsoleV2/NpV2UsbConsole.cs"));int before=source.IndexOf("auxGridLab.BeforeConfiguration(device)",StringComparison.Ordinal),start=source.IndexOf("device.Start(targetBlocks)",before,StringComparison.Ordinal),timing=source.IndexOf("usbTiming=NpUsbTimingSession.Prepare",start,StringComparison.Ordinal),ready=source.IndexOf("auxGridLab.AfterTiming",timing,StringComparison.Ordinal),arm=source.IndexOf("device.ArmCapture()",ready,StringComparison.Ordinal),queue=source.IndexOf("queueFree();",arm,StringComparison.Ordinal),reader=source.IndexOf("auxGridLab.AfterArm",queue,StringComparison.Ordinal);
@@ -111,6 +156,31 @@ internal static class NpV2AuxCaptureTests {
         var packets=new List<NpV2AuxPacket>();new NpV2AuxParser(true).Feed(raw,0,raw.Length,packets.Add);
         typeof(NpV2AuxLabSession).GetMethod("Packet",BindingFlags.NonPublic|BindingFlags.Instance).Invoke(lab,new object[]{packets.Single()});
     }
+    static void ProductionBound(string output,NpFirstSyncUsbFineRoot seed,NpV2WireVerifier verifier,NpV2DatRecorder data,bool gridFault=false,bool withTerminal=true){
+        string environment=Environment.GetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB");Environment.SetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB",null);
+        try{
+        var neural=Directory.GetFiles(output,"*.dat",SearchOption.AllDirectories).ToDictionary(p=>p,File.ReadAllBytes);
+        var root=InitialRoot(seed,verifier,r=>{r[133]=7;r[135]=0;Put(r,144,UInt32.MaxValue);Put(r,148,UInt32.MaxValue);});
+        var receipt=NpFirstSyncWire.Parse(root.Receipt);var binding=NpImuGridWriter.PhaseBinding(root.Uid,root.Token,receipt);
+        var phase=NpImuGridPhase.Pack(new NpImuGridPhaseRecord{Uid=binding.Uid,Session=binding.Session,CaptureGeneration=binding.CaptureGeneration,SourceEpoch=binding.SourceEpoch,CounterDomain=binding.CounterDomain,Token=binding.Token,FirstAcceptedSlot=receipt.Aux[0].Counter,LowerNumerator=100,UpperNumerator=200,Denominator=1,MaximumJitter=3200,Flags=3});
+        var grid=NpImuGridWire.Pack(new NpImuGridBatch{CaptureGeneration=root.Generation,FirstSlot=receipt.Aux[0].Counter,SlotCount=3,ObservedMask=7,AgValid=7,MagValid=7,Rows=new[]{new[]{1000000,0,0,1000,0,0,30000,0,0},new int[9],new int[9]}});
+        var terminal=new byte[80];Encoding.ASCII.GetBytes("NPGEND01").CopyTo(terminal,0);Put(terminal,8,1);Put(terminal,12,80);var words=NpFirstSyncUsb.UidWords(root.Uid);for(int i=0;i<3;i++)Put(terminal,16+i*4,words[i]);Put(terminal,28,receipt.Session);Put(terminal,32,root.Generation);Put(terminal,36,receipt.SourceEpoch);Put(terminal,40,receipt.Domain);Put64(terminal,44,root.Token);Put64(terminal,52,UInt64.MaxValue);if(gridFault)Put(terminal,68,4);Put(terminal,76,NpV2AuxTerminal.Crc(terminal));
+        byte[] ph=Packet(6,1,phase),batch=Packet(5,2,grid),end=Packet(7,3,terminal);Put64(ph,24,receipt.Aux[0].Counter);Put(batch,44,1250);Put64(batch,24,receipt.Aux[0].Counter);Put64(end,24,UInt64.MaxValue);
+        var n=new Native();n.Inputs.Enqueue(ph.Concat(batch).Concat(withTerminal?end:new byte[0]).Concat(Packet(4,withTerminal?4U:3U,new byte[0])).ToArray());
+        bool releasedRoot=false;int controls=0;var session=NpV2AuxLabSession.ForRecording(output,root.Uid,true);
+        session.BeforeConfiguration(true,()=>Control(version:2,uid:root.Uid),()=>{},()=>AuxStatus(4,root.Uid));
+        session.AfterTiming(()=>++controls==1?Control(1,1,2,root.Uid):Control(3,2,2,root.Uid),v=>Check(v,"Production native boundary deselected requested grid"),()=>releasedRoot?root:null,true);
+        session.AfterArm((selected,sink)=>{Check(selected,"Actual worker was not told its selected mode");return n.Start(sink,selected);});
+        Wait(()=>((NpV2AuxCapture)typeof(NpV2AuxLabSession).GetField("capture",BindingFlags.NonPublic|BindingFlags.Instance).GetValue(session)).WorkerExited,"Production AUX worker did not consume delayed-root packets");
+        Check(!File.Exists(Path.Combine(output,"analogin.dat")),"Root-delay path wrote unbound analog data");
+        session.StopAndRetire();releasedRoot=true;session.Complete(verifier.LastSourceTick+(ulong)verifier.TicksPerBlock,true,verifier,data);
+        Check(session.Selected&&session.EnforcedScheduleVerified&&session.Rows==3&&session.Observed==3&&session.PhaseQualified==!gridFault&&session.SourceWindowVerified==!gridFault&&(session.Error!=null)==gridFault,"Actual retired production grid lost unknown-cutoff phase or qualified a device grid fault: "+session.Error);
+        Check(File.ReadAllBytes(Path.Combine(output,"imu_grid_phase.bin")).SequenceEqual(phase)&&new FileInfo(Path.Combine(output,"analogin.dat")).Length==96&&new FileInfo(Path.Combine(output,"analogin_validity.dat")).Length==3,"Production root grid files/phase extents differ");
+        Check(!Directory.Exists(Path.Combine(output,"imu_grid_lab"))&&File.ReadAllText(Path.Combine(output,"imu_grid_status.txt")).Contains("final_slot_known=False"),"Production used lab folder or invented terminal tail");
+        Check(n.StopCalls==1&&n.AbortCalls==1&&n.AbortPipe==0x82&&n.ReleaseCalls==1,"Production retirement replayed controls or touched EP81");
+        Check(neural.All(p=>File.ReadAllBytes(p.Key).SequenceEqual(p.Value)),"Production AUX worker changed closed neural DAT bytes");
+        }finally{Environment.SetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB",environment);}
+    }
     static void FirstSlot(string repo){
         string basePath=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"first-slot");Directory.CreateDirectory(basePath);
         string seedPath=Path.Combine(basePath,"seed");Directory.CreateDirectory(seedPath);File.Copy(Path.Combine(repo,"Tests/Fixtures/NpV2GridR6TimingEvidence.jsonl"),Path.Combine(seedPath,NpUsbTimingEvidence.FileName));
@@ -129,6 +199,12 @@ internal static class NpV2AuxCaptureTests {
                 data.Complete();var root=InitialRoot(seed,verifier);byte[] stopped=root.Anchor;Put(stopped,8,1234);Seal(stopped);
                 string anchorPath=Path.Combine(output,"acquisition_anchor.bin");File.WriteAllBytes(anchorPath,stopped);
                 string why;Check(NpV2AuxLabSession.SavedFirstSource(output,seed.Uid,root,verifier,data,out why),"Actual closed initial V2 NP rows did not qualify: "+why);
+                ProductionBound(output,seed,verifier,data);
+                if(mask==3&&!merged)foreach(bool fault in new[]{false,true}){
+                    string replay=Path.Combine(output,fault?"production-fault":"production-no-grid-terminal");Directory.CreateDirectory(replay);File.Copy(anchorPath,Path.Combine(replay,"acquisition_anchor.bin"));
+                    foreach(int p in new[]{1,2}){string relative=Path.Combine("probe"+p,"neuropixels_ap.dat"),copy=Path.Combine(replay,relative);Directory.CreateDirectory(Path.GetDirectoryName(copy));File.Copy(Path.Combine(output,relative),copy);}
+                    ProductionBound(replay,seed,verifier,data,fault,fault);
+                }
                 var laterBad=(byte[])maker.Invoke(null,new object[]{99UL,99UL*(mask==3?46080UL:40960UL),mask,mask,20000U,false,UInt32.MaxValue});
                 Bad(()=>verifier.Feed(laterBad,0),"Later actual NN sequence fault was ignored");
                 Check(NpV2AuxLabSession.SavedFirstSource(output,seed.Uid,root,verifier,data,out why),"Later actual NN fault erased proven saved initial NP rows");
@@ -164,6 +240,7 @@ internal static class NpV2AuxCaptureTests {
         }}finally{Environment.SetEnvironmentVariable("WILDX_V2_AUX_GRID_LAB",prior);}
     }
     static void Main(string[] args){
+        ProductionSelection(args[0]);
         LabOrdering(args[0]);
         TerminalArchive(args[0]);
         FirstSlot(args[0]);

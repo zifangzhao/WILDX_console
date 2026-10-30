@@ -291,9 +291,9 @@ namespace USB512_interface
             });
             gridComplete=true;gridNpLocked=origin!=null;gridOriginEvidence=origin==null?"Unsynchronized fallback; NP byte-zero offset and UTC unavailable; see encoding file":origin.Evidence;
         }
-        internal void Complete(uint sourceHz=0,ulong sourceExtent=0,NpSdImuGridOrigin origin=null,Func<bool> cancelled=null)
+        internal void Complete(uint sourceHz=0,ulong sourceExtent=0,NpSdImuGridOrigin origin=null,Func<bool> cancelled=null,bool emitAnalog=true)
         {
-            if(sourceHz!=0&&advertised){
+            if(emitAnalog&&sourceHz!=0&&advertised){
                 try{
                     if(csv!=null){csv.Dispose();csv=null;}if(raw!=null){raw.Dispose();raw=null;}if(fineRaw!=null){fineRaw.Dispose();fineRaw=null;}
                     if(fineAdvertised&&origin!=null){ignoredFineOrigin=true;origin=null;if(error==null)error="FineAux caller grid origin ignored: producer continuity/phase contract is not qualified.";}

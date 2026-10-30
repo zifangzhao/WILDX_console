@@ -26,7 +26,7 @@ namespace USB512_interface
             uint mask=BitConverter.ToUInt32(legacy,16),hz=BitConverter.ToUInt32(legacy,20);
             string path=Path.Combine(folder,"sd_start_"+attempt.Token.ToString("X16",CultureInfo.InvariantCulture)+"_"+attempt.EvidenceId+".json");
             var document=new {schema=1,format="neuropixels.sd_first_sync_attempt",attempt_id=attempt.EvidenceId,device_uid=attempt.Uid,device_family=attempt.Family,
-                connection_epoch=attempt.ConnectionEpoch,token_hex=attempt.Token.ToString("X16",CultureInfo.InvariantCulture),request_id=attempt.Id,operation=attempt.Operation,
+                connection_epoch=attempt.ConnectionEpoch,token_hex=attempt.Token.ToString("X16",CultureInfo.InvariantCulture),request_id=attempt.Id,operation=attempt.Operation,protocol_version=parsed.Version,
                 phase=attempt.EvidencePhase,created_utc_host=attempt.CreatedUtc,evidence_updated_utc_host=attempt.EvidenceUpdatedUtc,
                 start_ack_outcome=attempt.Acknowledgement==null?"unconfirmed":attempt.Rejected?"validated_rejection":"validated_queued_or_historical_acceptance",
                 start_transport_entered=attempt.StartTransportEntered,status_transport_entered=attempt.StatusTransportEntered,

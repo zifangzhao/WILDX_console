@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using USB512_interface;
 
-internal static class NpV2SdDatExportTests
+internal static partial class NpV2SdDatExportTests
 {
     private const uint Start = 8192, Payload = 16384, ReservationEnd = 32768;
     private static int checks;
@@ -250,7 +250,7 @@ internal static class NpV2SdDatExportTests
                     }
                 }
                 using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){WriteAt(card,Start+4,f);CatalogEntry(card,f);}
-                foreach(string fault in new[]{"gap","tick","profile","sync","header","utc","truncated"}){
+                foreach(string fault in new[]{"gap","tick","profile","sync","header","truncated"}){
                     string badImage=Path.Combine(root,"fault_"+hz+"_"+au+"_"+fault+".img"),badOutput=Path.Combine(root,"fault_dat_"+hz+"_"+au+"_"+fault);MakeImage(badImage,hz,fault,au);bool refused=false;
                     try{using(var card=File.OpenRead(badImage))Bridge(card,Start,BitConverter.ToUInt32(f,116),badOutput,()=>false,null);}catch(Exception e) when(e is IOException || e is InvalidDataException){refused=true;}
                     Check(refused,"v12 payload/UTC corruption accepted: "+fault);
@@ -536,7 +536,7 @@ internal static class NpV2SdDatExportTests
         string planned=Path.Combine(root,"single_planned.img"),plannedOutput=Path.Combine(root,"single_planned_dat");
         MakeImage(planned,15000,"config_planned",0,1);
         using(var card=File.OpenRead(planned))Check(NpV2SdDatExport.Export(card,Start,plannedOutput).Rows.Length==1,"Single planned kind1 refused");
-        foreach(string fault in new[]{"config_crc","config_kind","config_reserved","config_unselected","config_port","config_request","footer","gap","tick","profile","sync","header","utc","truncated"}){
+        foreach(string fault in new[]{"config_crc","config_kind","config_reserved","config_unselected","config_port","config_request","footer","gap","tick","profile","sync","header","truncated"}){
             string image=Path.Combine(root,"single_fault_"+fault+".img"),output=Path.Combine(root,"single_fault_dat_"+fault);
             MakeImage(image,30000,fault,0,1);bool refused=false;
             try{using(var card=File.OpenRead(image))NpV2SdDatExport.Export(card,Start,output);}catch(Exception e)when(e is IOException || e is InvalidDataException){refused=true;}
@@ -544,7 +544,7 @@ internal static class NpV2SdDatExportTests
             Check(!Directory.Exists(output) || (Directory.GetFiles(output,"*.dat").Length==0 && File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt")).StartsWith("Export complete: False")),"Failed single export published DAT/success");
             if(fault.StartsWith("config_"))Check(!Directory.Exists(output),"Invalid single provenance created output");
         }
-        foreach(string fault in new[]{"config_crc","config_kind","config_reserved","config_unselected", "metadata","footer","card","bounds","reserved","gap","tick","profile","sync","header","utc","truncated"}){
+        foreach(string fault in new[]{"config_crc","config_kind","config_reserved","config_unselected", "metadata","footer","card","bounds","reserved","gap","tick","profile","sync","header","truncated"}){
             string image=Path.Combine(root,"triple_fault_"+fault+".img"),output=Path.Combine(root,"triple_fault_dat_"+fault);
             MakeImage(image,15000,fault,0,7);bool refused=false;
             try{using(var card=File.OpenRead(image))NpV2SdDatExport.Export(card,Start,output);}catch(Exception e)when(e is IOException || e is InvalidDataException){refused=true;}
@@ -556,12 +556,196 @@ internal static class NpV2SdDatExportTests
         Console.WriteLine("PASS {0} focused runtime SD export checks: all twelve mask1/3/7 x7.5/15/20/30 v11/v12, every signed ADC bit/channel, packed3/6 and codec6 aligned/raw-D8, closed tuples before payload/output, N2IMRO1 single staged request and kind3 fingerprint provenance, fail-closed files; no hardware/throughput qualification.",checks);
     }
 
+    private static void MakeSourceGapImage(string image,uint mask,uint version,uint dropped,string fault)
+    {
+        uint ticks=mask==1U?122880U:mask==3U?61440U:40960U;
+        uint au=version==11U?0U:version==12U?86016U:49152U;
+        MakeImage(image,15000U,null,au,mask,uint.MaxValue,version!=12U);
+        using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){
+            uint payload=BitConverter.ToUInt32(SectorAt(card,Start+3),60);
+            for(uint seq=0U;seq<8U;seq++){
+                ulong source=((ulong)seq+(seq>=4U?dropped:0U))*ticks;
+                if(fault=="backward" && seq==5U)source=5UL*ticks;
+                if(fault=="duplicate" && seq==5U)source=6UL*ticks;
+                if(fault=="unaligned" && seq==4U)source+=128UL;
+                if(fault=="first" && seq==0U)source=ticks;
+                var bytes=(byte[])Fixture.Invoke(null,new object[]{(ulong)seq,source,mask,mask,15000U,mask==3U,uint.MaxValue});
+                if(fault!="unmarked" && !(fault=="flagchange" && seq==5U))
+                    Put(bytes,52,BitConverter.ToUInt32(bytes,52)|256U);
+                if(fault=="sequence" && seq==5U)PutQ(bytes,24,4UL);
+                if(fault=="sync" && seq==4U){
+                    int at=(int)((1600UL-(source+137UL)%1600UL)%1600UL);
+                    if(mask==7U)bytes[512+at]^=1;
+                    else{int bit=at*(mask==1U?3:6);bytes[512+bit/8]^=(byte)(1<<(bit%8));}
+                }
+                card.Position=payload*512L+seq*46592L;card.Write(bytes,0,bytes.Length);
+            }
+        }
+        if(version==14U){MarkAppend(image);AppendPhysicalOrder(image,1,0);}
+    }
+
+    private static void SourceGapRows(string output,NpV2SdDatExport.Result result,uint ticks,uint dropped,
+        bool stats=false,uint overflowEvents=0U,ulong discardedTicks=0UL)
+    {
+        bool gap=dropped!=0U,complete=!gap && overflowEvents==0U;
+        Check(result.SourceGapsAdvertised && result.SourceTicks==8UL*ticks &&
+            result.MissingSourceTicks==(ulong)dropped*ticks && result.DroppedBlocks==dropped &&
+            result.SourceGapCount==(gap?1U:0U) && result.ElapsedSourceTicks==(8UL+dropped)*ticks &&
+            result.RecordingComplete==complete && result.Lossless==complete && result.StoredState==3U && result.StoredFault==0U &&
+            result.StoppedLossStatsPresent==stats && result.OverflowEvents==overflowEvents && result.ProducerDiscardedTicks==discardedTicks,
+            "Source loss/count/completion contract differs from stored metadata");
+        Check(result.Segments.Count==(gap?2:1),"Wrong contiguous source segment count");
+        for(int p=0;p<result.Rows.Length;p++){
+            long rows=0L;int phase=137+p*311;
+            byte[] bytes=File.ReadAllBytes(Path.Combine(output,"neuropixels_probe"+(p+1)+"_ap.dat"));
+            for(int segment=0;segment<result.Segments.Count;segment++){
+                var part=result.Segments[segment];
+                ulong begin=segment==0?0UL:(4UL+dropped)*ticks;
+                ulong end=gap && segment==0?4UL*ticks:(8UL+dropped)*ticks;
+                ulong first=begin+(1600UL-(begin%1600UL+(ulong)phase)%1600UL)%1600UL;
+                long count=(long)((end-first)/1600UL);
+                Check(part.FirstStoredBlock==(segment==0?0U:4U) && part.StoredBlocks==(gap?4U:8U) &&
+                    part.SourceStartTick==begin && part.SourceEndTick==end && part.RowOffsets[p]==rows && part.Rows[p]==count,
+                    "Segment source/row offsets or partial-row trimming changed");
+                for(long row=0;row<count;row++)for(int frame=0;frame<16;frame++)for(int adc=0;adc<24;adc++){
+                    int channel=(adc/2)*32+(adc&1)+frame*2;
+                    int source=checked((int)(first+(ulong)row*1600UL));
+                    short expected=(short)(2048-Convert.ToUInt16(Word.Invoke(null,new object[]{source,frame,adc/8,adc%8,p})));
+                    Check(BitConverter.ToInt16(bytes,checked((int)((rows+row)*768L+channel*2L)))==expected,
+                        "Gap export stitched/padded/misordered a real ADC row");
+                }
+                rows+=count;
+            }
+            Check(result.Phases[p]==phase && result.Rows[p]==rows && bytes.LongLength==rows*768L,
+                "Source-gap DAT file length or phase changed");
+        }
+        string report=File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt"));
+        Check(report.StartsWith("Export complete: True") && report.Contains("Source gap count: "+(gap?1:0)) &&
+            report.Contains("Dropped source blocks: "+dropped) && report.Contains("row_offset=") &&
+            report.Contains("stored tick quantity") && report.Contains("Stored terminal state: Complete") &&
+            report.Contains("Recording complete: "+complete) &&
+            report.Contains(stats?"Stopped loss statistics: present":"Stopped loss statistics: not recorded") &&
+            (!stats || report.Contains("Physical overflow events: "+overflowEvents) && report.Contains("Producer discarded raw ticks: "+discardedTicks)),
+            "Gap/count/time/completion evidence missing from export receipt");
+    }
+
+    private static void SourceGapStats(string image,uint dropped,uint events,ulong discarded,string fault=null)
+    {
+        using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite)){
+            var utc=SectorAt(card,Start+5);Put(utc,16,BitConverter.ToUInt32(utc,16)|8U);
+            Put(utc,80,events);Put(utc,84,dropped);PutQ(utc,88,(ulong)dropped*61440UL);
+            PutQ(utc,96,(8UL+dropped)*61440UL);PutQ(utc,104,discarded);
+            if(fault=="blocks")Put(utc,84,dropped+1U);
+            if(fault=="ticks")PutQ(utc,88,(ulong)dropped*61440UL+128UL);
+            if(fault=="end")PutQ(utc,96,(9UL+dropped)*61440UL);
+            if(fault=="reserved")utc[112]=1;
+            if(fault=="legacy_reserved")Put(utc,16,BitConverter.ToUInt32(utc,16)&~8U);
+            if(fault=="unknown_flag")Put(utc,16,BitConverter.ToUInt32(utc,16)|16U);
+            Seal(utc);WriteAt(card,Start+5,utc);
+        }
+    }
+
+    private static void SourceGaps(string root)
+    {
+        // The actual exporter, shared wire verifier and decoder are exercised.
+        // Payload comes from the existing chronological serial-wire fixture;
+        // every emitted channel is checked at its absolute source tick.
+        foreach(uint mask in new[]{1U,3U,7U})foreach(uint version in new[]{13U,14U}){
+            uint ticks=mask==1U?122880U:mask==3U?61440U:40960U;
+            string baseline=Path.Combine(root,"gap_legacy_"+mask+"_"+version),plain=baseline+".img";
+            MakeImage(plain,15000U,null,49152U,mask,uint.MaxValue,true);
+            if(version==14U){MarkAppend(plain);AppendPhysicalOrder(plain,1,0);}
+            using(var card=File.OpenRead(plain))NpV2SdDatExport.Export(card,Start,baseline);
+            foreach(uint dropped in new[]{0U,2U}){
+                string tag=mask+"_"+version+"_"+dropped,image=Path.Combine(root,"source_gap_"+tag+".img"),output=Path.Combine(root,"source_gap_dat_"+tag);
+                MakeSourceGapImage(image,mask,version,dropped,null);NpV2SdDatExport.Result result;
+                byte[] before=File.ReadAllBytes(image);
+                using(var card=File.OpenRead(image))result=NpV2SdDatExport.Export(card,Start,output);
+                SourceGapRows(output,result,ticks,dropped);
+                Check(before.SequenceEqual(File.ReadAllBytes(image)),"Gap export modified stored source");
+                if(dropped==0U)SameDat(baseline,output,mask==1U?1:mask==3U?2:3);
+            }
+        }
+        foreach(uint version in new[]{11U,12U}){
+            string image=Path.Combine(root,"gap_metadata_"+version+".img"),output=Path.Combine(root,"gap_metadata_dat_"+version);
+            MakeSourceGapImage(image,3U,version,2U,null);
+            using(var card=File.OpenRead(image))SourceGapRows(output,NpV2SdDatExport.Export(card,Start,output),61440U,2U);
+        }
+        foreach(uint version in new[]{13U,14U})foreach(string fault in new[]{"unmarked","backward","duplicate","unaligned","first","flagchange","sequence","sync"}){
+            string image=Path.Combine(root,"gap_bad_"+version+"_"+fault+".img"),output=Path.Combine(root,"gap_bad_dat_"+version+"_"+fault);
+            MakeSourceGapImage(image,3U,version,2U,fault);bool refused=false;
+            try{using(var card=File.OpenRead(image))NpV2SdDatExport.Export(card,Start,output);}
+            catch(InvalidDataException){refused=true;}
+            Check(refused,"Malformed/unmarked source gap accepted: "+fault);
+            Check(!Directory.Exists(output) || (Directory.GetFiles(output,"*.dat").Length==0 &&
+                File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt")).StartsWith("Export complete: False")),
+                "Rejected gap published complete DAT/success: "+fault);
+        }
+        // UTC statistics are a stopped snapshot, not a reconstruction of event
+        // counts from gaps. Raw discarded ticks deliberately differ from both.
+        foreach(uint version in new[]{13U,14U})foreach(uint kind in new[]{0U,1U,2U}){
+            uint dropped=kind==2U?2U:0U,events=kind==0U?0U:7U;
+            const ulong discarded=100001UL;
+            string image=Path.Combine(root,"gap_stats_"+version+"_"+kind+".img"),output=Path.Combine(root,"gap_stats_dat_"+version+"_"+kind);
+            MakeSourceGapImage(image,3U,version,dropped,null);SourceGapStats(image,dropped,events,discarded);
+            byte[] before=File.ReadAllBytes(image);
+            using(var card=File.OpenRead(image))SourceGapRows(output,NpV2SdDatExport.Export(card,Start,output),61440U,dropped,true,events,discarded);
+            Check(before.SequenceEqual(File.ReadAllBytes(image)),"UTC loss-stat export modified stored source");
+        }
+        foreach(string fault in new[]{"blocks","ticks","end","unmarked","empty"}){
+            uint dropped=fault=="unmarked"?0U:2U;
+            string image=Path.Combine(root,"gap_stats_bad_"+fault+".img"),output=Path.Combine(root,"gap_stats_bad_dat_"+fault);
+            MakeSourceGapImage(image,3U,13U,dropped,fault=="unmarked"?fault:null);
+            SourceGapStats(image,dropped,7U,100001UL,fault);bool refused=false;
+            if(fault=="empty")using(var card=new FileStream(image,FileMode.Open,FileAccess.ReadWrite))
+                WriteAt(card,Start+4,FooterFor(SectorAt(card,Start+3),SectorAt(card,Start+4),0U,1U,1U));
+            try{using(var card=File.OpenRead(image)){
+                if(fault=="empty")NpV2SdDatExport.ExportCommitted(card,Start,output);
+                else NpV2SdDatExport.Export(card,Start,output);
+            }}
+            catch(InvalidDataException error){refused=fault!="empty" || error.Message.Contains("no stored header");}
+            Check(refused,"Malformed/unmarked UTC loss statistics accepted: "+fault);
+            Check(!Directory.Exists(output) || (Directory.GetFiles(output,"*.dat").Length==0 &&
+                File.ReadAllText(Path.Combine(output,"np2_sd_export_status.txt")).StartsWith("Export complete: False")),
+                "Rejected UTC loss statistics published DAT/success: "+fault);
+        }
+        foreach(string fault in new[]{"reserved","legacy_reserved","unknown_flag"}){
+            string image=Path.Combine(root,"optional_stats_"+fault+".img"),output=Path.Combine(root,"optional_stats_dat_"+fault);
+            MakeSourceGapImage(image,3U,13U,2U,null);SourceGapStats(image,2U,7U,100001UL,fault);
+            using(var card=File.OpenRead(image))SourceGapRows(output,NpV2SdDatExport.Export(card,Start,output),61440U,2U);
+            Check(File.ReadAllText(Path.Combine(output,"first_sample_timestamps.json")).Contains("\"pc_time_valid\":false"),"Malformed optional metadata supplied a timestamp");
+        }
+        string initialImage=Path.Combine(root,"gap_initial_utc.img"),initialOutput=Path.Combine(root,"gap_initial_utc_dat");
+        MakeSourceGapImage(initialImage,3U,13U,0U,null);
+        using(var card=new FileStream(initialImage,FileMode.Open,FileAccess.ReadWrite))
+            WriteAt(card,Start+4,FooterFor(SectorAt(card,Start+3),SectorAt(card,Start+4),8U,4U,5U));
+        using(var card=File.OpenRead(initialImage)){
+            var result=NpV2SdDatExport.ExportCommitted(card,Start,initialOutput);
+            Check(!result.StoppedLossStatsPresent && result.OverflowEvents==0U && result.ProducerDiscardedTicks==0UL &&
+                !result.RecordingComplete && !result.Lossless && result.Rows[0]>0L,
+                "Initial UTC without stopped statistics prevented a verified incomplete-prefix export");
+        }
+        var marked=(byte[])Fixture.Invoke(null,new object[]{0UL,0UL,3U,3U,15000U,true,uint.MaxValue});
+        Put(marked,52,BitConverter.ToUInt32(marked,52)|256U);
+        bool strict=false;try{new NpV2WireVerifier().Feed(marked,0);}catch(InvalidDataException){strict=true;}
+        Check(strict,"Ordinary USB verifier accepted SD-only source-gap flag");
+        var unmarked=new NpV2WireVerifier(true);unmarked.Feed((byte[])Fixture.Invoke(null,new object[]{0UL,0UL,3U,3U,15000U,true,uint.MaxValue}),0);
+        strict=false;try{unmarked.Feed((byte[])Fixture.Invoke(null,new object[]{1UL,122880UL,3U,3U,15000U,true,uint.MaxValue}),0);}catch(InvalidDataException){strict=true;}
+        Check(strict,"SD opt-in silently accepted an unmarked source jump");
+        Console.WriteLine("PASS {0} focused SD source-gap checks: explicit bit256, v11/12/13/14 metadata and legacy bytes, optional stopped UTC statistics cross-checked against headers, independent overflow/raw-discard counts, all probe widths, retained absolute phase, complete real rows/segment offsets, no padding, strict USB and corruption refusals; software fixtures only.",checks);
+    }
+
     private static int Main(string[] args)
     {
         try {
             bool runtimeOnly=args.Length>=2 && args[1]=="--runtime-only";
             bool sourceMetadataOnly=args.Length>=2 && args[1]=="--v12-only";
-            if(args.Length>=2 && !runtimeOnly && !sourceMetadataOnly){
+            bool appendOnly=args.Length>=2 && args[1]=="--append14-only";
+            bool sourceGapsOnly=args.Length>=2 && args[1]=="--source-gaps-only";
+            bool closedLoopOnly=args.Length>=2 && args[1]=="--closed-loop-only";
+            bool imuOnly=args.Length>=2 && args[1]=="--imu-only";
+            bool grid16Only=args.Length>=2 && args[1]=="--grid16-only";
+            if(args.Length>=2 && !runtimeOnly && !sourceMetadataOnly && !appendOnly && !sourceGapsOnly && !closedLoopOnly && !imuOnly && !grid16Only){
                 var actual=Assembly.LoadFrom(Path.GetFullPath(args[1]));
                 ExternalBridge=actual.GetType("CE32_console.NpCe64Export",true).GetMethod("Export",BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic);
                 ExternalCatalog=actual.GetType("CE32_console.NpDownloadCatalog",true).GetMethod("Read",BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic);
@@ -570,15 +754,24 @@ internal static class NpV2SdDatExportTests
                 Console.WriteLine("Testing actual Release bridge: "+Path.GetFullPath(args[1]));
             }
             string root = Path.Combine(args[0], "export_tests_" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(root);
+            if(grid16Only){Grid16(root,args[2]);return 0;}
+            if(imuOnly){ImuSnapshots(root);return 0;}
+            if(closedLoopOnly){ClosedLoopMetadata(root,args[2]);return 0;}
+            if(sourceGapsOnly){SourceGaps(root);return 0;}
+            if(appendOnly){Append14(root,args[2]);return 0;}
             if(runtimeOnly){RuntimeProfiles(root);return 0;}
             if(sourceMetadataOnly || (args.Length>=3 && args[2]=="--v12-only")){
                 int baselineAt=sourceMetadataOnly?2:3;
                 MetadataVersions(root,args.Length>baselineAt?args[baselineAt]:null);LegacyAuMetadata(root);return 0;
             }
             Valid(root, 20000); Valid(root, 30000);
+            string optionalClockImage=Path.Combine(root,"invalid_optional_clock.img"),optionalClockOutput=Path.Combine(root,"invalid_optional_clock");
+            MakeImage(optionalClockImage,20000,"utc");
+            using(var card=File.OpenRead(optionalClockImage))Check(NpV2SdDatExport.Export(card,Start,optionalClockOutput).Rows.All(rows=>rows>0),"Invalid optional clock blocked payload export");
+            Check(File.ReadAllText(Path.Combine(optionalClockOutput,"first_sample_timestamps.json")).Contains("\"pc_time_valid\":false"),"Invalid clock supplied a first-row epoch");
             checks += NpV2UsbConsoleTests.LargeCounterTests();
             LargeOffset(root, 20000); LargeOffset(root, 30000);
-            foreach (string fault in new[] { "metadata", "footer", "card", "bounds", "utc", "reserved", "gap", "tick", "profile", "sync", "header", "truncated" }) {
+            foreach (string fault in new[] { "metadata", "footer", "card", "bounds", "reserved", "gap", "tick", "profile", "sync", "header", "truncated" }) {
                 string image = Path.Combine(root, fault + ".img"), output = Path.Combine(root, fault); MakeImage(image, 20000, fault);
                 bool rejected = false; try { using (var card = File.OpenRead(image)) NpV2SdDatExport.Export(card, Start, output); } catch (Exception e) when (e is IOException || e is InvalidDataException) { rejected = true; }
                 Check(rejected, "Corruption must be rejected: " + fault);

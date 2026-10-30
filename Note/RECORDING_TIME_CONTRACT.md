@@ -4,6 +4,20 @@
 
 Current scope: the user resumed coordination to finish deterministic timing development for V1 and V2. Both owners can implement and validate the affected recording paths under the existing lab-device authorization. Source/build work proceeds concurrently; shared hardware leases remain exclusive and existing recordings/settings must be preserved. Coordinate shared serialization before either implementation changes a binary format.
 
+## Required next behavior: deterministic IMU in both families
+
+The user clarified that IMU is required at deterministic time steps for both V1 and V2. A host-held display/compatibility grid does not fulfill this requirement. Implement and validate the real device-scheduled grid in ordinary USB recording and BLE-controlled SD recording. Release199 remains the checked baseline while this work is developed.
+
+- The period is800us (1250Hz). This is already an integer ratio of every supported NP AP rate: 6, 12, 16 or 24 NP samples per IMU slot at7.5,15,20 or30kHz. Retain that rate; use a hardware timer and one measured NP-relative phase instead of scheduling from USB arrival or NP block completion. The cached-copy acceptance window is a separate, tighter bound; the present V2 implementation uses100us, with counter quantization included conservatively. Hardware sensor conversions remain asynchronous and cached values may repeat.
+- Use one recording T0 at the accepted NP STARTBYTE and one genuinely measured first-slot offset. Derive later scheduled positions by ordinal; record missed slots explicitly without fabricating observations or storing per-row wall-clock timestamps.
+- Every retained observation must pass the configured copy-window check. A maximum seen in an early sample cannot establish a bound for later observations. For a fixed accepted copy window[L,U], the relative-to-first jitter bound is outward-ceil((U-L)*NPSourceHz/FineCounterHz).
+- Retained-observation phase/cadence qualification, overlap with the saved NP extent, and terminal coverage are separate results. Observed clock/configuration/context faults invalidate subsequent observations under that context. Qualification is for the checked normal HSE configuration, not proof against every undetectable oscillator transient.
+- Keep NSG1/NSGP and their existing batch CRCs unchanged. NSGC version2 is reserved for the enforced grid using the existing32-byte status/select interface. A producer must implement the enforcement before advertising2. Old version1 data remains readable, with unsupported enforcement explicitly unknown and no new general recording Start gate. V1 SD declaration2 is likewise reserved at104/108 with unchanged format6 geometry; matching header/footer/chunk declarations are required.
+- V2 SD needs an explicitly declared mixed-record carrier and committed-extent accounting. Existing session versions11–15 are occupied; no new layout may reuse them. Prefer the existing12-slot NPGRID02 wrapper over a second incompatible encoding. Freeze the exact new session version/fields once before producer/parser edits.
+- NP acquisition has higher priority. IMU ISR work is bounded cached copy/bookkeeping; packing/storage remain outside the ISR. Normal Stop must account for queued observations while preserving accepted NP data, and unknown cutoff alone is not a detected grid error.
+
+The carrier/RAM notes below include earlier design checkpoints. Current implementation and acceptance evidence is tracked in RECORDING_VALIDATION.md; those checkpoints do not qualify an experimental producer or authorize a silent wire-format change.
+
 ## Remove optional sensor fine timestamps
 
 Remove the per-observation fine-timestamp producer, its calls and carrier/sidecar packing from new firmware. A default-off feature flag is insufficient for the user's revised request; do not keep a diagnostic switch that reactivates this mechanism. Preserve existing sensor core ABIs, sequence/validity/error fields, relative indices and sparse gaps. Keep historical files and readers intact.

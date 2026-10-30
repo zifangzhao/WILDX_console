@@ -1,0 +1,53 @@
+{
+  "status": "USB and BLE-to-SD scoped recording checks passed",
+  "host_version": "1.0.0.199",
+  "app_crc32": "87109990",
+  "usb_crc32": "9D595E4D",
+  "cases": [
+    {
+      "id": "v1-usb",
+      "family": 1,
+      "mode": "USB",
+      "sample_hz": 20000,
+      "probe_mask": 3,
+      "capture_seconds": 60.037,
+      "recording_checks": "passed",
+      "rtc_local_full_interval_us": 111,
+      "rtc_local_under_1ms": true,
+      "declared_pc_uncertainty_us": 3018,
+      "pc_uncertainty_is_separate": true,
+      "reported_np_frame_counter_drop_loss_faults": 0,
+      "imu_data_saved": true,
+      "imu_valid_observations": 11967,
+      "initial_grid_slot_unavailable": 1,
+      "review": "validation/v1-usb.json",
+      "review_sha256": "DA11021CF409CEC6D741F4160E2BD5C0066D26D7B81D0B0FF843D3AAACB39FA4"
+    },
+    {
+      "id": "v1-sd",
+      "family": 1,
+      "mode": "BLE-to-SD and exact USB readback",
+      "sample_hz": 20000,
+      "probe_mask": 3,
+      "capture_seconds": 30,
+      "recording_checks": "passed",
+      "rtc_local_full_interval_us": 111,
+      "rtc_local_under_1ms": true,
+      "declared_pc_uncertainty_us": 23033,
+      "pc_uncertainty_is_separate": true,
+      "reported_np_frame_counter_drop_loss_faults": 0,
+      "imu_data_saved": true,
+      "imu_valid_observations": 15354,
+      "initial_grid_slot_unavailable": 1,
+      "review": "validation/v1-sd.json",
+      "review_sha256": "F9883F7FCB3D74747B3C10E2E8A2B3D5932936D022C25BE38A4A8B43BDEC611D"
+    }
+  ],
+  "all_mode_or_endurance_qualified": false,
+  "limits": [
+    "One initial IMU slot unavailable; no later observed grid gaps. Full phase and terminal tail unknown.",
+    "SD test used unchanged original USB4F7B521A for download; new streaming service tested independently. Fused composition not newly flashed as a whole.",
+    "Global RTC T0 valid; canonical per-stream source_tick remains null. PC uncertainty separate."
+  ],
+  "composition_receipt_sha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12"
+}

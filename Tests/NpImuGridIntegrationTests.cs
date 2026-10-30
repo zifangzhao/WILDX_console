@@ -12,7 +12,7 @@ using System.Web.Script.Serialization;
 using USB512_interface;
 using CE32_console;
 
-internal static class NpImuGridIntegrationTests {
+internal static partial class NpImuGridIntegrationTests {
     const string Uid="001D00065942500B20313354";const ulong Token=0x1020304050607080UL;const uint Sid=1792272185;
     static int checks;static string root;
     static void Need(bool ok,string why){checks++;if(!ok)throw new Exception(why);}
@@ -23,7 +23,7 @@ internal static class NpImuGridIntegrationTests {
     static string Folder(string name){string p=Path.Combine(root,name);Directory.CreateDirectory(p);return p;}
     static byte[] Frame(ulong first=0,uint gen=9,ushort mask=5){var b=new NpImuGridBatch{FirstSlot=first,CaptureGeneration=gen,SlotCount=3,ObservedMask=mask,AgValid=mask,MagValid=mask,AgRepeat=(ushort)(mask&4),MagRepeat=(ushort)(mask&4),ErrorMask=(ushort)(mask&1)};b.Rows=Enumerable.Range(0,3).Where(i=>(mask&(1<<i))!=0).Select(i=>new[]{1000000,-1000000,int.MaxValue,1000,-1000,0,300,-300,0}).ToArray();return NpImuGridWire.Pack(b);}
     static byte[] Packet(byte[] frame,uint sequence=0,uint sid=Sid){var b=new byte[506];Encoding.ASCII.GetBytes("NPGRID01").CopyTo(b,0);Put(b,8,sequence);Put(b,12,sid);Put(b,16,(uint)frame.Length);frame.CopyTo(b,20);Put(b,502,NpImuGridCarrier.Crc(b,0,502));return b;}
-    static byte[] Control(uint flags=1,uint rev=1){var b=new byte[32];Put(b,0,0x4347534e);Put(b,4,1);Put(b,8,flags);var u=NpFirstSyncUsb.UidWords(Uid);for(int i=0;i<3;i++)Put(b,12+i*4,u[i]);Put(b,24,rev);Seal(b);return b;}
+    static byte[] Control(uint flags=1,uint rev=1,uint version=1){var b=new byte[32];Put(b,0,0x4347534e);Put(b,4,version);Put(b,8,flags);var u=NpFirstSyncUsb.UidWords(Uid);for(int i=0;i<3;i++)Put(b,12+i*4,u[i]);Put(b,24,rev);Seal(b);return b;}
     static void Controls(){
         int reads=0,writes=0;Need(!NpImuGridControl.PrepareUsb(()=>{reads++;throw new Win32Exception(31);},n=>writes++,Uid,true)&&reads==1&&writes==0,"Unsupported probe did not preserve legacy");
         reads=writes=0;Need(NpImuGridControl.PrepareUsb(()=>++reads==1?Control():Control(3,2),n=>{writes++;throw new IOException("Lost OUT completion");},Uid,true)&&reads==2&&writes==1,"Lost SELECT did not reconcile once");
@@ -42,27 +42,55 @@ internal static class NpImuGridIntegrationTests {
     static void Carriers(){
         var raw=Packet(Frame());uint sequence;Need(NpImuGridCarrier.Usb(raw,0,506,Sid,out sequence).SequenceEqual(Frame())&&sequence==0,"USB exact frame retention");var original=(byte[])raw.Clone();
         Reject(()=>NpImuGridCarrier.Usb(raw,0,506,Sid+1,out sequence),"USB wrong session");raw[501]=1;Put(raw,502,NpImuGridCarrier.Crc(raw,0,502));Reject(()=>NpImuGridCarrier.Usb(raw,0,506,Sid,out sequence),"USB padding");raw=original;raw[50]^=1;Reject(()=>NpImuGridCarrier.Usb(raw,0,506,Sid,out sequence),"USB outer CRC");
-        var h=new byte[512];Put(h,8,6);var f=(byte[])h.Clone();Need(!NpImuGridCarrier.SdMetadata(h,f),"Legacy declaration changed");Put(h,104,NpImuGridWire.Magic);Put(h,108,1);f=(byte[])h.Clone();Need(NpImuGridCarrier.SdMetadata(h,f),"SD declaration");var d=(byte[])h.Clone();var b=new byte[65024];var frame=Frame();frame.CopyTo(b,62144);frame.CopyTo(b,62144+frame.Length);Put(d,124,(uint)(2*frame.Length));int n=NpImuGridCarrier.SdSpan(h,d);NpImuGridCarrier.SdPadding(b,n);Need(NpImuGridCarrier.SdFrames(b,n).Count()==2,"SD concatenated inner frames");
+        var h=new byte[512];Put(h,8,6);var f=(byte[])h.Clone();Need(!NpImuGridCarrier.SdMetadata(h,f),"Legacy declaration changed");Put(h,104,NpImuGridWire.Magic);Put(h,108,1);f=(byte[])h.Clone();Need(NpImuGridCarrier.SdMetadata(h,f)&&!NpImuGridCarrier.SdEnforcedSchedule(h,f),"Legacy SD declaration acquired enforcement");var d=(byte[])h.Clone();var b=new byte[65024];var frame=Frame();frame.CopyTo(b,62144);frame.CopyTo(b,62144+frame.Length);Put(d,124,(uint)(2*frame.Length));int n=NpImuGridCarrier.SdSpan(h,d);NpImuGridCarrier.SdPadding(b,n);Need(NpImuGridCarrier.SdFrames(b,n).Count()==2,"SD concatenated inner frames");
         b[65023]=1;Reject(()=>NpImuGridCarrier.SdPadding(b,n),"SD padding");b[65023]=0;b[62144+44]^=1;Reject(()=>NpImuGridCarrier.SdFrames(b,n).ToArray(),"SD inner CRC optional rejection");Put(d,124,2881);Reject(()=>NpImuGridCarrier.SdSpan(h,d),"Global SD span");Put(h,8,5);Reject(()=>NpImuGridCarrier.SdDeclared(h),"Grid admitted outside format6");
+        var h2=new byte[512];Put(h2,8,6);Put(h2,104,NpImuGridWire.Magic);Put(h2,108,2);var f2=(byte[])h2.Clone();Need(NpImuGridCarrier.SdMetadata(h2,f2)&&NpImuGridCarrier.SdEnforcedSchedule(h2,f2),"Enforced SD declaration not recognized");Put(f2,108,1);Reject(()=>NpImuGridCarrier.SdMetadata(h2,f2),"Mixed header/footer enforcement declaration");var d2=(byte[])h2.Clone();Put(d2,108,1);Reject(()=>NpImuGridCarrier.SdSpan(h2,d2),"Mixed chunk enforcement declaration");Put(h2,108,3);Reject(()=>NpImuGridCarrier.SdDeclared(h2),"Unannounced SD extension accepted");
     }
     static void Writers(){
-        string p=Folder("writer");using(var w=new NpImuGridWriter(p,9)){w.Feed(Frame(2));Need(w.Rows==5&&w.Missing==3&&w.Observed==2,"Missing prefix/inner ordinal accounting");var mark=w.Mark();w.Feed(Frame(5));w.Restore(mark);Need(w.Rows==5&&w.Missing==3,"Prefix rollback");Reject(()=>w.Feed(Frame(5,10)),"Generation mismatch");Reject(()=>w.Feed(Frame(4)),"Overlap");w.Complete(7,1250,0,true);Need(w.Rows==5,"Unknown phase fabricated a zero-phase tail");}
+        string p=Folder("writer");using(var w=new NpImuGridWriter(p,9,true)){w.Feed(Frame(2));Need(w.Rows==5&&w.Missing==3&&w.Observed==2,"Missing prefix/inner ordinal accounting");var mark=w.Mark();w.Feed(Frame(5));w.Restore(mark);Need(w.Rows==5&&w.Missing==3,"Prefix rollback");Reject(()=>w.Feed(Frame(5,10)),"Generation mismatch");Reject(()=>w.Feed(Frame(4)),"Overlap");w.Complete(7,1250,0,true);Need(w.Rows==5,"Unknown phase fabricated a zero-phase tail");}
         var data=File.ReadAllBytes(Path.Combine(p,"analogin.dat"));var flags=File.ReadAllBytes(Path.Combine(p,"analogin_validity.dat"));Need(data.Length==5*32&&flags.SequenceEqual(new byte[]{0,0,39,0,31}),"Exact missing/valid/repeat/error flags");Need(BitConverter.ToInt16(data,2)==short.MinValue&&BitConverter.ToInt16(data,2*32+2)==4096&&BitConverter.ToInt16(data,2*32+4)==-4096&&BitConverter.ToInt16(data,2*32+6)==short.MaxValue&&BitConverter.ToInt16(data,2*32+8)==16&&BitConverter.ToInt16(data,2*32+14)==1,"WILD scaling and unavailable sentinels");Need(File.ReadAllText(Path.Combine(p,"analogin_encoding.txt")).Contains("phase_offset_us=unknown"),"Nominal slot0 became exact phase");
-        p=Folder("sparse");using(var w=new NpImuGridWriter(p,9)){w.Feed(Frame());w.Feed(Frame(1000000000));Need(w.Rows==6&&w.Slots==1000000003&&w.Missing==999999999,"Long gaps expanded/rejected or ordinals lost");w.Complete(1000000003,1250,0,true);}Need(new FileInfo(Path.Combine(p,"analogin.dat")).Length==192&&File.ReadAllText(Path.Combine(p,"imu_grid_segments.csv")).Contains("1000000000,3,3"),"Sparse segment row join");
+        p=Folder("sparse");using(var w=new NpImuGridWriter(p,9,true)){w.Feed(Frame());w.Feed(Frame(1000000000));Need(w.Rows==6&&w.Slots==1000000003&&w.Missing==999999999,"Long gaps expanded/rejected or ordinals lost");w.Complete(1000000003,1250,0,true);}Need(new FileInfo(Path.Combine(p,"analogin.dat")).Length==192&&File.ReadAllText(Path.Combine(p,"imu_grid_segments.csv")).Contains("1000000000,3,3"),"Sparse segment row join");
     }
     static byte[] Receipt(uint session=Sid){var r=NpFirstSyncWireTests.Fixture(1,false,15000,3);Put(r,16,session);Put(r,12,BitConverter.ToUInt32(r,12)&~NpFirstSyncWire.AuxGated);r[133]=69;r[134]=64;Put(r,136,UInt32.MaxValue);Put(r,140,UInt32.MaxValue);Put64(r,152,3);Put(r,160,1250);Put64(r,168,0x8000000000000000UL);Put(r,176,0);Seal(r);return r;}
     static byte[] Anchor(){var a=new byte[64];uint[] w={0x5241504e,1,77,0x11f,9,1000,1000,1000000,1000012,128000000,11700000,0,0,15000,1000};for(int i=0;i<w.Length;i++)Put(a,i*4,w[i]);Seal(a);return a;}
     static byte[] Phase(ulong first=3,uint flags=3,uint session=Sid){var b=NpImuGridWriter.PhaseBinding(Uid,Token,NpFirstSyncWire.Parse(Receipt(session)));return NpImuGridPhase.Pack(new NpImuGridPhaseRecord{Uid=b.Uid,Session=b.Session,CaptureGeneration=b.CaptureGeneration,SourceEpoch=b.SourceEpoch,CounterDomain=b.CounterDomain,Token=b.Token,FirstAcceptedSlot=first,LowerNumerator=(flags&1)!=0?15000:Int64.MinValue,UpperNumerator=(flags&1)!=0?15010:Int64.MinValue,Denominator=(flags&1)!=0?1U:0,MaximumJitter=(flags&2)!=0?10U:UInt32.MaxValue,Flags=flags});}
+    static byte[] SdReceipt(){var r=Receipt();Put64(r,52,0);for(int port=0;port<2;port++){int at=64+port*20;Put64(r,at,0);Put(r,at+8,0);r[at+12]=r[at+13]=0;}Seal(r);return r;}
+    static void EnforcedSchedule(){
+        var legacy=NpImuGridControl.ParseUsb(Control(3),Uid);Need(legacy.Selected&&!legacy.EnforcedScheduleVerified&&legacy.Version==1,"Old control acquired enforced timing");
+        int legacyWrites=0;var legacyIdle=NpImuGridControl.PrepareUsbSelection(()=>Control(1),n=>legacyWrites++,Uid,true);Need(!legacyIdle.Selected&&!legacyIdle.EnforcedScheduleVerified&&legacyWrites==0,"Production typed selection enabled unenforced v1");int legacyReads=0;var legacyOff=NpImuGridControl.PrepareUsbSelection(()=>++legacyReads==1?Control(3,1):Control(1,2),n=>{Need(!n,"Legacy fallback requested Select1");legacyWrites++;},Uid,true);Need(!legacyOff.Selected&&legacyReads==2&&legacyWrites==1,"Already selected legacy grid did not reconcile once to ordinary fallback");
+        var selected=NpImuGridControl.PrepareUsbSelection(()=>Control(3,5,2),n=>{throw new Exception("Already selected mutated");},Uid,true);Need(selected.EnforcedScheduleVerified&&selected.Version==2,"NSGCv2 selected proof missing");
+        int reads=0,writes=0;selected=NpImuGridControl.PrepareUsbSelection(()=>++reads==1?Control(1,5,2):Control(3,6,2),n=>writes++,Uid,true);Need(selected.EnforcedScheduleVerified&&reads==2&&writes==1,"NSGCv2 typed selection lost final readback");
+        reads=0;Reject(()=>NpImuGridControl.PrepareUsbSelection(()=>++reads==1?Control(1,1,2):Control(3,2,1),n=>{},Uid,true),"Capability changed after SELECT");
+        Reject(()=>NpImuGridControl.ParseUsb(Control(3,1,3),Uid),"Unannounced future control version accepted");
+        foreach(string mode in new[]{"enforced","legacy","outside_np","lost_first","no_saved_first","jitter_unknown","observed_clock_fault","large_gap","no_extent"}){
+            string p=Folder("enforced_"+mode);var parent=Root(sourcePoint:false);var receipt=NpFirstSyncWire.Parse(parent.Receipt);var bound=NpImuGridWriter.PhaseBinding(Uid,Token,receipt);var raw=Phase(3,mode=="jitter_unknown"?1U:3U,9);bool enforcer=mode!="legacy";
+            using(var w=new NpImuGridWriter(p,9,enforcer)){
+                bool accepted=w.AcceptPhase(raw,bound,receipt.SourceHz,receipt);Need(accepted==enforcer,"Counter-only Flags3 admitted without explicit enforcer");w.Feed(Frame(mode=="lost_first"?4UL:3UL));
+                if(mode=="large_gap")w.Feed(Frame(1000000000));ulong extent=mode=="no_extent"?0UL:mode=="outside_np"||mode=="large_gap"?20000UL:200000UL;
+                w.Complete(extent,receipt.SourceHz,receipt.ReferenceTick,mode!="observed_clock_fault",mode!="no_saved_first");
+                bool qualified=mode=="enforced"||mode=="outside_np"||mode=="large_gap"||mode=="no_extent";Need(w.PhaseQualified==qualified,"Retained grid phase is tied to terminal/file overlap: "+mode);Need(w.SourceWindowVerified==(mode=="enforced"),"Source overlap conflated with retained lattice: "+mode);
+                if(mode=="large_gap")Need(w.Rows==9&&w.Missing>1000000,"Long missing run fabricated data or rejected NP");
+            }
+            string text=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));Need(text.Contains("terminal_tail_coverage=unknown")&&text.Contains("RTC_to_NP_uncertainty=separate"),"Enforced lattice invented terminal/RTC proof");
+        }
+        string d=Folder("enforced_default_off");var r=NpFirstSyncWire.Parse(Receipt(9));using(var w=new NpImuGridWriter(d,9)){Need(w.AcceptPhase(Phase(3,3,9),NpImuGridWriter.PhaseBinding(Uid,Token,r),r.SourceHz,r),"Legacy measured POINT evidence unreadable");w.Feed(Frame(3));w.Complete(200000,r.SourceHz,r.ReferenceTick,true,true);Need(w.FirstSlotPhaseValid&&!w.EnforcedScheduleVerified&&!w.PhaseQualified,"Old observed-maximum Flags3 gained new deterministic guarantee");}
+    }
+    static void ExactOverlap(){
+        const ulong lastBatch=1000000000000003UL;var receipt=NpFirstSyncWire.Parse(Receipt(9));var binding=NpImuGridWriter.PhaseBinding(Uid,Token,receipt);
+        var phase=NpImuGridPhase.Parse(Phase(3,3,9));phase.LowerNumerator=1;phase.UpperNumerator=(long)UInt32.MaxValue+1;phase.Denominator=UInt32.MaxValue;byte[] raw=NpImuGridPhase.Pack(phase);
+        ulong roundedEnd=checked(receipt.ReferenceTick+(lastBatch+2-3)*(receipt.SourceHz/1250U)+phase.MaximumJitter+1);
+        for(int extra=0;extra<2;extra++){string p=Folder("exact_overlap_"+extra);using(var w=new NpImuGridWriter(p,9,true)){Need(w.AcceptPhase(raw,binding,receipt.SourceHz,receipt),"Rational phase fixture invalid");w.Feed(Frame(3));w.Feed(Frame(lastBatch));w.Complete(roundedEnd+(uint)extra,receipt.SourceHz,receipt.ReferenceTick,true,true);Need(w.PhaseQualified&&w.SourceWindowVerified==(extra==1),"Tiny phase fraction was rounded into a large NP extent");Need(w.Rows==9,"Large ordinal overlap test expanded absent observations");}}
+    }
     static void Phases(){
         foreach(string mode in new[]{"valid","lost_first","missing_interval","missing_jitter","bad_crc","wrong_token","wrong_generation","conflict","all_missing_prefix","aux_counter","aux_rate","aux_bits","aux_kind","aux_point"}){
             string p=Folder("phase_"+mode);var expected=NpImuGridWriter.PhaseBinding(Uid,Token,NpFirstSyncWire.Parse(Receipt()));
-            using(var w=new NpImuGridWriter(p,9)){
+            using(var w=new NpImuGridWriter(p,9,true)){
                 byte[] raw=Phase(3,mode=="missing_interval"?2U:mode=="missing_jitter"?1U:3U);if(mode=="bad_crc")raw[80]^=1;if(mode=="wrong_token"){Put64(raw,36,Token+1);Seal(raw);}if(mode=="wrong_generation"){Put(raw,24,10);Seal(raw);}
                 byte[] rr=Receipt();if(mode=="aux_counter")Put64(rr,152,4);if(mode=="aux_rate")Put(rr,160,200);if(mode=="aux_bits")rr[134]=32;if(mode=="aux_kind")rr[135]=2;if(mode=="aux_point"){rr[133]&=191;rr[135]=0;Put(rr,144,UInt32.MaxValue);Put(rr,148,UInt32.MaxValue);}Seal(rr);
-                var parent=NpFirstSyncWire.Parse(rr);bool accepted=w.AcceptPhase(raw,expected,11700000,parent);Need(accepted!=(mode=="bad_crc"||mode=="wrong_token"||mode=="wrong_generation"||mode.StartsWith("aux_")),"NSGP exact context/CRC/NPSTART admission");
+                var parent=NpFirstSyncWire.Parse(rr);bool accepted=w.AcceptPhase(raw,expected,11700000,parent);Need(accepted!=(mode=="bad_crc"||mode=="wrong_token"||mode=="wrong_generation"||mode.StartsWith("aux_")&&mode!="aux_point"),"NSGP exact context/CRC/NPSTART admission");
                 if(mode=="conflict"){var c=Phase(4);Need(!w.AcceptPhase(c,expected,11700000,parent),"Conflicting once-only phase admitted");}
-                if(mode=="all_missing_prefix")w.Feed(Frame(0,9,0));w.Feed(Frame(mode=="lost_first"?4UL:3UL));w.Complete(780+100000,11700000,780,true);
-                Need(w.PhaseQualified==(mode=="valid"||mode=="all_missing_prefix"),"Stored first observed ordinal/phase/jitter qualification: "+mode);
+                if(mode=="all_missing_prefix")w.Feed(Frame(0,9,0));w.Feed(Frame(mode=="lost_first"?4UL:3UL));w.Complete(780+100000,11700000,780,true,true);
+                Need(w.PhaseQualified==(mode=="valid"||mode=="all_missing_prefix"||mode=="aux_point"),"Stored first observed ordinal/phase/jitter qualification: "+mode);
             }
             Need(File.ReadAllText(Path.Combine(p,"analogin_encoding.txt")).Contains("np_sample_grid_locked=false"),"NSGP became sample0 lock");Need(new FileInfo(Path.Combine(p,"analogin.dat")).Length>0,"Bad optional phase discarded actual grid data");
         }
@@ -74,7 +102,7 @@ internal static class NpImuGridIntegrationTests {
             if(mode==2)Put64(rr,152,4);if(mode==3)Put(rr,160,200);if(mode==4)rr[134]=32;
             Seal(rr);var parent=NpFirstSyncWire.Parse(rr);var expected=NpImuGridWriter.PhaseBinding(Uid,Token,parent);
             byte[] raw=Phase(mode==5?4UL:3UL,mode==6?1U:0U);if(mode==7){Put64(raw,36,Token+1);Seal(raw);}if(mode==8)raw[80]^=1;
-            using(var w=new NpImuGridWriter(p,9)){
+            using(var w=new NpImuGridWriter(p,9,true)){
                 bool accepted=w.AcceptPhase(raw,expected,mode==9?11700001U:11700000U,parent);Need(accepted==(mode<2||mode==6),"Unknown/start-only interval lost strict context/native ordinal/rate checks");
                 w.Feed(Frame(3));w.Complete(100000,11700000,780,true);Need(!w.PhaseQualified,"Unknown interval gained phase/physical/RTC qualification");
             }
@@ -96,16 +124,16 @@ internal static class NpImuGridIntegrationTests {
             p=>{foreach(var probe in p.Probes)probe.RawBytes+=60;}
         }){var altered=Window(source);bad(altered);Need(!altered.TryBound(source,out end,out why)&&end==0&&!String.IsNullOrEmpty(why),"Bad continuity/first-position/source extent admitted");}
     }
-    static void Usb(){string p=Folder("usb");NpFirstSyncUsbFineRoot r=null;using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>r)){w.Feed(Packet(Phase(3,3,9)),0,506);Need(!File.Exists(Path.Combine(p,"analogin.dat")),"Unbound parent emitted grid");r=Root();Need(NpFirstSyncWire.Parse(r.Receipt).Session==9&&r.Generation==9&&Sid!=9,"Fixture equates wrapper and NPSTART sessions");w.Feed(Packet(Frame(3),1),0,506);w.Complete(Window(r));Need(w.Error==null,"Distinct wrapper/NPSTART session grid failed: "+w.Error);}Need(new FileInfo(Path.Combine(p,"analogin.dat")).Length==192,"Pending batches not replayed once");string encoding=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));Need(encoding.Contains("grid_phase_qualified=True"),"Bound pending USB phase did not qualify");Need(encoding.Contains("terminal_tail_coverage=unknown"),"Retained-row phase proof became terminal completeness");
-        p=Folder("usb_missing");using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>null)){for(int i=0;i<33;i++)w.Feed(Packet(Frame((ulong)i*3),(uint)i),0,506);Need(w.Error!=null&&!File.Exists(Path.Combine(p,"analogin.dat")),"Unbounded/missing parent admitted");}
-        p=Folder("usb_badgen");using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>Root())){w.Feed(Packet(Frame(0,10)),0,506);Need(w.Error!=null,"Wrong parent generation admitted");}
-        p=Folder("usb_io");Directory.CreateDirectory(Path.Combine(p,"analogin_encoding.txt"));using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>Root())){w.Feed(Packet(Frame(3)),0,506);Need(w.Error!=null,"Optional grid IO error escaped or was lost");}
-        p=Folder("usb_wrong_outer_session");using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>Root())){w.Feed(Packet(Phase(3,3,9),0,9),0,506);Need(w.Error!=null&&!File.Exists(Path.Combine(p,"analogin.dat")),"NPSTART session was accepted as USB wrapper session");}
-        p=Folder("usb_wrong_phase_session");var parent=Root();using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent)){w.Feed(Packet(Phase()),0,506);w.Feed(Packet(Frame(3),1),0,506);w.Complete(Window(parent));Need(w.Error==null,"Wrong optional phase session rejected NN/data");}Need(File.ReadAllText(Path.Combine(p,"analogin_encoding.txt")).Contains("grid_phase_qualified=False"),"Wrapper session was accepted as NPSTART/NSGP session");
+    static void Usb(){string p=Folder("usb");NpFirstSyncUsbFineRoot r=null;using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>r,true)){w.Feed(Packet(Phase(3,3,9)),0,506);Need(!File.Exists(Path.Combine(p,"analogin.dat")),"Unbound parent emitted grid");r=Root();Need(NpFirstSyncWire.Parse(r.Receipt).Session==9&&r.Generation==9&&Sid!=9,"Fixture equates wrapper and NPSTART sessions");w.Feed(Packet(Frame(3),1),0,506);w.Complete(Window(r));Need(w.Error==null,"Distinct wrapper/NPSTART session grid failed: "+w.Error);}Need(new FileInfo(Path.Combine(p,"analogin.dat")).Length==192,"Pending batches not replayed once");string encoding=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));Need(encoding.Contains("grid_phase_qualified=True"),"Bound pending USB phase did not qualify");Need(encoding.Contains("terminal_tail_coverage=unknown"),"Retained-row phase proof became terminal completeness");
+        p=Folder("usb_missing");using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>null,true)){for(int i=0;i<33;i++)w.Feed(Packet(Frame((ulong)i*3),(uint)i),0,506);Need(w.Error!=null&&!File.Exists(Path.Combine(p,"analogin.dat")),"Unbounded/missing parent admitted");}
+        p=Folder("usb_badgen");using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>Root(),true)){w.Feed(Packet(Frame(0,10)),0,506);Need(w.Error!=null,"Wrong parent generation admitted");}
+        p=Folder("usb_io");Directory.CreateDirectory(Path.Combine(p,"analogin_encoding.txt"));using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>Root(),true)){w.Feed(Packet(Frame(3)),0,506);Need(w.Error!=null,"Optional grid IO error escaped or was lost");}
+        p=Folder("usb_wrong_outer_session");using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>Root(),true)){w.Feed(Packet(Phase(3,3,9),0,9),0,506);Need(w.Error!=null&&!File.Exists(Path.Combine(p,"analogin.dat")),"NPSTART session was accepted as USB wrapper session");}
+        p=Folder("usb_wrong_phase_session");var parent=Root();using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent,true)){w.Feed(Packet(Phase()),0,506);w.Feed(Packet(Frame(3),1),0,506);w.Complete(Window(parent));Need(w.Error==null,"Wrong optional phase session rejected NN/data");}Need(File.ReadAllText(Path.Combine(p,"analogin_encoding.txt")).Contains("grid_phase_qualified=False"),"Wrapper session was accepted as NPSTART/NSGP session");
     }
     static void UsbRecoveryRetention(){
         string p=Folder("usb_np_recovery_retention");var parent=Root();var phase=Phase(3,0,9);var source=Window(parent);
-        using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent)){
+        using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent,true)){
             w.Feed(Packet(phase),0,506);w.Feed(Packet(Frame(3),1),0,506);
             // The real caller supplies NP integrity at finalization, separately
             // from ordered grid delivery. A same-lifetime NP recovery cannot
@@ -122,7 +150,7 @@ internal static class NpImuGridIntegrationTests {
         Need(File.ReadAllText(Path.Combine(p,"imu_grid_gaps.csv")).Contains("6,3,transport_gap"),"Recovery gap lacks explicit ordinal metadata");
         foreach(string mode in new[]{"withdrawn","uid","token","generation","root_sequence","wrapper_session"}){
             p=Folder("usb_recovery_changed_"+mode);parent=Root();uint sid=Sid;
-            using(var w=new NpImuGridUsb(p,Uid,()=>sid,()=>parent)){
+            using(var w=new NpImuGridUsb(p,Uid,()=>sid,()=>parent,true)){
                 w.Feed(Packet(Frame(3)),0,506);
                 if(mode=="withdrawn")parent=null;if(mode=="uid")parent=Root(uid:"001A0004434250062039314E");
                 if(mode=="token")parent=Root(token:Token+1);if(mode=="generation")parent=Root(generation:10);
@@ -152,7 +180,7 @@ internal static class NpImuGridIntegrationTests {
             string p=Folder("usb_"+mode);source=Window(parent);byte[] phase=Phase(3,mode=="missing_interval"?0U:1U,9);
             if(mode=="later_np_error"){source.Probes[0].FrameErrors=1;source.Finalized=false;}
             if(mode=="no_saved_start")source.StartFinalized=false;if(mode=="wrong_counter")source.Probes[0].FirstCounter++;
-            using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent)){
+            using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent,true)){
                 w.Feed(Packet(phase),0,506);w.Feed(Packet(Frame(mode=="lost_first"?4UL:3UL),1),0,506);w.Complete(source);
             }
             bool valid=mode=="start_only"||mode=="later_np_error";var text=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));
@@ -168,9 +196,9 @@ internal static class NpImuGridIntegrationTests {
             string p=Folder("start_without_point_"+mode);var parent=mode=="foreground_point"?Root(firstPointKind:2):Root(sourcePoint:false);var source=Window(parent);
             var raw=Phase(mode=="wrong_ordinal"?4UL:3UL,mode=="full_grid"?3U:1U,9);if(mode=="bad_token"){Put64(raw,36,Token+1);Seal(raw);}if(mode=="bad_crc")raw[80]^=1;
             if(mode=="missing_saved_start")source.StartFinalized=false;
-            using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent)){w.Feed(Packet(raw),0,506);w.Feed(Packet(Frame(mode=="lost_first"?4UL:3UL),1),0,506);w.Complete(source);}
-            var text=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));Need(text.Contains("first_slot_phase_valid="+(mode=="valid"))&&text.Contains("grid_phase_qualified=False"),"Independent measured first interval/full-grid separation failed without POINT: "+mode);
-            bool archived=mode=="valid"||mode=="missing_saved_start"||mode=="lost_first";
+            using(var w=new NpImuGridUsb(p,Uid,()=>Sid,()=>parent,true)){w.Feed(Packet(raw),0,506);w.Feed(Packet(Frame(mode=="lost_first"?4UL:3UL),1),0,506);w.Complete(source);}
+            var text=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));Need(text.Contains("first_slot_phase_valid="+(mode=="valid"||mode=="full_grid"))&&text.Contains("grid_phase_qualified="+(mode=="full_grid")),"Independent measured first interval/full-grid separation failed without POINT: "+mode);
+            bool archived=mode=="valid"||mode=="missing_saved_start"||mode=="lost_first"||mode=="full_grid";
             Need(File.Exists(Path.Combine(p,"imu_grid_phase.bin"))==archived,"Missing POINT bypassed strict phase context/CRC/full-grid gate");
             Need(new FileInfo(Path.Combine(p,"analogin.dat")).Length==(mode=="lost_first"?7:6)*32,"POINT interoperability changed stored observations");
             var a=NpFirstSyncWire.Parse(parent.Receipt).Aux[0];if(mode!="foreground_point")Need((a.Flags&64)==0&&a.StampKind==0&&a.FirstMs==UInt32.MaxValue&&a.FirstCycles==UInt32.MaxValue,"Host fabricated legacy POINT/HALms evidence");
@@ -179,24 +207,24 @@ internal static class NpImuGridIntegrationTests {
             string p=Folder("start_without_point_bad_"+mode);var raw=Receipt(9);raw[133]&=191;raw[135]=0;Put(raw,144,UInt32.MaxValue);Put(raw,148,UInt32.MaxValue);
             if(mode=="counter")Put64(raw,152,4);if(mode=="rate")Put(raw,160,200);if(mode=="width")raw[134]=32;if(mode=="source_clock")Put(raw,12,BitConverter.ToUInt32(raw,12)&~NpFirstSyncWire.SourceClock);if(mode=="domain")Put(raw,28,18);Seal(raw);
             var expected=NpImuGridWriter.PhaseBinding(Uid,Token,NpFirstSyncWire.Parse(Receipt(9)));
-            using(var w=new NpImuGridWriter(p,9)){Need(!w.AcceptPhase(Phase(3,1,9),expected,11700000,NpFirstSyncWire.Parse(raw)),"Startup-only POINT exception weakened native/rate/source binding: "+mode);w.Feed(Frame(3));w.Complete(0,11700000,780,false,true);Need(!w.FirstSlotPhaseValid&&!w.PhaseQualified,"Bad native/source evidence acquired startup or full-grid confidence");}
+            using(var w=new NpImuGridWriter(p,9,true)){Need(!w.AcceptPhase(Phase(3,1,9),expected,11700000,NpFirstSyncWire.Parse(raw)),"Startup-only POINT exception weakened native/rate/source binding: "+mode);w.Feed(Frame(3));w.Complete(0,11700000,780,false,true);Need(!w.FirstSlotPhaseValid&&!w.PhaseQualified,"Bad native/source evidence acquired startup or full-grid confidence");}
         }
     }
     static void CallerOrder(string repository){
         string main=File.ReadAllText(Path.Combine(repository,"USB512_interface/USB512_interface/mainForm.cs")).Replace("\r\n","\n");
         string transport=File.ReadAllText(Path.Combine(repository,"USB512_interface/USB512_interface/XeNpWinUsb.cs"));
         int start=main.IndexOf("profile=device.StartPrepared(XeNpMcoDivider,delegate",StringComparison.Ordinal),end=main.IndexOf("\n                });",start,StringComparison.Ordinal);
-        int timing=main.IndexOf("usbTiming=NpUsbTimingSession.Prepare",start,StringComparison.Ordinal),select=main.IndexOf("imuGridSelected=NpImuGridControl.PrepareUsb",StringComparison.Ordinal);
+        int timing=main.IndexOf("usbTiming=NpUsbTimingSession.Prepare",start,StringComparison.Ordinal),select=main.IndexOf("var gridSelection=NpImuGridControl.PrepareUsbSelection",StringComparison.Ordinal);
         int output=main.IndexOf("sensors=new NpUsbSensors(runFolder,true,devicePath,null,0,0,!imuGridSelected)",StringComparison.Ordinal);
         Need(start>=0&&timing>start&&select>timing&&output>select&&output<end,"NSGC selection/sensor ownership preceded stopped timing negotiation");
-        Need(main.LastIndexOf("imuGridSelected=NpImuGridControl.PrepareUsb",StringComparison.Ordinal)==select,"Duplicate grid SELECT callsite");
+        Need(main.LastIndexOf("var gridSelection=NpImuGridControl.PrepareUsbSelection",StringComparison.Ordinal)==select,"Duplicate grid SELECT callsite");
         string callback=main.Substring(timing,end-timing);Need(callback.Contains("npRecordMiscSignals&&usbTiming!=null&&usbTiming.Enabled&&usbTiming.RtcEnabled"),"Grid requested without confirmed feature15 timing");
-        Need(callback.IndexOf("if(!running)",StringComparison.Ordinal)<callback.IndexOf("imuGridSelected=",StringComparison.Ordinal)&&callback.LastIndexOf("if(!running)",StringComparison.Ordinal)>callback.IndexOf("sensors=new",StringComparison.Ordinal),"Stop cancellation does not bracket optional grid setup");
+        Need(callback.IndexOf("if(!running)",StringComparison.Ordinal)<callback.IndexOf("var gridSelection=",StringComparison.Ordinal)&&callback.LastIndexOf("if(!running)",StringComparison.Ordinal)>callback.IndexOf("sensors=new",StringComparison.Ordinal),"Stop cancellation does not bracket optional grid setup");
         Need(main.Contains("#if !NP_IMU_GRID_ENABLE || !NP_FIRST_SYNC_ENABLE\n                if(npRecordMiscSignals)sensors=new NpUsbSensors(runFolder,true,devicePath);"),"Default-off legacy sensor path changed");
         int invoke=transport.IndexOf("if(beforeStart!=null)beforeStart();",StringComparison.Ordinal),command=transport.IndexOf("VendorOut(RequestStart, 0, 0);",invoke,StringComparison.Ordinal);Need(invoke>=0&&command>invoke,"beforeStart callback executes after Start command");
         Need(transport.Contains("if(current.SessionId==previousSession)continue;")&&transport.Contains("expectedSession=current.SessionId;")&&transport.Contains("s.SessionId=BitConverter.ToUInt32(data,312);"),"Fresh status session source changed");
         int admission=main.IndexOf("device.CompleteStartupAdmission();",end,StringComparison.Ordinal),read=main.IndexOf("reader.ReadInto(buffer)",admission,StringComparison.Ordinal),enqueue=main.IndexOf("completed.Add(new ReceiveBlock(buffer,bytesRead",read,StringComparison.Ordinal);Need(admission>end&&read>admission&&enqueue>read,"Worker can process before StartPrepared fresh profile assignment/admission");
-        Need(main.Contains("()=>profile.SessionId,()=>usbTiming==null?null:usbTiming.FineRoot"),"Grid wrapper bound to pre-Start/root generation instead of fresh firmware session");
+        Need(main.Contains("()=>profile.SessionId,()=>usbTiming==null?null:usbTiming.FineRoot,gridSelection.EnforcedScheduleVerified"),"Grid wrapper bound to pre-Start/root generation instead of fresh firmware session");
         Need(main.Contains("imuGrid.Complete(new NpImuGridSourceWindow")&&main.Contains("FirstCounter=p.Decoder.FirstSuperframeCounter")&&main.Contains("FirstTick=p.Decoder.StartupDiscardedBytes")&&!main.Contains("p.Lossless&&p.RawBytes==gridEnd"),"Grid source-window caller regressed to global byte-zero Lossless or lacks first-position proof");
     }
     static Dictionary<string,string> TextFields(string path){return File.ReadAllLines(path).Where(s=>s.Contains("=")).Select(s=>s.Split(new[]{'='},2)).GroupBy(s=>s[0]).ToDictionary(g=>g.Key,g=>g.Last()[1]);}
@@ -217,16 +245,16 @@ internal static class NpImuGridIntegrationTests {
     }
     sealed class CardOverlay:Stream {
         readonly NpV1PowerCutRecoveryTests.SparseCard card;readonly Dictionary<long,byte[]> sectors;readonly string output,fault;bool injected;
-        internal CardOverlay(NpV1PowerCutRecoveryTests.SparseCard card,bool proof,string output=null,string fault=null,byte[] receipt=null){this.card=card;this.output=output;this.fault=fault;sectors=new Dictionary<long,byte[]>();if(!proof)return;var c=new byte[512];Encoding.ASCII.GetBytes("N1SDUTC2").CopyTo(c,0);Put(c,8,2);Put(c,12,Sid);Put(c,72,15000);Put(c,76,1000);Seal(c);c=NpFirstSyncSd.BindSector(c,receipt??Receipt(),1,Uid,Token);sectors.Add((8192+5)*512L,c);sectors.Add((8192+6)*512L,NpFineClockWire.Companion(c,Anchor(),1,Sid,15000,Uid,Token));}
+        internal CardOverlay(NpV1PowerCutRecoveryTests.SparseCard card,bool proof,string output=null,string fault=null,byte[] receipt=null){this.card=card;this.output=output;this.fault=fault;sectors=new Dictionary<long,byte[]>();if(!proof)return;var c=new byte[512];Encoding.ASCII.GetBytes("N1SDUTC2").CopyTo(c,0);Put(c,8,2);Put(c,12,Sid);Put(c,72,15000);Put(c,76,1000);Seal(c);c=NpFirstSyncSd.BindSector(c,receipt??SdReceipt(),1,Uid,Token);sectors.Add((8192+5)*512L,c);sectors.Add((8192+6)*512L,NpFineClockWire.Companion(c,Anchor(),1,Sid,15000,Uid,Token));}
         public override int Read(byte[] b,int o,int n){if(fault!=null&&!injected&&Directory.Exists(output)){Directory.CreateDirectory(Path.Combine(output,fault));injected=true;}long at=card.Position;int count=card.Read(b,o,n);foreach(var s in sectors){long lo=Math.Max(at,s.Key),hi=Math.Min(at+count,s.Key+512);if(hi>lo)Buffer.BlockCopy(s.Value,(int)(lo-s.Key),b,o+(int)(lo-at),(int)(hi-lo));}return count;}
         public override bool CanRead{get{return true;}}public override bool CanSeek{get{return true;}}public override bool CanWrite{get{return false;}}public override long Length{get{return card.Length;}}public override long Position{get{return card.Position;}set{card.Position=value;}}public override long Seek(long n,SeekOrigin s){return card.Seek(n,s);}public override void Flush(){}public override void Write(byte[]b,int o,int n){throw new Exception("Source write");}public override void SetLength(long n){throw new Exception("Source write");}
     }
     static void Sd(){
-        foreach(string mode in new[]{"valid","bad_inner","bad_phase","lost_first","bad_span","undeclared","no_parent","recovery","encoding_io","status_io","phase_io"}){
-            string p=Path.Combine(root,"sd_"+mode);using(var c=new NpV1PowerCutRecoveryTests.SparseCard(8)){if(mode=="recovery")c.IncompleteFooter(8);else c.FinalizeFooter(8);Put(c.Header,104,NpImuGridWire.Magic);Put(c.Header,108,1);Put(c.Footer,104,NpImuGridWire.Magic);Put(c.Footer,108,1);Seal(c.Header);Seal(c.Footer);
-                foreach(var item in c.Chunks){var d=item.Value;Put(d,61632+104,NpImuGridWire.Magic);Put(d,61632+108,1);var f=Frame((ulong)(item.Key+1)*3,9,mode=="lost_first"&&item.Key==0?(ushort)4:(ushort)5);int offset=0;if(item.Key==0){var ph=Phase();if(mode=="bad_phase")ph[80]^=1;ph.CopyTo(d,62144);offset=84;}f.CopyTo(d,62144+offset);Put(d,61632+124,(uint)(offset+f.Length));Put(d,61632+508,NpImuGridCarrier.Crc(d,61632,508));}
+        foreach(string mode in new[]{"valid","legacy_valid","counter_only","legacy_counter_only","bad_inner","bad_phase","lost_first","bad_span","undeclared","no_parent","recovery","encoding_io","status_io","phase_io"}){
+            uint declaration=mode.StartsWith("legacy_")?1U:2U;string p=Path.Combine(root,"sd_"+mode);using(var c=new NpV1PowerCutRecoveryTests.SparseCard(8)){if(mode=="recovery")c.IncompleteFooter(8);else c.FinalizeFooter(8);Put(c.Header,104,NpImuGridWire.Magic);Put(c.Header,108,declaration);Put(c.Footer,104,NpImuGridWire.Magic);Put(c.Footer,108,declaration);Seal(c.Header);Seal(c.Footer);
+                foreach(var item in c.Chunks){var d=item.Value;Put(d,61632+104,NpImuGridWire.Magic);Put(d,61632+108,declaration);var f=Frame((ulong)(item.Key+1)*3,9,mode=="lost_first"&&item.Key==0?(ushort)4:(ushort)5);int offset=0;if(item.Key==0){var ph=Phase();if(mode=="bad_phase")ph[80]^=1;ph.CopyTo(d,62144);offset=84;}f.CopyTo(d,62144+offset);Put(d,61632+124,(uint)(offset+f.Length));Put(d,61632+508,NpImuGridCarrier.Crc(d,61632,508));}
                 if(mode=="bad_inner")c.Chunks[2][62144+44]^=1;if(mode=="bad_span")c.Descriptor(2,124,2881);if(mode=="undeclared")c.Chunks[2][65023]=1;
-                var before=c.Chunks.Values.SelectMany(n=>n).ToArray();using(var input=new CardOverlay(c,mode!="no_parent",p,mode=="encoding_io"?"analogin_encoding.txt":mode=="status_io"?"imu_grid_status.txt":mode=="phase_io"?"imu_grid_phase.bin":null)){
+                var sdReceipt=SdReceipt();if(mode.EndsWith("counter_only")){sdReceipt[133]&=191;sdReceipt[135]=0;Put(sdReceipt,144,UInt32.MaxValue);Put(sdReceipt,148,UInt32.MaxValue);Seal(sdReceipt);}var before=c.Chunks.Values.SelectMany(n=>n).ToArray();using(var input=new CardOverlay(c,mode!="no_parent",p,mode=="encoding_io"?"analogin_encoding.txt":mode=="status_io"?"imu_grid_status.txt":mode=="phase_io"?"imu_grid_phase.bin":null,sdReceipt)){
                     Action export=()=>{if(mode=="recovery")NpCe64Export.ExportPowerInterruptedPrefix(input,8192,c.ReservedEnd,p,null,null);else NpCe64Export.Export(input,8192,c.ReservedEnd,p,null,null);};
                     if(mode=="bad_span"||mode=="undeclared"){Reject(export,"Global SD geometry/padding was relaxed");continue;}export();
                 }
@@ -234,7 +262,7 @@ internal static class NpImuGridIntegrationTests {
                 if(mode=="no_parent")Need(!File.Exists(Path.Combine(p,"analogin.dat")),"Missing parent generated locked grid");else Need(File.Exists(Path.Combine(p,"analogin.dat")),"Declared bound grid missing");
                 string status=File.ReadAllText(Path.Combine(p,"capture_status.txt"));if(mode!="recovery")Need(status.Contains("complete=True"),"Optional inner grid failure rejected NN");Need(status.Contains("np1_ap_rows=")&&status.Contains("np2_ap_rows="),"NN decode path not exercised");
                 Need(!File.Exists(Path.Combine(p,"sensors_fine.bin")),"New no-SIF recording made empty fine archive");
-                if(mode!="no_parent"&&mode!="encoding_io")Need(File.ReadAllText(Path.Combine(p,"analogin_encoding.txt")).Contains("grid_phase_qualified="+(mode=="valid"||mode=="status_io")),"Actual SD phase/stored first ordinal qualification: "+mode);
+                if(mode!="no_parent"&&mode!="encoding_io")Need(File.ReadAllText(Path.Combine(p,"analogin_encoding.txt")).Contains("grid_phase_qualified="+(mode=="valid"||mode=="counter_only"||mode=="status_io")),"Actual SD phase/stored first ordinal qualification: "+mode);
             }
         }
     }
@@ -252,5 +280,5 @@ internal static class NpImuGridIntegrationTests {
             Need(File.ReadAllText(Path.Combine(p,"capture_status.txt")).Contains("complete=True")&&new FileInfo(Path.Combine(p,"analogin.dat")).Length>0,"Optional startup qualification rejected neural/grid data");
         }
     }}
-    static int Main(string[] args){try{root=Path.Combine(args[0],"grid-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(root);Controls();Carriers();Writers();Phases();UnknownPhases();SourceWindows();Usb();UsbRecoveryRetention();StartOnly();StartWithoutPoint();Sd();SdStartOnly();CallerOrder(args[1]);if(args.Length>2)SavedWindow(args[2]);var legacy=typeof(NpV1SdOptionalSensorTests).GetMethod("Main",BindingFlags.Static|BindingFlags.NonPublic);Need((int)legacy.Invoke(null,new object[]{new[]{root}})==0,"Legacy optional sensor regressions");Console.WriteLine("PASS "+checks+" NSG1/NSGP actual V1 control/carrier/writer/USB parent/SD export and caller-order checks; no hardware.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
+    static int Main(string[] args){try{root=Path.Combine(args[0],"grid-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(root);Controls();EnforcedSchedule();ExactOverlap();Carriers();Writers();Phases();UnknownPhases();SourceWindows();Usb();UsbRecoveryRetention();StartOnly();StartWithoutPoint();Sd();SdStartOnly();SdCertifiedStartup();CallerOrder(args[1]);if(args.Length>2)SavedWindow(args[2]);var legacy=typeof(NpV1SdOptionalSensorTests).GetMethod("Main",BindingFlags.Static|BindingFlags.NonPublic);Need((int)legacy.Invoke(null,new object[]{new[]{root}})==0,"Legacy optional sensor regressions");Console.WriteLine("PASS "+checks+" NSG1/NSGP actual V1 control/carrier/writer/USB parent/SD export and caller-order checks; no hardware.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
 }
