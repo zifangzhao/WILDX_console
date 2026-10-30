@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "status": "actual215_ui_pass_capability_driven_ports",
+  "checks": 128,
+  "source": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpSdUsbTestUiTests.cs",
+    "bytes": 21962,
+    "sha256": "66B2D66F6FA0AD5C4AA32AB9ACBDBAD96237E161335460D3D263A1E97502B6E1"
+  },
+  "runner": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\run.ps1",
+    "bytes": 1234,
+    "sha256": "B94727C834A9589CD08580EC0D01593C32B0DA0B0AA375FC1A9FAFC68A4CEAD2"
+  },
+  "exe": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\NpSdUsbTestUiTests.exe",
+    "bytes": 49152,
+    "sha256": "DE9F908EBC34F787C647D0BD6EE77424F2EB3DDB022E0DAC55827B64AF5B46FE"
+  },
+  "receipt": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\receipt.json",
+    "bytes": 5540,
+    "sha256": "DAB5D6AB3E4F0137A81D9E8BB55BE1D605A7D48EA6889956B85BAF80286AB7A7"
+  },
+  "images": [
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\main-usb-sd-test.png",
+      "bytes": 55898,
+      "sha256": "9FA172E79A20AD3EE66E09BC0E19800DD3025AFE9D035AACE787F45E09479ABE"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-780x560-100.png",
+      "bytes": 30283,
+      "sha256": "705478F3F72B9228C61D176EB7E81E4D521A788013543170FCA5AB61B5BD50CE"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-780x560-125-allrates-stats-longpath.png",
+      "bytes": 47317,
+      "sha256": "3F022B98A91C53765A8737202DF4BA5C296E3933C9817ADBF1911C98F14BCD28"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-780x560-125.png",
+      "bytes": 40010,
+      "sha256": "01BCF68DE5C3BFC3FE5FC189DDFFFA402471D74BAD98A61C41513BDDE08CA350"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-940x650-100-v1-three.png",
+      "bytes": 33529,
+      "sha256": "A7212B684FF0C6343FDADA9BCC702CDB1F39C3E3AD859FD2EE8761AB6D521D13"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-940x650-100.png",
+      "bytes": 34479,
+      "sha256": "7649B0C5C2A9B42452D12927C6CF5DEFEADB595CCA6F6276BCD1A83FB4D546A1"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-940x650-125-allrates.png",
+      "bytes": 47530,
+      "sha256": "84EC1012D05BB214D3191511C6B3277BEAD9AF0A9805D3E79DAE4CB57B07EA09"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_ui215\\render215\\sd-test-940x650-125.png",
+      "bytes": 46231,
+      "sha256": "C99BEDE798E7B97780F6AADBACF84CA8200A6226DE3F1D1115EB192265D7F3F6"
+    }
+  ],
+  "port_capability_cases": [
+    "V1F000F0F0 advertises mask7: Probe3 enabled, fixed3-probe sweep15k then7.5k only.",
+    "V10000F0F0 advertises masks1/3 only: Probe3 disabled.",
+    "V1 lower probe count can restore advertised30/20/15/7.5 rates; existing V2 allrate and firmware-filtered cases unchanged."
+  ],
+  "scope": "Actual215 GUI only, synthetic semantic reports/statistics. Reuses prior118 UI/statformat/max9/layout tests and adds capability-driven V1 cases/render.",
+  "prior_assumption_correction": "213 had family-based Probe3 disabling. Its retained118 checks used a restricted V1 bitmap and must not be read as proof that V1 universally has only2probes. Exact213 helper source/exe preserved at C:/Frank/Code/USB_PCconsole/_artifacts/sd_usb_test_ui213/source213-final. No old receipt changed.",
+  "no_product_edits_or_builds": true,
+  "no_hardware_or_discovery": true,
+  "no_statistics_popup": true,
+  "dpi_scope": "125% is modeled font/control scaling; actual DeviceDpi retained per image; OS settings unchanged"
+}

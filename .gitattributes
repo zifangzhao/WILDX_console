@@ -133,3 +133,7 @@ Firmware/** -text
 /ReleaseSources/1.0.0.210/** -text
 
 /LATEST_INSTALLERS/legacy/1.0.0.209/** -text
+
+/ReleaseSources/1.0.0.221/** -text
+
+/LATEST_INSTALLERS/legacy/1.0.0.210/** -text

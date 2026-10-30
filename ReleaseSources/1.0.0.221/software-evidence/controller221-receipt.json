@@ -1,0 +1,74 @@
+{
+  "product_builds": 0,
+  "status": "PASS_FOCUSED_SOFTWARE_ONLY",
+  "limits": "Actual controller shared decisions/SubmitOnce and shared wire codecs. Native/card/mode/export boundaries throw; no physical/full Run or payload-integrity claim.",
+  "inputs": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpSdUsbTestControllerTests.cs",
+      "sha256": "CADBE50DC707CCC84F30967C8A75822294269FDF8AB497D066B88BFEC77F38AE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpFirstSyncWireTests.cs",
+      "sha256": "D1C13A75D3456B56E9E5D36C34F6A8C4CD6D0AF5B243137507188BF6EDC82237"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSdUsbTestController.cs",
+      "sha256": "735602065200D0CDCB110DAF0E94EF7138D8C3CC6453EEB95B65116B353BAAE6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSdUsbTestWire.cs",
+      "sha256": "E7F848B0F93DCE3C20D009066CB31DFC8FFA8755D0A971B81E133ADECDD23CB8"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSdSweepPolicy.cs",
+      "sha256": "842C3792F31D2130DD0E789181C550EDE1432D875D7A5E3981CB67FDC94B5AB6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFirstSyncSd.cs",
+      "sha256": "5B8399E247C481E7F97DB1BB05AC7D40DB6DB441BA796D2686EA17DDD7734C84"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFirstSyncWire.cs",
+      "sha256": "0AFE9BF09E12723EE6A4C4BF8E457B271E3ABAB5E2382E1FBC18C32F00FA5F4E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFirstSyncSdClient.cs",
+      "sha256": "8906F11D8DE5C15E25AB2F8D0151675F92CEC09C7990ECECE6E53E51AB01928D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFirstSyncSdAttemptEvidence.cs",
+      "sha256": "5996C57BED66EF579BB754EA6D8D032ABDB7F97172F368863488C09857E884CF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpSdControl.cs",
+      "sha256": "1DDDA9A3B3918A927E546139DD33E7FD1DD274012AAB774429B26784CE2EDE25"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV1BleProtocol.cs",
+      "sha256": "3129AEF7A2BFFCF3F844111D31E5DA1BFE94DE87DFFAB0741B5309083EDCBCE5"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2SdControl.cs",
+      "sha256": "A807B43250ED8753DB120BCC1C63C7B4B464109FA1C80645E9832E70F8418128"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpMetadataFile.cs",
+      "sha256": "6578CE6806FC38A3C04DE47E059A82FB44AE33CE98188A88C6F8BB53ED866A14"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_controller\\catalog-advisory-r1\\ActualDtos.cs",
+      "sha256": "80109F981248CFF856E1FA0797F8124563677F991F68B45C5F0FC87A216E0E3D"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_controller\\catalog-advisory-r1\\ActualGeometry.cs",
+      "sha256": "9F993DB93CF60E03D8F605825914B3E4A2FEFC3FEAB8564F44579ABF67E0AF19"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdDatExport.cs",
+      "sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F"
+    }
+  ],
+  "run_sha256": "783903565C23414B1C49F8D6F0C75C5B1C305F9AAD48E63C19E4DD069CA27D8A",
+  "hardware_calls": 0,
+  "fixture_sha256": "6312D6296E58882AE1510F87CEC985E8D1D05355F3D5E34C5E1E95EC9BE30AB2"
+}

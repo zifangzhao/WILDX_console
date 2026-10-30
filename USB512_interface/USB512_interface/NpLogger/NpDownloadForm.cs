@@ -43,7 +43,6 @@ namespace CE32_console
         }
         IWin32Window DialogOwner{get{return TopLevelControl??this;}}
         internal event Action BusyChanged;
-        internal event Action<string> SdTestRequested;
         internal NpDownloadForm(string sourcePath=null):this(sourcePath,true){}
         internal NpDownloadForm(string sourcePath,bool autoDiscover) {
             sourcePath=sourcePath==null?null:sourcePath.Trim();
@@ -54,9 +53,6 @@ namespace CE32_console
             actions.Controls.Add(mergeDat);actions.Controls.Add(calibrationButton);
             calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
             var cardActions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};cardActions.Controls.AddRange(new Control[]{deleteLast,format,repairCatalog,cardHelp});
-            var sdTest=new Button {Text="SD card test…",AutoSize=true};cardActions.Controls.Add(sdTest);
-            sdTest.Click+=(s,e)=>{if(busy)return;var source=sources.SelectedItem as Source;string path=source!=null&&source.Usb?source.Path:null;
-                if(SdTestRequested!=null)SdTestRequested(path);else using(var dialog=new USB512_interface.NpSdTestForm(null,path))dialog.ShowDialog(DialogOwner);};
             Controls.Add(records);Controls.Add(cardActions);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Top,Height=76,ColumnCount=3,RowCount=2,Padding=new Padding(0,4,0,4)};
             nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));

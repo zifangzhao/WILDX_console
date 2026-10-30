@@ -137,8 +137,6 @@ namespace USB512_interface
                 await Run(StopRecording);
             };
             recordingSettings=Add(actions,"Recording settings",OpenRecordingSettings);
-            var sdTestButton=new Button {Text="SD card test…",AutoSize=true};actions.Controls.Add(sdTestButton);
-            sdTestButton.Click+=delegate {if(!busy&&!hostBusy)using(var dialog=new NpSdTestForm(this))dialog.ShowDialog(DialogOwner);};
             Add(actions, "Sync PC time", () => SyncClock());
             previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
             recordingsButton=Add(actions,"Recordings…",OpenRecordings);

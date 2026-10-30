@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "version": "1.0.0.209",
+  "status": "qualified_host_session_folder_gpio",
+  "gui_sha256": "063623C8EBAFC257AA6EDD943A4052852A724064473FAC61E78E3CE6142D7CD3",
+  "sdk_sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
+  "git_baseline": "dcca8bd38a51a959f3bf59866d3adbb52b10fb39",
+  "source_publication_commit": null,
+  "source_identity_role": "published207_baseline_plus_exact209_compiled_overlay",
+  "source_archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release209-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 966329,
+    "sha256": "EFE0D0052DB6955AD9203E2F43B630F6C00CB5EF112628B192C1E5AA75349191"
+  },
+  "catalog_sha256": "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
+  "firmware": [
+    {
+      "family": 1,
+      "release": "V1_DETERMINISTIC_IMU_APPFFF283D9_USB1E73A743_20261030",
+      "app": "FFF283D9",
+      "usb": "1E73A743",
+      "recovery": null,
+      "stage": "USB60 and BLE-to-SD30 recording checked"
+    },
+    {
+      "family": 2,
+      "release": "V2_GRID16_APPEND_APP7F238587_USB74FC7104_20261030",
+      "app": "7F238587",
+      "usb": "74FC7104",
+      "recovery": "6408DBB8",
+      "stage": "Three probes20kHz SD120 checked"
+    }
+  ],
+  "firmware_changed": false,
+  "recorder_wire_changed": false,
+  "software_checks": {
+    "actual209_session_gpio": 38,
+    "clock": 43,
+    "host_callbacks": 21,
+    "locator": 44,
+    "legacy_importer": 227,
+    "actual209_sdk_public_boundary": 68,
+    "ui_render": "passed BLE/USB screenshots"
+  },
+  "evidence": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble-session-folder-tests\\actual209-r3\\receipt.json",
+      "bytes": 528,
+      "sha256": "4836D9404FDBC19195809D79BECCEB0170F562BE3F71740A695F11C5DE2AF344"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble_locator_final\\source-freeze.json",
+      "bytes": 3632,
+      "sha256": "0260F341C3541D9FB96A13B0D491B4A5D3CA5CBD5EC17857045A20FB2D8C85CA"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble_session_209\\sdk-smoke\\exports\\receipt.json",
+      "bytes": 1590,
+      "sha256": "B6DC64D933EAB05FCBAFFB1DCC3366CDBCB2258190F1B028A7A5ABF1A4BDAD38"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\qualification.json",
+      "bytes": 6810,
+      "sha256": "FBE90DE1FD004BCCC34F746BF4C3A132412958814638B192727F63F82593FE73"
+    }
+  ],
+  "ui_screenshots": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble_session_209\\ui-render\\ble-session.png",
+      "bytes": 32343,
+      "sha256": "B9CEC8C4C49D342B61CEE380A50959483993451BA8912FCEF2B34CD004D4B41C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble_session_209\\ui-render\\usb-session.png",
+      "bytes": 55373,
+      "sha256": "BC09CA720C9CA8F8C005756545FD5E109503376E2C933367E698D78C70F3EF58"
+    }
+  ],
+  "sdk208209_source_match": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release209-prep\\host-source-archive\\source-freeze.json",
+    "bytes": 9944,
+    "sha256": "D74717ABC7B0E860B0331226F7869C7013D0A5CB14A9385DBAF7F01F88924A00"
+  },
+  "hardware": "No newHIL needed for host folder/UI/lookup-only change; exact207 firmware/catalog and recorded producer acceptance retained",
+  "limits": [
+    "BLE data remains ondeviceSD; PC session artifacts are saved to the selected destination.",
+    "GPIO is independently enabled/disabled and remains continuous across reconnect/interruption; no implicitStop from device loss.",
+    "Optional GPIO/clock evidence failure does not fabricate timing or sensor conversion phase.",
+    "LocalRTC interval and PC calibration uncertainty remain separate; no new timing precision claim."
+  ]
+}

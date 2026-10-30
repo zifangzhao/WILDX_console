@@ -1,0 +1,41 @@
+{
+  "stage_match": "All five changed canonical sources matched both APP and USB frozen stage manifests (10/10)",
+  "scope": "Transaction/source review only; physical qualification remains a separate accepted warm sweep and restore",
+  "independent_tests_run": 0,
+  "reviewer": "/root/stop_host_audit",
+  "findings_resolved": [
+    "Duplicate helper removed",
+    "reset seal preserves protected ticket/profile and writes only authority",
+    "Untrusted warm and cold restore register-only snapshot without SRAM reads or Start replay",
+    "Backup committed before profile mutation; marker cleared only after exact restore/readback",
+    "Valid camera and all-zero virgin defaults distinct; corrupt/invalid prior settings do not silently become normal capture profile",
+    "No extra backup registers;18/19 untouched"
+  ],
+  "builds": 0,
+  "status": "PASS_SCOPED_INDEPENDENT_SOURCE_REVIEW",
+  "hardware_calls": 0,
+  "source_pins": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_reset.h",
+      "sha256": "37DF6391CB1A1D68A2B3DAFFC8FC3568B3EC0455A6AE4F4F1BEEC219C72BFE03"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_profile.h",
+      "sha256": "F34C5B6084FDC259F519D7371E98D1BA4C2B955B1D1CCBFDE18C1F42D9419464"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_sd_usb_job_early.inc",
+      "sha256": "A4F86C51505DB25DE15884AF1EC62946368C67E3C517BC2E49AE26DFAC7DEA81"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_sd_usb_job_owner.inc",
+      "sha256": "D4CA35223BE15330C0C3290F58F675379528ACA374EE89141B2A32B5C49B47F1"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_usb_sd_job_platform.inc",
+      "sha256": "E28B24B6B736D960A6FB2DA50771C23D2628E6499C218405E04E3CBB15550641"
+    }
+  ],
+  "utc": "2026-10-30T23:25:00.4918512Z",
+  "schema": 1
+}

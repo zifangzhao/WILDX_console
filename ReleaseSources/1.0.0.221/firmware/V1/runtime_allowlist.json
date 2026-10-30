@@ -1,0 +1,52 @@
+{
+  "status": "PASS_SCOPED_WARM_SD_NATIVE_COLD_RECOVERY",
+  "files": [
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_APP76302AC4.hex",
+      "sha256": "CFCE7D0EA0234D84C672286A12CC40CD28C7F21E6FD22A5EBA91326E4DB16447",
+      "bytes": 1038420
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_APP76302AC4.xenp",
+      "sha256": "2D2FA9383A93E7663355DD1D119AEC9522FF4A3998FD547900496C80677D5168",
+      "bytes": 377560
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_USBEF0BC695.hex",
+      "sha256": "333E83C5D609A7DEB21F275F621B7EB9064F10137F39D0E572C0A476486C4598",
+      "bytes": 946476
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_BOOT_DFU_unchanged_20261030.hex",
+      "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9",
+      "bytes": 322607
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_BOOT_USBEF0BC695.hex",
+      "sha256": "89C96E3A5DAA2E90BA2E88EF552EEBD50D69B235AE5B12125A353F5FC70DAF96",
+      "bytes": 1290586
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_FUSED_BOOT_USBEF0BC695_APP76302AC4.hex",
+      "sha256": "431673E61783CAA33488832F03B09EBDB719336F97EBBD78F9952D176E1D4445",
+      "bytes": 5745164
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_SD_TEST_scoped_acceptance.json",
+      "sha256": "9E92F20C5BDE0AA926AC99C67DCD0BDD09810FD03DF3607346C2CDF03571E0EA",
+      "bytes": 1207
+    }
+  ],
+  "limits": [
+    "V1 exact neural gap durations and some device counters remain unavailable",
+    "Cold/ambiguous interrupted profile recovery fixed by register-only transaction; native/software reviewed, physical cold interruption not tested",
+    "No endurance, universal profile, arbitrary ADC bit-error, full source-window/final-tail or physical sensor conversion-phase claim",
+    "Physical cold interruption and general BLE/SD operation were not tested",
+    "Source archive is partial; exact main_syncbench source preimage unavailable",
+    "No assertion of losslessness outside the bounded 20 kHz test"
+  ],
+  "repository_only_source_archive": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_recovery_source_inputs.zip",
+    "sha256": "805211F0721E49E2FACC1AB5EF887D9372EC9BA5FA4AFD88F869F1094989F0CD"
+  }
+}

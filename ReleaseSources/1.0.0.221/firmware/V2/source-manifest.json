@@ -1,0 +1,161 @@
+{
+  "status": "PASS_SCOPED_221_USB_SD_SWEEP_AND_EXACT_ORIGINAL_RESTORE",
+  "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
+  "sourceCommitScope": "Historical baseline plus published 207 incremental overlay and exact current delta; not a clean/full rebuild.",
+  "canonicalSourceEquivalenceClaimed": false,
+  "fullFusedHardwareTestClaimed": false,
+  "parent_release": "V2_GRID16_APPEND_APP7F238587_USB74FC7104_20261030",
+  "parent_source_archive_sha256": "40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38",
+  "exact_delta_archive": {
+    "path": "V2_USB_SD_TEST_INCREMENTAL_SOURCE.zip",
+    "sha256": "20533127F1AD252AA588A80DCE2D811FB823A90BD11D96B73334D7F412B46CF6",
+    "bytes": 242807
+  },
+  "canonical_source_pins": {
+    "Core/Src/main.c": "E2609C553BF4E7D0219528E0D8F6F177A42F21E24C66532D5940C55C04577B6A",
+    "Core/Src/xe_np_np2_sd_control.c": "0987C8BC8FE7C806EC116D422E814B23A3000528CA4DA2F1AA8AF888E863A2EF",
+    "Core/Src/xe_np_usb_stream.c": "FA8B3ED7814B446EED231983ECF07EEFD78BD30BC944D67586A0D13390FB548A",
+    "Core/Src/xe_np_usb_unified.inc": "A463D9DD5CB1D12A9F233DB1AD0F13A866055B1CF33CD17113B85105F988FFAE",
+    "Core/Src/xe_np_np2_dual_sd_app.c": "EE86516F89B0845C0320CC31A2AFA028A0712A2FEF80C6C38BA76E9193F6E06A",
+    "Core/Src/xe_np_np2_live_sd.c": "D57761F0EBD73FE0EAB013305B0DF2A5991BE525422CC8BD7B6EE49F84A4EB89",
+    "Core/Src/xe_np_np2_usb_sd_test.c": "8539E88D2C3A56C0558C9B3D76B41030681CE7E290F0DC0C0358C2C7589A1DE5",
+    "Core/Inc/xe_np_np2_live_sd.h": "B4D8A4267E0413198B76DA525EA336F7EBB19EDD3410C6BB66F995ACC9E0C898",
+    "Core/Inc/xe_np_np2_usb_sd_test.h": "93E228111E092BADB82CC99FF98E7B0ADE7373B9E26B635796D74BD5C4E02EEE",
+    "Core/Src/xe_np_usb_sd_test_job.c": "D143653EED0FA696EA07F39573736ABDB35C3F55FA2A4E21EE64BBAFF1117E25",
+    "Core/Src/xe_np_usb_sd_test.inc": "58578D868B605A9F33AFED7E9F562991E23A83E945F8EC5C0766CA659121455B",
+    "Core/Inc/xe_np_usb_sd_test_job.h": "066A1E40B23D4C309037887D0270B8B78B6F920ED427AA4DFF6BF36CD14D1D3B",
+    "Core/Src/np_v2_usb_sd_retained.c": "F07971FAC3E5896C41C0EBB937D5584371E7CA7EF12873E92A10BFE7BB847209",
+    "Core/Inc/np_v2_usb_sd_retained.h": "C831C9E1023CAE278FD5A2B77D6E1F8C8E1772E2193398E2435231466E898314",
+    "Shared/Timing/np_usb_sd_test.h": "9F638AED4A97C11B91221258C4AF8AF1FCDDD67804F7766D99E2FD2969BC7963"
+  },
+  "components": {
+    "app": {
+      "crc32": "71A5126E",
+      "body_bytes": 335420,
+      "body_sha256": "B96FB851D93451B76B4076C91F79CE28BEFFB2FE8A2E9E7AA75F46CBEEF6F440",
+      "manifest_sha256": "2D07C38C5107152CC5817EA34F18F0DD692CD21A209BBDB19D61DA74F94D2B9B",
+      "hex_sha256": "AC92DBF86F323AB61B6EF37D8F63E057F5EF551AA4B1DCFD4C57FF1657FCFE36",
+      "manifest_address": "0x801e000",
+      "build_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\build-app\\receipt.json",
+      "build_receipt_sha256": "9D992957D2E2CF8C6D631E410C6CCA52FAA60C1E3CDEA2F096F28C757C860776",
+      "stack_top": "0x200bda50",
+      "execution_regions": [
+        "Execution Region ER_IROM1 (Exec base: 0x08020000, Load base: 0x08020000, Size: 0x0004d038, Max: 0x0015e000, ABSOLUTE)",
+        "Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08071dbc, Size: 0x00003a54, Max: 0x00004000, ABSOLUTE, COMPRESSED[0x00000080])",
+        "Execution Region RW_LIVE_RU0 (Exec base: 0x20004000, Load base: 0x0806d040, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU1 (Exec base: 0x20031800, Load base: 0x0806d5f8, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU2 (Exec base: 0x2005f000, Load base: 0x0806dbb0, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU3 (Exec base: 0x2008c800, Load base: 0x0806e168, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_IRAM_SPARE (Exec base: 0x200ba000, Load base: 0x08071cbc, Size: 0x00003a50, Max: 0x00004000, ABSOLUTE)",
+        "Execution Region RW_NOINIT (Exec base: 0x200be000, Load base: 0x0806e720, Size: 0x00000288, Max: 0x00002000, ABSOLUTE, UNINIT, COMPRESSED[0x00000008])",
+        "Execution Region RW_NP2_DESC (Exec base: 0x200c0000, Load base: 0x0806e860, Size: 0x00004c20, Max: 0x00010000, ABSOLUTE, COMPRESSED[0x0000009c])",
+        "Execution Region RW_NP_CAPTURE (Exec base: 0x200d0000, Load base: 0x0806e8fc, Size: 0x000b8860, Max: 0x000bc800, ABSOLUTE, COMPRESSED[0x00001728])",
+        "Execution Region RW_LIVE_RU4 (Exec base: 0x2018c800, Load base: 0x08070024, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU5 (Exec base: 0x201ba000, Load base: 0x080705dc, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU6 (Exec base: 0x201e7800, Load base: 0x08070b94, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU7 (Exec base: 0x20215000, Load base: 0x0807114c, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])",
+        "Execution Region RW_LIVE_RU8 (Exec base: 0x20242800, Load base: 0x08071704, Size: 0x0002d800, Max: 0x0002d800, ABSOLUTE, UNINIT, COMPRESSED[0x000005b8])"
+      ],
+      "recompiled": [
+        "main",
+        "xe_np_usb_sd_test_job",
+        "np_v2_usb_sd_retained",
+        "xe_np_np2_sd_control",
+        "xe_np_np2_dual_sd_app",
+        "xe_np_np2_usb_sd_test",
+        "xe_np_np2_live_sd"
+      ]
+    },
+    "usb": {
+      "crc32": "2556B4DD",
+      "body_bytes": 309212,
+      "body_sha256": "0B4CFF9EC332011327EA03B4476B55FC3E92589E4FBC1CAECA4820EC1DF06489",
+      "manifest_sha256": "0D3F1A0147A04B0EFF7C24B27C09529BE936F49E968F828D1AF1E9378205F75D",
+      "hex_sha256": "2F9DB76BFC58FC293F30D31FB948E5EF33694BDB878F26513B5D5172059B3A34",
+      "manifest_address": "0x817e000",
+      "build_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\build-usb\\receipt.json",
+      "build_receipt_sha256": "CE9411160A42BF75755B697CEAEDA172F74B38278D06AFB8A23C15A68FAF484E",
+      "stack_top": "0x2001ced0",
+      "execution_regions": [
+        "Execution Region ER_IROM1 (Exec base: 0x08180000, Load base: 0x08180000, Size: 0x00046bd4, Max: 0x00080000, ABSOLUTE)",
+        "Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x081c6be0, Size: 0x0001ced0, Max: 0x00020000, ABSOLUTE)",
+        "Execution Region RW_USB_DMA (Exec base: 0x20020000, Load base: 0x081c6c40, Size: 0x0000ff20, Max: 0x00010000, ABSOLUTE, UNINIT, COMPRESSED[0x00000204])",
+        "Execution Region RW_DOWNLOAD0 (Exec base: 0x20030000, Load base: 0x081c6e44, Size: 0x00080000, Max: 0x00080000, ABSOLUTE, UNINIT, COMPRESSED[0x00001014])",
+        "Execution Region RW_AUX (Exec base: 0x200b0000, Load base: 0x081c7e58, Size: 0x0000aed0, Max: 0x0000e000, ABSOLUTE, COMPRESSED[0x000000c0])",
+        "Execution Region RW_NOINIT (Exec base: 0x200be000, Load base: 0x081c7f18, Size: 0x00000004, Max: 0x00002000, ABSOLUTE, UNINIT)",
+        "Execution Region RW_NP2_DESC (Exec base: 0x200c0000, Load base: 0x081c8318, Size: 0x00000248, Max: 0x00004000, ABSOLUTE, COMPRESSED[0x00000008])",
+        "Execution Region RW_AUX_ADC (Exec base: 0x200c4000, Load base: 0x081cace4, Size: 0x00008000, Max: 0x00008000, ABSOLUTE, UNINIT, COMPRESSED[0x00000104])",
+        "Execution Region RW_AUX_TX (Exec base: 0x200cc000, Load base: 0x081cade8, Size: 0x000010c0, Max: 0x00004000, ABSOLUTE, UNINIT, COMPRESSED[0x00000024])",
+        "Execution Region RW_NP_CAPTURE (Exec base: 0x200d0000, Load base: 0x081c8338, Size: 0x000cb5f0, Max: 0x000d0000, ABSOLUTE, COMPRESSED[0x00001988])",
+        "Execution Region RW_DOWNLOAD1 (Exec base: 0x201a0000, Load base: 0x081c9cd0, Size: 0x00080000, Max: 0x00080000, ABSOLUTE, UNINIT, COMPRESSED[0x00001014])",
+        "Execution Region RW_AUX_CAMERA (Exec base: 0x20220000, Load base: 0x081cae0c, Size: 0x0004e200, Max: 0x00050000, ABSOLUTE, UNINIT, COMPRESSED[0x000009d0])"
+      ],
+      "recompiled": [
+        "main",
+        "xe_np_usb_sd_test_job",
+        "np_v2_usb_sd_retained",
+        "xe_np_usb_stream"
+      ]
+    }
+  },
+  "recovery": {
+    "crc32": "6408DBB8",
+    "body_bytes": 29888,
+    "body_sha256": "C063C195595684C9C1D7821CA643494807740FFA4D3326414780C84C6FA6A3FA",
+    "hex_sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+  },
+  "checked_installed_whole_flash_sha256": "51C9EE1605555836C3C80767CF7C8030913479B55EAB5553C618FC314F5623EF",
+  "original_restore_whole_flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+  "original_option_bytes_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+  "runtime_assets": [
+    {
+      "path": "V2/V2_APP_71A5126E_USB_SD_TEST_20261030.hex",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\build-app\\V2_APP_USB_SD_TEST_CANDIDATE.hex",
+      "bytes": 922884,
+      "sha256": "AC92DBF86F323AB61B6EF37D8F63E057F5EF551AA4B1DCFD4C57FF1657FCFE36"
+    },
+    {
+      "path": "V2/V2_APP_71A5126E_USB_SD_TEST_20261030.xenp",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\release-prep\\V2\\V2_APP_71A5126E_USB_SD_TEST_20261030.xenp",
+      "bytes": 335548,
+      "sha256": "36AF5B641C5897E3DA6F719AB2D620654B233F8664F401C7A27AC2666E8C398B"
+    },
+    {
+      "path": "V2/V2_USB_2556B4DD_USB_SD_TEST_20261030.hex",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\build-usb\\V2_USB_USB_SD_TEST_CANDIDATE.hex",
+      "bytes": 850796,
+      "sha256": "2F9DB76BFC58FC293F30D31FB948E5EF33694BDB878F26513B5D5172059B3A34"
+    },
+    {
+      "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\Firmware\\V2\\V2_recovery_only_6408DBB8_20261012.hex",
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "V2/V2_fused_RECOVERY6408DBB8_APP71A5126E_USB2556B4DD_USB_SD_TEST_20261030.hex",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\release-prep\\V2\\V2_fused_RECOVERY6408DBB8_APP71A5126E_USB2556B4DD_USB_SD_TEST_20261030.hex",
+      "bytes": 1855876,
+      "sha256": "E52CCA609BB1C267A5CACCB11049EBD5B3B5FBE38D59FE6EE93F8F312051CB6B"
+    }
+  ],
+  "runtime_bundle": {
+    "path": "V2_USB_SD_TEST_RUNTIME_ASSETS.zip",
+    "sha256": "D612D84DA306E75C986FF4596414FF800767966B6E9170778898B640DED17F87",
+    "bytes": 1601315
+  },
+  "historical_source_limit": "Published baseline retains historical source/retained-object limitations; new archive is the scoped delta, not a complete reconstruction.",
+  "validation": {
+    "actual221_sweep": "PASS_SCOPED",
+    "exact_original_restore": "PASS_EXACT_FLASH_OPTIONS_IDLE_AND_RELEASE",
+    "package_scope": "Direct checked-component merge; ownership, overlaps, seals, vectors and flash/stack bounds checked offline. No new build or hardware operation.",
+    "owner_acceptance": {
+      "path": "V2/acceptance.json",
+      "sha256": "BA44D8BD976D23A1A5E132B7AAF10C1F836F364E327A5CF62CC61654112189BF"
+    },
+    "root_scoped_acceptance": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_hil221\\V2-r1\\root-scoped-acceptance.json",
+      "sha256": "54FF048A416B80791EB947F4CE33CF7371436A55F097DA05C9EFF8C75B7B8620"
+    }
+  }
+}

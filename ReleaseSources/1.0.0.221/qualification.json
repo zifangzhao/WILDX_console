@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0.221",
+  "status": "development_acceptance_recorded",
+  "package_allowed": true,
+  "gui_sha256": "90D6D4540E59DDEA3EE45DE43EF075B8DE32C3F539F159C57AA08410B7F367C1",
+  "sdk_sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
+  "build_exit": 0,
+  "source_stable": true,
+  "source_archive": {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\compiled-sources.zip",
+    "bytes": 993216,
+    "sha256": "CFAE63EA6CA653E900B7BEA20283F99819F9AFD170A7CC09553253F37F70C01E"
+  },
+  "evidence": [
+    {
+      "name": "wire-managed-freeze.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\wire-managed-freeze.json",
+      "bytes": 4239,
+      "sha256": "4074AB92166F4FC4E126CA52EF6D90626BC9737FE6545A65B95DEB5CE46272BA"
+    },
+    {
+      "name": "wire-native-freeze.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\wire-native-freeze.json",
+      "bytes": 1385,
+      "sha256": "45EC533BCF624330B3D965B24DB94685D21A7BFF4E9FF246800C4B34F568AD4C"
+    },
+    {
+      "name": "wire-native-receipt.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\wire-native-receipt.json",
+      "bytes": 1878,
+      "sha256": "0E9F6C748149226B304CD9C824A0600676EEB4D45541AC441FD827428CBD7514"
+    },
+    {
+      "name": "controller221-source-freeze.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\controller221-source-freeze.json",
+      "bytes": 1955,
+      "sha256": "FE6169AFAF4961E3660E288FB57E5FF0E308F6546927578CA36B2759F5689FDC"
+    },
+    {
+      "name": "controller221-receipt.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\controller221-receipt.json",
+      "bytes": 3828,
+      "sha256": "9CCB240C11BC93344A6FB63C5BBEB9D0EF93988684F5BBDC6C2E62420F924DB1"
+    },
+    {
+      "name": "ui215-source-freeze.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\ui215-source-freeze.json",
+      "bytes": 3968,
+      "sha256": "2B7949B67EAB346CBF3BF352ECE30875A36F8D7AE35F22CA806936AFB521EB40"
+    },
+    {
+      "name": "ui215-receipt.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\ui215-receipt.json",
+      "bytes": 5540,
+      "sha256": "DAB5D6AB3E4F0137A81D9E8BB55BE1D605A7D48EA6889956B85BAF80286AB7A7"
+    },
+    {
+      "name": "ui215-run.ps1",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\ui215-run.ps1",
+      "bytes": 1234,
+      "sha256": "B94727C834A9589CD08580EC0D01593C32B0DA0B0AA375FC1A9FAFC68A4CEAD2"
+    },
+    {
+      "name": "policy-receipt.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\policy-receipt.json",
+      "bytes": 1713,
+      "sha256": "0594BED64F8371BE47ABB0541B12BDBBDE79D065504D944A188D249D1A74BFB2"
+    },
+    {
+      "name": "sdk209-qualification.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\software-evidence\\sdk209-qualification.json",
+      "bytes": 3945,
+      "sha256": "F2B303B3B57B2663C3CB994A81D5A71696D492025CCF7C82415C5DA257F506D2"
+    }
+  ],
+  "ui_reuse": "128 actual215 checks; exact NpSdTestForm source equal215/221; no221 device claim",
+  "firmware_acceptance": {
+    "V1": {
+      "status": "accepted",
+      "receipt": {
+        "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\cold_scoped_pair_20261030\\V1_SD_TEST_scoped_acceptance.json",
+        "bytes": 1207,
+        "sha256": "9E92F20C5BDE0AA926AC99C67DCD0BDD09810FD03DF3607346C2CDF03571E0EA"
+      }
+    },
+    "V2": {
+      "status": "accepted",
+      "receipt": {
+        "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\release-prep\\owner-acceptance.json",
+        "bytes": 4230,
+        "sha256": "BA44D8BD976D23A1A5E132B7AAF10C1F836F364E327A5CF62CC61654112189BF"
+      }
+    }
+  },
+  "limits": [
+    "Unknown gap/timing values remain unavailable; V1 exact gap durations remain unknown where only lowerbounds exist.",
+    "No card endurance, universal profile, electrical SD busy-line, physical conversion phase or all-stream timing claim."
+  ],
+  "software_checks_recorded": {
+    "wire_managed_native_parity": 1009,
+    "controller_catalog_advisory": 422,
+    "ui215_actual_reused": 128
+  },
+  "controller_correction": "Exclude only generated catalog-global RecoveryNotice advisory prose from previous-record preservation fingerprint. A valid append can change generation/frontier advice on prior records. All stored identity, geometry, state, extent, count and validation fields remain strict; actual stored-field mutation still rejects. No Start, replay or identity policy change.",
+  "installer_source": {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\WILDX_console.nsi",
+    "bytes": 4839,
+    "sha256": "F02302438FD46A20F6B3E33E5CB6A01168FA3165B4A9601C84EC123DDD93BD04"
+  },
+  "final_firmware_manifest": {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\final-firmware-manifest.json",
+    "bytes": 13991,
+    "sha256": "D88CCD2FE6106EC239F8C826102E10734DD48FE68A79181650167A4D40B8BD8C"
+  },
+  "catalog_sha256": "4CE8D280B3004536E97C1D4551C363F33D1ABC666D61CB0E36C9F3CA108DFF91",
+  "firmware": [
+    {
+      "family": 1,
+      "release": "V1_USB_SD_RECOVERY_APP76302AC4_USBEF0BC695_20261030",
+      "app": "76302AC4",
+      "usb": "EF0BC695",
+      "recovery": null,
+      "stage": "PASS_SCOPED_WARM_SD_NATIVE_COLD_RECOVERY"
+    },
+    {
+      "family": 2,
+      "release": "V2_USB_SD_TEST_APP71A5126E_USB2556B4DD_20261030",
+      "app": "71A5126E",
+      "usb": "2556B4DD",
+      "recovery": "6408DBB8",
+      "stage": "3P30 loss then automatic 3P20 full readback pass; 10 seconds/rate USB-only warm workflow"
+    }
+  ]
+}

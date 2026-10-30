@@ -7,44 +7,56 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_DETERMINISTIC_IMU_APPFFF283D9_USB1E73A743_20261030",
+      "release": "V1_USB_SD_RECOVERY_APP76302AC4_USBEF0BC695_20261030",
       "sourceCommit": "23edae6de84869b1b9edcf9e52074649c0579cbb",
-      "stage": "USB60 and BLE-to-SD30 recording checked",
-      "appVersion": "build FFF283D9",
-      "usbVersion": "build 1E73A743",
+      "stage": "PASS_SCOPED_WARM_SD_NATIVE_COLD_RECOVERY",
+      "appVersion": "build76302AC4 (USB SD-test cold-recovery fix)",
+      "usbVersion": "buildEF0BC695 (USB SD-test cold-recovery fix)",
       "recoveryVersion": "Unchanged bootloader / ABI258",
-      "appCrc32": "FFF283D9",
-      "usbCrc32": "1E73A743",
+      "appCrc32": "76302AC4",
+      "usbCrc32": "EF0BC695",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_APP_FFF283D9_deterministic_IMU_20261030.hex",
-        "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
+        "path": "V1/V1_APP76302AC4.hex",
+        "sha256": "CFCE7D0EA0234D84C672286A12CC40CD28C7F21E6FD22A5EBA91326E4DB16447"
       },
       "files": [
         {
-          "path": "V1/V1_APP_FFF283D9_deterministic_IMU_20261030.hex",
-          "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
+          "path": "V1/V1_APP76302AC4.hex",
+          "sha256": "CFCE7D0EA0234D84C672286A12CC40CD28C7F21E6FD22A5EBA91326E4DB16447"
         },
         {
-          "path": "V1/V1_USB_service_1E73A743_deterministic_IMU_20261030.hex",
-          "sha256": "74D7D5C886A4DDDBEA88EC907AA0291F90F824C700D91DFB827B0AF277B5F271"
+          "path": "V1/V1_APP76302AC4.xenp",
+          "sha256": "2D2FA9383A93E7663355DD1D119AEC9522FF4A3998FD547900496C80677D5168"
+        },
+        {
+          "path": "V1/V1_USBEF0BC695.hex",
+          "sha256": "333E83C5D609A7DEB21F275F621B7EB9064F10137F39D0E572C0A476486C4598"
         },
         {
           "path": "V1/V1_BOOT_DFU_unchanged_20261030.hex",
           "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
         },
         {
-          "path": "V1/V1_fused_BOOT_USB1E73A743_APPFFF283D9_deterministic_IMU_20261030.hex",
-          "sha256": "5D89FB6E25235867DD2E47F900228A57D60DB56C60BE6358BD624EF713BAFC9C"
+          "path": "V1/V1_BOOT_USBEF0BC695.hex",
+          "sha256": "89C96E3A5DAA2E90BA2E88EF552EEBD50D69B235AE5B12125A353F5FC70DAF96"
+        },
+        {
+          "path": "V1/V1_FUSED_BOOT_USBEF0BC695_APP76302AC4.hex",
+          "sha256": "431673E61783CAA33488832F03B09EBDB719336F97EBBD78F9952D176E1D4445"
+        },
+        {
+          "path": "V1/V1_SD_TEST_scoped_acceptance.json",
+          "sha256": "9E92F20C5BDE0AA926AC99C67DCD0BDD09810FD03DF3607346C2CDF03571E0EA"
         }
       ],
-      "limits": "Two probes / 20kHz checked in USB60 and BLE-to-SD30. Enforced 1250Hz cached IMU grid; one initial missing slot. Local RTC intervals112us USB/111us SD, PC uncertainty separate. SD source overlap, terminal tail and physical conversion phase remain unqualified. See acceptance.json.",
+      "limits": "V1 exact neural gap durations and some device counters remain unavailable; Cold/ambiguous interrupted profile recovery fixed by register-only transaction; native/software reviewed, physical cold interruption not tested; No endurance, universal profile, arbitrary ADC bit-error, full source-window/final-tail or physical sensor conversion-phase claim; Physical cold interruption and general BLE/SD operation were not tested; Source archive is partial; exact main_syncbench source preimage unavailable; No assertion of losslessness outside the bounded 20 kHz test",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 366296,
-        "codeCrc32": "FFF283D9",
-        "buildIdHex": "3866366237323165306263343265323636326338366262656236373135666139",
+        "bytes": 377432,
+        "codeCrc32": "76302AC4",
+        "buildIdHex": "3663666662303831636634353662613735313031383666303735373331373637",
         "manifestFlags": 0,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -52,14 +64,24 @@
       "usbIdentity": {
         "imageId": 1431519793,
         "baseAddress": 135790592,
-        "bytes": 330344,
-        "codeCrc32": "1E73A743",
-        "buildIdHex": "3466353665396462373865613166373362376366666233656531323639663630",
+        "bytes": 344000,
+        "codeCrc32": "EF0BC695",
+        "buildIdHex": "3738313739323736646631353332343136646531336330386337316537356234",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 366296,
+          "codeCrc32": "FFF283D9",
+          "buildIdHex": "3866366237323165306263343265323636326338366262656236373135666139",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -152,6 +174,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 330344,
+          "codeCrc32": "1E73A743",
+          "buildIdHex": "3466353665396462373865613166373362376366666233656531323639663630",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -311,17 +343,16 @@
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
       "sourceInputs": {
-        "archive": "ReleaseSources/1.0.0.204/V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
-        "sha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35",
-        "changedProductionCUnits": 5,
-        "uniqueSourceDependencyFiles": 426,
-        "fullHistoricalRebuildSourceClosureClaimed": false
+        "appBuild": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\app_candidate_cold_r1\\build.json",
+        "usbBuild": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\usb_candidate_cold_r1\\build.json",
+        "sourceArchiveSha256": "805211F0721E49E2FACC1AB5EF887D9372EC9BA5FA4AFD88F869F1094989F0CD",
+        "acceptance": "V1/V1_SD_TEST_scoped_acceptance.json"
       },
       "full": {
-        "path": "V1/V1_fused_BOOT_USB1E73A743_APPFFF283D9_deterministic_IMU_20261030.hex",
-        "sha256": "5D89FB6E25235867DD2E47F900228A57D60DB56C60BE6358BD624EF713BAFC9C"
+        "path": "V1/V1_FUSED_BOOT_USBEF0BC695_APP76302AC4.hex",
+        "sha256": "431673E61783CAA33488832F03B09EBDB719336F97EBBD78F9952D176E1D4445"
       },
-      "sourceCommitScope": "The resolved commit publishes the exact incremental source/dependency archive and metadata; it is not asserted to be a canonical clean-build firmware tree. Qualified component HEX bytes and retained binary provenance are separately identified.",
+      "sourceCommitScope": "Baseline commit only; changed local V1 sources require explicit source publication",
       "sourceProvenance": {
         "ownerManifest": "V1/source-manifest.json",
         "ownerManifestSha256": "042D4A49CB60C8449DF5A7537D6732921B893A5E464D4795A11E66386380D148",
@@ -332,7 +363,7 @@
         "sourceArchiveSha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35",
         "canonicalSourceEquivalenceClaimed": false
       },
-      "sourceCommitRole": "incremental_source_archive_publication",
+      "sourceCommitRole": "BASELINE_ONLY",
       "retainedBaselineProvenance": {
         "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
         "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
@@ -355,23 +386,23 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_GRID16_APPEND_APP7F238587_USB74FC7104_20261030",
+      "release": "V2_USB_SD_TEST_APP71A5126E_USB2556B4DD_20261030",
       "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
-      "stage": "Three probes20kHz SD120 checked",
-      "appVersion": "build 7F238587",
-      "usbVersion": "build 74FC7104",
+      "stage": "3P30 loss then automatic 3P20 full readback pass; 10 seconds/rate USB-only warm workflow",
+      "appVersion": "build 71A5126E",
+      "usbVersion": "build 2556B4DD",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "7F238587",
-      "usbCrc32": "74FC7104",
+      "appCrc32": "71A5126E",
+      "usbCrc32": "2556B4DD",
       "recoveryCrc32": "6408DBB8",
-      "limits": "SD120 at three probes20kHz checked. Local RTC120us; PC uncertainty is separate. Cached1250Hz IMU copies preserve gaps; physical conversion phase, source overlap, final-tail timing and endurance remain unqualified.",
+      "limits": "Fixed three-probe mask only. 30 kHz has verified losses; 20 kHz passed stored NP/IMU readback for 10 seconds. Native conversion phase, complete source window/final IMU slot, analog accuracy, power, endurance and other modes remain unqualified. Original firmware/options/profile restored; catalog20 preserved.",
       "appIdentity": {
         "imageId": 1095782449,
         "generation": 3,
         "baseAddress": 134348800,
-        "bytes": 324028,
-        "codeCrc32": "7F238587",
-        "buildIdHex": "6263626362353536363733396264613764383262343465306336623036356166",
+        "bytes": 335420,
+        "codeCrc32": "71A5126E",
+        "buildIdHex": "6239366662383531643933343531623736623430373663393166373963653238",
         "manifestFlags": 0,
         "minimumLoaderAbi": 4
       },
@@ -379,53 +410,64 @@
         "imageId": 1431519793,
         "generation": 3,
         "baseAddress": 135790592,
-        "bytes": 295868,
-        "codeCrc32": "74FC7104",
-        "buildIdHex": "3532376263636563383663636637633436656436393239326162353536393561",
+        "bytes": 309212,
+        "codeCrc32": "2556B4DD",
+        "buildIdHex": "3062346366663965633333323031313332376561303362343437366235356663",
         "manifestFlags": 3,
         "minimumLoaderAbi": 4
       },
       "app": {
-        "path": "V2/V2_APP_7F238587_GRID16_APPEND_20261030.xenp",
-        "sha256": "98D384A268897880F4D96366A7DA1A4EF77B63DA8BDE61C684EE1C0635EDBFEB"
+        "path": "V2/V2_APP_71A5126E_USB_SD_TEST_20261030.xenp",
+        "sha256": "36AF5B641C5897E3DA6F719AB2D620654B233F8664F401C7A27AC2666E8C398B"
       },
       "full": {
-        "path": "V2/V2_fused_RECOVERY6408DBB8_APP7F238587_USB74FC7104_GRID16_APPEND_20261030.hex",
-        "sha256": "6E93B1BD046EDA8E6C8C980B8D60C12067CD420007B0FB9E598F2736E05F9032"
+        "path": "V2/V2_fused_RECOVERY6408DBB8_APP71A5126E_USB2556B4DD_USB_SD_TEST_20261030.hex",
+        "sha256": "E52CCA609BB1C267A5CACCB11049EBD5B3B5FBE38D59FE6EE93F8F312051CB6B"
       },
       "files": [
         {
-          "path": "V2/V2_APP_7F238587_GRID16_APPEND_20261030.xenp",
-          "sha256": "98D384A268897880F4D96366A7DA1A4EF77B63DA8BDE61C684EE1C0635EDBFEB"
+          "path": "V2/V2_APP_71A5126E_USB_SD_TEST_20261030.hex",
+          "sha256": "AC92DBF86F323AB61B6EF37D8F63E057F5EF551AA4B1DCFD4C57FF1657FCFE36"
         },
         {
-          "path": "V2/V2_APP_7F238587_GRID16_APPEND_20261030.hex",
-          "sha256": "AADA9AF5BD5BDD4AC2DDEA2D2D2C3CA3D37DBFAB7AEF3A23062FA6DCC84A5E64"
+          "path": "V2/V2_APP_71A5126E_USB_SD_TEST_20261030.xenp",
+          "sha256": "36AF5B641C5897E3DA6F719AB2D620654B233F8664F401C7A27AC2666E8C398B"
         },
         {
-          "path": "V2/V2_fused_RECOVERY6408DBB8_APP7F238587_USB74FC7104_GRID16_APPEND_20261030.hex",
-          "sha256": "6E93B1BD046EDA8E6C8C980B8D60C12067CD420007B0FB9E598F2736E05F9032"
+          "path": "V2/V2_USB_2556B4DD_USB_SD_TEST_20261030.hex",
+          "sha256": "2F9DB76BFC58FC293F30D31FB948E5EF33694BDB878F26513B5D5172059B3A34"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_USB_74FC7104_GRID16_APPEND_20261030.hex",
-          "sha256": "C7FF2162017B5FEB6FB9243B436A28C6EC6DA80B699EFE32DF32795CF3170A3D"
+          "path": "V2/V2_fused_RECOVERY6408DBB8_APP71A5126E_USB2556B4DD_USB_SD_TEST_20261030.hex",
+          "sha256": "E52CCA609BB1C267A5CACCB11049EBD5B3B5FBE38D59FE6EE93F8F312051CB6B"
         }
       ],
-      "sourceCommitScope": "Baseline only; tested incremental source40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38 and retained objects/receipts are authoritative. Not a clean or full rebuild.",
+      "sourceCommitScope": "Historical baseline plus published 207 incremental overlay and exact current delta; not a clean/full rebuild.",
       "sourceProvenance": {
         "ownerManifest": "V2/source-manifest.json",
-        "ownerManifestSha256": "65F4784C9998D98659640E755C2FE1C055F2A7F69D2BEE57BFADD0C25A127082",
+        "ownerManifestSha256": "F949B1B4BC6BB7BE45D71259B809D4E4487C999E53B7F1E716E3264307071CF1",
+        "incrementalSourceArchiveSha256": "20533127F1AD252AA588A80DCE2D811FB823A90BD11D96B73334D7F412B46CF6",
+        "sourcePublicationRole": "historical_baseline_plus_exact_checked_incremental_delta",
+        "canonicalSourceEquivalenceClaimed": false,
+        "qualification": "PASS_SCOPED_221_USB_SD_SWEEP_AND_EXACT_ORIGINAL_RESTORE",
         "acceptance": "V2/acceptance.json",
-        "acceptanceSha256": "39D04460DAB5137AF3E438BA0E36E3EA36515AE13F905E0DD68A2304945E3C4E",
-        "incrementalSourceArchiveSha256": "40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38",
-        "sourcePublicationRole": "historical_firmware_baseline_plus_exact_tested_incremental_overlay",
-        "canonicalSourceEquivalenceClaimed": false
+        "acceptanceSha256": "BA44D8BD976D23A1A5E132B7AAF10C1F836F364E327A5CF62CC61654112189BF"
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "generation": 3,
+          "baseAddress": 134348800,
+          "bytes": 324028,
+          "codeCrc32": "7F238587",
+          "buildIdHex": "6263626362353536363733396264613764383262343465306336623036356166",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4
+        },
         {
           "imageId": 1095782449,
           "generation": 3,
@@ -528,6 +570,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "generation": 3,
+          "baseAddress": 135790592,
+          "bytes": 295868,
+          "codeCrc32": "74FC7104",
+          "buildIdHex": "3532376263636563383663636637633436656436393239326162353536393561",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4
+        },
         {
           "imageId": 1431519793,
           "generation": 3,

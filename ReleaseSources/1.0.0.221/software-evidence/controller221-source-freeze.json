@@ -1,0 +1,30 @@
+{
+  "changed_sources": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSdUsbTestController.cs",
+      "snapshot": "NpSdUsbTestController.cs",
+      "sha256": "735602065200D0CDCB110DAF0E94EF7138D8C3CC6453EEB95B65116B353BAAE6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpSdUsbTestControllerTests.cs",
+      "snapshot": "NpSdUsbTestControllerTests.cs",
+      "sha256": "CADBE50DC707CCC84F30967C8A75822294269FDF8AB497D066B88BFEC77F38AE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\test_sd_usb_test_controller.ps1",
+      "snapshot": "test_sd_usb_test_controller.ps1",
+      "sha256": "35E99F98100A4C48E0841D0F586BBF6ED339675B18C59FEE3BD839D9B8A089C6"
+    }
+  ],
+  "tests": "Existing420 suite, excluding obsolete RecoveryNotice mutation rejection, plus real-style advisory-only append accepted and actual prior extent mutation still rejected.",
+  "baseline_controller_sha256": "045744EE80F174A814090891FB0361923E12528E4EB7548E4E5945C9EA4CE30F",
+  "limits": "No app/SDK/firmware build/hardware. Actual source decisions/DTOs exercised with inert I/O boundaries. No relaxation of stored-record preservation or new Start policy.",
+  "status": "PASS_FOCUSED_SOFTWARE_ONLY",
+  "scope": "Exclude ONLY generated catalog-global RecoveryNotice prose from previous-record preservation fingerprint. All stored identity/geometry/state/extents/count/validation fields remain strict. A valid append may advance checkpoint generation/frontier advisory on every old record without falsely reporting a mutation.",
+  "fixture_sha256": "6312D6296E58882AE1510F87CEC985E8D1D05355F3D5E34C5E1E95EC9BE30AB2",
+  "checks": 422,
+  "receipt": {
+    "sha256": "9CCB240C11BC93344A6FB63C5BBEB9D0EF93988684F5BBDC6C2E62420F924DB1",
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_controller\\catalog-advisory-r1\\receipt.json"
+  }
+}

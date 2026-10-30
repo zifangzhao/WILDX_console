@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "status": "source_frozen_focused_software_pass",
+  "managed_checks": 1009,
+  "api": [
+    "NpSdUsbTestWire.ParseReport(byte[] raw,int family,string uid)",
+    "NpSdUsbTestWire.BuildPlan(NpSdUsbTestReport report,byte[] innerRequest,uint seconds,bool explicitReconcile=false)",
+    "NpSdUsbTestWire.ValidateMatch(byte[] plan,NpSdUsbTestReport report)",
+    "NpSdUsbTestReport.Supports(uint mask,uint hz)"
+  ],
+  "constants": {
+    "GET": "A3 IN256",
+    "SUBMIT": "A4 OUT128",
+    "capability": "0x00010000",
+    "flags_bit0": "ExplicitNewTestReconcile",
+    "legacy0x40": "unchanged V1 APP-update capability; not test support"
+  },
+  "files": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSdUsbTestWire.cs",
+      "bytes": 15452,
+      "sha256": "E7F848B0F93DCE3C20D009066CB31DFC8FFA8755D0A971B81E133ADECDD23CB8"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpSdUsbTestWireTests.cs",
+      "bytes": 18454,
+      "sha256": "16BD490E685463F4C711FBEE6354DE2574B5D150B38C3F392DE39D0D158F3F7E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\test_sd_usb_test_wire.ps1",
+      "bytes": 2348,
+      "sha256": "9C50FC4B72928072417FD637DAD070650CEB666F303AEB95A4633B33E20AB87C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\Timing\\np_usb_sd_test.h",
+      "bytes": 6832,
+      "sha256": "9F638AED4A97C11B91221258C4AF8AF1FCDDD67804F7766D99E2FD2969BC7963"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Note\\NP_SD_USB_TEST_WIRE.md",
+      "bytes": 4897,
+      "sha256": "E6487BEBEE649B56055A798A42C5D212379F7B579DCEA7FFDE62AD0BBE1BC33D"
+    }
+  ],
+  "focused_receipt": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sdut-final\\receipt.json",
+    "bytes": 2960,
+    "sha256": "ED7BCEB62F3860668ACF6C165E4C365C7D15C2F8FCEC01E04637361F906DA2C2"
+  },
+  "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File test_sd_usb_test_wire.ps1 -OutputDirectory C:/Frank/Code/USB_PCconsole/_artifacts/sdut-final -NativeGoldenDirectory _artifacts/sd_usb_test_wire",
+  "test_exe_sha256": "FDBF58C6F99E2C025084D32A8454309A0EC8F9A3BB833D6DBBF739687C287D0F",
+  "exact_native_parity": {
+    "plan128": "FF42398927450A924ACAB2CEA8B1AA0915402BB4ED0A26363BF7E06C557D682A",
+    "report256": "F9D68906356D1CC684E37F0AB0141E62555156EB741E6D32FCBE27BCFE5CBA7A",
+    "passes": 1,
+    "native_compile_by_this_agent": false,
+    "native_receipt": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_usb_test_wire\\receipt.json",
+      "bytes": 1878,
+      "sha256": "0E9F6C748149226B304CD9C824A0600676EEB4D45541AC441FD827428CBD7514"
+    }
+  },
+  "report_semantics": [
+    "MCU UID/family always strict; card identity/counters nullable when not declared known, exact raw bytes retained.",
+    "Match is attempt correlation, not SameCard/readback/Pass; an unknown card can correlate honest terminal storage/interrupted failure.",
+    "Known card mismatch rejects. Queued/accepted/running are never replaced.",
+    "Unknown initial state needs explicit bool/flag1, fresh card/catalog/available/source quiet/SD quiet/catalogFlags0 and distinct nonzero new ticket; no old terminal/profile-restored claim is inferred.",
+    "Controller separately captures current profile, enforces terminal/safe/readback/ownership and no-replay policy."
+  ],
+  "historical_rejected_capability_draft": {
+    "receipt": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sdut3\\receipt.json",
+      "bytes": 2391,
+      "sha256": "54A7505C513213355965833C41EBEC65EF5A539407FE742693A63A91FE90CA8D"
+    },
+    "source_snapshot": "C:/Frank/Code/USB_PCconsole/_artifacts/sdut3/source-snapshot",
+    "native_snapshot": "C:/Frank/Code/USB_PCconsole/_artifacts/sdut3/native-draft",
+    "scope": "Old0x40 draft974 only; rejected capability, not shippable"
+  },
+  "no_hardware": true,
+  "no_product_build": true,
+  "no_project_or_version_mutation": true,
+  "additional_source_scope": "Canonical C header and Note copied byte-exact from joint owner freeze; no producer/runtime source edits."
+}

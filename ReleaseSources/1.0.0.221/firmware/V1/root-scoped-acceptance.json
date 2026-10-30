@@ -1,0 +1,80 @@
+{
+  "application_sha256": "90D6D4540E59DDEA3EE45DE43EF075B8DE32C3F539F159C57AA08410B7F367C1",
+  "schema": 1,
+  "seconds_per_rate": 10,
+  "reset_or_manual_fallback_during_flow": false,
+  "firmware_identity_scope": "Owner full physical flash/options/profile verification plus continuous exact-UID lease; no runtime CRC query capability",
+  "controller_elapsed_seconds": 94.14812979999999,
+  "firmware_usb_crc": "EF0BC695",
+  "supported_hz": 20000,
+  "firmware_app_crc": "76302AC4",
+  "saved_imu": {
+    "initial_unavailable_slots": 1,
+    "rows": 12594,
+    "scope": "Actual saved scheduled NSG1 rows, AG/MAG validity and retained-slot continuity checked. Initial unavailable slots disclosed; baseline/lifetime coverage, physical conversion phase and terminal tail remain unknown. Exact device drop/discard/scheduler counters remain unknown when unreported.",
+    "missing_after_first_observation": 0,
+    "observed_rows": 12593
+  },
+  "status": "PASS_SCOPED_NEW_USB_SD_TEST_WARM_FLOW",
+  "profiles": [
+    {
+      "status": "Did not sustain rate — stored readback checked",
+      "readback": true,
+      "maximum_write_ms": 61,
+      "loss_events_lower_bound": 473,
+      "session": 1793402872,
+      "rate": 30000,
+      "skipped_lane_bytes_lower_bounds": [
+        14606280,
+        14606280,
+        0
+      ],
+      "retired": true,
+      "safe": true,
+      "prior_catalog_entries": 52
+    },
+    {
+      "status": "Passed stored readback",
+      "readback": true,
+      "maximum_write_ms": 62,
+      "loss_events_lower_bound": 0,
+      "session": 1793402922,
+      "rate": 20000,
+      "skipped_lane_bytes_lower_bounds": [
+        0,
+        0,
+        0
+      ],
+      "retired": true,
+      "safe": true,
+      "prior_catalog_entries": 53
+    }
+  ],
+  "uid": "001D00065942500B20313354",
+  "limits": [
+    "V1 exact neural gap durations and some device counters remain unavailable",
+    "Cold/ambiguous interrupted profile recovery fixed by register-only transaction; native/software reviewed, physical cold interruption not tested",
+    "No endurance, universal profile, arbitrary ADC bit-error, full source-window/final-tail or physical sensor conversion-phase claim"
+  ],
+  "evidence": [
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_hil221\\V1-coldfix-r1\\actual-result.json",
+      "sha256": "DBA04523F5D249432D94CEB6243806E89082B63C7F01AF997011BE3060D1A896"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_hil221\\V1-coldfix-r1\\hil.json",
+      "sha256": "C652D82F32DCA753EF3386B9DC3269A06A145C7F82FDDFF5592CA31AFD243C45"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_hil221\\V1-coldfix-r1\\inspect256.bin",
+      "sha256": "E0585E8A0CE7D7AE9491D0056138DF8976F50BD9A2747A5F661DB92B33D18D2E"
+    },
+    {
+      "path": "C:/Frank/Code/USB_PCconsole/_artifacts/release221-prep/software-evidence/v1-cold-source-review.json",
+      "sha256": "2BFDA7700B5554BDE6F6A4E646F02D0D4E3E20260BE8B969F4C250A008CC7589"
+    }
+  ],
+  "application_version": "1.0.0.221",
+  "restoration_status": "pending separate owner receipt",
+  "fixed_probe_mask": 3
+}

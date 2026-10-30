@@ -15,7 +15,7 @@ namespace USB512_interface
         NpBleForm bleWorkspace;
         Label workspaceStatus;
         Label advancedTarget,advancedStorageSource,advancedModeStatus;
-        Button diagnosticsButton,captureReportButton,repairUsbCatalogButton;
+        Button diagnosticsButton,captureReportButton,repairUsbCatalogButton,sdCardTestButton;
         readonly Button[] usbModeButtons=new Button[3];
         bool usbModeChanging;
         string lastCaptureReport;
@@ -163,6 +163,7 @@ namespace USB512_interface
             var usbDetails=new Button {Name="usbHealthDetails",Text="Details…",AutoSize=true};
             usbDetails.Click+=delegate {using(var report=new NpReportForm("USB transfer health",CurrentUsbHealthReport))report.ShowDialog(this);};
             usbQualityTestButton=new Button {Name="usbQualityTest",Text="USB quality test…",AutoSize=true};usbQualityTestButton.Click+=async delegate {await TestUsbQualityAsync();};
+            sdCardTestButton=new Button {Name="sdCardTest",Text="SD card test…",AutoSize=true};sdCardTestButton.Click+=delegate {OpenSdCardTest();};
             usbQualityContinuous=new CheckBox {Name="usbQualityContinuous",Text="Continuous",Checked=true,AutoSize=true};
             lblSpeed.Margin=new Padding(0,0,8,8);
             var activityActions=ActionRow(lblSpeed,captureReportButton);activity.Controls.Add(activityActions,0,1);
@@ -175,7 +176,7 @@ namespace USB512_interface
                 await downloadWorkspace.RepairUsbCatalogAsync(devicePath);
                 UpdateStartEnabled();
             };
-            usbInfo.Controls.Add(ActionRow(usbQualityTestButton,usbDetails,repairUsbCatalogButton),0,0);
+            usbInfo.Controls.Add(ActionRow(usbQualityTestButton,sdCardTestButton,usbDetails,repairUsbCatalogButton),0,0);
             usbQualityContinuous.Margin=Padding.Empty;usbInfo.Controls.Add(usbQualityContinuous,0,1);
             usbHealthSummary=new Label {Name="usbHealthSummary",Dock=DockStyle.Fill,UseMnemonic=false,Margin=Padding.Empty,ForeColor=WildXTheme.Muted};usbInfo.Controls.Add(usbHealthSummary,0,2);
             var usbCard=Card("USB",null,usbInfo,true);usbCard.Name="usbHealthCard";
@@ -252,7 +253,6 @@ namespace USB512_interface
             npSessionLabel.TextChanged+=delegate {if(downloadWorkspace.SessionLabel!=npSessionLabel.Text)downloadWorkspace.SessionLabel=npSessionLabel.Text;};
             downloadWorkspace.SessionLabelChanged+=value=>{if(npSessionLabel.Text!=value)npSessionLabel.Text=value;};
             downloadWorkspace.BusyChanged+=UpdateStartEnabled;
-            downloadWorkspace.SdTestRequested+=OpenSdCardTest;
             downloadPage.Controls.Add(Card("Recordings & storage","Refresh sources, list sessions, then select recordings to download or decode.",downloadWorkspace));downloadWorkspace.Show();
             BuildAdvancedWorkspace();
             FormClosing+=delegate(object sender,FormClosingEventArgs e){
@@ -346,8 +346,7 @@ namespace USB512_interface
             var storage=Stack(58,48,0);
             advancedStorageSource=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};storage.Controls.Add(advancedStorageSource,0,0);
             var openStorage=new Button {Text="Open Data Download",AutoSize=true};openStorage.Click+=delegate {workspaceTabs.SelectedTab=downloadPage;};
-            var sdTest=new Button {Text="SD card test…",AutoSize=true};sdTest.Click+=delegate {OpenSdCardTest();};
-            storage.Controls.Add(ActionRow(openStorage,sdTest),0,1);
+            storage.Controls.Add(ActionRow(openStorage),0,1);
             storage.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
                 Text="Format the logger card in BLE Mode → Recordings. For a removable SD card reader, use Data Download to delete or format.\r\n\r\nUSB download is read-only. Formatting requires confirmation."},0,2);
             tools.Controls.Add(Card("Storage maintenance",null,storage),1,0);
@@ -356,8 +355,10 @@ namespace USB512_interface
         }
         void OpenSdCardTest(string usb=null)
         {
-            if(running||ztestRunning||usbQualityRunning||DownloadBusy||firmwareManagementActive||systemInfoActive!=0){MessageBox.Show(this,"Finish the active operation before testing an SD card.","SD card test");return;}
-            using(var dialog=new NpSdTestForm(bleWorkspace,usb??devicePath))dialog.ShowDialog(this);
+            if(running||ztestRunning||usbQualityRunning||DownloadBusy||BleInUse||npSettingsApplying||usbModeChanging||firmwareManagementActive||systemInfoActive!=0||deviceRefreshActive!=0||!npRecoveryCancelled||NpExplorationActive||(mediaPreview!=null&&!mediaPreview.IsDisposed)){MessageBox.Show(this,"Finish the active operation before testing an SD card.","SD card test");return;}
+            workspaceTabs.SelectedTab=usbPage;firmwareManagementActive=true;UpdateStartEnabled();
+            try{using(var dialog=new NpSdTestForm(null,usb??devicePath))dialog.ShowDialog(this);}
+            finally{firmwareManagementActive=false;UpdateStartEnabled();}
         }
         void DrawWorkspaceTab(object sender,DrawItemEventArgs e)
         {
@@ -392,6 +393,7 @@ namespace USB512_interface
             if(usbQualityTestButton!=null)usbQualityTestButton.Enabled=usbQualityRunning || CanTestUsb;
             if(usbQualityContinuous!=null)usbQualityContinuous.Enabled=!usbQualityRunning && CanTestUsb;
             if(repairUsbCatalogButton!=null)repairUsbCatalogButton.Enabled=NpControlsAvailable && (mediaPreview==null || mediaPreview.IsDisposed);
+            if(sdCardTestButton!=null)sdCardTestButton.Enabled=!usbBusy && !usbQualityRunning && !usbModeChanging && !DownloadBusy && !BleInUse && (mediaPreview==null || mediaPreview.IsDisposed);
             if(String.IsNullOrWhiteSpace(devicePath))btnStreams.Enabled=false;
         }
         async Task SwitchUsbMode(ushort mode)

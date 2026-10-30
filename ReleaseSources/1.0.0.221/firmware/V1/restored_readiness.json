@@ -1,0 +1,58 @@
+{
+  "download_info_base64": "TlBEMQEAAAAAANgd/AMAAAAAAAAAAAAAAgAAAAEAAAA=",
+  "action": "Status",
+  "firmware_identity_capability": false,
+  "final": {
+    "Download": true,
+    "LoaderAbi": 0,
+    "Split": true,
+    "AppValid": false,
+    "PendingMode": 0,
+    "Description": "V1 USB ABI 258; SD download; busy=0; pending mode=0; APP update via recovery; ROM DFU advertised",
+    "Role": 3,
+    "Recovery": false,
+    "Capabilities": 31,
+    "Busy": 0
+  },
+  "capture_started": false,
+  "profile": {
+    "AbsentMask": 0,
+    "WireId": 118,
+    "Selectable": true,
+    "Rates": [
+      15,
+      15,
+      3
+    ],
+    "ActiveMask": 7,
+    "PresenceFaultMask": 0,
+    "BatchPackets": 112,
+    "AvailableMask": 7,
+    "SupportsPresence": false,
+    "PresenceState": 0,
+    "PresentMask": 0,
+    "PresenceRequestedMask": 0,
+    "ApHz": 7500,
+    "SupportsStartupAdmission": true,
+    "SupportsCameraOnly": true
+  },
+  "uid": "001D00065942500B20313354",
+  "full_flash_config_options_fresh": false,
+  "card_sectors": 500695040,
+  "read_only_preflight": true,
+  "card_command": false,
+  "card_bytes": 256355860480,
+  "firmware_identity_limitation": "Current runtime has no identity capability; component/config/options equality requires fresh full backup. AppValid=False in this status is not proof of invalid APP.",
+  "initial": {
+    "Download": true,
+    "LoaderAbi": 0,
+    "Split": true,
+    "AppValid": false,
+    "PendingMode": 0,
+    "Description": "V1 USB ABI 258; SD download; busy=0; pending mode=0; APP update via recovery; ROM DFU advertised",
+    "Role": 3,
+    "Recovery": false,
+    "Capabilities": 31,
+    "Busy": 0
+  }
+}

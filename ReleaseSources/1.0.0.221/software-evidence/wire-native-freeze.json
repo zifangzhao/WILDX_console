@@ -1,0 +1,25 @@
+{
+  "schema": 2,
+  "status": "joint_cap_flags_frozen_software_only",
+  "get_request": "IN A3/256",
+  "submit_request": "OUT A4/128",
+  "service_capability": "0x00010000",
+  "reserved_legacy_capability": "0x40 remains V1 APP update",
+  "envelope_flags": {
+    "bit0": "ExplicitNewTestReconcile; new manual request only; never replace queued/accepted/running"
+  },
+  "files": {
+    "np_usb_sd_test.h": "9F638AED4A97C11B91221258C4AF8AF1FCDDD67804F7766D99E2FD2969BC7963",
+    "contract.md": "E6487BEBEE649B56055A798A42C5D212379F7B579DCEA7FFDE62AD0BBE1BC33D",
+    "receipt.json": "0E9F6C748149226B304CD9C824A0600676EEB4D45541AC441FD827428CBD7514",
+    "plan128.bin": "FF42398927450A924ACAB2CEA8B1AA0915402BB4ED0A26363BF7E06C557D682A",
+    "report256.bin": "F9D68906356D1CC684E37F0AB0141E62555156EB741E6D32FCBE27BCFE5CBA7A",
+    "npsd5_finite_start.bin": "320377867C7ED5C34430593BB405487A82C8549E6AEDD903239A9BE9DCDCBF38"
+  },
+  "native_source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_common",
+  "hardware_qualified": false,
+  "report_values": "Illustrative fixture, not hardware measurements",
+  "rejected_draft_preserved": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sdut3\\native-draft",
+  "stale_draft_capability": "0x40 rejected for collision; not shippable",
+  "api_scope": "Correlation does not prove SameCard/readback/pass; no automatic replay"
+}

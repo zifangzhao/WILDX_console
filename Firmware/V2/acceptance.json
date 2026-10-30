@@ -1,188 +1,96 @@
 {
   "schema": 1,
-  "recorded_utc": "2026-10-30T18:34:09.538704+00:00",
-  "result": "PASS bounded actual 207 three-NP2/20kHz 120-second capture and full stored readback",
+  "status": "PASS_SCOPED_221_USB_SD_SWEEP_AND_EXACT_ORIGINAL_RESTORE",
   "uid": "001A0004434250062039314E",
-  "family": 2,
-  "firmware": {
-    "app_crc32": "7F238587",
-    "usb_crc32": "74FC7104",
-    "identity_scope": "Hash-pinned owner wholeflash/options installation proof; firmware CRC not advertised over BLE/USB"
+  "firmware_app_crc": "71A5126E",
+  "firmware_usb_crc": "2556B4DD",
+  "recovery_crc": "6408DBB8",
+  "root_scoped_acceptance": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_hil221\\V2-r1\\root-scoped-acceptance.json",
+    "sha256": "54FF048A416B80791EB947F4CE33CF7371436A55F097DA05C9EFF8C75B7B8620"
   },
-  "host": {
-    "version": 207,
-    "sha256": "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC",
-    "sdk_sha256": "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B",
-    "scope": "Actual production API/handlers and exporter headlessly; installed GUI visual acceptance not performed"
+  "restoration_and_release": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\hil-r4\\restoration-and-release.json",
+    "sha256": "68272D50E118074492A2016F7684CB04FC12BA00925057CC1FB1F1E9594B1574",
+    "uid_pid_exited": 18292,
+    "catalog_count_scope": "Actual221 full readback compared old18 then old19; postrestore read-only INSPECT confirms same card/frontier; no repeated full catalog scan",
+    "preserved_catalog_frontier": 94797824,
+    "whole_flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+    "option_bytes_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+    "global_pid_exited": 74424,
+    "restore_evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\hil-r4\\execution\\Restore-20261030T2302148642186Z",
+    "closed_utc": "2026-10-30T23:04:53.6377625Z",
+    "status": "EXACT_ORIGINAL_RESTORED_IDLE_AND_LEASES_RELEASED",
+    "idle_proof": "C:/Frank/Code/XE_NP/_artifacts/usb_sd_test_v2/hil-r4/restored-idle/idle-proof.json",
+    "preserved_catalog_count": 20,
+    "uid": "001A0004434250062039314E"
   },
-  "source_commit": "b249605074da17b01ad3095350022300ee82ac61",
-  "source_commit_role": "Repository baseline only, not exact clean source-complete build. Exact incremental overlay ZIP and retained-object/build receipts pin tested bytes.",
-  "source_overlay_sha256": "40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38",
-  "source_limits": "Historical 6CB seven unavailable preimages and unsealed download include remain; no complete historical rebuild closure claimed.",
-  "session": 3452184953,
-  "sample_hz": 20000,
-  "probe_mask": 7,
-  "recording_seconds": 120.00256,
-  "nn_blocks": 93752,
-  "rows_per_probe": 2400050,
-  "neural_gap_count": 0,
-  "missing_source_ticks": 0,
-  "dropped_blocks": 0,
-  "physical_overflows": 0,
-  "producer_discarded_ticks": 0,
-  "storage": {
-    "format": 16,
-    "schema": 3,
-    "order": 1,
-    "P": 93752,
-    "N": 93752,
-    "H": 93752,
-    "A": 93752,
-    "physical_groups": 23438,
-    "displaced_logical_groups": 636,
-    "backward_logical_steps_in_physical_order": 202,
-    "scope": "Sequential physical SD append; original NN logical identities reconstructed by PC"
+  "postrestore_usb_idle": {
+    "path": "C:/Frank/Code/XE_NP/_artifacts/usb_sd_test_v2/hil-r4/restored-idle/idle-proof.json",
+    "sha256": "1C8096198FA3417F6A81C890BC23C83438FC7A2680C87E4DEE03A4873F1D86E4"
   },
-  "aux": {
-    "grid_hz": 1250,
-    "queue_dropped": 0,
-    "scheduler_missing": 0,
-    "bad_sectors": 0,
-    "known_accepted_rows_not_persisted": 0,
-    "pending_record_rows_unknown": false,
-    "imu_valid_snapshots": 23532,
-    "imu_advancing_sequences": 23531,
-    "retained_schedule_verified": true,
-    "first_slot_np_and_rtc_phase_qualified": true,
-    "terminal_source_window_verified": false,
-    "native_conversion_phase_qualified": false
-  },
-  "timing": {
-    "rtc_first_np_local_interval_us": 120,
-    "pc_calibration_uncertainty_us": 20205,
-    "pc_uncertainty_separate_from_local_interval": true
-  },
-  "card": {
-    "label": "Delkin V90",
-    "capacity_sectors": 501301248,
-    "cid_crc32": "F796EE9A",
-    "fresh_full_cid_read": false
-  },
-  "final_idle": {
-    "prior_record_identities_preserved": 14,
-    "catalog_entries": 15,
-    "catalog_flags": 0,
-    "status": {
-      "Operation": 0,
-      "RequestId": 755753657,
-      "Error": 0,
-      "State": 1,
-      "Fault": 0,
-      "Mask": 3,
-      "Hz": 20000,
-      "Chunks": 0,
-      "Start": 90087424,
-      "End": 0,
-      "Capacity": 501301248,
-      "Flags": 7405457,
-      "LastId": 0
-    },
-    "dynamic_flag_change": {
-      "previous_last_id": 14,
-      "old": 459536,
-      "new": 262928,
-      "mask": "0x00030000",
-      "meaning": "LAST and DELETE_ALLOWED move to newest recording"
-    },
-    "new_session": 3452184953,
-    "next": 90087424,
-    "source_baseline_commit": "b249605074da17b01ad3095350022300ee82ac61",
-    "source_commit_role": "Repository baseline only; exact tested incremental overlay/object receipts are archived separately; not a clean source-complete build claim."
-  },
-  "leases_released": true,
-  "limits": [
-    "120-second result, not endurance qualification",
-    "Framing/source continuity does not exclude arbitrary ADC-bit corruption or establish analog quality",
-    "No whole-recording IMU/NP terminal-window or native-conversion-phase proof",
-    "No power measurements, no claim of lower measured consumption",
-    "No additional USB neural-streaming test in this cycle",
-    "Initial immediate readback attempt saw USB reenumeration; fresh observed mode3 then read-only retry passed without command replay or reset"
-  ],
-  "policy": {
-    "artificial_delay_gate": false,
-    "extra_payload_pools": false,
-    "clock_increase": false,
-    "np_priority": "highest",
-    "overflow_policy": "best effort; report dropped samples without extra per-sample recovery"
-  },
-  "evidence": [
+  "actual_profiles": [
     {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\hil.json",
-      "sha256": "966B485D32C3A877729D46A7CE07E3C09BAE1E5C36F9CCF18EBE6C1149C378AC"
+      "status": "Did not sustain rate \u2014 stored readback checked",
+      "p99_gap_ms": 15.36,
+      "safe": true,
+      "session": 666227136,
+      "rate": 30000,
+      "gaps": 684,
+      "readback": true,
+      "retired": true,
+      "maximum_write_ms": 39,
+      "prior_catalog_entries": 18,
+      "p95_gap_ms": 3.4133333333333336,
+      "maximum_gap_ms": 18.773333333333333
     },
     {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\physical-imu-check.json",
-      "sha256": "B177D5AB29B582DA1A5D3226FBA528E4CD8F749264FDD72E6B3E9B4D8F86F4AE"
-    },
-    {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\imu-grid-independent-check.json",
-      "sha256": "41BABD51895489BDA26B4EA1C73E5AD7C8A4E0E926DA68DC366FF7045EFBFCE6"
-    },
-    {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\export\\np2_sd_export_status.txt",
-      "sha256": "4B74DFFD11AC8BE98CC0A2753CCA7A79042EC2A1718CCEA6998C7668942D3D79"
-    },
-    {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\export\\imu_grid_status.txt",
-      "sha256": "FCB76B862DEDC63FC4A3563D37D72A9918257DF4B2CC03FD96FCB98F7ABE3596"
-    },
-    {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\export\\device_rtc_start_status.json",
-      "sha256": "FC5476E11B1BA0452E2B800B2761CBCA353C77F72968C8CBBCF88072D5BDB206"
-    },
-    {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\verify-120s-r2\\export\\neural_storage_index.csv",
-      "sha256": "C8A78A0F0352D0C0A9D964F158C09C4FA69A5E6BF0F340C72A2988CB76435E5C"
-    },
-    {
-      "path": "F:\\XE_NP_archieve\\v2_grid16_append_20261030_r1\\record-120s\\recording-result.json",
-      "sha256": "D304F3C0860BC6DA685F2B414E3AEE2D991E8D8948B91B600CB55FF9B2DE1E9D"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\owner-proof.json",
-      "sha256": "97CEE6CB5EFA596625F67DB3CBE8DE7E065E64CA901199926EC21C794AED9D2F"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\snapshot-before-120\\snapshot.json",
-      "sha256": "9822F417D585FC8F9E62A9232F15B79B77F18A107E574F83B3FFB3433B4F873D"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\handoff-after-120\\handover.json",
-      "sha256": "60686DF345F0598627DD049C9DCAC799F7A56E3A92D56F72021EB35C93F7E113"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\download-mode3\\handover.json",
-      "sha256": "0342DD17BEF819FE273D6D01C8AC142728EA7DCFB2BC32FC3F0068A70000CAE4"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\return-app-after-120\\handover.json",
-      "sha256": "A7AF0E25B5295CC0C8F92669031CA4F31E1F716EC4B6412CB9278ED43B4BE618"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\snapshot-after-120\\handover.json",
-      "sha256": "4DBC3291741BCC8AADF00D856441FDECBEDA5074E9F9D56C1C61D1EAEB108200"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\snapshot-after-120\\snapshot.json",
-      "sha256": "1B68C350FC5CCEFF9E7B2869EA5FBAD41713C109EBAFE25A237BE1AE1B75CD20"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\final-idle-check.json",
-      "sha256": "8E0CD41DE8C00751E22B0B2EEC8246DA941A0A246FFAEB33EE9626E88F7A4946"
-    },
-    {
-      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\test-run\\lease.json",
-      "sha256": "CA2CBFA939B4B48A2F0CB1F719A8628354CE44E5A151124D49A6F1F307CCFAF1"
+      "status": "Passed stored readback",
+      "p99_gap_ms": 0,
+      "safe": true,
+      "session": 666227150,
+      "rate": 20000,
+      "gaps": 0,
+      "readback": true,
+      "retired": true,
+      "maximum_write_ms": 29,
+      "prior_catalog_entries": 19,
+      "p95_gap_ms": 0,
+      "maximum_gap_ms": 0
     }
+  ],
+  "supported_hz": 20000,
+  "seconds_per_rate": 10,
+  "host": {
+    "version": "1.0.0.221",
+    "sha256": "90D6D4540E59DDEA3EE45DE43EF075B8DE32C3F539F159C57AA08410B7F367C1"
+  },
+  "saved_imu": {
+    "queue_dropped": 0,
+    "known_accepted_not_persisted": 0,
+    "source_window_verified": false,
+    "final_slot_known": false,
+    "bad_sectors": 0,
+    "scheduled_rows": 12506,
+    "missing_observed_slots": 0,
+    "physical_conversion_phase_known": false,
+    "scheduler_missing": 0,
+    "native_valid_observations": 1971
+  },
+  "prior_profile": {
+    "mask": 3,
+    "hz": 20000,
+    "restored_by_actual_terminal_control_exchange": true,
+    "evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\hil-r4\\after-controller221-idle\\idle-proof.json",
+    "postrestore_ble_requery": false
+  },
+  "scope": "Actual production sweep30k verified loss then automatic20k pass; real stored NP/IMU checked. No endurance/all-profile/all-mode or complete physical sensor conversion claim.",
+  "limits": [
+    "Only the fixed three-probe mask was exercised in this new workflow.",
+    "Three probes at 30 kHz has verified losses; it is not qualified lossless.",
+    "The 20 kHz candidate result is a 10-second-per-rate check, not endurance or universal mode qualification.",
+    "Native sensor physical conversion phase, complete source window and final IMU slot remain unproven.",
+    "No new power, analog accuracy or full fused-file flash qualification was performed.",
+    "Firmware identity uses the checked install plus uninterrupted exact-UID lease; this USB service does not advertise runtime CRC query."
   ]
 }

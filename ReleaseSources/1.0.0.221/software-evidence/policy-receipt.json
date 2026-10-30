@@ -1,0 +1,34 @@
+{
+  "scope": "Exact extracted production profile predicates and new pure sweep policy; no controller/firmware/physical throughput claim",
+  "hardware_calls": 0,
+  "run_sha256": "70C909018912C5767C708433B36D855BD5C02341940F05D867449443656B7E15",
+  "fixture_sha256": "C4D8A93A3D77348EECD2A9F5DECE196F84D92935594AB207590AF8403A6523BE",
+  "status": "PASS_PURE_SOFTWARE_ONLY",
+  "product_builds": 0,
+  "source_inputs": [
+    {
+      "sha256": "3129AEF7A2BFFCF3F844111D31E5DA1BFE94DE87DFFAB0741B5309083EDCBCE5",
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV1BleProtocol.cs"
+    },
+    {
+      "sha256": "DF78BC1961F5B7D3C6C3ED72B105EF8CB841B7A47D1EC178ACC461F45424B357",
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpSdGeometry.cs"
+    },
+    {
+      "sha256": "A807B43250ED8753DB120BCC1C63C7B4B464109FA1C80645E9832E70F8418128",
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2SdControl.cs"
+    },
+    {
+      "sha256": "842C3792F31D2130DD0E789181C550EDE1432D875D7A5E3981CB67FDC94B5AB6",
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpSdSweepPolicy.cs"
+    },
+    {
+      "sha256": "58EAC6C6F87F3917AC000F92E05358FD05B94CBCFA788D6C39DADA2D25C5600B",
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpSdSweepPolicyTests.cs"
+    },
+    {
+      "sha256": "D7B935B5407CBD24A1090ACFBA90282A44BB7D7DE13B8A843D46F3DB264471BF",
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd-sweep-policy-tests\\focused-r1\\ActualProfilePredicates.cs"
+    }
+  ]
+}

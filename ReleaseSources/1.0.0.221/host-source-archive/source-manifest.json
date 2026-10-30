@@ -1,0 +1,80 @@
+{
+  "version": "1.0.0.221",
+  "status": "exact_host_source_archive_with_accepted_family_provenance",
+  "archive": {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\compiled-sources.zip",
+    "bytes": 993216,
+    "sha256": "CFAE63EA6CA653E900B7BEA20283F99819F9AFD170A7CC09553253F37F70C01E"
+  },
+  "compiled_inputs": 204,
+  "archive_creation_by_this_prep": false,
+  "archive_entry_verification": "Coordinator already verified all204 entries; not repeated",
+  "build_receipt": {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\host-build-receipt-221.json",
+    "bytes": 36403,
+    "sha256": "C01A0D0C9721D9212350C211349623D234DF44C3E84BBC3472D5FE18447A1092"
+  },
+  "recipe": {
+    "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\release221-prep\\build-recipe.ps1",
+    "bytes": 6552,
+    "sha256": "4BB924A5980C316A128A29E5C74E37B23B814E775DB6979C685D2F9893E290FE"
+  },
+  "baseline_version": "1.0.0.210",
+  "source_git_baseline": "1b60cf4a8963ba0fbe580681ae71dc5a2f162a56",
+  "source_publication_commit": null,
+  "source_identity_role": "Published210 baseline plus exact221 compiled archive overlay; no clean/full-HEAD assertion",
+  "compiled_source_delta": [
+    {
+      "sha256": "9F638AED4A97C11B91221258C4AF8AF1FCDDD67804F7766D99E2FD2969BC7963",
+      "path": "Neuropixels\\Timing\\np_usb_sd_test.h"
+    },
+    {
+      "sha256": "FD1350FAFF77114C8E98DF39DDBF7BFA84AD463AD234A1FF019A806053A708EF",
+      "path": "USB512_interface\\USB512_interface\\Ble\\NpBleForm.cs"
+    },
+    {
+      "sha256": "E6D274E644FACDBD94E2557E0AB076E59F29C69C4F36A2ADB86CF5F5519C9710",
+      "path": "USB512_interface\\USB512_interface\\mainForm.WildX.cs"
+    },
+    {
+      "sha256": "F7E3465A11C534C12F494AF8704638B4B368ADF1CA2B377E80E538C4CCC8EC4C",
+      "path": "USB512_interface\\USB512_interface\\NpLogger\\NpDownloadForm.cs"
+    },
+    {
+      "sha256": "842C3792F31D2130DD0E789181C550EDE1432D875D7A5E3981CB67FDC94B5AB6",
+      "path": "USB512_interface\\USB512_interface\\NpSdSweepPolicy.cs"
+    },
+    {
+      "sha256": "08FFD0F90A0CA8F33DFE47EE5D18FF1DF2B501B96ACBFE41C276A289E7641DED",
+      "path": "USB512_interface\\USB512_interface\\NpSdTestForm.cs"
+    },
+    {
+      "sha256": "735602065200D0CDCB110DAF0E94EF7138D8C3CC6453EEB95B65116B353BAAE6",
+      "path": "USB512_interface\\USB512_interface\\NpSdUsbTestController.cs"
+    },
+    {
+      "sha256": "E7F848B0F93DCE3C20D009066CB31DFC8FFA8755D0A971B81E133ADECDD23CB8",
+      "path": "USB512_interface\\USB512_interface\\NpSdUsbTestWire.cs"
+    },
+    {
+      "sha256": "40B93C6DA020A6754B3F334753AA1B16B48BDDD3E9E917788B25558C23760C6B",
+      "path": "USB512_interface\\USB512_interface\\WILDX_console.csproj"
+    },
+    {
+      "sha256": "D23628CC215B3F35A60F9EF1C135EC0C7B6B2DCBE99F6932AC90D53109D02C0D",
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    }
+  ],
+  "sdk_reused_exact209": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
+  "ui215_reuse_proof": {
+    "form_source_sha256": "08FFD0F90A0CA8F33DFE47EE5D18FF1DF2B501B96ACBFE41C276A289E7641DED",
+    "equal_in215_and221": true
+  },
+  "firmware_source_provenance": "See accepted final firmware manifests/owner receipts; no clean/full historical rebuild assertion.",
+  "installer_source": {
+    "source": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\WILDX_console.nsi",
+    "bytes": 4839,
+    "sha256": "F02302438FD46A20F6B3E33E5CB6A01168FA3165B4A9601C84EC123DDD93BD04"
+  },
+  "installer_scope": "Only exact uninstall Delete for docs/sd-card-test.md added; no new compile/archive entry"
+}

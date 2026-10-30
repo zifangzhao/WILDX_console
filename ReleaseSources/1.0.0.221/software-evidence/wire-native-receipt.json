@@ -1,0 +1,43 @@
+{
+  "status": "DRAFT_PROPOSED_COMMANDS_NO_HARDWARE",
+  "tests": [
+    "MSVC native CRC32 vector, plan/report roundtrip, offsets and malformed/sentinel checks",
+    "Python independent struct/zlib golden parity"
+  ],
+  "npsd_source": {
+    "sha256": "A3B808E9B92AFDDA55A45E0806D25942CFF3C2A94ED6060A71B038CCD1469F2A",
+    "scope": "Derived from managed V5 request: token=outer 0x0123456789ABCDEF; 3P 20k/120s finite target 93752 aligned NN blocks; nested CRC recalculated. Outer codec preserves all 64 bytes verbatim.",
+    "path": "D:/Code/WILDX_console/WILDX_console/_artifacts/sd_grid16_append_protocol_20261030/codec/v5-start.bin"
+  },
+  "files": {
+    "np_usb_sd_test.h": {
+      "bytes": 6832,
+      "sha256": "9F638AED4A97C11B91221258C4AF8AF1FCDDD67804F7766D99E2FD2969BC7963"
+    },
+    "contract.md": {
+      "bytes": 4897,
+      "sha256": "E6487BEBEE649B56055A798A42C5D212379F7B579DCEA7FFDE62AD0BBE1BC33D"
+    },
+    "test_codec.c": {
+      "bytes": 5348,
+      "sha256": "32E16212FDDB5FA0C0AEFE706247CD251FD261BAB046F0ED376F7FCECDB0A3DF"
+    },
+    "verify_golden.py": {
+      "bytes": 1512,
+      "sha256": "825AB92066585D80D461F365DF417B9B733B89B3B783F4EEF36ECB8318BA2205"
+    },
+    "plan128.bin": {
+      "bytes": 128,
+      "sha256": "FF42398927450A924ACAB2CEA8B1AA0915402BB4ED0A26363BF7E06C557D682A"
+    },
+    "report256.bin": {
+      "bytes": 256,
+      "sha256": "F9D68906356D1CC684E37F0AB0141E62555156EB741E6D32FCBE27BCFE5CBA7A"
+    },
+    "npsd5_finite_start.bin": {
+      "bytes": 64,
+      "sha256": "320377867C7ED5C34430593BB405487A82C8549E6AEDD903239A9BE9DCDCBF38"
+    }
+  },
+  "limits": "No managed parity test yet; no NPSD semantic validation, firmware integration, device test or qualification. A3 GET, A4 SUBMIT and capability 0x10000 require root freeze. Illustrative report values are not measurements."
+}

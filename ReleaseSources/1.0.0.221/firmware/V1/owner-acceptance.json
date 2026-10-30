@@ -1,0 +1,20 @@
+{
+  "status": "PASS_SCOPED_WARM_SD_NATIVE_COLD_RECOVERY",
+  "uid": "001D00065942500B20313354",
+  "firmware_app_crc": "76302AC4",
+  "firmware_usb_crc": "EF0BC695",
+  "acceptance_sha256": "AA5E25CA0CAF1A208E90B3157E39F7F44A649CED942B9EDE582991CEE07DCF42",
+  "source_review_sha256": "2BFDA7700B5554BDE6F6A4E646F02D0D4E3E20260BE8B969F4C250A008CC7589",
+  "source_archive_sha256": "805211F0721E49E2FACC1AB5EF887D9372EC9BA5FA4AFD88F869F1094989F0CD",
+  "original_restored": true,
+  "original_flash_sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+  "limits": [
+    "V1 exact neural gap durations and some device counters remain unavailable",
+    "Cold/ambiguous interrupted profile recovery fixed by register-only transaction; native/software reviewed, physical cold interruption not tested",
+    "No endurance, universal profile, arbitrary ADC bit-error, full source-window/final-tail or physical sensor conversion-phase claim",
+    "Physical cold interruption and general BLE/SD operation were not tested",
+    "Source archive is partial; exact main_syncbench source preimage unavailable",
+    "No assertion of losslessness outside the bounded 20 kHz test"
+  ],
+  "published": false
+}

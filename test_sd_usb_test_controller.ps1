@@ -1,0 +1,21 @@
+param([string]$OutputDirectory='C:/Frank/Code/USB_PCconsole/_artifacts/sd_usb_test_controller/focused-r1')
+$ErrorActionPreference='Stop'
+$taskOut=[IO.Path]::GetFullPath($OutputDirectory);if(Test-Path -LiteralPath $taskOut){throw 'Fresh focused output required'};New-Item -ItemType Directory -Path $taskOut|Out-Null
+$taskUi=Join-Path $PSScriptRoot 'USB512_interface/USB512_interface'
+function ExtractClass([string]$Path,[string]$Signature){$t=[IO.File]::ReadAllText($Path);$start=$t.IndexOf($Signature);if($start -lt 0){throw "Missing actual DTO $Signature"};$open=$t.IndexOf('{',$start);$end=$open+1;$depth=1;while($depth -gt 0){if($t[$end] -eq '{'){$depth++};if($t[$end] -eq '}'){$depth--};$end++};return $t.Substring($start,$end-$start)}
+$taskDto=Join-Path $taskOut 'ActualDtos.cs'
+$taskExport=Join-Path $PSScriptRoot 'Neuropixels/SD/NpV2SdDatExport.cs'
+$taskText='using System;using System.Collections.Generic;namespace USB512_interface {'+(ExtractClass (Join-Path $taskUi 'NpSdCardTest.cs') 'internal sealed class NpSdTestResult')+' internal static class NpV2SdDatExport {'+(ExtractClass $taskExport 'public sealed class Segment')+(ExtractClass $taskExport 'public sealed class Result')+'}} namespace CE32_console {'+(ExtractClass (Join-Path $taskUi 'NpLogger/NpDownloadCatalog.cs') 'internal sealed class NpDownloadRecord')+'}'
+[IO.File]::WriteAllText($taskDto,$taskText)
+$taskGeometry=Join-Path $taskOut 'ActualGeometry.cs'
+$taskText=[IO.File]::ReadAllText((Join-Path $taskUi 'NpLogger/NpSdGeometry.cs'));$taskCount=[regex]::Match($taskText,'internal static int Count\([^\r\n]+').Value;$taskU=[regex]::Match($taskText,'internal static uint U\([^\r\n]+').Value;$taskValid=[regex]::Match($taskText,'internal static bool Valid\([^\r\n]+').Value
+[IO.File]::WriteAllText($taskGeometry,'using System;namespace CE32_console {internal static class NpSdGeometry {'+$taskCount+$taskU+$taskValid+'}}')
+$taskSources=@('Tests/NpSdUsbTestControllerTests.cs','Tests/NpFirstSyncWireTests.cs','USB512_interface/USB512_interface/NpSdUsbTestController.cs','USB512_interface/USB512_interface/NpSdUsbTestWire.cs','USB512_interface/USB512_interface/NpSdSweepPolicy.cs','USB512_interface/USB512_interface/NpFirstSyncSd.cs','USB512_interface/USB512_interface/NpFirstSyncWire.cs','USB512_interface/USB512_interface/NpFirstSyncSdClient.cs','USB512_interface/USB512_interface/NpFirstSyncSdAttemptEvidence.cs','USB512_interface/USB512_interface/Ble/NpSdControl.cs','USB512_interface/USB512_interface/Ble/NpV1BleProtocol.cs','USB512_interface/USB512_interface/Ble/NpV2SdControl.cs','Neuropixels/SD/NpMetadataFile.cs')|ForEach-Object {Join-Path $PSScriptRoot $_}
+$taskSources+=@($taskDto,$taskGeometry);$taskPins=@(($taskSources+@($taskExport))|ForEach-Object{@{path=$_;sha256=(Get-FileHash -LiteralPath $_).Hash}})
+$taskCompiler='C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/Roslyn/csc.exe';$taskExe=Join-Path $taskOut 'NpSdUsbTestControllerTests.exe'
+$taskArgv=@('/nologo','/warnaserror','/nowarn:0649','/r:System.Core.dll','/r:System.Web.Extensions.dll','/main:NpSdUsbTestControllerTests',('/out:'+$taskExe))+$taskSources
+@{compiler=$taskCompiler;argv=$taskArgv;inputs=$taskPins;hardware_calls=0}|ConvertTo-Json -Depth 7|Set-Content (Join-Path $taskOut 'compile-attempt.json')
+$taskLog=& $taskCompiler @taskArgv 2>&1;$taskExit=$LASTEXITCODE;$taskLog|Out-String|Set-Content (Join-Path $taskOut 'compile.log');if($taskExit){$taskLog;throw 'Controller focused compile failed'}
+$taskLog=& $taskExe (Join-Path $taskUi 'NpSdUsbTestController.cs') (Join-Path $taskOut 'file-fixtures') 2>&1;$taskExit=$LASTEXITCODE;$taskLog|Out-String|Set-Content (Join-Path $taskOut 'run.log');$taskLog;if($taskExit){throw 'Controller focused checks failed'}
+foreach($p in $taskPins){if((Get-FileHash -LiteralPath $p.path).Hash -ne $p.sha256){throw 'Source changed during check'}}
+@{status='PASS_FOCUSED_SOFTWARE_ONLY';inputs=$taskPins;fixture_sha256=(Get-FileHash -LiteralPath $taskExe).Hash;run_sha256=(Get-FileHash -LiteralPath (Join-Path $taskOut 'run.log')).Hash;hardware_calls=0;product_builds=0;limits='Actual controller shared decisions/SubmitOnce and shared wire codecs. Native/card/mode/export boundaries throw; no physical/full Run or payload-integrity claim.'}|ConvertTo-Json -Depth 7|Set-Content (Join-Path $taskOut 'receipt.json')

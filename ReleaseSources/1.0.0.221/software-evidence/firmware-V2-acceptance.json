@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "status": "PASS_SCOPED_221_USB_SD_SWEEP_AND_EXACT_ORIGINAL_RESTORE",
+  "uid": "001A0004434250062039314E",
+  "firmware_app_crc": "71A5126E",
+  "firmware_usb_crc": "2556B4DD",
+  "recovery_crc": "6408DBB8",
+  "root_scoped_acceptance": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_hil221\\V2-r1\\root-scoped-acceptance.json",
+    "sha256": "54FF048A416B80791EB947F4CE33CF7371436A55F097DA05C9EFF8C75B7B8620"
+  },
+  "restoration_and_release": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\hil-r4\\restoration-and-release.json",
+    "sha256": "68272D50E118074492A2016F7684CB04FC12BA00925057CC1FB1F1E9594B1574",
+    "uid_pid_exited": 18292,
+    "catalog_count_scope": "Actual221 full readback compared old18 then old19; postrestore read-only INSPECT confirms same card/frontier; no repeated full catalog scan",
+    "preserved_catalog_frontier": 94797824,
+    "whole_flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+    "option_bytes_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+    "global_pid_exited": 74424,
+    "restore_evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\hil-r4\\execution\\Restore-20261030T2302148642186Z",
+    "closed_utc": "2026-10-30T23:04:53.6377625Z",
+    "status": "EXACT_ORIGINAL_RESTORED_IDLE_AND_LEASES_RELEASED",
+    "idle_proof": "C:/Frank/Code/XE_NP/_artifacts/usb_sd_test_v2/hil-r4/restored-idle/idle-proof.json",
+    "preserved_catalog_count": 20,
+    "uid": "001A0004434250062039314E"
+  },
+  "postrestore_usb_idle": {
+    "path": "C:/Frank/Code/XE_NP/_artifacts/usb_sd_test_v2/hil-r4/restored-idle/idle-proof.json",
+    "sha256": "1C8096198FA3417F6A81C890BC23C83438FC7A2680C87E4DEE03A4873F1D86E4"
+  },
+  "actual_profiles": [
+    {
+      "status": "Did not sustain rate \u2014 stored readback checked",
+      "p99_gap_ms": 15.36,
+      "safe": true,
+      "session": 666227136,
+      "rate": 30000,
+      "gaps": 684,
+      "readback": true,
+      "retired": true,
+      "maximum_write_ms": 39,
+      "prior_catalog_entries": 18,
+      "p95_gap_ms": 3.4133333333333336,
+      "maximum_gap_ms": 18.773333333333333
+    },
+    {
+      "status": "Passed stored readback",
+      "p99_gap_ms": 0,
+      "safe": true,
+      "session": 666227150,
+      "rate": 20000,
+      "gaps": 0,
+      "readback": true,
+      "retired": true,
+      "maximum_write_ms": 29,
+      "prior_catalog_entries": 19,
+      "p95_gap_ms": 0,
+      "maximum_gap_ms": 0
+    }
+  ],
+  "supported_hz": 20000,
+  "seconds_per_rate": 10,
+  "host": {
+    "version": "1.0.0.221",
+    "sha256": "90D6D4540E59DDEA3EE45DE43EF075B8DE32C3F539F159C57AA08410B7F367C1"
+  },
+  "saved_imu": {
+    "queue_dropped": 0,
+    "known_accepted_not_persisted": 0,
+    "source_window_verified": false,
+    "final_slot_known": false,
+    "bad_sectors": 0,
+    "scheduled_rows": 12506,
+    "missing_observed_slots": 0,
+    "physical_conversion_phase_known": false,
+    "scheduler_missing": 0,
+    "native_valid_observations": 1971
+  },
+  "prior_profile": {
+    "mask": 3,
+    "hz": 20000,
+    "restored_by_actual_terminal_control_exchange": true,
+    "evidence": "C:\\Frank\\Code\\XE_NP\\_artifacts\\usb_sd_test_v2\\hil-r4\\after-controller221-idle\\idle-proof.json",
+    "postrestore_ble_requery": false
+  },
+  "scope": "Actual production sweep30k verified loss then automatic20k pass; real stored NP/IMU checked. No endurance/all-profile/all-mode or complete physical sensor conversion claim.",
+  "limits": [
+    "Only the fixed three-probe mask was exercised in this new workflow.",
+    "Three probes at 30 kHz has verified losses; it is not qualified lossless.",
+    "The 20 kHz candidate result is a 10-second-per-rate check, not endurance or universal mode qualification.",
+    "Native sensor physical conversion phase, complete source window and final IMU slot remain unproven.",
+    "No new power, analog accuracy or full fused-file flash qualification was performed.",
+    "Firmware identity uses the checked install plus uninterrupted exact-UID lease; this USB service does not advertise runtime CRC query."
+  ]
+}

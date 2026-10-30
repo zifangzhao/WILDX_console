@@ -160,6 +160,9 @@
     <Compile Include="NpDiagnosticsForm.cs" />
     <Compile Include="NpSdCardTest.cs" />
     <Compile Include="NpSdLoggerTest.cs" />
+    <Compile Include="NpSdSweepPolicy.cs" />
+    <Compile Include="NpSdUsbTestWire.cs" />
+    <Compile Include="NpSdUsbTestController.cs" />
     <Compile Include="NpSdTestForm.cs" />
     <Compile Include="NpCalibrationForm.cs" />
     <Compile Include="NpProgressEstimate.cs" />
