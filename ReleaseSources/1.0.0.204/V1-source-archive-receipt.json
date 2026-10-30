@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "exact_incremental_source_archive_complete",
+  "archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1-source\\V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
+    "bytes": 2274413,
+    "sha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35"
+  },
+  "entry_count": 444,
+  "compiled_source_dependency_files": 426,
+  "changed_c_units": 5,
+  "metadata_files": 16,
+  "all_entries_verified_once": true,
+  "mapping": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1-source\\mapping.json",
+    "bytes": 162792,
+    "sha256": "B2C810D1FE0D4B6C851EF9BA5D6C06DE2ED857CF7E931F59D0FEDE8F72A3ED06"
+  },
+  "source_manifest": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\source-manifest.json",
+    "bytes": 225153,
+    "sha256": "042D4A49CB60C8449DF5A7537D6732921B893A5E464D4795A11E66386380D148"
+  },
+  "firmware_manifest": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\manifest.json",
+    "bytes": 10064,
+    "sha256": "8D1C1735E1112461CCCFC8EB9459EF6E17776BF9B876EDB4C7DAE8C209F04861"
+  },
+  "unchanged_firmware_publication_allowlist": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\publication-allowlist.json",
+    "bytes": 1959,
+    "sha256": "60476DE0BE63C07C1475F4A769FF86D5D7572DE945C9A9904C04717E1415ABBD"
+  },
+  "creator": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1-source\\create_incremental_archive.py",
+    "bytes": 7177,
+    "sha256": "DBDCE9F32074CD61E95A6D1DEACB93653A1D5C3C2AA9CD6056692C91ADD13FC0"
+  },
+  "closure_scope": "Exact five newly compiled production C units and their resolved dependencies, plus production/link/identity metadata. Retained RTC and other unchanged linked objects are identified in metadata, but their historical source/dependency closure is not claimed or reconstructed.",
+  "publication_scope": "Repository/ReleaseSources source deliverable only; no installer/update ZIP inclusion or public publication performed",
+  "actions": {
+    "archive_creations": 1,
+    "entry_verification_passes": 1,
+    "build": false,
+    "fetch": false,
+    "hardware": false,
+    "recording_tests": false,
+    "git_mutation": false
+  }
+}

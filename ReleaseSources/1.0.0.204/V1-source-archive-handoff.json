@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "status": "ready_for_root_repository_source_publication",
+  "version": "1.0.0.204",
+  "family": 1,
+  "archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1-source\\V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
+    "bytes": 2274413,
+    "sha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35"
+  },
+  "archive_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1-source\\archive-receipt.json",
+    "sha256": "C6FB312A3F56837960C3E0B0D8AF9A9030623025ACAFBBE702539767C36076D1"
+  },
+  "planned_repository_destination": "ReleaseSources/1.0.0.204/V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
+  "installer_or_update_zip_inclusion": false,
+  "firmware_allowlist_unchanged": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release204-firmware\\V1\\publication-allowlist.json",
+    "bytes": 1959,
+    "sha256": "60476DE0BE63C07C1475F4A769FF86D5D7572DE945C9A9904C04717E1415ABBD"
+  },
+  "public_files_changed": false
+}

@@ -1,0 +1,26 @@
+{
+    "schema":  1,
+    "version":  "1.0.0.204",
+    "status":  "pending_firmware",
+    "recording_acceptance_pending":  true,
+    "scope":  "Exact source-input ZIP and identity evidence only; no app/SDK build, recording tests, hardware, firmware copy, installer staging/packaging/publication or Git",
+    "source_snapshot":  "_artifacts/utc_alignment_20261028/source204-grid",
+    "source_files":  199,
+    "zip_entries_verified":  199,
+    "compiled_sources":  {
+                             "path":  "compiled-sources.zip",
+                             "bytes":  959247,
+                             "sha256":  "40291432167A3BCB70979CD687C3197A2EA08456403A1FAF5EC0050A46222DD3"
+                         },
+    "host_build_receipt_sha256":  "8277D7F02672153DCFEA52628D9481E75F365733F9794F54535448700A5DFB6E",
+    "sdk_qualification_receipt_sha256":  "30B8B9903B12E01D54EE89D043B2208582098D916DA2197CB0FF463595BA7935",
+    "build_script_sha256":  "1D8812844B96F06BB449DE3969C3FA0689D4C23E5EE1070C37C723EF4572FEFD",
+    "gui_sha256":  "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E",
+    "sdk_sha256":  "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
+    "first_sync_enabled":  true,
+    "grid_enabled":  true,
+    "preparation_enabled":  false,
+    "all_modes_hardware_qualified":  false,
+    "published_release_unchanged":  "1.0.0.199",
+    "limits":  "Source-input archive is not a standalone SDK/toolchain/dependency distribution. Companion sources/runtime reuse stays referenced to checked199 provenance. No firmware or legacy archives copied."
+}
