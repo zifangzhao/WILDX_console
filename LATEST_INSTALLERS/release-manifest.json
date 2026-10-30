@@ -1,23 +1,23 @@
 {
     "schemaVersion":  1,
-    "version":  "1.0.0.209",
-    "releaseId":  "WILDX209_BLE_SESSION_FOLDER_GPIO_20261030",
-    "baselineVersion":  "1.0.0.207",
+    "version":  "1.0.0.210",
+    "releaseId":  "WILDX210_COMBINED_DAT_DEFAULT_20261030",
+    "baselineVersion":  "1.0.0.209",
     "installer":  {
-                      "file":  "WILDX_console-Setup-1.0.0.209.exe",
-                      "sha256":  "3CCE8B0B00A3867ABC8D9E0129F525E1495702A20AA3B7BD35C04BCF1AAC182A",
-                      "bytes":  7831533
+                      "file":  "WILDX_console-Setup-1.0.0.210.exe",
+                      "sha256":  "22425E4F6ACCE05A9AED99E77EA63F79A1380A4C5EFA20E54709DC82D0143BB0",
+                      "bytes":  7831527
                   },
-    "guiSha256":  "063623C8EBAFC257AA6EDD943A4052852A724064473FAC61E78E3CE6142D7CD3",
+    "guiSha256":  "E4863A73C3FD114F4D3AB7D755C941250F884A10608A9CE28BA5FCF0F72D89CF",
     "sdkSha256":  "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
     "catalogSha256":  "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
-    "sourceArchiveSha256":  "EFE0D0052DB6955AD9203E2F43B630F6C00CB5EF112628B192C1E5AA75349191",
-    "sourceGitBaseline":  "dcca8bd38a51a959f3bf59866d3adbb52b10fb39",
+    "sourceArchiveSha256":  "2485DEC8DEB481F787A2937C7F48FDE7D46C3CE6ADA751A8F6EBB462F140195E",
+    "sourceGitBaseline":  "c1c8bcdad7de34e8a187f4d7bcc5f3a0855f2d34",
     "sourcePublicationCommit":  null,
     "sourcePublicationCommitRole":  "not_assigned_before_publication; baseline_plus_exact_compiled_overlay",
-    "sourceIdentityRole":  "published207_baseline_plus_exact209_compiled_overlay",
-    "sourceProvenance":  "../ReleaseSources/1.0.0.209/host-source-archive/source-freeze.json",
-    "validation":  "../ReleaseSources/1.0.0.209/qualification.json",
+    "sourceIdentityRole":  "published209_baseline_plus_exact210_compiled_overlay",
+    "sourceProvenance":  "../ReleaseSources/1.0.0.210/host-source-archive/source-freeze.json",
+    "validation":  "../ReleaseSources/1.0.0.210/qualification.json",
     "firmware":  [
                      {
                          "family":  1,
@@ -184,7 +184,7 @@
                     {
                         "path":  "WILDX_console.exe",
                         "bytes":  2757120,
-                        "sha256":  "063623C8EBAFC257AA6EDD943A4052852A724064473FAC61E78E3CE6142D7CD3"
+                        "sha256":  "E4863A73C3FD114F4D3AB7D755C941250F884A10608A9CE28BA5FCF0F72D89CF"
                     },
                     {
                         "path":  "NpV2SdDatExport.dll",

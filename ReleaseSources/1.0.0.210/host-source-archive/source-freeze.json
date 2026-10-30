@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0.210",
+  "git_baseline": "c1c8bcdad7de34e8a187f4d7bcc5f3a0855f2d34",
+  "source_identity_role": "published209_baseline_plus_exact210_compiled_overlay",
+  "source_publication_commit": null,
+  "compiled_inputs": 200,
+  "archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release210-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 966333,
+    "sha256": "2485DEC8DEB481F787A2937C7F48FDE7D46C3CE6ADA751A8F6EBB462F140195E"
+  },
+  "build_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-210-combined.json",
+    "bytes": 35668,
+    "sha256": "53048ED5F1FF05CC4C731FB10E36CE900C71B541AA447D47482E60FF895B76B3"
+  },
+  "initial_build_exit": 1,
+  "compilation_completed": true,
+  "post_compile_copy_repaired": true,
+  "build_failure_scope": "Only debug PDB output copy failed because D: was full; original log retained. Freed redundant extracted installer copies and copied/hash-verified exact PDB. No second compilation.",
+  "recipe_reference": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\build-session208.ps1",
+    "bytes": 6399,
+    "sha256": "A76D7E8CDB09A62EFB50A43495AFCC2CC03D23539A1BAF3EE0EE11211C4CB164"
+  },
+  "recipe_reference_role": "Unchanged checked209 helper recipe; supplemental210 receipt is authoritative for compilation/copy repair.",
+  "source_stable_against_snapshot_and_build": true,
+  "changed_compiled_inputs": [
+    "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
+    "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+  ],
+  "sdk_reused_exact209": true,
+  "sdk_sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
+  "helper_historical_scope": "The build helper retains historical published207 wording; this final source freeze binds the actual published209 baseline and exact210 overlay without changing compiled snapshot bytes.",
+  "recipe_execution": "Use original recipe path; archived copy is reference because PSScriptRoot is relative."
+}

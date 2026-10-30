@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "version": "1.0.0.210",
+  "status": "qualified_combined_dat_default_only",
+  "gui_sha256": "E4863A73C3FD114F4D3AB7D755C941250F884A10608A9CE28BA5FCF0F72D89CF",
+  "sdk_sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
+  "git_baseline": "c1c8bcdad7de34e8a187f4d7bcc5f3a0855f2d34",
+  "source_publication_commit": null,
+  "source_identity_role": "published209_baseline_plus_exact210_compiled_overlay",
+  "source_archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release210-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 966333,
+    "sha256": "2485DEC8DEB481F787A2937C7F48FDE7D46C3CE6ADA751A8F6EBB462F140195E"
+  },
+  "catalog_sha256": "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
+  "firmware": [
+    {
+      "family": 1,
+      "release": "V1_DETERMINISTIC_IMU_APPFFF283D9_USB1E73A743_20261030",
+      "app": "FFF283D9",
+      "usb": "1E73A743",
+      "recovery": null,
+      "stage": "USB60 and BLE-to-SD30 recording checked"
+    },
+    {
+      "family": 2,
+      "release": "V2_GRID16_APPEND_APP7F238587_USB74FC7104_20261030",
+      "app": "7F238587",
+      "usb": "74FC7104",
+      "recovery": "6408DBB8",
+      "stage": "Three probes20kHz SD120 checked"
+    }
+  ],
+  "firmware_changed": false,
+  "recorder_wire_changed": false,
+  "algorithm_changed": false,
+  "initial_build_exit": 1,
+  "compilation_completed": true,
+  "post_compile_copy_repaired": true,
+  "build_failure_scope": "Only debug PDB output copy failed because D: was full; original log retained. Freed redundant extracted installer copies and copied/hash-verified exact PDB. No second compilation.",
+  "source_change": "NpDownloadForm mergeDat initializer Checked=true; manually unchecked false remains supported.",
+  "actual_default_toggle_check": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\combined_dat_210\\receipt.json",
+    "bytes": 235,
+    "sha256": "C3CF20DED9F04F9984B38F40F1FD642E0760EB6F5E10CDD751B443409785DE3F"
+  },
+  "unchanged_qualification": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release209-prep\\qualification.json",
+    "bytes": 3945,
+    "sha256": "F2B303B3B57B2663C3CB994A81D5A71696D492025CCF7C82415C5DA257F506D2"
+  },
+  "hardware": "No new hardware or recording tests; unchanged209 SDK/recorder/firmware qualification reused.",
+  "limits": [
+    "Only the initial combined-DAT checkbox choice changed; output algorithms and user override are unchanged.",
+    "No new timing, physical conversion phase, source window or terminal coverage claims."
+  ]
+}

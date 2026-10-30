@@ -27,7 +27,7 @@ namespace CE32_console
         private readonly Button repairCatalog=new Button{Name="repairUsbCatalog",Text="Repair SD catalog…",AutoSize=true};
         private readonly Label cardHelp=new Label{AutoSize=true,Text="Delete and format require an SD card reader.",Margin=new Padding(8,9,0,0)};
         private readonly CheckBox convertAfterDownload=new CheckBox{Text="MP4 + WAV",Checked=true,AutoSize=true};
-        private readonly CheckBox mergeDat=new CheckBox{Name="mergeSdProbeDat",Text="Merge probes into one DAT",AutoSize=true};
+        private readonly CheckBox mergeDat=new CheckBox{Name="mergeSdProbeDat",Text="Merge probes into one DAT",AutoSize=true,Checked=true};
         private bool busy,refreshing,usbBlocked,maintenanceActive,listedRecoverySearch;private volatile bool cancelled;private Source listedSource;
         private readonly string requestedSourcePath;
         private string boundSourcePath;

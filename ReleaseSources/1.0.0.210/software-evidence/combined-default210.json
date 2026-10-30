@@ -1,0 +1,8 @@
+{
+    "status":  "PASS",
+    "version":  "1.0.0.210",
+    "default_checked":  true,
+    "can_uncheck":  true,
+    "hardware_access":  false,
+    "app_sha256":  "E4863A73C3FD114F4D3AB7D755C941250F884A10608A9CE28BA5FCF0F72D89CF"
+}
