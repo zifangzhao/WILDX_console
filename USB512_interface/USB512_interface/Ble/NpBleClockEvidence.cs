@@ -99,6 +99,8 @@ namespace USB512_interface {
                 string line=json.Serialize(row);writer.WriteLine(line);writer.Flush();
                 string path=context==null?mirrorPath:String.IsNullOrEmpty(context.host_recording_receipt)?null:
                     Path.Combine(context.host_recording_receipt,"ble_clock_"+session+".jsonl");
+                if(path!=null && context!=null && String.Equals(Path.GetFullPath(context.host_recording_receipt).TrimEnd(Path.DirectorySeparatorChar),
+                    Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar),StringComparison.OrdinalIgnoreCase))path=null;
                 if(path!=mirrorPath){if(mirror!=null)mirror.Dispose();mirror=null;mirrorPath=path;
                     if(path!=null)mirror=Open(path,File.Exists(path));}
                 if(mirror!=null){mirror.WriteLine(line);mirror.Flush();}

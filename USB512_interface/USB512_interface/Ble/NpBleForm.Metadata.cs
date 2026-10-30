@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using CE32_console;
 
 namespace USB512_interface
@@ -11,8 +12,49 @@ namespace USB512_interface
         NpRecordingSettings bleRecordingMetadata;
         NpClosedLoopSettings.Setup bleClosedLoopSetup;
         string bleMetadataFolder,bleDeviceUid;
+        string blePendingSessionFolder;
+        readonly TextBox bleDestinationFolder=new TextBox {Name="bleDestinationFolder",Width=600,AccessibleName="BLE recording output folder"};
+        readonly CheckBox hostGpioEnabled=new CheckBox {Name="bleGpioRtcEnabled",Text="GPIO / RTC logging",AutoSize=true};
+        Button bleSelectFolder;
+        internal Func<string> ChooseBleSessionFolder;
+        internal CheckBox HostGpioLogging {get{return hostGpioEnabled;}}
         uint bleMetadataState=UInt32.MaxValue,bleMetadataFault;
         bool bleMetadataRecordingSeen,bleMetadataFinished,bleAnchorAttempted,bleAnchorStartRejected;
+        Control BuildBleSessionControls() {
+            bleDestinationFolder.Text=Properties.Settings.Default.BleRecordingFolder;
+            var options=new FlowLayoutPanel();
+            bleSelectFolder=new Button {Text="Select folder",AutoSize=true};
+            bleSelectFolder.Click+=delegate {string folder=SelectBleSessionFolder();if(folder!=null)bleDestinationFolder.Text=folder;};
+            options.Controls.Add(bleSelectFolder);options.Controls.Add(hostGpioEnabled);
+            return FieldGrid("Output folder",bleDestinationFolder,null,null,options);
+        }
+        string SelectBleSessionFolder() {
+            using(var dialog=new FolderBrowserDialog {Description="Choose where to save BLE session metadata, timing and GPIO logs.",SelectedPath=bleDestinationFolder.Text})
+                return dialog.ShowDialog(DialogOwner)==DialogResult.OK?dialog.SelectedPath:null;
+        }
+        bool PrepareBleSessionFolder() {
+            blePendingSessionFolder=null;
+            string root=bleDestinationFolder.Text.Trim();
+            if(root.Length==0){root=ChooseBleSessionFolder==null?SelectBleSessionFolder():ChooseBleSessionFolder();if(String.IsNullOrWhiteSpace(root))return false;}
+            root=Path.GetFullPath(root);
+            string folder=NpFolderNaming.CreateFresh(root,NpFolderNaming.DownloadName("BLE-"+connectedAddress.ToString("X12"),DateTime.Now,""));
+            using(var probe=new FileStream(Path.Combine(folder,".wildx-write-"+Guid.NewGuid().ToString("N")),FileMode.CreateNew,FileAccess.Write,FileShare.None,1,FileOptions.DeleteOnClose)){
+                probe.WriteByte(0);probe.Flush(true);
+            }
+            bleDestinationFolder.Text=root;blePendingSessionFolder=folder;
+            try{Properties.Settings.Default.BleRecordingFolder=root;Properties.Settings.Default.Save();}
+            catch(Exception ex){Append("Output folder preference could not be saved: "+ex.Message);}
+            try{NpFineClockEvidenceImport.RegisterSessionFolder(folder,connectedAddress.ToString("X12"));}
+            catch(Exception ex){Append("Automatic SD timing-log lookup could not be saved: "+ex.Message+" Session files will remain in "+folder);}
+            return true;
+        }
+        void BeginBleSessionStorage() {
+            if(String.IsNullOrEmpty(blePendingSessionFolder))throw new IOException("Select a writable BLE output folder before recording.");
+            RetireBleRecordingMetadata();bleMetadataFolder=blePendingSessionFolder;
+            connection.UseRecordingClockFolder(bleMetadataFolder);
+            connection.SetClockContext(recorderVersion,bleDeviceUid,bleMetadataFolder,current);
+            File.WriteAllText(Path.Combine(bleMetadataFolder,"pc_clock.json"),new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(NpHostClock.Receipt));
+        }
 #if NP_FIRST_SYNC_ENABLE
         string bleFirstSyncEvidenceNoticeId;
         void PersistBleFirstSyncAttempt(NpFirstSyncSdAttempt attempt)
@@ -79,11 +121,10 @@ namespace USB512_interface
         // with a historical recording is confirmed; never invent EEPROM data.
         void BeginBleRecordingMetadata(NpSdStatus before,byte[] request)
         {
-            RetireBleRecordingMetadata();
+            if(String.IsNullOrEmpty(blePendingSessionFolder))throw new IOException("Select a writable BLE output folder before recording.");
+            if(bleMetadataFolder!=blePendingSessionFolder)BeginBleSessionStorage();
+            blePendingSessionFolder=null;
             try {
-                bleMetadataFolder=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"WILDX","RecordingMetadata",
-                    "BLE-"+connectedAddress.ToString("X12"),DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N"));
-                Directory.CreateDirectory(bleMetadataFolder);
                 if(bleClosedLoopSetup!=null)bleClosedLoopSetup.Save(bleMetadataFolder);
                 string helper=Path.Combine(Path.GetDirectoryName(typeof(NpBleForm).Assembly.Location),"NPConfigurator","NPConfigurator.exe");
                 var settings=new NpRecordingSettings(bleMetadataFolder,helper,"ble_sd",V2,null,null,bleDeviceUid);
@@ -98,6 +139,21 @@ namespace USB512_interface
                 settings.Context("session_id",V2?null:(object)BitConverter.ToUInt32(request,32));
                 settings.Context("start_lba",before.Start);settings.Context("card_capacity_sectors",before.Capacity);
                 settings.Context("metadata_storage_scope","Host BLE receipt; data is on SD. Association with an exported recording is unverified.");
+                settings.Context("host_session_folder",bleMetadataFolder);
+                settings.Context("folder_time_scope","Folder timestamp is the local host request time, not the first neural sample or authoritative recording T0.");
+                settings.Context("session_log_file","ble_session.log");
+                var calibration=NpCalibrationStore.Get("ble:"+connectedAddress.ToString("X12"));
+                if(calibration.Count!=0){
+                    string directory=Path.Combine(bleMetadataFolder,"preview_calibration");Directory.CreateDirectory(directory);calibration.Save(directory);
+                    var inputs=new System.Collections.Generic.List<object>();
+                    foreach(int port in calibration.Ports){var profile=calibration.Get(port);
+                        inputs.Add(new {probe=port,serial=profile.Serial,model=profile.Model,ap_gain=profile.ApGain,lfp_gain=profile.LfpGain,
+                            gain_sha256=profile.GainHash,adc_sha256=profile.AdcHash});}
+                    NpCalibrationStore.SaveImros("ble:"+connectedAddress.ToString("X12"),directory);
+                    File.WriteAllText(Path.Combine(directory,"preview_calibration.json"),new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(
+                        new {schema=1,scope="BLE waveform preview inputs only; on-device SD data is not calibrated by this host snapshot",probes=inputs}));
+                    settings.Context("preview_calibration_file","preview_calibration/preview_calibration.json");
+                }
 #if NP_FIRST_SYNC_ENABLE
                 settings.Context("optional_sd_timing_receipts","If present: sd_start_*.json in this folder. This pointer alone does not declare an NPSD attempt or associate an SD recording.");
 #endif
@@ -118,7 +174,7 @@ namespace USB512_interface
                         "state",probePreparation.State,"mask",probePreparation.Mask,"sample_hz",probePreparation.Hz,
                         "scope","Probes/clock only; not recording or first-sample time."));settings.Write();
                 }
-            } catch(Exception ex){BleMetadataFailed(ex);}
+            } catch(Exception ex){BleMetadataFailed(ex);throw new IOException("BLE session metadata could not be saved. Recording was not started.",ex);}
             NotifyHostRecordingPrepared();
         }
         void ObserveBleRecordingMetadata(NpSdStatus status)

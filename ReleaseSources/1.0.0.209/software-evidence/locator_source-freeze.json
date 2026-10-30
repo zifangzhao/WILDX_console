@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-30T19:25:41.692377+00:00",
+  "status": "source_frozen_focused_tests_passed_product_build_pending",
+  "scope": "Selected BLE session folder discovery-only locator; raw data remains in chosen folder, strict sealed SD association unchanged",
+  "production": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFineClockEvidenceImport.cs",
+      "bytes": 16339,
+      "sha256": "414AD6CAB9124C4CB490DC64727F83CF676A8C43F6533D993F1FD96043C850D5"
+    }
+  ],
+  "tests": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpFineClockLocatorTests.cs",
+      "bytes": 8454,
+      "sha256": "36ED16B2428140BA0712EDA139F00E6CD9AFE88855B4D650F0D7C4AD06523BF3"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\test_fine_clock_locator.ps1",
+      "bytes": 1188,
+      "sha256": "F3F15BB0FAF2059FC5BE0B9EC3A67F5A4B44E8F1253F0B46937FDD185756DC80"
+    }
+  ],
+  "production_before_sha256": "A3F9FE633C8DB1F8DEA0A118477C2AC6D0ACC4BCED5D6A9D9194A1C401060D7F",
+  "api": "internal static string RegisterSessionFolder(string folder,string bleAddress,string metadataRoot=null)",
+  "address": "12 hexadecimal BLE address characters, case-insensitive input; canonical uppercase in index",
+  "locator": "AppData/Local/WILDX/RecordingMetadata/BLE-ADDRESS/UTC-GUID/session-folder.json; schema1 formatwildx.ble_session_folder; targetfullpath only, no raw/UID/token/precision claim",
+  "bounds": "Existing4096 peer/session index bounds,128 matching files/32MiB snapshots retained; locator16KiB; exactlyone optional targethop, no recursion; reparse file/target orancestor rejected",
+  "association": "Existing raw receipt final/allports/SourceClock, +5/+6-bound UID/token/profile, raw STARTCRC/ID/family/request and immutable attempt validation remain authoritative. Locator alone supplies no trust.",
+  "tests_passed": {
+    "new_locator": 44,
+    "existing_importer": 227
+  },
+  "coverage": [
+    "V1/V2 chosen-directory association",
+    "No raw copying into index; exact partial journal bytes preserved",
+    "Duplicate locators deduplicated without choosing conflicting immutable attempts",
+    "Malformed/oversize/wrongaddress/relative/missing/nested locator unavailable",
+    "WrongUID/token/requestCRC remains rejected",
+    "Malformed locator does not block valid legacy directfolder",
+    "Read-only existing Windows junction/ancestor rejection, no system-directory scan or writes",
+    "Existing bounded scan/size/ambiguity/legacy unavailable/error paths"
+  ],
+  "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File test_fine_clock_locator.ps1 -OutputDirectory _artifacts/ble_locator_final",
+  "fixture_executable": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ble_locator_final\\FineClockLocatorTests.exe",
+    "bytes": 78848,
+    "sha256": "2F4A23A78249C9C15747EB5A323B6CE348EF6E35CD2B810F50B7E96F6BE6AC27"
+  },
+  "test_environment_notes": [
+    "Initial optional-locator schema case exposed uncaughtInvalidDataException; fixed explicit optional rejection catch.",
+    "Creating a private junction was not permitted; final fixture uses existing Windows profile compatibility junction read-only and verifies rejected-locator count.",
+    "Nested oldfixture path exceededWin32length; final runner passes shortroot to unchanged legacyfixture."
+  ],
+  "project_changes": [],
+  "build_owner": "root; importer is linked in GUI+SDK, combined208 needed; no product build performed here",
+  "device_or_hardware_actions": false,
+  "source_edits_held": true
+}

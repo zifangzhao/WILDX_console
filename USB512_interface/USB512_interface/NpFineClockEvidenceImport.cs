@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 
 namespace USB512_interface {
@@ -17,14 +18,46 @@ namespace USB512_interface {
     internal static class NpFineClockEvidenceImport {
         internal const string StatusFile="host_clock_association.json";
         const int MaximumSessions=4096,MaximumFiles=128,MaximumBytes=32*1024*1024;
+        const string LocatorFile="session-folder.json",LocatorFormat="wildx.ble_session_folder";
+        const int MaximumLocatorBytes=16384;
         static readonly JavaScriptSerializer Json=new JavaScriptSerializer {MaxJsonLength=MaximumBytes};
         sealed class Match {internal string Path,Key,Id,RequestHash;}
         static bool Plain(string path){return (File.GetAttributes(path)&FileAttributes.ReparsePoint)==0;}
+        static bool PlainDirectory(string path){
+            for(var d=new DirectoryInfo(path);d!=null;d=d.Parent)if(!d.Exists||(d.Attributes&FileAttributes.ReparsePoint)!=0)return false;
+            return true;
+        }
+        internal static string RegisterSessionFolder(string folder,string bleAddress,string metadataRoot=null){
+            if(!Regex.IsMatch(bleAddress??"",@"\A[0-9A-Fa-f]{12}\z"))throw new ArgumentException("Exact BLE address required.","bleAddress");
+            if(String.IsNullOrWhiteSpace(folder)||!Path.IsPathRooted(folder))throw new ArgumentException("Full existing session folder required.","folder");
+            folder=Path.GetFullPath(folder);if(!PlainDirectory(folder))throw new IOException("Session folder is missing or contains a reparse directory.");
+            metadataRoot=metadataRoot??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"WILDX","RecordingMetadata");
+            metadataRoot=Path.GetFullPath(metadataRoot);Directory.CreateDirectory(metadataRoot);
+            if(!PlainDirectory(metadataRoot))throw new IOException("Metadata root contains a reparse directory.");
+            string peer=Path.Combine(metadataRoot,"BLE-"+bleAddress.ToUpperInvariant());Directory.CreateDirectory(peer);
+            if(!PlainDirectory(peer))throw new IOException("Metadata peer contains a reparse directory.");
+            string index=Path.Combine(peer,DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ",CultureInfo.InvariantCulture)+"-"+Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(index);string path=Path.Combine(index,LocatorFile);
+            byte[] bytes=System.Text.Encoding.UTF8.GetBytes(Json.Serialize(new{schema=1,format=LocatorFormat,ble_address=bleAddress.ToUpperInvariant(),session_folder=folder})+"\n");
+            if(bytes.Length>MaximumLocatorBytes)throw new IOException("Session folder locator exceeds16KiB.");
+            using(var file=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read)){file.Write(bytes,0,bytes.Length);file.Flush(true);}
+            return path;
+        }
+        static string LocatedFolder(string session,string peer){
+            string path=Path.Combine(session,LocatorFile);if(!File.Exists(path))return null;
+            var d=Json.Deserialize<Dictionary<string,object>>(System.Text.Encoding.UTF8.GetString(Snapshot(path,MaximumLocatorBytes)));
+            string address=Convert.ToString(Field(d,"ble_address")),folder=Convert.ToString(Field(d,"session_folder"));
+            if(Number(d,"schema")!=1||Convert.ToString(Field(d,"format"))!=LocatorFormat||
+                !Regex.IsMatch(address??"",@"\A[0-9A-Fa-f]{12}\z")||!String.Equals(Path.GetFileName(peer),"BLE-"+address,StringComparison.OrdinalIgnoreCase)||
+                String.IsNullOrWhiteSpace(folder)||!Path.IsPathRooted(folder))throw new InvalidDataException("Invalid session folder locator.");
+            folder=Path.GetFullPath(folder);if(!PlainDirectory(folder))throw new IOException("Located session folder is missing or contains a reparse directory.");
+            return folder; // Exactly one hop; never follow another locator.
+        }
         static string Hash(byte[] bytes){using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-","");}
-        static byte[] Snapshot(string path){
+        static byte[] Snapshot(string path,int maximum=MaximumBytes){
             if(!Plain(path))throw new IOException("Reparse files are not imported.");
             using(var file=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite)){
-                long length=file.Length;if(length>MaximumBytes)throw new IOException("Metadata file exceeds 32 MiB.");
+                long length=file.Length;if(length>maximum)throw new IOException("Metadata file exceeds its bounded snapshot size.");
                 var bytes=new byte[(int)length];int used=0,n;while(used<bytes.Length&&(n=file.Read(bytes,used,bytes.Length-used))!=0)used+=n;
                 if(used!=bytes.Length)Array.Resize(ref bytes,used);return bytes; // exact bounded snapshot, including any partial tail
             }
@@ -59,7 +92,7 @@ namespace USB512_interface {
             }finally{if(File.Exists(temporary))File.Delete(temporary);}return target;
         }
         internal static NpFineClockImportResult Import(string output,NpFineSdCompanion companion,string metadataRoot=null){
-            var result=new NpFineClockImportResult();var copied=new List<object>();int sessions=0,candidates=0,rejected=0;string requestHash=null,attemptId=null;
+            var result=new NpFineClockImportResult();var copied=new List<object>();int sessions=0,candidates=0,rejected=0,located=0,rejectedLocators=0;string requestHash=null,attemptId=null;
             NpFirstSyncSdBound bound=companion==null?null:companion.Bound;
             if(bound==null){result.Status="no_qualified_companion";return result;} // Legacy: no scan or output I/O.
             try {
@@ -72,14 +105,20 @@ namespace USB512_interface {
                 metadataRoot=metadataRoot??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"WILDX","RecordingMetadata");
                 if(!Directory.Exists(metadataRoot)){result.Status="metadata_root_missing";return result;}
                 if(!Plain(metadataRoot))throw new IOException("Metadata root is a reparse directory.");
-                var matches=new List<Match>();string pattern="sd_start_"+bound.Token.ToString("X16")+"_*.json";int peers=0;
+                var matches=new List<Match>();var scanned=new HashSet<string>(StringComparer.OrdinalIgnoreCase);string pattern="sd_start_"+bound.Token.ToString("X16")+"_*.json";int peers=0;
                 foreach(string peer in Directory.EnumerateDirectories(metadataRoot,"BLE-*",SearchOption.TopDirectoryOnly)){
                     if(++peers>MaximumSessions)throw new IOException("Bounded metadata scan exceeded 4096 BLE directories.");if(!Plain(peer))continue;
                     foreach(string session in Directory.EnumerateDirectories(peer,"*",SearchOption.TopDirectoryOnly)){
                         if(++sessions>MaximumSessions)throw new IOException("Bounded metadata scan exceeded 4096 sessions.");if(!Plain(session))continue;
-                        foreach(string path in Directory.EnumerateFiles(session,pattern,SearchOption.TopDirectoryOnly)){
-                            if(++candidates>MaximumFiles)throw new IOException("Bounded metadata scan exceeded 128 matching attempt files.");if(!Plain(path))continue;
-                            try{matches.Add(Validate(path,Snapshot(path),bound));}catch(Exception){rejected++;}
+                        string target=null;
+                        try{target=LocatedFolder(session,peer);if(target!=null)located++;}
+                        catch(Exception ex) when(ex is IOException||ex is InvalidDataException||ex is UnauthorizedAccessException||ex is ArgumentException||ex is InvalidOperationException||ex is FormatException||ex is OverflowException){rejectedLocators++;}
+                        foreach(string directory in target==null?new[]{session}:new[]{session,target}){
+                            if(!scanned.Add(Path.GetFullPath(directory)))continue;
+                            foreach(string path in Directory.EnumerateFiles(directory,pattern,SearchOption.TopDirectoryOnly)){
+                                if(++candidates>MaximumFiles)throw new IOException("Bounded metadata scan exceeded 128 matching attempt files.");if(!Plain(path))continue;
+                                try{matches.Add(Validate(path,Snapshot(path),bound));}catch(Exception){rejected++;}
+                            }
                         }
                     }
                 }
@@ -104,6 +143,7 @@ namespace USB512_interface {
                 try {var r=bound==null?null:bound.Receipt;var report=new {schema=1,status=result.Status,error=result.Error,association_confirmed=result.Associated,
                     recorded_uid=bound==null?null:bound.Uid,recorded_token_hex=bound==null?null:bound.Token.ToString("X16"),device_family=r==null?(uint?)null:r.Family,
                     attempt_id=attemptId,request_sha256=requestHash,receipt_sha256=r==null?null:Hash(r.Raw),sessions_scanned=sessions,matching_files_scanned=candidates,rejected_attempt_files=rejected,copied=copied,
+                    located_session_folders=located,rejected_session_locators=rejectedLocators,
                     pc_mapping_claimed=false,profile_crc_used_as_identity=false,
                     association_scope="Exact saved Start request/immutable attempt plus independently sealed on-card +5/+6 UID/token/profile binding. Before-delivery persistence is sufficient when that independent on-card proof exists; host attempt alone is not.",
                     clock_scope="Copied bounded raw snapshots, including partial tails; hashes describe those snapshots, not the entire growing source file. Clock/protocol validation and PC mapping are separate."};

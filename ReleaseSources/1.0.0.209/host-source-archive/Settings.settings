@@ -1,0 +1,17 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings>
+    <Setting Name="NetworkTimeEnabled" Type="System.Boolean" Scope="User"><Value Profile="(Default)">True</Value></Setting>
+    <Setting Name="NetworkTimeServer" Type="System.String" Scope="User"><Value Profile="(Default)">time.cloudflare.com</Value></Setting>
+    <Setting Name="NetworkTimeAutomatic" Type="System.Boolean" Scope="User"><Value Profile="(Default)">True</Value></Setting>
+    <Setting Name="NetworkTimeUpgradeRequired" Type="System.Boolean" Scope="User"><Value Profile="(Default)">True</Value></Setting>
+    <Setting Name="Np2ConfigurationIntents" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
+    <Setting Name="GpioRtcDevice" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
+    <Setting Name="GpioRtcEnabled" Type="System.Boolean" Scope="User"><Value Profile="(Default)">False</Value></Setting>
+    <Setting Name="BleRecordingFolder" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
+    <Setting Name="NpCalibrationFolder" Type="System.String" Scope="User"><Value Profile="(Default)" /></Setting>
+  </Settings>
+</SettingsFile>

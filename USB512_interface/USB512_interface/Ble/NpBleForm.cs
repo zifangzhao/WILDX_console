@@ -168,7 +168,7 @@ namespace USB512_interface
             foreach(var label in new[]{mediaStatus,clockStatus,configurationStatus}) {
                 label.Visible=false;label.TextChanged+=delegate {label.Visible=label.Text.Length!=0;};
             }
-            Controls.Add(log); Controls.Add(statusPanel); Controls.Add(actions); Controls.Add(settings); Controls.Add(top);
+            Controls.Add(log); Controls.Add(statusPanel); Controls.Add(actions); Controls.Add(settings);Controls.Add(BuildBleSessionControls());Controls.Add(top);
             if(maintenance)Controls.Add(maintenanceActions);
             devices.SelectedIndexChanged += delegate { if(!refreshingPeers)SelectCurrentPeer(); };
             // Use the same native WinRT registration as connection discovery.
@@ -283,6 +283,8 @@ namespace USB512_interface
         void UpdateControls()
         {
             bool linked=connection.Connected,ready=linked && recorderVersion!=0 && !busy && !hostBusy;
+            bool folderEditable=!busy && !hostBusy && pendingStop==null && (current==null || !(V2?current.State==3:current.State==1)) && !HasHostRecording();
+            bleDestinationFolder.Enabled=bleSelectFolder.Enabled=folderEditable;
             devices.Enabled=address.Enabled=!busy && !hostBusy && !linked;
             scan.Enabled=connect.Enabled=!busy && !hostBusy && !linked;
             stopScan.Enabled=!busy && !hostBusy && watcher.Status==BluetoothLEAdvertisementWatcherStatus.Started;
@@ -340,7 +342,11 @@ namespace USB512_interface
             if(NpFirmwareNotice.Offer(DialogOwner,"ble:"+address.Text.Trim(),NpFirmwareCatalog.Bundled.For((uint)recorderVersion),firmwareIdentity))
                 FirmwareReviewRequested?.Invoke();
         }
-        void Append(string message) { log.AppendText(DateTime.Now.ToString("HH:mm:ss") + " " + message + Environment.NewLine); }
+        void Append(string message) {
+            string line=DateTime.Now.ToString("HH:mm:ss")+" "+message+Environment.NewLine;log.AppendText(line);
+            string folder=blePendingSessionFolder??bleMetadataFolder;
+            if(!String.IsNullOrEmpty(folder))try{File.AppendAllText(Path.Combine(folder,"ble_session.log"),line);}catch{ /* A log write cannot interrupt device control. */ }
+        }
         async Task OpenReport()
         {
             string details="";
@@ -664,10 +670,12 @@ namespace USB512_interface
         {
             RequireNoPendingFirstSyncStart();
             if(pendingStop!=null)throw new IOException("Wait for Stop completion to be confirmed before starting another recording.");
+            if(!PrepareBleSessionFolder())return;
             var p = profiles.SelectedItem as Profile; var s = await ReadStatus();
             RequireStartNotCanceled();
             if(p==null)throw new IOException("Select recording settings before Start.");
             if(V2 && !NpV2SdControl.IsProfile(p.Mask,p.Hz))throw new IOException("Invalid V2 recording profile.");
+            BeginBleSessionStorage();
             if(p.Mask!=s.Mask || p.Hz!=s.Hz || !V2 && p.Mask==0 && mediaSettingsChanged){await Apply();s=await ReadStatus();}
             RequireStartNotCanceled();
             if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");

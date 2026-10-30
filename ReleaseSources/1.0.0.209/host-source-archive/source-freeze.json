@@ -1,0 +1,230 @@
+{
+  "version": "1.0.0.209",
+  "git_baseline": "dcca8bd38a51a959f3bf59866d3adbb52b10fb39",
+  "source_identity_role": "published207_baseline_plus_exact209_compiled_overlay",
+  "source_publication_commit": null,
+  "compiled_inputs": 200,
+  "archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release209-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 966329,
+    "sha256": "EFE0D0052DB6955AD9203E2F43B630F6C00CB5EF112628B192C1E5AA75349191"
+  },
+  "build_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-209-session.json",
+    "bytes": 35730,
+    "sha256": "5E472E9A37781122CB52016927D7BE765F4D97C17E2C85A2508E462B27AE5829"
+  },
+  "recipe": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\build-session208.ps1",
+    "bytes": 6399,
+    "sha256": "A76D7E8CDB09A62EFB50A43495AFCC2CC03D23539A1BAF3EE0EE11211C4CB164"
+  },
+  "source_stable_against_snapshot_and_build": true,
+  "sdk_reused_from208": true,
+  "sdk_inputs208209_identical": [
+    {
+      "path": "USB512_interface/USB512_interface/NpAcquisitionAnchor.cs",
+      "sha256": "21FA08D042DE1AEF5DB443E573242A8E8315CC5D507A16593DB64AB2EA190271"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRecordingUtc.cs",
+      "sha256": "20882A75D61D3745AB1D2BD87DF79A056C0F7C48F39CB8BABC7A60502444E8CF"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpV2ReadHistory.cs",
+      "sha256": "936A51FDF15D35F9A7DE692EE2E106794784D4C31C82C044EF0B495CEFBC77FD"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpImuGridWire.cs",
+      "sha256": "B8B2A6059F607EA09360EC284C9D1ECEEC66F25F0CF55A9CF88B6BC501BA775B"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpImuGridPhase.cs",
+      "sha256": "BD88E6317D2DCB79CB274B694809718A00B7FBF31F4CE4920C61FD9C7F97B8F3"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpImuGridCarrier.cs",
+      "sha256": "80F254F216C2D6B49E7692A12C2CF9D6CDBF85F04333D2A0ED63B764B4079E77"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpImuGridWriter.cs",
+      "sha256": "0E0F6DF089556A03516D1DDB38EE5D970189310680F9B18AA8DBF8B45D6BCE7F"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpV2GridSector.cs",
+      "sha256": "4234AAA87EC1A02A3FF2631FDFA11276A5AB434D252408147C008957C1EDED28"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncWire.cs",
+      "sha256": "0AFE9BF09E12723EE6A4C4BF8E457B271E3ABAB5E2382E1FBC18C32F00FA5F4E"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncUsb.cs",
+      "sha256": "E6CE50CD8FC2E3ADE2AC64DAEFE6FA12DEBE72D40FE7213E6D33BFB19F87D141"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncUsbEvidence.cs",
+      "sha256": "38C2BBACEEFB519914B94B2512265A9FFC3E9A66F5AB1DA9BB76881E93E1E8D0"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncUsbUtc.cs",
+      "sha256": "632AC10E2151856AC730DA69B3455D579F9713F1F0682A662BA064DAA9AD6C4A"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncSd.cs",
+      "sha256": "5B8399E247C481E7F97DB1BB05AC7D40DB6DB441BA796D2686EA17DDD7734C84"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFineClockWire.cs",
+      "sha256": "467A49EC001C35931D05660C5DE4743015C4FA7D49055B652CBE007236828EAF"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpSensorFineWire.cs",
+      "sha256": "73B12015F298444F689D42D28CFDA8F28DFB21DF95F0DC59A1CFF0B8BEDB51EB"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpSensorFine64Wire.cs",
+      "sha256": "555661DE3D0D6EEB504FB921E25B3145CDA047D3A3693EEF0E87ECB2D0668C35"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpSensorFineTime.cs",
+      "sha256": "A4A911B8D70C3F894C10B757366B3DBE0F9849393FA973870448FC745C8DAC36"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpSdFineAnalog.cs",
+      "sha256": "C06C821E62D16B3F19C06E1D0D8D5E9D7F3C96522F640DD7A82B35FFE2158F91"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpDerivedImuGridUtc.cs",
+      "sha256": "82ECDEA4A20F02551BA8397C80D25D141643F52BA567ED0942CEBDFC593CBBE1"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFineSdArchive.cs",
+      "sha256": "D89562DF1F72C9109A7BD144581783986D5CBEE456F19D1FCA4A459F643FAB8A"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRtcStartWire.cs",
+      "sha256": "C261A0610A9FF76697D0AA53E7D6FE6ACA882D0C554E7079943639A03B6DCEE4"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRtcSdArchive.cs",
+      "sha256": "4C8F03A881999A020DCC8C0BBFB831056189A79D40ED5EC34DA3AF51E37E27EF"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRtcRecordingUtc.cs",
+      "sha256": "CDCE65958ED85E61F2743534EE9455E3CBE6D68E787E25C3E6301711F67B9E4D"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpRtcUsbArchive.cs",
+      "sha256": "2AC59B9D7EED4147CE2765572B79FDBEBA0869F111856F8F8D64229E7CD3B3AD"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFineClockFit.cs",
+      "sha256": "3519B30DF65F53CACA548D22446EA5F08811B4DE85F54642E49ACF724C155F74"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFineClockRecording.cs",
+      "sha256": "6A39D4FCE413C6AD8956669395982C8BB7A1A528DB11BA0E4ABA009987C4F142"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFineClockEvidenceImport.cs",
+      "sha256": "414AD6CAB9124C4CB490DC64727F83CF676A8C43F6533D993F1FD96043C850D5"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncUtc.cs",
+      "sha256": "6BED6257D3D8B0EE5BFA17C7A85E086B65B728432AC76E5B14B87C782246C4A2"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncSdUtc.cs",
+      "sha256": "0498CDB24154EE068A6886DE52A5FA9382A22F00D67EC8C9EDB31339DE2F4779"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpUsbTimingWire.cs",
+      "sha256": "05C5A0C828BF92E735DAA50A9F7CF3786E01EBCFF6E7D387BEBB2E6E893206CB"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpUsbTimingEvidence.cs",
+      "sha256": "24533B3E17FBEABB68280311308C93A6184E178E8E8121A7E8C612F7088965F5"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpHostClock.cs",
+      "sha256": "D53E3DDE861D4762A0C75EE7AD1B7B4E90C830154533DCE89FC1564CBB208AC1"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpTimeCorrection.cs",
+      "sha256": "275FCB45E06B29EC3BD8EB302F90E00970698368D8519A1BB56ECD4172E1D357"
+    },
+    {
+      "path": "Neuropixels/SD/NpV2SdDatExport.cs",
+      "sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F"
+    },
+    {
+      "path": "Neuropixels/SD/NpV2SdGrid.cs",
+      "sha256": "2159B3E4D4D54335B46EF42CC711A1661E18420EF6204B3B6CA4501A54282DE9"
+    },
+    {
+      "path": "Neuropixels/SD/NpSdImuExport.cs",
+      "sha256": "1DE55BA87BD9EA50F8BE84118FF317DBC877C54AE74F38FA637E514D4C3E6FBD"
+    },
+    {
+      "path": "Neuropixels/ClosedLoop/NpClosedLoopEvent.cs",
+      "sha256": "342632A5909EF7E2F19D5F9ACA09342DC7ABF3F3A43793FBA1E3F77D4BA9D6CA"
+    },
+    {
+      "path": "Neuropixels/ClosedLoop/NpClosedLoopControl.cs",
+      "sha256": "A6F9267509CDE5BD71DA0182393B1F1B3FE9D1974D8ACE453ABCC4EF07B30B45"
+    },
+    {
+      "path": "Neuropixels/ClosedLoop/NpClosedLoopCarrier.cs",
+      "sha256": "5EC679E542838C46C895D1E3DA57D15416D8A68824C318E19923408341BD8BFE"
+    },
+    {
+      "path": "Neuropixels/ClosedLoop/NpClosedLoopLog.cs",
+      "sha256": "EFA59F6105C1ED35304BC2BDC7046D1E70887561D17C420EDF0DDAA04B01BB56"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpAdcCalibration.cs",
+      "sha256": "62749EAA50941760B07AEA01D2C06C77C67B5E7239B2787D0DE5E36E137267E9"
+    },
+    {
+      "path": "Neuropixels/SD/NpNeuroscopeXml.cs",
+      "sha256": "9BFC0C42467B06C3CD42BD0B5A85FE2CEF77B6157D6D7FEA7370367D87CEFE2D"
+    },
+    {
+      "path": "Neuropixels/SD/NpMetadataFile.cs",
+      "sha256": "6578CE6806FC38A3C04DE47E059A82FB44AE33CE98188A88C6F8BB53ED866A14"
+    },
+    {
+      "path": "Neuropixels/USBConsoleV2/NpV2UsbConsole.cs",
+      "sha256": "AFA417C40BC2FF4E8F5B5392CC24B475D04531EE03990B340D96AB1FC353B856"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Np2ConfigurationClient.cs",
+      "sha256": "977164CB1A6281DCB2F641F2CC63EBD97CCAEB5EDA3C95BE0E9B497B00F24228"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/USB512WinUsb.cs",
+      "sha256": "477A3312FFDE8117553002892E22DE698878B657344208C6BAF4F0399D65EB63"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/UsbHealth.cs",
+      "sha256": "5253BD3C84B3CE4D3400FD6FDAF451852B78B3D4F9E3560E79E2A4791E74B124"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/UsbHealthNative.cs",
+      "sha256": "D06AE5EB87949FB667DEC4713B63C76225C23CFE8577CC51FB4326638ACBA710"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NeuropixelsPreviewForm.cs",
+      "sha256": "35870EA5E803A1E24C75F71B5BB9930652F492BCFF32DC5625ADEA4ECC6DFB6F"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/XeNpStreamDecoder.cs",
+      "sha256": "F9880FECCFDB50A33A605328636ACB0F94AE54BF3B7A01C04646EA899DFDAD78"
+    }
+  ],
+  "sdk_input_count": 50,
+  "build_history": "SDK208 compiled once; GUI208 failed internalSaveFiles access. GUI209 uses public calibration.Save; exact208SDK retained after all50 shared input hashes matched.",
+  "hardware_scope": "Host/session folder/GPIO changes only; firmware/wire unchanged; reuse207 producer evidence.",
+  "recipe_execution": "Use original recipe path, archived copy is reference because PSScriptRoot is relative."
+}

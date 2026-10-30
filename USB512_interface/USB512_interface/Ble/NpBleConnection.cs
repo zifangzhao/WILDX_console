@@ -107,7 +107,7 @@ namespace USB512_interface
                     if(device==null || generation!=Epoch)return null;
                     string address=device.BluetoothAddress.ToString("X12");
                     string session=DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N");
-                    clockJournalFolder=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    clockJournalFolder=recordingClockFolder??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                         "WILDX","Sync","BLE-"+address,session);
                     // Transport address and connection epoch only; never fabricate an MCU UID.
                     clockJournal=new NpClockJournal(clockJournalFolder,"BLE-"+address,"connection-"+generation+"-"+session);
@@ -116,10 +116,15 @@ namespace USB512_interface
                 return clockJournalEpoch==generation?clockJournal:null;
             }}catch{return null;}
         }
+        string recordingClockFolder;
+        internal void UseRecordingClockFolder(string folder) {
+            string full=Path.GetFullPath(folder);Directory.CreateDirectory(full);
+            CloseClockJournal();lock(clockJournalLock)recordingClockFolder=clockJournalFolder=full;
+        }
         void CloseClockJournal()
         {
             CancelRecordingClock();NpClockJournal retired;
-            lock(clockJournalLock){retired=clockJournal;clockJournal=null;clockContext=null;
+            lock(clockJournalLock){retired=clockJournal;clockJournal=null;clockContext=null;recordingClockFolder=null;
                 if(retired!=null)retired.ClockClosed(Stopwatch.GetTimestamp(),"BLE connection ended; next connection has a separate epoch");}
             // Close/fit away from receive/control callbacks; no recording backpressure.
             if(retired!=null)try {Task.Run(delegate {try{retired.Dispose();}catch{}});}catch{}

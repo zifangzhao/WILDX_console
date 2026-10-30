@@ -241,6 +241,8 @@ namespace USB512_interface
             bleWorkspace.HostRecordingPrepared=StartGpioRtcForRecording;
             bleWorkspace.HostRecordingStopRequested=StopGpioRtcRecording;
             bleWorkspace.HostRecordingIsActive=()=>gpioRtcLogger!=null;
+            bleWorkspace.HostGpioLogging.Checked=gpioRtcEnabled.Checked;
+            bleWorkspace.HostGpioLogging.CheckedChanged+=delegate {if(gpioRtcEnabled.Checked!=bleWorkspace.HostGpioLogging.Checked)gpioRtcEnabled.Checked=bleWorkspace.HostGpioLogging.Checked;};
             bleWorkspace.FirmwareReviewRequested+=delegate {workspaceTabs.SelectedTab=advancedPage;};
             bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};
             blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
@@ -379,7 +381,9 @@ namespace USB512_interface
             if(advancedStorageSource!=null)advancedStorageSource.Text=downloadWorkspace.SelectedSourceDescription??"No storage source selected. Choose a card in Data Download.";
             if(DownloadBusy || BleInUse || npSettingsApplying)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
             bool usbBusy=running || ztestRunning || npSettingsApplying || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled || NpExplorationActive;
-            if(gpioRtcDevices!=null)gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=!usbBusy && gpioRtcLogger==null;
+            bool gpioEditable=!usbBusy && gpioRtcLogger==null && (bleWorkspace==null || !bleWorkspace.IsBusy);
+            if(gpioRtcDevices!=null){gpioRtcEnabled.Enabled=gpioEditable;gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=gpioEditable && gpioRtcEnabled.Checked;}
+            if(bleWorkspace!=null)bleWorkspace.HostGpioLogging.Enabled=gpioEditable;
             if(bleWorkspace!=null)bleWorkspace.SetHostBusy(usbBusy || DownloadBusy);
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
             if(selectedDeviceKind==DeviceKind.XeNp)btnPreview.Enabled=NpControlsAvailable;

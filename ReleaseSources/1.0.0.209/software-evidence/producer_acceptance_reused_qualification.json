@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "version": "1.0.0.207",
+  "status": "qualified_matched207_append_release",
+  "gui_sha256": "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC",
+  "sdk_sha256": "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B",
+  "runtime_selection": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\runtime-selection207.json",
+    "bytes": 12767,
+    "sha256": "065AE516D516164C2B70B2BAA153558BAFFDBB9FAEEA91380A4C14E021709C51"
+  },
+  "build_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-207-append.json",
+    "bytes": 35398,
+    "sha256": "CD981EF346631DE31850DDB3DF26A61F949F572292EDC8ED786EE423CAEA7E06"
+  },
+  "source_archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 963153,
+    "sha256": "F0F5765DA9B2302B2ADEDD0E47D30496E73510E27487A8C1DDFE91B545702637"
+  },
+  "software_evidence": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\protocol_receipt.json",
+      "bytes": 9462,
+      "sha256": "0221AC13DF0224AA77F6B1A46D9B5933A3C66D93A44ACDB6C7DB03D335157068"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\sdk_source_source-freeze.json",
+      "bytes": 6664,
+      "sha256": "5560A0DB4C3FE70AFCC6A4C2D9999950BB512A5E66117886F6660A252FC4BA90"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\actual207_sdk_boundary-freeze.json",
+      "bytes": 2073,
+      "sha256": "DAB99BE83F956380545AF4F937CF6C1F2D29EBAB9C3556A67E2E9E01278BD474"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\peer_review_review.json",
+      "bytes": 4981,
+      "sha256": "E6714032DBDB15936EF9DAE876C919CC9ECB07CAC55B09F5F128FFF73DDD439C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\production_c49_receipt.json",
+      "bytes": 1516,
+      "sha256": "F0F9165148A45E5C3E00A20CF14B11820DE0DAE008AB9B674BD5C33A403BF737"
+    }
+  ],
+  "bundle_checks": {
+    "status": "passed",
+    "actual_gui_sha256": "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC",
+    "actual_sdk_sha256": "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B",
+    "core_checks": 591,
+    "v2_checks": 42576,
+    "core_log": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\bundle-checks\\core.log",
+      "bytes": 93,
+      "sha256": "131A6D509B9B54A624CB70C4830A95E81F7FBC599B8D995CB65D85593231EFAB"
+    },
+    "v2_log": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\bundle-checks\\v2.log",
+      "bytes": 133,
+      "sha256": "CDBE59355B6BF9FC1A7D93A18C438A41925AC41EEB96E49E3D47C683F6743D9D"
+    },
+    "scope": "Actual207 staged bundle/identity/prompt/UI and full-image/guardedDFU model checks. No flash/write or new hardware capture.",
+    "root_receipt": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\bundle-checks\\receipt.json",
+      "bytes": 904,
+      "sha256": "F0759E998DA206DB1DE04268660C986CE6059B709BAFEEB3CA2757B57095CBBB"
+    }
+  },
+  "firmware_acceptance": {
+    "V1": "Reuse exact checked published204/206 production components and qualification; no recapture required",
+    "V1Camera": "Unchanged checked published206 camera payload",
+    "V2": {
+      "status": "accepted",
+      "candidate_app": "7F238587",
+      "candidate_usb": "74FC7104",
+      "receipt": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\actual-acceptance.json",
+        "bytes": 8138,
+        "sha256": "39D04460DAB5137AF3E438BA0E36E3EA36515AE13F905E0DD68A2304945E3C4E"
+      },
+      "scope": "Three probes20kHz SD120; exact NN/IMU/RTC and normal handoff plus prior14 catalog preservation and safe idle/leases released"
+    }
+  },
+  "v2_recording": {
+    "session": 3452184953,
+    "profile": "3probes20kHz SD120seconds",
+    "physical_nn_blocks": 93752,
+    "logical_prefix": 93752,
+    "logical_high_water": 93752,
+    "admitted_high_water": 93752,
+    "neural_source_gaps": 0,
+    "neural_dropped_blocks": 0,
+    "neural_missing_source_ticks": 0,
+    "physical_overflows": 0,
+    "producer_discarded_ticks": 0,
+    "grid_observed_rows": 150003,
+    "grid_missing_rows": 0,
+    "grid_queue_drops": 0,
+    "grid_scheduler_misses": 0,
+    "grid_known_unsaved_rows": 0,
+    "bad_aux": 0,
+    "valid_advancing_native_snapshots": 23532,
+    "local_rtc_interval_us": 120,
+    "pc_calibration_uncertainty_us": 20205,
+    "relative_cached_copy_bound_us": 101,
+    "normal_ble_usb2_usb3_handoff": true,
+    "physical_displaced_groups": 636,
+    "maximum_group_displacement": 5,
+    "source_window_qualified": false,
+    "terminal_timing_qualified": false,
+    "native_conversion_phase_qualified": false
+  },
+  "safe_finish": {
+    "app_mode": 1,
+    "ble_state": 1,
+    "error": 0,
+    "fault": 0,
+    "catalog_records": 15,
+    "prior14_ids_extents_cookies_preserved": true,
+    "last_marker_delta_only": "0x30000 LAST+DELETE_ALLOWED",
+    "both_leases_exit": 0,
+    "owner_hashed_acceptance": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\hil-r1\\actual-acceptance.json",
+      "bytes": 8138,
+      "sha256": "39D04460DAB5137AF3E438BA0E36E3EA36515AE13F905E0DD68A2304945E3C4E"
+    }
+  },
+  "firmware_source": {
+    "git_baseline": "b249605074da17b01ad3095350022300ee82ac61",
+    "role": "historicalbaseline_plus_exact_tested_incremental_overlay",
+    "incremental_archive_sha256": "40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38",
+    "full_clean_rebuild_claimed": false,
+    "historical_6cb_preimage_gaps_retained": true
+  },
+  "limits": [
+    "One scoped3probe20kHz120second V2 SD run; no unlimited stall/endurance/all-mode claim.",
+    "1250Hz scheduled cached copies are not physical sensor conversion-phase lock.",
+    "RTC-to-NP interval is local; PC calibration uncertainty is separate and not claimed absoluteUTC accuracy.",
+    "Source overlap and final-tail timing remain unqualified.",
+    "V1/Camera/runtime companions reuse exact prior checked bytes; no new qualification invented.",
+    "No postStop automatic fullpayload validation scan introduced."
+  ],
+  "packaging": "Root will invoke exactlyoneNSIS/fresh extraction and pin all55 runtime files; this qualification does not run installer."
+}

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace USB512_interface {
  public partial class Form1 {
-  ComboBox gpioRtcDevices;Button gpioRtcRefresh;Label gpioRtcStatus;
+  ComboBox gpioRtcDevices;Button gpioRtcRefresh;Label gpioRtcStatus;CheckBox gpioRtcEnabled;
   TextBox gpioRtcInfo;string gpioRtcLastInfo;
   sealed class GpioChannelRow {
    internal Label Id,Led,Count,Frequency;internal long Events;internal DateTime PulseUntil;
@@ -23,9 +23,10 @@ namespace USB512_interface {
    String.Equals(d.Port,port,StringComparison.OrdinalIgnoreCase) && String.Equals(d.Identity,id,StringComparison.OrdinalIgnoreCase));
   Control BuildGpioRtcControls() {
    var row=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=4,RowCount=1,Margin=Padding.Empty};
-   row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+   row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,125));row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
    row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,88));row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,105));
-   row.Controls.Add(new Label {Text="GPIO / RTC",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted,Margin=Padding.Empty},0,0);
+   gpioRtcEnabled=new CheckBox {Name="gpioRtcEnabled",Text="GPIO / RTC logging",AutoSize=true,Anchor=AnchorStyles.Left,Margin=Padding.Empty,
+    Checked=Properties.Settings.Default.GpioRtcEnabled};row.Controls.Add(gpioRtcEnabled,0,0);
    gpioRtcDevices=new ComboBox {Name="gpioRtcDevices",Anchor=AnchorStyles.Left|AnchorStyles.Right,DropDownStyle=ComboBoxStyle.DropDownList,AccessibleName="GPIO RTC logger",Margin=Padding.Empty};
    gpioRtcDevices.Items.Add(new NpGpioRtcDevice());gpioRtcDevices.SelectedIndex=0;
    gpioRtcDevices.SelectedIndexChanged+=delegate {
@@ -38,6 +39,12 @@ namespace USB512_interface {
    gpioRtcRefresh.Margin=new Padding(6,0,8,0);
    gpioRtcRefresh.Click+=delegate {RefreshGpioRtcDevices();};row.Controls.Add(gpioRtcRefresh,2,0);
    gpioRtcStatus=new Label {Name="gpioRtcStatus",Dock=DockStyle.Fill,TextAlign=ContentAlignment.MiddleLeft,ForeColor=WildXTheme.Muted};row.Controls.Add(gpioRtcStatus,3,0);
+   gpioRtcEnabled.CheckedChanged+=delegate {
+    try{Properties.Settings.Default.GpioRtcEnabled=gpioRtcEnabled.Checked;Properties.Settings.Default.Save();}
+    catch(Exception ex){WarnRecordingOnce("gpio-settings","GPIO/RTC setting could not be saved: "+ex.Message);}
+    if(bleWorkspace!=null && bleWorkspace.HostGpioLogging.Checked!=gpioRtcEnabled.Checked)bleWorkspace.HostGpioLogging.Checked=gpioRtcEnabled.Checked;
+    RefreshGpioRtcInfo();UpdateStartEnabled();
+   };
    return row;
   }
   Control BuildGpioRtcInfo() {
@@ -120,7 +127,7 @@ namespace USB512_interface {
    if(gpioRtcInfo==null)return;
    var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
    gpioRtcInfo.Text=gpioRtcLogger!=null?gpioRtcLogger.Describe(gpioRtcStatus.Text):gpioRtcLastInfo??
-    (selected==null || selected.Port==null?"Off":selected.Port+" · "+(selected.Port=="Unavailable"?"Unavailable":"Ready"));
+    (gpioRtcEnabled!=null && !gpioRtcEnabled.Checked || selected==null || selected.Port==null?"Off":selected.Port+" · "+(selected.Port=="Unavailable"?"Unavailable":"Ready"));
   }
   void RefreshGpioRtcDevices() {
    if(running || gpioRtcLogger!=null)return;
@@ -153,17 +160,23 @@ namespace USB512_interface {
    }
    gpioRtcLastInfo=null;
    ResetGpioChannelDisplay();
+   if(gpioRtcEnabled==null || !gpioRtcEnabled.Checked){
+    if(settings!=null)settings.Context("gpio_rtc",NpRecordingSettings.Fields("requested",false));
+    gpioRtcStatus.Text="Off";RefreshGpioRtcInfo();return;
+   }
+   gpioRtcEnabled.Enabled=false;
    gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=false;
    var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
-   if(selected==null || selected.Port==null){gpioRtcStatus.Text="";RefreshGpioRtcInfo();return;}
+   if(settings!=null)settings.Context("gpio_rtc",NpRecordingSettings.Fields("requested",true,"port",selected==null?null:selected.Port));
    try {
+    if(selected==null || selected.Port==null)throw new IOException("GPIO/RTC logging is enabled. Select a GPIO/RTC device in USB Mode.");
     SetGpioRtcContextForRecording(folder,settings);
     if(!gpioRtcDevicePresent(selected.Port,selected.Identity))throw new IOException("The selected GPIO/RTC board is unavailable. Refresh and select its COM port.");
     gpioRtcLogger=new NpGpioRtcLogger(folder,selected);gpioRtcLogger.Start();gpioRtcStatus.Text="Logging";
    }catch(Exception ex) {
     if(gpioRtcLogger!=null){gpioRtcLogger.Dispose();gpioRtcLogger=null;}
     gpioRtcStatus.Text="Failed";
-    gpioRtcLastInfo=selected.Port+" · Failed"+Environment.NewLine+ex.Message;
+    gpioRtcLastInfo=(selected==null?"GPIO/RTC":selected.Port)+" · Failed"+Environment.NewLine+ex.Message;
     try {File.WriteAllText(Path.Combine(folder,"gpio_rtc_start_error.txt"),DateTime.UtcNow.ToString("O")+Environment.NewLine+ex+Environment.NewLine);}
     catch(Exception logError){ex=new IOException(ex.Message+"; could not save GPIO/RTC failure: "+logError.Message,ex);}
     WarnRecordingOnce("gpio-start",ex.Message+"\r\n\r\nNeural recording will continue without GPIO/RTC logging.");
@@ -228,7 +241,7 @@ namespace USB512_interface {
      try{NpRecordingSettings.RefreshBundle(logger.DirectoryPath);}
      catch(Exception ex){WarnRecordingOnce("gpio-bundle","GPIO/RTC stopped, but its recording index could not be updated: "+ex.Message);}
    }
-   gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=true;
+   gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=true;if(gpioRtcEnabled!=null)gpioRtcEnabled.Enabled=true;
    RefreshGpioRtcInfo();
   }
   void ObserveNpImu(NpImuDisplay display,bool stopped) {

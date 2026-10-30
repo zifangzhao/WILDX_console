@@ -125,3 +125,7 @@ Firmware/** -text
 /LATEST_INSTALLERS/legacy/1.0.0.206/** -text
 
 /Firmware/V2/** -text
+
+/ReleaseSources/1.0.0.209/** -text
+
+/LATEST_INSTALLERS/legacy/1.0.0.207/** -text

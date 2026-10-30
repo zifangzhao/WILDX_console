@@ -1,43 +1,45 @@
 {
-    "version":  "1.0.0.207",
-    "releaseId":  "WILDX207_V2_GRID16_APPEND_20261030",
-    "baselineVersion":  "1.0.0.206",
+    "schemaVersion":  1,
+    "version":  "1.0.0.209",
+    "releaseId":  "WILDX209_BLE_SESSION_FOLDER_GPIO_20261030",
+    "baselineVersion":  "1.0.0.207",
     "installer":  {
-                      "file":  "WILDX_console-Setup-1.0.0.207.exe",
-                      "sha256":  "0AA5828A398EC74D4F4CCE56F01D91441DAD8651658C57BA2A461FABC5C6A81F",
-                      "bytes":  7824694
+                      "file":  "WILDX_console-Setup-1.0.0.209.exe",
+                      "sha256":  "3CCE8B0B00A3867ABC8D9E0129F525E1495702A20AA3B7BD35C04BCF1AAC182A",
+                      "bytes":  7831533
                   },
-    "guiSha256":  "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC",
-    "sdkSha256":  "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B",
+    "guiSha256":  "063623C8EBAFC257AA6EDD943A4052852A724064473FAC61E78E3CE6142D7CD3",
+    "sdkSha256":  "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
     "catalogSha256":  "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
-    "sourceArchiveSha256":  "F0F5765DA9B2302B2ADEDD0E47D30496E73510E27487A8C1DDFE91B545702637",
-    "sourcePublicationCommit":  "97ea7ed3ec688d4cc49cf42711a63f96bcad7837",
-    "sourceProvenance":  "../ReleaseSources/1.0.0.207/host-source-archive/source-freeze.json",
-    "validation":  "../ReleaseSources/1.0.0.207/qualification.json",
+    "sourceArchiveSha256":  "EFE0D0052DB6955AD9203E2F43B630F6C00CB5EF112628B192C1E5AA75349191",
+    "sourceGitBaseline":  "dcca8bd38a51a959f3bf59866d3adbb52b10fb39",
+    "sourcePublicationCommit":  null,
+    "sourcePublicationCommitRole":  "not_assigned_before_publication; baseline_plus_exact_compiled_overlay",
+    "sourceIdentityRole":  "published207_baseline_plus_exact209_compiled_overlay",
+    "sourceProvenance":  "../ReleaseSources/1.0.0.209/host-source-archive/source-freeze.json",
+    "validation":  "../ReleaseSources/1.0.0.209/qualification.json",
     "firmware":  [
                      {
-                         "usb":  "1E73A743",
-                         "stage":  "Two probes20kHz USB60 and SD30 checked",
+                         "family":  1,
+                         "release":  "V1_DETERMINISTIC_IMU_APPFFF283D9_USB1E73A743_20261030",
                          "app":  "FFF283D9",
-                         "family":  1
+                         "usb":  "1E73A743",
+                         "recovery":  null,
+                         "stage":  "USB60 and BLE-to-SD30 recording checked"
                      },
                      {
-                         "usb":  "74FC7104",
-                         "stage":  "Three probes20kHz SD120 checked",
+                         "family":  2,
+                         "release":  "V2_GRID16_APPEND_APP7F238587_USB74FC7104_20261030",
                          "app":  "7F238587",
+                         "usb":  "74FC7104",
                          "recovery":  "6408DBB8",
-                         "family":  2
+                         "stage":  "Three probes20kHz SD120 checked"
                      }
                  ],
+    "expectedPayloadFiles":  55,
     "firstSyncEnabled":  true,
     "preparationEnabled":  false,
     "allModeOrEnduranceQualified":  false,
-    "experimentalV2GridEnabled":  false,
-    "installerPayloadExtractedAndVerified":  true,
-    "extractedPayloadFilesVerified":  55,
-    "installerExecuted":  false,
-    "separateZipIncluded":  false,
-    "standaloneUpdateRequired":  false,
     "payload":  [
                     {
                         "path":  "Correct-RecordingTime.ps1",
@@ -181,13 +183,13 @@
                     },
                     {
                         "path":  "WILDX_console.exe",
-                        "bytes":  2744320,
-                        "sha256":  "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC"
+                        "bytes":  2757120,
+                        "sha256":  "063623C8EBAFC257AA6EDD943A4052852A724064473FAC61E78E3CE6142D7CD3"
                     },
                     {
                         "path":  "NpV2SdDatExport.dll",
-                        "bytes":  668160,
-                        "sha256":  "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B"
+                        "bytes":  672768,
+                        "sha256":  "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5"
                     },
                     {
                         "path":  "Firmware/V1Camera/README.md",
@@ -314,7 +316,5 @@
                         "bytes":  23600,
                         "sha256":  "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730"
                     }
-                ],
-    "sourceGitBaseline":  "0e41669fe419e42b98cdf27205fdaced6dff9047",
-    "sourceIdentityRole":  "git_baseline_plus_exact_compiled_source_overlay"
+                ]
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <ProjectGuid>{2C09A791-8FB3-492F-AD20-34FF63F311A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>NpV2SdDatExport</AssemblyName>
+    <RootNamespace>USB512_interface</RootNamespace>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Deterministic>true</Deterministic>
+    <DefineConstants>TRACE;NP2_CONSOLE_STANDALONE</DefineConstants>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableNpFirstSync)' == 'true'">
+    <DefineConstants>$(DefineConstants);NP_FIRST_SYNC_ENABLE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../USB512_interface/USB512_interface/NpAcquisitionAnchor.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRecordingUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpV2ReadHistory.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridPhase.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridCarrier.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridWriter.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpV2GridSector.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsb.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsbEvidence.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsbUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncSd.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSensorFineWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSensorFine64Wire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSensorFineTime.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSdFineAnalog.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpDerivedImuGridUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineSdArchive.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcStartWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcSdArchive.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcRecordingUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcUsbArchive.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockFit.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockRecording.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockEvidenceImport.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncSdUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpUsbTimingWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpUsbTimingEvidence.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpHostClock.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpTimeCorrection.cs" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Web.Extensions" />
+    <Compile Include="NpV2SdDatExport.cs" />
+    <Compile Include="NpV2SdGrid.cs" />
+    <Compile Include="NpSdImuExport.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopEvent.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopControl.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopCarrier.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopLog.cs" />
+    <Compile Include="..\..\USB512_interface\USB512_interface\NpAdcCalibration.cs"><Link>NpAdcCalibration.cs</Link></Compile>
+    <Compile Include="NpNeuroscopeXml.cs" />
+    <Compile Include="NpMetadataFile.cs" />
+    <!-- Reuse the maintained USB console wire/sample decoder. All sources
+         belong to this console repository, not a firmware checkout. -->
+    <Compile Include="..\USBConsoleV2\NpV2UsbConsole.cs"><Link>NpV2UsbConsole.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\Np2ConfigurationClient.cs"><Link>Np2ConfigurationClient.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\USB512WinUsb.cs"><Link>USB512WinUsb.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\UsbHealth.cs"><Link>UsbHealth.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\UsbHealthNative.cs"><Link>UsbHealthNative.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\NeuropixelsPreviewForm.cs"><Link>NeuropixelsPreviewForm.cs</Link></Compile>
+    <Compile Include="..\..\USB512_interface\USB512_interface\XeNpStreamDecoder.cs"><Link>XeNpStreamDecoder.cs</Link></Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
