@@ -1,0 +1,162 @@
+{
+  "utc": "2026-10-30T17:40:19.576515+00:00",
+  "status": "READY_OFFLINE_MATCHED207_V5_HELPER_HARDWARE_PENDING_OWNER_GO",
+  "helper": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\built-r2\\NpV2SdAppendAcceptance207.exe",
+    "bytes": 189952,
+    "sha256": "CEAC4BAAF62EFD017C30DF376AFCEC618E3B3D28DDD5F4A547B4D19E9CDE63E5"
+  },
+  "compile_count": 1,
+  "sources": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\common\\Acceptance207Pins.cs",
+      "bytes": 5923,
+      "sha256": "EFA0413C4D2B0CB1F0628462B4F40C43A653009D8BA66152D3D495D23D880DE6"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\common\\EnforcedGrid207Evidence.cs",
+      "bytes": 31118,
+      "sha256": "09BA47A2A63DE435FBD7C2701CC2DCCF6FF9DA5D5F8BABBC8715C4644B3C82EF"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\NpFirstSyncV2SdRecord207.cs",
+      "bytes": 66544,
+      "sha256": "D80B62D70AD47D92642E34F43E567257A4738864749D3C3E03E3DC69A826C6A4"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\V2Sd16Grid207Evidence.cs",
+      "bytes": 17954,
+      "sha256": "AC14B62DE086DA53561960E1476F76DE0B235796CA9ED54F644C32BCDBFC35FE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\OwnerBaseline203.cs",
+      "bytes": 6690,
+      "sha256": "BF12D93C5C13AC1094AE9CE41AA3A3C5F218857E64731EFF7C31E641122535A2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\FlagsAdmission203.cs",
+      "bytes": 2135,
+      "sha256": "03807D4FA066B669620C95CFFD099E7522EFDD3C4E04D32FA2B4CFCED1DBE7ED"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\EmptyAdmission203.cs",
+      "bytes": 2796,
+      "sha256": "2AC4BAD137CEDC7DCBF762652A0D95F66A2DD5276EB6BFD5F21F0BC42392F65B"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\AppendAdmission207.cs",
+      "bytes": 5324,
+      "sha256": "D9FC3C626584A9BB6CE7F73A1C1B9FD77DA75DE377B7F8336BDDD7AFEDA9B011"
+    }
+  ],
+  "scripts": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\build-once.ps1",
+      "bytes": 6368,
+      "sha256": "1FD312E457BA58DF6D29A7F50A37499CA9FE9814174AEDED4CBAD929ECF2CE21"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\prepare.py",
+      "bytes": 2412,
+      "sha256": "FB23AFB562915FFBF268D835783533DD0569BAE3848650150E5FE13803C87E6C"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\adapt.py",
+      "bytes": 3275,
+      "sha256": "573C2E84E7E2C67F6F9065B518AFB1C68F6D82602E5225D50F80E8B0CDF2C1BC"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\make-owner-pins207.ps1",
+      "bytes": 3571,
+      "sha256": "81D020E341C10B1E60EE6553AB7F06ED098947E2AE386E9E3987038D1650CDA7"
+    }
+  ],
+  "parent_worker": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\v2-sd-empty120-203\\source\\v2-sd\\NpFirstSyncV2SdRecord200.cs",
+    "bytes": 65658,
+    "sha256": "0D12C227D1260004C569F6BDDB7C0B259EB7DDD4F514CB31DBE0E57E8B1019A1"
+  },
+  "compiler_argv": [
+    "/nologo",
+    "/platform:x64",
+    "/optimize+",
+    "/r:System.Core.dll",
+    "/r:System.Configuration.dll",
+    "/r:System.Web.Extensions.dll",
+    "/r:System.Windows.Forms.dll",
+    "/r:System.Drawing.dll",
+    "/out:D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\built-r2\\NpV2SdAppendAcceptance207.exe",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\common\\Acceptance207Pins.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\common\\EnforcedGrid207Evidence.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\NpFirstSyncV2SdRecord207.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\V2Sd16Grid207Evidence.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\OwnerBaseline203.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\FlagsAdmission203.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\EmptyAdmission203.cs",
+    "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source\\v2-sd\\AppendAdmission207.cs"
+  ],
+  "compile_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\built-r2\\compile-attempt.json",
+    "bytes": 4027,
+    "sha256": "FFB22617D18E1C128091FBE8121695C3F4B5F483AB60457EA10F959DB2F6FF45"
+  },
+  "original_selftest_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\built-r2\\helper-receipt.json",
+    "bytes": 3322,
+    "sha256": "BAE137A62254AA000962CAB981254C50946E11C90E9ECA24197B7345F79F9911"
+  },
+  "selected_runtime_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\built-r2\\helper-selected-receipt.json",
+    "bytes": 2422,
+    "sha256": "FD3C6B34F757B2154E3EAF81C1093114325731A5C7A02E91EC5A69E160B21DAF"
+  },
+  "pins": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\pins-offline.json",
+    "bytes": 1997,
+    "sha256": "2574433BA7D9DF353A9C93AF79FB18477A62729D635ACD9DEC405CA2F134F96B"
+  },
+  "runtime_selection": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\runtime-selection207.json",
+    "bytes": 12767,
+    "sha256": "065AE516D516164C2B70B2BAA153558BAFFDBB9FAEEA91380A4C14E021709C51"
+  },
+  "cli_checks": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\cli-direct\\receipt.json",
+    "bytes": 338,
+    "sha256": "3CBB31AB17E8CDB972EDBF9598D022637BE95ADB60B7D7E8C91BBCF4DFC43841"
+  },
+  "readme": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\README.md",
+    "bytes": 5881,
+    "sha256": "DB17CDEF5B7DA907B326ECC6A4F4853609729B06B39C62481F9A6E6BF794363E"
+  },
+  "independent_actual207_sdk_smoke": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\compiled207\\exports\\receipt.json",
+    "bytes": 1617,
+    "sha256": "E088E543BDF520F2FCDCC4C3989F515685A72048CEB1AC5BDC9B1DEE00AEAE63"
+  },
+  "checks": {
+    "actual207_embedded_selftest": "PASS; no Form/connection/device constructed;120 shared-grid checks plus metadata/wrapper/schema3/physical-parent checks,2 actual207 client5 scenarios and retained identity/baseline/finite guards",
+    "independent_sdk_smoke_checks": 68,
+    "noargs_exit": 0,
+    "help_exit": 0,
+    "old203_rejection_exit": 1,
+    "one_csc_compile": true,
+    "reused_pure_selftest_after_selected_companion_copy": true
+  },
+  "new_helper_admission": {
+    "caps": "matching cached1/2/3/4/5 from actual207 client;5 required before Start",
+    "start": "actual UID-bound request/ACK5 and record25; no fallback qualifies",
+    "status": "actual207 client fake transport validates exact5/token; no extra active HIL query",
+    "stored": "actual207 SDK schema3/order1/IndexedGridAppend with exact original P/N/H/A and NN/AUX physical counts",
+    "aux": "physical order; original logical parent checked via saved index, no retag/sort",
+    "owner": "current full snapshot/CID/profile/idle/global+UID lease/verified paired firmware context retained; no new format or empty-card requirement"
+  },
+  "limits": [
+    "No hardware, flash, recording, app/SDK/firmware compilation, Git, package or publication by this work package.",
+    "Unknown Start/stop ownership retains HOLD; owner must not kill accepted draining work.",
+    "Firmware candidate identity supplied by owner; offline CRC values are only modeled fixture inputs.",
+    "Source gaps and optional grid/RTC failures remain independent; terminal source coverage and physical sensor conversion phase are not fabricated.",
+    "A failed precompile companion guard and a PowerShell scalar-splat launcher failure are retained; neither required helper source or product recompilation."
+  ]
+}

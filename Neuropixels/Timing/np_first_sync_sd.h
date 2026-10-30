@@ -23,13 +23,11 @@ static inline void np_first_sd_uid_put(uint8_t *b,const uint32_t uid[3])
 {unsigned i;for(i=0U;i<3U;i++)np_first_put32(b+4U*i,uid[i]);}
 static inline int np_first_sd_uid_same(const uint8_t *b,const uint32_t uid[3])
 {return np_first_sd_uid_valid(uid) && np_first_u32(b)==uid[0] && np_first_u32(b+4)==uid[1] && np_first_u32(b+8)==uid[2];}
-static inline int np_first_sd_version_family(uint32_t version,uint32_t family)
-{return version==1U || version==2U || version==3U || (version==4U && family==2U);}
 static inline int np_first_sd_shape_version(const uint8_t *b,size_t bytes,uint32_t family,const uint32_t uid[3],int admit,uint32_t version)
 {
     uint32_t op;uint64_t token;
     if(!b || bytes!=64U || (family!=1U && family!=2U) || np_first_u32(b)!=NP_FIRST_SD_REQUEST ||
-       !np_first_sd_version_family(version,family) || np_first_u16(b+4)!=version || !np_first_u32(b+8) || !np_first_sd_uid_same(b+12,uid) ||
+       (version!=1U && version!=2U && version!=3U && !((version==4U || version==5U) && family==2U)) || np_first_u16(b+4)!=version || !np_first_u32(b+8) || !np_first_sd_uid_same(b+12,uid) ||
        np_first_u32(b+60)!=np_first_crc(b,60U))return 0;
     op=np_first_u16(b+6);token=np_first_u64(b+24);if(op>NP_FIRST_SD_SCHEDULED)return 0;
     if(op==NP_FIRST_SD_CAPS)return !token && np_first_zero(b+32,28U);
@@ -49,9 +47,11 @@ static inline int np_first_sd_fine_aux_request_valid(const uint8_t *b,size_t byt
 {return np_first_sd_shape_version(b,bytes,family,uid,1,2U);}
 static inline int np_first_sd_fine_counter64_request_valid(const uint8_t *b,size_t bytes,uint32_t family,const uint32_t uid[3])
 {return np_first_sd_shape_version(b,bytes,family,uid,1,3U);}
-/* Explicit V2-only SD16 opt-in. Existing v1/v2/v3 entrypoints stay strict. */
 static inline int np_first_sd_grid16_request_valid(const uint8_t *b,size_t bytes,uint32_t family,const uint32_t uid[3])
 {return np_first_sd_shape_version(b,bytes,family,uid,1,4U);}
+/* Explicit V2 append opt-in; existing entry points retain their versions. */
+static inline int np_first_sd_grid16_append_request_valid(const uint8_t *b,size_t bytes,uint32_t family,const uint32_t uid[3])
+{return np_first_sd_shape_version(b,bytes,family,uid,1,5U);}
 /* Structural parsing precedes the cached duplicate check. Only a new mutation
  * uses freshness; an exact accepted duplicate can return its ACK read-only. */
 static inline int np_first_sd_fresh_start(const uint8_t *b,size_t bytes,uint32_t family,const uint32_t uid[3],uint64_t last_token)
@@ -72,12 +72,6 @@ static inline int np_first_sd_fine_counter64_fresh_start(const uint8_t *b,size_t
 static inline int np_first_sd_fine_counter64_cached_duplicate(const uint8_t *b,const uint8_t accepted[64],uint32_t family,const uint32_t uid[3])
 {return accepted && np_first_sd_fine_counter64_request_valid(b,64U,family,uid) && np_first_sd_fine_counter64_request_valid(accepted,64U,family,uid) &&
     (np_first_u16(b+6)==NP_FIRST_SD_START || np_first_u16(b+6)==NP_FIRST_SD_SCHEDULED) && !memcmp(b,accepted,64U);}
-static inline int np_first_sd_grid16_fresh_start(const uint8_t *b,size_t bytes,uint32_t family,const uint32_t uid[3],uint64_t last_token)
-{return np_first_sd_grid16_request_valid(b,bytes,family,uid) &&
-    (np_first_u16(b+6)==NP_FIRST_SD_START || np_first_u16(b+6)==NP_FIRST_SD_SCHEDULED) && np_first_u64(b+24)!=last_token;}
-static inline int np_first_sd_grid16_cached_duplicate(const uint8_t *b,const uint8_t accepted[64],uint32_t family,const uint32_t uid[3])
-{return accepted && np_first_sd_grid16_request_valid(b,64U,family,uid) && np_first_sd_grid16_request_valid(accepted,64U,family,uid) &&
-    (np_first_u16(b+6)==NP_FIRST_SD_START || np_first_u16(b+6)==NP_FIRST_SD_SCHEDULED) && !memcmp(b,accepted,64U);}
 static inline int np_first_sd_query_pack_version(uint8_t out[64],uint32_t op,uint32_t id,uint32_t family,const uint32_t uid[3],uint64_t token,uint32_t version)
 {
     if(!out)return 0;memset(out,0,64U);if((op!=NP_FIRST_SD_CAPS && op!=NP_FIRST_SD_STATUS) || !np_first_sd_uid_valid(uid))return 0;
@@ -93,6 +87,8 @@ static inline int np_first_sd_fine_counter64_query_pack(uint8_t out[64],uint32_t
 {return np_first_sd_query_pack_version(out,op,id,family,uid,token,3U);}
 static inline int np_first_sd_grid16_query_pack(uint8_t out[64],uint32_t op,uint32_t id,uint32_t family,const uint32_t uid[3],uint64_t token)
 {return np_first_sd_query_pack_version(out,op,id,family,uid,token,4U);}
+static inline int np_first_sd_grid16_append_query_pack(uint8_t out[64],uint32_t op,uint32_t id,uint32_t family,const uint32_t uid[3],uint64_t token)
+{return np_first_sd_query_pack_version(out,op,id,family,uid,token,5U);}
 static inline int np_first_sd_legacy_valid(const uint8_t *b,size_t bytes,uint32_t family)
 {
     uint32_t op;
@@ -110,7 +106,7 @@ static inline int np_first_sd_wrap_version(uint8_t out[64],const uint8_t legacy[
                                    const uint32_t uid[3],uint64_t token,uint64_t last_token,uint32_t version)
 {
     if(!out || out==legacy)return 0;memset(out,0,64U);
-    if(!np_first_sd_version_family(version,family) || !np_first_sd_legacy_valid(legacy,64U,family) || !np_first_sd_uid_valid(uid) || !token || token==last_token)return 0;
+    if((version!=1U && version!=2U && version!=3U && !((version==4U || version==5U) && family==2U)) || !np_first_sd_legacy_valid(legacy,64U,family) || !np_first_sd_uid_valid(uid) || !token || token==last_token)return 0;
     np_first_put32(out,NP_FIRST_SD_REQUEST);np_first_put16(out+4,(uint16_t)version);
     np_first_put16(out+6,(uint16_t)(np_first_u32(legacy+8)==4U?NP_FIRST_SD_SCHEDULED:NP_FIRST_SD_START));
     np_first_put32(out+8,np_first_u32(legacy+12));np_first_sd_uid_put(out+12,uid);np_first_put64(out+24,token);
@@ -124,6 +120,8 @@ static inline int np_first_sd_fine_counter64_wrap(uint8_t out[64],const uint8_t 
 {return np_first_sd_wrap_version(out,legacy,family,uid,token,last_token,3U);}
 static inline int np_first_sd_grid16_wrap(uint8_t out[64],const uint8_t legacy[64],uint32_t family,const uint32_t uid[3],uint64_t token,uint64_t last_token)
 {return np_first_sd_wrap_version(out,legacy,family,uid,token,last_token,4U);}
+static inline int np_first_sd_grid16_append_wrap(uint8_t out[64],const uint8_t legacy[64],uint32_t family,const uint32_t uid[3],uint64_t token,uint64_t last_token)
+{return np_first_sd_wrap_version(out,legacy,family,uid,token,last_token,5U);}
 static inline int np_first_sd_unwrap_version(uint8_t out[64],const uint8_t request[64],uint32_t family,const uint32_t uid[3],uint32_t version)
 {
     uint32_t op;if(!out || out==request)return 0;memset(out,0,64U);
@@ -142,6 +140,8 @@ static inline int np_first_sd_fine_counter64_unwrap(uint8_t out[64],const uint8_
 {return np_first_sd_unwrap_version(out,request,family,uid,3U);}
 static inline int np_first_sd_grid16_unwrap(uint8_t out[64],const uint8_t request[64],uint32_t family,const uint32_t uid[3])
 {return np_first_sd_unwrap_version(out,request,family,uid,4U);}
+static inline int np_first_sd_grid16_append_unwrap(uint8_t out[64],const uint8_t request[64],uint32_t family,const uint32_t uid[3])
+{return np_first_sd_unwrap_version(out,request,family,uid,5U);}
 static inline int np_first_sd_reply_valid_features(const uint8_t *b,size_t bytes,const uint8_t request[64],uint32_t family,uint32_t version,int continuity_caps)
 {
     uint32_t uid[3],result,supported,op,record_features,allowed;if(!request)return 0;np_first_sd_uid_get(request+12,uid);
@@ -170,6 +170,8 @@ static inline int np_first_sd_fine_counter64_reply_valid(const uint8_t *b,size_t
 {return np_first_sd_reply_valid_version(b,bytes,request,family,3U);}
 static inline int np_first_sd_grid16_reply_valid(const uint8_t *b,size_t bytes,const uint8_t request[64],uint32_t family)
 {return np_first_sd_reply_valid_version(b,bytes,request,family,4U);}
+static inline int np_first_sd_grid16_append_reply_valid(const uint8_t *b,size_t bytes,const uint8_t request[64],uint32_t family)
+{return np_first_sd_reply_valid_version(b,bytes,request,family,5U);}
 /* Explicit modern v2 discovery/association compatibility. A v2 START still
  * selects record9, never record25; existing fine_aux entry points stay strict. */
 static inline int np_first_sd_fine_aux_compatible_reply_valid(const uint8_t *b,size_t bytes,const uint8_t request[64],uint32_t family)
@@ -190,8 +192,6 @@ static inline int np_first_sd_fine_aux_reply_pack(uint8_t out[64],const uint8_t 
 {return np_first_sd_reply_pack_version(out,request,family,r,2U);}
 static inline int np_first_sd_fine_counter64_reply_pack(uint8_t out[64],const uint8_t request[64],uint32_t family,const NpFirstSdReply *r)
 {return np_first_sd_reply_pack_version(out,request,family,r,3U);}
-static inline int np_first_sd_grid16_reply_pack(uint8_t out[64],const uint8_t request[64],uint32_t family,const NpFirstSdReply *r)
-{return np_first_sd_reply_pack_version(out,request,family,r,4U);}
 static inline int np_first_sd_fine_aux_compatible_reply_pack(uint8_t out[64],const uint8_t request[64],uint32_t family,const NpFirstSdReply *r)
 {return np_first_sd_reply_pack_features(out,request,family,r,2U,1);}
 /* Common UTC2 framing/clock checks only; bytes80..159 remain owned by the

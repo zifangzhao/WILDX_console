@@ -91,6 +91,15 @@ namespace USB512_interface {
                             }
                         }
                     }
+                    if(same()&&family==2&&(client.Grid16SupportedFeatures&29)==29){
+                        using(var deadline=CancellationTokenSource.CreateLinkedTokenSource(warm.Token)){
+                            deadline.CancelAfter(750);
+                            try{await client.ReadGrid16AppendCapabilitiesAsync(deadline.Token);}
+                            catch(OperationCanceledException) when(!warm.IsCancellationRequested&&same()){
+                                // Optional v5 discovery cannot remove v4 or RTC support.
+                            }
+                        }
+                    }
                     if(same()&&client.FineCounter64SupportedFeatures!=0)await WarmBleHardwareRtc(client,warm.Token);
                 }catch(Exception){/* Optional discovery never prevents ordinary connection/legacy recording. */}
                 finally{if(ReferenceEquals(bleFirstSyncWarmCancel,warm))bleFirstSyncWarmCancel=null;}

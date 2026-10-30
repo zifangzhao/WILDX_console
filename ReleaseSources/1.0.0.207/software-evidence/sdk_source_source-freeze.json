@@ -1,0 +1,116 @@
+{
+  "utc": "2026-10-30T17:26:09.499820+00:00",
+  "status": "source_frozen_focused_checks_passed_product_build_pending",
+  "scope": "V2 SD16 schema3/order1 indexed original NN with physical AUX admission, segmented DAT and staged progress. No firmware, hardware, GUI or product SDK build.",
+  "contract": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\Note\\NP2_SD_GRID16_APPEND_WIRE.md",
+    "bytes": 9983,
+    "sha256": "4E5578FD874A6A3C868A48B23F3F15654809CA3FE47B67CF8172D856F203B09F"
+  },
+  "protocol_freeze": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\receipt.json",
+    "bytes": 9462,
+    "sha256": "0221AC13DF0224AA77F6B1A46D9B5933A3C66D93A44ACDB6C7DB03D335157068"
+  },
+  "production": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdDatExport.cs",
+      "bytes": 65563,
+      "sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdGrid.cs",
+      "bytes": 10675,
+      "sha256": "2159B3E4D4D54335B46EF42CC711A1661E18420EF6204B3B6CA4501A54282DE9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\USBConsoleV2\\NpV2UsbConsole.cs",
+      "bytes": 238057,
+      "sha256": "AFA417C40BC2FF4E8F5B5392CC24B475D04531EE03990B340D96AB1FC353B856"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpCe64Export.cs",
+      "bytes": 65724,
+      "sha256": "9747B82E404E1687BF7619619377D357D6371FB4ED21D8D4764A8D935D40529D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpDownloadForm.cs",
+      "bytes": 43821,
+      "sha256": "CEE4ACE4311D99F03EB12DE35984732FD583070F3E136F9B7D8EC0005B7516BB"
+    }
+  ],
+  "tests": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\Tests\\TestNpV2SdGridAppend.cs",
+      "bytes": 10980,
+      "sha256": "FCC7677ECF05158263FC2046F5FE7238BF5AA6FAC4F24B5F784A41413472E4FD"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\Tests\\TestNpV2SdGrid16.cs",
+      "bytes": 19033,
+      "sha256": "95E4926436BC94291C51369B5FAE918752AAD43898F7F665ECFDC2565258A342"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\test_sd_dat.ps1",
+      "bytes": 6153,
+      "sha256": "E4707ED057DD681855E46EE3975991F7B7F4BA78407428A53A6947885938EA29"
+    }
+  ],
+  "project_changes": [],
+  "new_api": [
+    "NpV2SdDatExport.ExportCommittedWithStages(...,Action<ExportProgress>) additive; existing public methods unchanged",
+    "ExportProgress Stage/Completed/Total/ElapsedSeconds",
+    "Result IndexedGridAppend/AdmittedHighWaterKnown/AdmittedHighWaterBlocks/MissingStoredBlocks/IndexSeconds/DecodeSeconds/StoppedLossStatsComparison",
+    "Segment FirstLogicalBlock/LogicalEndExclusive, existing stored ordinal and per-probe row offsets retained",
+    "OfflineSd factory and BeginStoredSegment are internal explicit SD-only seams; old USB constructors unchanged"
+  ],
+  "outputs": [
+    "neural_storage_index.csv",
+    "neural_segments.csv",
+    "existing first_sample_timestamps.json segment sample offsets",
+    "existing per-probe DAT and segment-aware merged DAT; no neural raw retention"
+  ],
+  "validation": {
+    "source_fixture_executable": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\focused-final\\NpV2SdDatExportTests.exe",
+      "bytes": 1114624,
+      "sha256": "4DAEC01F16523086FE49D0922D241C85F0955C904168134E9A2A25AFF70E78E6"
+    },
+    "new_append_checks": 977,
+    "existing_grid16_checks": 763,
+    "combined_grid16_checks": 1740,
+    "legacy_source_gap_checks": 5396376,
+    "independent_metadata_oracles": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\metadata-oracles-final.json",
+      "bytes": 5138,
+      "sha256": "CF63F065FEF155BDD08938260014CC50315476B16A5DFB6F98A5C9F73F1FB9B5"
+    },
+    "oracle_scope": "15 independent metadata cases; index-only rejection labels are not claimed tested by payload-absent metadata. Separate full-payload tests exercise duplicate/P/H failures.",
+    "commands": [
+      "powershell.exe -NoProfile -ExecutionPolicy Bypass -File Neuropixels/test_sd_dat.ps1 -Grid16 -EnableFirstSync -OutputDirectory _artifacts/deterministic_imu_next/sd16-append-host/focused-final",
+      "_artifacts/deterministic_imu_next/sd16-append-host/focused-final/NpV2SdDatExportTests.exe _artifacts/deterministic_imu_next/sd16-append-host/legacy-final --source-gaps-only",
+      "powershell.exe -NoProfile -ExecutionPolicy Bypass -File _artifacts/deterministic_imu_next/sd16-append-host/check-oracles.ps1 -AssemblyPath _artifacts/deterministic_imu_next/sd16-append-host/focused-final/NpV2SdDatExportTests.exe -OracleDirectory _artifacts/sd16_append_contract_goldens -Output _artifacts/deterministic_imu_next/sd16-append-host/metadata-oracles-final.json"
+    ]
+  },
+  "build": {
+    "owner": "root",
+    "sdk_project": "Neuropixels/SD/NpV2SdDatExport.csproj",
+    "sdk_properties": "Configuration=Release;Platform=AnyCPU;EnableNpFirstSync=true; fresh output/intermediate",
+    "gui_properties": "EnableNpFirstSync=true;EnableNpImuGrid=true; preparation disabled; root increments application version on its one compilation",
+    "new_source_includes": []
+  },
+  "limits": [
+    "Firmware writer/NPSD5 production admission and actual affected hardware acceptance pending; software results are modeled fixtures.",
+    "COMPLETE requires admitted logical coverage; acquisition source gaps remain separate.",
+    "Stored holes do not invent capture-loss flags/counters; unsealed suffix stays unknown.",
+    "Missing first stored NN source proof keeps first-source/grid relation unavailable.",
+    "Bad optional AUX preserves intact NN output and unqualifies grid timing.",
+    "Partial storage holes conservatively unqualify whole-grid source-window/phase while preserving all available IMU rows.",
+    "Index8bytes per durable group, header scans2KiB/group; no neural payload cache; no speed improvement claim."
+  ],
+  "initial_fixture_corrections": [
+    "r1 copied a raw-D8 lookahead from the wrong generated source block; test generator fixed only.",
+    "r2 direct SDK fixture had no recording_settings for merge; fixture now uses actual export bridge for partial outputs."
+  ],
+  "source_edits_held": true
+}

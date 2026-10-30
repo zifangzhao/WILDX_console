@@ -113,6 +113,9 @@ namespace CE32_console
         internal static USB512_interface.NpV2SdDatExport.Result ExportCalibrated(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration)
         { return ExportCore(card,start,directoryEnd,output,cancelled,progress,calibration==null || calibration.Count==0?null:calibration.Copy()); }
 
+        internal static USB512_interface.NpV2SdDatExport.Result ExportCalibratedWithStages(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration,Action<USB512_interface.NpV2SdDatExport.ExportProgress> stages)
+        {return ExportCore(card,start,directoryEnd,output,cancelled,progress,calibration==null||calibration.Count==0?null:calibration.Copy(),false,null,stages);}
+
         internal static USB512_interface.NpV2SdDatExport.Result ExportCalibratedWithImuOrigin(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration,USB512_interface.NpSdImuGridOrigin imuOrigin)
         {
             if(imuOrigin==null)throw new ArgumentNullException("imuOrigin");
@@ -121,6 +124,8 @@ namespace CE32_console
 
         internal static string V2RecordingWarning(USB512_interface.NpV2SdDatExport.Result result) {
             if(result==null || result.Lossless)return null;
+            if(result.IndexedGridAppend&&result.MissingStoredBlocks!=0)return "Recording incomplete: "+result.MissingStoredBlocks+
+                " NN blocks are absent below the stored logical high-water. Genuine later segments were retained; no padding or inferred acquisition-loss count. See neural_segments.csv.";
             if(result.SourceGapCount!=0 || result.OverflowEvents!=0)return String.Format(CultureInfo.InvariantCulture,
                 "Recording contains source loss: {0} gaps, {1} missing source ticks; {2}. DAT contains real rows only; see np2_sd_export_status.txt.",
                 result.SourceGapCount,result.MissingSourceTicks,result.StoppedLossStatsPresent?
@@ -139,7 +144,7 @@ namespace CE32_console
             internal long ImuGaps;internal long[] Lengths,OptionalLengths,NativeBytes,ApRows,LfpRows;internal uint[] ValidCounts;
         }
 
-        static USB512_interface.NpV2SdDatExport.Result ExportCore(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration,bool recoverPowerCut=false,USB512_interface.NpSdImuGridOrigin imuOrigin=null)
+        static USB512_interface.NpV2SdDatExport.Result ExportCore(Stream card,long start,long directoryEnd,string output,Func<bool> cancelled,Action<int> progress,USB512_interface.NpCalibrationSet calibration,bool recoverPowerCut=false,USB512_interface.NpSdImuGridOrigin imuOrigin=null,Action<USB512_interface.NpV2SdDatExport.ExportProgress> stages=null)
         {
             if(recoverPowerCut) {
                 if(cancelled!=null && cancelled())throw new OperationCanceledException("NP prefix export cancelled");
@@ -159,7 +164,8 @@ namespace CE32_console
                 bool success=false,exported=false;string error=null;
                 USB512_interface.NpV2SdDatExport.Result result=null;
                 try {
-                    result=imuOrigin==null?USB512_interface.NpV2SdDatExport.ExportCommitted(card,(uint)start,output,directoryEnd,cancelled,progress,calibration):
+                    result=imuOrigin==null?(stages==null?USB512_interface.NpV2SdDatExport.ExportCommitted(card,(uint)start,output,directoryEnd,cancelled,progress,calibration):
+                        USB512_interface.NpV2SdDatExport.ExportCommittedWithStages(card,(uint)start,output,directoryEnd,cancelled,progress,calibration,stages)):
                         USB512_interface.NpV2SdDatExport.ExportWithImuOrigin(card,(uint)start,output,imuOrigin,directoryEnd,cancelled,progress,calibration,true);
                     exported=true;success=result.RecordingComplete;
                     if(!success)error=V2RecordingWarning(result);
@@ -207,6 +213,14 @@ namespace CE32_console
                             settings.Context("missing_source_ticks",result.MissingSourceTicks);
                             settings.Context("dropped_source_blocks",result.DroppedBlocks);
                             settings.Context("elapsed_source_ticks",result.ElapsedSourceTicks);
+                            if(result.IndexedGridAppend){
+                                settings.Context("neural_storage_order","schema3 physical append; original NN records decoded in logical order");
+                                settings.Context("neural_logical_prefix_blocks",result.LogicalPrefixBlocks);settings.Context("neural_logical_high_water_blocks",result.LogicalHighWaterBlocks);
+                                settings.Context("neural_missing_stored_blocks",result.MissingStoredBlocks);
+                                settings.Context("neural_admitted_high_water_blocks",result.AdmittedHighWaterKnown?(object)result.AdmittedHighWaterBlocks:null);
+                                settings.Context("neural_storage_index_file","neural_storage_index.csv");settings.Context("neural_segments_file","neural_segments.csv");
+                                settings.Context("neural_index_seconds",result.IndexSeconds);settings.Context("neural_download_decode_seconds",result.DecodeSeconds);
+                            }
                             settings.Context("stopped_loss_stats_present",result.StoppedLossStatsPresent);
                             settings.Context("physical_overflow_events",result.StoppedLossStatsPresent?(object)result.OverflowEvents:null);
                             settings.Context("producer_discarded_ticks",result.StoppedLossStatsPresent?(object)result.ProducerDiscardedTicks:null);

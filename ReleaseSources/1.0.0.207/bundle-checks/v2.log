@@ -1,0 +1,1 @@
+PASS 42576 actual-app V2 bundle/parser/guarded DFU model/UI checks; fake programmer only, no device access or real firmware writes.

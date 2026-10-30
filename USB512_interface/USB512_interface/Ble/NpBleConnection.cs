@@ -82,10 +82,13 @@ namespace USB512_interface
             if(BitConverter.ToUInt32(request,0)!=NpFirstSyncSd.RequestMagic)return false;
             string uid=BitConverter.ToUInt32(request,12).ToString("X8")+BitConverter.ToUInt32(request,16).ToString("X8")+
                 BitConverter.ToUInt32(request,20).ToString("X8");
-            // The strict shared parser admits CAPS v1/v2/v3 only; no START or
+            // The strict shared parser admits family-bound CAPS only; no START or
             // STATUS gains read-only fixed-frame cancellation semantics.
             try{return NpFirstSyncSd.ParseRequest(request,1,uid).Operation==NpFirstSyncSd.Caps;}
-            catch(InvalidDataException){return false;}
+            catch(InvalidDataException){
+                try{return NpFirstSyncSd.ParseRequest(request,2,uid).Operation==NpFirstSyncSd.Caps;}
+                catch(InvalidDataException){return false;}
+            }
         }
         internal static bool ReadOnlyClockObservation(NpClockJournal journal,byte command,byte[] request,byte[] response,long start,long end)
         {

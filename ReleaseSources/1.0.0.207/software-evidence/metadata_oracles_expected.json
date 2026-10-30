@@ -1,0 +1,441 @@
+{
+  "contract_sha256": "4E5578FD874A6A3C868A48B23F3F15654809CA3FE47B67CF8172D856F203B09F",
+  "source": "independent Python construction from native schema1 fixture",
+  "baseline": {
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_codec_stage\\descriptor.bin": "74016555DCC5F25683B9D3E4413EE0C84E2CFC69E4FD67CC3CA81532DE240120",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_codec_stage\\footer.bin": "A50685AFA83DDDBB4CDBBF5D1A9AD3BF6A0037D87655E754737FF3C63F5C9368"
+  },
+  "neural_payload_present": false,
+  "hardware_access": false,
+  "cases": [
+    {
+      "name": "complete_0_2_1",
+      "expected": "accept",
+      "physical_logical_group_ids": [
+        0,
+        2,
+        1
+      ],
+      "physical_original_nn_first": [
+        0,
+        8,
+        4
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11,
+        7
+      ],
+      "logical_read_physical_groups": [
+        0,
+        2,
+        1
+      ],
+      "actual_index_prefix": 12,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 12,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "AB283B05E5FE90D90EFE7A1DB6F2575ADC70BC6A486CDFE4523FCEA79FC01774",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "partial_0_2_known",
+      "expected": "accept",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "8454508F4B54C83957821D96EB6230D87BD60C6DD49136D67EDCD70D4DAD0E9F",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "partial_0_2_unknown",
+      "expected": "accept",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "349FBFD3496B7B4F6EE80FAD19BA954E46D931C00ED66C5CAB2C56D6F975C927",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "partial_leading_hole",
+      "expected": "accept",
+      "physical_logical_group_ids": [
+        2
+      ],
+      "physical_original_nn_first": [
+        8
+      ],
+      "physical_original_nn_parent": [
+        11
+      ],
+      "logical_read_physical_groups": [
+        0
+      ],
+      "actual_index_prefix": 0,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 4,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "581298FFF25F639E1465077E550AC41C5D693618B872F3A7AF0BA7F6FC2B55A1",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "partial_unsealed_admitted",
+      "expected": "accept",
+      "physical_logical_group_ids": [
+        0
+      ],
+      "physical_original_nn_first": [
+        0
+      ],
+      "physical_original_nn_parent": [
+        3
+      ],
+      "logical_read_physical_groups": [
+        0
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 4,
+      "physical_nn_count": 4,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "396D12605719C00A5C94F0C0559FC8CC68F4EC8BB22F317440B49DBCB149C52F",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_index_prefix",
+      "expected": "reject_index_coverage",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "369BE8DCBFEDBCE6E60E1C7AD285D7DCB8705F811E6691015653EE9A5CB562EF",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_index_high_water",
+      "expected": "reject_index_coverage",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "7DF371EECC5D2F6FAC1182DF86564DC70F9184FB9D394769A522BAF2464872F8",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_complete_coverage",
+      "expected": "reject_metadata_complete",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "0549D1B26FCD34AC8029E7EAA18676F9CD795FA9E1A8EA20E7E8A8D03B25A354",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "duplicate_logical_group",
+      "expected": "reject_index_duplicate",
+      "physical_logical_group_ids": [
+        0,
+        2,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1,
+        2
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 12,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "576A574F13798C500CD9A6FC2719C5892D9C43339A806DBA7320559DB890CEF5",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_unknown_A_sentinel",
+      "expected": "reject_metadata",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "B03E6E932C32ABB8B9834D21EEB040F8B14EA95387B838313894CA633FD6991E",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_known_A_capacity",
+      "expected": "reject_metadata",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "98F1187EFA67862CD2031C228E5A031B0557016D652F7B81805B27BE10B96D91",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_reserved_404",
+      "expected": "reject_metadata",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "17B0765AF66B0FD46DF8FB4324EE95684C59CC46A23714833DE425036702C7DC",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_reserved_424",
+      "expected": "reject_metadata",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "9460661B63A486D301B4A086CF8491719EE6B740A9B9BCBD8BEE502B22D15FFC",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_schema2_order1",
+      "expected": "reject_metadata",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "8DAE193078FE552C592CAFC484F27EA40048DE24BBB2092F264357848356A6C2",
+      "footer_sha256": "096507B8A89B4737EF7F71935C259ABA339CB939033DEAE359D19BAB798629C2",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    },
+    {
+      "name": "bad_crc",
+      "expected": "reject_crc",
+      "physical_logical_group_ids": [
+        0,
+        2
+      ],
+      "physical_original_nn_first": [
+        0,
+        8
+      ],
+      "physical_original_nn_parent": [
+        3,
+        11
+      ],
+      "logical_read_physical_groups": [
+        0,
+        1
+      ],
+      "actual_index_prefix": 4,
+      "actual_index_high_water": 12,
+      "physical_nn_count": 8,
+      "descriptor_sha256": "B3FD627A550D129E888A633B0E9F1E0E11C72AE52EF1920FE14BA4F17EC3D8B5",
+      "footer_sha256": "8B7DCC7BFCBD88A3FA247D2FEB1DD82134931F1964042D833EF795B7E1CA3594",
+      "payload_present": false,
+      "scope": "metadata/header-index oracle, not a decodable recording"
+    }
+  ],
+  "aux_order_oracle": {
+    "scope": "separate abstract ordering oracle; metadata fixtures above contain empty AUX",
+    "physical_nn_group_ids": [
+      0,
+      2,
+      1
+    ],
+    "physical_wrapper_parents": [
+      3,
+      11,
+      7
+    ],
+    "physical_nsg_first_slots": [
+      0,
+      12,
+      24
+    ],
+    "incorrect_whole_group_sort_first_slots": [
+      0,
+      24,
+      12
+    ],
+    "required": "feed AUX in original physical admission order; decode NN in logical order"
+  }
+}

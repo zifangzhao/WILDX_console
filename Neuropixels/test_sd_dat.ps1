@@ -51,7 +51,7 @@ $sources = @(
     "$console\USB512WinUsb.cs", "$console\UsbHealth.cs", "$console\UsbHealthNative.cs", "$console\NeuropixelsPreviewForm.cs", "$console\XeNpStreamDecoder.cs",
     "$PSScriptRoot\Tests\TestNpV2SdDatExport.cs", "$PSScriptRoot\Tests\TestNpV2SdAppend.cs", "$PSScriptRoot\Tests\test_np_v2_usb_console.cs",
     "$PSScriptRoot\Tests\TestNpV2SdClosedLoop.cs",
-    "$PSScriptRoot\Tests\TestNpV2SdImu.cs", "$PSScriptRoot\Tests\TestNpV2SdGrid16.cs",
+    "$PSScriptRoot\Tests\TestNpV2SdImu.cs", "$PSScriptRoot\Tests\TestNpV2SdGrid16.cs", "$PSScriptRoot\Tests\TestNpV2SdGridAppend.cs",
     "$PSScriptRoot\..\Tests\NpFirstSyncWireTests.cs",
     "$console\NpLogger\NpCe64Export.cs", "$console\NpLogger\NpSdDatMerge.cs", "$console\NpLogger\NpCe64Decoder.cs", "$console\NpLogger\NpSdGeometry.cs",
     "$console\NpRecordingSettings.cs","$console\NpProbeIdentity.cs", "$console\NpProbeManifest.cs", "$PSScriptRoot\V1Capture\Configuration\NpConfigClient.cs",

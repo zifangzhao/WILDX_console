@@ -27,8 +27,9 @@ ACTUAL_NPSD_MATCH
             if(family==1&&scheduled)continue;
             var legacy=new byte[64];Put(legacy,0,family==1?0x31444c4eU:0x32444c4eU);Put(legacy,4,(uint)family);Put(legacy,8,scheduled?4U:2U);Put(legacy,12,57);Put(legacy,16,3);Put(legacy,20,20000);
             if(family==1){Put(legacy,24,8192);Put(legacy,28,1048576);Put(legacy,32,100);}else{Put(legacy,24,400);if(scheduled){Put(legacy,28,1234);Put(legacy,32,5678);}}Seal(legacy);
-            foreach(ushort version in family==1?new ushort[]{1,2,3}:new ushort[]{1,2,3,4})foreach(int operation in new[]{0,1,2}){
-                var q=operation==1?(version==4?NpFirstSyncSd.WrapLegacyGrid16(legacy,family,Uid,123456789UL):version==3?NpFirstSyncSd.WrapLegacyFineCounter64(legacy,family,Uid,123456789UL):version==2?NpFirstSyncSd.WrapLegacyFineAux(legacy,family,Uid,123456789UL):NpFirstSyncSd.WrapLegacy(legacy,family,Uid,123456789UL)):
+            foreach(ushort version in family==1?new ushort[]{1,2,3}:new ushort[]{1,2,3,4,5})foreach(int operation in new[]{0,1,2}){
+                var q=operation==1?(version==5?NpFirstSyncSd.WrapLegacyGrid16Append(legacy,family,Uid,123456789UL):version==4?NpFirstSyncSd.WrapLegacyGrid16(legacy,family,Uid,123456789UL):version==3?NpFirstSyncSd.WrapLegacyFineCounter64(legacy,family,Uid,123456789UL):version==2?NpFirstSyncSd.WrapLegacyFineAux(legacy,family,Uid,123456789UL):NpFirstSyncSd.WrapLegacy(legacy,family,Uid,123456789UL)):
+                    version==5?NpFirstSyncSd.QueryGrid16Append(operation==0?NpFirstSyncSd.Caps:NpFirstSyncSd.Status,5,family,Uid,operation==0?0:123456789UL):
                     version==4?NpFirstSyncSd.QueryGrid16(operation==0?NpFirstSyncSd.Caps:NpFirstSyncSd.Status,5,family,Uid,operation==0?0:123456789UL):
                     version==3?NpFirstSyncSd.QueryFineCounter64(operation==0?NpFirstSyncSd.Caps:NpFirstSyncSd.Status,5,family,Uid,operation==0?0:123456789UL):
                     version==2?NpFirstSyncSd.QueryFineAux(operation==0?NpFirstSyncSd.Caps:NpFirstSyncSd.Status,5,family,Uid,operation==0?0:123456789UL):NpFirstSyncSd.Query(operation==0?NpFirstSyncSd.Caps:NpFirstSyncSd.Status,5,family,Uid,operation==0?0:123456789UL);

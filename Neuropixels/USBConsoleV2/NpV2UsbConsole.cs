@@ -1255,6 +1255,11 @@ namespace USB512_interface
                 throw new ArgumentOutOfRangeException("originTick");
         }
 
+        // Only the sealed SD append exporter chooses a nonzero stored origin.
+        // Its verifier checks the actual profile-specific source tick contract.
+        internal static NpV2SampleDecoder OfflineSd(Action<uint,uint> onFormat,Action<int,short[]> onRow,ulong originTick)
+        {return new NpV2SampleDecoder(onFormat,onRow,0,originTick);}
+
         internal NpV2SampleDecoder(Action<uint, uint> onFormat, Action<int, short[]> onRow, int onlyProbe)
             : this(onFormat, onRow, onlyProbe, 0UL)
         { }
@@ -1282,7 +1287,7 @@ namespace USB512_interface
                 throw new InvalidDataException("NP2 decoded DAT contract changed mid-recording.");
             if (startTick != nextTick)
             {
-                if (!verifier.SdSourceGapsEnabled || verifier.LastSourceTick != startTick ||
+                if ((!verifier.SdSourceGapsEnabled&&!verifier.StoredSegmentStart) || verifier.LastSourceTick != startTick ||
                     startTick < nextTick || (startTick - nextTick) % (uint)ticksPerBlock != 0UL)
                     throw new InvalidDataException("NP2 DAT source ticks are discontinuous.");
                 // A partial frame/AP row must never join samples across loss.
@@ -2800,6 +2805,9 @@ namespace USB512_interface
         private ulong nextSequence, nextTick;
         private readonly ulong originSequence, originTick;
         private readonly bool allowSdSourceGaps;
+        private readonly bool allowStoredSegments;
+        private bool storedSegmentPending;
+        internal bool StoredSegmentStart {get;private set;}
         private int formatVersion;
         private uint probeMask, liveProbeMask, mclkHz, sampleHz, flags, ingressBytes, codecValue, d8PhaseBits, d8LookaheadBytes;
         private readonly int[] phases = { -1, -1, -1 };
@@ -2853,6 +2861,20 @@ namespace USB512_interface
             if (originSequence > UInt64.MaxValue / 61440UL || originTick != originSequence * 61440UL)
                 throw new ArgumentOutOfRangeException("originTick");
             this.originSequence = originSequence; this.originTick = originTick;
+        }
+
+        private NpV2WireVerifier(ulong sequence,ulong tick,bool storedSegments)
+        {originSequence=sequence;originTick=tick;allowSdSourceGaps=true;allowStoredSegments=storedSegments;}
+        internal static NpV2WireVerifier OfflineSd(ulong sequence,ulong tick)
+        {return new NpV2WireVerifier(sequence,tick,true);}
+        internal void BeginStoredSegment(ulong sequence,ulong tick)
+        {
+            if(!allowStoredSegments||first||storedSegmentPending||sequence<=nextSequence||tick<nextTick||
+                (tick-nextTick)%(uint)TicksPerBlock!=0||(tick-nextTick)/(uint)TicksPerBlock<sequence-nextSequence)
+                throw new InvalidDataException("Invalid offline stored-segment boundary.");
+            // This is missing storage, not a producer capture-loss declaration.
+            // Keep the same immutable contract and independently checked phase.
+            nextSequence=sequence;nextTick=tick;storedSegmentPending=true;
         }
 
         internal void Feed(byte[] bytes, int offset)
@@ -2927,12 +2949,17 @@ namespace USB512_interface
                 throw new InvalidDataException("NP2 USB payload CRC contract mismatch.");
             ulong sequence = U64(bytes, offset + 24), tick = U64(bytes, offset + 32);
             ulong missing = 0UL;
+            StoredSegmentStart=storedSegmentPending;
             if (tick > UInt64.MaxValue - (uint)ticks)
                 throw new InvalidDataException("NP2 source-tick extent overflows.");
             if (first)
             {
                 if (sequence != originSequence || tick != originTick)
                     throw new InvalidDataException("NP2 stream first block/source tick differs from immutable origin.");
+                if(allowStoredSegments&&(sequence>UInt64.MaxValue/(uint)ticks||
+                    tick<sequence*(uint)ticks||((blockFlags&FlagSourceGaps)==0&&tick!=sequence*(uint)ticks)||
+                    (tick-sequence*(uint)ticks)%(uint)ticks!=0))
+                    throw new InvalidDataException("Offline SD stored origin/profile ticks disagree.");
                 formatVersion = version; StoredBits = bits; TicksPerBlock = ticks;
                 probeMask = blockProbeMask; liveProbeMask = blockLiveMask; mclkHz = blockMclk;
                 sampleHz = blockSample; flags = blockFlags; ingressBytes = blockIngress; codecValue = codec;
@@ -2996,6 +3023,7 @@ namespace USB512_interface
             }
             LastSourceTick = tick;
             nextSequence = sequence + 1UL; nextTick = tick + (uint)ticks; first = false;
+            storedSegmentPending=false;
             if(Blocks==0){IdentityHeader=new byte[HeaderBytes];Buffer.BlockCopy(bytes,offset,IdentityHeader,0,HeaderBytes);}
             Blocks++; PayloadBytesSeen += PayloadBytes;
         }

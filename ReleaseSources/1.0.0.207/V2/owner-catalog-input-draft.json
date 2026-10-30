@@ -1,0 +1,86 @@
+{
+  "status": "TEST_ONLY_PENDING_HARDWARE_ACCEPTANCE_NOT_PUBLISHED",
+  "components": {
+    "app": {
+      "crc32": "7F238587",
+      "body_sha256": "BCBCB5566739BDA7D82B44E0C6B065AF592A5963C11AFDF4945E5CE2CAEA5579",
+      "hex_sha256": "AADA9AF5BD5BDD4AC2DDEA2D2D2C3CA3D37DBFAB7AEF3A23062FA6DCC84A5E64",
+      "manifest_sha256": "91B4017A230D3982A4D7A16566E5BD275A5E9515AE0D5D8AF61DFF2B1CE4CFDB",
+      "body_bytes": 324028,
+      "manifest_generation": 3,
+      "loader_abi": 4,
+      "flags": 0
+    },
+    "usb": {
+      "crc32": "74FC7104",
+      "body_sha256": "527BCCEC86CCF7C46ED69292AB55695A2DF8A09FEE5F2B1B936146F90D19298B",
+      "hex_sha256": "C7FF2162017B5FEB6FB9243B436A28C6EC6DA80B699EFE32DF32795CF3170A3D",
+      "manifest_sha256": "C4B822EC18558B374B64C415B8955DFC13A884153F111D2F6FE94F780B6FC77C",
+      "body_bytes": 295868,
+      "manifest_generation": 3,
+      "loader_abi": 4,
+      "flags": 3
+    }
+  },
+  "recovery": {
+    "crc32": "6408DBB8",
+    "hex_sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+  },
+  "runtime_asset_allowlist": {
+    "V2_APP_7F238587_TEST_ONLY.xenp": {
+      "sha256": "98D384A268897880F4D96366A7DA1A4EF77B63DA8BDE61C684EE1C0635EDBFEB",
+      "bytes": 324156
+    },
+    "V2_APP_GRID16_APPEND_TEST_ONLY.hex": {
+      "sha256": "AADA9AF5BD5BDD4AC2DDEA2D2D2C3CA3D37DBFAB7AEF3A23062FA6DCC84A5E64",
+      "bytes": 891540
+    },
+    "V2_FUSED_6408_7F238587_74FC7104_TEST_ONLY.hex": {
+      "sha256": "6E93B1BD046EDA8E6C8C980B8D60C12067CD420007B0FB9E598F2736E05F9032",
+      "bytes": 1828478
+    },
+    "V2_RECOVERY_6408DBB8.hex": {
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
+      "bytes": 84090
+    },
+    "V2_USB_GRID16_APPEND_TEST_ONLY.hex": {
+      "sha256": "C7FF2162017B5FEB6FB9243B436A28C6EC6DA80B699EFE32DF32795CF3170A3D",
+      "bytes": 814100
+    }
+  },
+  "provenance_archive": {
+    "path": "V2_GRID16_APPEND_INCREMENTAL_SOURCE.zip",
+    "sha256": "40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38",
+    "scope": "Changed sources and recorded evidence only; incremental historical closure incomplete.",
+    "existing_6cb_reference": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release205-firmware\\V2-prep\\incremental-source.zip",
+    "existing_6cb_reference_sha256": "422905D5D8C062EB361D975C68392CEB6EA63D2EFCAC152E759CFD0D94FDECB0",
+    "historical_limits": "6CB has seven unavailable source preimages and unsealed np_sd_usb_download.inc; no complete historical rebuild claimed."
+  },
+  "limits": "No installer, hardware acceptance, release publication or new firmware build. APP .xenp is manifest+body; existing WILD-X updater accepts APP image ID only, so USB has no supported .xenp here. Fused HEX omits 0x0801C000..0x0801DFFF retained configuration.",
+  "repository_only_assets": {
+    "V2_APP_7F238587_BODY.bin": {
+      "sha256": "BCBCB5566739BDA7D82B44E0C6B065AF592A5963C11AFDF4945E5CE2CAEA5579",
+      "bytes": 324028
+    },
+    "V2_APP_7F238587_MANIFEST.bin": {
+      "sha256": "91B4017A230D3982A4D7A16566E5BD275A5E9515AE0D5D8AF61DFF2B1CE4CFDB",
+      "bytes": 128
+    },
+    "V2_USB_74FC7104_BODY.bin": {
+      "sha256": "527BCCEC86CCF7C46ED69292AB55695A2DF8A09FEE5F2B1B936146F90D19298B",
+      "bytes": 295868
+    },
+    "V2_USB_74FC7104_MANIFEST.bin": {
+      "sha256": "C4B822EC18558B374B64C415B8955DFC13A884153F111D2F6FE94F780B6FC77C",
+      "bytes": 128
+    },
+    "V2_GRID16_APPEND_INCREMENTAL_SOURCE.zip": {
+      "sha256": "40764DC4A61133A4809AF510BA4D7185F805FC4875B6BECE153E52E10B959B38",
+      "bytes": 545177
+    },
+    "evidence-index.json": {
+      "sha256": "3E0F8554F615E56AE1F23AD7703FF24DEB609D871003A38D2CC3C383360CF98D",
+      "bytes": 952
+    }
+  }
+}

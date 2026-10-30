@@ -1,0 +1,113 @@
+{
+    "scope":  "Actual source-compiled metadata parser vs independent15 metadata-only oracles; index-only failures require separate payload fixtures",
+    "assembly_sha256":  "4DAEC01F16523086FE49D0922D241C85F0955C904168134E9A2A25AFF70E78E6",
+    "oracle_sha256":  "6DD57C80E54D1E0A8BEDC8023A057CEBD0BFFFEB7DAF2DBD9FB30083D1EDDDDE",
+    "cases":  [
+                  {
+                      "expected":  "accept",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "complete_0_2_1",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "accept",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "partial_0_2_known",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "accept",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "partial_0_2_unknown",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "accept",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "partial_leading_hole",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "accept",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "partial_unsealed_admitted",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_index_coverage",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "bad_index_prefix",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_index_coverage",
+                      "error":  "SD16: append logical coverage",
+                      "metadata_accepted":  false,
+                      "name":  "bad_index_high_water",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_metadata_complete",
+                      "error":  "SD16: complete append admitted coverage",
+                      "metadata_accepted":  false,
+                      "name":  "bad_complete_coverage",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_index_duplicate",
+                      "error":  null,
+                      "metadata_accepted":  true,
+                      "name":  "duplicate_logical_group",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_metadata",
+                      "error":  "SD16: append logical coverage",
+                      "metadata_accepted":  false,
+                      "name":  "bad_unknown_A_sentinel",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_metadata",
+                      "error":  "SD16: append logical coverage",
+                      "metadata_accepted":  false,
+                      "name":  "bad_known_A_capacity",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_metadata",
+                      "error":  "SD16: append logical coverage",
+                      "metadata_accepted":  false,
+                      "name":  "bad_reserved_404",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_metadata",
+                      "error":  "SD16: append logical coverage",
+                      "metadata_accepted":  false,
+                      "name":  "bad_reserved_424",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_metadata",
+                      "error":  "SD16: fixed group declaration",
+                      "metadata_accepted":  false,
+                      "name":  "bad_schema2_order1",
+                      "index_or_payload_executed":  false
+                  },
+                  {
+                      "expected":  "reject_crc",
+                      "error":  "Missing/torn/corrupt SD metadata: N2SDEND1",
+                      "metadata_accepted":  false,
+                      "name":  "bad_crc",
+                      "index_or_payload_executed":  false
+                  }
+              ],
+    "passed":  15
+}

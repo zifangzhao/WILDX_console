@@ -1,9 +1,7 @@
-# V2 recording firmware
+# V2 — deterministic IMU and SD append storage
 
-APP 194D9B94 / USB 74A9B98B / recovery 6408DBB8.
+APP7F238587 / USB74FC7104 / recovery6408DBB8. Three probes at20kHz completed the checked120-second SD recording and normal BLE/USB download handoff. StoredNN continuity and150003 scheduledIMU observations passed; localRTC interval120us, separate PC calibration uncertainty20205us.
 
-Checked with WILD-X 1.0.0.199 at three probes, 20 kHz: USB 60 seconds and BLE-to-SD 30 seconds with complete bounded readback. Device-local RTC-to-first-NP intervals were 120 and 121 microseconds. NP loss counters were zero; IMU observations were saved. PC synchronization uncertainty is separate.
+NPSD5 explicitly selects SD16 schema3 append storage. Original neural IDs are decoded in logical order; IMU batches keep physical admission order. Real gaps and incomplete segments remain explicit. Cached1250Hz copies do not imply physical sensor conversion-phase lock, complete source overlap, final-tail timing, unlimited stalls or endurance.
 
-The ordinary IMU path is enabled. The experimental hardware grid is disabled and is not qualified. This is a scoped update of the published R6 baseline, with no all-mode, endurance, or EC5 equivalence claim. Optional catalog inspection failed; normal listing/download/export passed. See acceptance.json for exact results and limits.
-
-The fused HEX merges the exact checked components without rebuilding or including device configuration. Earlier deliverables are retained under legacy.
+Use the Full bundle forAPP+USB+recovery. Omitted device configuration is preserved by the updater. APP-only capsules remain supported; no USB capsule or raw body is installed. Exact scope is in acceptance.json. Historical firmware baseline plus tested incremental overlay is documented in source-manifest.json; full clean rebuild equivalence is not claimed.

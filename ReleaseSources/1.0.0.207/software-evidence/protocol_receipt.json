@@ -1,0 +1,222 @@
+{
+  "created_utc": "2026-10-30T17:22:25.286169+00:00",
+  "scope": "Managed NPSD v5 family2 append control/client/Connect warm-up; focused isolated software checks only.",
+  "contract": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\Note\\NP2_SD_GRID16_APPEND_WIRE.md",
+    "bytes": 9983,
+    "sha256": "4E5578FD874A6A3C868A48B23F3F15654809CA3FE47B67CF8172D856F203B09F"
+  },
+  "source": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFirstSyncSd.cs",
+      "bytes": 13863,
+      "sha256": "5B8399E247C481E7F97DB1BB05AC7D40DB6DB441BA796D2686EA17DDD7734C84"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpFirstSyncSdClient.cs",
+      "bytes": 21091,
+      "sha256": "8906F11D8DE5C15E25AB2F8D0151675F92CEC09C7990ECECE6E53E51AB01928D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleForm.FirstSync.cs",
+      "bytes": 15010,
+      "sha256": "57131FD9FB6B93F197755A1ECFCF64D32188DCC73ED1D1BC5327C83C804BDB04"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConnection.cs",
+      "bytes": 46202,
+      "sha256": "3CFA43C9C0813ADE036FC7092D9F4B0CA2783CBA43501F667E790BFD89915377"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpFirstSyncSdClientTests.cs",
+      "bytes": 56819,
+      "sha256": "857C6BC0572DFADF165F9E666F82A853C6BC6CC0DCB8214522B887E6EEA0319A"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpFirstSyncSdGrid16Tests.cs",
+      "bytes": 8724,
+      "sha256": "66CE10BC0EF671F844EB25B809680A6262A0618935CD49DF8A5B0D833B7D6AB9"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpFirstSyncSdGrid16AppendTests.cs",
+      "bytes": 5679,
+      "sha256": "C19A04D99B565C59E98313A27AEA3EA08C8017D8E123901092ACC1CCACDC3AFE"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpBleFirstSyncMatchTests.cs",
+      "bytes": 4016,
+      "sha256": "D225E24548F3E841C3CE30CDFA9EA06A7670084435A7FBD9127DA53119CBC82D"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpBleSetupFrameTests.cs",
+      "bytes": 5721,
+      "sha256": "F9DC3E7091EDC7CF5415CF507C07B98F20FC88EFC3FF01FED81B3CF486077E73"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpBleFirstSyncFlowTests.cs",
+      "bytes": 26855,
+      "sha256": "423ADF14A8DA564A9E0CA2C12E0403968A5ADDC9CA1FC5EFC6FC5EF539F1D35A"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\test_first_sync_sd_grid16_append.ps1",
+      "bytes": 869,
+      "sha256": "F4928E174B4CE8AC1B09DFB10E01268E124371E7C0431D0B27AD589498C7A0C5"
+    }
+  ],
+  "tests": [
+    {
+      "command": "test_first_sync_sd_grid16_append.ps1",
+      "output": "codec",
+      "result": "PASS",
+      "checks": 639,
+      "wall_seconds": 1.5990578,
+      "artifacts": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\codec\\Grid16AppendTests.exe",
+          "bytes": 29184,
+          "sha256": "F39116D1DE175C3B32B290091D74B10369A531DE605460FA96CAEF26DD3C996F"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\codec\\v5-caps.bin",
+          "bytes": 128,
+          "sha256": "DE9394069261EA6CFE564D960C86E822FFF2058CDB9B8AD33E4B6B2106F4DB7F"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\codec\\v5-scheduled.bin",
+          "bytes": 128,
+          "sha256": "4B44B0CDF1831EC3D0DFBEF4613A0EC3F697137BBBAA2B8A3359FDE41414BA30"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\codec\\v5-start.bin",
+          "bytes": 128,
+          "sha256": "A3B808E9B92AFDDA55A45E0806D25942CFF3C2A94ED6060A71B038CCD1469F2A"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\codec\\v5-status.bin",
+          "bytes": 128,
+          "sha256": "C242734FB321BF277E1DB0A49FE8C2BD585B2C2654AD9CB33B9AE6B2154D4322"
+        }
+      ]
+    },
+    {
+      "command": "test_first_sync_sd_client.ps1",
+      "output": "client",
+      "result": "PASS",
+      "checks": 900,
+      "wall_seconds": 1.8140981,
+      "artifacts": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\client\\NpFirstSyncSdClientTests.exe",
+          "bytes": 167936,
+          "sha256": "981E7D2A1BADC3E2A8B10DFD66FB25893A405CC1DC98A5F8759E65B4C3013485"
+        }
+      ]
+    },
+    {
+      "command": "test_ble_first_sync_flow.ps1",
+      "output": "flow",
+      "result": "PASS",
+      "actual_apply_start_checks": 176,
+      "default_off_warm_stub": "PASS zero queries",
+      "matcher_enabled_checks": 351,
+      "matcher_disabled_checks": 351,
+      "wall_seconds": 6.0441052,
+      "artifacts": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\flow\\FirstSyncMatches-False.exe",
+          "bytes": 24064,
+          "sha256": "23FA8A8E91E448F9D719251F46A8F58C04BF00B3D096613182544A5AA6EB46E5"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\flow\\FirstSyncMatches-True.exe",
+          "bytes": 24064,
+          "sha256": "4CC4274AE03C877E534A72DBE5F2FAAED1559FE85FD44E2AA5C2699D2E711632"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\flow\\FirstSyncWarmOff.exe",
+          "bytes": 5120,
+          "sha256": "97A3601BD0C360B671BDBCE8297113F7A9F51BB2663279ABC154916F1F8AF879"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\flow\\NpBleFirstSyncFlowTests.exe",
+          "bytes": 210944,
+          "sha256": "93C5AFCD163B5999A555ADC300BC0B438FE0A79B4E7CDD6CE6916D16FBEBCC2A"
+        }
+      ]
+    },
+    {
+      "command": "test_ble_setup_frames.ps1",
+      "output": "setup",
+      "result": "PASS",
+      "checks": 570,
+      "wall_seconds": 1.5752531,
+      "artifacts": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\setup\\SetupFrames.exe",
+          "bytes": 42496,
+          "sha256": "28BF59E2130B0D51BF9A78649A2B0E49A706412E6E5452E637EB37465E88FE5C"
+        }
+      ]
+    },
+    {
+      "command": "test_first_sync_sd_grid16.ps1",
+      "output": "ordered-v4",
+      "result": "PASS",
+      "managed_checks": 457,
+      "c_parity_vectors": 433,
+      "actual_c_golden_roundtrip": "PASS",
+      "wall_seconds": 3.0473863,
+      "artifacts": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\ordered-v4\\golden.exe",
+          "bytes": 139776,
+          "sha256": "796640DFE82A913E6BC10CD204020C2E0EB682624397A908591509E3ADBE3D47"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\ordered-v4\\Grid16Tests.exe",
+          "bytes": 30720,
+          "sha256": "78996949387BD49188CB82D6DEC2B40FD339310D6BD05BD6AF271EDACBB13BCE"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\ordered-v4\\production-c-v4-golden.bin",
+          "bytes": 128,
+          "sha256": "FB4E9248F2E6D0F1C051FB7F508FB6B0EC906E3309B7929BB9F2EFA81A730CB5"
+        },
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\ordered-v4\\vectors.bin",
+          "bytes": 45512,
+          "sha256": "583CDA0A0E09C4386C02AF6CDCA33C0126E01B8FE9230579EA8B4507D9C7640C"
+        }
+      ]
+    }
+  ],
+  "version5": {
+    "family": 2,
+    "request_bytes": 64,
+    "reply_bytes": 64,
+    "record_features": 25,
+    "required_supported_mask": 29,
+    "scheduled_requires_advertised_mask": 31,
+    "storage_format": 16,
+    "storage_schema": 3,
+    "storage_order": 1
+  },
+  "unchanged_legacy_control_files": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpSdControl.cs",
+      "bytes": 3960,
+      "sha256": "1DDDA9A3B3918A927E546139DD33E7FD1DD274012AAB774429B26784CE2EDE25"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpV2SdControl.cs",
+      "bytes": 12697,
+      "sha256": "A807B43250ED8753DB120BCC1C63C7B4B464109FA1C80645E9832E70F8418128"
+    }
+  ],
+  "limitations": [
+    "No GUI/app/SDK/firmware build, hardware access or qualification, package, publication or Git action.",
+    "C v5 parity remains firmware-owner integration; independent fixed LE/zlib vectors supplied.",
+    "SDK export/verifier/decoder integration is separately owned; no source changes there.",
+    "No new USB NSGC2 behavior or per-record sensor timing claim."
+  ]
+}

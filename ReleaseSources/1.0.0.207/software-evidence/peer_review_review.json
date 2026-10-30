@@ -1,0 +1,72 @@
+{
+  "utc": "2026-10-30T17:30:10.688718+00:00",
+  "scope": "Bounded independent read-only review of frozen managed SD16 schema3/order1 SDK/export integration, no source edits/builds/tests/hardware.",
+  "source_freeze": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\source-freeze.json",
+    "sha256": "5560A0DB4C3FE70AFCC6A4C2D9999950BB512A5E66117886F6660A252FC4BA90"
+  },
+  "source_hashes": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdDatExport.cs",
+      "expected_sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F",
+      "after_review_sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F",
+      "matches": true
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\SD\\NpV2SdGrid.cs",
+      "expected_sha256": "2159B3E4D4D54335B46EF42CC711A1661E18420EF6204B3B6CA4501A54282DE9",
+      "after_review_sha256": "2159B3E4D4D54335B46EF42CC711A1661E18420EF6204B3B6CA4501A54282DE9",
+      "matches": true
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\USBConsoleV2\\NpV2UsbConsole.cs",
+      "expected_sha256": "AFA417C40BC2FF4E8F5B5392CC24B475D04531EE03990B340D96AB1FC353B856",
+      "after_review_sha256": "AFA417C40BC2FF4E8F5B5392CC24B475D04531EE03990B340D96AB1FC353B856",
+      "matches": true
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpCe64Export.cs",
+      "expected_sha256": "9747B82E404E1687BF7619619377D357D6371FB4ED21D8D4764A8D935D40529D",
+      "after_review_sha256": "9747B82E404E1687BF7619619377D357D6371FB4ED21D8D4764A8D935D40529D",
+      "matches": true
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\NpLogger\\NpDownloadForm.cs",
+      "expected_sha256": "CEE4ACE4311D99F03EB12DE35984732FD583070F3E136F9B7D8EC0005B7516BB",
+      "after_review_sha256": "CEE4ACE4311D99F03EB12DE35984732FD583070F3E136F9B7D8EC0005B7516BB",
+      "matches": true
+    }
+  ],
+  "concrete_blockers": [],
+  "findings": [
+    {
+      "topic": "Mandatory coverage versus optional IMU quality",
+      "evidence": "NpV2SdGrid.cs34-68 validates outer seals/profile/stride/N/P/H/A and complete admitted coverage before output; constructor70-84 and Feed88-98 retain optional context/carrier failures separately; DatExport368-376 records optional grid status without changing intact NN extents."
+    },
+    {
+      "topic": "Bounded index and original identities",
+      "evidence": "NpV2SdDatExport.cs592-641 allocates one8-byte index entry per durable physical group from validated footer112, scans only that physical extent, validates four consecutive aligned original IDs/profile/source ticks, rejects duplicates and recomputes exact P/H. No reservation-sized bitmap or neural payload caching."
+    },
+    {
+      "topic": "Physical AUX order stays independent",
+      "evidence": "IndexGridAppend625-629 reads each physical group AUX in physical order with original logical parent first+3, before Array.Sort633. Logical decoder238-242 changes NN read order only;287 skips AUX for gridAppend. NpImuGridWriter owns monotonic slot/optional-quality handling."
+    },
+    {
+      "topic": "Partial holes preserve data and do not forge acquisition loss",
+      "evidence": "DatExport277-286 and USBConsoleVerifier2870-2877 create explicit offline stored-segment boundaries. Decoder1288-1297 retires partial rows and reuses verified absolute phase without cross-hole splicing. SourceGap counters update only actual tick mismatch2980-2985, not storage gaps. Segment IDs/ticks/row offsets retained in neural_segments.csv and first_sample_timestamps.json."
+    },
+    {
+      "topic": "Missing initial NN cannot qualify first-source phase",
+      "evidence": "GridFirstSource728-744 reparses actual recorded clock/root and requires identity header logical sequence0/source tick0; missing prefix fails that predicate. DatExport370 also requires initialSequence0/no storage holes for verified whole-source window."
+    },
+    {
+      "topic": "Progress/ETA completion",
+      "evidence": "Index progress631 is once per64 physical groups; decode294-298 once per64 NN blocks, never per row. SDK progress100 occurs only finally467 after final DAT publication/receipt. GUI329 clamps local99 and final384 sets100 after export/merge/conversion loop. Stage ETA is separate; later phases remain unknown."
+    }
+  ],
+  "limits": [
+    "This review does not replace the existing focused fixture results and does not independently rerun them.",
+    "Firmware C/writer/pool/metadata parity and hardware acceptance remain pending with their owners.",
+    "No payload CRC or session-token proof is fabricated by indexing; whole-clock lifetime and physical sensor conversion phase remain outside scope."
+  ]
+}

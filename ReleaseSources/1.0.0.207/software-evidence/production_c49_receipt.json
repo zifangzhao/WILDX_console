@@ -1,0 +1,28 @@
+{
+  "checks": 49,
+  "goldens": [
+    {
+      "path": "D:/Code/WILDX_console/WILDX_console/_artifacts/sd_grid16_append_protocol_20261030/codec/v5-caps.bin",
+      "sha256": "DE9394069261EA6CFE564D960C86E822FFF2058CDB9B8AD33E4B6B2106F4DB7F"
+    },
+    {
+      "path": "D:/Code/WILDX_console/WILDX_console/_artifacts/sd_grid16_append_protocol_20261030/codec/v5-start.bin",
+      "sha256": "A3B808E9B92AFDDA55A45E0806D25942CFF3C2A94ED6060A71B038CCD1469F2A"
+    },
+    {
+      "path": "D:/Code/WILDX_console/WILDX_console/_artifacts/sd_grid16_append_protocol_20261030/codec/v5-status.bin",
+      "sha256": "C242734FB321BF277E1DB0A49FE8C2BD585B2C2654AD9CB33B9AE6B2154D4322"
+    },
+    {
+      "path": "D:/Code/WILDX_console/WILDX_console/_artifacts/sd_grid16_append_protocol_20261030/codec/v5-scheduled.bin",
+      "sha256": "4B44B0CDF1831EC3D0DFBEF4613A0EC3F697137BBBAA2B8A3359FDE41414BA30"
+    }
+  ],
+  "exe_sha256": "E9DDEA718449CE6DC0A7202AC0760820483CE10079C2A3B9EC563CDD206C6253",
+  "scope": "Pure C codec parity/family rejection/CRC/scheduled capability. No controller, firmware build or hardware proof.",
+  "wire_sha256": "7DBD89221461A9CDB072A358C37BF0B54F7748E6DAD2325546A6EFBE73AD4242",
+  "test_source_sha256": "85868F07FFFC98EA0D2BCF322B852262705AEA76BB71E567322037F6B5C6AB8F",
+  "wire_path": "C:/Frank/Code/XE_NP/_artifacts/grid16_append_main/Shared/Timing/np_first_sync_sd.h",
+  "status": "PASS_NATIVE_FILE_ONLY",
+  "source": "four independent managed golden request/reply pairs"
+}

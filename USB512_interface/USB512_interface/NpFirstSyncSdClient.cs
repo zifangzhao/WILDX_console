@@ -60,8 +60,8 @@ namespace USB512_interface {
         readonly Func<bool> leaseValid;
         readonly Func<byte[],CancellationToken,Task<byte[]>> exchange;
         int busy;
-        bool capsChecked,fineAuxCapsChecked,fineCounter64CapsChecked,grid16CapsChecked;
-        uint supported,fineAuxSupported,fineCounter64Supported,grid16Supported,queryId;
+        bool capsChecked,fineAuxCapsChecked,fineCounter64CapsChecked,grid16CapsChecked,grid16AppendCapsChecked;
+        uint supported,fineAuxSupported,fineCounter64Supported,grid16Supported,grid16AppendSupported,queryId;
         ulong tokenSequence;
         internal NpFirstSyncSdAttempt Attempt {get;private set;}
         internal string FallbackReason {get;private set;}
@@ -76,6 +76,9 @@ namespace USB512_interface {
         internal bool Grid16CapabilitiesChecked {get{return grid16CapsChecked;}}
         internal uint Grid16SupportedFeatures {get{return grid16Supported;}}
         internal string Grid16FallbackReason {get;private set;}
+        internal bool Grid16AppendCapabilitiesChecked {get{return grid16AppendCapsChecked;}}
+        internal uint Grid16AppendSupportedFeatures {get{return grid16AppendSupported;}}
+        internal string Grid16AppendFallbackReason {get;private set;}
         // Successfully discovered CAPS on this exact connection only. Reading
         // this value performs no query and never gates ordinary legacy Start.
         internal uint SupportedFeatures {get{return supported;}}
@@ -192,6 +195,30 @@ namespace USB512_interface {
                 return false;
             }finally{Exit();}
         }
+        // Optional V2 Connect warm-up only, after a matching version4 CAPS.
+        // Version5 selects SD16 schema3/order1; a failed query preserves v4.
+        internal async Task<bool> ReadGrid16AppendCapabilitiesAsync(CancellationToken cancel){
+            Enter(cancel);
+            try{
+                if(Family!=2 || Attempt!=null)return false;
+                if(grid16AppendCapsChecked)return (grid16AppendSupported&29)==29;
+                if(!grid16CapsChecked)return false;
+                if((grid16Supported&29)!=29){
+                    grid16AppendCapsChecked=true;Grid16AppendFallbackReason="SD16 capability is unavailable.";return false;
+                }
+                Check(cancel);var request=NpFirstSyncSd.QueryGrid16Append(NpFirstSyncSd.Caps,NextId(),Family,Uid);
+                grid16AppendCapsChecked=true;Grid16AppendFallbackReason="SD16 append discovery was not completed.";
+                try{
+                    var raw=await exchange((byte[])request.Clone(),cancel);Check(cancel);
+                    var reply=NpFirstSyncSd.ParseReply(raw,request,Family);
+                    if(reply.Result==0){grid16AppendSupported=reply.Supported;Grid16AppendFallbackReason=null;return true;}
+                    Grid16AppendFallbackReason="SD16 append is unavailable (result "+reply.Result+").";
+                }catch(Exception ex) when(ex is IOException||ex is InvalidDataException||ex is TimeoutException||ex is NotSupportedException){
+                    Check(cancel);Grid16AppendFallbackReason="SD16 append is unavailable: "+ex.Message;
+                }
+                return false;
+            }finally{Exit();}
+        }
         // Null means no Start delivery was attempted; the caller may separately
         // choose its ordinary legacy Start. Any delivery attempt remains stored,
         // including explicit rejection. This helper never sends legacy Start.
@@ -208,9 +235,11 @@ namespace USB512_interface {
                 }
                 bool fineCounter64=(fineCounter64Supported&29)==29 && (operation!=4 || (fineCounter64Supported&NpFirstSyncSd.FeatureScheduled)!=0);
                 bool grid16=Family==2 && (grid16Supported&29)==29 && (operation!=4 || (grid16Supported&NpFirstSyncSd.FeatureScheduled)!=0);
+                bool grid16Append=Family==2 && (grid16AppendSupported&29)==29 && (operation!=4 || (grid16AppendSupported&NpFirstSyncSd.FeatureScheduled)!=0);
                 bool fineAux=(fineAuxSupported&NpFirstSyncSd.FeatureFineCounter64)==0 && (fineAuxSupported&13)==13 &&
                     (operation!=4 || (fineAuxSupported&NpFirstSyncSd.FeatureScheduled)!=0);
-                var wrapped=grid16?NpFirstSyncSd.WrapLegacyGrid16(original,Family,Uid,NextToken()):
+                var wrapped=grid16Append?NpFirstSyncSd.WrapLegacyGrid16Append(original,Family,Uid,NextToken()):
+                    grid16?NpFirstSyncSd.WrapLegacyGrid16(original,Family,Uid,NextToken()):
                     fineCounter64?NpFirstSyncSd.WrapLegacyFineCounter64(original,Family,Uid,NextToken()):
                     fineAux?NpFirstSyncSd.WrapLegacyFineAux(original,Family,Uid,NextToken()):NpFirstSyncSd.WrapLegacy(original,Family,Uid,NextToken());
                 Check(cancel);uint id=BitConverter.ToUInt32(original,12);if(id>queryId)queryId=id;
@@ -228,7 +257,8 @@ namespace USB512_interface {
             Enter(cancel);
             try{
                 var attempt=Attempt;if(attempt==null)throw new InvalidOperationException("No SD Start attempt is bound to this client.");
-                var request=attempt.Version==4?NpFirstSyncSd.QueryGrid16(NpFirstSyncSd.Status,NextId(),Family,Uid,attempt.Token):
+                var request=attempt.Version==5?NpFirstSyncSd.QueryGrid16Append(NpFirstSyncSd.Status,NextId(),Family,Uid,attempt.Token):
+                    attempt.Version==4?NpFirstSyncSd.QueryGrid16(NpFirstSyncSd.Status,NextId(),Family,Uid,attempt.Token):
                     attempt.Version==3?NpFirstSyncSd.QueryFineCounter64(NpFirstSyncSd.Status,NextId(),Family,Uid,attempt.Token):
                     attempt.Version==2?NpFirstSyncSd.QueryFineAux(NpFirstSyncSd.Status,NextId(),Family,Uid,attempt.Token):
                     NpFirstSyncSd.Query(NpFirstSyncSd.Status,NextId(),Family,Uid,attempt.Token);

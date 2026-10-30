@@ -31,7 +31,7 @@ static class NpFirstSyncSdClientTests {
         internal int CurrentEpoch=Epoch;
         internal string CurrentUid=Uid;
         internal bool Lease=true;
-        internal uint Supported,FineAuxSupported,FineCounter64Supported,Grid16Supported;
+        internal uint Supported,FineAuxSupported,FineCounter64Supported,Grid16Supported,Grid16AppendSupported=29;
         internal readonly List<byte[]> Calls=new List<byte[]>();
         internal Func<byte[],CancellationToken,Task<byte[]>> Handler;
         internal Fake(int family){Family=family;Supported=family==1?1U:3U;FineAuxSupported=family==1?13U:15U;FineCounter64Supported=family==1?29U:31U;Grid16Supported=31U;Handler=(q,c)=>Task.FromResult(Reply(q));}
@@ -43,7 +43,7 @@ static class NpFirstSyncSdClientTests {
         internal int Starts {get{return Calls.Count(q=>BitConverter.ToUInt16(q,6)==1||BitConverter.ToUInt16(q,6)==3);}}
         internal byte[] Reply(byte[] q,uint result=0,bool found=false){
             ushort op=BitConverter.ToUInt16(q,6),version=BitConverter.ToUInt16(q,4);bool record=result==0&&op!=NpFirstSyncSd.Caps;
-            return NpFirstSyncSd.BuildReply(q,Family,new NpFirstSyncSdReply{Result=result,Supported=version==4?Grid16Supported:version==3?FineCounter64Supported:version==2?FineAuxSupported:Supported,RecordFeatures=record?(version>=3?25U:version==2?9U:1U):0,
+            return NpFirstSyncSd.BuildReply(q,Family,new NpFirstSyncSdReply{Result=result,Supported=version==5?Grid16AppendSupported:version==4?Grid16Supported:version==3?FineCounter64Supported:version==2?FineAuxSupported:Supported,RecordFeatures=record?(version>=3?25U:version==2?9U:1U):0,
                 Session=record&&found?100U:0,Generation=record&&found?9U:0,SourceEpoch=record&&found?11U:0,ProfileCrc=UInt32.MaxValue});
         }
     }
@@ -386,6 +386,44 @@ static class NpFirstSyncSdClientTests {
         }
         var pending=Continuous(2);var pc=pending.Client();await pc.ReadFineAuxCapabilitiesAsync(CancellationToken.None);await pc.ReadFineCounter64CapabilitiesAsync(CancellationToken.None);var complete=new TaskCompletionSource<byte[]>();byte[] saved=null;pending.Handler=(q,ct)=>{saved=(byte[])q.Clone();return complete.Task;};var warm=pc.ReadGrid16CapabilitiesAsync(CancellationToken.None);await Fails<InvalidOperationException>(async()=>{await pc.StartAsync(Legacy(2),CancellationToken.None);},"Concurrent Start bypassed v4 warmup owner");Need(pc.Attempt==null&&pending.Starts==0,"V4 CAPS created a mutation");complete.SetResult(pending.Reply(saved));Need(await warm,"Pending v4 capability lost");
     }
-    static async Task Run(){await OldFirmware();await FineCapabilities();await QueuedAndStatus(1);await QueuedAndStatus(2);await LostAndMalformedAck();await CancellationAndBinding();await ScheduleAndIsolation();await InFlight();await ConcurrentStart();await FineAuxCapabilities();await FineAuxFailures();await FineAuxInFlight();await FineCounter64Capabilities();await FineCounter64Failures();await Grid16Capabilities();}
+    static async Task WarmGrid16(NpFirstSyncSdClient client){
+        await client.ReadFineAuxCapabilitiesAsync(CancellationToken.None);await client.ReadFineCounter64CapabilitiesAsync(CancellationToken.None);await client.ReadGrid16CapabilitiesAsync(CancellationToken.None);
+    }
+    static async Task Grid16AppendCapabilities(){
+        var v1=Continuous(1);var c1=v1.Client();await c1.ReadFineAuxCapabilitiesAsync(CancellationToken.None);await c1.ReadFineCounter64CapabilitiesAsync(CancellationToken.None);int calls=v1.Calls.Count;
+        Need(!await c1.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&v1.Calls.Count==calls&&!c1.Grid16AppendCapabilitiesChecked,"V1 probed version5");
+        var f=Continuous(2);var client=f.Client();Need(!await client.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&f.Calls.Count==0,"v5 probed before matching v4");await WarmGrid16(client);calls=f.Calls.Count;
+        Need(await client.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&client.Grid16AppendSupportedFeatures==29&&client.Grid16AppendCapabilitiesChecked&&f.Calls.Count==calls+1,"Explicit v5 warmup missing");
+        calls=f.Calls.Count;Need(await client.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&f.Calls.Count==calls,"v5 CAPS replayed");
+        var a=await client.StartAsync(Legacy(2),CancellationToken.None);Need(a.Version==5&&a.Acknowledgement.Grid16Append&&a.Acknowledgement.Grid16&&a.Acknowledgement.FineCounter64&&a.Acknowledgement.RecordFeatures==25&&f.Calls.Count==calls+1&&f.Starts==1,"v5 Start changed declaration or added discovery");
+        Need((await client.StatusAsync(CancellationToken.None)).Version==5&&BitConverter.ToUInt64(f.Calls.Last(),24)==a.Token,"v5 STATUS lost exact version/token");calls=f.Calls.Count;Need(!await client.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&f.Calls.Count==calls,"v5 retargeted an existing attempt");
+        client.RetireAfterConfirmedStop(Uid,2,Epoch,true);var next=await client.StartAsync(Legacy(2,58),CancellationToken.None);Need(next.Version==5&&next.Token!=a.Token,"Confirmed Stop lost v5 cache or reused token");
+        var ordered=Continuous(2);var oc=ordered.Client();await WarmGrid16(oc);calls=ordered.Calls.Count;Need((await oc.StartAsync(Legacy(2),CancellationToken.None)).Version==4&&ordered.Calls.Count==calls+1,"Unwarmed v5 changed ordered v4 Start");
+        foreach(uint support in new[]{29U,31U}){
+            var scheduled=Continuous(2);scheduled.Grid16AppendSupported=support;var sc=scheduled.Client();await WarmGrid16(sc);await sc.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None);calls=scheduled.Calls.Count;
+            var sa=await sc.StartAsync(Legacy(2,57,true),CancellationToken.None);Need(sa.Version==(support==31?5:4)&&scheduled.Calls.Count==calls+1,"v5 Scheduled dependency ignored or fallback occurred after delivery");
+        }
+        for(int mode=0;mode<9;mode++){
+            int fault=mode;var peer=Continuous(2);var pc=peer.Client();await WarmGrid16(pc);
+            peer.Handler=(q,ct)=>{if(fault==0)throw new TimeoutException();if(fault==1)throw new IOException();if(fault==2)throw new NotSupportedException();if(fault==3)return Task.FromResult(new byte[64]);if(fault==4)return Task.FromResult(peer.Reply(q,1));var raw=peer.Reply(q);raw[new[]{0,0,0,0,0,4,12,24,60}[fault]]^=1;if(fault!=8)Seal(raw);return Task.FromResult(raw);};
+            Need(!await pc.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&pc.Grid16AppendCapabilitiesChecked&&pc.Grid16AppendSupportedFeatures==0&&pc.Grid16SupportedFeatures==31,"Unavailable/bad v5 removed confirmed v4");
+            calls=peer.Calls.Count;Need(!await pc.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None)&&peer.Calls.Count==calls,"Unsupported v5 queried more than once");peer.Handler=(q,ct)=>Task.FromResult(peer.Reply(q));Need((await pc.StartAsync(Legacy(2),CancellationToken.None)).Version==4&&peer.Calls.Count==calls+1,"Failed v5 gated Start or replayed discovery");
+        }
+        foreach(bool after in new[]{false,true})using(var cancel=new CancellationTokenSource()){
+            var peer=Continuous(2);var pc=peer.Client();await WarmGrid16(pc);calls=peer.Calls.Count;if(after)peer.Handler=(q,ct)=>{cancel.Cancel();return Task.FromResult(peer.Reply(q));};else cancel.Cancel();
+            await Fails<OperationCanceledException>(async()=>{await pc.ReadGrid16AppendCapabilitiesAsync(cancel.Token);},"v5 CAPS ignored cancellation");Need(pc.Grid16AppendSupportedFeatures==0&&pc.Grid16SupportedFeatures==31&&pc.Attempt==null&&peer.Calls.Count==calls+(after?1:0),"Canceled v5 fabricated proof or mutation");
+            calls=peer.Calls.Count;peer.Handler=(q,ct)=>Task.FromResult(peer.Reply(q));Need((await pc.StartAsync(Legacy(2),CancellationToken.None)).Version==4&&peer.Calls.Count==calls+1,"Start queried canceled v5");
+        }
+        foreach(bool uid in new[]{false,true}){
+            var peer=Continuous(2);var pc=peer.Client();await WarmGrid16(pc);peer.Handler=(q,ct)=>{var raw=peer.Reply(q);if(uid)peer.CurrentUid=OtherUid;else peer.CurrentEpoch++;return Task.FromResult(raw);};
+            await Fails<InvalidOperationException>(async()=>{await pc.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None);},"Changed context admitted v5 CAPS");calls=peer.Calls.Count;await Fails<InvalidOperationException>(async()=>{await pc.StartAsync(Legacy(2),CancellationToken.None);},"Changed context sent Start");Need(pc.Grid16AppendSupportedFeatures==0&&pc.Attempt==null&&peer.Calls.Count==calls,"Changed context retained v5 proof");
+        }
+        foreach(bool rejected in new[]{false,true}){
+            var peer=Continuous(2);var pc=peer.Client();await WarmGrid16(pc);await pc.ReadGrid16AppendCapabilitiesAsync(CancellationToken.None);peer.Handler=(q,ct)=>{if(rejected)return Task.FromResult(peer.Reply(q,3));throw new TimeoutException("lost v5 START ACK");};
+            if(rejected)Need((await pc.StartAsync(Legacy(2),CancellationToken.None)).Rejected,"Explicit v5 rejection lost");else await Fails<TimeoutException>(async()=>{await pc.StartAsync(Legacy(2),CancellationToken.None);},"Lost v5 ACK accepted");
+            a=pc.Attempt;calls=peer.Calls.Count;Need(a.Version==5&&peer.Starts==1,"Uncertain v5 attempt lost");await Fails<InvalidOperationException>(async()=>{await pc.StartAsync(Legacy(2,58),CancellationToken.None);},"Uncertain v5 Start replayed/downgraded");Need(peer.Calls.Count==calls,"Uncertain v5 sent fallback");peer.Handler=(q,ct)=>Task.FromResult(peer.Reply(q,4));Need((await pc.StatusAsync(CancellationToken.None)).Version==5&&ReferenceEquals(pc.Attempt,a),"NOT_FOUND changed v5 ownership/version");
+        }
+    }
+    static async Task Run(){await OldFirmware();await FineCapabilities();await QueuedAndStatus(1);await QueuedAndStatus(2);await LostAndMalformedAck();await CancellationAndBinding();await ScheduleAndIsolation();await InFlight();await ConcurrentStart();await FineAuxCapabilities();await FineAuxFailures();await FineAuxInFlight();await FineCounter64Capabilities();await FineCounter64Failures();await Grid16Capabilities();await Grid16AppendCapabilities();}
     static int Main(){try{Run().GetAwaiter().GetResult();Console.WriteLine("PASS "+checks+" isolated SD client checks; fake B8 transport only.");return 0;}catch(Exception ex){Console.Error.WriteLine(ex);return 1;}}
 }

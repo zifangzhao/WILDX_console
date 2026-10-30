@@ -18,7 +18,7 @@ namespace USB512_interface {
         NpFirmwareIdentity firmwareIdentity;
         bool busy,hostBusy,closing,firstSyncFailNextStatus,firstSyncRejectStop;
         bool firstSyncUnsupported,firstSyncFineUnsupported,firstSyncLoseStart,firstSyncDelayStart,firstSyncContinuous,firstSyncCounterUnsupported;
-        bool firstSyncIdentityTimeout,firstSyncIdentityBadCrc,firstSyncIdentityZeroUid,firstSyncGrid16,firstSyncGridDeadline;
+        bool firstSyncIdentityTimeout,firstSyncIdentityBadCrc,firstSyncIdentityZeroUid,firstSyncGrid16,firstSyncGridDeadline,firstSyncGridAppend,firstSyncGridAppendDeadline;
         uint firstSyncStartError,firstSyncSupport,firstSyncIdentityResult=1;
         byte[] firstSyncDelayed;
         Action<byte[]> firstSyncOnExchange;
@@ -39,7 +39,9 @@ namespace USB512_interface {
                 if(!firstSyncIdentityZeroUid)for(int i=0;i<3;i++)FirstPut(response,48+4*i,Convert.ToUInt32(FirstUid.Substring(i*8,8),16));
                 FirstPut(response,60,NpProbePreparation.Crc(response,60));if(firstSyncIdentityBadCrc)response[60]^=1;return Task.FromResult(response);
             }
-            ushort op=BitConverter.ToUInt16(q,6),version=BitConverter.ToUInt16(q,4);bool fineAux=version==2,fineCounter64=version==3,grid16=version==4;
+            ushort op=BitConverter.ToUInt16(q,6),version=BitConverter.ToUInt16(q,4);bool fineAux=version==2,fineCounter64=version==3,grid16=version==4,append=version==5;
+            if(append&&firstSyncGridAppendDeadline)return FirstGridDeadline(cancel);
+            if(append&&!firstSyncGridAppend)throw new TimeoutException("Legacy firmware has no SD16 append opt-in");
             if(grid16&&firstSyncGridDeadline)return FirstGridDeadline(cancel);
             if(grid16&&!firstSyncGrid16)throw new TimeoutException("Legacy firmware has no SD16 opt-in");
             if(op==NpFirstSyncSd.Caps&&(firstSyncUnsupported||fineAux&&firstSyncFineUnsupported||fineCounter64&&firstSyncCounterUnsupported))throw new TimeoutException("Legacy firmware has no NPSD capability version");
@@ -52,7 +54,7 @@ namespace USB512_interface {
             if(start&&firstSyncLoseStart)throw new TimeoutException("NPSD Start ACK lost");
             uint error=start?firstSyncStartError:0;
             return Task.FromResult(NpFirstSyncSd.BuildReply(q,recorderVersion,new NpFirstSyncSdReply{
-                Result=error,Supported=grid16||fineCounter64||fineAux&&firstSyncContinuous?(V2?31U:29U):fineAux?(V2?15U:13U):firstSyncSupport!=0?firstSyncSupport:V2?3U:1U,RecordFeatures=op==0||error!=0?0U:grid16||fineCounter64?25U:fineAux?9U:1U,ProfileCrc=UInt32.MaxValue}));
+                Result=error,Supported=append?29U:grid16||fineCounter64||fineAux&&firstSyncContinuous?(V2?31U:29U):fineAux?(V2?15U:13U):firstSyncSupport!=0?firstSyncSupport:V2?3U:1U,RecordFeatures=op==0||error!=0?0U:append||grid16||fineCounter64?25U:fineAux?9U:1U,ProfileCrc=UInt32.MaxValue}));
         }
         static Task<byte[]> FirstGridDeadline(CancellationToken cancel){return Task.FromException<byte[]>(new OperationCanceledException("Optional transport deadline",cancel));}
         static void FirstPut(byte[] b,int at,uint n){Buffer.BlockCopy(BitConverter.GetBytes(n),0,b,at,4);}
@@ -209,7 +211,7 @@ namespace USB512_interface {
             foreach(bool timeout in new[]{false,true}){
                 var grid=FirstForm(true);grid.firstSyncSupport=7;grid.firstSyncContinuous=true;grid.firstSyncGrid16=!timeout;grid.firstSyncGridDeadline=timeout;
                 Console.WriteLine("SD16 local timeout fixture="+timeout);await grid.WarmBleFirstSyncCapabilities();
-                Need(grid.firstSyncCalls.Count==4&&grid.rtcWarmCalls==1&&grid.bleFirstSyncClient.FineCounter64SupportedFeatures==31&&grid.bleFirstSyncClient.Grid16CapabilitiesChecked,"Optional CAPS4 did not retain v3/RTC warm after local timeout");
+                Need(grid.firstSyncCalls.Count==(timeout?4:5)&&grid.rtcWarmCalls==1&&grid.bleFirstSyncClient.FineCounter64SupportedFeatures==31&&grid.bleFirstSyncClient.Grid16CapabilitiesChecked,"Optional CAPS4 did not retain v3/RTC warm after local timeout");
                 Need(grid.bleFirstSyncClient.Grid16SupportedFeatures==(timeout?0U:31U)&&grid.bleFirstSyncWarmCancel==null,"CAPS4 cached unsupported proof or leaked warm ownership");
                 int count=grid.firstSyncCalls.Count;await grid.StartRecording();Need(grid.firstSyncCalls.Count==count+1&&grid.bleFirstSyncClient.Attempt.Version==(timeout?3:4),"Start queried or ignored explicit v4 capability");
             }
@@ -217,6 +219,17 @@ namespace USB512_interface {
                 var grid=FirstForm(true);grid.firstSyncSupport=7;grid.firstSyncContinuous=true;grid.firstSyncGrid16=true;
                 grid.firstSyncOnExchange=q=>{if(BitConverter.ToUInt16(q,4)==4){if(loss==0)grid.CancelBleFirstSyncStart();else if(loss==1)grid.connection.Epoch++;else grid.connectedAddress++;}};
                 await grid.WarmBleFirstSyncCapabilities();Need(grid.firstSyncCalls.Count==4&&grid.rtcWarmCalls==0&&grid.bleFirstSyncClient.Grid16SupportedFeatures==0&&grid.bleFirstSyncClient.Attempt==null,"Changed/canceled CAPS4 context cached proof or warmed RTC");
+            }
+            foreach(bool timeout in new[]{false,true}){
+                var grid=FirstForm(true);grid.firstSyncSupport=7;grid.firstSyncContinuous=true;grid.firstSyncGrid16=true;grid.firstSyncGridAppend=!timeout;grid.firstSyncGridAppendDeadline=timeout;
+                await grid.WarmBleFirstSyncCapabilities();Need(grid.firstSyncCalls.Count==5&&grid.rtcWarmCalls==1&&grid.bleFirstSyncClient.Grid16AppendCapabilitiesChecked&&grid.bleFirstSyncClient.Grid16SupportedFeatures==31,"CAPS5 local timeout removed v4/RTC or added discovery");
+                Need(grid.bleFirstSyncClient.Grid16AppendSupportedFeatures==(timeout?0U:29U)&&grid.bleFirstSyncWarmCancel==null,"CAPS5 cached unknown proof or leaked warm ownership");int count=grid.firstSyncCalls.Count;
+                await grid.StartRecording();Need(grid.firstSyncCalls.Count==count+1&&grid.bleFirstSyncClient.Attempt.Version==(timeout?4:5)&&grid.bleFirstSyncClient.Attempt.Acknowledgement.RecordFeatures==25,"Start queried or ignored explicit v5 capability");
+            }
+            foreach(int loss in new[]{0,1,2}){
+                var grid=FirstForm(true);grid.firstSyncSupport=7;grid.firstSyncContinuous=true;grid.firstSyncGrid16=true;grid.firstSyncGridAppend=true;
+                grid.firstSyncOnExchange=q=>{if(BitConverter.ToUInt16(q,4)==5){if(loss==0)grid.CancelBleFirstSyncStart();else if(loss==1)grid.connection.Epoch++;else grid.connectedAddress++;}};
+                await grid.WarmBleFirstSyncCapabilities();Need(grid.firstSyncCalls.Count==5&&grid.rtcWarmCalls==0&&grid.bleFirstSyncClient.Grid16AppendSupportedFeatures==0&&grid.bleFirstSyncClient.Grid16SupportedFeatures==31&&grid.bleFirstSyncClient.Attempt==null,"Changed/canceled CAPS5 context cached proof or warmed RTC");
             }
         }
     }

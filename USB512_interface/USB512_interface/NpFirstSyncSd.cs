@@ -15,9 +15,10 @@ namespace USB512_interface {
         internal ushort Version;
         internal uint Result,Supported,RecordFeatures,Session,Generation,SourceEpoch,ProfileCrc;
         // Association may still be pending; this never means recording/running.
-        internal bool Associated {get{return Result==0 && (Version==1 && RecordFeatures==1 || Version==2 && RecordFeatures==9 || (Version==3 || Version==4) && RecordFeatures==25);}}
-        internal bool FineCounter64 {get{return Associated && (Version==3 || Version==4);}}
-        internal bool Grid16 {get{return Associated && Version==4;}}
+        internal bool Associated {get{return Result==0 && (Version==1 && RecordFeatures==1 || Version==2 && RecordFeatures==9 || (Version==3 || Version==4 || Version==5) && RecordFeatures==25);}}
+        internal bool FineCounter64 {get{return Associated && (Version==3 || Version==4 || Version==5);}}
+        internal bool Grid16 {get{return Associated && (Version==4 || Version==5);}}
+        internal bool Grid16Append {get{return Associated && Version==5;}}
     }
     internal sealed class NpFirstSyncSdBound {
         internal string Uid;
@@ -48,7 +49,7 @@ namespace USB512_interface {
         static void Seal(byte[] b){Put(b,b.Length-4,NpFirstSyncWire.Crc(b,b.Length-4));}
         static NpFirstSyncSdRequest CheckRequest(byte[] b,int family,string uid,bool admit){
             Require(b!=null && b.Length==64 && (family==1 || family==2),"request size/family");UidWords(uid);
-            Require(U(b,0)==RequestMagic && (H(b,4)==1 || H(b,4)==2 || H(b,4)==3 || H(b,4)==4 && family==2) && U(b,8)!=0 && String.Equals(ReadUid(b,12),uid,StringComparison.OrdinalIgnoreCase) &&
+            Require(U(b,0)==RequestMagic && (H(b,4)==1 || H(b,4)==2 || H(b,4)==3 || (H(b,4)==4 || H(b,4)==5) && family==2) && U(b,8)!=0 && String.Equals(ReadUid(b,12),uid,StringComparison.OrdinalIgnoreCase) &&
                 U(b,60)==NpFirstSyncWire.Crc(b,60),"request tag/version/ID/UID/CRC");
             ushort op=H(b,6);ulong token=L(b,24);Require(op<=Scheduled,"request operation");
             if(op==Caps)Require(token==0 && Zero(b,32,28),"CAPS token/payload");
@@ -78,6 +79,9 @@ namespace USB512_interface {
         internal static byte[] QueryGrid16(ushort op,uint id,int family,string uid,ulong token=0){
             return QueryVersion(4,op,id,family,uid,token);
         }
+        internal static byte[] QueryGrid16Append(ushort op,uint id,int family,string uid,ulong token=0){
+            return QueryVersion(5,op,id,family,uid,token);
+        }
         static byte[] QueryVersion(ushort version,ushort op,uint id,int family,string uid,ulong token){
             Require(op==Caps || op==Status,"use legacy START wrapper");var b=new byte[64];Put(b,0,RequestMagic);Put(b,4,version|((uint)op<<16));Put(b,8,id);PutUid(b,12,uid);Put64(b,24,token);Seal(b);
             ParseRequest(b,family,uid);return b;
@@ -99,6 +103,9 @@ namespace USB512_interface {
         }
         internal static byte[] WrapLegacyGrid16(byte[] legacy,int family,string uid,ulong token,ulong lastToken=0){
             return WrapLegacyVersion(4,legacy,family,uid,token,lastToken);
+        }
+        internal static byte[] WrapLegacyGrid16Append(byte[] legacy,int family,string uid,ulong token,ulong lastToken=0){
+            return WrapLegacyVersion(5,legacy,family,uid,token,lastToken);
         }
         static byte[] WrapLegacyVersion(ushort version,byte[] legacy,int family,string uid,ulong token,ulong lastToken){
             Legacy(legacy,family);var b=new byte[64];Put(b,0,RequestMagic);Put(b,4,version|((U(legacy,8)==4?3U:1U)<<16));Put(b,8,U(legacy,12));PutUid(b,12,uid);Put64(b,24,token);

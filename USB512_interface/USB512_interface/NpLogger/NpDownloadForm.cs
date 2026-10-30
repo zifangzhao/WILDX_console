@@ -322,6 +322,7 @@ namespace CE32_console
                     var timingBefore=download==null?null:download.TimingSnapshot();
                     long transferStart=download==null?0:download.DownloadedBytes;
                     var watch=System.Diagnostics.Stopwatch.StartNew();
+                    USB512_interface.NpV2SdDatExport.ExportProgress exportStage=null;
                     Action<int> reportProgress=p=>{
                         double totalBytes=(double)r.Chunks*(r.V2?46592:65536),bytes=totalBytes*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
                         bool knownSize=!(recoverInterrupted&&r.PowerInterruptedRecovery);
@@ -329,9 +330,11 @@ namespace CE32_console
                         string speed=download==null?"~"+(bytes/seconds/1e6).ToString("F1")+" MB/s":
                             USB512_interface.NpProgressEstimate.TransferRate(download.DownloadedBytes-transferStart,seconds);
                         string activity=knownSize?"native download ~"+(bytes/1073741824).ToString("F2")+" / "+(totalBytes/1073741824).ToString("F2")+" GiB · "+speed:"read-only prefix recovery";
+                        string stageText=exportStage==null?null:exportStage.Stage+" | "+(exportStage.Total>0&&exportStage.Completed>=exportStage.Total?
+                            "stage complete; preparing next phase":USB512_interface.NpProgressEstimate.Remaining(exportStage.Completed,exportStage.Total,exportStage.ElapsedSeconds,true));
                         ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+" ("+(index+1)+"/"+chosen.Count+"): "+
-                            (p>=100?"Finalizing recording files…":p+"% | "+activity+" | "+DownloadTimeRemaining(p,seconds,knownSize))+
-                            " | Selected downloads: "+USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown)+" · "+elapsed.Elapsed+"\r\n"+output));
+                            (stageText??(p>=100?"Finalizing recording files…":p+"% | "+activity+" | "+DownloadTimeRemaining(p,seconds,knownSize)))+
+                            " | Selected downloads: "+(exportStage==null?USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown):"remaining phases unknown")+" · "+elapsed.Elapsed+"\r\n"+output));
                     };
                     reportProgress(0);
                     bool exported=false;string exportError=null;
@@ -342,7 +345,8 @@ namespace CE32_console
                         else NpCe64Export.ExportPowerInterruptedPrefix(input,r.Start,r.End,output,()=>cancelled,reportProgress);
                     }
                     else {
-                        var result=NpCe64Export.ExportCalibrated(input,r.Start,r.End,output,()=>cancelled,reportProgress,calibration.Count==0?null:calibration);
+                        var result=NpCe64Export.ExportCalibratedWithStages(input,r.Start,r.End,output,()=>cancelled,reportProgress,calibration.Count==0?null:calibration,
+                            stage=>{exportStage=stage;if(stage.Stage=="Finalizing recording files")reportProgress(99);});
                         string warning=NpCe64Export.V2RecordingWarning(result);
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);
                     }

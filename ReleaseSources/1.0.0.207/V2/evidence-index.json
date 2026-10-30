@@ -1,0 +1,32 @@
+[
+  {
+    "path": "evidence/pool_fixture.c",
+    "sha256": "7E7B16833B828D34E772AAA77E40B0116DC9D3F7BC5D92153A68E5F47B19B222",
+    "bytes": 594266
+  },
+  {
+    "path": "evidence/wire_receipt.json",
+    "sha256": "F0F9165148A45E5C3E00A20CF14B11820DE0DAE008AB9B674BD5C33A403BF737",
+    "bytes": 1516
+  },
+  {
+    "path": "evidence/wire_test.c",
+    "sha256": "85868F07FFFC98EA0D2BCF322B852262705AEA76BB71E567322037F6B5C6AB8F",
+    "bytes": 2092
+  },
+  {
+    "path": "evidence/writer_append_cases.c",
+    "sha256": "6AE860070568DA77B88871F5FD3707EC1CBC63AD1238A4D08CD9339BB51C5C40",
+    "bytes": 9677
+  },
+  {
+    "path": "evidence/writer_native_receipt.json",
+    "sha256": "1F0421C2590CE863F86F765B4E8264389E97AD514856DDC05F945954289640DE",
+    "bytes": 6512
+  },
+  {
+    "path": "evidence/writer_native_recipe.py",
+    "sha256": "A83F2F684B2E922CD3406095912513845B4244886EF759785D0C1E4308B53CC4",
+    "bytes": 4100
+  }
+]

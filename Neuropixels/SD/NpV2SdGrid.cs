@@ -47,7 +47,7 @@ namespace USB512_interface {
                 end==Align(rounded,16384)&&end<=U(d,72)&&end*512<=(ulong)cardLength&&
                 (v!=12||(payload/1024<=0x3fffff&&(rounded-au)/1024<=0x3fffff))&&U(d,100)==1&&Zero(d,104,24),"descriptor/profile/reservation");
             uint schema=U(d,216);
-            Need(Encoding.ASCII.GetString(d,208,8)=="N2GRP016"&&(schema==1||schema==2)&&U(d,224)==0&&U(d,228)==k&&U(d,232)==stride&&
+            Need(Encoding.ASCII.GetString(d,208,8)=="N2GRP016"&&(schema==1||schema==2||schema==3)&&U(d,224)==(schema==3?1U:0U)&&U(d,228)==k&&U(d,232)==stride&&
                 U(d,236)==4&&U(d,240)==1&&U(d,244)==2&&U(d,248)==1250&&U(d,252)==0&&Zero(d,256,252),"fixed group declaration");
             Need(cl?U(d,136)==v&&U(d,140)==0x314d4c43:Zero(d,132,12),"closed-loop declaration");
             Need(Zero(d,144,64)&&Zero(f,132,12)&&(cl||Zero(f,144,64))&&(schema!=1||Zero(f,392,116)),"reserved metadata");
@@ -59,12 +59,19 @@ namespace USB512_interface {
             Need((incomplete?U(f,100)>=1&&U(f,100)<=4:U(f,100)==3&&U(f,104)==0&&n!=0)&&n%4==0&&g==n/4&&g<=groups&&
                 physical==g*stride&&Q(f,264)==g*k&&U(f,116)==payload+physical&&Q(f,120)==n*ticks&&U(f,128)==au&&
                 (payload+physical)*512<=(ulong)cardLength,"committed physical/neural extent");
+            if(schema==3){
+                ulong p=U(f,408),h=U(f,412),a=U(f,416),capacity=groups*4;uint coverage=U(f,420);
+                bool known=(coverage&1)!=0;
+                Need(Zero(f,404,4)&&Zero(f,424,84)&&coverage<=1&&p%4==0&&h%4==0&&p<=n&&n<=h&&h<=capacity&&
+                    ((h==0)==(n==0))&&(known?h<=a&&a<=capacity:a==UInt32.MaxValue),"append logical coverage");
+                Need(U(f,100)!=3 || known&&a==p&&p==n&&n==h&&n!=0,"complete append admitted coverage");
+            }
         }
         internal NpV2SdGrid(string folder,byte[] footer,NpFineSdCompanion context){
             this.folder=folder;this.footer=footer;this.context=context;
             MetadataSchema=U(footer,216);
-            if(MetadataSchema==2){
-                TailStatsValid=U(footer,400)<=1&&U(footer,404)==0&&Zero(footer,408,100);
+            if(MetadataSchema==2||MetadataSchema==3){
+                TailStatsValid=U(footer,400)<=1&&U(footer,404)==0&&(MetadataSchema==3||Zero(footer,408,100));
                 if(TailStatsValid){KnownUnsavedRows=Q(footer,392);PendingRecordRowsUnknown=U(footer,400)!=0;}
                 else TailError="Invalid optional SD16 schema2 retirement-tail fields; coverage is unknown.";
             }

@@ -89,6 +89,7 @@ internal static partial class NpV2SdDatExportTests {
     }
     static void Grid16(string root,string native){
         NativeGrid16(root,native);
+        GridAppend(root);
         foreach(uint hz in new[]{7500U,15000U,20000U,30000U})foreach(byte mask in new byte[]{1,3,7}){
             string name="g16_"+hz+"_"+mask,legacy=Path.Combine(root,name+".img"),baseline=Path.Combine(root,name+"_old"),image=Path.Combine(root,name+"_new.img"),output=Path.Combine(root,name);
             MakeImage(legacy,hz,null,0,mask,mask==7?719U:UInt32.MaxValue);AddImu(legacy,null);NpV2SdDatExport.Result before;using(var card=File.OpenRead(legacy))before=NpV2SdDatExport.Export(card,Start,baseline);

@@ -1,7 +1,11 @@
-# WILD-X1.0.0.206
+# WILD-X1.0.0.207
 
-[Download the installer](WILDX_console-Setup-1.0.0.206.exe).
+V2 now supports deterministic1250Hz cached IMU copies and explicitly negotiated SD append storage. The PC indexes original neural block IDs, preserves physical IMU order, and retains real later data segments across storage gaps without padding or invented capture-loss counts. Indexing, download/decoding and finalization show separate progress. Older firmware and recordings remain supported.
 
-Fixes the V2 Full bundle parser error before programming at0x080074C0. Untouched flash and configuration are preserved from the exact backup. Select Advanced -> Firmware update -> the exact device/family -> Full bundle: APP + USB + boot -> Update bundled firmware.
+The matched V2 three-probe20kHz120-second SD recording passed storedNN/IMU/RTC checks:93752 neural blocks,150003 observed IMU slots, and no reported neural, queue, scheduler, AUX or unsaved-row loss. Local deviceRTC-to-firstNP interval was120us; PC calibration uncertainty was20205us and is separate. Normal BLE-to-USB download and finalAPP/idle handoff passed;14 prior catalog records were preserved.
 
-All firmware and companions are unchanged from204: V1APPFFF283D9/USB1E73A743, V2APP194D9B94/USB74A9B98B/recovery6408DBB8; V1Camera unchanged. New V2 SD experiments are excluded. This is an independently checked host updater fix; no new physical flash or recording qualification is claimed. Source and validation records are in ReleaseSources/1.0.0.206. The predecessor is archived under legacy/1.0.0.204; one current installer remains here.
+V1 andCamera firmware and the28 checked runtime companions retain their previous identities. New V2 APP7F238587/USB74FC7104/recovery6408DBB8 are bundled. No USB update capsule or raw firmware body is installed.
+
+Upgrade: Advanced > Firmware update window. Select the exact deviceUID and matching bundled family, choose Full bundle: APP + USB + boot, then Update bundled firmware. APP-only does not updateUSB. The updater preserves omitted configuration bytes using the verified backup.
+
+Cached copies can repeat asynchronous sensor conversions. Physical conversion phase, full source overlap, final-tail timing and endurance remain unqualified. Old recordings without the start receipt do not retroactively gain a preciseRTC anchor. Firmware source provenance is the recorded historical baseline plus the exact tested incremental overlay, not a full clean rebuild.

@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "version": "1.0.0.207",
+  "status": "software_qualified_matching_firmware_pending",
+  "git_baseline": "0e41669fe419e42b98cdf27205fdaced6dff9047",
+  "source_identity_role": "published206_plus_archived207_compiled_overlay_not_clean_HEAD_claim",
+  "build_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-207-append.json",
+    "bytes": 35398,
+    "sha256": "CD981EF346631DE31850DDB3DF26A61F949F572292EDC8ED786EE423CAEA7E06"
+  },
+  "source_snapshot": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\source207-append",
+  "compiled_source_archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 963153,
+    "sha256": "F0F5765DA9B2302B2ADEDD0E47D30496E73510E27487A8C1DDFE91B545702637"
+  },
+  "compiled_inputs": 199,
+  "source_stable_against_build_and_snapshot": true,
+  "recipe": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\build-grid-lab207.ps1",
+    "bytes": 6337,
+    "sha256": "85252586E2AA616460BA83A624EE3EAE2AD13F7F8FC0DE4084E849D42429872A"
+  },
+  "archive_recipe_execution": "Reference copy only; execute original workspace recipe because PSScriptRoot paths are relative. No build authorized by prep.",
+  "source_delta_from206": [
+    {
+      "path": "Neuropixels/SD/NpV2SdDatExport.cs",
+      "sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F"
+    },
+    {
+      "path": "Neuropixels/SD/NpV2SdGrid.cs",
+      "sha256": "2159B3E4D4D54335B46EF42CC711A1661E18420EF6204B3B6CA4501A54282DE9"
+    },
+    {
+      "path": "Neuropixels/Timing/np_first_sync_sd.h",
+      "sha256": "7DBD89221461A9CDB072A358C37BF0B54F7748E6DAD2325546A6EFBE73AD4242"
+    },
+    {
+      "path": "Neuropixels/USBConsoleV2/NpV2UsbConsole.cs",
+      "sha256": "AFA417C40BC2FF4E8F5B5392CC24B475D04531EE03990B340D96AB1FC353B856"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleConnection.cs",
+      "sha256": "3CFA43C9C0813ADE036FC7092D9F4B0CA2783CBA43501F667E790BFD89915377"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Ble/NpBleForm.FirstSync.cs",
+      "sha256": "57131FD9FB6B93F197755A1ECFCF64D32188DCC73ED1D1BC5327C83C804BDB04"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncSd.cs",
+      "sha256": "5B8399E247C481E7F97DB1BB05AC7D40DB6DB441BA796D2686EA17DDD7734C84"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpFirstSyncSdClient.cs",
+      "sha256": "8906F11D8DE5C15E25AB2F8D0151675F92CEC09C7990ECECE6E53E51AB01928D"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpCe64Export.cs",
+      "sha256": "9747B82E404E1687BF7619619377D357D6371FB4ED21D8D4764A8D935D40529D"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpDownloadForm.cs",
+      "sha256": "CEE4ACE4311D99F03EB12DE35984732FD583070F3E136F9B7D8EC0005B7516BB"
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+      "sha256": "E000362A69C46CE4216584C7123BD24EB000BC3CEE05CA50141BF913E50248FA"
+    }
+  ],
+  "runtime_selection": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\runtime-selection207.json",
+    "bytes": 12767,
+    "sha256": "065AE516D516164C2B70B2BAA153558BAFFDBB9FAEEA91380A4C14E021709C51"
+  },
+  "software_evidence": [
+    {
+      "role": "protocol",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd_grid16_append_protocol_20261030\\receipt.json",
+        "bytes": 9462,
+        "sha256": "0221AC13DF0224AA77F6B1A46D9B5933A3C66D93A44ACDB6C7DB03D335157068"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\protocol_receipt.json",
+        "bytes": 9462,
+        "sha256": "0221AC13DF0224AA77F6B1A46D9B5933A3C66D93A44ACDB6C7DB03D335157068"
+      }
+    },
+    {
+      "role": "sdk_source",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\source-freeze.json",
+        "bytes": 6664,
+        "sha256": "5560A0DB4C3FE70AFCC6A4C2D9999950BB512A5E66117886F6660A252FC4BA90"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\sdk_source_source-freeze.json",
+        "bytes": 6664,
+        "sha256": "5560A0DB4C3FE70AFCC6A4C2D9999950BB512A5E66117886F6660A252FC4BA90"
+      }
+    },
+    {
+      "role": "actual207_sdk",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\compiled207\\boundary-freeze.json",
+        "bytes": 2073,
+        "sha256": "DAB99BE83F956380545AF4F937CF6C1F2D29EBAB9C3556A67E2E9E01278BD474"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\actual207_sdk_boundary-freeze.json",
+        "bytes": 2073,
+        "sha256": "DAB99BE83F956380545AF4F937CF6C1F2D29EBAB9C3556A67E2E9E01278BD474"
+      }
+    },
+    {
+      "role": "actual207_sdk_result",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\compiled207\\exports\\receipt.json",
+        "bytes": 1617,
+        "sha256": "E088E543BDF520F2FCDCC4C3989F515685A72048CEB1AC5BDC9B1DEE00AEAE63"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\actual207_sdk_result_receipt.json",
+        "bytes": 1617,
+        "sha256": "E088E543BDF520F2FCDCC4C3989F515685A72048CEB1AC5BDC9B1DEE00AEAE63"
+      }
+    },
+    {
+      "role": "metadata_oracles",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\sd16_append_contract_goldens\\expected.json",
+        "bytes": 12758,
+        "sha256": "6DD57C80E54D1E0A8BEDC8023A057CEBD0BFFFEB7DAF2DBD9FB30083D1EDDDDE"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\metadata_oracles_expected.json",
+        "bytes": 12758,
+        "sha256": "6DD57C80E54D1E0A8BEDC8023A057CEBD0BFFFEB7DAF2DBD9FB30083D1EDDDDE"
+      }
+    },
+    {
+      "role": "actual_metadata_checks",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\metadata-oracles-final.json",
+        "bytes": 5138,
+        "sha256": "CF63F065FEF155BDD08938260014CC50315476B16A5DFB6F98A5C9F73F1FB9B5"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\actual_metadata_checks_metadata-oracles-final.json",
+        "bytes": 5138,
+        "sha256": "CF63F065FEF155BDD08938260014CC50315476B16A5DFB6F98A5C9F73F1FB9B5"
+      }
+    },
+    {
+      "role": "contract",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\Note\\NP2_SD_GRID16_APPEND_WIRE.md",
+        "bytes": 9983,
+        "sha256": "4E5578FD874A6A3C868A48B23F3F15654809CA3FE47B67CF8172D856F203B09F"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\contract_NP2_SD_GRID16_APPEND_WIRE.md",
+        "bytes": 9983,
+        "sha256": "4E5578FD874A6A3C868A48B23F3F15654809CA3FE47B67CF8172D856F203B09F"
+      }
+    },
+    {
+      "role": "c_wire",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\Timing\\np_first_sync_sd.h",
+        "bytes": 20513,
+        "sha256": "7DBD89221461A9CDB072A358C37BF0B54F7748E6DAD2325546A6EFBE73AD4242"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\c_wire_np_first_sync_sd.h",
+        "bytes": 20513,
+        "sha256": "7DBD89221461A9CDB072A358C37BF0B54F7748E6DAD2325546A6EFBE73AD4242"
+      }
+    },
+    {
+      "role": "peer_review",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host-independent-review\\review.json",
+        "bytes": 4981,
+        "sha256": "E6714032DBDB15936EF9DAE876C919CC9ECB07CAC55B09F5F128FFF73DDD439C"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\peer_review_review.json",
+        "bytes": 4981,
+        "sha256": "E6714032DBDB15936EF9DAE876C919CC9ECB07CAC55B09F5F128FFF73DDD439C"
+      }
+    },
+    {
+      "role": "production_c49",
+      "original": {
+        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\wire-golden\\receipt.json",
+        "bytes": 1516,
+        "sha256": "F0F9165148A45E5C3E00A20CF14B11820DE0DAE008AB9B674BD5C33A403BF737"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\production_c49_receipt.json",
+        "bytes": 1516,
+        "sha256": "F0F9165148A45E5C3E00A20CF14B11820DE0DAE008AB9B674BD5C33A403BF737"
+      }
+    },
+    {
+      "role": "matched_helper_software",
+      "original": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-acceptance207\\source-freeze.json",
+        "bytes": 9639,
+        "sha256": "9BE80C2F78B1D3FD55DA118C67D84E257C17DB98DB70C959F61842CA9567E405"
+      },
+      "archived": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release207-prep\\software-evidence\\matched_helper_software_source-freeze.json",
+        "bytes": 9639,
+        "sha256": "9BE80C2F78B1D3FD55DA118C67D84E257C17DB98DB70C959F61842CA9567E405"
+      }
+    }
+  ],
+  "pending_exact_reference_resolvers": [],
+  "hardware_qualification": "Pending matched firmware acceptance; no firmware/USB pair or new SD throughput qualification inferred.",
+  "production_c_wire_mirror": {
+    "canonical": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\grid16_append_main\\Shared\\Timing\\np_first_sync_sd.h",
+      "bytes": 20513,
+      "sha256": "7DBD89221461A9CDB072A358C37BF0B54F7748E6DAD2325546A6EFBE73AD4242"
+    },
+    "console": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\Timing\\np_first_sync_sd.h",
+      "bytes": 20513,
+      "sha256": "7DBD89221461A9CDB072A358C37BF0B54F7748E6DAD2325546A6EFBE73AD4242"
+    },
+    "byte_identical": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "version": "1.0.0.207",
+  "recorded_utc": "2026-10-30T18:45:40.6036407Z",
+  "app_sha256": "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC",
+  "sdk_sha256": "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B",
+  "catalog_sha256": "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
+  "checks": [
+    {
+      "name": "core_bundle_identity_prompt_offline_UI",
+      "sha256": "131A6D509B9B54A624CB70C4830A95E81F7FBC599B8D995CB65D85593231EFAB",
+      "assertions": 591,
+      "log": "bundle-checks/core.log"
+    },
+    {
+      "name": "actual_app_V2_parser_guarded_DFU_model_UI",
+      "sha256": "CDBE59355B6BF9FC1A7D93A18C438A41925AC41EEB96E49E3D47C683F6743D9D",
+      "assertions": 42576,
+      "log": "bundle-checks/v2.log"
+    }
+  ],
+  "hardware_access": false,
+  "firmware_writes": false
+}
