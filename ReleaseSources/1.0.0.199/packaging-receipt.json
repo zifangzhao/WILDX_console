@@ -1,0 +1,20 @@
+{
+  "status": "packaged and extracted verified; publication pending",
+  "version": "1.0.0.199",
+  "payload_ready_utc": "2026-10-30T02:36:17.4928746Z",
+  "verified_utc": "2026-10-30T02:39:39.2492949Z",
+  "nsis_seconds": 3.806385,
+  "extraction_identity_seconds": 0.2673641,
+  "wall_from_payload_ready_seconds": 202.2522279,
+  "installer_sha256": "22FA42FA496F7494340EB3A01D38A1364CCE55EC794D9555093903D3B6AF00FA",
+  "package_invocations": 1,
+  "fresh_extractions": 1,
+  "prelaunch_failures": [
+    "PowerShell native redirection before process start",
+    "Restricted x86 loader DLL relocation before process start"
+  ],
+  "files_verified": 56,
+  "recording_validation_reused": true,
+  "new_compilation_or_recording_during_packaging": false,
+  "publication_timing_receipt": "_artifacts/release199/release-receipt.json after remote verification"
+}

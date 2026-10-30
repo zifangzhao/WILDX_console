@@ -36,6 +36,7 @@ namespace USB512_interface
         GattCharacteristic rx, tx;
         TaskCompletionSource<byte[]> receipt;
         Func<byte, byte[], bool> matches;
+        volatile NpBleClockTransport clockTransport; // Optional read-only timing; receiveLock owns publication.
         int epoch;
         volatile bool connectCanceled;
         CancellationTokenSource connectTimeout; // Owned by ConnectAsync; guarded by receiveLock.
@@ -50,10 +51,41 @@ namespace USB512_interface
 
         internal static bool IsReadOnlyClockRequest(byte command,byte[] request)
         {
+            if(command==0xb9&&NpFineClockWire.IsRequest(request))return true;
             return command==0xb9 && request!=null && request.Length==64 &&
                 BitConverter.ToUInt32(request,0)==NpV2OnlineClock.RequestMagic && BitConverter.ToUInt32(request,4)==1 &&
                 BitConverter.ToUInt32(request,8)==0 && BitConverter.ToUInt32(request,12)!=0 &&
                 BitConverter.ToUInt32(request,60)==NpSdControl.Crc(request,60);
+        }
+        internal static bool IsReadOnlySetupRequest(byte command,byte[] request)
+        {
+            if(request==null || request.Length!=64 ||
+                BitConverter.ToUInt32(request,60)!=NpSdControl.Crc(request,60))return false;
+#if NP_FIRST_SYNC_ENABLE
+            if(command==0xb9&&BitConverter.ToUInt32(request,0)==NpHardwareRtcClock.RequestMagic&&BitConverter.ToUInt32(request,4)==2){
+                try{NpHardwareRtcClock.ValidateRequest(request);return BitConverter.ToUInt32(request,8)==0;}
+                catch(InvalidDataException){return false;}
+            }
+#endif
+            if(command==0xb9 && BitConverter.ToUInt32(request,0)==NpAcquisitionAnchor.RequestMagic){
+                if(BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)==0)return false;
+                for(int i=12;i<60;i++)if(request[i]!=0)return false;
+                return true;
+            }
+            if(command!=0xb8)return false;
+            if(BitConverter.ToUInt32(request,0)==NpProbePreparation.RequestMagic){
+                if(BitConverter.ToUInt32(request,4)!=1 || BitConverter.ToUInt32(request,8)!=NpProbePreparation.Status ||
+                    BitConverter.ToUInt32(request,12)==0)return false;
+                for(int i=16;i<60;i++)if(request[i]!=0)return false;
+                return true;
+            }
+            if(BitConverter.ToUInt32(request,0)!=NpFirstSyncSd.RequestMagic)return false;
+            string uid=BitConverter.ToUInt32(request,12).ToString("X8")+BitConverter.ToUInt32(request,16).ToString("X8")+
+                BitConverter.ToUInt32(request,20).ToString("X8");
+            // The strict shared parser admits CAPS v1/v2/v3 only; no START or
+            // STATUS gains read-only fixed-frame cancellation semantics.
+            try{return NpFirstSyncSd.ParseRequest(request,1,uid).Operation==NpFirstSyncSd.Caps;}
+            catch(InvalidDataException){return false;}
         }
         internal static bool ReadOnlyClockObservation(NpClockJournal journal,byte command,byte[] request,byte[] response,long start,long end)
         {
@@ -304,6 +336,9 @@ namespace USB512_interface
                     // The BLE/UART bridge needs a brief subscription settle time.
                     await Task.Delay(250, timeout.Token);
                     if (!Connected) throw new IOException("Selected device disconnected during discovery.");
+#if NP_FIRST_SYNC_ENABLE
+                    PreferThroughput();
+#endif
                     TraceConnect(elapsed,"connected");
                 }
                 finally { lock(receiveLock){if(connectTimeout==timeout)connectTimeout=null;timeout.Dispose();} }
@@ -318,12 +353,21 @@ namespace USB512_interface
 
         void ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
+            var arrivalObserver=clockTransport;
+            long arrivalQpc=arrivalObserver==null?0:Stopwatch.GetTimestamp();
             byte[] bytes;
             using (var reader = DataReader.FromBuffer(args.CharacteristicValue)) { bytes = new byte[reader.UnconsumedBufferLength]; reader.ReadBytes(bytes); }
             System.Collections.Generic.List<Tuple<byte,byte[]>> frames;int receivedEpoch;
             lock (receiveLock) {
                 if (sender != rx) return;
-                receivedEpoch=epoch;frames=wire.Feed(bytes);
+                receivedEpoch=epoch;
+                var observer=ReferenceEquals(arrivalObserver,clockTransport)?arrivalObserver:null;
+                if(observer!=null){
+                    observer.NotificationReceived(wire.ReceivedBytes,bytes.Length,arrivalQpc);
+                    frames=wire.FeedObserved(bytes,(command,body,start,end)=>{
+                        if(receipt!=null&&matches!=null&&matches(command,body))observer.Accepted(command,body,start,end);
+                    });
+                }else frames=wire.Feed(bytes);
                 foreach (var frame in frames)
                     if (receipt != null && matches != null && matches(frame.Item1, frame.Item2)) receipt.TrySetResult(frame.Item2);
             }
@@ -332,7 +376,7 @@ namespace USB512_interface
         void ConnectionChanged(BluetoothLEDevice sender, object args)
         {
             if (sender != device || sender.ConnectionStatus != BluetoothConnectionStatus.Disconnected) return;
-            lock (receiveLock) { epoch++; wire.Clear(); if (receipt != null) receipt.TrySetException(new IOException("BLE disconnected; command outcome may be unknown. Reconnect and read status.")); }
+            lock (receiveLock) { epoch++; wire.Clear();clockTransport=null; if (receipt != null) receipt.TrySetException(new IOException("BLE disconnected; command outcome may be unknown. Reconnect and read status.")); }
             CloseClockJournal();
             var handler = Disconnected; if (handler != null) handler("BLE disconnected. Reconnect and read status; recording was not stopped.");
         }
@@ -340,6 +384,11 @@ namespace USB512_interface
         {
             if(command==NpFirmwareIdentity.BleCommand)return request!=null && request.Length==0 && receivedCommand==command && response!=null &&
                 response.Length==NpFirmwareIdentity.WireBytes && BitConverter.ToUInt32(response,188)==NpSdControl.Crc(response,188);
+            if(command==0xb9&&NpFineClockWire.IsRequest(request)){
+                if(receivedCommand!=command||response==null||response.Length!=80)return false;
+                try{NpFineClockWire.ParseReply(response,request,BitConverter.ToUInt16(response,6)>>8);return true;}
+                catch(InvalidDataException){return false;}
+            }
             if (response==null || response.Length!=64 || BitConverter.ToUInt32(response,60)!=NpSdControl.Crc(response,60))return false;
             if(command==0x82){
                 if(!DiscoveryRequest(request) || receivedCommand!=0xb9)return false;
@@ -350,6 +399,24 @@ namespace USB512_interface
                 try { NpV1MediaStatus.Parse(response);return true; }catch(IOException){return false;}
             }
             uint magic = BitConverter.ToUInt32(request, 0);
+#if NP_FIRST_SYNC_ENABLE
+            if(command==0xb9&&magic==NpHardwareRtcClock.RequestMagic&&BitConverter.ToUInt32(request,4)==2){
+                try{NpHardwareRtcClock.Parse(response,request);return true;}
+                catch(InvalidDataException){return false;}
+            }
+            if(command==0xb8 && magic==NpFirstSyncSd.RequestMagic) {
+                // The transport has no family binding. Accept only a complete
+                // valid echo; the owning client revalidates its exact family.
+                try {NpFirstSyncSd.ParseReply(response,request,1);return true;}
+                catch(InvalidDataException) {
+                    try {NpFirstSyncSd.ParseReply(response,request,2);return true;}
+                    catch(InvalidDataException) {return false;}
+                }
+            }
+#endif
+            if(command==0xb8 && NpProbePreparation.IsRequest(request))return NpProbePreparation.Matches(request,response);
+            if((command==0xb8||command==0xb9)&&WildNpClosedLoop.NpClosedLoopControl.IsRequest(request))
+                return WildNpClosedLoop.NpClosedLoopControl.MatchesReply(request,response);
             if(command==0xb9 && magic==NpAcquisitionAnchor.RequestMagic) {
                 uint version=(BitConverter.ToUInt32(response,12)>>8)&255;if(version==0)version=1;
                 try {NpAcquisitionAnchor.Parse(response,BitConverter.ToUInt32(request,8),(int)version);return true;}catch(InvalidDataException){return false;}
@@ -430,9 +497,10 @@ namespace USB512_interface
                 long clockStart=observationJournal==null?0:observationJournal.NowMicroseconds;
                 lock(clockJournalLock)if(observationJournal!=null && clockJournal==observationJournal)
                     clockAttempt=observationJournal.BeginExchange(request,Stopwatch.GetTimestamp(),generation,clockContext);
+                if(clockAttempt!=null)lock(receiveLock){if(receipt==waiting)clockTransport=clockAttempt.Transport;}
                 // Finish an optional fixed command frame before honoring cancellation.
                 // Leaving half a UART frame must never delay the following Stop.
-                await WriteFrame(frame,generation,opportunistic?CancellationToken.None:cancel);
+                await WriteFrame(frame,generation,opportunistic||IsReadOnlySetupRequest(command,request)?CancellationToken.None:cancel);
                 cancel.ThrowIfCancellationRequested();
                 if (await Task.WhenAny(waiting.Task, Task.Delay(5000, cancel)) != waiting.Task) {
                     cancel.ThrowIfCancellationRequested();
@@ -450,7 +518,7 @@ namespace USB512_interface
             catch(Exception ex) {clockFailure=ex;if(command==NpFirmwareIdentity.BleCommand)Disconnect();throw;}
             finally {
                 if(observationJournal!=null)try {lock(clockJournalLock)observationJournal.FinishExchange(clockAttempt,clockResponse,clockReceiveQpc==0?Stopwatch.GetTimestamp():clockReceiveQpc,clockFailure);}catch{}
-                lock (receiveLock) { if (receipt == waiting) { receipt = null; matches = null; } }
+                lock (receiveLock) { if (receipt == waiting) { receipt = null; matches = null;clockTransport=null; } }
                 transaction.Release();
             }
         }
@@ -469,7 +537,7 @@ namespace USB512_interface
             if(!acknowledged || maxPdu<70 || frame==null || frame.Length!=67 ||
                 frame[0]!=0x3c || frame[1]!=0xb9 || frame[66]!=0x3e)return 20;
             uint magic=BitConverter.ToUInt32(frame,2);
-            return magic==NpV2SdControl.RequestMagic || magic==NpV2OnlineClock.RequestMagic?67:20;
+            return magic==NpV2SdControl.RequestMagic || magic==NpV2OnlineClock.RequestMagic || magic==NpFineClockWire.RequestMagic?67:20;
         }
         async Task WriteFrame(byte[] frame,int generation,CancellationToken cancel)
         {
@@ -483,14 +551,20 @@ namespace USB512_interface
             // session information only; no MTU request, retry or recorder reset.
             bool fast=chunkBytes==20 && (transmitter.CharacteristicProperties & GattCharacteristicProperties.WriteWithoutResponse)!=0;
             var option=fast?GattWriteOption.WriteWithoutResponse:GattWriteOption.WriteWithResponse;
+            var observer=clockTransport;if(observer!=null&&!observer.IsWrite(frame))observer=null;
             using(var timeout=CancellationTokenSource.CreateLinkedTokenSource(cancel)){
                 timeout.CancelAfter(5000);
                 for(int at=0;at<frame.Length;at+=chunkBytes){
                     timeout.Token.ThrowIfCancellationRequested();
                     if(!Connected || Epoch!=generation)throw new IOException("Connection changed during command delivery; no fragments replayed.");
                     var part=frame.Skip(at).Take(Math.Min(chunkBytes,frame.Length-at)).ToArray();
-                    var result=await transmitter.WriteValueAsync(part.AsBuffer(),option).AsTask(timeout.Token);
-                    if(result!=GattCommunicationStatus.Success)throw new IOException("BLE write failed: "+result+"; outcome unknown, no retry sent.");
+                    var buffer=part.AsBuffer();bool success=false;
+                    try{
+                        if(observer!=null)observer.WriteStarted(at,part.Length,Stopwatch.GetTimestamp());
+                        var result=await transmitter.WriteValueAsync(buffer,option).AsTask(timeout.Token);
+                        success=result==GattCommunicationStatus.Success;
+                        if(!success)throw new IOException("BLE write failed: "+result+"; outcome unknown, no retry sent.");
+                    }finally{if(observer!=null)observer.WriteCompleted(at,Stopwatch.GetTimestamp(),success);}
                     if(fast && at+part.Length<frame.Length)await Task.Delay(3,timeout.Token);
                 }
             }
@@ -550,7 +624,8 @@ namespace USB512_interface
                 // Request cancellation of the pending wait, not a recorder
                 // reset. Windows may still finish its underlying radio attempt.
                 if(connectTimeout!=null)connectTimeout.Cancel();
-                epoch++; wire.Clear();
+                epoch++; wire.Clear();clockTransport=null;
+                ClearConnectionPreference();
                 CloseClockJournal();
                 if (receipt != null) receipt.TrySetException(new IOException("BLE connection closed; pending receipt invalidated."));
                 if (rx != null) rx.ValueChanged -= ValueChanged;

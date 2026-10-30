@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -36,6 +37,33 @@ namespace CE32_console
         internal string TransportDescription {get;private set;}
         internal bool IsSynthetic {get;private set;}
         internal Func<bool> Cancelled;
+        internal sealed class ReadTiming {
+            internal long ReadTicks,ControlTicks,BulkTicks,ValidationTicks,ReadySleepTicks;
+            internal long SourceBytes,BulkBytes,ValidatedBytes,Replies,ControlCalls,BulkCalls;
+            internal ReadTiming Copy(){return (ReadTiming)MemberwiseClone();}
+        }
+        private readonly ReadTiming timing=new ReadTiming();
+        internal ReadTiming TimingSnapshot(){return timing.Copy();}
+        internal Dictionary<string,object> PerformanceSince(ReadTiming before,double wallSeconds) {
+            double scale=1.0/Stopwatch.Frequency,read=(timing.ReadTicks-before.ReadTicks)*scale;
+            double control=(timing.ControlTicks-before.ControlTicks)*scale,bulk=(timing.BulkTicks-before.BulkTicks)*scale;
+            double crc=(timing.ValidationTicks-before.ValidationTicks)*scale,sleep=(timing.ReadySleepTicks-before.ReadySleepTicks)*scale;
+            long source=timing.SourceBytes-before.SourceBytes,wire=timing.BulkBytes-before.BulkBytes;
+            return new Dictionary<string,object>{
+                {"wall_seconds",wallSeconds},{"stream_read_seconds",read},{"ep0_control_seconds",control},
+                {"bulk_call_wait_seconds",bulk},{"reply_validation_seconds",crc},{"readiness_sleep_seconds",sleep},
+                {"read_copy_and_other_seconds",Math.Max(0,read-control-bulk-crc-sleep)},
+                {"outside_read_processing_output_seconds",Math.Max(0,wallSeconds-read)},
+                {"source_bytes_copied",source},{"bulk_success_bytes_including_headers",wire},
+                {"validated_payload_bytes",timing.ValidatedBytes-before.ValidatedBytes},
+                {"validated_replies",timing.Replies-before.Replies},{"bulk_calls",timing.BulkCalls-before.BulkCalls},
+                {"ep0_calls",timing.ControlCalls-before.ControlCalls},{"max_request_payload_bytes",maxBlocks*512},
+                {"copied_source_MB_per_second",wallSeconds>0?(object)(source/wallSeconds/1e6):null},
+                {"active_bulk_call_MB_per_second",bulk>0?(object)(wire/bulk/1e6):null},
+                {"recovered_reads",RecoveredReads},{"read_retry_attempts",ReadRecoveryAttempts},
+                {"scope","Per-stream instance delta; read time includes control/bulk/CRC/cache copies. Outside-read time includes structural checks, decode, output writes and flush. Bulk waits can include device SD work; this is not isolated bus bandwidth. Firmware timing counters may overlap."}
+            };
+        }
         [DllImport("kernel32.dll",SetLastError=true)]
         private static extern bool DeviceIoControl(SafeFileHandle h,uint code,IntPtr input,uint inputBytes,out long output,uint outputBytes,out uint returned,IntPtr overlapped);
         private sealed class RawDisk : FileStream {
@@ -120,8 +148,12 @@ namespace CE32_console
         private byte[] Control(byte type,byte request,ushort value,ushort index,ushort size) {
             byte[] b=new byte[size];uint n;
             var setup=new NpDownloadNative.WINUSB_SETUP_PACKET{RequestType=type,Request=request,Value=value,Index=index,Length=size};
-            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,b,size,out n,IntPtr.Zero)) {
-                int error=Marshal.GetLastWin32Error();var native=new Win32Exception(error);
+            long started=Stopwatch.GetTimestamp();
+            bool ok=NpDownloadNative.WinUsbControlTransfer(usb,setup,b,size,out n,IntPtr.Zero);
+            int error=Marshal.GetLastWin32Error(); // Preserve native error before timing work.
+            timing.ControlTicks+=Stopwatch.GetTimestamp()-started;timing.ControlCalls++;
+            if(!ok) {
+                var native=new Win32Exception(error);
                 if(qualityTestSession && type==0xc0 && request==0x60 && (error==1 || error==31))throw new NpDownloadProtocolUnavailableException(native);
                 throw new IOException("NP SD download control request 0x"+request.ToString("X2")+" failed (Windows "+error+").",native);
             }
@@ -219,7 +251,7 @@ namespace CE32_console
                     break;
                 }
                 if(state!=4)throw new IOException("NP USB owned-read retirement failed (state "+state+"); no read replayed.");
-                Thread.Sleep(1);
+                long sleeping=Stopwatch.GetTimestamp();Thread.Sleep(1);timing.ReadySleepTicks+=Stopwatch.GetTimestamp()-sleeping;
             }
             CheckRecoveryCancellation();
             if(!NpDownloadNative.WinUsbResetPipe(usb,0x81))throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -267,7 +299,7 @@ namespace CE32_console
                 uint state=U(info,16);
                 if(state==0)return;
                 if(state!=3)throw new IOException("Unexpected NP USB download readiness state "+state+"; next read was not sent.");
-                Thread.Sleep(1);
+                long sleeping=Stopwatch.GetTimestamp();Thread.Sleep(1);timing.ReadySleepTicks+=Stopwatch.GetTimestamp()-sleeping;
             }
         }
         private void Fill() {
@@ -302,6 +334,8 @@ namespace CE32_console
                     bool readOk=NpDownloadNative.WinUsbReadPipe(usb,0x81,part,(uint)(expected-got),out n,IntPtr.Zero);
                     int nativeError=Marshal.GetLastWin32Error(); // Capture before timing/formatting/native work.
                     long readTicks=Stopwatch.GetTimestamp()-readStarted;
+                    timing.BulkTicks+=readTicks;timing.BulkCalls++;
+                    if(readOk && n<=expected-got)timing.BulkBytes+=n;
                     if(!readOk || n==0 || n>expected-got) {
                         string message="NP USB read timed out/failed (Windows "+nativeError+", bytes "+n+"); LBA="+lba+" (0x"+lba.ToString("X8")+"), blocks="+blocks+", expected="+expected+", accumulated="+got+", native_ok="+readOk+", read_ms="+(readTicks*1000.0/Stopwatch.Frequency).ToString("F3",System.Globalization.CultureInfo.InvariantCulture)+"; partial download retained.";
                         if(!readOk)throw new NativeBulkReadFailure(message,nativeError);
@@ -311,16 +345,21 @@ namespace CE32_console
                     // Reject an already observed bad header/SD result before a
                     // later native failure could qualify for transport recovery.
                     if(got>=32 && got<expected && got-(int)n<32) {
+                        long validating=Stopwatch.GetTimestamp();
                         try {ValidateReplyHeader(reply,got,lba,blocks,unchecked(sequence+1),epoch);}
                         catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
+                        finally {timing.ValidationTicks+=Stopwatch.GetTimestamp()-validating;}
                     }
                     // Error response is deliberately a short header-only transfer.
                     if(got==32 && U(reply,16)!=0)break;
                 }
                 }
                 qualityRequestPending=false;
+                long validationStarted=Stopwatch.GetTimestamp();
                 try {ValidateReplyInPlace(reply,got,lba,blocks,unchecked(sequence+1),epoch);USB512_interface.UsbHealth.Integrity(usb,0x81,false,"download header/sequence/payload CRC");}
                 catch(InvalidDataException){USB512_interface.UsbHealth.Integrity(usb,0x81,true,"download header/sequence/payload CRC");throw;}
+                finally {timing.ValidationTicks+=Stopwatch.GetTimestamp()-validationStarted;}
+                timing.Replies++;timing.ValidatedBytes+=got-32;
                 CountDownloadedPayload(got-32);
                 sequence++;
                 if(burst)CommitBurstReply(lba);
@@ -358,12 +397,14 @@ namespace CE32_console
             if(usb==IntPtr.Zero)throw new ObjectDisposedException(GetType().Name);
             if(faulted)throw new IOException("This download connection failed; close and reopen it before retrying.");
             if(b==null)throw new ArgumentNullException("b");if(offset<0 || count<0 || offset>b.Length-count)throw new ArgumentOutOfRangeException();
-            int copied=0;while(count>0 && position<length) {
+            long started=Stopwatch.GetTimestamp();
+            try {int copied=0;while(count>0 && position<length) {
                 if(Cancelled!=null && Cancelled())throw new OperationCanceledException();
                 if(cache==null || position<cacheStart || position>=cacheStart+cachePayloadCount)Fill();
                 int at=(int)(position-cacheStart),n=Math.Min(count,cachePayloadCount-at);
-                Buffer.BlockCopy(cache,32+at,b,offset,n);position+=n;offset+=n;count-=n;copied+=n;
+                Buffer.BlockCopy(cache,32+at,b,offset,n);position+=n;offset+=n;count-=n;copied+=n;timing.SourceBytes+=n;
             }return copied;
+            } finally {timing.ReadTicks+=Stopwatch.GetTimestamp()-started;}
         }
         public override bool CanRead{get{return usb!=IntPtr.Zero;}} public override bool CanSeek{get{return CanRead;}} public override bool CanWrite{get{return false;}}
         public override long Length{get{return length;}} public override long Position{get{return position;}set{if(value<0 || value>length)throw new ArgumentOutOfRangeException();position=value;}}

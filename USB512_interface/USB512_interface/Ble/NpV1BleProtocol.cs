@@ -249,6 +249,9 @@ namespace CE32_console {
    return milliseconds<=8000?10U:((uint)milliseconds+999U)/1000U+12U;
   }
  }
+ internal sealed class NpV1PreviewUnavailableException:IOException {
+  internal NpV1PreviewUnavailableException():base("LFP preview is unavailable while closed-loop processing uses the preview workspace. Recording continues."){}
+ }
  internal sealed class NpV1PreviewBurst {
   internal const uint Magic=0x3156504e;
   internal uint Id,Session,Hz,Kind,Probe,Channel,Band,ValidMask,Stride,Dropped;
@@ -285,6 +288,13 @@ namespace CE32_console {
    ulong first=NpSdGeometry.U(b,16)|((ulong)NpSdGeometry.U(b,20)<<32);
    int at=(int)(range&65535),total=(int)(range>>16);
    uint stride=NpSdGeometry.U(b,192),dropped=NpSdGeometry.U(b,196);
+   if(kind==6){
+    bool zero=first==0&&range==0;
+    for(int i=32;i<220;i++)if((i<208||i>=212)&&b[i]!=0)zero=false;
+    if(!zero||probe<1||probe>3||channel>=384||band>1||!NpV1BleProtocol.TheoreticalMode(1U<<(int)(probe-1),hz)||
+       NpSdGeometry.U(b,208)!=1||NpSdGeometry.U(b,220)!=NpSdControl.Crc(b,220))throw new IOException("Invalid V1 preview availability status.");
+    throw new NpV1PreviewUnavailableException();
+   }
    if(kind==5)return AcceptCompact(b,session,hz,probe,band,channel,first,range,stride,dropped);
    if(session==0||probe<1||probe>3||!NpV1BleProtocol.TheoreticalMode(1U<<(int)(probe-1),hz)||channel>=384||band>1||
       (kind!=0&&kind!=2)||total!=(kind==0?1560:160)||

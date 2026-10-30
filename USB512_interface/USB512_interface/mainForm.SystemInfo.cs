@@ -44,7 +44,7 @@ namespace USB512_interface
         private bool CanRefreshIdleNp2Sensor()
         {
             return selectedDeviceKind == DeviceKind.NpV2 && !String.IsNullOrWhiteSpace(devicePath) &&
-                !running && !ztestRunning && !firmwareManagementActive && !DownloadBusy && !BleInUse &&
+                !running && !npSettingsApplying && !ztestRunning && !firmwareManagementActive && !DownloadBusy && !BleInUse &&
                 deviceRefreshActive == 0 && npRecoveryCancelled && !npRecoveryAttempt;
         }
 
@@ -88,7 +88,7 @@ namespace USB512_interface
         }
         private void RefreshSystemInfo()
         {
-            if (firmwareManagementActive || running || ztestRunning || deviceRefreshActive != 0 || !npRecoveryCancelled || String.IsNullOrWhiteSpace(devicePath) ||
+            if (npSettingsApplying || firmwareManagementActive || running || ztestRunning || deviceRefreshActive != 0 || !npRecoveryCancelled || String.IsNullOrWhiteSpace(devicePath) ||
                 selectedDeviceKind == DeviceKind.Ce64Msc || Interlocked.CompareExchange(ref systemInfoActive, 1, 0) != 0) return;
             string selectedPath = devicePath, device = SystemInfoDeviceName();
             int generation = systemInfoGeneration;
@@ -121,7 +121,7 @@ namespace USB512_interface
         }
         private void UpdateSystemInfoControls()
         {
-            bool busy = systemInfoActive != 0 || firmwareManagementActive;
+            bool busy = npSettingsApplying || systemInfoActive != 0 || firmwareManagementActive;
             btnSystemInfoRefresh.Enabled = !busy && !running && !ztestRunning && deviceRefreshActive == 0 && npRecoveryCancelled &&
                 selectedDeviceKind != DeviceKind.Ce64Msc && !String.IsNullOrWhiteSpace(devicePath);
             if (busy) {

@@ -97,21 +97,49 @@ namespace CE32_console
 
         internal static Dictionary<string, object> ClockMetadata(byte[] sector, uint session)
         {
-            if (Magic(sector, 0) != "N1SDUTC1") return null;
+            uint clockVersion=U(sector,8);
+            if ((clockVersion!=1 && clockVersion!=2) || Magic(sector, 0) != "N1SDUTC"+clockVersion) return null;
             var result = new Dictionary<string, object>();
             string[] fields = { "version", "session", "flags", "generation", "uncertainty_us", "tick", "before_tick", "after_tick", "ap_hz", "tick_quantum_us" };
             int[] offsets = { 8,12,16,20,24,28,64,68,72,76 };
             for (int i = 0; i < fields.Length; i++) result[fields[i]] = U(sector, offsets[i]);
             result["utc_us"] = Q(sector, 32); result["scheduled_utc_us"] = Q(sector, 40);
             result["before_utc_us"] = Q(sector, 48); result["after_utc_us"] = Q(sector, 56);
-            bool valid = U(sector, 508) == NpDownloadStream.Crc(sector, 0, 508) && U(sector, 8) == 1 &&
+            bool valid = U(sector, 508) == NpDownloadStream.Crc(sector, 0, 508) && U(sector, 8) == clockVersion &&
                 U(sector, 12) == session && (U(sector, 16) & ~7U) == 0 && U(sector, 76) == 1000;
+            result["exported_source_zero"] = valid && clockVersion==2 && (U(sector,16)&2)!=0;
             result["metadata_valid"] = valid;
             result["anchor_valid"] = valid && (U(sector, 16) & 1) != 0 && U(sector, 20) != 0 &&
                 Q(sector, 32) >= 1577836800000000UL && Q(sector, 32) <= 4102444800000000UL &&
                 U(sector, 24) >= 1000 && U(sector, 24) <= 5000000;
             result["error"] = valid ? null : "Invalid legacy clock CRC/identity/format";
             return result;
+        }
+
+        static USB512_interface.NpRecordingUtc.StreamStart MediaStart(string id,string kind,string file,uint rate,
+            uint? tick,long sampleIndex,bool present,Dictionary<string,object> clock,Dictionary<string,object> final,bool recovery)
+        {
+            var point=new USB512_interface.NpRecordingUtc.StreamStart{Id=id,Kind=kind,DataFile=file,
+                RateNumerator=rate,SampleIndex=sampleIndex,DataPresent=present};
+            if(!present||!tick.HasValue||recovery)return point;
+            uint? origin=null;bool captureEpoch=false;
+            if(final!=null&&(Number(final,"flags")&4U)!=0){
+                uint span=unchecked((uint)Number(final,"stop_tick")-(uint)Number(final,"start_tick"));
+                uint offset=unchecked(tick.Value-(uint)Number(final,"start_tick"));
+                if(span>0&&span<0x80000000U){captureEpoch=true;if(offset<=span)origin=(uint)Number(final,"start_tick");}
+            }
+            ulong? utc=UtcAt(clock,tick.Value,false);
+            if(!captureEpoch&&utc.HasValue)origin=(uint)Number(clock,"start_clock_tick");
+            if(origin.HasValue){
+                uint delta=unchecked(tick.Value-origin.Value);
+                if(delta<0x80000000U){point.SourceTick=delta;point.SourceHz=1000;point.Clock="media.device_milliseconds";}
+            }
+            if(utc.HasValue){
+                ulong uncertainty=Number(clock,"start_uncertainty_us");
+                point.UtcLowerUs=(decimal)utc.Value-uncertainty;
+                point.UtcUpperUs=(decimal)utc.Value+uncertainty+1000m;
+            }
+            return point;
         }
 
         static void Qualify(byte[] h, byte[] f, Dictionary<string, object> initial, Dictionary<string, object> final,
@@ -302,7 +330,7 @@ namespace CE32_console
                 {"status", "converting"}, {"native_files_modified", false}, {"microphone_samples", samples}, {"microphone_hz", samples > 0 ? 200000 : 0},
                 {"camera_frames", frames}, {"camera_hz", rate}, {"audio_resampling_or_filtering", false}, {"streams_muxed_or_truncated", false},
                 {"video_timing", "Saved frames at nominal camera rate only; timestamp CSVs remain authoritative. No missing frames are invented."},
-                {"video_color_processing", "BGGR native / RGGB after 180-degree rotation; RGB channel order. Camera tone v2: bounded luminance-shadow contrast, smoothed 99th-percentile white reference, at most 2x display exposure, sRGB curve. Flat scenes keep zero-based tone; no calibrated sensor black level or white balance; native pixels retained."},
+                {"video_color_processing", "BGGR native / RGGB after 180-degree rotation; RGB channel order. Fixed camera tone: bounded shadow contrast from the first complete image, native full-scale white reference and sRGB curve; no per-frame gain or black-level adaptation. A flat initial image uses zero-based tone; no calibrated sensor black level or white balance; native pixels retained."},
                 {"video_image_recovery", "Every row training marker and every pixel start/stop guard checked. Unique shifts within 32 bytes realigned for display only. Damaged/ambiguous frames hold the previous complete image, or black before the first valid image. No interpolation, native byte changes, frame removal or timestamp changes. Framing guards are not a pixel-value checksum."},
                 {"image_recovery_report", "camera.image-recovery.csv: zero-based frame index; affected frames only; held images are not recovered sensor measurements"},
                 {"timing_warning", warning}, {"native_timestamps_retained", true}, {"microphone_wav_reused", false}
@@ -310,7 +338,7 @@ namespace CE32_console
             bool durationChecked = native.ContainsKey("source_stop_timing_assumption");
             report["capture_qualification"] = durationChecked && native.ContainsKey("capture_qualification") ? native["capture_qualification"] : "transport-only (legacy export; duration coverage unverified)";
             report["capture_lossless_qualified"] = durationChecked && native.ContainsKey("capture_lossless_qualified") && Convert.ToBoolean(native["capture_lossless_qualified"]);
-            foreach (string key in new[] { "qualification_reasons", "camera_invalid_frames", "camera_frame_gaps", "camera_timing_irregularities", "camera_timing_phase_errors", "camera_nominal_video_eligible" })
+            foreach (string key in new[] { "qualification_reasons", "camera_invalid_frames", "camera_frame_gaps", "camera_timing_irregularities", "camera_timing_phase_errors", "camera_nominal_video_eligible", "camera_native_source_timing" })
                 if (native.ContainsKey(key)) report[key] = native[key];
             try
             {
@@ -412,9 +440,11 @@ namespace CE32_console
                 clockSource = "N1SDUTC1";
             }
             ulong samples = 0; uint frames = 0, invalidFrames = 0, padding = 0, gaps = 0, processed = 0;
-            uint? firstFrameId = null, firstCameraTick = null; uint irregularTiming = 0, phaseErrors = 0;
+            uint? firstFrameId = null, firstCameraTick = null, firstActualCameraTick=null;
+            long firstActualCameraIndex=0;uint irregularTiming = 0, phaseErrors = 0;
             var cameraMisses = new HashSet<uint>(); var cameraIntervals = new Dictionary<string, uint>();
             uint? origin = null, previousFrame = null; uint frameId = 0, frameTick = 0, frameRate = 0, frameMissed = 0;
+            uint? sourceFrameId=null,sourceFrameTick=null;uint sourceTimedFrames=0;
             ulong continuousCameraTick=0;uint previousCameraTick=0;
             int frameAt = 0; bool complete = false; string failure = null;
             Exception prefixError=null;string prefixBoundary="Bounded metadata reservation/source limit reached.";
@@ -435,7 +465,7 @@ namespace CE32_console
                 using (var analogTimes = new StreamWriter(Create(output, names[8]+".partial"),new UTF8Encoding(false)))
                 {
                     byte[] sensorColumns = Encoding.ASCII.GetBytes(NpCe64Export.SensorColumns + "\n"); sensorCsv.Write(sensorColumns, 0, sensorColumns.Length);
-                    camTime.WriteLine("frame_index,device_frame_id,device_tick_ms_u32,camera_hz,device_missed_cadence,final_chunk,device_tick_ms_unwrapped_u64,utc_us,utc_source");
+                    camTime.WriteLine("frame_index,device_frame_id,device_tick_ms_u32,camera_hz,device_missed_cadence,final_chunk,device_tick_ms_unwrapped_u64,utc_us,utc_source,native_source_frame_id_u32,native_source_completion_tick_ms_u32");
                     micTime.WriteLine("chunk,first_sample_u64,sample_count,microphone_hz,device_origin_ms_u32,device_collection_ms_u32,first_sample_time_ns_u64,end_sample_time_ns_u64,origin_utc_us,first_sample_utc_us,utc_source");
                     var prefix = new byte[1536]; card.Position = checked(start * 512); Exact(card, prefix,-1,recoverPowerCut?cancelled:null);
                     using (var parameters = Create(output, "CE_params.bin")) parameters.Write(prefix, 0, prefix.Length);
@@ -450,14 +480,16 @@ namespace CE32_console
                             camTime.Flush();micTime.Flush();analogTimes.Flush();
                             Stream[] outputs={cam,mic,camTime.BaseStream,micTime.BaseStream,misc,analog,sensorBinary,sensorCsv,analogTimes.BaseStream};
                             long[] lengths=outputs.Select(stream=>stream.Position).ToArray();
-                            var saved=new{samples,frames,invalidFrames,padding,gaps,processed,firstFrameId,firstCameraTick,irregularTiming,phaseErrors,origin,previousFrame,frameId,frameTick,frameRate,frameMissed,continuousCameraTick,previousCameraTick,frameAt,sensorRecords,validImu,validMag,validEnv,lastSensorValid};
+                            var saved=new{samples,frames,invalidFrames,padding,gaps,processed,firstFrameId,firstCameraTick,firstActualCameraTick,firstActualCameraIndex,irregularTiming,phaseErrors,origin,previousFrame,frameId,frameTick,frameRate,frameMissed,sourceFrameId,sourceFrameTick,sourceTimedFrames,continuousCameraTick,previousCameraTick,frameAt,sensorRecords,validImu,validMag,validEnv,lastSensorValid};
                             int snapshotCount=snapshots.Count;uint[] misses=cameraMisses.ToArray();var intervals=cameraIntervals.ToArray();
                             rollback=()=>{
                                 camTime.Flush();micTime.Flush();analogTimes.Flush();
                                 for(int i=0;i<outputs.Length;i++){outputs[i].SetLength(lengths[i]);outputs[i].Position=lengths[i];}
                                 samples=saved.samples;frames=saved.frames;invalidFrames=saved.invalidFrames;padding=saved.padding;gaps=saved.gaps;processed=saved.processed;
                                 firstFrameId=saved.firstFrameId;firstCameraTick=saved.firstCameraTick;irregularTiming=saved.irregularTiming;phaseErrors=saved.phaseErrors;origin=saved.origin;previousFrame=saved.previousFrame;
+                                firstActualCameraTick=saved.firstActualCameraTick;firstActualCameraIndex=saved.firstActualCameraIndex;
                                 frameId=saved.frameId;frameTick=saved.frameTick;frameRate=saved.frameRate;frameMissed=saved.frameMissed;continuousCameraTick=saved.continuousCameraTick;previousCameraTick=saved.previousCameraTick;frameAt=saved.frameAt;
+                                sourceFrameId=saved.sourceFrameId;sourceFrameTick=saved.sourceFrameTick;sourceTimedFrames=saved.sourceTimedFrames;
                                 sensorRecords=saved.sensorRecords;validImu=saved.validImu;validMag=saved.validMag;validEnv=saved.validEnv;lastSensorValid=saved.lastSensorValid;
                                 snapshots.RemoveRange(snapshotCount,snapshots.Count-snapshotCount);cameraMisses.Clear();foreach(uint value in misses)cameraMisses.Add(value);
                                 cameraIntervals.Clear();foreach(var interval in intervals)cameraIntervals.Add(interval.Key,interval.Value);
@@ -495,12 +527,22 @@ namespace CE32_console
                             Require(padding == 0 && (version == 7 || version == 8) && U(raw, o + 40) == FrameBytes &&
                                 U(raw, o + 48) == 320 && U(raw, o + 52) == 320 && valid > 0 && valid <= 61440 &&
                                 offset <= FrameBytes && valid <= FrameBytes - offset && rate > 0 && rate == U(h, 112), "Invalid camera fragment geometry/rate.");
+                            // CCTS explicitly declares these optional source fields.
+                            // Older headers and gap slots must not turn zero/padding
+                            // into a native frame identity. A real completion tick0
+                            // remains valid across uint32 wrap.
+                            bool sourceStamp=U(raw,o+72)==0x53544343U && U(raw,o+64)!=0;
+                            uint? fragmentSourceId=sourceStamp?(uint?)U(raw,o+64):null;
+                            uint? fragmentSourceTick=sourceStamp?(uint?)U(raw,o+68):null;
                             if (offset == 0)
                             {
                                 Require(frameAt == 0, "New camera frame before previous frame completed.");
                                 if (previousFrame.HasValue) { uint distance = unchecked(id - previousFrame.Value); Require(distance > 0 && distance < 0x80000000U, "Camera frame counter reordered."); gaps = checked(gaps + distance - 1); }
                                 frameId = id; frameTick = tick; frameRate = rate; frameMissed = missed;
+                                sourceFrameId=fragmentSourceId;sourceFrameTick=fragmentSourceTick;
                             }
+                            else if(sourceFrameId!=fragmentSourceId || sourceFrameTick!=fragmentSourceTick)
+                                sourceFrameId=sourceFrameTick=null; // Optional ambiguity never rejects pixels.
                             Require(id == frameId && offset == frameAt && tick == frameTick && rate == frameRate && missed == frameMissed,
                                 "Camera fragment counter/offset/timestamp discontinuity.");
                             uint flags = (offset == 0 ? 1U : 0U) | (offset + valid == FrameBytes ? 2U : 0U);
@@ -510,7 +552,8 @@ namespace CE32_console
                             {
                                 cam.Write(raster, 0, raster.Length);
                                 // Exact CE64CAMGAP v1 marker; the existing player holds these slots.
-                                if (Magic(raster, 0) == "CE64CAMG" && U(raster, 8) == 0x00015041U && U(raster, 12) == 0x96695AA5U) invalidFrames++;
+                                if (Magic(raster, 0) == "CE64CAMG" && U(raster, 8) == 0x00015041U && U(raster, 12) == 0x96695AA5U){invalidFrames++;sourceFrameId=sourceFrameTick=null;}
+                                else if(!firstActualCameraTick.HasValue){firstActualCameraTick=frameTick;firstActualCameraIndex=frames;}
                                 if (previousFrame.HasValue)
                                 {
                                     uint interval = unchecked(frameTick - previousCameraTick); string key = interval.ToString(CultureInfo.InvariantCulture);
@@ -522,7 +565,8 @@ namespace CE32_console
                                 continuousCameraTick=previousFrame.HasValue?AdvanceCameraTick(continuousCameraTick,previousCameraTick,frameTick):frameTick;previousCameraTick=frameTick;
                                 if (Math.Abs((decimal)continuousCameraTick - firstCameraTick.Value - (decimal)frames * 1000m/frameRate) > 1) phaseErrors++;
                                 ulong? utc = UtcAt(clockAnchor, frameTick, false);
-                                camTime.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3},{4},{5},{6},{7},{8}", frames, frameId, frameTick, frameRate, frameMissed, sequence,continuousCameraTick,utc,utc.HasValue ? clockSource : null));
+                                camTime.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", frames, frameId, frameTick, frameRate, frameMissed, sequence,continuousCameraTick,utc,utc.HasValue ? clockSource : null,sourceFrameId,sourceFrameTick));
+                                if(sourceFrameId.HasValue)sourceTimedFrames++;
                                 frames++; previousFrame = frameId; frameAt = 0;
                             }
                         }
@@ -601,6 +645,13 @@ namespace CE32_console
                     ,{ "capture_lossless_qualified", false }, { "capture_qualification", "Transport validation is not full-capture qualification; retain camera/microphone fault and source/saved counters from descriptor/footer." }
                     ,{ "continuous_timestamps", "Raw device ticks retained; camera uint32 wrap unwrapped without inventing frames; microphone relative sample time is exact 5000 ns/sample." }
                 };
+                if(sourceTimedFrames>0)report["camera_native_source_timing"]=new Dictionary<string,object>{
+                    {"header_extension","CCTS"},{"header_offsets_bytes",new[]{64,68,72}},
+                    {"frames_with_native_source_identity",sourceTimedFrames},{"frames_without_native_source_identity",frames-sourceTimedFrames},
+                    {"timestamp_file","camera.timestamps.csv"},{"frame_id_column","native_source_frame_id_u32"},
+                    {"completion_tick_column","native_source_completion_tick_ms_u32"},{"timestamp_unit","raw uint32 device milliseconds"},
+                    {"timestamp_event","camera raster receive completion; separate from scheduled cadence"},
+                    {"exposure_phase_known",false},{"hardware_rtc_mapping_applied",false}};
                 Qualify(h, f, initialMetadata, finalMetadata, report, cameraMisses);
                 if(recoverPowerCut) {
                     report["power_cut_prefix_export"]=true;report["power_interrupted"]=true;report["recovered"]=processed>0;
@@ -610,6 +661,16 @@ namespace CE32_console
                     report["analogin_timing"]="Not generated for recovery: the initial footer supplies no confirmed capture START/STOP interval. Original sensor snapshots are retained in sensors.dat/csv.";
                 }
                 File.WriteAllText(Path.Combine(output, "recording.json"), new JavaScriptSerializer().Serialize(report) + "\n", new UTF8Encoding(false));
+                try{
+                    var firstStreams=new List<USB512_interface.NpRecordingUtc.StreamStart>();
+                    if(U(h,112)!=0)firstStreams.Add(MediaStart("camera","camera","camera.raw",U(h,112),firstActualCameraTick,
+                        firstActualCameraIndex,firstActualCameraTick.HasValue,clockAnchor,finalMetadata,recoverPowerCut));
+                    if(U(h,116)!=0)firstStreams.Add(MediaStart("microphone","audio","microphone.dat",U(h,116),origin,
+                        0,samples>0,clockAnchor,finalMetadata,recoverPowerCut));
+                    if(sensorRecords>0)firstStreams.Add(new USB512_interface.NpRecordingUtc.StreamStart{Id="imu",Kind="imu",DataFile="sensors.csv",DataPresent=validImu>0});
+                    USB512_interface.NpRecordingUtc.Write(output,USB512_interface.NpRecordingUtc.Build(false,firstStreams,1,null,session,null,
+                        recoverPowerCut?"Incomplete media prefix; first-sample epoch unconfirmed":clockSource+" plus native camera/audio timestamps"));
+                }catch { /* Optional time metadata cannot change media export completion. */ }
             }
         }
     }

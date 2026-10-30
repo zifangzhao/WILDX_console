@@ -8,15 +8,16 @@ using System.Text;
 namespace USB512_interface {
  // Optional, low-rate timing evidence. No device clock changes or RAW rewrites.
  internal sealed class NpClockJournal : IDisposable {
-  readonly long hostTick=Stopwatch.GetTimestamp(),hostUtc=(DateTime.UtcNow.Ticks-621355968000000000L)/10;
-  readonly string identity,session,epoch=Guid.NewGuid().ToString("N"),folder;
+  readonly long hostTick=NpHostClock.OriginTicks,hostUtc=NpHostClock.OriginUtcUs;
+  readonly string identity,session,epoch=NpHostClock.Epoch,folder;
   readonly List<NpClockObservation> observations=new List<NpClockObservation>();
-  StreamWriter csv;long lastFitTick=-2000000;bool disposed;
+  StreamWriter csv;long lastFitTick=-2000000;bool disposed;NpBleClockEvidence evidence;
   internal string Error {get;private set;}
   internal NpClockJournal(string directory,string deviceIdentity,string captureSession) {
    folder=directory;identity=deviceIdentity;session=captureSession;
    try {
     Directory.CreateDirectory(folder);
+    File.WriteAllText(Path.Combine(folder,"pc_clock.json"),new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(NpHostClock.Receipt));
     csv=new StreamWriter(Path.Combine(folder,"clock_observations.csv"),false,new UTF8Encoding(false));
     csv.WriteLine("device_identity,session,host_epoch,generation,device_ms,host_monotonic_us,host_utc_us,uncertainty_us,kind");
    } catch(Exception ex){Error=ex.Message;}
@@ -34,12 +35,19 @@ namespace USB512_interface {
     if(midpointUs-lastFitTick>=2000000){observations.Add(o);lastFitTick=midpointUs;}
    } catch(Exception ex){Error=ex.Message;try{csv.Dispose();}catch{}csv=null;}
   }
+  internal NpBleClockAttempt BeginExchange(byte[] request,long qpc,int connectionEpoch,NpBleClockContext context) {
+   try {if(disposed)return null;if(evidence==null)evidence=new NpBleClockEvidence(folder,identity,connectionEpoch);return evidence.Begin(request,qpc,context);}catch{return null;}
+  }
+  internal void FinishExchange(NpBleClockAttempt attempt,byte[] response,long qpc,Exception error) {if(evidence!=null)evidence.Finish(attempt,response,qpc,error);}
+  internal void ClockGap(NpBleClockContext context,string reason,long qpc) {if(evidence!=null)evidence.Gap(context,reason,qpc);}
+  internal void ClockClosed(long qpc,string reason) {if(evidence!=null)evidence.Close(qpc,reason);}
   public void Dispose() {
-   if(disposed)return;disposed=true;
+   if(disposed)return;disposed=true;if(evidence!=null)evidence.Dispose();
    try {
     if(csv!=null)csv.Dispose();
     var lines=new List<string>{NpClockFitResult.Limitation,"raw_data_changed=false","device_identity="+identity,
      "identity_scope=exact USB MCU UID, or BLE transport address only where MCU UID is unavailable",
+     "raw_exchange_evidence_error="+(evidence==null?"not_enabled":evidence.Error??"none"),
      "formula=UTC_us = reference_utc_us + (unwrapped_device_ms - first_device_ms) * slope_us_per_ms",
      "fit_coverage_only=true","session="+session,"host_epoch="+epoch,"journal_error="+(Error??"none")};
     foreach(var r in NpClockFit.FitGroups(observations)) {

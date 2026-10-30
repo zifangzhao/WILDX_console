@@ -696,7 +696,7 @@ namespace CE32_console
             }
 
             BilinearDemosaicRggb(rotated, Width, Height, rgb16);
-            tone.Apply(rotated, rgb16);
+            tone.Apply(rgb16);
 
             if (BitConverter.IsLittleEndian)
             {
@@ -775,24 +775,22 @@ namespace CE32_console
             }
         }
 
-        // Display/export only. Estimate shadows from spatial luminance contrast,
-        // never the lowest color channel: uniform bright/tinted scenes must not
-        // be stretched into magenta. Native camera samples remain unchanged.
+        // Display/export only. Lock one curve at the first complete image;
+        // per-frame gain/black tracking makes flat dark periods turn gray.
+        // This is scene contrast, not a calibrated sensor black reference.
         private sealed class CameraTone
         {
-            readonly int[] histogram = new int[1024];
             readonly int[] luminance = new int[1024];
             readonly ushort[] curve = new ushort[1024];
-            double white, black;
-            int curveWhite, curveBlack;
-            internal void Reset() { white = 0; black = 0; }
-            internal void Apply(ushort[] bayer, ushort[] rgb)
+            bool initialized;
+            internal void Reset() { initialized = false; }
+            internal void Apply(ushort[] rgb)
             {
-                Array.Clear(histogram, 0, histogram.Length);
-                for (int i = 0; i < bayer.Length; i++) histogram[bayer[i]]++;
-                int threshold = (bayer.Length * 99 + 99) / 100, count = 0, percentile = 1023;
-                for (int i = 0; i < histogram.Length; i++)
-                    if ((count += histogram[i]) >= threshold) { percentile = i; break; }
+                if (!initialized) Initialize(rgb);
+                for (int i = 0; i < rgb.Length; i++) rgb[i] = curve[rgb[i]];
+            }
+            void Initialize(ushort[] rgb)
+            {
                 Array.Clear(luminance, 0, luminance.Length);
                 // Exclude demosaic boundaries and the captured reference edge.
                 for (int y = 2; y < Height - 2; y++) for (int x = 2; x < Width - 2; x++) {
@@ -800,7 +798,7 @@ namespace CE32_console
                     luminance[(54 * rgb[i] + 183 * rgb[i + 1] + 19 * rgb[i + 2] + 128) >> 8]++;
                 }
                 int pixels = (Width - 4) * (Height - 4), low = 0, high = 1023;
-                count = 0;
+                int count = 0;
                 for (int i = 0; i < luminance.Length; i++) {
                     count += luminance[i];
                     if (count >= (pixels + 99) / 100) { low = i; break; }
@@ -808,32 +806,17 @@ namespace CE32_console
                 count = 0;
                 for (int i = 0; i < luminance.Length; i++)
                     if ((count += luminance[i]) >= (pixels * 99 + 99) / 100) { high = i; break; }
-                // Limited shadow correction removes the gray veil without
-                // claiming a calibrated sensor black level. Flat scenes retain
-                // their brightness; keep headroom below the measured shadows.
-                int targetBlack = high - low >= 64 ? Math.Max(0, Math.Min(256, low - 8)) : 0;
-                // Ignore sparse hot pixels; place ordinary scene highlights near
-                // half linear scale, with at most 2x digital exposure boost.
-                int target = Math.Max(512, Math.Min(1023, percentile * 2));
-                if (white == 0) { white = target; black = targetBlack; }
-                else {
-                    white += Math.Max(-16, Math.Min(16, (target - white) / 8));
-                    black += Math.Max(-4, Math.Min(4, (targetBlack - black) / 8));
-                }
-                int level = (int)Math.Round(white);
-                int shadow = (int)Math.Round(black);
-                if (curveWhite != level || curveBlack != shadow)
+                // Keep the bounded first-image shadow correction, but never
+                // lower it as the scene darkens or add automatic exposure gain.
+                // A flat initial image uses the full native range, not black.
+                int shadow = high - low >= 64 ? Math.Max(0, Math.Min(256, low - 8)) : 0;
+                for (int i = 0; i < curve.Length; i++)
                 {
-                    for (int i = 0; i < curve.Length; i++)
-                    {
-                        double linear = Math.Max(0, Math.Min(1, (i - shadow) / (double)(level - shadow)));
-                        double display = linear <= 0.0031308 ? 12.92 * linear : 1.055 * Math.Pow(linear, 1 / 2.4) - 0.055;
-                        curve[i] = (ushort)Math.Round(display * 65535);
-                    }
-                    curveWhite = level;
-                    curveBlack = shadow;
+                    double linear = Math.Max(0, Math.Min(1, (i - shadow) / (double)(1023 - shadow)));
+                    double display = linear <= 0.0031308 ? 12.92 * linear : 1.055 * Math.Pow(linear, 1 / 2.4) - 0.055;
+                    curve[i] = (ushort)Math.Round(display * 65535);
                 }
-                for (int i = 0; i < rgb.Length; i++) rgb[i] = curve[rgb[i]];
+                initialized = true;
             }
         }
 

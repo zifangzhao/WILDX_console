@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "scope": "Exact checked 1.0.0.189 companion runtime reuse for the candidate 1.0.0.199 host; no new companion binaries accepted.",
+  "baseline": "../1.0.0.189/package-verification.json",
+  "baseline_sha256": "53DB9B149B16583410899BA9D49A30C87EB9ECDDC6CFA1A77AC2B607350159A8",
+  "files": [
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+      "bytes": 449,
+      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "bytes": 55808,
+      "sha256": "3BEA6D5DE99ED085AADA286591FFEF38C098931F3D707B296FEB3DF607D8AA2F"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+      "bytes": 152064,
+      "sha256": "D78107469DE53D447B8A6176564E4D97698D7654784CDE587DCC3C9A91A75425"
+    },
+    {
+      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+      "bytes": 340,
+      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.deps.json",
+      "bytes": 434,
+      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.dll",
+      "bytes": 375808,
+      "sha256": "F3B7F1F3E62C8CA6D491D3FE0B5A694FEB2CF72F04B352AC5113C1CB10A64706"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.exe",
+      "bytes": 151552,
+      "sha256": "50CEB214418A79BDC77BC2B3BE2285C28634218BCCF40B909AF941069996394E"
+    },
+    {
+      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
+      "bytes": 458,
+      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "companion-reuse/companion-metadata.json",
+      "sha256": "912D008331534E3072E286A232BC096428DE1948E83C0505DFECF8BBF66643AE"
+    },
+    {
+      "path": "companion-reuse/companion-apphost-sections.json",
+      "sha256": "5114D501DFB93BF899E2F1434510BE685FE6C1DA5C35B041E811CDDCB67301D3"
+    },
+    {
+      "path": "companion-reuse/companion-source-closure.json",
+      "sha256": "A4A27DC0E958DFC71199660DCC6F67A9BDD280464DCEFECCF842C8368CAC7458"
+    }
+  ],
+  "equivalence": "All managed method bodies/signatures/locals/exception regions and embedded resources match 189; actual DLL-bound portable-PDB non-generated source hashes match. Native apphost code sections match; only version-resource metadata differs in 199-built helpers.",
+  "compatibility": "App199 uses the existing helper CLI. New RTC controls use app WinUSB/BLE directly; no new helper command or ABI is required.",
+  "source_scope": "The197-input main host receipt excludes companion projects. Their15 checked source/project/catalog inputs are now separately archived in companion-sources.zip, with actual DLL-bound PDB and embedded-catalog matching in companion-source-freeze.json. No claim that they were compiled from the main host ZIP.",
+  "working_changes": "The checked NPConfigurator Program.cs --snapshot-v2 and Np2DeviceSelection.FromPayload working changes, already present in both189/199 companions, plus their22-line test addition are explicitly intended for source publication per root review. Other unrelated dirty files remain excluded.",
+  "limits": "Static identity/source/ABI reuse evidence, not a new helper execution or hardware validation claim."
+}

@@ -214,6 +214,29 @@ namespace USB512_interface
         }
     }
 
+    // Reader-only overflow ownership. Never borrow a queued/worker-owned span.
+    internal sealed class NpHostReadLoss
+    {
+        readonly byte[] scratch;
+        long pendingBytes,pendingEvents;
+        internal long DroppedWireBytes {get;private set;}
+        internal long DropEvents {get;private set;}
+        internal NpHostReadLoss(int bytes,bool enabled) {if(enabled)scratch=new byte[bytes];}
+        internal byte[] Acquire(BlockingCollection<byte[]> free) {
+            byte[] buffer;if(free.TryTake(out buffer))return buffer;
+            if(scratch==null)throw new IOException("NP1 disk/decoder queue cannot keep up; recording stopped without dropping queued data.");
+            return scratch;
+        }
+        internal bool IsDiscard(byte[] buffer) {return scratch!=null && ReferenceEquals(buffer,scratch);}
+        internal void Discard(int bytes) {
+            if(scratch==null || bytes<=0 || bytes>scratch.Length)throw new ArgumentOutOfRangeException("bytes");
+            checked {pendingBytes+=bytes;pendingEvents++;DroppedWireBytes+=bytes;DropEvents++;}
+        }
+        internal void TakePending(out long bytes,out long events) {
+            bytes=pendingBytes;events=pendingEvents;pendingBytes=pendingEvents=0;
+        }
+    }
+
     // Tagged quad packets: global NP sequence, explicit physical probe and time
     // lane. A whole group must belong to one probe. Never resynchronize silently.
     internal sealed class NpTaggedPacketParser
@@ -221,21 +244,49 @@ namespace USB512_interface
         readonly int[] probes;
         readonly int batchPackets;
         internal readonly bool PairedRaw;
+        internal readonly bool BestEffort;
         readonly byte[] packet=new byte[512],lanes=new byte[2024],output=new byte[2024];
         int stored,lane;bool failed;
+        int skipPrefix;bool seekingGroup,haveDiscardedGroup;
+        ushort nextNpSequence,activeGroupSequence,lastDiscardedGroup;
         internal long Packets { get; private set; }
         internal long MiscPackets { get; private set; }
         internal long SequenceGaps { get; private set; }
+        internal long NpSequenceGaps {get;private set;}
+        internal long MiscSequenceGaps {get;private set;}
+        internal long DiscardedIncompleteGroups {get;private set;}
+        internal long DiscardedGroupPackets {get;private set;}
+        internal long DiscardedPartialPacketBytes {get;private set;}
+        internal long IncompleteTailBytes {get;private set;}
         internal int PendingBytes { get { return stored; } }
         internal int PendingLanePackets { get { return lane; } }
         ushort miscSequence;bool haveMisc;
         internal Action<byte[],int,int> OnMisc;
+        internal Action OnTransportLoss;
         internal Action<byte[],int,int,byte,ushort> OnCamera;
         internal NpTaggedPacketParser(int mask,int batchPackets) : this(mask,batchPackets,false) {}
-        internal NpTaggedPacketParser(int mask,int batchPackets,bool pairedRaw) {
-            if(mask<1 || mask>7 || (pairedRaw && mask!=3) || batchPackets<4 || batchPackets>256 || batchPackets%4!=0)throw new ArgumentException();
+        internal NpTaggedPacketParser(int mask,int batchPackets,bool pairedRaw) : this(mask,batchPackets,pairedRaw,false) {}
+        internal NpTaggedPacketParser(int mask,int batchPackets,bool pairedRaw,bool bestEffort) {
+            if(mask<1 || mask>7 || (pairedRaw && mask!=3) || (bestEffort && !pairedRaw) || batchPackets<4 || batchPackets>256 || batchPackets%4!=0)throw new ArgumentException();
             var list=new List<int>();for(int p=1;p<=3;p++)if((mask&(1<<(p-1)))!=0)list.Add(p);
-            probes=list.ToArray();this.batchPackets=batchPackets;PairedRaw=pairedRaw;
+            probes=list.ToArray();this.batchPackets=batchPackets;PairedRaw=pairedRaw;BestEffort=bestEffort;
+        }
+        void CountDiscardedGroup(ushort sequence) {
+            ushort group=(ushort)(sequence>>2);
+            if(!haveDiscardedGroup || group!=lastDiscardedGroup) {
+                DiscardedIncompleteGroups++;lastDiscardedGroup=group;haveDiscardedGroup=true;
+            }
+        }
+        void DiscardGroup() {
+            if(lane!=0) {CountDiscardedGroup(activeGroupSequence);DiscardedGroupPackets+=lane;lane=0;}
+        }
+        internal void NotifyTransportLoss(long bytes) {
+            if(!BestEffort || failed || bytes<=0)throw new IOException("Unqualified NP outer-loss notification.");
+            int position=skipPrefix!=0?512-skipPrefix:stored;
+            int end=(position+(int)(bytes%512))%512;
+            DiscardedPartialPacketBytes+=stored;stored=0;skipPrefix=end==0?0:512-end;
+            DiscardGroup();seekingGroup=true;
+            if(OnTransportLoss!=null)OnTransportLoss();
         }
         internal void Feed(byte[] input,int count,Action<int,byte[],int,int> receive) {
             if(failed)throw new IOException("NP tagged parser previously failed.");
@@ -243,6 +294,10 @@ namespace USB512_interface
             try {
                 int at=0;
                 while(at<count) {
+                    if(skipPrefix!=0) {
+                        int skip=Math.Min(skipPrefix,count-at);at+=skip;skipPrefix-=skip;
+                        DiscardedPartialPacketBytes+=skip;continue;
+                    }
                     int target=stored<6?6:packet[2]==3?6+NpCameraRecording.PayloadLength(packet[3]):512;
                     int n=Math.Min(target-stored,count-at);Buffer.BlockCopy(input,at,packet,stored,n);stored+=n;at+=n;
                     if(stored<6)continue;
@@ -256,17 +311,37 @@ namespace USB512_interface
                         OnCamera(packet,6,target-6,packet[3],seq);stored=0;continue;
                     }
                     if(packet[2]==5) {
-                        if(packet[3]!=8 || lane!=0 || OnMisc==null)throw new IOException("Invalid NP misc packet/boundary.");
-                        if(haveMisc && seq!=miscSequence) {SequenceGaps++;throw new IOException("NP misc sequence gap.");}
+                        if(packet[3]!=8 || (!BestEffort && lane!=0) || OnMisc==null)throw new IOException("Invalid NP misc packet/boundary.");
+                        if(BestEffort && lane!=0) {DiscardGroup();seekingGroup=true;}
+                        if(haveMisc && seq!=miscSequence) {
+                            SequenceGaps++;MiscSequenceGaps++;
+                            if(!BestEffort)throw new IOException("NP misc sequence gap.");
+                            if(OnTransportLoss!=null)OnTransportLoss();
+                        }
                         miscSequence=unchecked((ushort)(seq+1));haveMisc=true;OnMisc(packet,6,506);MiscPackets++;stored=0;continue;
                     }
                     int probe=PairedRaw?0:probes[(int)((Packets/batchPackets)%probes.Length)];
                     if(PairedRaw) {
-                        if(packet[2]!=0x77 || packet[3]!=lane || packet[6]!=3 || packet[7]!=1)
+                        if(packet[2]!=0x77 || packet[3]>3 || (!BestEffort && packet[3]!=lane) || packet[6]!=3 || packet[7]!=1)
                             throw new IOException("Paired NP wire/lane/mask/version changed at packet "+Packets+".");
                     } else if(packet[2]!=0x76 || packet[3]!=(0x60|probe|(lane<<2)))
                         throw new IOException("NP probe/time-lane order changed at packet "+Packets+".");
-                    if(seq!=unchecked((ushort)Packets)) {SequenceGaps++;throw new IOException("NP global sequence gap at packet "+Packets+".");}
+                    if(BestEffort) {
+                        if((seq&3)!=packet[3])throw new IOException("Paired NP sequence/time-lane identity changed.");
+                        if(seq!=nextNpSequence) {
+                            SequenceGaps++;NpSequenceGaps++;DiscardGroup();seekingGroup=true;
+                        }
+                        nextNpSequence=unchecked((ushort)(seq+1));
+                        if(seekingGroup) {
+                            if(packet[3]!=0) {
+                                CountDiscardedGroup(seq);
+                                DiscardedGroupPackets++;stored=0;Packets++;continue;
+                            }
+                            seekingGroup=false;
+                        }
+                        if(packet[3]!=lane)throw new IOException("Paired NP time-lane order changed without a sequence loss.");
+                        if(lane==0)activeGroupSequence=seq;
+                    } else if(seq!=unchecked((ushort)Packets)) {SequenceGaps++;NpSequenceGaps++;throw new IOException("NP global sequence gap at packet "+Packets+".");}
                     int payload=PairedRaw?504:506,header=PairedRaw?8:6;
                     Buffer.BlockCopy(packet,header,lanes,lane*payload,payload);stored=0;Packets++;lane++;
                     if(lane!=4)continue;
@@ -275,7 +350,7 @@ namespace USB512_interface
                             output[i*4+l]=lanes[l*504+i*2];
                             output[1008+i*4+l]=lanes[l*504+i*2+1];
                         }
-                        lane=0;receive(1,output,0,1008);receive(2,output,1008,1008);
+                        lane=0;haveDiscardedGroup=false;receive(1,output,0,1008);receive(2,output,1008,1008);
                     } else {
                         for(int i=0;i<506;i++)for(int l=0;l<4;l++)output[i*4+l]=lanes[l*506+i];
                         lane=0;receive(probe,output,0,output.Length);
@@ -284,6 +359,10 @@ namespace USB512_interface
             } catch {failed=true;throw;}
         }
         internal void Complete() {
+            if(BestEffort && !failed) {
+                IncompleteTailBytes+=stored+(long)lane*512;DiscardedPartialPacketBytes+=stored;
+                stored=0;skipPrefix=0;DiscardGroup();return;
+            }
             if(failed || stored!=0 || lane!=0)throw new IOException("Incomplete NP packet/time-lane group; recording is incomplete.");
         }
     }
@@ -517,8 +596,9 @@ namespace USB512_interface
     // Queue order is independent of wall-clock adjustments on the host.
     internal struct NpReadStamp {
         internal readonly DateTime Utc;
-        internal readonly long Order;
-        internal NpReadStamp(DateTime utc,long order){Utc=utc;Order=order;}
+        internal readonly long Order,ReceiveTicks;
+        internal NpReadStamp(DateTime utc,long order):this(utc,order,0){}
+        internal NpReadStamp(DateTime utc,long order,long ticks){Utc=utc;Order=order;ReceiveTicks=ticks;}
     }
 
     // Post-drain, file-only timeline. No sensor/device ticks or processing clock.
@@ -667,6 +747,7 @@ namespace USB512_interface
         internal long ApOutputRows {get{return ap.Output.OutputRows;}}
         internal long LfpOutputRows {get{return lfp.Output.OutputRows;}}
         internal DateTime LfpLastReceiveUtc {get{return lfp.LastReadStamp.Utc;}}
+        internal void ObserveTiming(Action<NpReadStamp,long,NpReadStamp,long> observer){lock(sync)observer(ap.LastReadStamp,ap.Output.OutputRows,lfp.LastReadStamp,lfp.Output.OutputRows);}
         internal int ApTailRows(int probe) {return ap.TailRows[probe];}
         internal int LfpTailRows(int probe) {return lfp.TailRows[probe];}
         internal NpMergedDatWriter(string folder,int[] probes,bool upsampleAp) {
@@ -705,6 +786,7 @@ namespace USB512_interface
         readonly NpProbeRecording[] byProbe=new NpProbeRecording[4];
         internal Action<byte[],int,int> OnMisc;
         internal Action<byte[],int,int,byte,ushort> OnCamera;
+        internal Action OnTransportLoss;
         internal Action<int,short[],int,short[],int> OnSamples;
         internal Action<int,short[],int,short[],int> SampleCorrection;
         internal Action<int> OnPayload;
@@ -728,6 +810,17 @@ namespace USB512_interface
         internal long Packets { get { return Tagged?tagged.Packets:legacy.Packets; } }
         internal long MiscPackets { get { return Tagged?tagged.MiscPackets:legacy.MiscPackets; } }
         internal long SequenceGaps { get { return Tagged?tagged.SequenceGaps:legacy.SequenceGaps; } }
+        internal bool OuterLossEnabled {get{return Tagged && tagged.BestEffort;}}
+        internal long RawPoolDroppedWireBytes {get;private set;}
+        internal long RawPoolDropEvents {get;private set;}
+        internal long NpPacketGapEvents {get{return Tagged?tagged.NpSequenceGaps:0;}}
+        internal long MiscPacketGapEvents {get{return Tagged?tagged.MiscSequenceGaps:0;}}
+        internal long DiscardedIncompleteGroups {get{return Tagged?tagged.DiscardedIncompleteGroups:0;}}
+        internal long DiscardedGroupPackets {get{return Tagged?tagged.DiscardedGroupPackets:0;}}
+        internal long DiscardedPartialPacketBytes {get{return Tagged?tagged.DiscardedPartialPacketBytes:0;}}
+        internal long OuterIncompleteTailBytes {get{return Tagged?tagged.IncompleteTailBytes:0;}}
+        internal bool OuterLossless {get{return RawPoolDroppedWireBytes==0 && SequenceGaps==0 &&
+            DiscardedIncompleteGroups==0 && DiscardedPartialPacketBytes==0 && OuterIncompleteTailBytes==0;}}
         internal int PendingLanePackets { get { return Tagged?tagged.PendingLanePackets:legacy.PendingLanePackets; } }
         internal long FileBytes { get {long n=MergedDat?merged.FileBytes:0;foreach(var p in Probes)n+=p.FileBytes;return n;} }
         internal long FramesChecked { get {long n=0;foreach(var p in Probes)n+=p.Decoder.FramesChecked;return n;} }
@@ -740,6 +833,9 @@ namespace USB512_interface
         bool synchronous;
         string configuredFolder;
         NpReadStamp receivingStamp;
+        internal long CurrentReceiveTicks {get{return receivingStamp.ReceiveTicks;}}
+        NpTimeJournal timeJournal;
+        Action<NpReadStamp,long,NpReadStamp,long> mergedTiming;
         long readOrder;
         internal readonly List<Dictionary<string,object>> LfpTimeOutputs=new List<Dictionary<string,object>>();
         internal void Configure(string folder,XeNpStatus status,NpModeCapabilities caps) {
@@ -777,42 +873,73 @@ namespace USB512_interface
             if(requestedOptions==null)throw new ArgumentNullException("requestedOptions");
             Directory.CreateDirectory(folder);
             configuredFolder=Path.GetFullPath(folder);
+            if(timeJournal==null)timeJournal=new NpTimeJournal(configuredFolder);
             PhysicalPortsKnown=caps!=null;
             ProbeMask=caps==null?1:caps.ActiveMask;ApHz=caps==null?status.ApSampleRateHz:caps.ApHz;
             options=new NpCaptureOptions(requestedOptions.MergeProbeDat,requestedOptions.UpsampleAp15To20 && ApHz==15000);
             synchronous=status.UsesV1SynchronousReads;
-            if(caps!=null && (caps.WireId==0x76 || caps.WireId==0x77))tagged=new NpTaggedPacketParser(ProbeMask,caps.BatchPackets,caps.WireId==0x77);
+            if(caps!=null && (caps.WireId==0x76 || caps.WireId==0x77))
+                tagged=new NpTaggedPacketParser(ProbeMask,caps.BatchPackets,caps.WireId==0x77,
+                    synchronous && ProbeMask==3 && ApHz==20000 && caps.WireId==0x77 && !UpsampledAp && OnCamera==null);
             var active=new List<int>();foreach(int id in new[]{1,2,3})if((ProbeMask&(1<<(id-1)))!=0)active.Add(id);
-            if(options.MergeProbeDat && active.Count>1)merged=new NpMergedDatWriter(folder,active.ToArray(),UpsampledAp);
+            if(options.MergeProbeDat && active.Count>1){
+                merged=new NpMergedDatWriter(folder,active.ToArray(),UpsampledAp);
+                mergedTiming=(a,na,l,nl)=>{
+                    timeJournal.Observe(Path.Combine(folder,"neuropixels_ap.dat"),merged.ChannelCount,OutputApHz,1,na,a.ReceiveTicks,a.Utc);
+                    timeJournal.Observe(Path.Combine(folder,"neuropixels_lfp.dat"),merged.ChannelCount,ApHz,12,nl,l.ReceiveTicks,l.Utc);
+                };
+            }
             foreach(int id in active) {
                 // Individual output keeps the established per-probe folders.
                 // Merged output writes one root AP/LFP pair in physical-port order.
                 string dir=active.Count>1 && !MergedDat?Path.Combine(folder,"probe"+id):folder;
                 var p=new NpProbeRecording(dir,id,Tagged?XeNpLaneLayout.GpioV1Quad:status.Layout,!MergedDat,UpsampledAp);
+                if(synchronous && !UpsampledAp && p.Decoder.Layout==XeNpLaneLayout.GpioV1Quad)p.EnableBestEffort(dir);
                 p.SampleCorrection=SampleCorrection;
+                p.Timing=delegate {
+                    if(merged!=null)merged.ObserveTiming(mergedTiming);
+                    else {
+                        var stamp=p.DecodedReadStamp;
+                        if(!p.Decoder.CurrentApMissing)timeJournal.Observe(Path.Combine(dir,"neuropixels_ap.dat"),384,OutputApHz,1,p.ApOutputRows,stamp.ReceiveTicks,stamp.Utc);
+                        if(!p.Decoder.CurrentLfpMissing)timeJournal.Observe(Path.Combine(dir,"neuropixels_lfp.dat"),384,ApHz,12,p.LfpOutputRows,stamp.ReceiveTicks,stamp.Utc);
+                    }
+                };
                 Probes.Add(p);byProbe[id]=p;p.Decoded=delegate(int probe,uint counter,short[] a,int na,short[] l,int nl) {
                     if(merged!=null)merged.Add(probe,counter,a,na,l,nl,p.DecodedReadStamp);
-                    lock(samplesCallbackLock)if(OnSamples!=null)OnSamples(probe,a,na,l,nl);
+                    // Gap sentinels remain in DAT, not apparently valid scope samples.
+                    int validAp=p.Decoder.CurrentApMissing?0:na,validLfp=p.Decoder.CurrentLfpMissing?0:nl;
+                    lock(samplesCallbackLock)if(OnSamples!=null && (validAp!=0 || validLfp!=0))OnSamples(probe,a,validAp,l,validLfp);
                 };
             }
             Action<byte[],int,int> misc=delegate(byte[] b,int o,int n) {if(OnMisc==null)throw new IOException("No misc recorder.");OnMisc(b,o,n);};
             legacy.OnMisc=misc;if(Tagged)tagged.OnMisc=misc;
             legacy.OnCamera=OnCamera;if(Tagged)tagged.OnCamera=OnCamera;
+            if(Tagged)tagged.OnTransportLoss=delegate {if(OnTransportLoss!=null)OnTransportLoss();};
             taggedReceive=Receive;
             legacyReceive=delegate(byte[] b,int o,int n) {
                 if(legacy.IsQuadInterleaved) {
                     if(!synchronous)throw new IOException("Firmware advertised V2 but sent V1 quad data.");
                     Probes[0].Decoder.UseV1QuadFormat();
+                    if(!UpsampledAp && !Probes[0].Decoder.BestEffort)Probes[0].EnableBestEffort(configuredFolder);
                 }
                 Receive(Probes[0].Probe,b,o,n);
             };
         }
         void Receive(int probe,byte[] b,int o,int n) {byProbe[probe].Feed(b,o,n,receivingStamp);if(OnPayload!=null)OnPayload(n);}
+        // Decoder-worker only, in chronological order before the next Feed or
+        // (for trailing loss) Complete. Never invent elapsed AP/LFP samples.
+        internal void NotifyTransportLoss(long bytes,long events) {
+            if(!OuterLossEnabled || bytes<=0 || events<=0)throw new IOException("Unqualified NP transport loss.");
+            checked {RawPoolDroppedWireBytes+=bytes;RawPoolDropEvents+=events;}
+            tagged.NotifyTransportLoss(bytes);
+        }
         internal void Feed(byte[] b,int n) {Feed(b,n,DateTime.MinValue);}
-        internal void Feed(byte[] b,int n,DateTime receiveUtc) {
-            receivingStamp=new NpReadStamp(receiveUtc,++readOrder);
+        internal void Feed(byte[] b,int n,DateTime receiveUtc) {Feed(b,n,receiveUtc,0);}
+        internal void Feed(byte[] b,int n,DateTime receiveUtc,long receiveTicks) {
+            receivingStamp=new NpReadStamp(receiveUtc,++readOrder,receiveTicks);
             if(Tagged)tagged.Feed(b,n,taggedReceive);else legacy.Feed(b,n,legacyReceive);
         }
+        internal void WriteCalibratedTimes(){if(timeJournal!=null)timeJournal.Finish();}
         // Call only after all workers/files have drained and closed, including
         // failed recordings. File lengths define the complete saved prefix.
         internal void WriteLfpTimes() {
@@ -836,6 +963,11 @@ namespace USB512_interface
         internal void Flush() {foreach(var p in Probes)p.Flush();if(merged!=null)merged.Flush();}
         internal void WriteStatus(string folder,bool complete) {
             var lines=new List<string> {"complete="+complete,"probe_mask="+ProbeMask,"probe_count="+Probes.Count,
+                "outer_loss_enabled="+OuterLossEnabled,"outer_lossless="+OuterLossless,
+                "raw_pool_dropped_wire_bytes="+RawPoolDroppedWireBytes,"raw_pool_drop_events="+RawPoolDropEvents,
+                "np_packet_gap_events="+NpPacketGapEvents,"misc_packet_gap_events="+MiscPacketGapEvents,
+                "discarded_incomplete_groups="+DiscardedIncompleteGroups,"discarded_group_packets="+DiscardedGroupPackets,
+                "discarded_partial_packet_bytes="+DiscardedPartialPacketBytes,"outer_incomplete_tail_bytes="+OuterIncompleteTailBytes,
                 "native_ap_sample_rate_hz_per_probe="+ApHz,"output_ap_sample_rate_hz="+OutputApHz,
                 "output_lfp_sample_rate_hz="+OutputLfpHzExact,"output_lfp_rate_numerator="+ApHz,
                 "output_lfp_rate_denominator=12","ap_upsampled_15_to_20khz="+UpsampledAp,
@@ -873,6 +1005,12 @@ namespace USB512_interface
                 lines.Add(prefix+"initial_lfp_slot="+p.Decoder.InitialLfpSlot);
                 lines.Add(prefix+"startup_discarded_lfp_superframes="+p.Decoder.StartupDiscardedLfpSuperframes);
                 lines.Add(prefix+"lfp_phase_errors="+p.Decoder.LfpPhaseErrors);
+                lines.Add(prefix+"best_effort="+p.Decoder.BestEffort);lines.Add(prefix+"lossless="+p.Lossless);
+                lines.Add(prefix+"missing_ap_rows="+p.Decoder.MissingApRows);lines.Add(prefix+"missing_lfp_rows="+p.Decoder.MissingLfpRows);
+                lines.Add(prefix+"gap_events="+p.Decoder.GapEvents);lines.Add(prefix+"recovery_discarded_bytes="+p.Decoder.RecoveryDiscardedBytes);
+                lines.Add(prefix+"incomplete_tail_bytes="+p.Decoder.IncompleteTailBytes);
+                lines.Add(prefix+"host_dropped_lane_bytes="+p.HostDroppedLaneBytes);lines.Add(prefix+"host_drop_events="+p.HostDropEvents);
+                if(p.Decoder.BestEffort)lines.Add(prefix+"gap_policy=literal zero native DAT rows; per-probe gap CSV; fixed model/layout; ambiguous counter epoch remains hard; no ADC payload checksum");
             }
             lines.Add("physical_ports_known="+PhysicalPortsKnown);
             if(!PhysicalPortsKnown)lines.Add("port_mapping=legacy logical stream 1; physical connector not reported by firmware");
@@ -891,22 +1029,41 @@ namespace USB512_interface
         internal int Probe;
         internal XeNpStreamDecoder Decoder;
         NpDatWriter ap,lfp;
+        StreamWriter gaps;
         readonly BlockingCollection<byte[]> free=new BlockingCollection<byte[]>(DecodeBuffers);
         readonly BlockingCollection<DecodeBlock> queued=new BlockingCollection<DecodeBlock>(DecodeBuffers);
         Thread worker;
         Exception workerFailure;
+        internal Exception RecordingFailure {get{return Volatile.Read(ref workerFailure);}}
         byte[] producerBuffer;int producerBytes;
         NpReadStamp producerStamp;
         internal NpReadStamp DecodedReadStamp;
+        internal Action Timing;
         internal DateTime LfpLastReceiveUtc;
         bool addingCompleted,workerJoined,disposed;
         internal long RawBytes,ApRows,LfpRows;
+        long hostDroppedLaneBytes,hostDropEvents;
+        internal long HostDroppedLaneBytes {get{return Interlocked.Read(ref hostDroppedLaneBytes);}}
+        internal long HostDropEvents {get{return Interlocked.Read(ref hostDropEvents);}}
+        internal bool Lossless {get{return Decoder.Lossless && HostDroppedLaneBytes==0;}}
         internal long ApOutputRows {get{return ap==null?0:ap.OutputRows;}}
         internal long LfpOutputRows {get{return lfp==null?0:lfp.OutputRows;}}
         internal long FileBytes { get { return (ap==null?0:ap.FileBytes)+(lfp==null?0:lfp.FileBytes); } }
         internal Action<int,uint,short[],int,short[],int> Decoded;
         internal Action<int,short[],int,short[],int> SampleCorrection;
         Action<short[],int,short[],int> samples;
+        internal void EnableBestEffort(string folder) {
+            Decoder.BestEffort=true;
+            // No sidecar before first loss: startup-only admission may still
+            // replace its owned empty DAT files/probe layout.
+            Decoder.Gap=delegate(long first,long rows){
+                if(gaps==null) {
+                    gaps=new StreamWriter(new FileStream(Path.Combine(folder,"neuropixels_probe"+Probe+"_gaps.csv"),FileMode.CreateNew,FileAccess.Write,FileShare.Read));
+                    gaps.WriteLine("band,first_native_row,missing_rows,reason");
+                }
+                gaps.WriteLine("ap,"+first+","+rows+",counter_bounded_recovery");
+            };
+        }
         internal NpProbeRecording(string folder,int probe,XeNpLaneLayout layout) {
             Initialize(folder,probe,layout,true,false);
         }
@@ -927,7 +1084,8 @@ namespace USB512_interface
             samples=OnSamples;
         }
         void OnSamples(short[] a,int na,short[] l,int nl) {
-            if(SampleCorrection!=null)SampleCorrection(Probe,a,na,l,nl);
+            if(SampleCorrection!=null)SampleCorrection(Probe,a,Decoder.CurrentApMissing?0:na,l,Decoder.CurrentLfpMissing?0:nl);
+            if(Decoder.CurrentLfpMissing && gaps!=null)gaps.WriteLine("lfp,"+LfpRows+",1,gap_crossing");
             if(ap!=null)ap.Write(a,na);if(lfp!=null)lfp.Write(l,nl);
             if(nl>0)LfpLastReceiveUtc=DecodedReadStamp.Utc;
             Interlocked.Add(ref ApRows,na);Interlocked.Add(ref LfpRows,nl);
@@ -940,6 +1098,7 @@ namespace USB512_interface
                         Interlocked.Add(ref RawBytes,block.Count);
                         DecodedReadStamp=block.ReadStamp;
                         Decoder.Feed(block.Buffer,0,block.Count,samples);
+                        if(Timing!=null)Timing();
                     } finally {free.Add(block.Buffer);}
                 }
                 Decoder.Complete();
@@ -962,6 +1121,13 @@ namespace USB512_interface
             if(data==null || offset<0 || count<0 || offset>data.Length-count)throw new ArgumentOutOfRangeException("count");
             ThrowWorkerFailure();
             while(count!=0) {
+                // Drop only the incoming chronological lane span, never a
+                // queued/worker-owned block. The original counter/framing
+                // checks account for the gap when a later span arrives.
+                if(producerBuffer==null && Decoder.BestEffort && !free.TryTake(out producerBuffer)) {
+                    ThrowWorkerFailure();
+                    Interlocked.Add(ref hostDroppedLaneBytes,count);Interlocked.Increment(ref hostDropEvents);return;
+                }
                 while(producerBuffer==null && !free.TryTake(out producerBuffer,100)) {
                     ThrowWorkerFailure();
                     if(addingCompleted || disposed)throw new IOException("Probe "+Probe+" decoder queue closed during backpressure.");
@@ -979,12 +1145,13 @@ namespace USB512_interface
             if(!workerJoined && worker!=null) {worker.Join();workerJoined=true;}
             ThrowWorkerFailure();
         }
-        internal void Flush() {if(ap!=null)ap.Flush();if(lfp!=null)lfp.Flush();}
+        internal void Flush() {if(ap!=null)ap.Flush();if(lfp!=null)lfp.Flush();if(gaps!=null)gaps.Flush();}
         public void Dispose() {
             if(disposed)return;disposed=true;
             if(!addingCompleted) {addingCompleted=true;queued.CompleteAdding();}
             if(!workerJoined && worker!=null) {worker.Join();workerJoined=true;}
             if(ap!=null)ap.Dispose();if(lfp!=null)lfp.Dispose();
+            if(gaps!=null)gaps.Dispose();
             free.Dispose();queued.Dispose();
         }
     }

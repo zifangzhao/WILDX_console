@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using WildNpConfiguration;
+using System.Threading.Tasks;
 namespace USB512_interface {
  public partial class Form1 {
   // Null preserves the firmware's default.  A non-null object represents the
@@ -130,18 +131,41 @@ namespace USB512_interface {
     if(result!=null){npRequestedConfiguration=result;npConfigurationDevicePath=devicePath;}
    }
   }
-  private void NpShowModeSettings() {
-   bool np2=selectedDeviceKind==DeviceKind.NpV2;
-   using(var dialog=new NpRecordingDialog(np2,np2?(int)npV2RequestedProbeMask:npRequestedMode==null?0:npRequestedMode.ProbeMask,
+  private async Task NpShowModeSettings() {
+   if(npSettingsApplying)return;
+   npSettingsApplying=true;UpdateStartEnabled();
+   try {
+    await RetirePassiveUsbReads();
+    if(npPreparationStopRequested)throw new OperationCanceledException("Settings canceled by Stop.");
+    bool np2=selectedDeviceKind==DeviceKind.NpV2;
+    using(var dialog=new NpRecordingDialog(np2,np2?(int)npV2RequestedProbeMask:npRequestedMode==null?0:npRequestedMode.ProbeMask,
     np2?(int)npV2RequestedSampleHz:npRequestedMode==null?30000:npRequestedMode.RequestedApHz,
     npMergeProbeDat,npUpsampleAp15To20,npRecordMiscSignals,ReadNpRecordingProfile,ShowNpProbeConfiguration)) {
     if(dialog.ShowDialog(this)==DialogResult.OK) {
+     if(npPreparationStopRequested)throw new OperationCanceledException("Settings canceled by Stop.");
+#if NP_PREPARATION_ENABLE
+     await RetireUsbProbePreparationForSettings();
+     if(npPreparationStopRequested)throw new OperationCanceledException("Settings canceled by Stop.");
+#endif
      if(np2){npV2RequestedProbeMask=(uint)dialog.ProbeMask;npV2RequestedSampleHz=(uint)dialog.SampleHz;}
      else {var profile=ReadNpRecordingProfile();int mask=dialog.ProbeMask==0?profile.SelectedMask:dialog.ProbeMask;npRequestedMode=mask==0?null:new NpCaptureRequest(mask,dialog.SampleHz);}
      npMergeProbeDat=dialog.Merge;npUpsampleAp15To20=dialog.Upsample;npRecordMiscSignals=dialog.Misc;
+#if NP_FIRST_SYNC_ENABLE
+     BeginUsbRtcSettingsSetup(np2?NpV2FirmwareForm.Uid(devicePath):NpV1Management.UidFromPath(devicePath),np2?2:1,
+      np2?npV2RequestedProbeMask:npRequestedMode==null?0U:(uint)npRequestedMode.ProbeMask,
+      np2?npV2RequestedSampleHz:npRequestedMode==null?0U:(uint)npRequestedMode.RequestedApHz);
+#endif
+#if NP_PREPARATION_ENABLE
+     await PrepareUsbProbeSettings();
+#else
+     lblRecInfo.Text="Settings saved.";
+#endif
     }
-    UpdateStartEnabled();
+    }
    }
+   catch(OperationCanceledException){lblRecInfo.Text="Probe settings canceled by Stop.";}
+   catch(Exception ex){lblRecInfo.Text="Probe settings were not confirmed. Start remains available. "+ex.Message;}
+   finally{npSettingsApplying=false;UpdateStartEnabled();if(npPreparationStopRequested)await StopUsbProbePreparation();}
   }
  }
 }

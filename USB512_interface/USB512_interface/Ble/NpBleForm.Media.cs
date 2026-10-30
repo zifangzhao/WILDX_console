@@ -35,7 +35,7 @@ namespace USB512_interface
         void ResetMedia(){mediaConfirmed=mediaWasRecording=false;mediaStatus.Text="";}
         async Task RefreshStatusQuietly()
         {
-            try {await ReadStatus();if(V2)await CheckClock();}
+            try {CancelBleImuPoll();await RetireBleRecordingClock();await bleImuTask;await ReadStatus();if(V2 && (current==null || current.State!=3))await CheckClock();}
             catch(Exception ex){if(!closing && !IsDisposed){current=null;state.Text=ex.Message;Append(ex.Message);}}
             finally {if(!closing && !IsDisposed && !busy)UpdateControls();}
         }

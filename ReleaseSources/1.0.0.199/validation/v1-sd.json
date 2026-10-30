@@ -1,0 +1,424 @@
+{
+    "scope":  "V1 actual199 BLE-to-SD30 + stored USB readback; independent metadata review",
+    "passed":  true,
+    "checks":  84435,
+    "hardware_calls":  0,
+    "app_builds":  0,
+    "source_edits":  0,
+    "neural_payload_rescan":  false,
+    "input_pins":  {
+                       "value":  [
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\analogin_encoding.txt",
+                                         "bytes":  2606,
+                                         "sha256":  "6349C41649FB82807B7AC1286DCE1C7726D1CC16A0B93BEC4D6590AF00D939B5"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\analogin_validity.dat",
+                                         "bytes":  37800,
+                                         "sha256":  "1D06E607B2150B883C0F6C88B64EEED1840D3AE69C3760813A88FC071BDC6467"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\analogin.dat",
+                                         "bytes":  1209600,
+                                         "sha256":  "E962AFB276505486BD3B861551F75CAFA5F1270953342B819C2B8B376D81896E"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\analogin.dat.legacy_chunk",
+                                         "bytes":  7864320,
+                                         "sha256":  "7AFBF0F17C0191C23273B115C3E70D0DBDB30DC4CA9D4BD02C6402827E85D77D"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\capture_status.txt",
+                                         "bytes":  2882,
+                                         "sha256":  "CB0E717995318146CD6B2CC9D919E24BB934819C25D59C72623A63562F2C26A0"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\CE_params.bin",
+                                         "bytes":  1536,
+                                         "sha256":  "FD483A1AE1957405F7BEC6ECD2F379F00AA6BD303FDEF3576ADAC1E101305239"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\descriptor.bin",
+                                         "bytes":  512,
+                                         "sha256":  "D0B04D976A6493B747D7BCF80F745EE93AEC8E744EE1F2BD99F9C84AC55D3AE8"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\device_rtc_start_sector7.bin",
+                                         "bytes":  512,
+                                         "sha256":  "5BB9A7E41EAD839C3C849570CCCF20065FC13FAAD9C37D7D21B1E973C40B4034"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\device_rtc_start_status.json",
+                                         "bytes":  566,
+                                         "sha256":  "CB5C583CD4F94254FDE07FA795830F3E7B314EAB1CC73FF2D4D66DE5C66C3678"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\fine_clock_fit_status.json",
+                                         "bytes":  1047,
+                                         "sha256":  "9D35A326D5E75D90B82881753E8E400B25C1E866EF4E139F3AD652C70200D192"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\fine_source_clock_status.json",
+                                         "bytes":  1030,
+                                         "sha256":  "2718A8EBE310BEDE432D6F53E274761307FD4DE80482FCBCDECD91645D5D667D"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\first_sample_timestamps.json",
+                                         "bytes":  2663,
+                                         "sha256":  "54A0AD4038C73CDBAEBEC9D8A5C76C148931637D86EDC886DDC42F8AC418E5F8"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\first_source_clock_sector6.bin",
+                                         "bytes":  512,
+                                         "sha256":  "0CD91F0E1EFAB796BD031D9B5AE3AAE2A5DB5AABCBEADE807EC80494CBAF9EEF"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\first_sync_sd_status.json",
+                                         "bytes":  495,
+                                         "sha256":  "8AAAEBCD4672BDA95EF2C4417A717629F85883E690BCC5B0967D8DDF910B97A5"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\footer.bin",
+                                         "bytes":  512,
+                                         "sha256":  "958AC029F647F24CA20FF08FB3C3EA70B71ABE88CAF0715FD43729BEA2F9A822"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\host_clock_association.json",
+                                         "bytes":  1467,
+                                         "sha256":  "A8AA6D7C5AF75B2F16544E8670FC1E8CFB52543AAE7F58F529FDA62EAB784967"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\imu_grid_gaps.csv",
+                                         "bytes":  49,
+                                         "sha256":  "138B87BDCA009E08C183A95C9320F0BE6C7170D87BB0CB0375CDA880B66B5CCB"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\imu_grid_phase.bin",
+                                         "bytes":  84,
+                                         "sha256":  "23A4A0D36B3E4FF7E0BD7FEAD60CEDA278ABB5C0267E330F57F65AB248D0A3FA"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\imu_grid_segments.csv",
+                                         "bytes":  48,
+                                         "sha256":  "73FB240BD75CB51270FB79DBC5E0F3EAC25637E5768F86EF4421C4CDA5BF8A9E"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\imu_grid_status.txt",
+                                         "bytes":  292,
+                                         "sha256":  "0C95F406C5771EE2E913F4A241D162F063F9AEA6CB10F43C6F3F9C10C704D3FA"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\imu_sd_export_status.txt",
+                                         "bytes":  675,
+                                         "sha256":  "C316D631B79025C3C5B552F0CAA7DF1B30F873A6A7C1F4B8038C307512813C2D"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\np1_ap.xml",
+                                         "bytes":  16646,
+                                         "sha256":  "EF67FB251B2205C55201EFB41596085DB248636D3CBC44316ED7AED3B2627C12"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\np1_lfp.xml",
+                                         "bytes":  16660,
+                                         "sha256":  "40A0D046A1161C73E08C5E0776DF9145EBA1C77BB8BCF66059AAE254B06EB636"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\np2_ap.xml",
+                                         "bytes":  16646,
+                                         "sha256":  "014E1B22ED14DB21EC200B6E6563D14C672E84D23C92D7E478D780CD0E92F365"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\np2_lfp.xml",
+                                         "bytes":  16660,
+                                         "sha256":  "69F0F4629D61725A83472C23BB661032FDCDCF993B89054F1E40E59F09EF86A3"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\probe_1.json",
+                                         "bytes":  760,
+                                         "sha256":  "BD83B20D4B34C1BAAF9E2AAD13FB08C651B983C2B0E2EB3B6711F7DE60B5EC03"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\probe_2.json",
+                                         "bytes":  760,
+                                         "sha256":  "987BEC8C9DD9A24A787642E9276D06B4CF5BA7A30A6B7A6EB5125522CB0DA0AD"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\probe_info.json",
+                                         "bytes":  744,
+                                         "sha256":  "5F72D9C721983C40C13914EEE5B2C43D2227BC7EADD0B8AFC44F464F4567C5AC"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\recorded_clock.bin",
+                                         "bytes":  512,
+                                         "sha256":  "AD0B98F6B4826B8BB5D1CB6F7167B55A0C2ECEDAB9B570163EAEB9C7672D5389"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\recording_files.json",
+                                         "bytes":  2698,
+                                         "sha256":  "575C7BC724A47BAABBECD50B5E203124FFFF98EC795F4D24D306D915FEA37F2B"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\recording_settings.json",
+                                         "bytes":  4387,
+                                         "sha256":  "BFB53C27D02D88D2C12668A71710D3E788E0BD8B4A517AD67EDA9BB6F2369321"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\recording_start_pc_estimate.json",
+                                         "bytes":  5486,
+                                         "sha256":  "2BE48D07FC97B294D946D8646F283623B61AF6B2554C038D77FC625E0BE60EB2"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\recording_start_utc.json",
+                                         "bytes":  6487,
+                                         "sha256":  "3E4DB53108615B9A1A2C4682520D8F3D18CB7CAB9CBA2E20A4BB02DEE505BD86"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\sample_gaps.csv",
+                                         "bytes":  48,
+                                         "sha256":  "03E8701AC65ABF21EF1DC5C0B7E5C5320278D1807C4050EBC0B025CD0393500C"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\sd_start_import_C5254E5F9D7154541609770EF8F57EDCD030E31021D8DF1F51E5C985AB422C01.json",
+                                         "bytes":  2528,
+                                         "sha256":  "C5254E5F9D7154541609770EF8F57EDCD030E31021D8DF1F51E5C985AB422C01"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\sensors.bin",
+                                         "bytes":  2519040,
+                                         "sha256":  "D47598B25B79F7061179088BDA12E39A689089B56E09186FB540490F47D616B1"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\sensors.csv",
+                                         "bytes":  2418707,
+                                         "sha256":  "8AA22D381828661B488B0B952CF8A7CF10BB7D3AF429F7E86DF02D54D5B55A2A"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\export\\timestamp_calibration.json",
+                                         "bytes":  2177,
+                                         "sha256":  "C99452901F127CB9D432689950A53A362AD4083DCDA60C48FFBA946F1548BA40"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\record\\events.jsonl",
+                                         "bytes":  6359,
+                                         "sha256":  "06098FDA9794CE0651FB99F30FFB943BA227258380D6A1AAC7080BFD91CEFEE5"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\record\\fine-write-summary.json",
+                                         "bytes":  197,
+                                         "sha256":  "034E954B48406DAD9D8457D089B1DFD1F02364535A7E24D97F534A1AF792DBA6"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\record\\hil.json",
+                                         "bytes":  16596,
+                                         "sha256":  "9F5B7151071AC454193315BCA841271E8FB3570350E5A4D548A18F32D1D26BC4"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\record\\recording-result.json",
+                                         "bytes":  1603,
+                                         "sha256":  "2D299B584ED09CAEE3000C38410E9BB136F4201B9B8283E4503EA8BBD71C9EFE"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\events.jsonl",
+                                         "bytes":  11185,
+                                         "sha256":  "2AE453D97C950F5C660C8D1BEC7445B9986E094E66D751C0CD2F2BB7D5D952BD"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\hil.json",
+                                         "bytes":  18230,
+                                         "sha256":  "B2A63AF037FFDDFF017776B7FD130195E1255D05759042075E2E50C6E5FA6FE6"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\imu-grid-independent-check.json",
+                                         "bytes":  4204,
+                                         "sha256":  "3A653AB6B9BD70D95D0EEA3D52114A3B6FCC89EC75F339FFBD5B3A348EB9E547"
+                                     },
+                                     {
+                                         "path":  "F:\\Neuropixel\\V1_SD_HOST199_20261029_R1\\readback\\physical-imu-check.json",
+                                         "bytes":  1039,
+                                         "sha256":  "1150400B3B85D7B5C3BAA2BF12D628F2AB81529B9A4B3BD795E46E0F13036781"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\install_verified.json",
+                                         "bytes":  383,
+                                         "sha256":  "79DE6925AE3F5D7FB5C54673BD12945972B5959F53DB9B47810DE383503437E5"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_verified.json",
+                                         "bytes":  383,
+                                         "sha256":  "6CC3DA1E64B567D3E6017F2F919313C8071A9075DCC1D215795A87C71F6A01B4"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restored_idle.json",
+                                         "bytes":  1328,
+                                         "sha256":  "E4DD02159BBF68223406CBD3AD2BCA452A83E59EB8B0F229274A9873C005A6E2"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\install_flash.bin",
+                                         "bytes":  2097152,
+                                         "sha256":  "73293FB13BAFA1DC8E3C5F4F1A2A61A484F63EB79934D2817C5281CE373CA268"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_flash.bin",
+                                         "bytes":  2097152,
+                                         "sha256":  "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\original_flash.bin",
+                                         "bytes":  2097152,
+                                         "sha256":  "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\install_options.bin",
+                                         "bytes":  48,
+                                         "sha256":  "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_options.bin",
+                                         "bytes":  48,
+                                         "sha256":  "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\original_options.bin",
+                                         "bytes":  48,
+                                         "sha256":  "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\install_uid.bin",
+                                         "bytes":  12,
+                                         "sha256":  "300F21D40B7FBE16304FEFC74B22AC7A8C46BC85B2E01DD589FC3537EF63BCB9"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\restore_uid.bin",
+                                         "bytes":  12,
+                                         "sha256":  "300F21D40B7FBE16304FEFC74B22AC7A8C46BC85B2E01DD589FC3537EF63BCB9"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\rtc_app_hil_r1\\card_proof.json",
+                                         "bytes":  823,
+                                         "sha256":  "3C9258541057C69A1B5F401E2585F28162714622A02E3CE828136A2031B8FC3B"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\WILDX_console.exe",
+                                         "bytes":  2723328,
+                                         "sha256":  "E2E5F22A8F9A7EB46284475D142697398B623BF9030A979602D67966DCD5F249"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NpV2SdDatExport.dll",
+                                         "bytes":  644096,
+                                         "sha256":  "685A914554AA3EE6B1730755D1C30F51BEF04421F15FE3C3D4CD8746B9B0ADC1"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-199-grid.json",
+                                         "bytes":  34888,
+                                         "sha256":  "90AE6BCCFAE36FC14E529011230BFF2F97397144020AB7CE83D8FBD352389A00"
+                                     },
+                                     {
+                                         "path":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\test_only\\identity.json",
+                                         "bytes":  524,
+                                         "sha256":  "FAC3ED6E582AB1B0F5C247D68743E96494A93EB2A5E565F76EF16AC10E47FC2B"
+                                     }
+                                 ],
+                       "Count":  62
+                   },
+    "uid":  "001D00065942500B20313354",
+    "session":  1793326535,
+    "token_hex":  "409059D63DB1E9B7",
+    "generation":  2,
+    "source_epoch":  1,
+    "profile":  "P1+P2/20k",
+    "rtc":  {
+                "pc_declared_uncertainty_us":  23033,
+                "qualified":  true,
+                "full_width_us":  111,
+                "upper_us":  1793326539585533,
+                "pc_calibration_generation":  1,
+                "lower_us":  1793326539585422,
+                "pc_in_local_interval":  false
+            },
+    "np":  {
+               "verified_bytes":  1006632960,
+               "reported_continuity_loss_faults":  0,
+               "boundary_trims_disclosed":  "V1 · P1+P2 · 20,000 samples/s\r\n30.0 s recorded · 960.0 MiB · start LBA 83230720\r\nFirmware: APP Not reported  |  USB Not reported  |  Boot Not reported\r\nnp1: startup alignment 724 bytes; terminal partial AP row 596 bytes (including 56 incomplete frame bytes); initial partial LFP 6 AP rows; terminal partial LFP 8 AP rows.\r\nnp2: startup alignment 744 bytes; terminal partial AP row 576 bytes (including 36 incomplete frame bytes); initial partial LFP 6 AP rows; terminal partial LFP 8 AP rows.\r\nBoundary trims are disclosed separately; stored continuity does not prove every physical sample was captured.\r\nLongest recorded write transaction: 67.0 ms (not a CMD25 histogram).\r\nFull stored-data framing readback: 960.0 MiB.\r\nUSB readback is matched by MCU (where reported), session, profile and extent; it is not a reusable card certification.",
+               "actual_saved_first_byte_counter_matches_receipt":  true,
+               "asic_payload_checksum_claim":  false,
+               "chunks":  15360,
+               "per_stream_timestamp_metadata_populated":  false,
+               "rows":  [
+                            {
+                                "per_stream_source_tick_populated":  false,
+                                "probe":  1,
+                                "rows":  604946,
+                                "band":  "ap"
+                            },
+                            {
+                                "per_stream_source_tick_populated":  false,
+                                "probe":  1,
+                                "rows":  50411,
+                                "band":  "lfp"
+                            },
+                            {
+                                "per_stream_source_tick_populated":  false,
+                                "probe":  2,
+                                "rows":  604946,
+                                "band":  "ap"
+                            },
+                            {
+                                "per_stream_source_tick_populated":  false,
+                                "probe":  2,
+                                "rows":  50411,
+                                "band":  "lfp"
+                            }
+                        ]
+           },
+    "imu":  {
+                "physical_conversion_phase_locked":  false,
+                "phase_qualified":  false,
+                "sequence_resets":  0,
+                "raw_snapshots":  15360,
+                "valid_mag":  15352,
+                "fine_sidecar_present":  false,
+                "grid_rows":  37800,
+                "missing_after_first_observed":  0,
+                "valid_ag":  15354,
+                "advancing_sequences":  6028,
+                "observed":  37799,
+                "missing_initial_slot0":  1,
+                "tail_qualified":  false
+            },
+    "catalog":  {
+                    "all_prior_immutable_fields_preserved":  true,
+                    "before":  46,
+                    "owned_session_retained":  true,
+                    "card_capacity_sectors":  500695040,
+                    "after":  47
+                },
+    "firmware_installed":  [
+                               {
+                                   "body_bytes":  365520,
+                                   "body_crc":  "87109990",
+                                   "source":  "Saved installed wholeflash; not BLE reported version",
+                                   "body_sha256":  "6CD16CD22DD01D0541EFE022C33C60A9405F7F2C91075EA380CBCD923175237B",
+                                   "role":  "APP"
+                               },
+                               {
+                                   "body_bytes":  264808,
+                                   "body_crc":  "4F7B521A",
+                                   "source":  "Saved installed wholeflash; not BLE reported version",
+                                   "body_sha256":  "64888893963A7DF11CA444B58785CA96C24FDE2372BE5017AF057579DA35ECC4",
+                                   "role":  "USB"
+                               }
+                           ],
+    "paired_installed_fullflash_sha256":  "73293FB13BAFA1DC8E3C5F4F1A2A61A484F63EB79934D2817C5281CE373CA268",
+    "restoration":  {
+                        "reviewer_live_query":  false,
+                        "original_usb_profile":  "P1+P2+P3/7500",
+                        "lease_release":  "Owner handoff, no reviewer query",
+                        "options_sha256":  "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+                        "fullflash_sha256":  "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+                        "idle_saved_proof":  true,
+                        "exact_uid":  "001D00065942500B20313354"
+                    },
+    "qualification_scope":  "Measured candidate bytes and actual199 APIs; source test_only flag is provenance, not a permission policy. Changed release payloads require exact-byte mapping.",
+    "originals_unchanged":  true
+}

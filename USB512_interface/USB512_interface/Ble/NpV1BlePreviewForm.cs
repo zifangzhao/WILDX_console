@@ -19,6 +19,7 @@ namespace USB512_interface
         readonly Func<bool> controlsBusy;
         readonly NpCalibrationSet calibration;
         readonly int epoch;
+        bool workspaceUnavailable;
         internal Func<string> RecordingInfo;
         readonly Label recordingInfo=new Label{Dock=DockStyle.Top,Height=24,Padding=new Padding(10,3,10,0),AutoEllipsis=true,Visible=false};
         readonly NumericUpDown probe=new NumericUpDown{Minimum=1,Maximum=3,Value=1,Width=55};
@@ -146,7 +147,8 @@ namespace USB512_interface
         {
             if(closed)return;RefreshRecordingInfo();if(busy)return;busy=true;int generation=selectionVersion;
             try{
-                if(!Current()){phases.Clear();await StopPreview();info.Text=enabled.Checked?"Waiting for an active probe recording…":"Paused";return;}
+                if(!Current()){workspaceUnavailable=false;phases.Clear();await StopPreview();info.Text=enabled.Checked?"Waiting for an active probe recording…":"Paused";return;}
+                if(workspaceUnavailable)return;
                 if(activeId!=0 && activeSelection!=generation){await StopPreview(true);info.Text="Waiting for new preview selection…";return;}
                 bool controlBusy=controlsBusy();
                 if(activeId==0){
@@ -190,6 +192,7 @@ namespace USB512_interface
                 diagnostics.SetToolTip(info,"Subsampled preview; channel timestamps preserve their ADC offsets · gaps "+gaps+" · host drops "+hostDrops+" · packets "+packets);
                 if(idle>5000)throw new TimeoutException("LFP preview is waiting for data.");
             }catch(OperationCanceledException){}
+            catch(NpV1PreviewUnavailableException ex){workspaceUnavailable=true;await StopPreview();info.Text=ex.Message;}
             catch(TimeoutException ex){await RetryPreview(ex.Message,generation);}
             catch(IOException ex){await RetryPreview(ex.Message,generation,true);}
             catch(Exception ex){if(!closed && generation==selectionVersion){enabled.Checked=false;try{await StopPreview();}catch(OperationCanceledException){}info.Text=ex.Message;}}

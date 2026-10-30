@@ -1,0 +1,207 @@
+{
+  "result": "PASS bounded compact preview and full SD source-bit/export acceptance",
+  "uid": "001D00065942500B20313354",
+  "host_version": "1.0.0.138",
+  "app_crc32": "82E51DEA",
+  "usb_crc32": "4F7B521A",
+  "session": 1792909659,
+  "committed_chunks": 16768,
+  "raw_extent_bytes": 1107296256,
+  "raw_extent_sha256": "23E5B9681C8A07C0AB71980757D49BE6F0464EC8D0EC4BEDCE219E5EA73FAC23",
+  "exact_dat_lengths": [
+    {
+      "file": "np1_ap.dat",
+      "bytes": 507187200
+    },
+    {
+      "file": "np1_lfp.dat",
+      "bytes": 42264576
+    },
+    {
+      "file": "np2_ap.dat",
+      "bytes": 507187200
+    },
+    {
+      "file": "np2_lfp.dat",
+      "bytes": 42264576
+    }
+  ],
+  "prior_catalog_records_unchanged": 35,
+  "phases": [
+    {
+      "phase": "preview-off-before",
+      "seconds": 4.5344435,
+      "packets": 0,
+      "begin_chunks": 256,
+      "end_chunks": 2528,
+      "status_ms": [
+        114,
+        156,
+        111,
+        118
+      ]
+    },
+    {
+      "phase": "compact-ap",
+      "seconds": 10.4604471,
+      "packets": 301,
+      "begin_chunks": 2528,
+      "end_chunks": 7808,
+      "status_ms": [
+        95,
+        121,
+        187,
+        140,
+        158,
+        128,
+        114,
+        184,
+        233
+      ]
+    },
+    {
+      "phase": "compact-lfp",
+      "seconds": 10.2689808,
+      "packets": 194,
+      "begin_chunks": 7808,
+      "end_chunks": 13088,
+      "status_ms": [
+        123,
+        112,
+        116,
+        115,
+        159,
+        180,
+        118,
+        105,
+        114
+      ]
+    },
+    {
+      "phase": "preview-off-after",
+      "seconds": 4.4770857,
+      "packets": 0,
+      "begin_chunks": 13088,
+      "end_chunks": 15360,
+      "status_ms": [
+        86,
+        111,
+        113,
+        110
+      ]
+    }
+  ],
+  "preview_valid_samples": 27163,
+  "preview_explicit_missing_samples": 4581,
+  "framed_compact_packets": 507,
+  "framed_crc_errors": 0,
+  "channel_comparisons": [
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 0,
+      "samples": 4167,
+      "missing": 665,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 24,
+      "samples": 4167,
+      "missing": 665,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 25,
+      "samples": 4167,
+      "missing": 665,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "ap",
+      "probe": 1,
+      "channel": 383,
+      "samples": 4166,
+      "missing": 666,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 0,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 24,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 25,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    },
+    {
+      "band": "lfp",
+      "probe": 1,
+      "channel": 383,
+      "samples": 2624,
+      "missing": 480,
+      "mismatches": 0,
+      "phase_errors": 0,
+      "first_mismatch": null,
+      "passed": true
+    }
+  ],
+  "imu_valid_snapshots": 16768,
+  "uart_baud": 115200,
+  "higher_uart_promoted": false,
+  "limits": [
+    "One bounded P12/20k recording; four selected channels on P1, AP then LFP; not all ports/rates or endurance.",
+    "Preview remains best effort with explicit gaps; no claim of full-rate spike monitoring or physical ADC synchronization.",
+    "Observer r3 exit1 after successful Stop/catalog was post-restore status confirmation across a clock reset; fresh BLE identity/profile confirmation is separate.",
+    "No higher UART write/trial: module did not answer documented read queries;115200 unchanged.",
+    "USB streaming and speed evidence inherited unchanged from137/USB4F; not repeated for the APP-only preview change.",
+    "Faster UART remains blocked on confirmed module configuration access/rollback semantics; no higher-rate claim.",
+    "Source archive preserves admitted inputs and object identities; no full clean-rebuild claim."
+  ],
+  "host_sha256": "6E1A2E88B98E6DC55A2733082BECD8496913F91DA99A5C4A86876BC195B8DB86",
+  "source_archive_sha256": "28754D94A92D9D865427C90974028EE5F4D8D8A2881FA3DA3F26FE7B54804CCE",
+  "profile_restored_and_confirmed_on_fresh_ble_connection": true,
+  "final_setup": "stopped idle USB download; APP P12/15k restored; USB unchanged P12/20k",
+  "firmware_unchanged_boot_usb_configuration_options": true,
+  "firmware_rebuilt_during_packaging": false,
+  "published": false
+}

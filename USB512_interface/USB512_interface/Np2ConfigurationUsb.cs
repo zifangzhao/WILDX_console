@@ -21,7 +21,7 @@ namespace USB512_interface
 
         internal static Np2ConfigReply StageForCapture(NpV2UsbDevice device, Np2ConfigRequest request)
         {
-            return new Np2ConfigClient(new Np2ConfigurationUsb(device)).StageAsync(request, CancellationToken.None).GetAwaiter().GetResult();
+            return new Np2ConfigClient(new Np2ConfigurationUsb(device)).StageAsync(request, CancellationToken.None, true).GetAwaiter().GetResult();
         }
 
         internal static Np2ConfigReply ConfirmApplied(NpV2UsbDevice device, Np2ConfigRequest request)

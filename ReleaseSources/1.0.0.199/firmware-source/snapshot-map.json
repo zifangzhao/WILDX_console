@@ -1,0 +1,10 @@
+{
+  "scope": "Exact tested 8-slot V2 USB header retained before a separate laboratory edit",
+  "qualified_usb_crc32": "74A9B98B",
+  "snapshot": "V2/xe_np_np2_usb_wire.h",
+  "sha256": "58EDDA3385C58933DB2B752226375BB519F0648CA437993C23F500BF83A33AC6",
+  "historical_source": "D:/Code/XE_NP_V2/Core/Inc/xe_np_np2_usb_wire.h",
+  "owner_snapshot": "C:/Frank/Code/XE_NP/_artifacts/v2_usb_wire_before_11slot.h",
+  "new_11_slot_experiment_included": false,
+  "release_binary_changed": false
+}

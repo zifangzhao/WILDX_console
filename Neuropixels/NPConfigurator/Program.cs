@@ -17,6 +17,9 @@ internal static class Program
             if(args.Length==3 && args[0]=="--snapshot-v1") {
                 DeviceSelection.FromPayload(File.ReadAllBytes(args[1])).Save(args[2]);return 0;
             }
+            if(args.Length==3 && args[0]=="--snapshot-v2") {
+                Np2DeviceSelection.FromPayload(File.ReadAllBytes(args[1])).Save(args[2]);return 0;
+            }
             if(args.Length==5 && args[0]=="--prepare-v1") {
                 var c=DeviceSelection.LoadForPort(args[1],int.Parse(args[4],System.Globalization.CultureInfo.InvariantCulture));
                 var bytes=DeviceSelection.Compile(c);

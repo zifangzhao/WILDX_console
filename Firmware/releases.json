@@ -7,44 +7,44 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_IMU100_BLE_USB4F7B521A_APPB1758369_20261028",
+      "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
       "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
-      "stage": "SOFTWARE_CHECKED_CANDIDATE_NO_NEW_HIL",
-      "appVersion": "build B1758369",
-      "usbVersion": "1.0.108",
-      "recoveryVersion": "Included in fused HEX; version not reported",
-      "appCrc32": "B1758369",
-      "usbCrc32": "4F7B521A",
+      "stage": "USB and SD recording checked",
+      "appVersion": "build 87109990",
+      "usbVersion": "build 9D595E4D",
+      "recoveryVersion": "Unchanged bootloader / ABI258",
+      "appCrc32": "87109990",
+      "usbCrc32": "9D595E4D",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_APP_B1758369_IMU100_BLE_20261028.hex",
-        "sha256": "4E509A9D5AB0DC134B08B2583EFC47CEB30F148CDCC648334DB54B1717417A59"
+        "path": "V1/V1_APP_87109990_RTC_IMU_20261029.hex",
+        "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
       },
       "files": [
         {
-          "path": "V1/V1_APP_B1758369_IMU100_BLE_20261028.hex",
-          "sha256": "4E509A9D5AB0DC134B08B2583EFC47CEB30F148CDCC648334DB54B1717417A59"
+          "path": "V1/V1_APP_87109990_RTC_IMU_20261029.hex",
+          "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
         },
         {
-          "path": "V1/V1_DFU_boot_USB4F7B521A_lifecycle_20261025.hex",
-          "sha256": "7CF00B5675B35BD48A994204EAEA5966C3056ED5B0231DC963C6C835212C0C5F"
+          "path": "V1/V1_USB_service_9D595E4D_RTC_IMU_20261029.hex",
+          "sha256": "9BB9DB094C81C8F2FEAD4ABE253430E4A280547C2B8EB45B94820DC82A133199"
         },
         {
-          "path": "V1/V1_fused_BOOT_USB4F7B521A_APPB1758369_IMU100_BLE_20261028.hex",
-          "sha256": "085BFB32F8614B0122BDE1750731A9FA0D008D458385C8C45FA0C95C716BB394"
+          "path": "V1/V1_BOOT_DFU_unchanged_20261029.hex",
+          "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
         },
         {
-          "path": "V1/V1_USB_service_1.0.108_USB4F7B521A_lifecycle_20261025.hex",
-          "sha256": "0BDDFBEDDB1FE3F842E485732F0B1104AD75708EB8446A509AA26C943E5CCC2B"
+          "path": "V1/V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
+          "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9"
         }
       ],
-      "limits": "IMU-only software-checked candidate from production APP82/USB4F. No new hardware or installed-pair test. APP AG200Hz/MAG100Hz, cached sparse BLE query; unchanged USB retains MAG25Hz. 1250Hz analogin is host held-value compatibility, not native sensor rate. No prearm/first-sync/CL code. V1 writable SD already had no automatic full post-Stop payload readback; durable finalization/metadata checks and host verification retained. No new all-mode/endurance qualification.",
+      "limits": "USB and BLE-to-SD checked at two probes / 20kHz. PC uncertainty is separate from local RTC alignment. See acceptance.json for scope and initial IMU-slot limits.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 298268,
-        "codeCrc32": "B1758369",
-        "buildIdHex": "3862363563313361396133393262323438646237623230303835616236366236",
+        "bytes": 365520,
+        "codeCrc32": "87109990",
+        "buildIdHex": "3663643136636432326464303164303534316566653032326333336336306139",
         "manifestFlags": 0,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -52,14 +52,24 @@
       "usbIdentity": {
         "imageId": 1431519793,
         "baseAddress": 135790592,
-        "bytes": 264808,
-        "codeCrc32": "4F7B521A",
-        "buildIdHex": "3634383838383933393633613764663131636134343462353837383563613936",
+        "bytes": 330344,
+        "codeCrc32": "9D595E4D",
+        "buildIdHex": "6361636435353064306662323333616665313839306537393536636531303962",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 298268,
+          "codeCrc32": "B1758369",
+          "buildIdHex": "3862363563313361396133393262323438646237623230303835616236366236",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -132,6 +142,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 264808,
+          "codeCrc32": "4F7B521A",
+          "buildIdHex": "3634383838383933393633613764663131636134343462353837383563613936",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -269,95 +289,113 @@
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
-      "sourceCommitScope": "Retained production baseline commit; exact hotfix overlay and retained-object provenance are bound by sourceInputs.",
       "sourceInputs": {
         "baselineRelease": "APP82E51DEA",
         "sourceOverlaySha256": "102D0F6B7ED7DC59AEA302FF4D9DD5CB208249EE0C3AC498BD5F3A99BBC35135",
         "evidence": "ReleaseSources/1.0.0.158/firmware/V1"
       },
       "full": {
-        "path": "V1/V1_fused_BOOT_USB4F7B521A_APPB1758369_IMU100_BLE_20261028.hex",
-        "sha256": "085BFB32F8614B0122BDE1750731A9FA0D008D458385C8C45FA0C95C716BB394"
+        "path": "V1/V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
+        "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9"
+      },
+      "sourceCommitScope": "Exact incremental inputs and retained objects are identified by source-manifest.json; scoped USB and SD checks use these unchanged component bytes.",
+      "sourceProvenance": {
+        "ownerManifest": "V1/source-manifest.json",
+        "ownerManifestSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+        "packageReceiptSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+        "acceptance": "V1/acceptance.json",
+        "acceptanceSha256": "DAF895B31EEB3B6C876E3906D76EFB51E15DDF7811BD40F5CEE8D954A680D346",
+        "canonicalSourceEquivalenceClaimed": false
       }
     },
     {
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_RTC_FIRST_SAMPLE_APP46DF5009_USB62910614_20261029",
+      "release": "V2_RTC_START_APP194D9B94_USB74A9B98B_20261029",
       "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
-      "stage": "SD_TRIPLE20K_30S_CHECKED_USB_ACQUISITION_UNTESTED",
-      "appVersion": "build 46DF5009",
-      "usbVersion": "build 62910614",
+      "stage": "USB and SD recording checked",
+      "appVersion": "build 194D9B94",
+      "usbVersion": "build 74A9B98B",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "46DF5009",
-      "usbCrc32": "62910614",
+      "appCrc32": "194D9B94",
+      "usbCrc32": "74A9B98B",
       "recoveryCrc32": "6408DBB8",
-      "limits": "Validated one 30-second P1+P2+P3/20kHz SD run on Delkin V90: full 1092116480-byte readback, 23440 chunks, 600063 DAT rows/probe, all five reported loss counters zero. Saved IMU 5780 AG/2890 MAG observations, observed sequence gaps zero; not every physical conversion. Independent local RTC-to-first-NP full interval120us; pre-record PC calibration generation2 confirmed and bound. PC declared setup uncertainty20594us and separate stopped readback phase interval[-36669,+41237]us are not the120us local interval or a verified absolute PC-error guarantee. R6 USB acquisition/USB IMU physical recording remains untested. Normal SD-to-USB2/download3/full export passed. No all-mode/card/endurance/analog-quality or arbitrary ADC-bit-checksum guarantee. Whole fused image not newly flashed; exact checked components merged without rebuild. Lab originals restored after test.",
+      "limits": "USB and BLE-to-SD checked at three probes / 20 kHz. PC-time uncertainty is separate from local RTC alignment. Experimental grid disabled; see acceptance.json for scope and known issues.",
       "appIdentity": {
         "imageId": 1095782449,
+        "generation": 3,
         "baseAddress": 134348800,
-        "bytes": 279852,
-        "codeCrc32": "46DF5009",
-        "buildIdHex": "3638656433343063666236633234623534353830366364306136616562396562",
+        "bytes": 274764,
+        "codeCrc32": "194D9B94",
+        "buildIdHex": "6431393737323465333761666464353131313937363461666661626661343165",
         "manifestFlags": 0,
-        "minimumLoaderAbi": 4,
-        "generation": 3
+        "minimumLoaderAbi": 4
       },
       "usbIdentity": {
         "imageId": 1431519793,
+        "generation": 3,
         "baseAddress": 135790592,
-        "bytes": 237668,
-        "codeCrc32": "62910614",
-        "buildIdHex": "6364666230316562333162633565303534643232613332656330303235666430",
+        "bytes": 267228,
+        "codeCrc32": "74A9B98B",
+        "buildIdHex": "6563343136373737623263353765663764636232613830373065343365363361",
         "manifestFlags": 3,
-        "minimumLoaderAbi": 4,
-        "generation": 3
+        "minimumLoaderAbi": 4
       },
       "app": {
-        "path": "V2/V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.xenp",
-        "sha256": "060BC91098B46F78EA97237AA2C3D0ED37F2AF69E53A75F1D78A8E1A8E70908F"
+        "path": "V2/V2_APP_194D9B94_RTC_START_20261029.xenp",
+        "sha256": "69B509ACB34D6F19E9BA73F927AC54823C5A030D82185475822E00B8DE050935"
       },
       "full": {
-        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_62910614_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex",
-        "sha256": "22817BD623D7D73657202251E40419979DCB89FA8D3CFF1FE3451562BE1F8914"
+        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_74A9B98B_APP_194D9B94_RTC_START_20261029.hex",
+        "sha256": "7FFC34425952074C6AE88F59DDE575B7C7D235E4924C4CE56FFA54AE5DD0A6E6"
       },
       "files": [
         {
-          "path": "V2/V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex",
-          "sha256": "912BCA1508570A8D792E94E5CF76C97D0AD696BB984BCCB5F24BBC333C8C80D0"
+          "path": "V2/V2_APP_194D9B94_RTC_START_20261029.hex",
+          "sha256": "F165D2EACBA7A565D0CA9C19A4655F20D850DC0522487BAB004F8512217ADA82"
         },
         {
-          "path": "V2/V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.xenp",
-          "sha256": "060BC91098B46F78EA97237AA2C3D0ED37F2AF69E53A75F1D78A8E1A8E70908F"
+          "path": "V2/V2_APP_194D9B94_RTC_START_20261029.xenp",
+          "sha256": "69B509ACB34D6F19E9BA73F927AC54823C5A030D82185475822E00B8DE050935"
         },
         {
-          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_62910614_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex",
-          "sha256": "22817BD623D7D73657202251E40419979DCB89FA8D3CFF1FE3451562BE1F8914"
+          "path": "V2/V2_USB_74A9B98B_RTC_START_20261029.hex",
+          "sha256": "FEBFDD1424A674C8F89D864F050628B12AE0A458443E5627A8322C21A3478F95"
+        },
+        {
+          "path": "V2/V2_USB_74A9B98B_RTC_START_20261029.xenp",
+          "sha256": "09990B47E102DB33EFB3F2D66EA060BEBFFBB0305734A7C33708884C6297FBD2"
+        },
+        {
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_74A9B98B_APP_194D9B94_RTC_START_20261029.hex",
+          "sha256": "7FFC34425952074C6AE88F59DDE575B7C7D235E4924C4CE56FFA54AE5DD0A6E6"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-        },
-        {
-          "path": "V2/V2_USB_62910614_RTC_FIRST_SAMPLE_20261029.hex",
-          "sha256": "683A8F4BA40B7E3384F75EE00508D44563C3CAE92AB98A541CD4094BC6793714"
-        },
-        {
-          "path": "V2/V2_USB_62910614_RTC_FIRST_SAMPLE_20261029.xenp",
-          "sha256": "8963CBB6BF5C9656E2054FEBE19085C56BAC0A6C544516660AE51345D5BB0922"
         }
       ],
-      "sourceCommitScope": "Retained published baseline only; exact R6 incremental/retained-object source identities are bound by source-manifest.json and checked ARM review receipts.",
+      "sourceCommitScope": "Retained published R6 baseline; exact rebuilt inputs and scoped paired tests are bound by source-manifest.json and acceptance.json.",
       "sourceProvenance": {
         "ownerManifest": "V2/source-manifest.json",
-        "ownerManifestSha256": "E7C59BE394AD42F62EE30664C52776AACF12FDDB8D4E9957A0620EB610A89A62",
-        "packageReceiptSha256": "7AAADAEF80C75A2FC1D56725733D3D1022926FC3C93D35F0EA2B303ECCEDBF71",
+        "ownerManifestSha256": "F5922B3D5B3B118BD98F8BF06B3E59D9FACAEBDB2AB410EBDFF2B6467A3B0E06",
+        "packageReceiptSha256": "761D3220F9FCA9FEE43358F7916581B43C5E56E12B9862D511DC86422E919AFC",
         "acceptance": "V2/acceptance.json",
-        "acceptanceSha256": "7320E7A89DAFACDF053D5A855806E7F910CA0F3A545D1771F91D23E52001F96C",
+        "acceptanceSha256": "8930C5EDBAC4BD07C73811A58D3B2505C31CE9AE28491922E60D0A39ACC666B9",
         "canonicalSourceEquivalenceClaimed": false
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 279852,
+          "codeCrc32": "46DF5009",
+          "buildIdHex": "3638656433343063666236633234623534353830366364306136616562396562",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -440,6 +478,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 237668,
+          "codeCrc32": "62910614",
+          "buildIdHex": "6364666230316562333162633565303534643232613332656330303235666430",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,

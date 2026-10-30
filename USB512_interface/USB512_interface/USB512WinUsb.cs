@@ -865,6 +865,16 @@ namespace USB512_interface
         internal int RecoveryCount { get; private set; }
         internal int CompletionFailureRecoveryCount { get; private set; }
         internal int SubmitFailureRecoveryCount { get; private set; }
+        // Optional borrowed-pipe owners need an explicit positive retirement
+        // result. Dispose historically retains native slots on uncertainty.
+        internal bool RetirementConfirmed { get; private set; }
+        internal void Retire()
+        {
+            if (RetirementConfirmed) return;
+            if (disposed) throw new IOException("WinUSB reader disposal did not prove native retirement.");
+            RetirePendingReads();
+            RetirementConfirmed = true;
+        }
 
         // The capture-thread integrity gate calls this immediately when stream
         // packet numbering detects a missing transfer.  Recover before the
@@ -925,7 +935,7 @@ namespace USB512_interface
         // next call examines a different slot.
         internal int ReadInto(byte[] destination)
         {
-            if (disposed)
+            if (disposed || RetirementConfirmed)
                 throw new ObjectDisposedException("USB512WinUsbQueuedReader");
             if (destination == null)
                 throw new ArgumentNullException("destination");
@@ -1162,7 +1172,8 @@ namespace USB512_interface
             disposed = true;
             try
             {
-                RetirePendingReads();
+                if (!RetirementConfirmed) RetirePendingReads();
+                RetirementConfirmed = true;
             }
             catch
             {

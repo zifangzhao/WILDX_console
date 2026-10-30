@@ -1,0 +1,554 @@
+{
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "family": 1,
+      "boardIds": [
+        65537
+      ],
+      "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
+      "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
+      "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+      "stage": "USB and SD recording checked",
+      "appVersion": "build 87109990",
+      "usbVersion": "build 9D595E4D",
+      "recoveryVersion": "Unchanged bootloader / ABI258",
+      "appCrc32": "87109990",
+      "usbCrc32": "9D595E4D",
+      "recoveryCrc32": null,
+      "app": {
+        "path": "V1/V1_APP_87109990_RTC_IMU_20261029.hex",
+        "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
+      },
+      "files": [
+        {
+          "path": "V1/V1_APP_87109990_RTC_IMU_20261029.hex",
+          "sha256": "818AF7C8E74142A72584D8295DBBDF7CDC1DAA32ACA11FD113FFB7A29DAF1321"
+        },
+        {
+          "path": "V1/V1_USB_service_9D595E4D_RTC_IMU_20261029.hex",
+          "sha256": "9BB9DB094C81C8F2FEAD4ABE253430E4A280547C2B8EB45B94820DC82A133199"
+        },
+        {
+          "path": "V1/V1_BOOT_DFU_unchanged_20261029.hex",
+          "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
+        },
+        {
+          "path": "V1/V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
+          "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9"
+        }
+      ],
+      "limits": "USB and BLE-to-SD checked at two probes / 20kHz. PC uncertainty is separate from local RTC alignment. See acceptance.json for scope and initial IMU-slot limits.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "baseAddress": 134348800,
+        "bytes": 365520,
+        "codeCrc32": "87109990",
+        "buildIdHex": "3663643136636432326464303164303534316566653032326333336336306139",
+        "manifestFlags": 0,
+        "minimumLoaderAbi": 258,
+        "generation": 1
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "baseAddress": 135790592,
+        "bytes": 330344,
+        "codeCrc32": "9D595E4D",
+        "buildIdHex": "6361636435353064306662323333616665313839306537393536636531303962",
+        "manifestFlags": 1,
+        "minimumLoaderAbi": 258,
+        "generation": 1
+      },
+      "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 298268,
+          "codeCrc32": "B1758369",
+          "buildIdHex": "3862363563313361396133393262323438646237623230303835616236366236",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 296380,
+          "codeCrc32": "82E51DEA",
+          "buildIdHex": "3561636438633237373132353430633533616633346134636662393632613738",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 293564,
+          "codeCrc32": "CC50D8D2",
+          "buildIdHex": "3738666561656437363464643431396233386466386334613065333038616436",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 286012,
+          "codeCrc32": "654824DE",
+          "buildIdHex": "3833643434356263626333396334323666363332623962633832356333656265",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272336,
+          "codeCrc32": "FA2016E7",
+          "buildIdHex": "6630396433303531666335636535363665303138636633636665316461663264",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272112,
+          "codeCrc32": "8FD89229",
+          "buildIdHex": "3466663135343162613266386430633239373231363634636261306232353839",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272080,
+          "codeCrc32": "BC6B506E",
+          "buildIdHex": "6439626331393337336338666131343262623961613939316264313965623931",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 270512,
+          "codeCrc32": "BB1C7399",
+          "buildIdHex": "6633306230376638646337303461636636623963653161613536363632323066",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        }
+      ],
+      "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 264808,
+          "codeCrc32": "4F7B521A",
+          "buildIdHex": "3634383838383933393633613764663131636134343462353837383563613936",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "F2D80C4F",
+          "buildIdHex": "3664613030333361326137613962373337353665303965333466646134366437",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "F8E721C2",
+          "buildIdHex": "3062343931383364333239356131353139373430383763343532333336303865",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "B5FC4876",
+          "buildIdHex": "6637613863326236303266633134623663643238393962393031633637343863",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "D75CA6F9",
+          "buildIdHex": "6635363336646238343734306535316532336432616362613363343630663135",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "6CD1917C",
+          "buildIdHex": "3862656534316137316130633961363837653964396264313534623665626131",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "037CF67C",
+          "buildIdHex": "6435336435363937633331643032666662313032373534396435336635333264",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "22D0792B",
+          "buildIdHex": "6164393939666365633231663835623837303137343237623735316331373039",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "0E542BBD",
+          "buildIdHex": "3562376436356661333739636538623534336465653464646566316134326637",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "76E544AB",
+          "buildIdHex": "3062313861643431373365653131346131663262323562363133346465316436",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "02FF93A9",
+          "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "40D39075",
+          "buildIdHex": "3934386332396537623530363963656166656433653063326162366635613962",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "681B6C2A",
+          "buildIdHex": "3035613735613038383534346236623564343433376566633166313730613163",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "2F1C6BD5",
+          "buildIdHex": "3061393165653230303761656666636534656235613166623361376265383935",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        }
+      ],
+      "historySources": [
+        "e831a5f10c28c1df596766b195d4a48aeb38991d",
+        "72c432b59002d394e4d396b1dd078e203547981a",
+        "a6f2f8054dfdf528038802092c34040cbd29ce48",
+        "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
+      ],
+      "sourceInputs": {
+        "baselineRelease": "APP82E51DEA",
+        "sourceOverlaySha256": "102D0F6B7ED7DC59AEA302FF4D9DD5CB208249EE0C3AC498BD5F3A99BBC35135",
+        "evidence": "ReleaseSources/1.0.0.158/firmware/V1"
+      },
+      "full": {
+        "path": "V1/V1_fused_BOOT_USB9D595E4D_APP87109990_RTC_IMU_20261029.hex",
+        "sha256": "A4F7266DFA178AC00D3D3911DAF409F5860625DAEBEB14E913FE62734AC78CD9"
+      },
+      "sourceCommitScope": "Exact incremental inputs and retained objects are identified by source-manifest.json; scoped USB and SD checks use these unchanged component bytes.",
+      "sourceProvenance": {
+        "ownerManifest": "V1/source-manifest.json",
+        "ownerManifestSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+        "packageReceiptSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+        "acceptance": "V1/acceptance.json",
+        "acceptanceSha256": "DAF895B31EEB3B6C876E3906D76EFB51E15DDF7811BD40F5CEE8D954A680D346",
+        "canonicalSourceEquivalenceClaimed": false
+      }
+    },
+    {
+      "family": 2,
+      "boardIds": [],
+      "board": "WILD-X V2 / NP2",
+      "release": "V2_RTC_START_APP194D9B94_USB74A9B98B_20261029",
+      "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
+      "stage": "USB and SD recording checked",
+      "appVersion": "build 194D9B94",
+      "usbVersion": "build 74A9B98B",
+      "recoveryVersion": "build 6408DBB8",
+      "appCrc32": "194D9B94",
+      "usbCrc32": "74A9B98B",
+      "recoveryCrc32": "6408DBB8",
+      "limits": "USB and BLE-to-SD checked at three probes / 20 kHz. PC-time uncertainty is separate from local RTC alignment. Experimental grid disabled; see acceptance.json for scope and known issues.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "generation": 3,
+        "baseAddress": 134348800,
+        "bytes": 274764,
+        "codeCrc32": "194D9B94",
+        "buildIdHex": "6431393737323465333761666464353131313937363461666661626661343165",
+        "manifestFlags": 0,
+        "minimumLoaderAbi": 4
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "generation": 3,
+        "baseAddress": 135790592,
+        "bytes": 267228,
+        "codeCrc32": "74A9B98B",
+        "buildIdHex": "6563343136373737623263353765663764636232613830373065343365363361",
+        "manifestFlags": 3,
+        "minimumLoaderAbi": 4
+      },
+      "app": {
+        "path": "V2/V2_APP_194D9B94_RTC_START_20261029.xenp",
+        "sha256": "69B509ACB34D6F19E9BA73F927AC54823C5A030D82185475822E00B8DE050935"
+      },
+      "full": {
+        "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_74A9B98B_APP_194D9B94_RTC_START_20261029.hex",
+        "sha256": "7FFC34425952074C6AE88F59DDE575B7C7D235E4924C4CE56FFA54AE5DD0A6E6"
+      },
+      "files": [
+        {
+          "path": "V2/V2_APP_194D9B94_RTC_START_20261029.hex",
+          "sha256": "F165D2EACBA7A565D0CA9C19A4655F20D850DC0522487BAB004F8512217ADA82"
+        },
+        {
+          "path": "V2/V2_APP_194D9B94_RTC_START_20261029.xenp",
+          "sha256": "69B509ACB34D6F19E9BA73F927AC54823C5A030D82185475822E00B8DE050935"
+        },
+        {
+          "path": "V2/V2_USB_74A9B98B_RTC_START_20261029.hex",
+          "sha256": "FEBFDD1424A674C8F89D864F050628B12AE0A458443E5627A8322C21A3478F95"
+        },
+        {
+          "path": "V2/V2_USB_74A9B98B_RTC_START_20261029.xenp",
+          "sha256": "09990B47E102DB33EFB3F2D66EA060BEBFFBB0305734A7C33708884C6297FBD2"
+        },
+        {
+          "path": "V2/V2_fused_RECOVERY_6408DBB8_USB_74A9B98B_APP_194D9B94_RTC_START_20261029.hex",
+          "sha256": "7FFC34425952074C6AE88F59DDE575B7C7D235E4924C4CE56FFA54AE5DD0A6E6"
+        },
+        {
+          "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
+          "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+        }
+      ],
+      "sourceCommitScope": "Retained published R6 baseline; exact rebuilt inputs and scoped paired tests are bound by source-manifest.json and acceptance.json.",
+      "sourceProvenance": {
+        "ownerManifest": "V2/source-manifest.json",
+        "ownerManifestSha256": "F5922B3D5B3B118BD98F8BF06B3E59D9FACAEBDB2AB410EBDFF2B6467A3B0E06",
+        "packageReceiptSha256": "761D3220F9FCA9FEE43358F7916581B43C5E56E12B9862D511DC86422E919AFC",
+        "acceptance": "V2/acceptance.json",
+        "acceptanceSha256": "8930C5EDBAC4BD07C73811A58D3B2505C31CE9AE28491922E60D0A39ACC666B9",
+        "canonicalSourceEquivalenceClaimed": false
+      },
+      "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 279852,
+          "codeCrc32": "46DF5009",
+          "buildIdHex": "3638656433343063666236633234623534353830366364306136616562396562",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 211436,
+          "codeCrc32": "EC5C2198",
+          "buildIdHex": "3366386166343761376636313835343639333934666331396335386638313165",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 212364,
+          "codeCrc32": "C250DF48",
+          "buildIdHex": "3662616531323266386465343434373165646632646234323430323834343264",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 205164,
+          "codeCrc32": "8DE56637",
+          "buildIdHex": "3065323336356162653238356433313438356133653061363664623065373031",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 189740,
+          "codeCrc32": "D44907A5",
+          "buildIdHex": "3764353638633737326438376661653530356231316636633730363864313864",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 184716,
+          "codeCrc32": "660A6DA4",
+          "buildIdHex": "3831626561303066323366383536393438343834616237326434636639393834",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 181680,
+          "codeCrc32": "15FAE47B",
+          "buildIdHex": "6161353261646565316163316662306439343561323666643966343731316133",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 172400,
+          "codeCrc32": "B60291EE",
+          "buildIdHex": "3935343863363038383263383531373731646136666161323639323265363636",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 2
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 172400,
+          "codeCrc32": "136172A5",
+          "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        }
+      ],
+      "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 237668,
+          "codeCrc32": "62910614",
+          "buildIdHex": "6364666230316562333162633565303534643232613332656330303235666430",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 187716,
+          "codeCrc32": "A71BDECC",
+          "buildIdHex": "6237356438643139633833613061396533323562663435623534663139646363",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 184740,
+          "codeCrc32": "13ED1F8E",
+          "buildIdHex": "6330383438373565383131316430643634643535623538393335653966633636",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 184740,
+          "codeCrc32": "1D3262FB",
+          "buildIdHex": "3339316561376634633466393534623737366539653137653433376631356138",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 176608,
+          "codeCrc32": "B6099A0E",
+          "buildIdHex": "6636396235343538613763616539306533633238646637666666643137623630",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 172512,
+          "codeCrc32": "E323A06A",
+          "buildIdHex": "6465633132346261313030393634363735366335383836323330306432653938",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 159296,
+          "codeCrc32": "2E07799E",
+          "buildIdHex": "6563333565636665343430343235373164376566303065616437393465323738",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        }
+      ]
+    }
+  ]
+}

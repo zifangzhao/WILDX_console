@@ -4,6 +4,8 @@ internal static class Np2DeviceSelectionTests
 {
     public static void Run(string[] paths)
     {
+        string? output=null;
+        if(paths.Length>=2 && paths[0]=="--output") {output=paths[1];Directory.CreateDirectory(output);paths=paths.Skip(2).ToArray();}
         int assertions = 0;
         void Check(bool condition, string message)
         {
@@ -55,6 +57,13 @@ internal static class Np2DeviceSelectionTests
             for (int s = 0; s < 4; s++) for (int bit = 0; bit < 1288; bit++)
                 Check(Bit(bytes, s, bit) == (expectedBits.Contains((s, bit)) ? 1 : 0), "All shank electrode/reference/dummy bits");
             Check(c.Channels.Select(x => (x.Shank, x.Site)).Distinct().Count() == 384, "384 unique active physical sites");
+            var recovered=Np2DeviceSelection.FromPayload(bytes);
+            Check(recovered.HardwareState=="NotApplied" && recovered.Connector==c.Connector,"Recovered staged request has no applied claim");
+            var restored=Np2DeviceSelection.Compile(recovered);
+            Check(restored.AsSpan(40).SequenceEqual(bytes.AsSpan(40)),"Every saved routing/reference bit round trips");
+            string imro=StandardFormats.ToImro(recovered);
+            var imported=StandardFormats.FromImro(imro);imported.Connector=recovered.Connector;
+            Check(Np2DeviceSelection.Compile(imported).AsSpan(40).SequenceEqual(bytes.AsSpan(40)),"Regenerated IMRO preserves all routing/reference bits");
         }
         ProbeConfiguration Ground()
         {
@@ -73,7 +82,15 @@ internal static class Np2DeviceSelectionTests
         {
             var c = ground.Clone(); c.Connector = port;
             Verify(c, Np2DeviceSelection.Compile(c));
+            if(output!=null){c.Save(Path.Combine(output,$"probe_{port}.json"));File.WriteAllBytes(Path.Combine(output,$"probe_{port}.n2b1"),Np2DeviceSelection.Compile(c));}
         }
+        var dispersed=ground.Clone();
+        foreach(var channel in dispersed.Channels) {
+            channel.Shank=channel.Channel%4;
+            var sites=Enumerable.Range(0,1280).Where(s=>Catalog.Channel(dispersed.Profile,channel.Shank,s)==channel.Channel).ToArray();
+            channel.Site=sites[channel.Channel%sites.Length];
+        }
+        Verify(dispersed,Np2DeviceSelection.Compile(dispersed));
         var external = ground.Clone();
         foreach (var channel in external.Channels) channel.Reference = "External";
         Verify(external, Np2DeviceSelection.Compile(external));
@@ -117,6 +134,11 @@ internal static class Np2DeviceSelectionTests
         var reordered = ground.Clone(); reordered.Channels.Reverse();
         Check(Np2DeviceSelection.Compile(reordered).SequenceEqual(payload), "Canonical channel order gives stable payload/identity");
         Check(Np2DeviceSelection.Compile(ground).SequenceEqual(payload), "Repeat compilation stable");
+        foreach(int offset in new[]{0,4,5,6,7,40,683,684}) {
+            var broken=(byte[])payload.Clone();broken[offset]=255;
+            bool rejected=false;try{Np2DeviceSelection.FromPayload(broken);}catch(InvalidDataException){rejected=true;}
+            Check(rejected,"Malformed saved request refused at "+offset);
+        }
         foreach (string path in paths)
         {
             var c = Np2DeviceSelection.LoadForPort(path, 2);

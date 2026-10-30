@@ -19,7 +19,28 @@ namespace CE32_console
         private readonly short[] apFrame=new short[Channels];
         private readonly ushort[] words=new ushort[32];
         private int lfpSlot, lfpCollected;
-        private bool recordingResetDeclared, lfpPhaseInitialized;
+        private bool recordingResetDeclared, lfpPhaseInitialized, lfpGap, recovering, bestEffort;
+        // Opt-in V1 only; >= half a 20-bit counter epoch is ambiguous.
+        internal bool BestEffort {
+            get{return bestEffort;}
+            set{
+                if(locked || pendingCount!=0 || failed || completed)throw new IOException("NP recovery policy cannot change after decoding starts.");
+                if(value && Layout!=NpCe64LaneLayout.GpioV1Quad)throw new IOException("Best-effort decoding requires the explicit V1 quad layout.");
+                bestEffort=value;
+            }
+        }
+        internal Action<long,long> Gap;
+        internal long MissingApRows {get;private set;}
+        internal long MissingLfpRows {get;private set;}
+        internal long GapEvents {get;private set;}
+        internal long RecoveryDiscardedBytes {get;private set;}
+        internal long IncompleteTailBytes {get;private set;}
+        internal long ApRowsEmitted {get;private set;}
+        internal long LogicalApRows {get{return ApRowsEmitted;}}
+        internal bool CurrentApMissing {get;private set;}
+        internal bool CurrentLfpMissing {get;private set;}
+        internal bool Lossless {get{return !failed && GapEvents==0 && FrameErrors==0 && CounterErrors==0 && StartupDiscardedBytes==0;}}
+        internal uint LastSuperframeCounter {get;private set;}
         internal int InitialLfpSlot { get; private set; } = -1;
         internal uint FirstSuperframeCounter { get; private set; }
         internal long StartupDiscardedLfpSuperframes { get; private set; }
@@ -133,6 +154,41 @@ namespace CE32_console
             }
             lastCounter=count;FramesChecked++;
         }
+        private bool WholeRowValid(int offset,out bool counterError)
+        {
+            counterError=false;uint previous=lastCounter;
+            for(int f=0;f<13;f++) {
+                int at=offset+f*60;
+                if(!FrameIsValid(at,f==0?SyncSuperframe:SyncFrame,Layout,ExpectedFixedWord))return false;
+                uint c=Counter(at,Layout);
+                if((f>0 || FramesChecked>0) && c!=((previous+1)&0xFFFFF)){counterError=true;return false;}
+                previous=c;
+            }
+            return true;
+        }
+        private void Emit(short[] ap,int na,short[] lfp,int nl,bool missingAp,Action<short[],int,short[],int> output)
+        {
+            CurrentApMissing=missingAp;CurrentLfpMissing=nl!=0 && lfpGap;
+            if(CurrentLfpMissing){Array.Clear(lfpAssembly,0,lfpAssembly.Length);MissingLfpRows++;}
+            ApRowsEmitted+=na;
+            try{output(ap,na,lfp,nl);}finally{CurrentApMissing=false;CurrentLfpMissing=false;}
+        }
+        private void Recover(int offset,Action<short[],int,short[],int> output)
+        {
+            uint delta=(Counter(offset,Layout)-((lastCounter+1)&0xFFFFF))&0xFFFFF;
+            if(delta>=0x80000 || delta%13!=0){failed=true;throw new IOException("NP1 gap has an ambiguous counter epoch or non-row duration; no timeline was invented.");}
+            long rows=delta/13;GapEvents++;MissingApRows+=rows;
+            if(Gap!=null)Gap(LogicalApRows,rows);
+            Array.Clear(apFrame,0,apFrame.Length);
+            for(long i=0;i<rows;i++) {
+                if(lfpSlot==0)lfpCollected=0;
+                lfpGap=true;lfpCollected++;
+                lastCounter=(lastCounter+13)&0xFFFFF;LastSuperframeCounter=lastCounter;
+                if(++lfpSlot==12){lfpSlot=0;Emit(apFrame,1,lfpAssembly,1,true,output);}
+                else Emit(apFrame,1,null,0,true,output);
+            }
+            Resynchronizations++;recovering=false;
+        }
         internal void Feed(byte[] lanes,Action<short[],int,short[],int> onSamples)
         { Feed(lanes,0,lanes.Length,onSamples); }
         internal void Feed(byte[] lanes,int offset,int count,Action<short[],int,short[],int> onSamples)
@@ -162,7 +218,25 @@ namespace CE32_console
             }
             int consumed=0;
             while(pendingCount-consumed>=SuperframeBytes) {
-                for(int frame=0;frame<13;frame++)CheckFrame(consumed+frame*60,frame==0?SyncSuperframe:SyncFrame);
+                if(BestEffort) {
+                    if(recovering) {
+                        int start=consumed;
+                        while(start<=pendingCount-StartupBytes && !StartupIsValid(start,Layout,ExpectedFixedWord))start++;
+                        if(start>pendingCount-StartupBytes) {
+                            int discard=Math.Max(0,pendingCount-consumed-(StartupBytes-1));
+                            RecoveryDiscardedBytes+=discard;consumed+=discard;
+                            break;
+                        }
+                        RecoveryDiscardedBytes+=start-consumed;consumed=start;Recover(consumed,onSamples);
+                    }
+                    bool counterError;
+                    if(!WholeRowValid(consumed,out counterError)) {
+                        if(counterError)CounterErrors++;else FrameErrors++;
+                        recovering=true;continue;
+                    }
+                    lastCounter=Counter(consumed+12*60,Layout);FramesChecked+=13;
+                } else for(int frame=0;frame<13;frame++)CheckFrame(consumed+frame*60,frame==0?SyncSuperframe:SyncFrame);
+                LastSuperframeCounter=lastCounter;
                 DecodeSuperframe(consumed,onSamples);consumed+=SuperframeBytes;
             }
             if(consumed>0)RemovePrefix(consumed);
@@ -176,7 +250,14 @@ namespace CE32_console
             if(completed)return;
             if(failed)throw new IOException("NP1 decoder previously failed.");
             if(!locked)throw new IOException("No qualified pair of NP1 superframes was received.");
-            for(int frame=0;frame<pendingCount/60;frame++)CheckFrame(frame*60,frame==0?SyncSuperframe:SyncFrame);
+            if(BestEffort) {
+                IncompleteTailBytes=pendingCount;
+                if(!recovering)for(int frame=0;frame<pendingCount/60;frame++) {
+                    if(!FrameIsValid(frame*60,frame==0?SyncSuperframe:SyncFrame,Layout,ExpectedFixedWord)){FrameErrors++;break;}
+                    if(Counter(frame*60,Layout)!=((lastCounter+1)&0xFFFFF)){CounterErrors++;break;}
+                    lastCounter=Counter(frame*60,Layout);FramesChecked++;
+                }
+            } else for(int frame=0;frame<pendingCount/60;frame++)CheckFrame(frame*60,frame==0?SyncSuperframe:SyncFrame);
             completed=true;
         }
         private void DecodeSuperframe(int offset,Action<short[],int,short[],int> onSamples)
@@ -196,7 +277,7 @@ namespace CE32_console
             // avoids ~25 MB/s of managed allocation at 30 kS/s.
             short[] ap=apFrame;
             ExtractAdcWords(offset);
-            if(lfpSlot==0)lfpCollected=0;
+            if(lfpSlot==0){lfpCollected=0;lfpGap=false;}
             // Nominal ADC counts: remove mid-supply and undo ASIC negative gain.
             // Apply once at the decoded-sample boundary; framing stays raw.
             for(int adc=0;adc<32;adc++)lfpAssembly[AdcWordToChannel(adc,lfpSlot)]=(short)(512-(int)words[adc]);
@@ -207,9 +288,9 @@ namespace CE32_console
             }
             if(++lfpSlot==12) {
                 lfpSlot=0;
-                if(lfpCollected==12)onSamples(ap,1,lfpAssembly,1);
-                else {StartupDiscardedLfpSuperframes+=lfpCollected;onSamples(ap,1,null,0);}
-            } else onSamples(ap,1,null,0);
+                if(lfpCollected==12)Emit(ap,1,lfpAssembly,1,false,onSamples);
+                else {StartupDiscardedLfpSuperframes+=lfpCollected;Emit(ap,1,null,0,false,onSamples);}
+            } else Emit(ap,1,null,0,false,onSamples);
         }
         private void ExtractAdcWords(int offset)
         {

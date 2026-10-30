@@ -130,7 +130,7 @@ namespace USB512_interface
             catalog=value;records.BeginUpdate();records.Items.Clear();double used=0;bool append=false;
             foreach(var record in value.Records){
                 string status=value.V2==null?(value.V1ReadOnly?"Read-only":"—"):NpV2BleCatalog.RecordStatus(record);
-                append|=value.V2!=null && (record.Flags&255)==14;
+                append|=value.V2!=null && ((record.Flags&255)==14 || (record.Flags&255)==15);
                 records.Items.Add(new ListViewItem(new[]{record.Id.ToString(),record.MiB.ToString("N2"),record.Start.ToString("N0"),record.End.ToString("N0"),status}));used+=record.MiB;
             }
             records.EndUpdate();info.Text=value.Records.Count+" recordings · "+used.ToString("N2")+" MiB allocated · card "+(capacity*512.0/1073741824).ToString("N2")+" GiB";

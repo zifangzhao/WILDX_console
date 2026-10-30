@@ -1,9 +1,7 @@
-# WILD-X 1.0.0.189
+# WILD-X1.0.0.199
 
-[Download installer](WILDX_console-Setup-1.0.0.189.exe). Matching firmware and catalog are included; no separate update ZIP is needed.
+[Download the installer](WILDX_console-Setup-1.0.0.199.exe).
 
-Includes the V2 hardware RTC update (APP 46DF5009, USB 62910614, recovery 6408DBB8), saved first-sample timing evidence, IMU export and shorter Stop finalization. A 30-second SD recording with three probes at 20 kHz passed neural and IMU checks. The first NP start was bounded to a 120 µs full interval relative to the device RTC; PC synchronization uncertainty is separate.
+The installer includes the matching V1 and V2 firmware. USB60-second and BLE-to-SD30-second tests at20kHz passed with saved IMU data and zero reported NP continuity faults. Full device-local RTC-to-first-NP intervals: V1 111microseconds in both modes; V2 120microseconds USB and121microseconds SD. PC synchronization uncertainty is separate.
 
-V1 firmware remains APP B1758369 / USB 4F7B521A while its new RTC firmware is tested. Installing the console does not flash devices. Use **Advanced → Firmware update** to select the bundled firmware.
-
-[Validation and limits](../ReleaseSources/1.0.0.189/README.md). V2 USB acquisition with this firmware and alignment of every stream remain under investigation.
+The experimental V2 hardware IMU grid remains disabled. Detailed scope, initial IMU-slot and timing limits are in the release manifest and ReleaseSources/1.0.0.199. Earlier installers are recoverable under legacy; this root contains one current installer and no separate firmware ZIP.

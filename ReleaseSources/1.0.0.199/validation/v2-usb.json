@@ -1,0 +1,277 @@
+{
+    "rtc":  {
+                "generation":  1,
+                "full_width_us":  120,
+                "token_hex":  "46BF1F13B5355282",
+                "qualified":  true,
+                "pc_uncertainty_us":  1099,
+                "calibration_generation":  2,
+                "upper_us":  1793322775610765,
+                "lower_us":  1793322775610645,
+                "uid":  "001A0004434250062039314E",
+                "pc_uncertainty_in_local_bound":  false
+            },
+    "builds":  0,
+    "conclusions":  [
+                        "Ordinary mode actual199/production USB capture NP47196verified/drop/error0 and legacyIMU saved/fresh data pass.",
+                        "Strict raw RTC reparse and canonical full120us satisfy local\u003c1000us; PC1099us uncertainty remains separate.",
+                        "Initial helper failed only because it compared correlation requestID/CRC byte-identically; all physical fields match and both original receipts validate.",
+                        "Ordinary legacyIMU has1200 fresh retained observations and75369 held-value rows; native_sequence_gaps10802 reflect sparse observation and are not lossless200Hz/deterministicgrid proof.",
+                        "No grid/NSGP/terminal/tail/physical sensor phase or both-family/BLESD qualification claimed."
+                    ],
+    "np":  {
+               "bounded_capture_seconds":  60.425,
+               "asic_checksum_claim":  false,
+               "verified":  47196,
+               "rows":  [
+                            {
+                                "first_source_tick":  1176,
+                                "file_bytes":  927909888,
+                                "probe":  1,
+                                "rows":  1208216
+                            },
+                            {
+                                "first_source_tick":  1396,
+                                "file_bytes":  927909888,
+                                "probe":  2,
+                                "rows":  1208216
+                            },
+                            {
+                                "first_source_tick":  1356,
+                                "file_bytes":  927909888,
+                                "probe":  3,
+                                "rows":  1208216
+                            }
+                        ],
+               "raw_decode_drops":  0,
+               "raw_payload_rescan":  false,
+               "capture_producer_source_errors":  0,
+               "received":  47196
+           },
+    "run_folder":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35",
+    "checks":  123,
+    "restoration":  {
+                        "idle_and_lease_release":  "No live reviewer query; hardware-owner handoff required for final idle/lease state",
+                        "byte_readback_verified":  true,
+                        "installed_full_candidate_sha256":  "9ECA5AA2D845DCCC1526D73E0D7990567B6EB8D3B6E9DD7AB53B2835683B5FFD",
+                        "expected_full_candidate_sha256":  "9ECA5AA2D845DCCC1526D73E0D7990567B6EB8D3B6E9DD7AB53B2835683B5FFD",
+                        "restored_options_sha256":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+                        "restored_full_4mib_sha256":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                        "exact_uid":  "001A0004434250062039314E"
+                    },
+    "originals_unchanged":  true,
+    "scope":  "File-only ordinary production V2 USB199/74A9B98B review, both lab flags absent",
+    "anchor_comparison":  {
+                              "stopped_request_id":  0,
+                              "cached_kind5_root_request_id_hex":  "6DA7342C",
+                              "stopped_crc_hex":  "19CAB84A",
+                              "root_crc_hex":  "2EEB5D74",
+                              "actual_different_offsets":  [
+                                                               8,
+                                                               9,
+                                                               10,
+                                                               11,
+                                                               60,
+                                                               61,
+                                                               62,
+                                                               63
+                                                           ],
+                              "reason":  "Stopped GetAcquisitionAnchor uses0x7E with default value/index0 and Read defaultrequestId0. Kind5 cached root requires nonzeroID and is independently UID/token/finalgen/sequence/CRC bound. Ignore only transport correlation ID and consequent CRC after individual strict validation; never rewrite raw bytes.",
+                              "both_individually_parsed_with_exact_expected_ids_and_crc":  true,
+                              "original_helper_failure_preserved":  true,
+                              "physical_fields":  {
+                                                      "CounterHz":  1000000,
+                                                      "Generation":  1,
+                                                      "Origin":  0,
+                                                      "AfterCycles":  33,
+                                                      "BeforeMs":  71349,
+                                                      "Flags":  543,
+                                                      "SampleHz":  20000,
+                                                      "AfterMs":  71349,
+                                                      "BeforeCycles":  27,
+                                                      "SourceHz":  32000000
+                                                  },
+                              "all_physical_fields_identical":  true
+                          },
+    "hardware_calls":  0,
+    "input_pins":  {
+                       "value":  [
+                                     {
+                                         "sha256":  "E2E5F22A8F9A7EB46284475D142697398B623BF9030A979602D67966DCD5F249",
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\WILDX_console.exe"
+                                     },
+                                     {
+                                         "sha256":  "685A914554AA3EE6B1730755D1C30F51BEF04421F15FE3C3D4CD8746B9B0ADC1",
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NpV2SdDatExport.dll"
+                                     },
+                                     {
+                                         "sha256":  "4AA5ECBB9F20B252F69F2B49B474D9E8313FEFC56D4A0F7E7F4368C7DC6FE9A6",
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ordinary_v2_host199_20261029\\NpV2OrdinaryUsbHardware199.exe"
+                                     },
+                                     {
+                                         "sha256":  "D0AE342686EA744001ABD29654C156A7B6F59767C92940EABF6B6E49A42ACF34",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\experiment.json"
+                                     },
+                                     {
+                                         "sha256":  "8017BDA332B934B1B0D8F6DD2312CB1B51ACAD8E2AF80A135EE1B4B3818F4C59",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\ordinary-independent-check.json"
+                                     },
+                                     {
+                                         "sha256":  "93FADEC66D8BB38E7E2C03714D854EA8911F31F35E958612F23ECE5A0CE00A34",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\device-state.json"
+                                     },
+                                     {
+                                         "sha256":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\swd-restored-full.bin"
+                                     },
+                                     {
+                                         "sha256":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\swd-restored-options.bin"
+                                     },
+                                     {
+                                         "sha256":  "C2429B618221D7A8AC180CCB016CDEF5DBB48362B932D99285FC0D4EFE37DCB8",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\swd-restore-uid.bin"
+                                     },
+                                     {
+                                         "sha256":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\original-a.bin"
+                                     },
+                                     {
+                                         "sha256":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\original-b.bin"
+                                     },
+                                     {
+                                         "sha256":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\original-options.bin"
+                                     },
+                                     {
+                                         "sha256":  "9ECA5AA2D845DCCC1526D73E0D7990567B6EB8D3B6E9DD7AB53B2835683B5FFD",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\expected.bin"
+                                     },
+                                     {
+                                         "sha256":  "9ECA5AA2D845DCCC1526D73E0D7990567B6EB8D3B6E9DD7AB53B2835683B5FFD",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\installed-full.bin"
+                                     },
+                                     {
+                                         "sha256":  "A6F2F0C44C8AF0803DE95BB41F0C242724692A6E3A028C31636CD80EF0D6CE7F",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\recording_settings.json"
+                                     },
+                                     {
+                                         "sha256":  "D0ADD6BD8B5FD8460E3E949EE11784C62105E156E1908085736EF75A1B33B962",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\recording_start_utc.json"
+                                     },
+                                     {
+                                         "sha256":  "B511525D17B889BD5E2598C6ED324F1254B973F6C52983952590909C54E8FDCA",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\usb_first_sync_receipt.bin"
+                                     },
+                                     {
+                                         "sha256":  "F99D8C5CB34A05604F68A3D557478C1723DB5F5EAFAAFD4709FED35112E3EEA6",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\usb_rtc_start.bin"
+                                     },
+                                     {
+                                         "sha256":  "3BEC6E95ADD19E06BDC774AB1C764DE83C34C106C4E11F030B7E3366E1863DFF",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\acquisition_anchor.bin"
+                                     },
+                                     {
+                                         "sha256":  "F6EDF297A9991B2B1CF8F1CD7CBF84691F248197C8B534E8D7B3D3DA4FD87E0F",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\first_sample_timestamps.json"
+                                     },
+                                     {
+                                         "sha256":  "5901A5B14F0591053B31DADB03FA49119D04707B830DF57C3921E0C8BD0969BE",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\usb_timing_evidence.jsonl"
+                                     },
+                                     {
+                                         "sha256":  "6D1A8659AB7D749FDD62997958D1AE69A5663AE9DA8BBDD449DFCCBF4B7BBE7B",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\neuropixels_np2usb_status.txt"
+                                     },
+                                     {
+                                         "sha256":  "7F5565DEED53B2251BB7E62C72782814C64B91447899998886D8F7789169A073",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\analogin.dat"
+                                     },
+                                     {
+                                         "sha256":  "814ECEC4612BD31A1010E4177A25BE707E63E746A13B0EA3F844104992B91727",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\analogin_encoding.txt"
+                                     },
+                                     {
+                                         "sha256":  "0CB4CC0F92551F875E5B6F6A3135774320E8E1C5B05D398FBB25E607C7716F98",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_native_samples_status.json"
+                                     },
+                                     {
+                                         "sha256":  "CF7FB9ABDBA0A45AD740F7A6F182567BE8C168742DD6B333A1375C156115A39E",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_native_samples.jsonl"
+                                     },
+                                     {
+                                         "sha256":  "0389A50E7A303F173682F22D531DAA06906006B261A9E17D1CE4DC8097326F03",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_snapshots.bin"
+                                     },
+                                     {
+                                         "sha256":  "F80FCE6CD396484AC0F78079B365A77C5B3EC0DA1FEF0E1B8D1643947BEC399D",
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_observation_status.txt"
+                                     }
+                                 ],
+                       "Count":  28
+                   },
+    "imu_sparse_native_status":  {
+                                     "schema":  1,
+                                     "observations":  1201,
+                                     "retained_samples":  1200,
+                                     "accepted_samples":  1200,
+                                     "invalid_observations":  1,
+                                     "duplicate_observations":  0,
+                                     "sequence_gaps":  10802,
+                                     "reset_segments":  0,
+                                     "error":  null,
+                                     "limitation":  "Distinct valid retained observations only; sequence gaps and missed estimates are not an exact count of lost ADC conversions. analogin.dat remains a held-value compatibility grid."
+                                 },
+    "imu":  {
+                "success":  true,
+                "legacy_analog_rows":  75369,
+                "held_ag_rows":  75369,
+                "held_mag_rows":  75369,
+                "raw_snapshots":  1201,
+                "raw_fresh_ag":  1200,
+                "raw_fresh_mag":  1200,
+                "distinct_native_ag":  1200,
+                "distinct_native_mag":  1200,
+                "native_conversion_phase_locked":  false,
+                "np_grid_alignment_claimed":  false,
+                "semantics":  "1250Hz held-value compatibility data; sparse native observations, not lossless 200Hz or deterministic grid proof"
+            },
+    "protected_file_sha256":  {
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\usb_timing_evidence.jsonl":  "5901A5B14F0591053B31DADB03FA49119D04707B830DF57C3921E0C8BD0969BE",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\swd-restored-full.bin":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\usb_rtc_start.bin":  "F99D8C5CB34A05604F68A3D557478C1723DB5F5EAFAAFD4709FED35112E3EEA6",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\expected.bin":  "9ECA5AA2D845DCCC1526D73E0D7990567B6EB8D3B6E9DD7AB53B2835683B5FFD",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\first_sample_timestamps.json":  "F6EDF297A9991B2B1CF8F1CD7CBF84691F248197C8B534E8D7B3D3DA4FD87E0F",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_native_samples_status.json":  "0CB4CC0F92551F875E5B6F6A3135774320E8E1C5B05D398FBB25E607C7716F98",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_observation_status.txt":  "F80FCE6CD396484AC0F78079B365A77C5B3EC0DA1FEF0E1B8D1643947BEC399D",
+                                  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\ordinary_v2_host199_20261029\\NpV2OrdinaryUsbHardware199.exe":  "4AA5ECBB9F20B252F69F2B49B474D9E8313FEFC56D4A0F7E7F4368C7DC6FE9A6",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\swd-restored-options.bin":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\recording_settings.json":  "A6F2F0C44C8AF0803DE95BB41F0C242724692A6E3A028C31636CD80EF0D6CE7F",
+                                  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\WILDX_console.exe":  "E2E5F22A8F9A7EB46284475D142697398B623BF9030A979602D67966DCD5F249",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\analogin_encoding.txt":  "814ECEC4612BD31A1010E4177A25BE707E63E746A13B0EA3F844104992B91727",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_native_samples.jsonl":  "CF7FB9ABDBA0A45AD740F7A6F182567BE8C168742DD6B333A1375C156115A39E",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\acquisition_anchor.bin":  "3BEC6E95ADD19E06BDC774AB1C764DE83C34C106C4E11F030B7E3366E1863DFF",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\original-a.bin":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\original-b.bin":  "0A72DA8F3C796EF7E41FDD0B609C2122B534D27C52DD9EB550EDA586DF7C8F0B",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\analogin.dat":  "7F5565DEED53B2251BB7E62C72782814C64B91447899998886D8F7789169A073",
+                                  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NpV2SdDatExport.dll":  "685A914554AA3EE6B1730755D1C30F51BEF04421F15FE3C3D4CD8746B9B0ADC1",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\device-state.json":  "93FADEC66D8BB38E7E2C03714D854EA8911F31F35E958612F23ECE5A0CE00A34",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\neuropixels_np2usb_status.txt":  "6D1A8659AB7D749FDD62997958D1AE69A5663AE9DA8BBDD449DFCCBF4B7BBE7B",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\recording_start_utc.json":  "D0ADD6BD8B5FD8460E3E949EE11784C62105E156E1908085736EF75A1B33B962",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\ordinary-independent-check.json":  "8017BDA332B934B1B0D8F6DD2312CB1B51ACAD8E2AF80A135EE1B4B3818F4C59",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\original-options.bin":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\usb_first_sync_receipt.bin":  "B511525D17B889BD5E2598C6ED324F1254B973F6C52983952590909C54E8FDCA",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\experiment.json":  "D0AE342686EA744001ABD29654C156A7B6F59767C92940EABF6B6E49A42ACF34",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\installed-full.bin":  "9ECA5AA2D845DCCC1526D73E0D7990567B6EB8D3B6E9DD7AB53B2835683B5FFD",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\record199\\WILD_X_V2_NP2_2026-10-29_21-12-35\\imu_snapshots.bin":  "0389A50E7A303F173682F22D531DAA06906006B261A9E17D1CE4DC8097326F03",
+                                  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-prod-rtc-r1\\swd-restore-uid.bin":  "C2429B618221D7A8AC180CCB016CDEF5DBB48362B932D99285FC0D4EFE37DCB8"
+                              },
+    "ordinary_mode":  {
+                          "both_lab_env_absent":  true,
+                          "lab_grid_output_absent":  true,
+                          "lab_history_output_absent":  true,
+                          "automatic_grid_promotion":  false
+                      },
+    "production_source_edits":  0
+}

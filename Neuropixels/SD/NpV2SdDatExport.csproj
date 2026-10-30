@@ -17,7 +17,42 @@
     <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableNpFirstSync)' == 'true'">
+    <DefineConstants>$(DefineConstants);NP_FIRST_SYNC_ENABLE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../USB512_interface/USB512_interface/NpAcquisitionAnchor.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRecordingUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpV2ReadHistory.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridPhase.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridCarrier.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpImuGridWriter.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsb.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsbEvidence.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUsbUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncSd.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSensorFineWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSensorFine64Wire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSensorFineTime.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpSdFineAnalog.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpDerivedImuGridUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineSdArchive.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcStartWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcSdArchive.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcRecordingUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpRtcUsbArchive.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockFit.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockRecording.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFineClockEvidenceImport.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpFirstSyncSdUtc.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpUsbTimingWire.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpUsbTimingEvidence.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpHostClock.cs" />
+    <Compile Include="../../USB512_interface/USB512_interface/NpTimeCorrection.cs" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -25,6 +60,11 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Web.Extensions" />
     <Compile Include="NpV2SdDatExport.cs" />
+    <Compile Include="NpSdImuExport.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopEvent.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopControl.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopCarrier.cs" />
+    <Compile Include="..\ClosedLoop\NpClosedLoopLog.cs" />
     <Compile Include="..\..\USB512_interface\USB512_interface\NpAdcCalibration.cs"><Link>NpAdcCalibration.cs</Link></Compile>
     <Compile Include="NpNeuroscopeXml.cs" />
     <Compile Include="NpMetadataFile.cs" />

@@ -1,0 +1,351 @@
+{
+  "scope": "Read-only PE/portable-PDB metadata provenance; no assembly execution, build, hardware or source mutation",
+  "results": [
+    {
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "baseline": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled189\\FirmwareUpdater\\XeNpFirmwareUpdater.dll",
+        "sha256": "3BEA6D5DE99ED085AADA286591FFEF38C098931F3D707B296FEB3DF607D8AA2F",
+        "product_version": "1.0.0+316d34f57fa06ea0cee8e1f34eea27dddf07cff6",
+        "method_count": 141,
+        "method_implementation_sha256": "387A0F40719FD5F674BD09C2CE864FC24263C6B4BA14B181A1AC7400C8F8333E",
+        "managed_resource_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "managed_resource_bytes": 0,
+        "pdb": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled189\\FirmwareUpdater\\XeNpFirmwareUpdater.pdb",
+        "pdb_sha256": "37864FD6867D9C3FA20F1849BF7E1EC9E2CC17620A93B105B93471A5DB0A97C1",
+        "pdb_guid_matches_dll": true,
+        "documents": [
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\MscControl.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "65DD113A610C39C77E3B0B077C60B6E6AECF116D99EFA9D017DC34E7E7D93455",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\Program.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "7EA1E169F32E65B7A5974698727869B4B45E6288D699679A607EF0ED0802EFED",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\SensorControl.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "E5A352C273993F67B230C2AED833207238033AA61A897C827388FBA5A3CB30ED",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\StLinkProbe.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "01497B04585A9104973CA39509CA15776A9DDBDA9FE2A3DEC895F6E92A481057",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\XeNpFirmwareUpdater.GlobalUsings.g.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F3F134E9E825E3E7268090F58B1AF2BDA2DE513F61A09C56F48B9B8D08612ABC",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F7A5D9789C863625E139FF99E1113A503830F6B85A88F6129916DF83AC76B49E",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\XeNpFirmwareUpdater.AssemblyInfo.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "AFE8DFF429D16C1865907BFFD918C2BF5D69C9428359EF61329740F300722C13",
+            "generated": true,
+            "current_source_match": false
+          }
+        ]
+      },
+      "candidate": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\FirmwareUpdater\\XeNpFirmwareUpdater.dll",
+        "sha256": "591896B5D5F22298A723D60051BC4FE3C97683CA77E4B80D963CD7BB525457A8",
+        "product_version": "1.0.0+45328f48dddeeb7e25af6b5dfb882a224e0d3b9f",
+        "method_count": 141,
+        "method_implementation_sha256": "387A0F40719FD5F674BD09C2CE864FC24263C6B4BA14B181A1AC7400C8F8333E",
+        "managed_resource_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "managed_resource_bytes": 0,
+        "pdb": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\FirmwareUpdater\\XeNpFirmwareUpdater.pdb",
+        "pdb_sha256": "CC09310BD590DBB85A61E45CEA242B7D74CC7D3C6C14A407F9047A89E750FE34",
+        "pdb_guid_matches_dll": true,
+        "documents": [
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\MscControl.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "65DD113A610C39C77E3B0B077C60B6E6AECF116D99EFA9D017DC34E7E7D93455",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\Program.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "7EA1E169F32E65B7A5974698727869B4B45E6288D699679A607EF0ED0802EFED",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\SensorControl.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "E5A352C273993F67B230C2AED833207238033AA61A897C827388FBA5A3CB30ED",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\StLinkProbe.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "01497B04585A9104973CA39509CA15776A9DDBDA9FE2A3DEC895F6E92A481057",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\XeNpFirmwareUpdater.GlobalUsings.g.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F3F134E9E825E3E7268090F58B1AF2BDA2DE513F61A09C56F48B9B8D08612ABC",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F7A5D9789C863625E139FF99E1113A503830F6B85A88F6129916DF83AC76B49E",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\XeNpFirmwareUpdater.AssemblyInfo.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "C102E769C9B2FB4346790C59115FAA8DB7E6BA9693506D1BE3E12EE7D394059A",
+            "generated": true,
+            "current_source_match": true
+          }
+        ]
+      },
+      "method_implementations_identical": true,
+      "embedded_resources_identical": true,
+      "document_differences": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\FirmwareUpdater\\obj\\Release\\net8.0-windows\\XeNpFirmwareUpdater.AssemblyInfo.cs",
+          "old": "AFE8DFF429D16C1865907BFFD918C2BF5D69C9428359EF61329740F300722C13",
+          "new": "C102E769C9B2FB4346790C59115FAA8DB7E6BA9693506D1BE3E12EE7D394059A"
+        }
+      ]
+    },
+    {
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "baseline": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled189\\NPConfigurator\\NPConfigurator.dll",
+        "sha256": "F3B7F1F3E62C8CA6D491D3FE0B5A694FEB2CF72F04B352AC5113C1CB10A64706",
+        "product_version": "1.0.0+316d34f57fa06ea0cee8e1f34eea27dddf07cff6",
+        "method_count": 581,
+        "method_implementation_sha256": "915AD208B2D1E64CC183F35465677096360FC55FD16045D5AF26B8E4E09E7284",
+        "managed_resource_sha256": "1170A40571D86B6813B286B95239EE005BE9A8C81C77D6F11ECE9E9C11DA2197",
+        "managed_resource_bytes": 218160,
+        "pdb": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled189\\NPConfigurator\\NPConfigurator.pdb",
+        "pdb_sha256": "FD2DCEC87AFF59B21120AAABE8DAF7387FD6B0839596032B21357FF4978B0B13",
+        "pdb_guid_matches_dll": true,
+        "documents": [
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\Configuration.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "05BC327DC1D80965BF6D51220A47F0A254A0AFCEACDB9AFEBEA0350FF155691B",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\ProbeBankScan.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "7E67EE679DF21B21D75A2C74923B81EC25EDE8874465A099361B44C3398A74F3",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\ConfigurationForm.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "BA20A0E13965E0DAAB6F129C3BBEB4629C63B64D5D75AE2C4B59F00014F91AA9",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\ProbeView.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "4443078FC54D84DD2B6B800C5367F2F83601284BBE4C2905186CA1FF98C1BFCC",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\Program.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "75794E1EE0D9CC1FE59ADDE981A595E192E8FCAD993B7382873691C977EC82C3",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\DeviceSelection.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "65422F61DB42CC2B976284212F6851055061240469FE15774C32C2B9EAE5DF70",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\Np2DeviceSelection.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "6D82CB8046E2057D372A168177DAE22E0BEDED2875E1089CB4F36E42337617D2",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\StandardFormats.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "D978BCDF303FD95EA8321D562E009EF703BBB5E356275E5C0EFFA359CA403D34",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\NPConfigurator.GlobalUsings.g.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "427D9A42FA44FD3D6C018A63A0D55B7C737DFDF7FC82CF33C069304BEA4C74BE",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F7A5D9789C863625E139FF99E1113A503830F6B85A88F6129916DF83AC76B49E",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\NPConfigurator.AssemblyInfo.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F4750847A9997664BB480870399079289FF87E2E5B2CA0EC137A829B945EE3F6",
+            "generated": true,
+            "current_source_match": false
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\System.Windows.Forms.Analyzers.CSharp\\System.Windows.Forms.Generators.ApplicationConfigurationGenerator\\ApplicationConfiguration.g.cs",
+            "algorithm": "ff1816ec-aa5e-4d10-87f7-6f4963833460",
+            "sha": "C88D3DA0241236E28E91BF94E758B232AED3537E",
+            "generated": true,
+            "current_source_match": null
+          }
+        ]
+      },
+      "candidate": {
+        "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NPConfigurator\\NPConfigurator.dll",
+        "sha256": "1B465EA66E96BB25D993AB5E221646B8967C016FAD3E68F87995CD20DC6735C1",
+        "product_version": "1.0.0+45328f48dddeeb7e25af6b5dfb882a224e0d3b9f",
+        "method_count": 581,
+        "method_implementation_sha256": "915AD208B2D1E64CC183F35465677096360FC55FD16045D5AF26B8E4E09E7284",
+        "managed_resource_sha256": "1170A40571D86B6813B286B95239EE005BE9A8C81C77D6F11ECE9E9C11DA2197",
+        "managed_resource_bytes": 218160,
+        "pdb": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NPConfigurator\\NPConfigurator.pdb",
+        "pdb_sha256": "50EE2B632F556CEEE0F6F0D3D841D1740109BDA6C4085545C2DD5F731FAAFF3F",
+        "pdb_guid_matches_dll": true,
+        "documents": [
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\Configuration.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "05BC327DC1D80965BF6D51220A47F0A254A0AFCEACDB9AFEBEA0350FF155691B",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\ProbeBankScan.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "7E67EE679DF21B21D75A2C74923B81EC25EDE8874465A099361B44C3398A74F3",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\ConfigurationForm.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "BA20A0E13965E0DAAB6F129C3BBEB4629C63B64D5D75AE2C4B59F00014F91AA9",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\ProbeView.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "4443078FC54D84DD2B6B800C5367F2F83601284BBE4C2905186CA1FF98C1BFCC",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\Program.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "75794E1EE0D9CC1FE59ADDE981A595E192E8FCAD993B7382873691C977EC82C3",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\DeviceSelection.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "65422F61DB42CC2B976284212F6851055061240469FE15774C32C2B9EAE5DF70",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\Np2DeviceSelection.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "6D82CB8046E2057D372A168177DAE22E0BEDED2875E1089CB4F36E42337617D2",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\StandardFormats.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "D978BCDF303FD95EA8321D562E009EF703BBB5E356275E5C0EFFA359CA403D34",
+            "generated": false,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\NPConfigurator.GlobalUsings.g.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "427D9A42FA44FD3D6C018A63A0D55B7C737DFDF7FC82CF33C069304BEA4C74BE",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F7A5D9789C863625E139FF99E1113A503830F6B85A88F6129916DF83AC76B49E",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\NPConfigurator.AssemblyInfo.cs",
+            "algorithm": "8829d00f-11b8-4213-878b-770e8597ac16",
+            "sha": "F5E6E5F57D1BCC649CB5957841C289A90E2DD7D78659638918170589683255AB",
+            "generated": true,
+            "current_source_match": true
+          },
+          {
+            "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\System.Windows.Forms.Analyzers.CSharp\\System.Windows.Forms.Generators.ApplicationConfigurationGenerator\\ApplicationConfiguration.g.cs",
+            "algorithm": "ff1816ec-aa5e-4d10-87f7-6f4963833460",
+            "sha": "C88D3DA0241236E28E91BF94E758B232AED3537E",
+            "generated": true,
+            "current_source_match": null
+          }
+        ]
+      },
+      "method_implementations_identical": true,
+      "embedded_resources_identical": true,
+      "document_differences": [
+        {
+          "path": "D:\\Code\\WILDX_console\\WILDX_console\\Neuropixels\\NPConfigurator\\obj\\Release\\net8.0-windows\\NPConfigurator.AssemblyInfo.cs",
+          "old": "F4750847A9997664BB480870399079289FF87E2E5B2CA0EC137A829B945EE3F6",
+          "new": "F5E6E5F57D1BCC649CB5957841C289A90E2DD7D78659638918170589683255AB"
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,9 @@ namespace USB512_interface
     internal sealed class NpBleWire
     {
         readonly List<byte> pending = new List<byte>();
-        internal void Clear() { pending.Clear(); }
+        long consumed;
+        internal long ReceivedBytes {get{return consumed+pending.Count;}}
+        internal void Clear() { pending.Clear();consumed=0; }
         internal static byte[] Frame(byte command, byte[] body)
         {
             if (body == null || body.Length != 64) throw new ArgumentException("64-byte NP request required.");
@@ -22,14 +24,19 @@ namespace USB512_interface
             for(int i=start;i+67<=pending.Count;i++){
                 byte lead=pending[i],cmd=pending[i+1];
                 if((lead!=0x3c&&lead!=0xad)||(cmd!=0xb8&&cmd!=0xb9))continue;
-                int length=lead==0xad?68:67;if(i+length>pending.Count)continue;
-                if(lead==0xad?(pending[i+66]!=0xda||pending[i+67]!=0xda):pending[i+66]!=0x3e)continue;
-                var body=pending.GetRange(i+2,64).ToArray();
-                if(BitConverter.ToUInt32(body,60)==NpSdControl.Crc(body,60))return i;
+                int bodyBytes=cmd==0xb9&&BitConverter.ToUInt32(pending.GetRange(i+2,4).ToArray(),0)==NpFineClockWire.ReplyMagic?80:64;
+                int length=bodyBytes+(lead==0xad?4:3);if(i+length>pending.Count)continue;
+                if(lead==0xad?(pending[i+bodyBytes+2]!=0xda||pending[i+bodyBytes+3]!=0xda):pending[i+bodyBytes+2]!=0x3e)continue;
+                var body=pending.GetRange(i+2,bodyBytes).ToArray();
+                if(BitConverter.ToUInt32(body,bodyBytes-4)==NpSdControl.Crc(body,bodyBytes-4))return i;
             }
             return -1;
         }
         internal List<Tuple<byte, byte[]>> Feed(byte[] bytes)
+        {return FeedObserved(bytes,null);}
+        // Optional timing metadata uses the actual accepted frame range,
+        // never an independent scanner looking inside another frame's body.
+        internal List<Tuple<byte, byte[]>> FeedObserved(byte[] bytes,Action<byte,byte[],long,long> accepted)
         {
             pending.AddRange(bytes);
             var frames = new List<Tuple<byte, byte[]>>();
@@ -47,6 +54,7 @@ namespace USB512_interface
                     if(previewMagic!=NpV2PreviewBurst.Magic && previewMagic!=0x3156504eU){at++;continue;}
                 }
                 int bodyLength=identity?192:command==0x95?4:native?512:preview?224:64;
+                if(command==0xb9&&pending.Count-at>=6&&BitConverter.ToUInt32(pending.GetRange(at+2,4).ToArray(),0)==NpFineClockWire.ReplyMagic)bodyLength=80;
                 int length = bodyLength+(lead == 0x3c ? 3 : 4);
                 if(preview && previewMagic==0x3156504eU && pending.Count-at>=34){
                     int kind=pending[at+31]&15;
@@ -90,14 +98,17 @@ namespace USB512_interface
                 bool tail = lead == 0x3c ? pending[at+bodyLength+2] == 0x3e : pending[at+bodyLength+2] == 0xda && pending[at+bodyLength+3] == 0xda;
                 var body = pending.GetRange(at + 2, bodyLength).ToArray();
                 // Each preview profile validates its own metadata/body and CRC contract.
-                // B8/B9 remain independent fixed 64-byte, CRC-checked controls.
-                int crcAt=identity?188:60;
+                // NPRF is an explicitly tagged 80-byte read-only reply. Other
+                // B8/B9 controls retain their established 64-byte framing.
+                int crcAt=identity?188:bodyLength-4;
                 if (!tail || (v1Compact && BitConverter.ToUInt32(body,220)!=NpSdControl.Crc(body,220)) || (!preview && !native && BitConverter.ToUInt32(body, crcAt) != NpSdControl.Crc(body, crcAt))) { at++; continue; }
-                frames.Add(Tuple.Create(command, body)); at += length;
+                frames.Add(Tuple.Create(command, body));
+                if(accepted!=null)accepted(command,body,consumed+at,consumed+at+length);
+                at += length;
             }
-            if (at != 0) pending.RemoveRange(0, at);
+            if (at != 0){pending.RemoveRange(0, at);consumed+=at;}
             // At most one incomplete fixed-length candidate is retained.
-            if (pending.Count > 516) pending.Clear();
+            if (pending.Count > 516){consumed+=pending.Count;pending.Clear();}
             return frames;
         }
     }

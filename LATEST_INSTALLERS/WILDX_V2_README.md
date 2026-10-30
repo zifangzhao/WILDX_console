@@ -1,7 +1,5 @@
-# V2 firmware in WILD-X 1.0.0.189
+# WILD-X V2
 
-The installer contains APP 46DF5009, USB 62910614 and recovery 6408DBB8, with matching component and fused images and catalog. No separate update ZIP is required.
+Use WILDX_console-Setup-1.0.0.199.exe. It includes APP194D9B94 / USB74A9B98B / recovery6408DBB8.
 
-The checked 30-second SD recording used three probes at 20 kHz. Neural and IMU readback passed, and saved first-NP timing had a 120 µs full interval relative to the hardware RTC. PC synchronization uncertainty is separate. V2 USB acquisition with this pair and the complete fused-image flashing path were not newly hardware tested.
-
-[Detailed results and scope](../ReleaseSources/1.0.0.189/README.md).
+Three-probe20kHz USB60-second and SD30-second checks passed. The ordinary IMU path is enabled; the experimental hardware grid remains disabled. See release-manifest.json for the exact payload and qualification limits.

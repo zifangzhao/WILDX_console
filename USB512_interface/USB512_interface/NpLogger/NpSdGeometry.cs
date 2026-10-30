@@ -9,6 +9,7 @@ namespace CE32_console {
   internal static void Validate(byte[] h,byte[] f,long start,long end){
    if(U(h,8)==7||U(h,8)==8)throw new InvalidDataException("This is typed V1 camera/audio data (v7/v8), not NP samples. Use the strict V1 media exporter; NP export was not started.");
    NpV1StoreBinding.Validate(h,f);
+   USB512_interface.NpImuGridCarrier.SdMetadata(h,f);
    foreach(int p in new[]{8,12,16,20,24,28,32,36,40,44,48,80})if(U(h,p)!=U(f,p))throw new InvalidDataException("NP footer/session mismatch");
    uint version=U(h,8),mask=U(h,16),width=U(h,20),hz=U(h,24),lane=U(h,32),hs=U(h,48),chunks=U(f,68);
    bool legacy=(version==3 || version==4) && U(h,80)==1 && ((mask==1 && width==1)||(mask==2 && width==1)||(mask==3 && width==2)) && (hz==15000 || hz==30000);
@@ -19,6 +20,7 @@ namespace CE32_console {
   }
   internal static void Descriptor(byte[] h,byte[] d,uint chunk,long lba){
    NpV1StoreBinding.Validate(h,d);
+   USB512_interface.NpImuGridCarrier.SdSpan(h,d);
    foreach(int p in new[]{8,12,16,20,24,28,32,36,40,44,48,80,96})if(U(h,p)!=U(d,p))throw new InvalidDataException("NP chunk/session mismatch");
    uint mask=U(h,16);
    if(U(d,52)!=chunk || U(d,56)!=lba || U(d,88)!=Probe(mask,chunk)+1 || U(d,92)!=chunk/Count(mask) ||

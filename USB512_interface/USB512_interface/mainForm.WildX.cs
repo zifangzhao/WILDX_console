@@ -24,7 +24,7 @@ namespace USB512_interface
         DateTime recordingSummaryStartUtc=DateTime.MinValue,recordingSummaryStopUtc=DateTime.MinValue;
         readonly TextBox npSessionLabel=new TextBox {Name="npSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
         readonly TextBox usbDestinationFolder=new TextBox {Name="usbDestinationFolder",Dock=DockStyle.Fill,AccessibleName="Recording destination folder",AutoCompleteMode=AutoCompleteMode.SuggestAppend,AutoCompleteSource=AutoCompleteSource.FileSystemDirectories};
-        bool NpControlsAvailable {get{return (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && !String.IsNullOrWhiteSpace(devicePath) &&
+        bool NpControlsAvailable {get{return !npSettingsApplying && (selectedDeviceKind==DeviceKind.XeNp || selectedDeviceKind==DeviceKind.NpV2) && !String.IsNullOrWhiteSpace(devicePath) &&
             !running && !ztestRunning && systemInfoActive==0 && deviceRefreshActive==0 && !firmwareManagementActive && npRecoveryCancelled && !DownloadBusy && !BleInUse;}}
         bool DownloadBusy { get { return downloadWorkspace!=null && downloadWorkspace.IsBusy; } }
         bool BleInUse { get { return bleWorkspace!=null && bleWorkspace.SessionOwned; } }
@@ -238,25 +238,47 @@ namespace USB512_interface
             healthAndGpio.Controls.Add(networkTimeCard,0,2);
 
             bleWorkspace=new NpBleForm() {TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill,MinimumSize=Size.Empty};
+            bleWorkspace.HostRecordingPrepared=StartGpioRtcForRecording;
+            bleWorkspace.HostRecordingStopRequested=StopGpioRtcRecording;
+            bleWorkspace.HostRecordingIsActive=()=>gpioRtcLogger!=null;
             bleWorkspace.FirmwareReviewRequested+=delegate {workspaceTabs.SelectedTab=advancedPage;};
             bleWorkspace.StateChanged+=delegate {if(!Disposing && !IsDisposed)UpdateStartEnabled();};
             blePage.Controls.Add(Card("BLE Control",null,bleWorkspace));bleWorkspace.Show();
+            Shown+=delegate {bleWorkspace.StartScan();};
 
             downloadWorkspace=new CE32_console.NpDownloadForm(null,false) { TopLevel=false,FormBorderStyle=FormBorderStyle.None,Dock=DockStyle.Fill };
             npSessionLabel.TextChanged+=delegate {if(downloadWorkspace.SessionLabel!=npSessionLabel.Text)downloadWorkspace.SessionLabel=npSessionLabel.Text;};
             downloadWorkspace.SessionLabelChanged+=value=>{if(npSessionLabel.Text!=value)npSessionLabel.Text=value;};
             downloadWorkspace.BusyChanged+=UpdateStartEnabled;
+            downloadWorkspace.SdTestRequested+=OpenSdCardTest;
             downloadPage.Controls.Add(Card("Recordings & storage","Refresh sources, list sessions, then select recordings to download or decode.",downloadWorkspace));downloadWorkspace.Show();
             BuildAdvancedWorkspace();
             FormClosing+=delegate(object sender,FormClosingEventArgs e){
+                if(npSettingsApplying){e.Cancel=true;workspaceStatus.Text="Finishing the probe settings request before closing.";return;}
+                npPreparationTimer.Stop();
                 if(usbQualityRunning){usbQualityCancel=true;e.Cancel=true;usbQualityStatus="Stopping USB test after the current transfer…";return;}
                 if(bleWorkspace.IsBusy){e.Cancel=true;workspaceStatus.Text="Waiting for the BLE command to finish before closing.";return;}
                 if(DownloadBusy){downloadWorkspace.RequestCancel();e.Cancel=true;workspaceStatus.Text="Waiting for the storage operation to finish before closing.";}
             };
+            FormClosed+=delegate {npPreparationTimer.Dispose();};
             oldInfo.Dispose();oldTime.Dispose();
             // Keep unused legacy status controls out of the workspace, while retaining ownership.
             label4.Visible=lblStaleBanks.Visible=btnImpedance.Visible=false;Controls.Add(label4);Controls.Add(lblStaleBanks);Controls.Add(btnImpedance);
             AutoScaleDimensions=new SizeF(96F,96F);AutoScaleMode=AutoScaleMode.Dpi;ResumeLayout(true);UpdateStartEnabled();
+        }
+        internal static string NpCaptureDetails(int mask,double? apHz,double? lfpHz,double? cameraHz,double? dataMiB,string warning) {
+            string ports=String.Join(" + ",Enumerable.Range(1,3).Where(p=>(mask&(1<<(p-1)))!=0).Select(p=>"P"+p));
+            bool validAp=apHz.HasValue && apHz.Value>=0 && !Double.IsNaN(apHz.Value) && !Double.IsInfinity(apHz.Value);
+            bool validData=dataMiB.HasValue && dataMiB.Value>=0 && !Double.IsNaN(dataMiB.Value) && !Double.IsInfinity(dataMiB.Value);
+            string rates="AP "+(validAp?(apHz.Value/1000.0).ToString("F2")+" kS/s":"—");
+            if(lfpHz.HasValue && lfpHz.Value>0)rates+=" · LFP "+(lfpHz.Value/1000.0).ToString("F2")+" kS/s";
+            if(cameraHz.HasValue && cameraHz.Value>0)rates+=" · Camera "+cameraHz.Value.ToString("F1")+" fps";
+            return (ports.Length==0?"":ports+" · ")+rates+"\r\nData "+(validData?dataMiB.Value.ToString("F2")+" MiB/s":"—")+
+                (String.IsNullOrWhiteSpace(warning)?"":"\r\n"+warning);
+        }
+        void ShowNpCaptureActivity(string state,int mask,double? apHz,double? lfpHz,double? cameraHz,double? dataMiB,string warning,string report) {
+            lblSpeed.Text=state;lblRecInfo.Text=NpCaptureDetails(mask,apHz,lfpHz,cameraHz,dataMiB,warning);
+            lastCaptureReport=report;captureReportButton.Enabled=!String.IsNullOrEmpty(report);
         }
         void ResetRecordingSummary(string folder) {
             usbQualityPath=usbQualityStatus=lastUsbQualityReport=null;
@@ -322,12 +344,18 @@ namespace USB512_interface
             var storage=Stack(58,48,0);
             advancedStorageSource=new Label {Dock=DockStyle.Fill,AutoEllipsis=true,ForeColor=WildXTheme.Muted};storage.Controls.Add(advancedStorageSource,0,0);
             var openStorage=new Button {Text="Open Data Download",AutoSize=true};openStorage.Click+=delegate {workspaceTabs.SelectedTab=downloadPage;};
-            storage.Controls.Add(ActionRow(openStorage),0,1);
+            var sdTest=new Button {Text="SD card test…",AutoSize=true};sdTest.Click+=delegate {OpenSdCardTest();};
+            storage.Controls.Add(ActionRow(openStorage,sdTest),0,1);
             storage.Controls.Add(new Label {Dock=DockStyle.Fill,ForeColor=WildXTheme.Muted,
                 Text="Format the logger card in BLE Mode → Recordings. For a removable SD card reader, use Data Download to delete or format.\r\n\r\nUSB download is read-only. Formatting requires confirmation."},0,2);
             tools.Controls.Add(Card("Storage maintenance",null,storage),1,0);
             var bleMaintenance=Card("BLE firmware & recovery",null,bleWorkspace.MaintenanceControls);
             tools.Controls.Add(bleMaintenance,0,1);tools.SetColumnSpan(bleMaintenance,2);
+        }
+        void OpenSdCardTest(string usb=null)
+        {
+            if(running||ztestRunning||usbQualityRunning||DownloadBusy||firmwareManagementActive||systemInfoActive!=0){MessageBox.Show(this,"Finish the active operation before testing an SD card.","SD card test");return;}
+            using(var dialog=new NpSdTestForm(bleWorkspace,usb??devicePath))dialog.ShowDialog(this);
         }
         void DrawWorkspaceTab(object sender,DrawItemEventArgs e)
         {
@@ -349,8 +377,8 @@ namespace USB512_interface
                 "\r\nInstalled: "+NpFirmwareCatalog.Bundled.Installed(selectedDeviceKind==DeviceKind.XeNp?1U:2U,systemInfo==null?null:systemInfo.Firmware)+
                 "\r\nBundled: "+(NpFirmwareCatalog.Bundled.For(selectedDeviceKind==DeviceKind.XeNp?1U:2U)?.Versions??"Unavailable");
             if(advancedStorageSource!=null)advancedStorageSource.Text=downloadWorkspace.SelectedSourceDescription??"No storage source selected. Choose a card in Data Download.";
-            if(DownloadBusy || BleInUse)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
-            bool usbBusy=running || ztestRunning || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled || NpExplorationActive;
+            if(DownloadBusy || BleInUse || npSettingsApplying)btnStart.Enabled=btnDfu.Enabled=btnRefresh.Enabled=comboDrives.Enabled=btnStreams.Enabled=btnSdInfo.Enabled=btnSystemInfoRefresh.Enabled=false;
+            bool usbBusy=running || ztestRunning || npSettingsApplying || systemInfoActive!=0 || firmwareManagementActive || deviceRefreshActive!=0 || !npRecoveryCancelled || NpExplorationActive;
             if(gpioRtcDevices!=null)gpioRtcDevices.Enabled=gpioRtcRefresh.Enabled=!usbBusy && gpioRtcLogger==null;
             if(bleWorkspace!=null)bleWorkspace.SetHostBusy(usbBusy || DownloadBusy);
             if(downloadWorkspace!=null)downloadWorkspace.SetUsbBlocked(usbBusy || BleInUse);
@@ -389,7 +417,7 @@ namespace USB512_interface
         }
         void OpenV2Firmware()
         {
-            if (running || systemInfoActive != 0 || firmwareManagementActive || !npRecoveryCancelled || DownloadBusy || BleInUse) return;
+            if (running || npSettingsApplying || systemInfoActive != 0 || firmwareManagementActive || !npRecoveryCancelled || DownloadBusy || BleInUse) return;
             firmwareManagementActive = true;
             UpdateStartEnabled();
             try { using (var dialog = new NpV2FirmwareForm(devicePath)) dialog.ShowDialog(this); }

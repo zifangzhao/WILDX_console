@@ -27,7 +27,11 @@ namespace USB512_interface {
    this.folder=folder;this.helper=helper;this.np2=np2;
    document=Fields("schema_version",1,"format","neuropixels.recording_settings","source",source,
     "software_version",typeof(NpRecordingSettings).Assembly.GetName().Version.ToString(),
-    "recording_start_time_utc_host",startUtc.HasValue?(object)startUtc.Value.ToUniversalTime().ToString("O",CultureInfo.InvariantCulture):null,
+    // Retain the deprecated key as null for historical readers. A Start-click
+    // or folder-creation timestamp is a request, not acquisition sample zero.
+    "recording_start_time_utc_host",null,
+    "recording_start_request_time_utc_host",startUtc.HasValue?(object)startUtc.Value.ToUniversalTime().ToString("O",CultureInfo.InvariantCulture):null,
+    "recording_start_utc_file",NpRecordingUtc.FileName,
     "metadata_created_time_utc",DateTime.UtcNow.ToString("O",CultureInfo.InvariantCulture),
     "device",Fields("usb_path",path,"uid",uid,"firmware_version",null,"firmware_version_evidence","not advertised"),
     "requested",Fields("ap_sample_rate_hz",null,"probe_mask",null,"merge_probe_dat",null,"upsample_ap_15_to_20",null),
@@ -209,7 +213,12 @@ namespace USB512_interface {
      probe["selection_file"]=binary;probe["configuration_state"]="stored_request_unverified";
      probe["recorded_configuration_id"]=BitConverter.ToString(selection,8,32).Replace("-","");
      probe["recorded_request_crc32"]=NpConfigClient.Crc(selection,selection.Length).ToString("X8");
-     probe["imro_unavailable_reason"]="The saved binary request is retained; this SD format does not store the original IMRO text.";
+     string native="probe_"+port+".sd-request.npconfig.json";
+     try {
+      Helper("--snapshot-v2 "+Quote(Path.Combine(folder,binary))+" "+Quote(Path.Combine(folder,native)));
+      probe["requested_configuration_file"]=native;
+      if(Imro(probe,native,"probe_"+port+".imro"))probe["imro_state"]="stored_request_unverified";
+     }catch(IOException ex){probe["imro_unavailable_reason"]=ex.Message;}
     }else if(kind==3 && magic=="N2IMRO2"){
      probe["configuration_state"]="stored_fingerprint_unverified";
      probe["recorded_configuration_id"]=BitConverter.ToString(bytes,128+(port-1)*36,32).Replace("-","");
@@ -234,7 +243,7 @@ namespace USB512_interface {
     // Sidecars follow each per-probe DAT. Never copy bulk neural/sensor data or
     // use a merged/root XML as the single-probe channel layout.
     foreach(string file in Directory.GetFiles(folder))if(MetadataFile(file) && !Path.GetFileName(file).StartsWith("gpio_rtc_",StringComparison.OrdinalIgnoreCase) &&
-     Path.GetFileName(file)!="recording_warnings.txt" && Path.GetFileName(file)!="recording_settings.json" && !Path.GetExtension(file).Equals(".xml",StringComparison.OrdinalIgnoreCase))
+     Path.GetFileName(file)!="recording_warnings.txt" && Path.GetFileName(file)!="recording_settings.json" && Path.GetFileName(file)!=NpRecordingUtc.FileName && !Path.GetExtension(file).Equals(".xml",StringComparison.OrdinalIgnoreCase))
      File.Copy(file,Path.Combine(child,Path.GetFileName(file)),true);
     string calibration=Path.Combine(folder,"calibration");
     if(Directory.Exists(calibration)){
@@ -243,6 +252,7 @@ namespace USB512_interface {
     }
     var local=(Dictionary<string,object>)json.DeserializeObject(json.Serialize(document));
     local["parent_recording_settings"]="../recording_settings.json";local["folder_probe_mask"]=1<<(item.Key-1);
+    local["recording_start_utc_file"]="../"+NpRecordingUtc.FileName;
     if(local.ContainsKey("gpio_rtc")) {
      var gpio=(Dictionary<string,object>)local["gpio_rtc"];
      foreach(string key in new[]{"session_file","events_file","clock_queries_file"})if(gpio.ContainsKey(key) && gpio[key]!=null && !Path.IsPathRooted((string)gpio[key]))gpio[key]="../"+gpio[key];
@@ -295,11 +305,27 @@ namespace USB512_interface {
    double? lfpRate=lfp["rate_hz"]==null?(double?)null:Convert.ToDouble(lfp["rate_hz"],CultureInfo.InvariantCulture);
    NpNeuroscopeXml.WriteFolder(target,mask,merged,Convert.ToInt32(rate,CultureInfo.InvariantCulture),lfpRate,appliedSelections);
   }
+  internal static void MergedSd(string folder,int mask,int ap,bool np2) {
+   var serializer=new JavaScriptSerializer{MaxJsonLength=4*1024*1024};
+   string path=Path.Combine(folder,"recording_settings.json");
+   var saved=(Dictionary<string,object>)serializer.DeserializeObject(File.ReadAllText(path));
+   var output=(Dictionary<string,object>)saved["output"];
+   output["dat_layout"]="merged";output["probe_subfolders"]=false;output["channel_count_per_dat"]=384*Enumerable.Range(0,3).Count(p=>(mask&(1<<p))!=0);
+   output["channel_order"]="ascending physical probe; contiguous 384-channel blocks";
+   ((Dictionary<string,object>)saved["requested"])["merge_probe_dat"]=true;
+   saved["dat_files"]=np2?"neuropixels_ap.dat":"neuropixels_ap.dat, neuropixels_lfp.dat; analogin.dat";
+   saved["dat_merge_receipt"]="dat_merge.json";
+   NpNeuroscopeXml.WriteFolder(folder,mask,true,ap,np2?(double?)null:ap/12.0,null);
+   NpMetadataFile.WriteText(path,serializer.Serialize(saved)+Environment.NewLine);
+  }
   internal static NpRecordingSettings Saved(string folder,bool np2,int ap,int mask,uint version,uint session,string source,string uid=null,bool decoded=true) {
-   var settings=new NpRecordingSettings(folder,null,source,np2,null,null,uid);
+   string helper=Path.Combine(Path.GetDirectoryName(typeof(NpRecordingSettings).Assembly.Location),"NPConfigurator","NPConfigurator.exe");
+   var settings=new NpRecordingSettings(folder,helper,source,np2,null,null,uid);
    settings.DeviceEvidence("recording_format_version",version);settings.DeviceEvidence("session_id",session);
    settings.Context("original_start_time_evidence","UTC unavailable in this descriptor; no export timestamp is substituted for recording start.");
    settings.Actual(ap,ap,mask,false,false,"validated saved recording descriptor");
+   if(source=="sd_export" && !np2)foreach(var probe in settings.probes.Values)
+    probe["imro_unavailable_reason"]="This V1 SD format does not retain the full historical electrode/gain/reference selection. No IMRO is inferred from current GUI settings.";
    if(!decoded) {
     settings.document["decoded"]=Fields("ap_sample_rate_hz",null,"lfp_sample_rate",settings.Lfp(null));
     settings.document["output"]=Fields("ap_sample_rate_hz",null,"lfp_sample_rate",settings.Lfp(null),"dat_layout","none; raw archive");

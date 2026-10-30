@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "version": "1.0.0.199",
+  "status": "host_archive_only_qualification_pending",
+  "scope": "Archive existing immutable source199-grid and original laboratory build receipt; no compile, application test, hardware, installer, firmware/catalog change, or publication.",
+  "source_snapshot": "_artifacts/utc_alignment_20261028/source199-grid",
+  "source_files": 197,
+  "source_zip_verification": "PASS: exactly 197 entries; every decompressed entry SHA256 matches the original source_inputs pin.",
+  "host_build_receipt_sha256": "90AE6BCCFAE36FC14E529011230BFF2F97397144020AB7CE83D8FBD352389A00",
+  "compiled_sources": {
+    "path": "compiled-sources.zip",
+    "bytes": 951149,
+    "sha256": "7A8818546BC3C77841E317A4F037307240AFFD629094C16ACAA30BB1FE7EF438"
+  },
+  "packaging_resources": {
+    "path": "packaging-resources.zip",
+    "bytes": 43557,
+    "sha256": "D94C3F4B67ED4E2EC9B7D42F93875C7CDB9AEB222994A5B4FE635920A29B2829",
+    "scope": "Byte-identical checked189 docs/*.md snapshot; all 16 entries match current documentation."
+  },
+  "installer_nsi_sha256": "380337771F2F203BBAEF279C8EE125F9669DAFB5EDBEF9683ECCE72D9BED7A33",
+  "gui_sha256": "E2E5F22A8F9A7EB46284475D142697398B623BF9030A979602D67966DCD5F249",
+  "sdk_sha256": "685A914554AA3EE6B1730755D1C30F51BEF04421F15FE3C3D4CD8746B9B0ADC1",
+  "original_build_scope": "Enabled laboratory app/SDK build and exact source/tool snapshot; firmware RTC and all-stream hardware qualification remain open; no installer/publication",
+  "preparation_enabled": false,
+  "first_sync_enabled": true,
+  "all_stream_alignment_verified": false,
+  "laboratory_opt_ins": [
+    "WILDX_V2_AUX_GRID_LAB=1",
+    "WILDX_V2_USB_HISTORY_LAB=1"
+  ],
+  "companion_reuse_provenance_sha256": "2AFFFFBE02CF1A596E65292FE84B209097D50BAC833EE708D6D7F71B6A450A34",
+  "pending": "Final qualified firmware tuple/catalog, ordinary production device acceptance, validation-summary, installer/package verification and publication.",
+  "companion_sources": {
+    "source_freeze_sha256": "DF417EC480316299AFD38D01284659237F622C2C6350618B1A9C4CC5E17305D5",
+    "sha256": "62E0A6F900414097FCC1BD30E17C2193B42985D9439CF14C84424E2B2DF97E50",
+    "bytes": 106794,
+    "files": 15,
+    "path": "companion-sources.zip"
+  }
+}

@@ -10,6 +10,43 @@ public static class Np2DeviceSelection
     public static ProbeConfiguration LoadForPort(string path, int connector)
         => Normalize(StandardFormats.Load(path), connector);
 
+    // Recover the selected electrodes and references, not the original JSON
+    // identity or evidence that this staged request reached the silicon.
+    public static ProbeConfiguration FromPayload(byte[] bytes)
+    {
+        if (bytes.Length != PayloadBytes || !bytes.AsSpan(0, 4).SequenceEqual("N2B1"u8) ||
+            bytes[4] != 4 || bytes[5] > 2 || bytes[6] != 0 || bytes[7] != 0)
+            throw new InvalidDataException("Unsupported saved NP2013 selection request.");
+        int Bit(int shank, int bit) => (bytes[40 + shank * ShankBytes + bit / 8] >> (7 - bit % 8)) & 1;
+        var c = ProbeConfiguration.Create(ProbeProfile.Np2Multi);
+        c.Connector = bytes[5] + 1; c.ModelRevision = "2013";
+        foreach (var channel in c.Channels) channel.Site = null;
+        for (int shank = 0; shank < 4; shank++) for (int site = 0; site < 1280; site++)
+        {
+            int electrodeBit = (site & 1) != 0 ? 642 - site / 2 : 645 + site / 2;
+            if (Bit(shank, electrodeBit) == 0) continue;
+            var channel = c.Channels[Catalog.Channel(c.Profile, shank, site)];
+            if (channel.Site != null) throw new InvalidDataException("Saved selection connects multiple sites to one channel.");
+            channel.Site = site; channel.Shank = shank;
+        }
+        var tips = Enumerable.Range(0, 4).Where(s => Bit(s, 643) != 0 || Bit(s, 644) != 0).ToArray();
+        foreach (var channel in c.Channels)
+        {
+            if (channel.Site == null) throw new InvalidDataException("Saved selection has a disconnected channel.");
+            int offset = 684 + (channel.Channel & 1) * BaseBytes + (383 - channel.Channel) / 4;
+            int reference = (bytes[offset] >> ((channel.Channel & 2) != 0 ? 4 : 0)) & 15;
+            channel.Reference = reference switch {
+                1 => "Ground", 4 => "External", 2 when tips.Length == 1 => "Tip" + tips[0],
+                _ => throw new InvalidDataException("Unsupported saved reference or standby bits.")
+            };
+        }
+        c.RequireValid();
+        var rebuilt = Compile(c);
+        for (int i = 0; i < bytes.Length; i++) if ((i < 8 || i >= 40) && bytes[i] != rebuilt[i])
+            throw new InvalidDataException("Saved selection contains unsupported or inconsistent routing bits.");
+        return c;
+    }
+
     private static ProbeConfiguration Normalize(ProbeConfiguration configuration, int connector)
     {
         configuration.RequireValid();

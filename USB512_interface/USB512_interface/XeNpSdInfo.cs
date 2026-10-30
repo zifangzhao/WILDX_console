@@ -179,6 +179,20 @@ namespace USB512_interface
         }
         internal static string State(uint state)
         { return state==0?"Not queried":state==1?"Query in progress":state==2?"Complete":"Failed / partial"; }
+        internal static TreeNode BuildBasic(NpSystemInfo info)
+        {
+            var root=Node("sd","SD card",info.Device,"Passive information supported by the current firmware and USB role.",0);
+            var identity=Add(root,"identity","Device identity","",info.CardSource);
+            Add(identity,"capacity","Capacity",info.Capacity);
+            Add(identity,"card","Card identity",info.Card);
+            Add(identity,"bus","Bus",info.Bus,"A cached diagnostic bus setting may differ from the SD recording app.");
+            Add(root,"allocation","Allocated / free space",NpSystemInfo.NotReported,"Capacity alone does not establish writable free space.");
+            Add(root,"recordings","Recording count",NpSystemInfo.NotReported,"Use the recordings catalog when supported.");
+            Add(root,"mode","USB role",info.Mode);
+            Add(root,"source","Information source",info.CardSource);
+            Add(root,"status","Status",info.Status);
+            return root;
+        }
         internal static TreeNode Build(XeNpSdInfo info,string path,DateTime receivedAt)
         {
             bool identified=(info.Flags&1)!=0,uhs=(info.Flags&2)!=0;
@@ -292,6 +306,7 @@ namespace USB512_interface
     internal sealed class XeNpSdInfoForm : Form
     {
         private readonly string path;
+        private readonly string deviceName;
         private readonly TreeView attributes=new TreeView { Dock=DockStyle.Fill,HideSelection=false,
             ShowNodeToolTips=true,ShowLines=true,ShowPlusMinus=true,AccessibleName="SD card attributes" };
         private readonly TextBox details=new TextBox { Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,
@@ -307,9 +322,10 @@ namespace USB512_interface
         private readonly ContextMenuStrip nodeMenu=new ContextMenuStrip();
         private string reportText;
         private bool busy;
-        internal XeNpSdInfoForm(string path,bool autoRead=true)
+        internal XeNpSdInfoForm(string path,bool autoRead=true):this(path,autoRead,"NP V1"){}
+        internal XeNpSdInfoForm(string path,bool autoRead,string deviceName)
         {
-            this.path=path;Text="WILDX SD Card Properties";Size=new Size(1080,760);
+            this.path=path;this.deviceName=deviceName??"NP V1";Text="WILDX SD Card Properties";Size=new Size(1080,760);
             Font=SystemFonts.MessageBoxFont;AutoScaleMode=AutoScaleMode.Dpi;
             AutoScaleDimensions=new SizeF(96,96);MinimumSize=new Size(740,480);
             StartPosition=FormStartPosition.CenterParent;KeyPreview=true;
@@ -403,18 +419,20 @@ namespace USB512_interface
         private async Task ReadInfo()
         {
             if(busy)return;busy=true;refresh.Enabled=false;
-            var expandedKeys=ExpandedKeys();
-            string selectedKey=attributes.SelectedNode==null?null:XeNpSdInfoTree.Key(attributes.SelectedNode);
-            ShowMessage("Reading SD card...","Identifying the card at the safe base clock.\r\nNo sector writes or high-speed tuning. Please wait.");
+            ShowMessage("Reading SD card...","Reading the information supported by this device and USB mode. Please wait.");
             try {
-                XeNpSdInfo info=await Task.Run(delegate {
-                    // Control-only open must not reset/flush/abort the capture pipe.
-                    using(var device=XeNpWinUsbDevice.OpenForControl(path))return device.ReadSdInfo();
-                });
-                ShowSnapshot(info,DateTime.Now,expandedKeys,selectedKey);
+                ShowBasicSnapshot(await Task.Run(()=>NpSystemInfo.Read(path,deviceName)));
             } catch(Exception ex) {
-                ShowMessage("SD Info unavailable",ex.Message+"\r\n\r\nStop recording first. Older firmware needs the matching SD Info USB-service update. No recording was stopped automatically.");
+                ShowMessage("SD Info unavailable",ex.Message+"\r\nThe current firmware or USB mode does not expose this information.");
             } finally { busy=false;refresh.Enabled=true; }
+        }
+        internal void ShowBasicSnapshot(NpSystemInfo info)
+        {
+            if(info.Sd!=null&&(info.Sd.Flags&1)!=0&&(info.Sd.State==2||info.Sd.State==3)) {ShowSnapshot(info.Sd,info.ReceivedAt);return;}
+            attributes.Nodes.Clear();var root=XeNpSdInfoTree.BuildBasic(info);attributes.Nodes.Add(root);root.Expand();root.Nodes["identity"].Expand();
+            attributes.SelectedNode=root.Nodes["identity"];ShowSelected();
+            reportText=info.Report(Application.ProductVersion)+"\r\nAllocated / free space: "+NpSystemInfo.NotReported+"\r\nRecording count: "+NpSystemInfo.NotReported;
+            save.Enabled=expand.Enabled=collapse.Enabled=true;status.Text="Available information · "+info.ReceivedAt.ToString("G");
         }
         protected override void Dispose(bool disposing)
         {

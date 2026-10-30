@@ -26,7 +26,6 @@ namespace CE32_console
         private readonly Button deleteLast=new Button{Name="deleteLastNpRecording",Text="Delete last recording…",AutoSize=true};
         private readonly Button repairCatalog=new Button{Name="repairUsbCatalog",Text="Repair SD catalog…",AutoSize=true};
         private readonly Label cardHelp=new Label{AutoSize=true,Text="Delete and format require an SD card reader.",Margin=new Padding(8,9,0,0)};
-
         private readonly CheckBox convertAfterDownload=new CheckBox{Text="MP4 + WAV",Checked=true,AutoSize=true};
         private readonly CheckBox mergeDat=new CheckBox{Name="mergeSdProbeDat",Text="Merge probes into one DAT",AutoSize=true};
         private bool busy,refreshing,usbBlocked,maintenanceActive,listedRecoverySearch;private volatile bool cancelled;private Source listedSource;
@@ -44,6 +43,7 @@ namespace CE32_console
         }
         IWin32Window DialogOwner{get{return TopLevelControl??this;}}
         internal event Action BusyChanged;
+        internal event Action<string> SdTestRequested;
         internal NpDownloadForm(string sourcePath=null):this(sourcePath,true){}
         internal NpDownloadForm(string sourcePath,bool autoDiscover) {
             sourcePath=sourcePath==null?null:sourcePath.Trim();
@@ -53,9 +53,10 @@ namespace CE32_console
             var actions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};actions.Controls.AddRange(new Control[]{refresh,list,recover,save,cancel,play,convert,convertAfterDownload});
             actions.Controls.Add(mergeDat);actions.Controls.Add(calibrationButton);
             calibrationButton.Click+=(s,e)=>{if(!busy)USB512_interface.NpCalibrationStore.Show(DialogOwner,"offline");};
-
             var cardActions=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true};cardActions.Controls.AddRange(new Control[]{deleteLast,format,repairCatalog,cardHelp});
-
+            var sdTest=new Button {Text="SD card test…",AutoSize=true};cardActions.Controls.Add(sdTest);
+            sdTest.Click+=(s,e)=>{if(busy)return;var source=sources.SelectedItem as Source;string path=source!=null&&source.Usb?source.Path:null;
+                if(SdTestRequested!=null)SdTestRequested(path);else using(var dialog=new USB512_interface.NpSdTestForm(null,path))dialog.ShowDialog(DialogOwner);};
             Controls.Add(records);Controls.Add(cardActions);Controls.Add(actions);Controls.Add(sources);Controls.Add(progress);Controls.Add(status);
             var nameRow=new TableLayoutPanel {Dock=DockStyle.Top,Height=76,ColumnCount=3,RowCount=2,Padding=new Padding(0,4,0,4)};
             nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,115));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));nameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,100));
@@ -273,6 +274,15 @@ namespace CE32_console
         {return !usb || USB512_interface.NpV1Management.UidFromPath(path)!=null;}
         private List<NpDownloadRecord> ReadCatalog(Stream stream,Source source,Action<int> report=null,bool forceHeaders=false)
         {return HeaderRecoveryEligible(source.Usb,source.Path)?NpCatalogRecovery.Read(stream,()=>cancelled,report,forceHeaders):NpDownloadCatalog.ReadAvailable(stream);}
+        private static string DownloadDiagnostics(NpDownloadStream stream) {
+            if(stream==null)return "Card-reader source; no firmware counters";
+            try{return stream.Diagnostics();}catch(Exception ex){return "Unavailable: "+ex.Message;}
+        }
+        internal static void WriteDownloadPerformance(string output,object report) {
+            // Never overwrite an earlier result, including after a refused export.
+            using(var file=new FileStream(Path.Combine(output,"download_performance.json"),FileMode.CreateNew,FileAccess.Write,FileShare.Read))
+            using(var writer=new StreamWriter(file))writer.Write(new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(report));
+        }
         internal static string DownloadTimeRemaining(int percent,double elapsedSeconds,bool knownSize) {
             return USB512_interface.NpProgressEstimate.Remaining(percent,100,elapsedSeconds,knownSize);
         }
@@ -308,6 +318,8 @@ namespace CE32_console
                     using(var destination=USB512_interface.NpFolderNaming.Reserve(root,name)) {
                     string output=destination.Path;int index=i;
                     var download=stream as NpDownloadStream;
+                    string firmwareBefore=DownloadDiagnostics(download);
+                    var timingBefore=download==null?null:download.TimingSnapshot();
                     long transferStart=download==null?0:download.DownloadedBytes;
                     var watch=System.Diagnostics.Stopwatch.StartNew();
                     Action<int> reportProgress=p=>{
@@ -322,7 +334,8 @@ namespace CE32_console
                             " | Selected downloads: "+USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown)+" · "+elapsed.Elapsed+"\r\n"+output));
                     };
                     reportProgress(0);
-                    using(var prefetch=source.Usb?new NpDownloadPrefetchStream(stream,checked(r.Start*512),checked(r.End*512),()=>cancelled):null){
+                    bool exported=false;string exportError=null;
+                    try {using(var prefetch=source.Usb?new NpDownloadPrefetchStream(stream,checked(r.Start*512),checked(r.End*512),()=>cancelled):null){
                     Stream input=prefetch??stream;
                     if(recoverInterrupted&&r.PowerInterruptedRecovery){
                         if(r.Media)NpMediaExport.ExportPowerInterruptedPrefix(input,r.Start,r.End,output,()=>cancelled,reportProgress);
@@ -333,6 +346,24 @@ namespace CE32_console
                         string warning=NpCe64Export.V2RecordingWarning(result);
                         if(warning!=null)conversionWarnings.Add("Session "+r.Session+": "+warning);
                     }
+                    }exported=true;
+                    } catch(Exception ex){exportError=ex.Message;throw;}
+                    finally {
+                        watch.Stop();
+                        // Freeze timing before the final read-only diagnostics or
+                        // report/hash writes; none are part of the export rate.
+                        object measured=download==null?null:download.PerformanceSince(timingBefore,watch.Elapsed.TotalSeconds);
+                        string firmwareAfter=DownloadDiagnostics(download);
+                        if(Directory.Exists(output))try {
+                            string executable=typeof(NpDownloadForm).Assembly.Location,sha;
+                            using(var hash=System.Security.Cryptography.SHA256.Create())using(var file=File.OpenRead(executable))sha=BitConverter.ToString(hash.ComputeHash(file)).Replace("-","");
+                            WriteDownloadPerformance(output,new{schema_version=1,software_version=typeof(NpDownloadForm).Assembly.GetName().Version.ToString(),executable_sha256=sha,
+                                source_path=source.Path,transport=download==null?"SD card reader":download.TransportDescription,
+                                record=new{session=r.Session,format_version=r.FormatVersion,v2=r.V2,probe_mask=r.ProbeMask,ap_hz=r.ApHz,chunks=r.Chunks,prefix_recovery=recoverInterrupted&&r.PowerInterruptedRecovery},
+                                export_returned_successfully=exported,error=exportError,wall_seconds=watch.Elapsed.TotalSeconds,read_timing=measured,
+                                firmware_before=firmwareBefore,firmware_after=firmwareAfter,
+                                scope="Native export through flush/close; not subsequent MP4/WAV conversion or report writing. A successful export can contain an explicitly incomplete stored recording. No recording mutation or new USB read/retry policy."});
+                        }catch(Exception ex){System.Diagnostics.Trace.WriteLine("Download timing report unavailable: "+ex.Message);}
                     }
                     nativeDone+=(double)r.Chunks*(r.V2?46592:65536);nativeSeconds+=watch.Elapsed.TotalSeconds;
                     if(merge && !r.Media && (r.Chunks>0 || recoverInterrupted&&r.PowerInterruptedRecovery))NpSdDatMerge.ExportTimed(output,r.V2,(int)r.ProbeMask,(int)r.ApHz,()=>cancelled,
@@ -346,7 +377,7 @@ namespace CE32_console
                     }catch(OperationCanceledException){throw;}catch(Exception ex){conversionErrors.Add("Session "+r.Session+": "+ex.Message);}
                     }
                 }
-            }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Export finished · "+elapsed.Elapsed+". Data, metadata and timestamps saved. NP: capture_status.txt.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+(recoverInterrupted?"Recovered prefixes remain INCOMPLETE; not firmware-finalized. ":chosen.Any(r=>!r.Complete)?"Incomplete recordings contain footer-reported data only. ":"")+string.Join("; ",conversionWarnings);
+            }});progress.Value=100;status.Text=(conversionErrors.Count==0?"Export finished · "+elapsed.Elapsed+". Data, metadata and timestamps saved. Timing: download_performance.json.":"Native download complete; media conversion failed: "+string.Join("; ",conversionErrors))+" "+(recoverInterrupted?"Recovered prefixes remain INCOMPLETE; not firmware-finalized. ":chosen.Any(r=>!r.Complete)?"Incomplete recordings contain footer-reported data only. ":"")+string.Join("; ",conversionWarnings);
             }catch(OperationCanceledException){status.Text="Cancelled. Partial files are retained and marked incomplete.";}
             catch(Exception ex){status.Text="Download stopped: "+ex.Message;MessageBox.Show(DialogOwner,status.Text,"NP download",MessageBoxButtons.OK,MessageBoxIcon.Warning);}
             finally{SetBusy(false);}

@@ -1,45 +1,32 @@
 {
-  "release": "V2_RTC_FIRST_SAMPLE_APP46DF5009_USB62910614_20261029",
-  "stage": "SD_TRIPLE20K_30S_CHECKED_USB_ACQUISITION_UNTESTED",
-  "files": {
-    "V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex": {
-      "bytes": 770056,
-      "sha256": "912BCA1508570A8D792E94E5CF76C97D0AD696BB984BCCB5F24BBC333C8C80D0"
-    },
-    "V2_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.xenp": {
-      "bytes": 279980,
-      "sha256": "060BC91098B46F78EA97237AA2C3D0ED37F2AF69E53A75F1D78A8E1A8E70908F"
-    },
-    "V2_fused_RECOVERY_6408DBB8_USB_62910614_APP_46DF5009_RTC_FIRST_SAMPLE_20261029.hex": {
-      "bytes": 5745164,
-      "sha256": "22817BD623D7D73657202251E40419979DCB89FA8D3CFF1FE3451562BE1F8914"
-    },
-    "V2_recovery_only_6408DBB8_20261012.hex": {
-      "bytes": 84090,
-      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-    },
-    "V2_USB_62910614_RTC_FIRST_SAMPLE_20261029.hex": {
-      "bytes": 654040,
-      "sha256": "683A8F4BA40B7E3384F75EE00508D44563C3CAE92AB98A541CD4094BC6793714"
-    },
-    "V2_USB_62910614_RTC_FIRST_SAMPLE_20261029.xenp": {
-      "bytes": 237796,
-      "sha256": "8963CBB6BF5C9656E2054FEBE19085C56BAC0A6C544516660AE51345D5BB0922"
-    }
+  "status": "SCOPED_CANDIDATE_NOT_PUBLISHED",
+  "components": {
+    "recovery": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
+    "app": "F165D2EACBA7A565D0CA9C19A4655F20D850DC0522487BAB004F8512217ADA82",
+    "usb": "FEBFDD1424A674C8F89D864F050628B12AE0A458443E5627A8322C21A3478F95"
   },
-  "rebuild": false,
-  "relink": false,
-  "hardware_access_during_packaging": false,
-  "new_test_during_packaging": false,
-  "checked_components_preserved_byte_for_byte": true,
-  "manifests_preserved": true,
-  "retained_configuration_in_fused": false,
-  "partition_overlap": false,
-  "entry_vectors_and_flash_stack_bounds_checked": true,
-  "reused_existing_arm_map_evidence": true,
-  "fused_lf_normalized": true,
-  "fused_erased_padding_only": true,
-  "fused_programmed_bytes": 2088960,
-  "whole_fused_newly_flashed": false,
-  "limits": "Validated one 30-second P1+P2+P3/20kHz SD run on Delkin V90: full 1092116480-byte readback, 23440 chunks, 600063 DAT rows/probe, all five reported loss counters zero. Saved IMU 5780 AG/2890 MAG observations, observed sequence gaps zero; not every physical conversion. Independent local RTC-to-first-NP full interval120us; pre-record PC calibration generation2 confirmed and bound. PC declared setup uncertainty20594us and separate stopped readback phase interval[-36669,+41237]us are not the120us local interval or a verified absolute PC-error guarantee. R6 USB acquisition/USB IMU physical recording remains untested. Normal SD-to-USB2/download3/full export passed. No all-mode/card/endurance/analog-quality or arbitrary ADC-bit-checksum guarantee. Whole fused image not newly flashed; exact checked components merged without rebuild. Lab originals restored after test."
+  "files": {
+    "app.hex": "F165D2EACBA7A565D0CA9C19A4655F20D850DC0522487BAB004F8512217ADA82",
+    "app.xenp": "69B509ACB34D6F19E9BA73F927AC54823C5A030D82185475822E00B8DE050935",
+    "fused.hex": "7FFC34425952074C6AE88F59DDE575B7C7D235E4924C4CE56FFA54AE5DD0A6E6",
+    "recovery.hex": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
+    "usb.hex": "FEBFDD1424A674C8F89D864F050628B12AE0A458443E5627A8322C21A3478F95",
+    "usb.xenp": "09990B47E102DB33EFB3F2D66EA060BEBFFBB0305734A7C33708884C6297FBD2"
+  },
+  "installed_full_sha256": "26229C92478352C5AAE03E86A4389F520B542B032912E7E6BA68A5EAA78A37A6",
+  "limits": [
+    "30-second 3-probe 20 kHz SD and 60-second ordinary USB evidence only",
+    "Experimental AUX grid not enabled",
+    "A1 catalog inspection rejected; normal export passed",
+    "Full feature parity with latest APP not yet established",
+    "Fused image assembled from individually checked components, not flashed as a whole"
+  ],
+  "release": "WILD-X V2 RTC and IMU",
+  "stage": "SCOPED_HARDWARE_CHECKED",
+  "app_crc32": "194D9B94",
+  "usb_crc32": "74A9B98B",
+  "recovery_crc32": "6408DBB8",
+  "all_modes_or_endurance_qualified": false,
+  "source_manifest_sha256": "F5922B3D5B3B118BD98F8BF06B3E59D9FACAEBDB2AB410EBDFF2B6467A3B0E06",
+  "acceptance_sha256": "8930C5EDBAC4BD07C73811A58D3B2505C31CE9AE28491922E60D0A39ACC666B9"
 }

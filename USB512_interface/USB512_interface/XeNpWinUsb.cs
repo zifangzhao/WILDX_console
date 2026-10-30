@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace USB512_interface
 {
@@ -147,7 +149,7 @@ namespace USB512_interface
         // only a concrete supported mode.  The returned text is saved with
         // the recording so a reduced best-effort profile is never mistaken
         // for the requested one.
-        internal NpModeCapabilities SelectCaptureMode(NpCaptureRequest requested,out NpCaptureMode resolved,out string resolution,out string reconnectUid)
+        internal NpModeCapabilities SelectCaptureMode(NpCaptureRequest requested,out NpCaptureMode resolved,out string resolution,out string reconnectUid,bool discoverPreparation=false)
         {
             reconnectUid=null;
             XeNpStatus status=GetStatus();
@@ -172,7 +174,19 @@ namespace USB512_interface
                 return caps;
             }
             resolved=requested.ResolveBest(caps,out resolution);
-            if(caps.SupportsPresence) {
+            bool prepared=false;
+#if NP_PREPARATION_ENABLE
+            if(discoverPreparation && caps.SupportsPresence && resolved.ProbeMask==caps.ActiveMask && resolved.ApHz==caps.ApHz){
+                string uid=NpV1Management.UidFromPath(devicePath);
+                if(uid!=null)try{
+                    var receipt=NpProbePreparation.Query((q,c)=>Task.FromResult(ExchangeProbePreparation(q,c)),CancellationToken.None).GetAwaiter().GetResult();
+                    prepared=NpProbePreparation.MatchesProfile(receipt,uid,NpProbePreparation.Usb,(uint)resolved.ProbeMask,(uint)resolved.ApHz);
+                }catch(Exception ex) when(ex is IOException || ex is TimeoutException || ex is NotSupportedException){ }
+            }
+#endif
+            // Presence/reset preflight destroys preparation. Only a fresh,
+            // UID/profile/generation-bound receipt can bypass that preflight.
+            if(caps.SupportsPresence && !prepared) {
                 int checkMask=resolved.ProbeMask;
                 VendorOut(0x75,(ushort)checkMask,(ushort)resolved.ApHz);
                 DateTime presenceDeadline=DateTime.UtcNow.AddSeconds(12);
@@ -209,6 +223,8 @@ namespace USB512_interface
         }
 
         internal XeNpStatus Start(ushort mcoDivider)
+        {return StartPrepared(mcoDivider,null);}
+        internal XeNpStatus StartPrepared(ushort mcoDivider,Action beforeStart)
         {
             XeNpStatus status=GetStatus();
             var startCaps=GetModeCapabilities();
@@ -242,6 +258,7 @@ namespace USB512_interface
             int expectedHz=startCaps==null?status.ApSampleRateHz:startCaps.ApHz;
             if(NpCaptureMode.RateBit(expectedHz)==0)
                 throw new IOException("No supported NP capture profile is available. No START sent.");
+            if(beforeStart!=null)beforeStart();
             VendorOut(RequestStart, 0, 0);
             uint previousSession=status.SessionId,expectedSession=0;
             DateTime deadline=DateTime.UtcNow.AddSeconds(3);
@@ -344,8 +361,52 @@ namespace USB512_interface
             return NpV1Management.ParseSplitStatus(data,uid);
         }
 
+        internal byte[] GetAcquisitionAnchor() { return ReadTimingControl(0x7e,64); }
+        internal byte[] GetCycleClock(uint id) {return ReadTimingControl(0x7f,64,(ushort)id,(ushort)(id>>16));}
+        internal byte[] GetUsbTimingInfo(){return ReadTimingControl(0x80,64);}
+#if NP_IMU_GRID_ENABLE && NP_FIRST_SYNC_ENABLE
+        internal byte[] GetImuGridControl(){return ReadTimingControl(0x81,32);}
+        internal void SelectImuGrid(bool selected){VendorOut(0x81,selected?(ushort)1:(ushort)0,0);}
+#endif
+#if NP_FIRST_SYNC_ENABLE
+        internal CE32_console.NpHardwareRtcUsbTransaction LastHardwareRtcTransaction {get;private set;}
+        internal byte[] GetUsbFirstSyncInfo(){return ReadTimingControl(0x80,64,0,UInt16.MaxValue);}
+#endif
+        internal byte[] GetUsbTimingPrearm(uint id){return ReadTimingControl(0x80,108,(ushort)id,(ushort)(id>>16));}
+        internal NpUsbTimingOut CreateUsbTimingOut(){return new NpUsbTimingOut(winUsb);}
+        internal void SetUsbTiming(byte[] body) {
+            if(body==null||body.Length!=64)throw new ArgumentException("Timing negotiation must be64 bytes.");
+            var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {RequestType=0x40,Request=0x80,Length=64};uint sent;
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,body,64,out sent,IntPtr.Zero)||sent!=64)
+                throw new Win32Exception(Marshal.GetLastWin32Error(),"Optional timing negotiation unavailable.");
+        }
+        internal uint GetFreshDeviceTick() {
+            byte[] b=ReadTimingControl(0x42,400);
+            if(b.Length<12 || BitConverter.ToUInt32(b,0)!=0x55534253)throw new IOException("Unsupported fresh device clock.");
+            return BitConverter.ToUInt32(b,8);
+        }
+        byte[] ReadTimingControl(byte request,ushort length) {return ReadTimingControl(request,length,0,0);}
+        byte[] ReadTimingControl(byte request,ushort length,ushort value,ushort index) {
+            var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {RequestType=0xc0,Request=request,Length=length,Value=value,Index=index};
+            var bytes=new byte[length];uint count;
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,bytes,length,out count,IntPtr.Zero)) {
+                int error=Marshal.GetLastWin32Error();
+                throw new Win32Exception(error,"Optional timing query unavailable (Windows "+error+
+                    "; request 0x"+request.ToString("X2")+", value 0x"+value.ToString("X4")+
+                    ", index 0x"+index.ToString("X4")+", length "+length+").");
+            }
+            if(count!=length)Array.Resize(ref bytes,(int)count);return bytes;
+        }
+
+#if NP_FIRST_SYNC_ENABLE
+        byte[] lastStatusRaw;
+        internal byte[] LastStatusRaw {get{var raw=lastStatusRaw;return raw==null?null:(byte[])raw.Clone();}}
+#endif
         internal XeNpStatus GetStatus()
         {
+#if NP_FIRST_SYNC_ENABLE
+            lastStatusRaw=null; // A failed read cannot expose an earlier reply.
+#endif
             var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {
                 RequestType=0xC0, Request=0x42, Value=0, Index=0, Length=400 };
             byte[] buffer=new byte[400]; uint transferred;
@@ -353,6 +414,11 @@ namespace USB512_interface
                 int error=Marshal.GetLastWin32Error();
                 throw new Win32Exception(error,"WILDX status request failed (Win32 "+error+")");
             }
+#if NP_FIRST_SYNC_ENABLE
+            if(transferred>buffer.Length)throw new IOException("WILDX status reply exceeded the supplied buffer.");
+            if(transferred!=buffer.Length)Array.Resize(ref buffer,checked((int)transferred));
+            lastStatusRaw=buffer; // Preserve malformed replies too; Parse does not mutate.
+#endif
             return XeNpStatus.Parse(buffer,checked((int)transferred));
         }
 
@@ -479,6 +545,52 @@ namespace USB512_interface
             throw new TimeoutException("NP configuration receipt timed out; read status before retrying a commit.");
         }
 
+#if NP_FIRST_SYNC_ENABLE
+        // Same stopped foreground mailbox, distinct NPT2v2 parser. One OUT;
+        // stale replies may be polled, COMMIT is never resubmitted.
+        internal byte[] ExchangeHardwareRtc(byte[] request,CancellationToken cancel)
+        {
+            var transaction=new CE32_console.NpHardwareRtcUsbTransaction(request,0x70,0x71);LastHardwareRtcTransaction=transaction;
+            return transaction.Exchange(cancel,(isOut,bytes)=>{
+                var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET{RequestType=isOut?(byte)0x40:(byte)0xc0,Request=isOut?(byte)0x70:(byte)0x71,Length=64};uint transferred;
+                bool success=USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,bytes,64,out transferred,IntPtr.Zero);
+                return new CE32_console.NpHardwareRtcUsbTransfer(success,transferred,success?0:Marshal.GetLastWin32Error());
+            });
+        }
+#endif
+        internal byte[] ExchangeProbePreparation(byte[] request,System.Threading.CancellationToken cancel)
+        {
+            if(!NpProbePreparation.IsRequest(request))throw new ArgumentException("Probe preparation frame required.");
+            cancel.ThrowIfCancellationRequested();uint transferred;
+            var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET{RequestType=0x40,Request=0x70,Length=64};
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,request,64,out transferred,IntPtr.Zero)||transferred!=64)
+                throw new IOException("Probe preparation is unavailable in this USB service.");
+            setup.RequestType=0xc0;setup.Request=0x71;var wait=System.Diagnostics.Stopwatch.StartNew();
+            while(wait.ElapsedMilliseconds<2500){
+                cancel.ThrowIfCancellationRequested();var reply=new byte[64];
+                if(USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,reply,64,out transferred,IntPtr.Zero)&&transferred==64&&
+                    NpProbePreparation.Matches(request,reply))return reply;
+                System.Threading.Thread.Sleep(20);
+            }
+            throw new TimeoutException("Probe preparation receipt missing; no command replayed.");
+        }
+
+        internal byte[] ExchangeNpClosedLoop(byte[] request,System.Threading.CancellationToken cancel)
+        {
+            WildNpClosedLoop.NpClosedLoopControl.Parse(request);cancel.ThrowIfCancellationRequested();
+            var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET{RequestType=0x40,Request=0x70,Length=64};uint transferred;
+            if(!USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,request,64,out transferred,IntPtr.Zero)||transferred!=64)
+                throw new IOException("Closed-loop control is unavailable; neural recording remains available.");
+            setup.RequestType=0xc0;setup.Request=0x71;var wait=System.Diagnostics.Stopwatch.StartNew();
+            while(wait.ElapsedMilliseconds<2500){
+                cancel.ThrowIfCancellationRequested();var reply=new byte[64];
+                if(USB512WinUsbNative.WinUsbControlTransfer(winUsb,setup,reply,64,out transferred,IntPtr.Zero)&&transferred==64&&
+                   WildNpClosedLoop.NpClosedLoopControl.MatchesReply(request,reply))return reply;
+                System.Threading.Thread.Sleep(20);
+            }
+            throw new TimeoutException("Closed-loop receipt missing; outcome unknown. No configuration replayed.");
+        }
+
         internal XeNpSdInfo GetSdInfo()
         {
             var setup=new USB512WinUsbNative.WINUSB_SETUP_PACKET {
@@ -516,6 +628,9 @@ namespace USB512_interface
                     throw new Win32Exception(Marshal.GetLastWin32Error(),"NP bulk reads did not abort after STOP; recording is incomplete.");
             }
         }
+
+        // Explicit Stop of probe-only preparation has no active bulk reader.
+        internal void StopPreparation(){VendorOut(RequestStop,0,0);}
 
         internal int Read(byte[] buffer)
         {
@@ -579,8 +694,12 @@ namespace USB512_interface
                 RequestType = 0x40, Request = request, Value = value, Index = index, Length = 0
             };
             uint transferred;
-            if (!USB512WinUsbNative.WinUsbControlTransfer(winUsb, setup, new byte[0], 0, out transferred, IntPtr.Zero))
-                throw new IOException("WILDX vendor request failed: " + Marshal.GetLastWin32Error());
+            if (!USB512WinUsbNative.WinUsbControlTransfer(winUsb, setup, new byte[0], 0, out transferred, IntPtr.Zero)) {
+                int error=Marshal.GetLastWin32Error();
+                throw new IOException("WILDX vendor request failed: "+error+
+                    " (request 0x"+request.ToString("X2")+", value 0x"+value.ToString("X4")+
+                    ", index 0x"+index.ToString("X4")+").");
+            }
         }
 
         public void Dispose()

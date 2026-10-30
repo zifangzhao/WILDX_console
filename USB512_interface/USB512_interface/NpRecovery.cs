@@ -16,7 +16,7 @@ namespace USB512_interface {
   private DeviceKind npSessionDeviceKind;
   private int npSegmentNumber,npEmptyAttempts,npConsecutiveShortFailures;
   private bool npInternalRestart,npRecoveryCancelled=true,npSessionHasGap;
-  private bool npRecoveryAttempt,npV2RecoverySafe,npV2RecoveryComplete;
+  private bool npRecoveryAttempt,npV2RecoverySafe,npV2RecoveryComplete,npV1StallRecoverySafe,npV1TimelineRecoverySafe;
   private volatile bool npFreshStartAvailable;
   private DateTime npLastReceiveUtc=DateTime.MinValue,npPreviousReceiveUtc=DateTime.MinValue,npSegmentStartUtc=DateTime.MinValue;
   private void NpInitializeRecovery() {
@@ -34,7 +34,7 @@ namespace USB512_interface {
    };
   }
   private string NpSegmentFolder(string fallback) {
-   npRecoveryAttempt=npInternalRestart;npV2RecoverySafe=false;npV2RecoveryComplete=false;
+   npRecoveryAttempt=npInternalRestart;npV2RecoverySafe=false;npV2RecoveryComplete=false;npV1StallRecoverySafe=npV1TimelineRecoverySafe=false;
    if((selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2) || !npAutoRecover.Checked) {
     npSessionFolder=null;npLatestRecordingFolder=npPreviousRecordingFolder=null;npRecoveryCancelled=true;npInternalRestart=false;return fallback;
    }
@@ -99,6 +99,23 @@ namespace USB512_interface {
     message.Contains("Win32 error 1167") || message.Contains("Win32 error 31") ||
     message.Contains("Win32 error 2)") || message.Contains("Win32 error 6)") ||
     message.Contains("No such device");
+  }
+  internal static bool NpV1StallRetryable(string failure,bool freshStart,bool stopped,bool cleanupSafe,bool validPrefix) {
+   // A post-data stall may restart only after STOP and every file/decoder
+   // finalizer succeeded. The first timeout must not hide a later failure.
+   return failure=="NP1 stream stopped producing data; recording is incomplete." &&
+    freshStart && stopped && cleanupSafe && validPrefix;
+  }
+  internal static NpTimelineBreakException NpV1TimelineBreakCause(Exception error) {
+   if(error==null)return null;
+   while(error.InnerException!=null)error=error.InnerException;
+   return error as NpTimelineBreakException;
+  }
+  internal static bool NpV1TimelineRetryable(Exception error,bool freshStart,bool stopped,bool closed,bool savedPrefix,params Exception[] probeFailures) {
+   if(NpV1TimelineBreakCause(error)==null || !freshStart || !stopped || !closed || !savedPrefix || probeFailures==null || probeFailures.Length==0)return false;
+   bool found=false;
+   foreach(var failure in probeFailures)if(failure!=null){if(NpV1TimelineBreakCause(failure)==null)return false;found=true;}
+   return found;
   }
   private static bool NpV2TransportCode(int code) {
    return code==2 || code==6 || code==31 || code==121 || code==1167;
@@ -169,7 +186,8 @@ namespace USB512_interface {
    bool intact=!failure && (!v2 || npV2RecoveryComplete);
    NpJournal(failure?"recording_failed":intact?"recording_stopped":"recording_incomplete",runFolder,message);
    bool freshExporterRetry=!v2 && npFreshStartAvailable && NpFreshStartExporterFault(message);
-   bool retry=v2?npV2RecoverySafe && npSessionDeviceUid!=null:NpRetryable(message) || freshExporterRetry;
+   bool retry=v2?npV2RecoverySafe && npSessionDeviceUid!=null:NpRetryable(message) || freshExporterRetry ||
+    ((npV1StallRecoverySafe || npV1TimelineRecoverySafe) && npSessionDeviceUid!=null);
    if(!npRecoveryCancelled && failure && retry) {
     npSessionHasGap=true;
     npEmptyAttempts=Interlocked.Read(ref neuropixelsPayloadBytes)>0?0:npEmptyAttempts+1;
@@ -177,7 +195,8 @@ namespace USB512_interface {
      DateTime.UtcNow-npSegmentStartUtc>=TimeSpan.FromSeconds(10))?0:npConsecutiveShortFailures+1;
     if(npLastReceiveUtc!=DateTime.MinValue)npPreviousReceiveUtc=npLastReceiveUtc;
     if(npEmptyAttempts<12 && npConsecutiveShortFailures<12) {
-     NpJournal("gap_reconnect_pending",runFolder,"Reopen same UID with fresh START; previous recording incomplete; missing samples UNKNOWN");
+     NpJournal("gap_reconnect_pending",runFolder,"Reopen same UID with fresh START; previous recording incomplete; missing samples UNKNOWN"+
+      (npV1TimelineRecoverySafe?"; ambiguous NP timeline ended the previous files; no cross-recording alignment claimed":""));
      File.WriteAllText(Path.Combine(npSessionFolder,"session_status.txt"),"state=reconnecting\r\nhas_gaps=True\r\nlossless=False\r\n");
      btnStart.Enabled=false;btnStop.Enabled=true;btnRefresh.Enabled=false;comboDrives.Enabled=false;
      btnNpLogger.Enabled=false;btnSdInfo.Enabled=false;

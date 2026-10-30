@@ -123,6 +123,7 @@ namespace CE32_console {
                 alignment="Ordinal complete rows within each source segment. Original per-probe phase offsets remain; merging is not proof of simultaneous ADC sampling. No new padding or gap bridging.",
                 unmatched_rows="Retained in unpaired_tail, indexed by the segment receipts. Original SD validation/status reports remain source evidence.",bands=receipts})+Environment.NewLine);
             USB512_interface.NpRecordingSettings.MergedSd(folder,mask,apHz,v2);
+            USB512_interface.NpTimeCorrection.AfterMerge(folder);
             foreach(var band in bands)foreach(string input in band.Inputs){File.Delete(input);string xml=Path.ChangeExtension(input,".xml");if(File.Exists(xml))File.Delete(xml);}
             USB512_interface.NpRecordingSettings.RefreshBundle(folder);
             if(progress!=null)progress(100,"DAT merge complete · "+estimate.Elapsed);

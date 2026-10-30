@@ -16,8 +16,8 @@ namespace USB512_interface
         internal enum Encoding { Auto, SignedNominal, LegacyUnsigned }
         internal sealed class MissingProbe
         {
-            internal string Recording,MetadataFolder;internal int Port;internal bool? Np2;internal Dictionary<string,object> Probe;
-            internal string Key {get{return Path.GetFullPath(Recording).TrimEnd(Path.DirectorySeparatorChar)+"|"+Port;}}
+            internal string Recording,MetadataFolder,SettingsKey;internal int Port;internal bool? Np2;internal Dictionary<string,object> Probe;
+            internal string Key {get{return (SettingsKey??Path.GetFullPath(Recording).TrimEnd(Path.DirectorySeparatorChar))+"|"+Port;}}
         }
         internal sealed class Selection {internal NpAdcCalibration Profile;internal string Imro,ImroHash;}
         sealed class MissingSerial:IOException {internal MissingSerial():base("Probe SN unavailable; select a factory probe for this recording."){} }
@@ -48,6 +48,26 @@ namespace USB512_interface
         static string Text(object value){return value as string;}
         static bool True(object value){return value is bool&&(bool)value;}
         static Dictionary<string,object> Read(string path){return Json.Deserialize<Dictionary<string,object>>(File.ReadAllText(path));}
+        static object Ordered(object value)
+        {
+            var fields=value as Dictionary<string,object>;
+            if(fields!=null)return new SortedDictionary<string,object>(fields.ToDictionary(p=>p.Key,p=>Ordered(p.Value)),StringComparer.Ordinal);
+            var rows=value as IEnumerable;
+            return rows!=null&&!(value is string)?rows.Cast<object>().Select(Ordered).ToArray():value;
+        }
+        static string SelectionSettings(Dictionary<string,object> doc,Dictionary<string,object> probe,string folder,bool? np2)
+        {
+            var actual=Part(doc,"actual");object mask=Value(actual,"probe_mask");
+            if(mask==null||!np2.HasValue)return null; // Legacy metadata without a total probe count stays recording-specific.
+            Mask(Number(mask));object channels=Value(probe,"channel_mapping");string imro=null;
+            string name=Text(Value(probe,"imro_file"));
+            if(channels==null&&!String.IsNullOrWhiteSpace(name)&&folder!=null){
+                string path=Path.GetFullPath(Path.Combine(folder,name));
+                if(!Inside(path,Path.GetFullPath(folder)))throw new InvalidDataException("Recorded IMRO path leaves its metadata folder.");
+                imro=NpCalibrationLibrary.Hash(path);
+            }
+            return Json.Serialize(new{mask=Number(mask),np2=np2.Value,rate=Value(actual,"ap_sample_rate_hz")??Value(Part(doc,"output"),"ap_sample_rate_hz"),channels=Ordered(channels),imro});
+        }
         static IEnumerable<string> EvidenceFolders(string input)
         {
             string folder=Path.GetDirectoryName(input);yield return folder;
@@ -153,10 +173,12 @@ namespace USB512_interface
                     notes.Add("P"+port+" SN "+serial+" matched");
                 }else if(library!=null){
                     Selection selection;if(!item.Selections.TryGetValue(port,out selection)){
-                        item.Missing.Add(new MissingProbe{Recording=item.MetadataFolder??Path.GetDirectoryName(item.Input),MetadataFolder=item.MetadataFolder,Port=port,Np2=np2??NpCalibrationLibrary.ModelHint(probe),Probe=probe});continue;
+                        bool? model=np2??NpCalibrationLibrary.ModelHint(probe);
+                        item.Missing.Add(new MissingProbe{Recording=item.MetadataFolder??Path.GetDirectoryName(item.Input),MetadataFolder=item.MetadataFolder,Port=port,Np2=model,Probe=probe,SettingsKey=SelectionSettings(doc,probe,item.MetadataFolder,model)});continue;
                     }
-                    profile=selection.Profile;
-                    if(selection.Imro!=null){if(NpCalibrationLibrary.Hash(selection.Imro)!=selection.ImroHash)throw new IOException("Selected IMRO changed; select it again.");item.Imros[port]=selection.Imro;item.ImroHashes[port]=selection.ImroHash;}
+                    if(selection.Imro!=null&&NpCalibrationLibrary.Hash(selection.Imro)!=selection.ImroHash)throw new IOException("Selected IMRO changed; select it again.");
+                    string selectedImro;profile=library.SelectRecording(selection.Profile.Serial,probe,item.MetadataFolder,selection.Imro,selection.Profile,out selectedImro);
+                    if(selectedImro!=null){item.Imros[port]=selectedImro;item.ImroHashes[port]=NpCalibrationLibrary.Hash(selectedImro);}
                     notes.Add("P"+port+" SN "+profile.Serial+" user selected for this recording; recorded serial unavailable");
                 }else{profile=profiles.Get(port);if(profile==null)throw new InvalidDataException("Load calibration for physical probe "+port+"; recorded serial unavailable.");notes.Add("P"+port+" SN "+profile.Serial+" manual assignment; recorded serial unavailable");}
                 if(np2.HasValue&&profile.Np2!=np2.Value||item.Lfp&&profile.Np2)throw new InvalidDataException("Calibration model does not match the recording/band.");

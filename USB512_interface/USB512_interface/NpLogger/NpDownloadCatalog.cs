@@ -10,29 +10,36 @@ namespace CE32_console
 {
     internal sealed class NpDownloadRecord {
         internal long Start,End;internal uint Session,Chunks,ApHz,LfpHz,State,Fault,ProbeMask,LaneBytes,TicksPerBlock;
-        internal uint FormatVersion,CameraHz,MicrophoneHz,LogicalPrefixBlocks,LogicalHighWaterBlocks;
+        internal uint FormatVersion,UnderlyingFormatVersion,CameraHz,MicrophoneHz,LogicalPrefixBlocks,LogicalHighWaterBlocks;
         internal string ValidationError;
         internal long CatalogEnd,CommittedEnd;
         internal bool OpenTail;
         internal string RecoveryNotice;
         internal bool Downloadable{get{return string.IsNullOrEmpty(ValidationError);}}
-        internal bool V2{get{return FormatVersion==11 || FormatVersion==12 || FormatVersion==13 || FormatVersion==14;}}
+        internal bool V2{get{return FormatVersion==11 || FormatVersion==12 || FormatVersion==13 || FormatVersion==14 || FormatVersion==15;}}
         internal bool Media{get{return (FormatVersion==7 || FormatVersion==8) && ProbeMask==0 && ApHz==0;}}
         internal bool Complete{get{return State==3 && Fault==0 && Chunks>0;}}
         internal bool PowerInterruptedRecovery{get{return Downloadable && (FormatVersion==6 && State>=1 && State<=4 || Media && State==1 && Fault==0) && Chunks==0 && !Complete;}}
         internal string V2ProbeLabel{get{return ProbeMask==1?"probe 1":ProbeMask==3?"probes 1 + 2":ProbeMask==7?"probes 1 + 2 + 3":"mask "+ProbeMask;}}
         internal double V2DurationSeconds{get{return ApHz==0||TicksPerBlock==0?0:Chunks*(double)TicksPerBlock/(ApHz*1600.0);}}
+        internal string RecordedSize{get{
+            if(PowerInterruptedRecovery)return "size unknown";
+            double size=(ulong)Chunks*(V2?46592UL:65536UL);int unit=0;
+            string[] units={"B","KiB","MiB","GiB","TiB"};
+            while(size>=1024 && unit<units.Length-1){size/=1024;unit++;}
+            return size.ToString(unit==0?"N0":"N2")+" "+units[unit]+(Chunks==0?" committed":"");
+        }}
         public override string ToString(){
             if(!Downloadable)return (Start>0?"Recording at LBA "+Start:"Catalog")+" | UNAVAILABLE — "+ValidationError;
-            string state=Complete?"complete (payload not yet validated)":PowerInterruptedRecovery?"INCOMPLETE — unfinished footer; read-only recovery available":Chunks==0?"INCOMPLETE — footer reports zero chunks (payload not scanned)":"INCOMPLETE — committed prefix only";
-            if(FormatVersion==14)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N2} GiB | physical/prefix/high-water blocks {4}/{5}/{6} | {7}",
-                Session,V2ProbeLabel,ApHz,Chunks*46592.0/1073741824,Chunks,LogicalPrefixBlocks,LogicalHighWaterBlocks,
+            string state=Complete?"complete (payload not yet validated)":PowerInterruptedRecovery?"INCOMPLETE — unfinished footer; read-only recovery available":Chunks==0?"INCOMPLETE — no committed data (payload not scanned)":"INCOMPLETE — committed prefix only";
+            if(FormatVersion==14 || FormatVersion==15 && UnderlyingFormatVersion==14)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3} | {4}",
+                Session,V2ProbeLabel,ApHz,RecordedSize,
                 LogicalPrefixBlocks!=Chunks || LogicalHighWaterBlocks!=Chunks?"INCOMPLETE — logical gaps; DAT export refused":state)+
                 (RecoveryNotice==null?"":" — "+RecoveryNotice);
-            if(V2)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N1} s | {4:N2} GiB | {5}{6}",Session,V2ProbeLabel,ApHz,V2DurationSeconds,Chunks*46592.0/1073741824,state,RecoveryNotice==null?"":" — "+RecoveryNotice);
+            if(V2)return string.Format("Session {0} | NP2 {1} | {2:N0} samples/s | {3:N1} s | {4} | {5}{6}",Session,V2ProbeLabel,ApHz,V2DurationSeconds,RecordedSize,state,RecoveryNotice==null?"":" — "+RecoveryNotice);
             string notice=RecoveryNotice==null?"":" — "+RecoveryNotice;
-            if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3:N0} chunks | {4}",Session,CameraHz,MicrophoneHz,Chunks,state)+notice;
-            return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),state)+notice;
+            if(Media)return string.Format("Session {0} | Camera {1} fps / microphone {2:N0} Hz | {3} | {4}",Session,CameraHz,MicrophoneHz,RecordedSize,state)+notice;
+            return string.Format("Session {0} | mask "+ProbeMask+" | AP {1:N0} / LFP {2:N0} Hz | {3:N1} s | {4} | {5}",Session,ApHz,LfpHz,Chunks*(LaneBytes*4.0)/(ApHz*780.0*NpSdGeometry.Count(ProbeMask)),RecordedSize,state)+notice;
         }
     }
     internal static class NpDownloadCatalog {
@@ -57,15 +64,28 @@ namespace CE32_console
                 }
             }
             byte[] b=Sector(s,record.Start+5);bool v2=record.V2;
-            if(Encoding.ASCII.GetString(b,0,8)!=(v2?"N2SDUTC1":"N1SDUTC1") ||
+            uint clockVersion=NpDownloadStream.U(b,8);
+            if((clockVersion!=1 && clockVersion!=2) || Encoding.ASCII.GetString(b,0,8)!=(v2?"N2SDUTC":"N1SDUTC")+clockVersion ||
                NpDownloadStream.U(b,508)!=NpDownloadStream.Crc(b,0,508))return null;
+            if(clockVersion==2 && b.Skip(160).Take(348).Any(value=>value!=0)){
+                // A recognized sealed receipt may extend UTC2. Normalize only
+                // a private copy, after exact recorded family/session/profile
+                // binding; arbitrary reserved bytes never acquire a date.
+                try {
+                    var bound=USB512_interface.NpFirstSyncSd.ReadSector(b,v2?2:1,record.Session,record.ApHz);
+                    if(bound==null || bound.Receipt.Mask!=record.ProbeMask)return null;
+                }catch(InvalidDataException){return null;}
+                b=(byte[])b.Clone();Array.Clear(b,160,348);
+                Buffer.BlockCopy(BitConverter.GetBytes(NpDownloadStream.Crc(b,0,508)),0,b,508,4);
+            }
             uint flags=NpDownloadStream.U(b,16),uncertainty=NpDownloadStream.U(b,24);
             ulong anchor=BitConverter.ToUInt64(b,32);
-            if(NpDownloadStream.U(b,8)!=1 || NpDownloadStream.U(b,12)!=record.Session ||
-               (flags&~7U)!=0 || (flags&3)!=3 || NpDownloadStream.U(b,20)==0 ||
+            if(NpDownloadStream.U(b,12)!=record.Session ||
+               (flags&~(v2?15U:7U))!=0 || (flags&3)!=3 || NpDownloadStream.U(b,20)==0 ||
                uncertainty<1000 || uncertainty>5000000 || NpDownloadStream.U(b,72)!=record.ApHz ||
                NpDownloadStream.U(b,76)!=1000 || anchor<1577836800000000UL || anchor>4102444800000000UL)return null;
-            if(v2 && b.Skip(80).Take(428).Any(value=>value!=0))return null;
+            int reserved=(flags&8U)!=0?112:80;
+            if(v2 && b.Skip(reserved).Take(508-reserved).Any(value=>value!=0))return null;
             uint before=unchecked(NpDownloadStream.U(b,v2?48:64)-NpDownloadStream.U(b,28));
             uint after=unchecked(NpDownloadStream.U(b,v2?52:68)-NpDownloadStream.U(b,28));
             ulong beforeUtc=BitConverter.ToUInt64(b,v2?56:48),afterUtc=BitConverter.ToUInt64(b,v2?64:56);
@@ -213,7 +233,7 @@ namespace CE32_console
                                 NpDownloadStream.U(h,72)==s.Length/512 && NpDownloadStream.U(h,68)<=s.Length/512;
                             if(end<NpDownloadStream.U(f,116) || end>NpDownloadStream.U(h,68))throw new InvalidDataException("NP2 extent mismatch: catalog="+end+", payload="+NpDownloadStream.U(h,60)+", committed="+NpDownloadStream.U(f,116)+", reserved="+NpDownloadStream.U(h,68)+", state="+state+", fault="+NpDownloadStream.U(f,104)+", blocks="+NpDownloadStream.U(f,108)+".");}
                         catch(InvalidDataException ex){failure=ex.Message;}
-                        return new NpDownloadRecord{ValidationError=failure,CatalogEnd=end,CommittedEnd=NpDownloadStream.U(f,116),OpenTail=openTail,FormatVersion=NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104),LogicalPrefixBlocks=NpDownloadStream.U(f,132),LogicalHighWaterBlocks=NpDownloadStream.U(f,136)};
+                        return new NpDownloadRecord{ValidationError=failure,CatalogEnd=end,CommittedEnd=NpDownloadStream.U(f,116),OpenTail=openTail,FormatVersion=NpDownloadStream.U(h,8),UnderlyingFormatVersion=NpDownloadStream.U(h,8)==15?NpDownloadStream.U(h,136):NpDownloadStream.U(h,8),ProbeMask=NpDownloadStream.U(h,24),LaneBytes=46592/4,TicksPerBlock=NpDownloadStream.U(h,44),Start=start,End=end,Session=NpDownloadStream.U(h,12),Chunks=NpDownloadStream.U(f,108),ApHz=NpDownloadStream.U(h,16),LfpHz=0,State=NpDownloadStream.U(f,100),Fault=NpDownloadStream.U(f,104),LogicalPrefixBlocks=NpDownloadStream.U(f,132),LogicalHighWaterBlocks=NpDownloadStream.U(f,136)};
                     }
                     return ReadV1Record(start,end,h,f,available);
         }

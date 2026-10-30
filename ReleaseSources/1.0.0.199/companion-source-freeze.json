@@ -1,0 +1,310 @@
+{
+  "schema": 1,
+  "status": "companion_sources_archived_qualification_pending",
+  "scope": "Source provenance/archive only; no new code, build, test, hardware, Git mutation, or binary acceptance",
+  "archive": {
+    "sha256": "62E0A6F900414097FCC1BD30E17C2193B42985D9439CF14C84424E2B2DF97E50",
+    "bytes": 106794,
+    "path": "companion-sources.zip"
+  },
+  "source_files": 15,
+  "source_pins": [
+    {
+      "path": "Neuropixels/FirmwareUpdater/MscControl.cs",
+      "sha256": "65DD113A610C39C77E3B0B077C60B6E6AECF116D99EFA9D017DC34E7E7D93455",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/FirmwareUpdater/Program.cs",
+      "sha256": "7EA1E169F32E65B7A5974698727869B4B45E6288D699679A607EF0ED0802EFED",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/FirmwareUpdater/SensorControl.cs",
+      "sha256": "E5A352C273993F67B230C2AED833207238033AA61A897C827388FBA5A3CB30ED",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/FirmwareUpdater/StLinkProbe.cs",
+      "sha256": "01497B04585A9104973CA39509CA15776A9DDBDA9FE2A3DEC895F6E92A481057",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/Configuration.cs",
+      "sha256": "05BC327DC1D80965BF6D51220A47F0A254A0AFCEACDB9AFEBEA0350FF155691B",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/ProbeBankScan.cs",
+      "sha256": "7E67EE679DF21B21D75A2C74923B81EC25EDE8874465A099361B44C3398A74F3",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/ConfigurationForm.cs",
+      "sha256": "BA20A0E13965E0DAAB6F129C3BBEB4629C63B64D5D75AE2C4B59F00014F91AA9",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/ProbeView.cs",
+      "sha256": "4443078FC54D84DD2B6B800C5367F2F83601284BBE4C2905186CA1FF98C1BFCC",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/Program.cs",
+      "sha256": "75794E1EE0D9CC1FE59ADDE981A595E192E8FCAD993B7382873691C977EC82C3",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/DeviceSelection.cs",
+      "sha256": "65422F61DB42CC2B976284212F6851055061240469FE15774C32C2B9EAE5DF70",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/Np2DeviceSelection.cs",
+      "sha256": "6D82CB8046E2057D372A168177DAE22E0BEDED2875E1089CB4F36E42337617D2",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/StandardFormats.cs",
+      "sha256": "D978BCDF303FD95EA8321D562E009EF703BBB5E356275E5C0EFFA359CA403D34",
+      "proof": "Actual199DLL-boundportablePDBdocument; same189document"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/NPConfigurator.csproj",
+      "sha256": "FB48573E03D7A2E705DE6EB0E4CFE995515B229B55269A4D262CFB4B39443AAF",
+      "proof": "Project/embeddedcatalog dependency; embeddedresource unchanged189"
+    },
+    {
+      "path": "Neuropixels/NPConfigurator/catalog.json",
+      "sha256": "C7A07F3A6A7382215805CF3A4F648DE1D099DBB6C2BDAA17EA8FCF59BB709B95",
+      "proof": "Project/embeddedcatalog dependency; embeddedresource unchanged189"
+    },
+    {
+      "path": "Neuropixels/FirmwareUpdater/XeNpFirmwareUpdater.csproj",
+      "sha256": "5644B38B1ED10671587648755CDE964E9F6579F2C0D228F9D3A8E6A6F020DFE4",
+      "proof": "Project/embeddedcatalog dependency; embeddedresource unchanged189"
+    }
+  ],
+  "actual_dll_pdb_bindings": [
+    {
+      "actual_codeview_guid_matches": true,
+      "dll_sha256": "3BEA6D5DE99ED085AADA286591FFEF38C098931F3D707B296FEB3DF607D8AA2F",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "pdb_sha256": "37864FD6867D9C3FA20F1849BF7E1EC9E2CC17620A93B105B93471A5DB0A97C1",
+      "role": "baseline"
+    },
+    {
+      "actual_codeview_guid_matches": true,
+      "dll_sha256": "591896B5D5F22298A723D60051BC4FE3C97683CA77E4B80D963CD7BB525457A8",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "pdb_sha256": "CC09310BD590DBB85A61E45CEA242B7D74CC7D3C6C14A407F9047A89E750FE34",
+      "role": "candidate"
+    },
+    {
+      "actual_codeview_guid_matches": true,
+      "dll_sha256": "F3B7F1F3E62C8CA6D491D3FE0B5A694FEB2CF72F04B352AC5113C1CB10A64706",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "pdb_sha256": "FD2DCEC87AFF59B21120AAABE8DAF7387FD6B0839596032B21357FF4978B0B13",
+      "role": "baseline"
+    },
+    {
+      "actual_codeview_guid_matches": true,
+      "dll_sha256": "1B465EA66E96BB25D993AB5E221646B8967C016FAD3E68F87995CD20DC6735C1",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "pdb_sha256": "50EE2B632F556CEEE0F6F0D3D841D1740109BDA6C4085545C2DD5F731FAAFF3F",
+      "role": "candidate"
+    }
+  ],
+  "actual_zip_pdb_matches": [
+    {
+      "sha256": "65DD113A610C39C77E3B0B077C60B6E6AECF116D99EFA9D017DC34E7E7D93455",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/MscControl.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "7EA1E169F32E65B7A5974698727869B4B45E6288D699679A607EF0ED0802EFED",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/Program.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "E5A352C273993F67B230C2AED833207238033AA61A897C827388FBA5A3CB30ED",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/SensorControl.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "01497B04585A9104973CA39509CA15776A9DDBDA9FE2A3DEC895F6E92A481057",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/StLinkProbe.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "65DD113A610C39C77E3B0B077C60B6E6AECF116D99EFA9D017DC34E7E7D93455",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/MscControl.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "7EA1E169F32E65B7A5974698727869B4B45E6288D699679A607EF0ED0802EFED",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/Program.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "E5A352C273993F67B230C2AED833207238033AA61A897C827388FBA5A3CB30ED",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/SensorControl.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "01497B04585A9104973CA39509CA15776A9DDBDA9FE2A3DEC895F6E92A481057",
+      "component": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+      "path": "Neuropixels/FirmwareUpdater/StLinkProbe.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "05BC327DC1D80965BF6D51220A47F0A254A0AFCEACDB9AFEBEA0350FF155691B",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/Configuration.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "7E67EE679DF21B21D75A2C74923B81EC25EDE8874465A099361B44C3398A74F3",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/ProbeBankScan.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "BA20A0E13965E0DAAB6F129C3BBEB4629C63B64D5D75AE2C4B59F00014F91AA9",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/ConfigurationForm.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "4443078FC54D84DD2B6B800C5367F2F83601284BBE4C2905186CA1FF98C1BFCC",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/ProbeView.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "75794E1EE0D9CC1FE59ADDE981A595E192E8FCAD993B7382873691C977EC82C3",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/Program.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "65422F61DB42CC2B976284212F6851055061240469FE15774C32C2B9EAE5DF70",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/DeviceSelection.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "6D82CB8046E2057D372A168177DAE22E0BEDED2875E1089CB4F36E42337617D2",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/Np2DeviceSelection.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "D978BCDF303FD95EA8321D562E009EF703BBB5E356275E5C0EFFA359CA403D34",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/StandardFormats.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "05BC327DC1D80965BF6D51220A47F0A254A0AFCEACDB9AFEBEA0350FF155691B",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/Configuration.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "7E67EE679DF21B21D75A2C74923B81EC25EDE8874465A099361B44C3398A74F3",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/ProbeBankScan.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "BA20A0E13965E0DAAB6F129C3BBEB4629C63B64D5D75AE2C4B59F00014F91AA9",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/ConfigurationForm.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "4443078FC54D84DD2B6B800C5367F2F83601284BBE4C2905186CA1FF98C1BFCC",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/ProbeView.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "75794E1EE0D9CC1FE59ADDE981A595E192E8FCAD993B7382873691C977EC82C3",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/Program.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "65422F61DB42CC2B976284212F6851055061240469FE15774C32C2B9EAE5DF70",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/DeviceSelection.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "6D82CB8046E2057D372A168177DAE22E0BEDED2875E1089CB4F36E42337617D2",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/Np2DeviceSelection.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    },
+    {
+      "sha256": "D978BCDF303FD95EA8321D562E009EF703BBB5E356275E5C0EFFA359CA403D34",
+      "component": "NPConfigurator/NPConfigurator.dll",
+      "path": "Neuropixels/NPConfigurator/StandardFormats.cs",
+      "zip_matches_actual_pdb": true,
+      "role": "candidate"
+    }
+  ],
+  "actual_zip_embedded_catalog_matches": [
+    {
+      "sha256": "C7A07F3A6A7382215805CF3A4F648DE1D099DBB6C2BDAA17EA8FCF59BB709B95",
+      "bytes": 218154,
+      "path": "Neuropixels/NPConfigurator/catalog.json",
+      "zip_matches_actual_embedded_resource": true,
+      "role": "baseline"
+    },
+    {
+      "sha256": "C7A07F3A6A7382215805CF3A4F648DE1D099DBB6C2BDAA17EA8FCF59BB709B95",
+      "bytes": 218154,
+      "path": "Neuropixels/NPConfigurator/catalog.json",
+      "zip_matches_actual_embedded_resource": true,
+      "role": "candidate"
+    }
+  ],
+  "project_files": "Two csproj files match prior checked source/dependency pins, not PDB document claims",
+  "main_197_source_zip_sha256": "7A8818546BC3C77841E317A4F037307240AFFD629094C16ACAA30BB1FE7EF438",
+  "original_host_build_receipt_sha256": "90AE6BCCFAE36FC14E529011230BFF2F97397144020AB7CE83D8FBD352389A00",
+  "readme_sha256": "945A5804918AE7009AA7500281868D977E9EE8ACC0A50A5D94827DF55A053060",
+  "companion_runtime_reuse": "Exact checked189 runtime files retained; no new companion build",
+  "historical_source_scope": "The original197 host receipt never included these projects. This separate archive now preserves their known checked source closure."
+}

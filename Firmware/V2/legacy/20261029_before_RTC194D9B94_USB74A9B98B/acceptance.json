@@ -1,0 +1,51 @@
+{
+  "release": "V2_RTC_FIRST_SAMPLE_APP46DF5009_USB62910614_20261029",
+  "stage": "SD_TRIPLE20K_30S_CHECKED_USB_ACQUISITION_UNTESTED",
+  "app_crc32": "46DF5009",
+  "usb_crc32": "62910614",
+  "recovery_crc32": "6408DBB8",
+  "console_version": "1.0.0.189",
+  "profile": {
+    "mask": 7,
+    "hz": 20000,
+    "seconds": 30
+  },
+  "session": 3268315904,
+  "neural": {
+    "verified_bytes": 1092116480,
+    "chunks": 23440,
+    "rows_per_probe": 600063,
+    "loss_counters": {
+      "StoredSourceGaps": 0,
+      "OverflowEvents": 0,
+      "MissingSourceTicks": 0,
+      "DroppedBlocks": 0,
+      "ProducerDiscardedTicks": 0
+    }
+  },
+  "imu": {
+    "ag_observations": 5780,
+    "mag_observations": 2890,
+    "observed_sequence_gaps": 0,
+    "physical_conversion_phase_verified": false
+  },
+  "local_rtc_interval_us": [
+    1793285062748433,
+    1793285062748553
+  ],
+  "local_rtc_full_width_us": 120,
+  "pc_calibration_generation": 2,
+  "pc_calibration_provenance_qualified": true,
+  "declared_pc_setup_uncertainty_us": 20594,
+  "stopped_pc_readback_phase_interval_us": [
+    -36669,
+    41237
+  ],
+  "normal_sd_usb_download_handover_passed": true,
+  "usb_acquisition_r6_hardware_tested": false,
+  "whole_fused_newly_flashed": false,
+  "limits": "Validated one 30-second P1+P2+P3/20kHz SD run on Delkin V90: full 1092116480-byte readback, 23440 chunks, 600063 DAT rows/probe, all five reported loss counters zero. Saved IMU 5780 AG/2890 MAG observations, observed sequence gaps zero; not every physical conversion. Independent local RTC-to-first-NP full interval120us; pre-record PC calibration generation2 confirmed and bound. PC declared setup uncertainty20594us and separate stopped readback phase interval[-36669,+41237]us are not the120us local interval or a verified absolute PC-error guarantee. R6 USB acquisition/USB IMU physical recording remains untested. Normal SD-to-USB2/download3/full export passed. No all-mode/card/endurance/analog-quality or arbitrary ADC-bit-checksum guarantee. Whole fused image not newly flashed; exact checked components merged without rebuild. Lab originals restored after test.",
+  "phase_handoff_sha256": "E7DD42F4861BAABCF2F30CA2BF14EF23810B5D249C56E51B08F70A45CA1D4FB4",
+  "independent_interval_sha256": "A052B1C15AD4D609E6D7A75FDBF85A230316A26046C1C0C0562B9C834C36E09C",
+  "independent_pc_binding_sha256": "DB17469FCF446804493F27ACBCD559A9EF4B10AA307D05BF0B704FEAC33E2BCB"
+}

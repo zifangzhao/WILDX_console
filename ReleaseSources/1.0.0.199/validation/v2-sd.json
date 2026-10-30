@@ -1,0 +1,218 @@
+{
+    "imu":  {
+                "fine_native_timestamps_qualified":  false,
+                "raw_record_bytes":  132,
+                "held_1250_grid_is_conversion_rate":  false,
+                "fine_native_archive_present":  false,
+                "physical_conversion_phase_locked":  false,
+                "advancing_ag":  5740,
+                "csv_rows":  5741,
+                "sns2_records":  5741,
+                "valid_ag":  5741,
+                "valid_mag":  5741
+            },
+    "conclusions":  [
+                        "Strict actual199 +5/+6/+7 hardwareRTC local first-saved-NP full interval121us meets\u003c1000us, PC20060us remains separate.",
+                        "Normal read-only export already verified1,092,116,480bytes/23440blocks, three600063AProws, zero advertised NN loss/discard/overflow.",
+                        "Saved ordinary SNS2physicalIMU5741validAGMAG/5740advancingAG; no fine archive or native/NP phase proof fabricated.",
+                        "Fresh UID-bound CAPS/START/context and completed/idle/list/readback/catalog preservation checked; optionalA1 failure is not catalog repair qualification.",
+                        "Firmware labels rely on pinned external paired flash/options proof; device BLE/USB CRC capability absent, measured versions unknown.",
+                        "Restoration final proof and V1 matched199 acceptance remain separate."
+                    ],
+    "input_pins":  {
+                       "value":  [
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\hil.json",
+                                         "sha256":  "8B160B8BFC2A73636A62ACDD6CCCDCAE947B2E04D33AA829F246547344E98C32"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\record199-r2\\hil.json",
+                                         "sha256":  "25182A78968265A90F846CB0C647584D038E9354DD6D46EA5161364FB76EFEE2"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\manual-installed-full.bin",
+                                         "sha256":  "26229C92478352C5AAE03E86A4389F520B542B032912E7E6BA68A5EAA78A37A6"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\manual-installed-options.bin",
+                                         "sha256":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\readback_header.bin",
+                                         "sha256":  "C4C04CD3A1826C9644A68FCC340BD510D49A7F1B0C0103ED3B2986D9A2C9F6DE"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\readback_footer.bin",
+                                         "sha256":  "E5E13184C2A0F371AF3EA7AFB3CD6F128124E5BC5BAB9994DC842916417B7619"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\catalog_inspection_receipt.bin",
+                                         "sha256":  "E9DCC57AD67619E68DBA6A26C8FE57C42D42A240AF9CDB60F72457405FB6741F"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\catalog_inspection_service.bin",
+                                         "sha256":  "8E5E15800455EDAB3F439979504D7B7A11EAEF0C4B5735DD54D4A870C4D51B2B"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\prior_failed_inspection_hil.json",
+                                         "sha256":  "56426327EB92CFCE1B8BCDE0EF01C2EE94704497CA7888C2B70964A273E2A516"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\physical-imu-check.json",
+                                         "sha256":  "15CB1B426BF7FB92EC8A0DC701651E6E47D87A0CD269C2E1AAD1DE073793D4CB"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\descriptor.bin",
+                                         "sha256":  "C4C04CD3A1826C9644A68FCC340BD510D49A7F1B0C0103ED3B2986D9A2C9F6DE"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\footer.bin",
+                                         "sha256":  "E5E13184C2A0F371AF3EA7AFB3CD6F128124E5BC5BAB9994DC842916417B7619"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\recorded_clock.bin",
+                                         "sha256":  "C5214F6666455D8461C5DD764B1E0E96CD23F61774F42B5430E4149C335EB1A8"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\first_source_clock_sector6.bin",
+                                         "sha256":  "480A9689428FE9C0FB883E4AF63C7D6808C7562825D58D178583C7B54EB64E83"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\device_rtc_start_sector7.bin",
+                                         "sha256":  "B01D38FB1A5D4439CC73517A7A553276B726E111D100E3B685ADDD4C5D9408BB"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\recording_start_utc.json",
+                                         "sha256":  "45E4E09099C8386BC0D23F68E1947B76ED69BBF5B45C2670525E404E7FFBFF74"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\recording_settings.json",
+                                         "sha256":  "413638786D1992AC66C27B51DA8A18CB7D975F8D86D118EC5728816D32395710"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\first_sample_timestamps.json",
+                                         "sha256":  "30E86A937AA118A6D710E70486678CEB412DF347FD6E6D58FB95667F34698EC4"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\np2_sd_export_status.txt",
+                                         "sha256":  "E9301A505867158F68B678E72CF9CFDAC71614E32B20222B02D17D1284581182"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\imu_sd_export_status.txt",
+                                         "sha256":  "028809DB2901AE6D0823F2A39F5087FC747999DF92FC490AACBD2A7F765D0388"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\imu_sd_records.sns2",
+                                         "sha256":  "5171B946CAF12AE87F9F46BE726197A2DD0BFAB56E58D61744DC30C23E1F40D9"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\sensors.csv",
+                                         "sha256":  "1DDAF70114C7B7A98A84A2A5B367F95F6696DAD91DDEEA42B15709737543385E"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\imu_fine_timing_status.json",
+                                         "sha256":  "6E2F317D5CA082A2AC303532E052EBCF1174EA495A1AA92FEE364C3FCC3BBE0B"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\XE_NP_V2\\_artifacts\\v2_grid_source_20261029\\hil-sd-app-r1\\verify199-r4b\\export\\fine_clock_fit_status.json",
+                                         "sha256":  "6A4F6E82AF4D4266740EB29B6D97649B08A6D64254AC1704FFF490EC7CB425A4"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\WILDX_console.exe",
+                                         "sha256":  "E2E5F22A8F9A7EB46284475D142697398B623BF9030A979602D67966DCD5F249"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NpV2SdDatExport.dll",
+                                         "sha256":  "685A914554AA3EE6B1730755D1C30F51BEF04421F15FE3C3D4CD8746B9B0ADC1"
+                                     },
+                                     {
+                                         "path":  "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-199-grid.json",
+                                         "sha256":  "90AE6BCCFAE36FC14E529011230BFF2F97397144020AB7CE83D8FBD352389A00"
+                                     }
+                                 ],
+                       "Count":  27
+                   },
+    "source_edits":  0,
+    "builds":  0,
+    "catalog":  {
+                    "former_last_dynamic_flags_cleared":  "0x30000 LAST|DELETE_ALLOWED",
+                    "owned_completed_record_kept":  true,
+                    "prior":  327,
+                    "all_prior_semantic_fields_preserved":  true,
+                    "after":  328
+                },
+    "inspection":  {
+                       "optional_a1_failed_receipt_preserved":  true,
+                       "fresh_current_card_cid_claim":  false,
+                       "later_a0_readonly_idle":  true,
+                       "catalog_repair_pass":  false,
+                       "normal_read_route_verified":  true
+                   },
+    "binding":  {
+                    "actual_rtc_setup_generation":  2,
+                    "generation":  1,
+                    "source_epoch":  1,
+                    "fresh_caps_uid_validated":  true,
+                    "record_features":  25,
+                    "profile":  "3probes20k",
+                    "same_logical_setup":  true,
+                    "start_version":  3,
+                    "session":  3289850273,
+                    "uid":  "001A0004434250062039314E",
+                    "token_hex":  "4626228B4ECDA3EF"
+                },
+    "rtc":  {
+                "pc_declared_uncertainty_us":  20060,
+                "qualified":  true,
+                "pc_uncertainty_in_local_bound":  false,
+                "full_width_us":  121,
+                "upper_us":  1793324555829660,
+                "lower_us":  1793324555829539
+            },
+    "scope":  "Independent production V2 BLE-to-SD30/normalUSB readback199 review; no repeated NN payload scan",
+    "owner_paired_firmware":  {
+                                  "declared_usb_crc":  "74A9B98B",
+                                  "source":  "External owner flash/options readback, not BLE/USB reported CRC",
+                                  "options_sha256":  "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+                                  "paired_wholeflash_sha256":  "26229C92478352C5AAE03E86A4389F520B542B032912E7E6BA68A5EAA78A37A6",
+                                  "declared_app_crc":  "194D9B94",
+                                  "ble_measured_crc_available":  false,
+                                  "usb_measured_crc_available":  false
+                              },
+    "hardware_calls":  0,
+    "originals_unchanged":  true,
+    "np":  {
+               "producer_discarded":  0,
+               "verified_bytes":  1092116480,
+               "overflow":  0,
+               "payload_rescan":  false,
+               "source_gaps":  0,
+               "normal_export_report_reused":  true,
+               "dropped_blocks":  0,
+               "missing_source_ticks":  0,
+               "rows":  [
+                            {
+                                "first_source_tick":  935,
+                                "probe":  1,
+                                "rows":  600063
+                            },
+                            {
+                                "first_source_tick":  1039,
+                                "probe":  2,
+                                "rows":  600063
+                            },
+                            {
+                                "first_source_tick":  1071,
+                                "probe":  3,
+                                "rows":  600063
+                            }
+                        ],
+               "blocks":  23440,
+               "asic_checksum_claim":  false
+           },
+    "checks":  14198,
+    "restoration":  {
+                        "status":  "Pending hardware-owner final fullflash/options/UID/idle receipt; active at review start",
+                        "live_query_by_reviewer":  false
+                    }
+}

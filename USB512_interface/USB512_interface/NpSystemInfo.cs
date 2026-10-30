@@ -96,6 +96,13 @@ namespace USB512_interface
                         throw new InvalidDataException("Unsupported passive SD download information");
                     result.Capacity = CapacityText(BitConverter.ToUInt32(capacity, 8));
                     result.CardSource = "Passive download-service capacity; card identity and speed are not exposed";
+                    if(result.Family==1)try {
+                        var card=NpV1Management.ParseSdFormatInfo(read(0xc0,0x79,0,64),NpV1Management.UidFromPath(path));
+                        if((card.Capabilities&1)!=0&&card.Capacity!=0)result.Capacity=CapacityText(card.Capacity);
+                        if((card.Capabilities&2)!=0) {result.Card="CID "+card.Cid;result.CardSource="Passive V1 card identity receipt; allocation and bus mode not reported";}
+                    }catch(Exception ex) when(ex is IOException || ex is Win32Exception || ex is TimeoutException || ex is ArgumentException) {
+                        result.CardSource="Passive download capacity; optional card identity not reported by this firmware";
+                    }
                 } else if (role == 2) {
                     byte[] cached = read(0xc0, 0x4b, 0, XeNpSdInfo.WireBytes);
                     result.Sd = XeNpSdInfo.Parse(cached, cached == null ? 0 : cached.Length);

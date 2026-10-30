@@ -39,7 +39,51 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableNpFirstSync)' == 'true'">
+    <DefineConstants>$(DefineConstants);NP_FIRST_SYNC_ENABLE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableNpImuGrid)' == 'true'">
+    <DefineConstants>$(DefineConstants);NP_IMU_GRID_ENABLE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
+    <Compile Include="NpAcquisitionAnchor.cs" />
+    <Compile Include="NpUsbTimingWire.cs" />
+    <Compile Include="NpImuGridWire.cs" />
+    <Compile Include="NpImuGridPhase.cs" />
+    <Compile Include="NpImuGridCarrier.cs" />
+    <Compile Include="NpImuGridControl.cs" />
+    <Compile Include="NpImuGridWriter.cs" />
+    <Compile Include="NpImuGridUsb.cs" />
+    <Compile Include="NpV2AuxPacket.cs" />
+    <Compile Include="NpV2AuxCapture.cs" />
+    <Compile Include="NpV2AuxLabSession.cs" />
+    <Compile Include="NpV2ReadHistory.cs" />
+    <Compile Include="NpUsbTimingEvidence.cs" />
+    <Compile Include="NpUsbTimingSession.cs" />
+    <Compile Include="NpUsbTimingOut.cs" />
+    <Compile Include="NpFirstSyncWire.cs" />
+    <Compile Include="NpFirstSyncUsb.cs" />
+    <Compile Include="NpFirstSyncUsbEvidence.cs" />
+    <Compile Include="NpFirstSyncUsbUtc.cs" />
+    <Compile Include="NpFirstSyncSd.cs" />
+    <Compile Include="NpFineClockWire.cs" />
+    <Compile Include="NpSensorFineWire.cs" />
+    <Compile Include="NpSensorFine64Wire.cs" />
+    <Compile Include="NpSensorFineTime.cs" />
+    <Compile Include="NpSdFineAnalog.cs" />
+    <Compile Include="NpDerivedImuGridUtc.cs" />
+    <Compile Include="NpFineSdArchive.cs" />
+    <Compile Include="NpRtcStartWire.cs" />
+    <Compile Include="NpRtcSdArchive.cs" />
+    <Compile Include="NpRtcRecordingUtc.cs" />
+    <Compile Include="NpRtcUsbArchive.cs" />
+    <Compile Include="NpFineClockFit.cs" />
+    <Compile Include="NpFineClockRecording.cs" />
+    <Compile Include="NpFineClockEvidenceImport.cs" />
+    <Compile Include="NpFirstSyncSdClient.cs" />
+    <Compile Include="NpFirstSyncSdAttemptEvidence.cs" />
+    <Compile Include="NpFirstSyncUtc.cs" />
+    <Compile Include="NpFirstSyncSdUtc.cs" />
     <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.3.3\lib\net20\OpenTK.dll</HintPath>
     </Reference>
@@ -81,12 +125,22 @@
     <Compile Include="XeNpStreamDecoder.cs" />
     <Compile Include="NpCaptureModes.cs" />
     <Compile Include="NpModeDialog.cs" />
+    <Compile Include="NpProbePreparation.cs" />
+    <Compile Include="NpRecordingUtc.cs" />
+    <Compile Include="mainForm.Preparation.cs" />
+    <Compile Include="Ble\NpBleForm.Preparation.cs" />
+    <Compile Include="Ble\NpBleForm.FirstSync.cs" />
     <Compile Include="NpRecovery.cs" />
     <Compile Include="NpGpioRtcLogger.cs" />
+    <Compile Include="NpGpioTimeCorrection.cs" />
+    <Compile Include="NpImuTimeCorrection.cs" />
     <Compile Include="NpFolderNaming.cs" />
     <Compile Include="NpUsbSensors.cs" />
     <Compile Include="NpUsbSensorMonitor.cs" />
+    <Compile Include="NpUsbFineSensors.cs" />
     <Compile Include="NpClockFit.cs" />
+    <Compile Include="NpTimeCorrection.cs" />
+    <Compile Include="NpHostClock.cs" />
     <Compile Include="NpClockJournal.cs" />
     <Compile Include="NpConfigurationDialog.cs" />
     <Compile Include="NpConfigurationUsb.cs" />
@@ -97,11 +151,16 @@
     <Compile Include="NpProbeIdentity.cs" />
     <Compile Include="NpRecordingSettings.cs" />
     <Compile Include="NpRecordingDialog.cs" />
+    <Compile Include="NpClosedLoopSettings.cs" />
+    <Compile Include="NpClosedLoopV2UsbLog.cs" />
     <Compile Include="NpExploration.cs" />
     <Compile Include="mainForm.Exploration.cs" />
     <Compile Include="NpMediaUsbForm.cs" />
     <Compile Include="NpAudioPreview.cs" />
     <Compile Include="NpDiagnosticsForm.cs" />
+    <Compile Include="NpSdCardTest.cs" />
+    <Compile Include="NpSdLoggerTest.cs" />
+    <Compile Include="NpSdTestForm.cs" />
     <Compile Include="NpCalibrationForm.cs" />
     <Compile Include="NpProgressEstimate.cs" />
     <Compile Include="NpCalibrationLibrary.cs" />
@@ -115,6 +174,7 @@
     <Compile Include="NpLogger\NpDownloadStream.cs" />
     <Compile Include="NpLogger\NpDownloadStream.Progress.cs" />
     <Compile Include="NpLogger\NpDownloadBurst.cs" />
+    <Compile Include="NpLogger\NpDownloadPrefetchStream.cs" />
     <Compile Include="NpLogger\NpDownloadCatalog.cs" />
     <Compile Include="NpLogger\NpV1StoreV2.cs" />
     <Compile Include="NpLogger\NpCatalogRecovery.cs" />
@@ -151,12 +211,22 @@
     <Compile Include="Ble\NpV1BleProtocol.cs" />
     <Compile Include="Ble\NpV2SdControl.cs" />
     <Compile Include="Ble\NpV2OnlineClock.cs" />
+    <Compile Include="Ble\NpHardwareRtcClock.cs" />
     <Compile Include="Ble\NpBleWire.cs" />
     <Compile Include="Ble\NpBleConnection.cs" />
+    <Compile Include="Ble\NpBleConnection.Parameters.cs" />
     <Compile Include="Ble\NpBleConnection.Media.cs" />
     <Compile Include="Ble\NpBleConnection.Storage.cs" />
     <Compile Include="Ble\NpBleForm.cs" />
     <Compile Include="Ble\NpBleForm.Metadata.cs" />
+    <Compile Include="Ble\NpBleForm.HostRecording.cs" />
+    <Compile Include="Ble\NpBleForm.Rtc.cs" />
+    <Compile Include="Ble\NpBleImu.cs" />
+    <Compile Include="Ble\NpBleConnection.Imu.cs" />
+    <Compile Include="Ble\NpBleForm.Imu.cs" />
+    <Compile Include="Ble\NpBleClockEvidence.cs" />
+    <Compile Include="Ble\NpBleConnection.ClockEvidence.cs" />
+    <Compile Include="Ble\NpBleForm.ClockEvidence.cs" />
     <Compile Include="Ble\NpBleForm.Media.cs" />
     <Compile Include="Ble\NpBleForm.Storage.cs" />
     <Compile Include="Ble\NpBleStorage.cs" />
@@ -172,7 +242,7 @@
     <Compile Include="Ble\NpMediaExport.cs" />
     <Compile Include="Ble\WILD_VideoDecoder.cs" />
     <Compile Include="NpLogger\NpDownloadForm.cs" />
-    <Compile Include="NpLogger\NpDownloadPrefetchStream.cs" />
+
     <Compile Include="NpLogger\NpUsbCatalogRepair.cs" />
     <Compile Include="NpLogger\NpV2FirmwareForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -218,6 +288,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="..\..\Tools\Correct-RecordingTime.ps1">
+      <Link>Correct-RecordingTime.ps1</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Neuropixels\SD\NpV2SdDatExport.csproj">

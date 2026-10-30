@@ -99,7 +99,7 @@ namespace CE32_console {
   }
   internal static string Describe(NpSdStatus s){
    if(!ValidStatus(s))throw new IOException("Unsupported V2 capability/status response");
-   string[] names={"SD not mounted","Idle","Preparing probes","Recording","Draining / verifying SD","Complete","Armed for UTC start","Cancelled before capture"};
+   string[] names={"SD not mounted","Idle","Preparing probes","Recording","Finalizing SD","Complete","Armed for UTC start","Cancelled before capture"};
    string state=s.State==255?(StopAlreadySatisfied(s)?"Stopped after recording failure":"Failed — finalizing"):names[s.State];
    return "WILD-X V2 — "+state+"\r\n"+ProbePrefix(s.Mask)+", "+s.Hz.ToString("N0")+" samples/s"+
     (s.Fault==0?"":"\r\nRecording error: fault "+s.Fault+". Saved data may be incomplete.")+
@@ -115,6 +115,8 @@ namespace CE32_console {
     (s.State==1 || ((s.Flags&512)!=0 && (s.State==5 || s.State==7)));
   }
   internal static bool StopAlreadySatisfied(NpSdStatus s){
+   // A terminal writer/catalog receipt is enough; payload readback is separate.
+   // Legacy firmware may still hold state4 while doing its own verification.
    return s!=null&&!s.Busy&&
     (s.State==0||s.State==1||s.State==5||s.State==7||s.State==255);
   }
@@ -157,7 +159,7 @@ namespace CE32_console {
     case 1:return "Ready";
     case 2:return "Starting recording — preparing probes...";
     case 3:return "Recording";
-    case 4:return "Stopping recording — saving and verifying; keep power connected...";
+    case 4:return "Stopping recording — saving data; keep power connected...";
     case 5:return "Recording complete — ready";
     case 6:return "Waiting for scheduled start...";
     case 7:return "Recording cancelled — ready";

@@ -19,7 +19,7 @@ namespace USB512_interface {
    }
   }
   internal static void StageForCapture(XeNpWinUsbDevice device,IList<NpConfigRequest> requests,int mask){
-   new NpConfigClient(new NpConfigurationUsb(device)).StageForCaptureAsync(requests,mask,CancellationToken.None).GetAwaiter().GetResult();
+   new NpConfigClient(new NpConfigurationUsb(device)).StageForCaptureAsync(requests,mask,CancellationToken.None,true).GetAwaiter().GetResult();
   }
   internal static void ConfirmApplied(XeNpWinUsbDevice device,IList<NpConfigRequest> requests,int mask,string folder){
    var client=new NpConfigClient(new NpConfigurationUsb(device));var lines=new List<string>();

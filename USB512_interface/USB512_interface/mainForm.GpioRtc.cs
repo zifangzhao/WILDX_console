@@ -16,6 +16,7 @@ namespace USB512_interface {
   readonly SortedDictionary<byte,GpioChannelRow> gpioRows=new SortedDictionary<byte,GpioChannelRow>();
   TableLayoutPanel gpioChannelTable;Panel gpioChannelViewport;
   NpGpioRtcLogger gpioRtcLogger;bool refreshingGpioRtc;
+  string gpioRtcRecordingFolder;
   readonly HashSet<string> recordingWarnings=new HashSet<string>(StringComparer.Ordinal);
   internal Action<string> recordingWarningPresenter=null;
   internal Func<string,string,bool> gpioRtcDevicePresent=(port,id)=>NpGpioRtcDevice.Find().Any(d=>
@@ -139,11 +140,15 @@ namespace USB512_interface {
    finally{refreshingGpioRtc=false;gpioRtcLastInfo=null;ResetGpioChannelDisplay();RefreshGpioRtcInfo();}
   }
   void StartGpioRtcRecording() {
+   StartGpioRtcForRecording(runFolder,npRecordingSettings);
+  }
+  void StartGpioRtcForRecording(string folder,NpRecordingSettings settings) {
+   gpioRtcRecordingFolder=folder;
    recordingWarnings.Clear();
    if(gpioRtcLogger!=null) {
     // NP recovery owns new neural files; the independent RTC stream retains
     // its open COM port, clock observations, counts and original output files.
-    try{SetGpioRtcRecordingContext();}catch(Exception ex){WarnRecordingOnce("gpio-link","GPIO/RTC continues, but its recording link could not be saved: "+ex.Message);}
+    try{SetGpioRtcContextForRecording(folder,settings);}catch(Exception ex){WarnRecordingOnce("gpio-link","GPIO/RTC continues, but its recording link could not be saved: "+ex.Message);}
     RefreshGpioRtcInfo();return;
    }
    gpioRtcLastInfo=null;
@@ -152,38 +157,42 @@ namespace USB512_interface {
    var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
    if(selected==null || selected.Port==null){gpioRtcStatus.Text="";RefreshGpioRtcInfo();return;}
    try {
-    SetGpioRtcRecordingContext();
+    SetGpioRtcContextForRecording(folder,settings);
     if(!gpioRtcDevicePresent(selected.Port,selected.Identity))throw new IOException("The selected GPIO/RTC board is unavailable. Refresh and select its COM port.");
-    gpioRtcLogger=new NpGpioRtcLogger(runFolder,selected);gpioRtcLogger.Start();gpioRtcStatus.Text="Logging";
+    gpioRtcLogger=new NpGpioRtcLogger(folder,selected);gpioRtcLogger.Start();gpioRtcStatus.Text="Logging";
    }catch(Exception ex) {
     if(gpioRtcLogger!=null){gpioRtcLogger.Dispose();gpioRtcLogger=null;}
     gpioRtcStatus.Text="Failed";
     gpioRtcLastInfo=selected.Port+" · Failed"+Environment.NewLine+ex.Message;
-    try {File.WriteAllText(Path.Combine(runFolder,"gpio_rtc_start_error.txt"),DateTime.UtcNow.ToString("O")+Environment.NewLine+ex+Environment.NewLine);}
+    try {File.WriteAllText(Path.Combine(folder,"gpio_rtc_start_error.txt"),DateTime.UtcNow.ToString("O")+Environment.NewLine+ex+Environment.NewLine);}
     catch(Exception logError){ex=new IOException(ex.Message+"; could not save GPIO/RTC failure: "+logError.Message,ex);}
     WarnRecordingOnce("gpio-start",ex.Message+"\r\n\r\nNeural recording will continue without GPIO/RTC logging.");
    }
    RefreshGpioRtcInfo();
   }
-  string GpioRtcFileReference(string name) {
-   string target=Path.GetFullPath(Path.Combine(gpioRtcLogger==null?runFolder:gpioRtcLogger.DirectoryPath,name));
-   var source=new Uri(Path.GetFullPath(runFolder).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar);
+  string GpioRtcFileReferenceForRecording(string folder,string name) {
+   string target=Path.GetFullPath(Path.Combine(gpioRtcLogger==null?folder:gpioRtcLogger.DirectoryPath,name));
+   var source=new Uri(Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar);
    var relative=source.MakeRelativeUri(new Uri(target));
    return relative.IsAbsoluteUri?target:Uri.UnescapeDataString(relative.ToString()).Replace('/',Path.DirectorySeparatorChar);
   }
-  void SetGpioRtcRecordingContext() {
+  void SetGpioRtcContextForRecording(string folder,NpRecordingSettings settings) {
    var selected=gpioRtcDevices.SelectedItem as NpGpioRtcDevice;
    if(selected==null || selected.Port==null)return;
    var context=NpRecordingSettings.Fields("requested",true,"port",selected.Port,"pnp_device_id",selected.Identity,
-    "session_file",GpioRtcFileReference("gpio_rtc_session.json"),"events_file",GpioRtcFileReference("gpio_rtc_events.txt"),
-    "clock_queries_file",GpioRtcFileReference("gpio_rtc_sync.csv"),"continuous_across_neural_interruptions",true);
-   if(npRecordingSettings!=null)npRecordingSettings.Context("gpio_rtc",context);
-   if(gpioRtcLogger!=null && !String.Equals(Path.GetFullPath(runFolder).TrimEnd(Path.DirectorySeparatorChar),
+    "session_file",GpioRtcFileReferenceForRecording(folder,"gpio_rtc_session.json"),"events_file",GpioRtcFileReferenceForRecording(folder,"gpio_rtc_events.txt"),
+    "clock_queries_file",GpioRtcFileReferenceForRecording(folder,"gpio_rtc_sync.csv"),"continuous_across_neural_interruptions",true,
+    "host_epoch",NpHostClock.Epoch,"clock_reference","pc_wall_clock; network correction separate");
+   if(settings!=null)settings.Context("gpio_rtc",context);
+   if(gpioRtcLogger!=null && !String.Equals(Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar),
     Path.GetFullPath(gpioRtcLogger.DirectoryPath).TrimEnd(Path.DirectorySeparatorChar),StringComparison.OrdinalIgnoreCase))
-    NpMetadataFile.WriteText(Path.Combine(runFolder,"gpio_rtc_link.json"),
+    NpMetadataFile.WriteText(Path.Combine(folder,"gpio_rtc_link.json"),
      new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(context)+Environment.NewLine);
   }
   void RememberGpioRtcNeuralStart() {
+   // BLE uses its own receipt folder. A previous USB recording's GUI summary
+   // must not become the first-receive evidence of that unrelated session.
+   if(gpioRtcRecordingFolder!=null && !String.Equals(gpioRtcRecordingFolder,runFolder,StringComparison.OrdinalIgnoreCase))return;
    if(gpioRtcLogger!=null && recordingSummaryStartUtc!=DateTime.MinValue &&
     (!gpioRtcLogger.NeuralFirstReceiveUtc.HasValue || recordingSummaryStartUtc<gpioRtcLogger.NeuralFirstReceiveUtc.Value))
     gpioRtcLogger.NeuralFirstReceiveUtc=recordingSummaryStartUtc;
@@ -191,7 +200,12 @@ namespace USB512_interface {
   void FinishGpioRtcCapture() {
    RememberGpioRtcNeuralStart();
    if(selectedDeviceKind!=DeviceKind.XeNp && selectedDeviceKind!=DeviceKind.NpV2)StopGpioRtcRecording();
-   else RefreshGpioRtcInfo();
+   else {
+    RefreshGpioRtcInfo();
+    // Null releases the logger/file owner after explicit Stop. The NP owner
+    // has now published its final canonical time, which may follow GPIO Stop.
+    if(gpioRtcLogger==null)NpGpioTimeCorrection.QueueCompleted(runFolder);
+   }
   }
   void PollGpioRtcRecording() {
    if(gpioRtcLogger==null)return;
@@ -227,7 +241,8 @@ namespace USB512_interface {
   }
   void WarnRecordingOnce(string key,string text){if(recordingWarnings.Add(key))PresentRecordingWarning(text);}
   void PresentRecordingWarning(string text) {
-   if(!String.IsNullOrEmpty(runFolder))try{File.AppendAllText(Path.Combine(runFolder,"recording_warnings.txt"),DateTime.UtcNow.ToString("O")+" "+text+Environment.NewLine);}
+   string folder=gpioRtcRecordingFolder??runFolder;
+   if(!String.IsNullOrEmpty(folder))try{File.AppendAllText(Path.Combine(folder,"recording_warnings.txt"),DateTime.UtcNow.ToString("O")+" "+text+Environment.NewLine);}
     catch(Exception ex){text+="\r\nWarning log could not be saved: "+ex.Message;}
    // Post the modal dialog after the Start/Stop callback; USB workers keep running.
    string warning=text;PostToUi(delegate {

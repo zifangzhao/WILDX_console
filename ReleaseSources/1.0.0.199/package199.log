@@ -1,0 +1,20 @@
+Command line defined: "APP_PAYLOAD_DIR=D:\Code\WILDX_console\WILDX_console\_artifacts\release199\payload"
+Processing config: C:\Program Files (x86)\NSIS\nsisconf.nsh
+Processing script file: "D:\Code\WILDX_console\WILDX_console\USB512_interface\WILDX_console.nsi" (ACP)
+
+Processed 1 file, writing output (x86-unicode):
+
+Output: "D:\Code\WILDX_console\WILDX_console\_artifacts\release199\payload\WILDX_console-Setup-1.0.0.199.exe"
+Install: 3 pages (192 bytes), 1 section (2072 bytes), 386 instructions (10808 bytes), 239 strings (9136 bytes), 1 language table (290 bytes).
+Uninstall: 2 pages (192 bytes), 1 section (2072 bytes), 76 instructions (2128 bytes), 123 strings (4332 bytes), 1 language table (250 bytes).
+Datablock optimizer saved 7445 bytes (~0.1%).
+
+Using zlib compression.
+
+EXE header size:              152576 / 39936 bytes
+Install code:                   4858 / 22962 bytes
+Install data:                7228861 / 25096606 bytes
+Uninstall code+data:           25979 / 115078 bytes
+CRC (0x2184D8D7):                  4 / 4 bytes
+
+Total size:                  7412278 / 25274586 bytes (29.3%)

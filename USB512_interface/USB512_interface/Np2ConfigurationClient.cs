@@ -170,7 +170,23 @@ namespace USB512_interface
             return reply;
         }
 
-        internal async Task<Np2ConfigReply> StageAsync(Np2ConfigRequest request, CancellationToken cancel)
+        internal Task<Np2ConfigReply> StageAsync(Np2ConfigRequest request, CancellationToken cancel)
+        {
+            return StageAsync(request, cancel, false);
+        }
+
+        internal static bool MatchesResident(Np2ConfigReply reply, Np2ConfigRequest request)
+        {
+            if (reply == null || request == null || reply.Error != 0 ||
+                (reply.GlobalState != 0 && reply.GlobalState != 2) || reply.Received != 0 ||
+                (reply.PortState != 2 && reply.PortState != 3) || reply.Port != request.Port || reply.Model != 4 ||
+                reply.PayloadCrc != Crc(request.Selection, request.Selection.Length) ||
+                reply.ConfigurationId == null || reply.ConfigurationId.Length != 32) return false;
+            for (int i = 0; i < 32; i++) if (reply.ConfigurationId[i] != request.Selection[8 + i]) return false;
+            return true;
+        }
+
+        internal async Task<Np2ConfigReply> StageAsync(Np2ConfigRequest request, CancellationToken cancel, bool reuseMatching)
         {
             if (request == null) throw new ArgumentNullException("request");
             await gate.WaitAsync(cancel);
@@ -179,7 +195,11 @@ namespace USB512_interface
             try
             {
                 await RequireCaps(request.Port, cancel);
-                Require(await Send(Frame(Status, request.Port, NewTransaction(), 0, 0, 0), cancel));
+                var status = await Send(Frame(Status, request.Port, NewTransaction(), 0, 0, 0), cancel);
+                Require(status);
+                // A fresh receipt can avoid uploading an unchanged resident map.
+                // It does not prove probe initialization or a prepared capture.
+                if (reuseMatching && MatchesResident(status, request)) return status;
                 Require(await Send(Frame(Begin, request.Port, transaction, 0, Np2ConfigRequest.PayloadBytes, crc), cancel)); begun = true;
                 for (int offset = 0; offset < request.Selection.Length; offset += ChunkBytes)
                 {

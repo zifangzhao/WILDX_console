@@ -45,6 +45,7 @@ namespace USB512_interface
         readonly NumericUpDown cameraRate = new NumericUpDown { Minimum=1, Maximum=50, Value=40, Width=64 };
         readonly FlowLayoutPanel connectorRow,rateRow,mediaRow;
         readonly Button configuration;
+        readonly Button closedLoop;
         readonly Label channelInfo;
         readonly NpSdRecordingOptions sd;
         bool loading;
@@ -98,7 +99,9 @@ namespace USB512_interface
                 catch(Exception ex){error=ex.Message;}
                 finally {loading=false;refresh.Enabled=configuration.Enabled=true;UpdateSelection();}
                 if(error!=null)status.Text=error;
-            };layout.Controls.Add(configuration,0,6);
+            };
+            closedLoop=new Button{Text="Closed-loop…",AutoSize=true};closedLoop.Click+=delegate{NpClosedLoopSettings.Edit(this,np2);};
+            var configurationRow=new FlowLayoutPanel{Dock=DockStyle.Fill};configurationRow.Controls.AddRange(new Control[]{configuration,closedLoop});layout.Controls.Add(configurationRow,0,6);
             var buttons=new FlowLayoutPanel { Dock=DockStyle.Fill };
             refresh.Click+=async delegate {await RefreshProfile();};
             var cancel=new Button { Text="Cancel",AutoSize=true,DialogResult=DialogResult.Cancel };
@@ -151,7 +154,8 @@ namespace USB512_interface
         void UpdateSelection()
         {
             if(connectorRow==null||rateRow==null||mediaRow==null||configuration==null)return;
-            connectorRow.Visible=rateRow.Visible=configuration.Visible=!Media;mediaRow.Visible=Media;
+            connectorRow.Visible=rateRow.Visible=configuration.Visible=closedLoop.Visible=!Media;mediaRow.Visible=Media;
+            closedLoop.Enabled=!loading;
             channelInfo.Text=Media?"Continuous until Stop":np2?"384 AP channels per probe":"384 AP + 384 LFP channels per probe";
             cameraRate.Enabled=camera.Checked;
             for(int i=0;i<3;i++)ports[i].Enabled=profile!=null && !automatic.Checked && (profile.AvailableMask&(1<<i))!=0;

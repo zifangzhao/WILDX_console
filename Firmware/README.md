@@ -1,5 +1,5 @@
 # Bundled firmware
 
-V1 APP B1758369 and V2 APP EC5C2198 add BLE/SD IMU support; V2 omits the automatic full payload reread after Stop. Essential finalization and PC download checks remain. The installer includes matching component/fused images and catalog directly.
+The current V1 and V2 recording images and matching catalog are included in the installer. V1 uses APP87109990/USB9D595E4D; V2 uses APP194D9B94/USB74A9B98B. Unchanged V1Camera assets are retained.
 
-USB services and boot/recovery are retained: V1 USB 4F7B521A; V2 USB A71BDECC and recovery 6408DBB8. V1Camera is unchanged. [Scope and software-only validation](../ReleaseSources/1.0.0.158/README.md).
+USB60-second and BLE-to-SD30-second checks at20kHz verified local RTC-to-first-NP intervals below1ms, saved IMU data and NP continuity. These are scoped tests, not all-profile/endurance qualification. See each family's acceptance.json and the release validation summary for exact limits. Experimental V2 hardware-grid firmware is excluded. Previous deliverables are recoverable under legacy.

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
@@ -13,15 +14,41 @@ namespace USB512_interface
         private const int Sector = 512, Block = 46592;
         private const uint RuSectors = 364;
         private static readonly uint[] CrcTable = MakeCrcTable();
+        public sealed class Segment
+        {
+            public uint FirstStoredBlock, StoredBlocks;
+            public ulong SourceStartTick, SourceEndTick;
+            public readonly long[] RowOffsets, Rows;
+            internal Segment(uint block, ulong tick, long[] rows)
+            { FirstStoredBlock=block; SourceStartTick=tick; RowOffsets=(long[])rows.Clone(); Rows=new long[rows.Length]; }
+        }
         public sealed class Result
         {
             public uint SampleHz, Session, CommittedBlocks, ProbeMask;
             public uint StoredState, StoredFault;
-            public bool RecordingComplete { get { return StoredState==3 && StoredFault==0 && CommittedBlocks>0; } }
+            public bool PhysicalAppendOrder;
+            public uint LogicalPrefixBlocks, LogicalHighWaterBlocks;
+            public bool RecordingComplete { get { return StoredState==3 && StoredFault==0 && CommittedBlocks>0 && SourceGapCount==0 && OverflowEvents==0; } }
+            public bool Lossless { get { return RecordingComplete; } }
+            public bool SourceGapsAdvertised;
+            public bool ImuAnalogGridNpLocked;
+            public string ImuNativeFineTimestampsFile,ImuFineTimingStatusFile;
+            public string ImuAnalogGridOriginEvidence;
+            public bool StoppedLossStatsPresent;
+            public uint OverflowEvents;
+            public ulong ProducerDiscardedTicks;
+            public uint SourceGapCount;
+            public ulong MissingSourceTicks, DroppedBlocks, ElapsedSourceTicks;
             public ulong SourceTicks;
+            public readonly List<Segment> Segments = new List<Segment>();
             public readonly long[] Rows;
             public readonly int[] Phases;
             public byte[] IdentityHeader { get; internal set; }
+            public bool SensorSnapshotsAdvertised;
+            public long SensorSnapshots,DistinctImuObservations,ImuSequenceGaps;
+            public long ImuAnalogGridRows;
+            public bool ImuAnalogGridComplete;
+            public string OptionalImuError;
             public Result() : this(2) { }
             internal Result(int probes) { Rows = new long[probes]; Phases = new int[probes]; }
         }
@@ -40,8 +67,18 @@ namespace USB512_interface
             long directoryEndLba=0,Func<bool> cancelled=null,Action<int> progress=null,NpCalibrationSet calibration=null)
         { return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,calibration==null || calibration.Count==0?null:calibration.Copy(),true); }
 
+        // Explicit seam for a qualified NP-reference-to-sensor clock relation.
+        // Ordinary/legacy callers supply no origin and retain their fallback.
+        public static Result ExportWithImuOrigin(Stream card,uint startLba,string output,NpSdImuGridOrigin imuOrigin,
+            long directoryEndLba=0,Func<bool> cancelled=null,Action<int> progress=null,NpCalibrationSet calibration=null,bool allowIncomplete=false)
+        {
+            if(imuOrigin==null)throw new ArgumentNullException("imuOrigin");
+            return ExportCore(card,startLba,output,directoryEndLba,cancelled,progress,
+                calibration==null || calibration.Count==0?null:calibration.Copy(),allowIncomplete,imuOrigin);
+        }
+
         static Result ExportCore(Stream card, uint startLba, string output,
-            long directoryEndLba, Func<bool> cancelled, Action<int> progress, NpCalibrationSet calibration,bool allowIncomplete)
+            long directoryEndLba, Func<bool> cancelled, Action<int> progress, NpCalibrationSet calibration,bool allowIncomplete,NpSdImuGridOrigin imuOrigin=null)
         {
             if (card == null || !card.CanRead || !card.CanSeek) throw new ArgumentException("Read-only seekable card/image required.");
             if (String.IsNullOrWhiteSpace(output) || Directory.Exists(output) || File.Exists(output))
@@ -49,6 +86,11 @@ namespace USB512_interface
             byte[] desc = ReadAt(card, ((long)startLba + 3) * Sector, Sector);
             byte[] end = ReadAt(card, ((long)startLba + 4) * Sector, Sector);
             ValidateMetadataCore(desc, end, startLba, card.Length,allowIncomplete);
+            bool appendOrder=StorageVersion(desc)==14;
+            if(appendOrder && (U(end,132)!=U(end,108) || U(end,136)!=U(end,108)))
+                throw new InvalidDataException("Append-order recording has logical gaps: physical="+U(end,108)+
+                    ", prefix="+U(end,132)+", high-water="+U(end,136)+
+                    ". DAT export requires a verified contiguous logical extent. All stored units remain on the source; no padding or renumbering was performed.");
             uint probeMask = U(desc, 24);
             if(calibration!=null)calibration.RequireModel(true,(int)probeMask);
             int probes = probeMask == 1U ? 1 : probeMask == 3U ? 2 : 3, ticks = ProfileTicks(probeMask, U(desc, 16));
@@ -57,31 +99,70 @@ namespace USB512_interface
             byte[] configuration = probeMask != 3U ? ReadAt(card, ((long)startLba + 8) * Sector, 2048) : null;
             if (probeMask == 1U) ValidateSingleConfiguration(configuration, desc, U(end, 108));
             if (probeMask == 7U) ValidateTripleConfiguration(configuration, desc, U(end, 108));
+            if(U(desc,8)==15)WildNpClosedLoop.NpClosedLoopCarrier.ReadV2Configuration(configuration,desc);
             if (directoryEndLba != 0 && (directoryEndLba < U(end, 116) || directoryEndLba > U(desc, 68)))
                 throw new InvalidDataException("SD catalog entry does not contain this committed recording extent.");
             byte[] utc = ReadAt(card, ((long)startLba + 5) * Sector, Sector);
-            bool hasUtc = Magic(utc, "N2SDUTC1");
-            if (hasUtc) ValidateUtc(utc, U(desc, 12), U(desc, 16));
+            bool hasUtc = Magic(utc, "N2SDUTC1") || Magic(utc,"N2SDUTC2");
+            if (hasUtc)try {ValidateUtc(utc, U(desc, 12), U(desc, 16));}catch(InvalidDataException){hasUtc=false;}
+            bool hasLossStats=hasUtc && (U(utc,16)&8U)!=0U;
             var result = new Result(probes) { ProbeMask = probeMask, SampleHz = U(desc, 16), Session = U(desc, 12),
-                CommittedBlocks = U(end, 108), SourceTicks = Q(end, 120),StoredState=U(end,100),StoredFault=U(end,104) };
+                CommittedBlocks = U(end, 108), SourceTicks = Q(end, 120),StoredState=U(end,100),StoredFault=U(end,104),
+                PhysicalAppendOrder=appendOrder,LogicalPrefixBlocks=appendOrder?U(end,132):U(end,108),
+                LogicalHighWaterBlocks=appendOrder?U(end,136):U(end,108) };
+            if(imuOrigin!=null){
+                var bound=NpFirstSyncSd.ReadSector(utc,2,result.Session,result.SampleHz);
+                if(bound==null||(bound.Receipt.Flags&(NpFirstSyncWire.Final|NpFirstSyncWire.AllPorts))!=(NpFirstSyncWire.Final|NpFirstSyncWire.AllPorts)||
+                    bound.Receipt.Mask!=probeMask||bound.Receipt.ReferenceTick!=imuOrigin.ReferenceTick)
+                    throw new InvalidDataException("Qualified IMU origin requires this recording's sealed final-generation NP reference receipt.");
+                imuOrigin.RequireCapture(result.SampleHz*1600U,bound.Receipt.Generation);
+            }
+            if(hasLossStats && result.CommittedBlocks==0U)
+                throw new InvalidDataException("Stopped loss statistics have no stored header to attest source-gap support.");
+            // Index only the bounded durable physical extent. No output is
+            // created until all four original headers in every RU are checked.
+            uint[] appendIndex=appendOrder?IndexAppendUnits(card,desc,end,cancelled,progress):null;
             Directory.CreateDirectory(output);
             string receipt = Path.Combine(output, "np2_sd_export_status.txt");
             using (var f = new FileStream(receipt, FileMode.CreateNew, FileAccess.Write))
                 WriteText(f, "Export complete: False\nExport is in progress; .partial files are not complete recordings.\n");
             var files = new FileStream[probes];
+            var hashes = new SHA256[probes];
+            var hashBuffers = new byte[probes][];
+            var hashUsed = new int[probes];
+            var digests = new string[probes];
+            bool completed=false;
+            WildNpClosedLoop.NpClosedLoopLog closedLoop=null;
+            WildNpClosedLoop.NpClosedLoopCarrier.V2Summary closedLoopSummary=null;
+            // Per-record +5/+6 binding is optional evidence. Only its explicit
+            // Features9 declaration admits the additional fine sensor carrier.
+            var fineContext=result.CommittedBlocks==0?null:NpFineSdArchive.Read(output,utc,2,result.Session,result.SampleHz,probeMask,
+                ()=>ReadAt(card,((long)startLba+6)*Sector,Sector));
+            NpRtcSdArchive.Capture(output,utc,fineContext,()=>ReadAt(card,((long)startLba+7)*Sector,Sector));
+            var sensorExport=new NpSdImuExport(output,fineContext);
             try
             {
                 File.WriteAllBytes(Path.Combine(output, "descriptor.bin"), desc);
                 File.WriteAllBytes(Path.Combine(output, "footer.bin"), end);
                 if (configuration != null) File.WriteAllBytes(Path.Combine(output, "configuration.bin"), configuration);
+                if(U(desc,8)==15){
+                    byte[] baseD,baseF;
+                    closedLoopSummary=WildNpClosedLoop.NpClosedLoopCarrier.NormalizeV2Metadata(desc,end,allowIncomplete,out baseD,out baseF);
+                    var snapshot=new byte[64];Buffer.BlockCopy(configuration,1920,snapshot,0,64);
+                    closedLoop=new WildNpClosedLoop.NpClosedLoopLog(output,result.Session,snapshot);
+                }
                 if (hasUtc) File.WriteAllBytes(Path.Combine(output, "utc.bin"), utc);
                 if(calibration!=null)calibration.Save(output);
                 if(result.CommittedBlocks==0){
                     File.WriteAllText(receipt,"Export complete: True\nRecording complete: False\nStored state: "+result.StoredState+"\nStored fault: "+result.StoredFault+"\nCommitted blocks: 0\nMetadata only; no committed samples and no DAT created.\n",Encoding.UTF8);
-                    if(progress!=null)progress(100);return result;
+                    if(closedLoop!=null)closedLoop.Complete(closedLoopSummary);
+                    completed=true;return result;
                 }
-                for (int p = 0; p < probes; p++) files[p] = new FileStream(Path.Combine(output, Name(p) + ".partial"),
-                    FileMode.CreateNew, FileAccess.Write, FileShare.Read, 1024 * 1024, FileOptions.SequentialScan);
+                for (int p = 0; p < probes; p++) {
+                    files[p] = new FileStream(Path.Combine(output, Name(p) + ".partial"),
+                        FileMode.CreateNew, FileAccess.Write, FileShare.Read, 1024 * 1024, FileOptions.SequentialScan);
+                    hashes[p]=SHA256.Create();hashBuffers[p]=new byte[768*128];
+                }
                 var rowBytes = new byte[384 * 2];
                 var decoder = new NpV2SampleDecoder((mask, hz) => {
                     if (mask != probeMask || hz != result.SampleHz) throw new InvalidDataException("SD/DAT probe/rate contract mismatch.");
@@ -93,49 +174,159 @@ namespace USB512_interface
                     for (int c = 0; c < row.Length; c++) {
                         rowBytes[c * 2] = (byte)row[c]; rowBytes[c * 2 + 1] = (byte)(row[c] >> 8);
                     }
-                    files[probe - 1].Write(rowBytes, 0, rowBytes.Length); result.Rows[probe - 1]++;
+                    int p=probe-1;
+                    files[p].Write(rowBytes, 0, rowBytes.Length);result.Rows[p]++;
+                    // Hash emitted DAT bytes in bounded batches. A second full
+                    // disk pass can otherwise take minutes after USB reaches100%.
+                    Buffer.BlockCopy(rowBytes,0,hashBuffers[p],hashUsed[p],rowBytes.Length);
+                    hashUsed[p]+=rowBytes.Length;
+                    if(hashUsed[p]==hashBuffers[p].Length){hashes[p].TransformBlock(hashBuffers[p],0,hashUsed[p],null,0);hashUsed[p]=0;}
                 });
-                var verifier = new NpV2WireVerifier();
-                var block = new byte[Block]; byte[] immutable = null;
+                var verifier = new NpV2WireVerifier(true); // Explicit offline-SD-only gap opt-in.
+                var block = new byte[Block]; byte[] immutable = null,neuralCopy=null;
+                Segment segment=null;ulong nextSource=0UL;
                 card.Position = (long)U(desc, 60) * Sector;
                 for (uint seq = 0; seq < result.CommittedBlocks; seq++) {
                     if (cancelled != null && cancelled()) throw new OperationCanceledException("SD DAT export cancelled; output remains partial.");
+                    if(appendIndex!=null && seq%4==0)
+                        card.Position=checked((long)U(desc,60)*Sector+(long)(appendIndex[seq/4]-1)*RuSectors*Sector);
                     ReadExact(card, block);
-                    if (Q(block, 24) != seq || Q(block, 32) != (ulong)seq * (uint)ticks ||
+                    bool marked=(U(block,52)&NpV2WireVerifier.FlagSourceGaps)!=0U;
+                    ulong source=Q(block,32);
+                    if (Q(block, 24) != seq || !SourceTickValid(source,seq,(uint)ticks,marked) ||
                         U(block, 44) != result.SampleHz * 1600 || U(block, 60) != result.SampleHz ||
                         U(block, 48) != U(desc, 28) || U(block, 76) != probeMask || U(block, 80) != probeMask || U(block, 84) != 1 ||
                         U(block, 156) != U(desc, 36) || U(block, 160) != U(desc, 32) || (U(block, 52) & 40) != 40 ||
-                        U(block, 56) != 0 || U(block, 508) != 0)
+                        U(block, 56) != 0 || ((U(block,52)&NpSdImuSnapshot.Flag)==0U && U(block, 508) != 0) ||
+                        ((U(desc,8)==15)!=((U(block,52)&WildNpClosedLoop.NpClosedLoopCarrier.V2Flag)!=0)))
                         throw new InvalidDataException("SD block/header/sequence contract mismatch at block " + seq + ".");
-                    // Only sequence/tick and advertised raw-D8 lookahead bytes
-                    // can vary. The shared verifier checks exact lookahead bounds
-                    // and zero tail; all identity/phase/provenance stays immutable.
+                    // Sequence/tick and explicitly advertised extension bytes
+                    // can vary; identity/phase/provenance stays immutable.
+                    // Known optional SD sensor tail geometry is independent
+                    // of clock/context validity. The base NN verifier still
+                    // checks every other field on its private normalized copy.
+                    if(NpSdImuSnapshot.Present(block))NpSdImuSnapshot.ValidateGeometry(U(block,52),true);
                     if (immutable == null) immutable = (byte[])block.Clone();
-                    else for (int n = 0; n < Sector; n++) if ((n < 24 || n >= 40) &&
-                        !((U(block, 52) & 64U) != 0U && n >= 184 && n < 184 + U(block, 180)) && block[n] != immutable[n])
-                        throw new InvalidDataException("SD metadata changed at block " + seq + ".");
-                    verifier.Feed(block, 0); decoder.Feed(block, 0, verifier);
+                    else {
+                        uint flags=U(block,52),firstFlags=U(immutable,52);
+                        bool sensorLayout=(flags&NpSdImuSnapshot.Flag)!=0U&&(firstFlags&NpSdImuSnapshot.Flag)!=0U;
+                        int sensorStart=((flags|firstFlags)&NpSdImuSnapshot.FineFlag)!=0U?NpSdImuSnapshot.FineOffset:NpSdImuSnapshot.Offset;
+                        for (int n = 0; n < Sector; n++) if ((n < 24 || n >= 40) &&
+                            !(sensorLayout&&n>=52&&n<56&&((flags^firstFlags)&~NpSdImuSnapshot.FineFlag)==0U) &&
+                            !((flags&64U)!=0U && n>=184 && n<184+U(block,180)) &&
+                            !(sensorLayout&&n>=sensorStart) &&
+                            !WildNpClosedLoop.NpClosedLoopCarrier.IsV2DynamicByte(flags,n) && block[n] != immutable[n])
+                            throw new InvalidDataException("SD metadata changed at block " + seq + ".");
+                    }
+                    byte[] neural=block;
+                    if(NpSdImuSnapshot.Present(block)){
+                        sensorExport.Feed(block);
+                        if(neuralCopy==null)neuralCopy=new byte[Block];
+                        NpSdImuSnapshot.NormalizeNeuralCopy(block,neuralCopy,true);neural=neuralCopy;
+                    }
+                    verifier.Feed(neural, 0);
+                    if(closedLoop!=null)closedLoop.ObserveV2(neural,0,U(neural,52));
+                    if(segment==null || source!=nextSource){
+                        if(segment!=null)FinishSegment(segment,seq,nextSource,result.Rows);
+                        segment=new Segment(seq,source,result.Rows);result.Segments.Add(segment);
+                    }
+                    decoder.Feed(neural, 0, verifier);
+                    nextSource=checked(source+(uint)ticks);
                     if (progress != null && (seq % 64 == 0 || seq + 1 == result.CommittedBlocks))
-                        progress((int)((ulong)(seq + 1) * 100 / result.CommittedBlocks));
+                        progress(appendOrder?25+(int)((ulong)(seq+1)*74/result.CommittedBlocks):
+                            (int)((ulong)(seq + 1) * 99 / result.CommittedBlocks));
                 }
                 decoder.Complete();
                 result.IdentityHeader=new byte[Sector];Buffer.BlockCopy(immutable,0,result.IdentityHeader,0,Sector);
+                if(segment!=null)FinishSegment(segment,result.CommittedBlocks,nextSource,result.Rows);
+                result.SourceGapsAdvertised=verifier.SdSourceGapsEnabled;
+                result.SourceGapCount=verifier.SourceGapCount;result.MissingSourceTicks=verifier.MissingSourceTicks;
+                result.DroppedBlocks=verifier.DroppedBlocks;result.ElapsedSourceTicks=nextSource;
+                if(imuOrigin!=null&&!sensorExport.FineAdvertised&&imuOrigin.ReferenceTick>=nextSource)
+                    throw new InvalidDataException("Qualified IMU NP reference is outside the exported source extent.");
                 if (verifier.Blocks != result.CommittedBlocks) throw new InvalidDataException("SD verifier extent mismatch.");
+                if(hasLossStats){
+                    if(!result.SourceGapsAdvertised || U(utc,84)!=result.DroppedBlocks ||
+                        Q(utc,88)!=result.MissingSourceTicks || Q(utc,96)!=result.ElapsedSourceTicks)
+                        throw new InvalidDataException("Stopped loss statistics do not match the marked stored source extent.");
+                    result.StoppedLossStatsPresent=true;result.OverflowEvents=U(utc,80);
+                    result.ProducerDiscardedTicks=Q(utc,104);
+                }
                 for (int p = 0; p < probes; p++) {
+                    if(cancelled!=null && cancelled())throw new OperationCanceledException("SD DAT export cancelled before finalization; output remains partial.");
                     result.Phases[p] = verifier.PhaseForProbe(p);
-                    ulong first = (ulong)((1600 - result.Phases[p]) % 1600);
-                    long expected = (long)((result.SourceTicks - first) / 1600);
+                    if(result.Phases[p]<0 || result.Phases[p]>=1600)
+                        throw new InvalidDataException("SD DAT probe phase is unavailable.");
+                    long expected=0L;
+                    foreach(var part in result.Segments){
+                        ulong first=FirstRowTick(part.SourceStartTick,result.Phases[p]);
+                        long rows=part.SourceEndTick<=first?0L:checked((long)((part.SourceEndTick-first)/1600UL));
+                        if(part.Rows[p]!=rows || part.RowOffsets[p]!=expected)
+                            throw new InvalidDataException("SD DAT segment row count/offset mismatch.");
+                        expected=checked(expected+rows);
+                    }
                     if (result.Phases[p] < 0 || result.Rows[p] != expected || files[p].Length != expected * 768)
                         throw new InvalidDataException("SD DAT row count/length mismatch.");
+                    if(hashUsed[p]>0)hashes[p].TransformBlock(hashBuffers[p],0,hashUsed[p],null,0);
+                    hashes[p].TransformFinalBlock(new byte[0],0,0);
+                    digests[p]=BitConverter.ToString(hashes[p].Hash).Replace("-","");
                     files[p].Flush(true); files[p].Dispose(); files[p] = null;
                 }
-                // Publish the success receipt LAST. No padding, resync, silent
-                // recovery, dropped rows or fabricated LFP stream is permitted.
+                if(cancelled!=null && cancelled())throw new OperationCanceledException("SD DAT export cancelled before publishing; output remains partial.");
+                var firstRows=new System.Collections.Generic.List<NpFirstSampleRow>();
+                for(int p=0;p<probes;p++) {
+                    var timingSegments=new System.Collections.Generic.List<NpSampleSegment>();
+                    foreach(var part in result.Segments)if(part.Rows[p]>0)timingSegments.Add(new NpSampleSegment(part.RowOffsets[p],part.Rows[p],FirstRowTick(part.SourceStartTick,result.Phases[p])));
+                    firstRows.Add(new NpFirstSampleRow(p+1,"ap",timingSegments.Count>0?(ulong?)timingSegments[0].first_source_tick:null,result.SampleHz).ForData(Name(p),384,result.Rows[p],result.SampleHz,1,timingSegments));
+                }
+                NpAcquisitionTiming.SaveSd(output,utc,result.Session,2,result.SampleHz,firstRows);
+                // A supplied origin was matched to this sealed final receipt
+                // before any output. Null never infers phase from UTC/ARM.
+                ulong imuExtent=imuOrigin==null||sensorExport.FineAdvertised?result.ElapsedSourceTicks:
+                    result.ElapsedSourceTicks>imuOrigin.ReferenceTick?result.ElapsedSourceTicks-imuOrigin.ReferenceTick:0;
+                sensorExport.Complete(result.SampleHz*1600U,imuExtent,imuOrigin,cancelled);sensorExport.Dispose();
+                result.SensorSnapshotsAdvertised=sensorExport.Advertised;result.SensorSnapshots=sensorExport.Observations;
+                result.DistinctImuObservations=sensorExport.Samples;result.ImuSequenceGaps=sensorExport.SequenceGaps;result.OptionalImuError=sensorExport.Error;
+                result.ImuAnalogGridRows=sensorExport.GridRows;
+                result.ImuAnalogGridComplete=sensorExport.GridComplete;
+                result.ImuAnalogGridNpLocked=sensorExport.GridNpLocked;result.ImuAnalogGridOriginEvidence=sensorExport.GridOriginEvidence;
+                if(fineContext!=null&&fineContext.FineCounter64){
+                    var fineGrid=NpSdFineAnalog.Export(output,2,result.Session,result.SampleHz,probeMask,result.ElapsedSourceTicks,result.CommittedBlocks,
+                        result.SourceGapCount==0&&result.OverflowEvents==0&&result.OptionalImuError==null,cancelled);
+                    result.ImuFineTimingStatusFile=NpSdFineAnalogResult.StatusFile;
+                    result.ImuNativeFineTimestampsFile=fineGrid.Applied?NpSdFineAnalogResult.NativeFile:null;
+                    if(fineGrid.Applied){result.ImuAnalogGridRows=fineGrid.Rows;result.ImuAnalogGridNpLocked=true;result.ImuAnalogGridOriginEvidence="Validated Features25 continuous64 cache-observation intervals relative to NP STARTBYTE; no native conversion phase or PC UTC mapping";}
+                    else {result.ImuAnalogGridNpLocked=false;result.OptionalImuError=fineGrid.Error;}
+                }
+                if(cancelled!=null&&cancelled())throw new OperationCanceledException("SD DAT export cancelled before publishing.");
+                // Publish the success receipt LAST. No padding, phase relearning,
+                // silent loss or fabricated LFP stream is permitted.
                 for (int p = 0; p < probes; p++) File.Move(Path.Combine(output, Name(p) + ".partial"), Path.Combine(output, Name(p)));
-                var report = new StringBuilder("Export complete: True\nStored terminal state: "+(result.RecordingComplete?"Complete":"Incomplete")+"\nRecording complete: "+result.RecordingComplete+"\nStored state: "+result.StoredState+"\nStored fault: "+result.StoredFault+"\n");
-                if(!result.RecordingComplete)report.Append("Only the verified committed prefix was exported; the recording remains incomplete.\n");
+                var report = new StringBuilder("Export complete: True\nStored terminal state: "+(result.StoredState==3 && result.StoredFault==0?"Complete":"Incomplete")+"\nRecording complete: "+result.RecordingComplete+"\nStored state: "+result.StoredState+"\nStored fault: "+result.StoredFault+"\n");
+                if(result.SourceGapCount!=0)report.Append("Best-effort source loss: complete real AP rows were concatenated; no gap padding or cross-gap partial rows. The recording is not lossless.\n");
+                else if(result.OverflowEvents!=0)report.Append("Stopped overflow events were recorded, even though the stored prefix has no source gap. The recording is not lossless.\n");
+                else if(!result.RecordingComplete)report.Append("Only the verified committed prefix was exported; the recording remains incomplete.\n");
                 report.AppendFormat(CultureInfo.InvariantCulture,
                     "Session: {0}\nSample rate Hz: {1}\nCommitted blocks: {2}\nSource ticks: {3}\n", result.Session, result.SampleHz, result.CommittedBlocks, result.SourceTicks);
+                report.AppendFormat(CultureInfo.InvariantCulture,
+                    "Lossless: {0}\nSource gaps advertised: {1}\nSource gap count: {2}\nMissing source ticks: {3}\nDropped source blocks: {4}\nElapsed source ticks: {5}\nFooter source ticks are stored tick quantity, not elapsed source span.\n",
+                    result.Lossless,result.SourceGapsAdvertised,result.SourceGapCount,result.MissingSourceTicks,result.DroppedBlocks,result.ElapsedSourceTicks);
+                if(result.StoppedLossStatsPresent)report.AppendFormat(CultureInfo.InvariantCulture,
+                    "Stopped loss statistics: present\nPhysical overflow events: {0}\nProducer discarded raw ticks: {1}\nPhysical event/raw-discard counts are not inferred from stored source gaps.\n",
+                    result.OverflowEvents,result.ProducerDiscardedTicks);
+                else report.Append("Stopped loss statistics: not recorded; physical overflow events and producer-discarded ticks are unknown, not reconstructed from stored gaps.\n");
+                for(int n=0;n<result.Segments.Count;n++){
+                    var part=result.Segments[n];
+                    report.AppendFormat(CultureInfo.InvariantCulture,"Segment {0}: first_stored_block={1}; stored_blocks={2}; source_start_tick={3}; source_end_tick={4}\n",
+                        n,part.FirstStoredBlock,part.StoredBlocks,part.SourceStartTick,part.SourceEndTick);
+                    for(int p=0;p<probes;p++)report.AppendFormat(CultureInfo.InvariantCulture,
+                        "Segment {0} probe {1}: row_offset={2}; rows={3}; first_source_tick={4}\n",
+                        n,p+1,part.RowOffsets[p],part.Rows[p],FirstRowTick(part.SourceStartTick,result.Phases[p]));
+                }
+                if(appendOrder)report.Append("Storage order: physical append; original blocks verified and decoded in logical sequence order\n"+
+                    "Physical durable blocks: "+result.CommittedBlocks+"\nLogical contiguous-prefix blocks: "+result.LogicalPrefixBlocks+
+                    "\nLogical high-water blocks: "+result.LogicalHighWaterBlocks+
+                    "\nFooter tick field is stored tick quantity, not elapsed logical time. Stored status/fault and original metadata are unchanged.\n");
                 report.Append("Format: per-probe AP, 384 channels, sample-major int16 little-endian, signed nominal ADC counts\n");
                 report.Append("sample_encoding=" + (calibration==null?NpV2SampleDecoder.SampleEncoding:"signed_calibrated_nominal_adc_counts") + "\n");
                 report.Append("sample_transform=" + NpV2SampleDecoder.SampleTransform + (calibration==null?"":"; then factory gain correction") + "\n");
@@ -143,9 +334,10 @@ namespace USB512_interface
                 report.Append("sample_polarity=inverted relative to raw ASIC ADC codes; ASIC negative analog gain undone\n");
                 report.Append(calibration==null?"No gain/comparator calibration or microvolt conversion. ":"Factory host gain correction applied; see adc_calibration.json. No hardware trim or microvolt conversion claim. ");
                 report.Append("Legacy DAT before WILDX 1.0.0.9 contains unsigned raw 12-bit codes; existing DAT files are not rewritten.\n");
-                report.Append("Checks: descriptor/footer CRC32, exact immutable headers/sequence/ticks, native SuperSync in every block, exact row/file lengths\n");
+                report.Append("Checks: descriptor/footer CRC32, exact immutable headers/dense sequence, source ticks contiguous or explicitly marked whole-block forward gaps, native SuperSync in every block, exact segment row/file lengths\n");
+                if(result.SensorSnapshotsAdvertised)report.Append("IMU: recorded SNS2 latest-value snapshots; "+result.DistinctImuObservations+" distinct valid observations; see sensors.csv and imu_sd_export_status.txt. Sensor quality is independent of neural verification.\n");
                 report.Append("No ADC payload CRC. Whole-superframe loss or arbitrary ADC bit errors are not excluded by this export. Live producer continuity and analog quality require separate hardware evidence.\n");
-                report.Append("Boundary policy: trim incomplete leading/trailing AP rows; do not pad. Probe rows have independent source-tick origins; use the offsets below for alignment.\n");
+                report.Append("Boundary policy: trim incomplete leading/trailing AP rows in each contiguous source segment; do not pad. Probe rows have independent source-tick origins; use segment offsets for alignment.\n");
                 if (probeMask == 1U) {
                     report.Append("Configuration: configuration.bin; N2IMRO1; planned/staged P1 request only, NOT applied-mapping proof. Physical electrode geometry unavailable.\n");
                 }
@@ -161,10 +353,13 @@ namespace USB512_interface
                 for (int p = 0; p < probes; p++) report.AppendFormat(CultureInfo.InvariantCulture,
                     "Probe {0}: file={1}; rows={2}; phase={3}; first_source_tick={4}; trailing_ticks={5}; SHA256={6}\n",
                     p + 1, Name(p), result.Rows[p], result.Phases[p], (1600 - result.Phases[p]) % 1600,
-                    (result.SourceTicks - (ulong)((1600 - result.Phases[p]) % 1600)) % 1600, Hash(Path.Combine(output, Name(p))));
+                    SegmentTrailing(result.Segments[result.Segments.Count-1],result.Phases[p]), digests[p]);
+                report.Append("SHA256 scope: emitted DAT bytes, computed during writing; flush/length checks, no second disk-readback pass.\n");
                 report.Append(hasUtc ? "UTC: validated utc.bin; capture-start bracket only, not ADC synchronization\n" : "UTC: not present; no timing accuracy claim\n");
-                if (progress != null) progress(100);
                 File.WriteAllText(receipt, report.ToString(), Encoding.UTF8);
+                if(closedLoop!=null)closedLoop.Complete(closedLoopSummary);
+                completed=true;
+                NpTimeCorrection.Automatic(output);
                 return result;
             }
             catch (Exception ex)
@@ -173,9 +368,13 @@ namespace USB512_interface
                 throw;
             }
             finally {
+                sensorExport.Dispose();
+                if(closedLoop!=null)closedLoop.Dispose();
                 foreach (var f in files) if (f != null) f.Dispose();
+                foreach (var hash in hashes) if (hash != null) hash.Dispose();
                 try { NpNeuroscopeXml.WriteFolder(output,(int)probeMask,false,(int)result.SampleHz,null,null); }
                 catch(IOException ex) { File.AppendAllText(receipt,"Neuroscope XML unavailable: "+ex.Message+"\n"); }
+                if(completed && progress!=null)progress(100);
             }
         }
 
@@ -187,6 +386,12 @@ namespace USB512_interface
 
         static void ValidateMetadataCore(byte[] d,byte[] f,uint start,long length,bool allowIncomplete)
         {
+            if(d!=null && d.Length>=12 && U(d,8)==15){
+                byte[] baseD,baseF;
+                WildNpClosedLoop.NpClosedLoopCarrier.NormalizeV2Metadata(d,f,allowIncomplete,out baseD,out baseF);
+                ValidateMetadataCore(baseD,baseF,start,length,allowIncomplete);return;
+            }
+            if(d!=null && d.Length>=12 && U(d,8)==14){ValidateAppendMetadata(d,f,start,length,allowIncomplete);return;}
             Seal(d, "N2SDLOG1"); Seal(f, "N2SDEND1");
             int ticks = ProfileTicks(U(d, 24), U(d, 16));
             uint mask = U(d, 24);
@@ -223,6 +428,79 @@ namespace USB512_interface
                 throw new InvalidDataException("Incomplete, failed, torn or out-of-bounds SD recording; strict DAT export refused.");
         }
 
+        static uint AppendBaseVersion(byte[] descriptor)
+        {
+            switch(U(descriptor,96)&~128U){case 79:return 11;case 95:return 12;case 111:return 13;
+                default:throw new InvalidDataException("Unsupported v14 storage metadata flags.");}
+        }
+
+        static void ValidateAppendMetadata(byte[] d,byte[] f,uint start,long length,bool allowIncomplete)
+        {
+            if(d.Length!=Sector || f==null || f.Length!=Sector)throw new InvalidDataException("Missing v14 descriptor/footer sector.");
+            Seal(d,"N2SDLOG1");Seal(f,"N2SDEND1");
+            for(int n=8;n<100;n++)if(d[n]!=f[n])throw new InvalidDataException("V14 descriptor/footer identity mismatch.");
+            if(!Zero(d,132,376) || !Zero(f,140,368))throw new InvalidDataException("Nonzero v14 reserved bytes.");
+            uint version=AppendBaseVersion(d),physical=U(f,108),prefix=U(f,132),high=U(f,136),state=U(f,100),fault=U(f,104);
+            // Private validation copies reuse the old exact geometry contract.
+            // Original descriptor/footer bytes are never normalized or written.
+            var legacyD=(byte[])d.Clone();var legacyF=(byte[])f.Clone();
+            foreach(var bytes in new[]{legacyD,legacyF}){
+                Put(bytes,8,version);Put(bytes,96,U(bytes,96)&~64U);
+            }
+            Array.Clear(legacyF,132,8);Put(legacyD,508,Crc(legacyD,508));Put(legacyF,508,Crc(legacyF,508));
+            ValidateMetadataCore(legacyD,legacyF,start,length,allowIncomplete);
+            ulong maximum=((ulong)U(d,64)-U(d,60))/91;
+            if(prefix%4!=0 || high%4!=0 || prefix>physical || physical>high || high>maximum ||
+                (physical==0 && (prefix!=0 || high!=0)) || ((prefix==physical)!=(high==physical)) ||
+                (state==3 && (physical==0 || fault!=0)) || (state==4 && fault==0) ||
+                (state==1 && (physical!=0 || fault==0)) || (state!=1 && state!=3 && state!=4) ||
+                ((state==3 || state==4 && fault==0x56455249U) && (physical==0 || prefix!=physical)))
+                throw new InvalidDataException("Invalid v14 physical/prefix/high-water counts or stored state: physical="+physical+", prefix="+prefix+", high-water="+high+".");
+        }
+
+        static uint[] IndexAppendUnits(Stream card,byte[] d,byte[] f,Func<bool> cancelled,Action<int> progress)
+        {
+            uint blocks=U(f,108),units=blocks/4;var index=new uint[checked((int)units)];
+            var header=new byte[Sector];byte[] immutable=null;uint ticks=U(d,44);
+            long payload=checked((long)U(d,60)*Sector);
+            for(uint physical=0;physical<units;physical++){
+                ulong first=0;
+                for(uint within=0;within<4;within++){
+                    if(cancelled!=null && cancelled())throw new OperationCanceledException("SD append-order indexing cancelled; source unchanged.");
+                    card.Position=checked(payload+(long)physical*RuSectors*Sector+(long)within*Block);ReadExact(card,header);
+                    ulong sequence=Q(header,24);
+                    if(within==0){
+                        first=sequence;
+                        if(first%4!=0 || first>=(ulong)blocks || first+3>=(ulong)blocks || index[first/4]!=0)
+                            throw new InvalidDataException("Duplicate, overlapping or out-of-range logical RU at physical unit "+physical+".");
+                    }
+                    if(sequence!=first+within || !SourceTickValid(Q(header,32),sequence,ticks,
+                        (U(header,52)&NpV2WireVerifier.FlagSourceGaps)!=0U) || !Magic(header,"NP2USB03") ||
+                        U(header,8)!=3 || U(header,12)!=Sector || U(header,16)!=Block || U(header,20)!=Block-Sector || U(header,40)!=ticks ||
+                        U(header,44)!=U(d,20) || U(header,48)!=U(d,28) || U(header,60)!=U(d,16) ||
+                        U(header,76)!=U(d,24) || U(header,80)!=U(d,24) || U(header,84)!=1 ||
+                        U(header,156)!=U(d,36) || U(header,160)!=U(d,32) || (U(header,52)&40)!=40 ||
+                        U(header,56)!=0 || ((U(header,52)&NpSdImuSnapshot.Flag)==0U && U(header,508)!=0) || ((U(header,52)&64)!=0 && U(header,180)>200))
+                        throw new InvalidDataException("V14 native sequence/tick/profile header mismatch at physical unit "+physical+", block "+within+".");
+                    if(NpSdImuSnapshot.Present(header))NpSdImuSnapshot.ValidateGeometry(U(header,52));
+                    if(immutable==null)immutable=(byte[])header.Clone();
+                    else for(int n=0;n<Sector;n++)if((n<24 || n>=40) &&
+                        !((U(header,52)&64)!=0 && n>=184 && n<184+U(header,180)) &&
+                        !((U(header,52)&NpSdImuSnapshot.Flag)!=0U && n>=NpSdImuSnapshot.Offset) &&
+                        !WildNpClosedLoop.NpClosedLoopCarrier.IsV2DynamicByte(U(header,52),n) && header[n]!=immutable[n])
+                        throw new InvalidDataException("V14 native provenance changed at physical unit "+physical+", block "+within+".");
+                }
+                index[first/4]=physical+1; // Zero means missing; preserve physical RU zero.
+                if(progress!=null && (physical%64==0 || physical+1==units))progress((int)((ulong)(physical+1)*25/units));
+            }
+            for(int n=0;n<index.Length;n++)if(index[n]==0)throw new InvalidDataException("Missing logical RU "+n+" in committed v14 payload.");
+            return index;
+        }
+
+        static bool UnitGeometry(byte[] descriptor)
+        {uint version=StorageVersion(descriptor);return version==12 || version==13 || version==14 && AppendBaseVersion(descriptor)!=11;}
+        static uint StorageVersion(byte[] descriptor){return U(descriptor,8)==15?U(descriptor,136):U(descriptor,8);}
+
         private static bool IsLegacyAu(uint unit)
         {
             switch(unit){case 2048:case 4096:case 8192:case 16384:case 24576:case 32768:
@@ -247,7 +525,7 @@ namespace USB512_interface
                 U(b,24)!=1U || U(b,28)!=7U || U(b,32)!=4U || U(b,36)!=3U || U(b,40)!=Block ||
                 U(b,44)<committed || U(b,44)%4!=0 ||
                 (ulong)U(b,44)*91>(ulong)U(d,64)-U(d,60) ||
-                ((U(d,8)==12U || U(d,8)==13U) && (ulong)U(b,44)*91!=(ulong)U(d,64)-U(d,60)) ||
+                (UnitGeometry(d) && (ulong)U(b,44)*91!=(ulong)U(d,64)-U(d,60)) ||
                 !Zero(b,71,1) || b[72]!=(kind==2U?1:0) || !Zero(b,73,55) || !Zero(b,1004,1044))
                 throw new InvalidDataException("Invalid single-probe SD configuration provenance.");
             for(int n=0;n<16;n++)if(b[48+n]!=d[80+n])
@@ -267,8 +545,8 @@ namespace USB512_interface
                 U(b, 24) != 7U || U(b, 28) != 511U || U(b, 32) != 6U || U(b, 36) != 9U || U(b, 40) != Block ||
                 U(b, 44) < committed || U(b, 44) % 4 != 0 ||
                 (ulong)U(b, 44) * 91 > (ulong)U(d, 64) - U(d, 60) ||
-                ((U(d, 8) == 12U || U(d, 8) == 13U) && (ulong)U(b, 44) * 91 != (ulong)U(d, 64) - U(d, 60)) ||
-                !Zero(b, 71, 1) || (b[72] & ~7) != 0 || !Zero(b, 73, 55) || !Zero(b, 236, 1812))
+                (UnitGeometry(d) && (ulong)U(b, 44) * 91 != (ulong)U(d, 64) - U(d, 60)) ||
+                !Zero(b, 71, 1) || (b[72] & ~7) != 0 || !Zero(b, 73, 55) || !Zero(b, 236, U(d,8)==15?1652:1812))
                 throw new InvalidDataException("Invalid triple SD configuration/fingerprint provenance.");
             for (int n = 0; n < 16; n++) if (b[48 + n] != d[80 + n])
                 throw new InvalidDataException("Triple configuration/card identity mismatch.");
@@ -280,9 +558,18 @@ namespace USB512_interface
 
         private static void ValidateUtc(byte[] b, uint session, uint hz)
         {
-            Seal(b, "N2SDUTC1"); uint flags = U(b, 16);
-            if (U(b, 8) != 1 || U(b, 12) != session || (flags & ~7U) != 0 ||
-                U(b, 72) != hz || U(b, 76) != 1000 || !Zero(b, 80, 428) ||
+            uint version=U(b,8);Seal(b, version==2?"N2SDUTC2":"N2SDUTC1"); uint flags = U(b, 16);
+            if(version==2&&!Zero(b,160,348)){
+                // Only a recognized, sealed, recording-bound extension may be
+                // removed for the unchanged legacy clock/loss-stat validator.
+                // Archive the original sector, not this private validation copy.
+                if(NpFirstSyncSd.ReadSector(b,2,session,hz)==null)
+                    throw new InvalidDataException("Invalid SD first-sync UTC extension.");
+                b=(byte[])b.Clone();Array.Clear(b,160,348);NpAcquisitionAnchor.Put(b,508,NpAcquisitionAnchor.Crc(b,508));
+            }
+            int reserved=(flags&8U)!=0U?112:80;
+            if ((version!=1 && version!=2) || U(b, 12) != session || (flags & ~15U) != 0 ||
+                U(b, 72) != hz || U(b, 76) != 1000 || !Zero(b, reserved, 508-reserved) ||
                 ((flags & 1) != 0 && (U(b, 20) == 0 || U(b, 24) < 1000 || Q(b, 32) == 0)))
                 throw new InvalidDataException("Invalid SD UTC companion.");
             if ((flags & 3) == 3) for (int p = 0; p < 2; p++) {
@@ -293,7 +580,21 @@ namespace USB512_interface
         }
 
         private static string Name(int p) { return "neuropixels_probe" + (p + 1) + "_ap.dat"; }
-        private static string Hash(string path) { using (var f = File.OpenRead(path)) using (var h = SHA256.Create()) return BitConverter.ToString(h.ComputeHash(f)).Replace("-", ""); }
+        private static bool SourceTickValid(ulong source,ulong sequence,uint ticks,bool marked)
+        {
+            if(ticks==0U || sequence>UInt64.MaxValue/ticks || (sequence==0UL && source!=0UL))return false;
+            ulong minimum=sequence*ticks;
+            return marked?source>=minimum && (source-minimum)%ticks==0UL:source==minimum;
+        }
+        private static ulong FirstRowTick(ulong start,int phase)
+        {return checked(start+(1600UL-(start%1600UL+(ulong)phase)%1600UL)%1600UL);}
+        private static ulong SegmentTrailing(Segment part,int phase)
+        {ulong first=FirstRowTick(part.SourceStartTick,phase);return part.SourceEndTick<=first?part.SourceEndTick-part.SourceStartTick:(part.SourceEndTick-first)%1600UL;}
+        private static void FinishSegment(Segment part,uint endBlock,ulong endTick,long[] rows)
+        {
+            part.StoredBlocks=endBlock-part.FirstStoredBlock;part.SourceEndTick=endTick;
+            for(int p=0;p<rows.Length;p++)part.Rows[p]=rows[p]-part.RowOffsets[p];
+        }
         private static void WriteText(Stream f, string text) { var b = Encoding.UTF8.GetBytes(text); f.Write(b, 0, b.Length); }
         private static byte[] ReadAt(Stream f, long at, int count) { f.Position = at; var b = new byte[count]; ReadExact(f, b); return b; }
         private static void ReadExact(Stream f, byte[] b) { int n = 0, got; while (n < b.Length && (got = f.Read(b, n, b.Length - n)) != 0) n += got; if (n != b.Length) throw new EndOfStreamException("Truncated SD record."); }
@@ -301,6 +602,7 @@ namespace USB512_interface
         private static bool Zero(byte[] b, int at, int count) { for (int n = at; n < at + count; n++) if (b[n] != 0) return false; return true; }
         private static ulong AlignUp(ulong value,uint unit){return (value+unit-1)/unit*unit;}
         private static uint U(byte[] b, int n) { return BitConverter.ToUInt32(b, n); }
+        private static void Put(byte[] b,int n,uint value){Buffer.BlockCopy(BitConverter.GetBytes(value),0,b,n,4);}
         private static ulong Q(byte[] b, int n) { return BitConverter.ToUInt64(b, n); }
         private static void Seal(byte[] b, string magic) { if (!Magic(b, magic) || U(b, 508) != Crc(b, 508)) throw new InvalidDataException("Missing/torn/corrupt SD metadata: " + magic); }
         private static uint[] MakeCrcTable() { var t = new uint[256]; for (uint i = 0; i < 256; i++) { uint c = i; for (int n = 0; n < 8; n++) c = (c >> 1) ^ ((c & 1) == 0 ? 0 : 0xedb88320U); t[i] = c; } return t; }

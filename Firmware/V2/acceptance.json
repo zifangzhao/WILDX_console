@@ -1,51 +1,48 @@
 {
-  "release": "V2_RTC_FIRST_SAMPLE_APP46DF5009_USB62910614_20261029",
-  "stage": "SD_TRIPLE20K_30S_CHECKED_USB_ACQUISITION_UNTESTED",
-  "app_crc32": "46DF5009",
-  "usb_crc32": "62910614",
+  "uid": "001A0004434250062039314E",
+  "host_version": "1.0.0.199",
+  "app_crc32": "194D9B94",
+  "usb_crc32": "74A9B98B",
   "recovery_crc32": "6408DBB8",
-  "console_version": "1.0.0.189",
-  "profile": {
-    "mask": 7,
-    "hz": 20000,
-    "seconds": 30
+  "normal_usb": {
+    "configuration": "3 NP2 / 20 kHz / 60.425 s",
+    "received_verified_blocks": 47196,
+    "host_raw_drops": 0,
+    "host_decoded_lane_drops": 0,
+    "firmware_capture_producer_source_errors": [
+      0,
+      0,
+      0
+    ],
+    "legacy_imu_fresh_ag_and_mag": 1200,
+    "legacy_held_rows": 75369,
+    "rtc_local_interval_us": 120,
+    "pc_calibration_uncertainty_us": 1099,
+    "proof_sha256": "16BA7048927A70CB87252713BC56715A3CB9A20F678F9E9EF2647731EBDDC9C1"
   },
-  "session": 3268315904,
-  "neural": {
+  "ble_sd": {
+    "configuration": "3 NP2 / 20 kHz / 30.0032 s",
     "verified_bytes": 1092116480,
-    "chunks": 23440,
-    "rows_per_probe": 600063,
-    "loss_counters": {
-      "StoredSourceGaps": 0,
-      "OverflowEvents": 0,
-      "MissingSourceTicks": 0,
-      "DroppedBlocks": 0,
-      "ProducerDiscardedTicks": 0
-    }
+    "rows_each_probe": 600063,
+    "source_gaps": 0,
+    "missing_ticks": 0,
+    "dropped_blocks": 0,
+    "producer_discarded_ticks": 0,
+    "overflow_events": 0,
+    "valid_ag_mag_snapshots": 5741,
+    "rtc_local_interval_us": 121,
+    "pc_calibration_uncertainty_us": 20060,
+    "proof_sha256": "8B160B8BFC2A73636A62ACDD6CCCDCAE947B2E04D33AA829F246547344E98C32"
   },
-  "imu": {
-    "ag_observations": 5780,
-    "mag_observations": 2890,
-    "observed_sequence_gaps": 0,
-    "physical_conversion_phase_verified": false
-  },
-  "local_rtc_interval_us": [
-    1793285062748433,
-    1793285062748553
-  ],
-  "local_rtc_full_width_us": 120,
-  "pc_calibration_generation": 2,
-  "pc_calibration_provenance_qualified": true,
-  "declared_pc_setup_uncertainty_us": 20594,
-  "stopped_pc_readback_phase_interval_us": [
-    -36669,
-    41237
-  ],
-  "normal_sd_usb_download_handover_passed": true,
-  "usb_acquisition_r6_hardware_tested": false,
-  "whole_fused_newly_flashed": false,
-  "limits": "Validated one 30-second P1+P2+P3/20kHz SD run on Delkin V90: full 1092116480-byte readback, 23440 chunks, 600063 DAT rows/probe, all five reported loss counters zero. Saved IMU 5780 AG/2890 MAG observations, observed sequence gaps zero; not every physical conversion. Independent local RTC-to-first-NP full interval120us; pre-record PC calibration generation2 confirmed and bound. PC declared setup uncertainty20594us and separate stopped readback phase interval[-36669,+41237]us are not the120us local interval or a verified absolute PC-error guarantee. R6 USB acquisition/USB IMU physical recording remains untested. Normal SD-to-USB2/download3/full export passed. No all-mode/card/endurance/analog-quality or arbitrary ADC-bit-checksum guarantee. Whole fused image not newly flashed; exact checked components merged without rebuild. Lab originals restored after test.",
-  "phase_handoff_sha256": "E7DD42F4861BAABCF2F30CA2BF14EF23810B5D249C56E51B08F70A45CA1D4FB4",
-  "independent_interval_sha256": "A052B1C15AD4D609E6D7A75FDBF85A230316A26046C1C0C0562B9C834C36E09C",
-  "independent_pc_binding_sha256": "DB17469FCF446804493F27ACBCD559A9EF4B10AA307D05BF0B704FEAC33E2BCB"
+  "all_modes_or_endurance_qualified": false,
+  "experimental_grid_enabled": false,
+  "limits": [
+    "A1 catalog inspection was rejected; ordinary catalog listing and exact-session readback passed",
+    "BLE and USB firmware-identity capabilities absent during SD HIL: externally verified whole-flash proof, not device-reported CRC",
+    "Legacy USB IMU is held-value compatibility; no native conversion completeness or phase guarantee",
+    "RTC bound covers first validated NP only; PC uncertainty separate; whole-record clock continuity and terminal grid tail not established",
+    "APP changed from published R6 by five rebuilt units/removal of optional sensor fine archive; not equivalent to prior EC5",
+    "Experimental grid 600 s run failed at 205.310 s due producer retention; not enabled or qualified in ordinary USB profile",
+    "Fused file assembled from individually verified components and was not flashed as a whole"
+  ]
 }

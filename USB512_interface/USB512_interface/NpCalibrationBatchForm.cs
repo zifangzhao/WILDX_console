@@ -34,7 +34,7 @@ namespace USB512_interface
             AddPath(paths,0,"Source folder",source);layout.Controls.Add(paths,0,0);
             var options=new FlowLayoutPanel{Dock=DockStyle.Top,AutoSize=true,WrapContents=true};options.Controls.Add(new Label{Text="Source encoding",AutoSize=true,Margin=new Padding(0,9,8,0)});
             encoding.Items.AddRange(new object[]{"Auto from recording","Signed nominal ADC counts","Legacy unsigned ADC codes"});encoding.SelectedIndex=0;options.Controls.Add(encoding);options.Controls.Add(keepBackup);options.Controls.Add(scan);layout.Controls.Add(options,0,1);
-            var assignments=new Label{AutoSize=true,Dock=DockStyle.Fill,Margin=new Padding(0,8,0,10),Text=library!=null?"Factory folder: "+library.Folder+" · "+library.Count+" probe serials · match each recording automatically":String.Join("   |   ",profiles.Ports.Select(p=>{var c=profiles.Get(p);return "P"+p+" → SN "+c.Serial+" · "+c.Model+(c.Np2?"":" · AP "+c.ApGain+" / LFP "+c.LfpGain);}))};layout.Controls.Add(assignments,0,2);
+            var assignments=new Label{AutoSize=true,Dock=DockStyle.Fill,Margin=new Padding(0,8,0,10),Text=library!=null?"Factory folder: "+library.Folder+" · reuse selections for matching settings and probe count":String.Join("   |   ",profiles.Ports.Select(p=>{var c=profiles.Get(p);return "P"+p+" → SN "+c.Serial+" · "+c.Model+(c.Np2?"":" · AP "+c.ApGain+" / LFP "+c.LfpGain);}))};layout.Controls.Add(assignments,0,2);
             files.Columns.Add("file","File");files.Columns[0].FillWeight=28;
             files.Columns.Add("band","Band");files.Columns[1].FillWeight=6;
             files.Columns.Add("ports","Probe order");files.Columns[2].FillWeight=10;

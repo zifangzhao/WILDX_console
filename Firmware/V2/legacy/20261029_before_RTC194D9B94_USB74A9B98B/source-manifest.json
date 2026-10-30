@@ -1,0 +1,112 @@
+{
+  "scope": "Exact reviewed R6 retained-object/incremental inputs; published baseline commit is not a source equivalence claim",
+  "published_baseline_commit": "b249605074da17b01ad3095350022300ee82ac61",
+  "seal_handoff": {
+    "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\seal-handoff.json",
+    "sha256": "36A3050ABE2ED5E188B9D81024C7EE4598E6C2D5B013E268FACC862F04529AB0"
+  },
+  "arm_source_handoff_sha256": "C99C9E6812986AEF4B06C32B9134DFB83847E55305D476362F13762EC2ABC727",
+  "role_arm_review_pins": {
+    "app": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\v2-r6-app-arm-review\\receipt.json",
+      "sha256": "66ABC71ECFC1FED9ACC1E1F7EC32A8F98B5C7633A0689F1DF05FB0D942E95497"
+    },
+    "usb": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v2_usb_r6_arm_review_20261029\\review.json",
+      "sha256": "CFEEAB7A5F2910458C1436D06329BE1A7EAC071B35169B9B0CD92DAA165943F0"
+    }
+  },
+  "roles": {
+    "app": {
+      "body_crc32": "46DF5009",
+      "body_sha256": "68ED340CFB6C24B545806CD0A6AEB9EBBFA70A3C88CF991855800165A579C817",
+      "body_bytes": 279852,
+      "reviewed_axf_sha256": "8C7318D3CFF7B3BE81B5F659586CB49F23B3EDDCCF627B0618C743841CE09F38",
+      "reviewed_map_sha256": "6D0098F9CC0D4BD17FE5CC4BAAD497AADAB203AD942E2E223ACE8995905E9F03",
+      "generation": 3,
+      "loader_abi": 4,
+      "flags": 0,
+      "image_id": "0x41505031",
+      "manifest_base": "0x0801E000",
+      "manifest_end_exclusive": "0x0801E080",
+      "body_base": "0x08020000",
+      "body_end_exclusive": "0x0806452C",
+      "slot_limit_exclusive": "0x0817E000",
+      "vector_sp": "0x200BD9D8",
+      "vector_reset": "0x0802035D",
+      "manifest_prefix_crc32": "EB9A0EC4",
+      "files": {
+        "hex": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\app\\V2_APP_46DF5009_RTC_COUNTER64_TEST_ONLY.hex",
+          "sha256": "912BCA1508570A8D792E94E5CF76C97D0AD696BB984BCCB5F24BBC333C8C80D0",
+          "bytes": 770056
+        },
+        "body": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\app\\V2_APP_46DF5009_RTC_COUNTER64_TEST_ONLY.bin",
+          "sha256": "68ED340CFB6C24B545806CD0A6AEB9EBBFA70A3C88CF991855800165A579C817",
+          "bytes": 279852
+        },
+        "manifest": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\app\\V2_APP_46DF5009_RTC_COUNTER64_TEST_ONLY.manifest.bin",
+          "sha256": "6B418687B34A089D161756DE993E102ABE5A213ADBEEF34CD8B36BA1F084E9F1",
+          "bytes": 128
+        },
+        "update": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\app\\V2_APP_46DF5009_RTC_COUNTER64_TEST_ONLY.xenp",
+          "sha256": "060BC91098B46F78EA97237AA2C3D0ED37F2AF69E53A75F1D78A8E1A8E70908F",
+          "bytes": 279980
+        }
+      },
+      "hex_exact_slot_only": true,
+      "LF_normalized": true
+    },
+    "usb": {
+      "body_crc32": "62910614",
+      "body_sha256": "CDFB01EB31BC5E054D22A32EC0025FD06BA7F3EA76C5ACC5401D22CA145AC60E",
+      "body_bytes": 237668,
+      "reviewed_axf_sha256": "39EF1E3E339E9FA4C341FA64C013FE546E481E75A09F6E65ECFE4519D7B18F02",
+      "reviewed_map_sha256": "26DC46AC0D1F0FF38A5BDAE5274F60D7454BDC75A4D8F548DE70B184398354E3",
+      "generation": 3,
+      "loader_abi": 4,
+      "flags": 3,
+      "image_id": "0x55534231",
+      "manifest_base": "0x0817E000",
+      "manifest_end_exclusive": "0x0817E080",
+      "body_base": "0x08180000",
+      "body_end_exclusive": "0x081BA064",
+      "slot_limit_exclusive": "0x08200000",
+      "vector_sp": "0x200B90E8",
+      "vector_reset": "0x0818038D",
+      "manifest_prefix_crc32": "A57B4658",
+      "files": {
+        "hex": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\usb\\V2_USB_62910614_RTC_COUNTER64_TEST_ONLY.hex",
+          "sha256": "683A8F4BA40B7E3384F75EE00508D44563C3CAE92AB98A541CD4094BC6793714",
+          "bytes": 654040
+        },
+        "body": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\usb\\V2_USB_62910614_RTC_COUNTER64_TEST_ONLY.bin",
+          "sha256": "CDFB01EB31BC5E054D22A32EC0025FD06BA7F3EA76C5ACC5401D22CA145AC60E",
+          "bytes": 237668
+        },
+        "manifest": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\usb\\V2_USB_62910614_RTC_COUNTER64_TEST_ONLY.manifest.bin",
+          "sha256": "5C15A4F501655E66154AEE3A93BBEBB4736BCC5FB8D169BAEA09791472F832D7",
+          "bytes": 128
+        },
+        "update": {
+          "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\sealed-test-only-r6\\usb\\V2_USB_62910614_RTC_COUNTER64_TEST_ONLY.xenp",
+          "sha256": "8963CBB6BF5C9656E2054FEBE19085C56BAC0A6C544516660AE51345D5BB0922",
+          "bytes": 237796
+        }
+      },
+      "hex_exact_slot_only": true,
+      "LF_normalized": true
+    }
+  },
+  "phase_handoff": {
+    "path": "D:\\Code\\XE_NP_V2\\_artifacts\\v2_rtc_counter64_20261029\\hardware-sd189-r6\\phase-handoff.json",
+    "sha256": "E7DD42F4861BAABCF2F30CA2BF14EF23810B5D249C56E51B08F70A45CA1D4FB4"
+  },
+  "canonical_source_equivalence_claimed": false
+}

@@ -1,0 +1,162 @@
+[
+  {
+    "component": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+    "baseline": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled189\\FirmwareUpdater\\XeNpFirmwareUpdater.exe",
+      "sha256": "D78107469DE53D447B8A6176564E4D97698D7654784CDE587DCC3C9A91A75425",
+      "product_version": "1.0.0+316d34f57fa06ea0cee8e1f34eea27dddf07cff6",
+      "sections": [
+        {
+          "name": ".text",
+          "bytes": 91136,
+          "sha256": "B3CCF7C943E1C9E450751F17612E335013D6BE2161974B6FD4E1397318F8A5D3"
+        },
+        {
+          "name": ".rdata",
+          "bytes": 48640,
+          "sha256": "9119683003F9451733FE9B4174FDAF7C18F5A40FBC207AAEFECB0A6AA5A25408"
+        },
+        {
+          "name": ".data",
+          "bytes": 2560,
+          "sha256": "3B6B94DEBA470A8E91EFF879225E05E8D16B8D6289F43F7922E9B5D40E3D931E"
+        },
+        {
+          "name": ".pdata",
+          "bytes": 5632,
+          "sha256": "8EC64D1641E6C662F6C059F8DD795FB6576F7E2578EF7B24BB02B1473260E3FE"
+        },
+        {
+          "name": ".reloc",
+          "bytes": 1024,
+          "sha256": "7D1932EAE9901EC74760EB2C44A2DF4A20F3A8BFB1A595DB5DD20E43AF7C73CF"
+        },
+        {
+          "name": ".rsrc",
+          "bytes": 2048,
+          "sha256": "D40AE82A9E6E290658A834797D38CC1FAFE5FC173E74E14BE22EEFE8A1FA04B3"
+        }
+      ]
+    },
+    "candidate": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\FirmwareUpdater\\XeNpFirmwareUpdater.exe",
+      "sha256": "1B46FC3C4CCE501BB868AF969970CF65248868F4DE862522C31041AFDBB5FD37",
+      "product_version": "1.0.0+45328f48dddeeb7e25af6b5dfb882a224e0d3b9f",
+      "sections": [
+        {
+          "name": ".text",
+          "bytes": 91136,
+          "sha256": "B3CCF7C943E1C9E450751F17612E335013D6BE2161974B6FD4E1397318F8A5D3"
+        },
+        {
+          "name": ".rdata",
+          "bytes": 48640,
+          "sha256": "9119683003F9451733FE9B4174FDAF7C18F5A40FBC207AAEFECB0A6AA5A25408"
+        },
+        {
+          "name": ".data",
+          "bytes": 2560,
+          "sha256": "3B6B94DEBA470A8E91EFF879225E05E8D16B8D6289F43F7922E9B5D40E3D931E"
+        },
+        {
+          "name": ".pdata",
+          "bytes": 5632,
+          "sha256": "8EC64D1641E6C662F6C059F8DD795FB6576F7E2578EF7B24BB02B1473260E3FE"
+        },
+        {
+          "name": ".reloc",
+          "bytes": 1024,
+          "sha256": "7D1932EAE9901EC74760EB2C44A2DF4A20F3A8BFB1A595DB5DD20E43AF7C73CF"
+        },
+        {
+          "name": ".rsrc",
+          "bytes": 2048,
+          "sha256": "928927C285CD69872D18804D646CA10ED522AA5F8923C747AAD4C0A63AB6AE0B"
+        }
+      ]
+    },
+    "changed_sections": [
+      ".rsrc"
+    ]
+  },
+  {
+    "component": "NPConfigurator/NPConfigurator.exe",
+    "baseline": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled189\\NPConfigurator\\NPConfigurator.exe",
+      "sha256": "50CEB214418A79BDC77BC2B3BE2285C28634218BCCF40B909AF941069996394E",
+      "product_version": "1.0.0+316d34f57fa06ea0cee8e1f34eea27dddf07cff6",
+      "sections": [
+        {
+          "name": ".text",
+          "bytes": 91136,
+          "sha256": "B3CCF7C943E1C9E450751F17612E335013D6BE2161974B6FD4E1397318F8A5D3"
+        },
+        {
+          "name": ".rdata",
+          "bytes": 48640,
+          "sha256": "9119683003F9451733FE9B4174FDAF7C18F5A40FBC207AAEFECB0A6AA5A25408"
+        },
+        {
+          "name": ".data",
+          "bytes": 2560,
+          "sha256": "8D448E03530E59EE7C430BACD9660246E0823A887DF2947E21C216C87A350D6C"
+        },
+        {
+          "name": ".pdata",
+          "bytes": 5632,
+          "sha256": "8EC64D1641E6C662F6C059F8DD795FB6576F7E2578EF7B24BB02B1473260E3FE"
+        },
+        {
+          "name": ".reloc",
+          "bytes": 1024,
+          "sha256": "7D1932EAE9901EC74760EB2C44A2DF4A20F3A8BFB1A595DB5DD20E43AF7C73CF"
+        },
+        {
+          "name": ".rsrc",
+          "bytes": 1536,
+          "sha256": "802442F10A5332C4BC9E875B4EF28DE85F614A54BA79542F031BC70B095D5A24"
+        }
+      ]
+    },
+    "candidate": {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled199-grid\\NPConfigurator\\NPConfigurator.exe",
+      "sha256": "B751235941C42DC22C3AC2C04AFF3F23524EE81B7D0E570FDB468B79B48B9098",
+      "product_version": "1.0.0+45328f48dddeeb7e25af6b5dfb882a224e0d3b9f",
+      "sections": [
+        {
+          "name": ".text",
+          "bytes": 91136,
+          "sha256": "B3CCF7C943E1C9E450751F17612E335013D6BE2161974B6FD4E1397318F8A5D3"
+        },
+        {
+          "name": ".rdata",
+          "bytes": 48640,
+          "sha256": "9119683003F9451733FE9B4174FDAF7C18F5A40FBC207AAEFECB0A6AA5A25408"
+        },
+        {
+          "name": ".data",
+          "bytes": 2560,
+          "sha256": "8D448E03530E59EE7C430BACD9660246E0823A887DF2947E21C216C87A350D6C"
+        },
+        {
+          "name": ".pdata",
+          "bytes": 5632,
+          "sha256": "8EC64D1641E6C662F6C059F8DD795FB6576F7E2578EF7B24BB02B1473260E3FE"
+        },
+        {
+          "name": ".reloc",
+          "bytes": 1024,
+          "sha256": "7D1932EAE9901EC74760EB2C44A2DF4A20F3A8BFB1A595DB5DD20E43AF7C73CF"
+        },
+        {
+          "name": ".rsrc",
+          "bytes": 1536,
+          "sha256": "A0D527928C4DAEA4F45BEA2F92AFFD3C482F2E43BFC478A98DC9341B193E77B4"
+        }
+      ]
+    },
+    "changed_sections": [
+      ".rsrc"
+    ]
+  }
+]

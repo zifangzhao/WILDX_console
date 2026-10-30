@@ -133,7 +133,8 @@ namespace USB512_interface {
    folder=directory;device=selected;port=transport??new NpGpioRtcSerial(selected.Port);
    foreach(byte id in DefaultChannelIds)channelEvents.Add(id,0);
   }
-  static long Now(){return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();}
+  static long Now(){return NpHostClock.NowUs/1000;}
+  static string ClockFields(long ticks){return ","+NpHostClock.Epoch+","+ticks+","+F(NpHostClock.MonotonicUs(ticks))+","+F(NpHostClock.UnixUs(ticks))+","+DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();}
   static long MonotonicMs(){return (long)(Stopwatch.GetTimestamp()*(1000.0/Stopwatch.Frequency));}
   static string F(double number){return number.ToString("R",CultureInfo.InvariantCulture);}
   void Fail(string message){lock(gate){if(error==null)error=message;}running=false;stop.Set();}
@@ -141,7 +142,7 @@ namespace USB512_interface {
    started=DateTime.UtcNow;
    try {
     events=Open("gpio_rtc_events.txt");sync=Open("gpio_rtc_sync.csv");
-    sync.WriteLine("kind,query_sequence,pc_send_unix_ms,pc_receive_unix_ms,device_rtc_ms,rtt_ms,offset_ms,selected_query,selected_offset_ms");sync.Flush();
+    sync.WriteLine("kind,query_sequence,pc_send_unix_ms,pc_receive_unix_ms,device_rtc_ms,rtt_ms,offset_ms,selected_query,selected_offset_ms,host_epoch,observation_qpc,host_monotonic_us,host_pc_unix_us,observed_wall_unix_ms");sync.Flush();
     port.Open();running=true;SaveReceipt("logging");
     writer=Launch("GPIO RTC file writer",WriteLoop);receiver=Launch("GPIO RTC receiver",ReceiveLoop);probes=Launch("GPIO RTC clock queries",SyncLoop);
    }catch(Exception ex){Fail("GPIO/RTC could not start: "+ex.Message);Dispose();throw new IOException(Error,ex);}
@@ -158,26 +159,26 @@ namespace USB512_interface {
    catch(Exception ex){if(running)Fail("GPIO/RTC receive failed: "+ex.Message);}
   }
   void Trigger(byte channel,uint sequence,ulong deviceMs) {
-   DateTime receive=DateTime.UtcNow;DateTime? mapped;
+   long receiveTicks=Stopwatch.GetTimestamp();DateTime receive=new DateTime(621355968000000000L+(long)(NpHostClock.UnixUs(receiveTicks)*10),DateTimeKind.Utc);DateTime? mapped;
    lock(gate){mapped=ClockSynchronized?clock.Map(deviceMs):null;long count;channelEvents.TryGetValue(channel,out count);channelEvents[channel]=count+1;
     eventRate.Add(channel,deviceMs,MonotonicMs());lastChannel=channel;lastDeviceMs=deviceMs;}
    if(haveSequence && sequence!=unchecked(lastSequence+1))Interlocked.Increment(ref gaps);
    haveSequence=true;lastSequence=sequence;Interlocked.Increment(ref received);
    Enqueue(false,String.Format(CultureInfo.InvariantCulture,"Time: {0}, DeviceMs: {1}, Sequence: {2}, Data: {3}, PcReceive: {4}",
     mapped.HasValue?mapped.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff",CultureInfo.InvariantCulture):"UNSYNCED",deviceMs,sequence,channel,
-    receive.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.ffffff",CultureInfo.InvariantCulture)));
+    receive.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.ffffff",CultureInfo.InvariantCulture))+", PcClock: "+ClockFields(receiveTicks).Substring(1));
   }
   void Reply(uint sequence,ulong deviceMs) {
-   long now=Now();NpGpioRtcClock.Sample sample,best;
+   long ticks=Stopwatch.GetTimestamp(),now=(long)(NpHostClock.UnixUs(ticks)/1000);NpGpioRtcClock.Sample sample,best;
    lock(gate){sample=clock.Reply(sequence,deviceMs,now);best=clock.Best;if(sample!=null)eventRate.Observe(deviceMs,MonotonicMs());}
    Enqueue(true,"reply,"+sequence+","+(sample==null?"":sample.Sent.ToString(CultureInfo.InvariantCulture))+","+now+","+deviceMs+","+
-    (sample==null?",":sample.Rtt+","+F(sample.Offset))+","+(best==null?",":best.Sequence+","+F(best.Offset)));
+    (sample==null?",":sample.Rtt+","+F(sample.Offset))+","+(best==null?",":best.Sequence+","+F(best.Offset))+ClockFields(ticks));
   }
   void SyncLoop() {
    try {int sent=0;while(running) {
-    long now=Now();uint sequence;lock(gate){sequence=clock.Query(now);}
+    long ticks=Stopwatch.GetTimestamp(),now=(long)(NpHostClock.UnixUs(ticks)/1000);uint sequence;lock(gate){sequence=clock.Query(now);}
     byte[] query={0x3c,0x90,0,0,0,0,0x3e};Buffer.BlockCopy(BitConverter.GetBytes(sequence),0,query,2,4);
-    Enqueue(true,"query,"+sequence+","+now+",,,,,,");port.Write(query);
+    Enqueue(true,"query,"+sequence+","+now+",,,,,,"+ClockFields(ticks));port.Write(query);
     if(stop.WaitOne(++sent<20?50:1000))break;
    }}catch(Exception ex){if(running)Fail("GPIO/RTC clock query failed: "+ex.Message);}
   }
@@ -206,9 +207,10 @@ namespace USB512_interface {
   void SaveReceipt(string state) {
    NpGpioRtcClock.Sample best;lock(gate){best=clock.Best;}
    var activity=GetActivity();
-   var receipt=new {schema_version=1,format="wild.gpio_rtc",state=state,port=device.Port,pnp_device_id=device.Identity,baud=119200,
+   var receipt=new {schema_version=2,pc_clock=NpHostClock.Receipt,format="wild.gpio_rtc",state=state,port=device.Port,pnp_device_id=device.Identity,baud=119200,
     started_utc=started.ToString("O"),stopped_utc=finished==DateTime.MinValue?null:finished.ToString("O"),
     neural_first_receive_utc=NeuralFirstReceiveUtc.HasValue?NeuralFirstReceiveUtc.Value.ToString("O"):null,
+    neural_first_receive_is_recording_start=false,recording_start_reference_file=NpRecordingUtc.FileName,
     events_file="gpio_rtc_events.txt",clock_queries_file="gpio_rtc_sync.csv",events_received=Interlocked.Read(ref received),events_saved=EventsSaved,
     channel_ids=activity.Ids.Select(id=>(int)id).ToArray(),channel_event_counts=activity.Counts,
     last_channel=haveSequence?(byte?)lastChannel:null,last_device_rtc_ms=haveSequence?(ulong?)lastDeviceMs:null,
@@ -217,7 +219,7 @@ namespace USB512_interface {
     rejected_records=Interlocked.Read(ref rejected),sequence_discontinuities=Interlocked.Read(ref gaps),invalid_frames=parser.InvalidFrames,pending_frame_bytes=parser.PendingBytes,
     valid_clock_replies=SyncReplies,clock_synchronized=ClockSynchronized,best_rtt_ms=best==null?(long?)null:best.Rtt,selected_offset_ms=best==null?(double?)null:best.Offset,
     error=Error,complete=state=="stopped" && Error==null && received==saved && gaps==0 && parser.InvalidFrames==0 && parser.PendingBytes==0,
-    time_mapping="RTC milliseconds mapped to PC by the lowest-RTT offset among the latest 16 replies; raw query observations retained. Not synchronized to the neural ADC clock."};
+    time_mapping="RTC milliseconds mapped to the shared NP/GPIO PC monotonic epoch by the lowest-RTT offset among the latest 16 replies; raw QPC and wall observations retained. Physical neural ADC/event latency remains uncalibrated."};
    NpMetadataFile.WriteText(Path.Combine(folder,"gpio_rtc_session.json"),new JavaScriptSerializer().Serialize(receipt)+Environment.NewLine);
   }
   public void Dispose() {
@@ -229,6 +231,7 @@ namespace USB512_interface {
    try{if(events!=null)events.Dispose();if(sync!=null)sync.Dispose();}catch(Exception ex){Fail("GPIO/RTC flush failed: "+ex.Message);}
    try{port.Dispose();}catch(Exception ex){Fail("GPIO/RTC port disposal failed: "+ex.Message);}
    finished=DateTime.UtcNow;try{SaveReceipt(Error==null?"stopped":"error");}catch(Exception ex){Fail("GPIO/RTC session metadata failed: "+ex.Message);}
+   NpGpioTimeCorrection.Queue(folder);
    // Avoid disposing synchronization objects if a broken serial driver left a worker alive.
    if((receiver==null || !receiver.IsAlive) && (probes==null || !probes.IsAlive) && (writer==null || !writer.IsAlive)){lines.Dispose();stop.Dispose();}
   }

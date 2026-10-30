@@ -11,4 +11,5 @@ No recording, flashing, new compilation or repeated recording validation is adde
 
 Targets: push-only 2 minutes, report an overrun at 5 minutes; packaging/publication 3-5 minutes, report an overrun at 10 minutes. Record actual elapsed/queue times in the release receipt. Finish an active write or restoration safely if a target is exceeded.
 
-Release 1.0.0.189 is published at a52fc97129d0c42fe5a7b3768c959b2799effa5c; publication work remaining is zero. Its [52-file payload comparison](../ReleaseSources/1.0.0.189/package-verification.json) and [packaging receipt](../ReleaseSources/1.0.0.189/packaging-receipt.json) remain valid. Pending development validation is tracked only in the recording checklist.
+Release1.0.0.199 has completed development acceptance and one fresh56-file installer payload comparison. Exact identities and actual packaging times are in ReleaseSources/1.0.0.199. Publication verifies the main branch remote commit; its final timing/commit receipt is retained in _artifacts/release199/release-receipt.json after the push.
+

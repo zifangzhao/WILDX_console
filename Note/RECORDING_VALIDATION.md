@@ -22,22 +22,21 @@ The 60/30-second captures are baseline development samples, not endurance proof.
 
 A relevant failure sends the change back to development. Software checks or another mode passing do not establish that the failing mode works. Missing fine timing in old firmware remains explicitly unknown and must not become a new GUI recording Start gate.
 
-## Current pending development work
+## Current development result
 
-Snapshot from owner reports on 2026-10-29. Estimates are planning allowances, not measured completion promises. This documentation correction does not start hardware work.
+2026-10-29. WILD-X1.0.0.199 passed the four scoped recording checks below. Exact independent reviews and source/component identities are retained in [the release validation summary](../ReleaseSources/1.0.0.199/validation-summary.json). These development results are reused during publication.
 
-The user resumed coordination to finish deterministic timing development for V1 and V2. Each owner proceeds as one authorized work package. Source/build work can overlap; hardware retains the existing shared lease. Pending estimates are planning allowances, not running countdowns. Current shared scope and carrier constraints are recorded in the [time contract](RECORDING_TIME_CONTRACT.md).
+| Check | Result |
+|---|---|
+| V1 USB, two probes20kHz/60s | RTC-to-first-NP full interval111us; closed AP/LFP and native/grid IMU checks passed; no reported NP continuity faults |
+| V1 BLE-to-SD, two probes20kHz/30s | Full960MiB readback passed; local interval111us;46prior recordings preserved |
+| V2 ordinary USB, three probes20kHz/60s | Local interval120us;47,196 NP blocks verified with no reported drops; ordinary IMU snapshots saved |
+| V2 BLE-to-SD, three probes20kHz/30s | Full1.09GB readback passed; local interval121us; NP loss counters zero and5,741 valid IMU observations |
+| Build/package reuse | One combined199 app/SDK build; checked189 companion runtimes reused; one successful NSIS invocation and one fresh56-file payload comparison |
 
-V2's TIM3 source edit is currently blocked by automatic approval review, which reports that its earlier paused/review-only scope still applies even after the user's affirmative reply. The user has been asked for a direct explicit resume statement in the V2 chat. V1 and independent host work continue. No V2 timer edit or hardware change has occurred.
+The local intervals are separate from PC/network synchronization uncertainty. V1 has one initial unavailable grid slot and no later observed grid gap in these captures; full phase and final-tail coverage remain unknown. V1 SD has a valid global T0, while canonical per-stream source_tick remains null. The ordinary V2 USB path uses sparse native observations and a held-value compatibility grid, not lossless200Hz.
 
-| Item | State | Remaining estimate / checkpoint |
-|---|---|---|
-| V2 USB helper build/self-test | Done: actual embedded self-test passed without device access | 0; measured build/self-test work package 0.682 s |
-| V2 USB NP + IMU + RTC | Resumed; three probes/20 kHz/60 s plan prepared, new-grid hardware run not started | Completion ETA depends on carrier implementation and shared hardware availability |
-| V1 deterministic scheduling and startup | Resumed by the user; private 32-slot bookkeeping helper native-tested, actual timer/carrier not integrated. Normal-reset candidate USB worked; SD/APP readiness remains unresolved. | Completion ETA unknown until timer/carrier fit and affected startup path are resolved; report a bounded development checkpoint |
-| V1 USB + SD RTC validation | USB60 completed with no reported continuity-counter errors and valid IMU observations; startup/terminal tails disclosed, lossless=false. Required kind5 source-root record was absent, so RTC remained unqualified. No host bypass is justified; SD capture did not start. | Reuse USB data for analysis. Remaining implementation follows the single-origin plan; no new completion ETA until the affected fix is ready |
-| V2 SD NP + IMU + RTC | Previous exact R6 pair passed 30 s at three probes/20 kHz; RTC-to-NP full interval 120 µs. New grid remains unvalidated. | Reuse [R6 evidence](../ReleaseSources/1.0.0.189/validation-summary.json) for unchanged behavior; validate changed grid |
-| Remaining stream physical alignment | Camera/audio/ADC/external-GPIO timing coverage incomplete | No credible completion ETA; define a bounded experiment per affected stream |
+Further grid/headroom and long-capture experiments are separate, default-off development work; they are not release pre-flight or an all-mode/endurance claim. V2 optional catalog INSPECT failed; normal listing/download/export passed. Exact original firmware/options and saved idle/profile restoration proofs passed. The composed fused images use exact checked components and were not newly flashed as whole images.
 
 ## Reduce validation time
 
@@ -46,3 +45,4 @@ V2's TIM3 source edit is currently blocked by automatic approval review, which r
 - Validate one bounded new recording on the PC. Do not make firmware Stop or publication scan old sessions/the entire card.
 - Record actual elapsed and queue time per step in the existing development result. Report the exact blocker and next checkpoint on an overrun; finish active flashing, write drains and restoration safely.
 - Hand the accepted artifacts and evidence to packaging/publication. Do not repeat recording validation when asked to push those artifacts.
+
