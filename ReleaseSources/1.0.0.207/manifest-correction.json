@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "version": "1.0.0.207",
+  "recorded_utc": "2026-10-30T18:52:27.8924584Z",
+  "status": "manifest_summary_corrected",
+  "published_release_commit": "97ea7ed3ec688d4cc49cf42711a63f96bcad7837",
+  "installer_sha256": "0AA5828A398EC74D4F4CCE56F01D91441DAD8651658C57BA2A461FABC5C6A81F",
+  "installer_unchanged": true,
+  "new_builds": 0,
+  "new_packages": 0,
+  "new_extractions": 0,
+  "existing_extracted_files_matched": 55,
+  "catalog_sha256": "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
+  "v2_app": "7F238587",
+  "v2_usb": "74FC7104",
+  "v2_recovery": "6408DBB8",
+  "corrected_fields": [
+    "catalogSha256",
+    "firmware family2 app/usb/stage",
+    "extractedPayloadFilesVerified",
+    "sourceGitBaseline",
+    "sourcePublicationCommit"
+  ],
+  "previous_manifests": [
+    {
+      "path": "LATEST_INSTALLERS/release-manifest.json",
+      "sha256": "071522987A1E85B9DD977CC4C9524FFB34397C723C5C04CE3B8934B82ADE8E0B"
+    },
+    {
+      "path": "LATEST_INSTALLERS/WILDX_release-manifest.json",
+      "sha256": "071522987A1E85B9DD977CC4C9524FFB34397C723C5C04CE3B8934B82ADE8E0B"
+    }
+  ],
+  "corrected_manifest_sha256": "9EC870540C5EEEE1793FB1B5CBE13C0E25F67F0BE70D622EF912BE866BBCEF5F",
+  "cause": "Release promotion reused prior manifest metadata and refreshed payload entries without deriving all summary fields from the selected207 catalog and package receipt."
+}

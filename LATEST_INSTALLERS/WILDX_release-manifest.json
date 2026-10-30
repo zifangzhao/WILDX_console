@@ -9,9 +9,9 @@
                   },
     "guiSha256":  "3A726DA0D7DE08E432C33AF252D10CCB9929A20C6AEC79925F00802DF934F1EC",
     "sdkSha256":  "2606AC896DADD09A3E4A475D39C5EB46A9526B121FA35A73729A88F48C61539B",
-    "catalogSha256":  "3D59BBA8383A29BA07591D05AA661054F8B41C2E6A8CEF9321509E0C6E5AC55E",
+    "catalogSha256":  "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730",
     "sourceArchiveSha256":  "F0F5765DA9B2302B2ADEDD0E47D30496E73510E27487A8C1DDFE91B545702637",
-    "sourcePublicationCommit":  null,
+    "sourcePublicationCommit":  "97ea7ed3ec688d4cc49cf42711a63f96bcad7837",
     "sourceProvenance":  "../ReleaseSources/1.0.0.207/host-source-archive/source-freeze.json",
     "validation":  "../ReleaseSources/1.0.0.207/qualification.json",
     "firmware":  [
@@ -22,9 +22,9 @@
                          "family":  1
                      },
                      {
-                         "usb":  "74A9B98B",
-                         "stage":  "Retained checked1.0.0.199 bundle",
-                         "app":  "194D9B94",
+                         "usb":  "74FC7104",
+                         "stage":  "Three probes20kHz SD120 checked",
+                         "app":  "7F238587",
                          "recovery":  "6408DBB8",
                          "family":  2
                      }
@@ -34,7 +34,7 @@
     "allModeOrEnduranceQualified":  false,
     "experimentalV2GridEnabled":  false,
     "installerPayloadExtractedAndVerified":  true,
-    "extractedPayloadFilesVerified":  57,
+    "extractedPayloadFilesVerified":  55,
     "installerExecuted":  false,
     "separateZipIncluded":  false,
     "standaloneUpdateRequired":  false,
@@ -315,6 +315,6 @@
                         "sha256":  "26D82E084F15981B21D5CBAFECCA02847825CCD7EE7427000F29DF3170082730"
                     }
                 ],
-    "sourceGitBaseline":  "16262132449d10ec45075105de66c4d4c2254d15",
+    "sourceGitBaseline":  "0e41669fe419e42b98cdf27205fdaced6dff9047",
     "sourceIdentityRole":  "git_baseline_plus_exact_compiled_source_overlay"
 }
