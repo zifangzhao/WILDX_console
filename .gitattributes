@@ -110,3 +110,8 @@ Firmware/** -text
 /ReleaseSources/1.0.0.158/** -text
 /LATEST_INSTALLERS/legacy/20261028_before_1.0.0.165/** -text
 /ReleaseSources/1.0.0.165/** -text
+
+# Preserve release204 provenance hashes and the archived199 metadata verbatim.
+/ReleaseSources/1.0.0.204/** -text
+/LATEST_INSTALLERS/legacy/1.0.0.199/** -text
+/LATEST_INSTALLERS/WILDX_release-manifest.json -text
