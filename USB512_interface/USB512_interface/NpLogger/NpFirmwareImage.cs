@@ -97,19 +97,29 @@ namespace USB512_interface
                 return image;
             }
             if(family==1 && image.count!=FlashBytes-PageBytes)throw new InvalidDataException("Select complete fused V1 firmware or pure APP-only HEX. Partial APP+USB and service-only images are ambiguous.");
-            image.Read(FlashBase,(int)(ConfigBase-FlashBase));
+            int recoveryBytes=(int)(ConfigBase-FlashBase);
+            if(family==2){
+                // A catalog-SHA-checked V2 recovery may end before the reserved
+                // loader partition. Require its actual prefix to be dense;
+                // absent tail bytes remain owned by the physical backup.
+                while(recoveryBytes>0 && !image.present[recoveryBytes-1])recoveryBytes--;
+                if(recoveryBytes<8)throw new InvalidDataException("V2 recovery vectors are missing.");
+            }
+            image.Read(FlashBase,recoveryBytes);
             // The SHA-checked V2 bundle deliberately omits unused tail flash.
             // Required APP/USB bytes are checked by their manifests below;
             // ExpectedFlash preserves every address absent from the HEX.
             if(family==1)image.Read(AppManifest,(int)(FlashLimit-AppManifest));
             if(family==1)ValidateRecovery(image.flash);
-            ValidateVector(image.flash,0,FlashBase,(int)(ConfigBase-FlashBase));
+            ValidateVector(image.flash,0,FlashBase,recoveryBytes);
+            if(family==2)image.Read(U(image.flash,4)&~1U,2); // Reset instruction must actually be supplied.
             image.ValidateManifest(UsbManifest,0x55534231,UsbBase,FlashLimit);
             int dl=(int)(0x081be000-FlashBase);
             // Unified USB can occupy the old download-manifest address. Only
             // interpret a separate legacy slot when it is outside that payload.
             uint usbSize=U(image.flash,(int)(UsbManifest-FlashBase)+28);
-            if(UsbBase+usbSize<=0x081be000 && U(image.flash,dl)!=UInt32.MaxValue)
+            bool legacyDownload=family==1?U(image.flash,dl)!=UInt32.MaxValue:image.NonErasedPresent(dl,FlashBytes-dl);
+            if(UsbBase+usbSize<=0x081be000 && legacyDownload)
                 image.ValidateManifest(0x081be000,0x444c4431,0x081c0000,FlashLimit);
             if(start.HasValue && (start.Value&~1U)!=(U(image.flash,4)&~1U))throw new InvalidDataException("Fused HEX entry does not match its recovery reset vector.");
             image.Full=true;return image;
@@ -120,6 +130,8 @@ namespace USB512_interface
             for(int i=0;i<size;i++){if(!present[at+i])throw new InvalidDataException("Firmware image is incomplete at 0x"+(address+(uint)i).ToString("X8")+".");result[i]=flash[at+i];}
             return result;
         }
+        bool NonErasedPresent(int at,int size)
+        {for(int i=at;i<at+size;i++)if(present[i] && flash[i]!=255)return true;return false;}
         void ValidateManifest(uint address,uint id,uint imageBase,uint limit)
         {
             var m=Read(address,128);uint size=U(m,28);

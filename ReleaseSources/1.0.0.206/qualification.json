@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "version": "1.0.0.206",
+  "status": "qualified_host_sparse_v2_update_fix",
+  "baseline": "1.0.0.204",
+  "gui_sha256": "084A328A72180F8297810EF85E3D8F8078D4C8DF5E93261D74F4B0789CF292CA",
+  "sdk_sha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
+  "app_compilations": 1,
+  "sdk_rebuilt": false,
+  "compiled_inputs": 199,
+  "changed_compiled_inputs": [
+    "NpLogger/NpFirmwareImage.cs",
+    "Properties/AssemblyInfo.cs"
+  ],
+  "focused_results": [
+    {
+      "name": "Actual app firmware bundle/identity/offline UI",
+      "checks": 592,
+      "passed": true
+    },
+    {
+      "name": "Shared V1/V2 manager",
+      "checks": 24,
+      "passed": true
+    },
+    {
+      "name": "Actual app V2 parser/guarded DFU model/UI",
+      "checks": 37456,
+      "passed": true
+    },
+    {
+      "name": "Actual206 shipping V2 load plus independent HEX/2MiB+4MiB backup/page overlay",
+      "byte_assertions": 12582912,
+      "passed": true
+    },
+    {
+      "name": "Frozen source parser strict mutants and preservation",
+      "byte_and_guard_assertions": 8756726,
+      "passed": true,
+      "receipt": "_artifacts/firmware_sparse206_r2/source-freeze.json"
+    }
+  ],
+  "legacy_notice_fixture": {
+    "gate": false,
+    "original": "Stale standalone runner lacks unrelated geometry dependencies",
+    "adapted": "Old source fixture expects unknown private firmware to stay silent, while unchanged current Offer deliberately offers difference review",
+    "production_notice_source_changed": false,
+    "product_fix_applied": false,
+    "failures_retained": true
+  },
+  "firmware_changed": false,
+  "catalog_changed": false,
+  "hardware_access": false,
+  "flash_performed": false,
+  "reused_recording_evidence": "Published204 V1 and retained199 V2 components; no recording behavior change",
+  "experimental_v2_grid_included": false,
+  "limits": [
+    "No new physical firmware update was performed; parser and guarded flash plan were checked with exact shipped images and fake programmer.",
+    "Byte assertion totals are not counts of distinct test scenarios.",
+    "New V2 SD experiments remain unqualified and excluded."
+  ]
+}

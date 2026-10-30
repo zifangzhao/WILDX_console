@@ -1,19 +1,19 @@
 {
-  "version": "1.0.0.204",
-  "releaseId": "WILDX204_V1_DETERMINISTIC_IMU_20261030",
-  "baselineVersion": "1.0.0.199",
+  "version": "1.0.0.206",
+  "releaseId": "WILDX206_SPARSE_V2_FULL_BUNDLE_FIX_20261030",
+  "baselineVersion": "1.0.0.204",
   "installer": {
-    "bytes": 7780178,
-    "file": "WILDX_console-Setup-1.0.0.204.exe",
-    "sha256": "E97E23F680632413A2A032C3E95B26DD5309C7129EFE4B6D3807EC05972B0FA2"
+    "bytes": 7780450,
+    "file": "WILDX_console-Setup-1.0.0.206.exe",
+    "sha256": "8891B8EC45FE8BE5AD2594F8D717BB96AB6F345867ABF4DBF16108C477ED9966"
   },
-  "guiSha256": "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E",
+  "guiSha256": "084A328A72180F8297810EF85E3D8F8078D4C8DF5E93261D74F4B0789CF292CA",
   "sdkSha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
   "catalogSha256": "3D59BBA8383A29BA07591D05AA661054F8B41C2E6A8CEF9321509E0C6E5AC55E",
-  "sourceArchiveSha256": "40291432167A3BCB70979CD687C3197A2EA08456403A1FAF5EC0050A46222DD3",
-  "sourcePublicationCommit": "23edae6de84869b1b9edcf9e52074649c0579cbb",
-  "sourceProvenance": "../ReleaseSources/1.0.0.204/host-source-freeze.json",
-  "validation": "../ReleaseSources/1.0.0.204/validation-summary.json",
+  "sourceArchiveSha256": "489C47D082B51A4E38B6AB8350BE91745237593BF5296239E9EE4FB66306BCE7",
+  "sourcePublicationCommit": null,
+  "sourceProvenance": "../ReleaseSources/1.0.0.206/source-freeze.json",
+  "validation": "../ReleaseSources/1.0.0.206/validation-summary.json",
   "firmware": [
     {
       "usb": "1E73A743",
@@ -62,7 +62,7 @@
     {
       "path": "WILDX_console.exe",
       "bytes": 2737664,
-      "sha256": "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E"
+      "sha256": "084A328A72180F8297810EF85E3D8F8078D4C8DF5E93261D74F4B0789CF292CA"
     },
     {
       "path": "WILDX_console.exe.config",
@@ -324,5 +324,7 @@
       "bytes": 656,
       "sha256": "B8F0CCA9800F9520006DCF54F587D15150198F2307414BE88E07246C8B7B7C31"
     }
-  ]
+  ],
+  "sourceGitBaseline": "16262132449d10ec45075105de66c4d4c2254d15",
+  "sourceIdentityRole": "git_baseline_plus_exact_compiled_source_overlay"
 }

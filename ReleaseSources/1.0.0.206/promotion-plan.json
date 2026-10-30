@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "scope": "Explicit host-only206 promotion; no new firmware or recording qualification",
+  "expected_git_baseline": "16262132449d10ec45075105de66c4d4c2254d15",
+  "gui_sha256": "084A328A72180F8297810EF85E3D8F8078D4C8DF5E93261D74F4B0789CF292CA",
+  "source_archive_sha256": "489C47D082B51A4E38B6AB8350BE91745237593BF5296239E9EE4FB66306BCE7",
+  "qualification_sha256": "01F02EBB0B64FF27F818F9E5759AD6CCF037A4EC83DAB9835989098CAAE4F305",
+  "baseline_latest": [
+    {
+      "path": "LATEST_INSTALLERS/README.md",
+      "bytes": 1095,
+      "sha256": "01EDFA5E4493F25578DFEF09B3F5958D3BB6B25F49A7801FD3322AEE0D0E0EA6"
+    },
+    {
+      "path": "LATEST_INSTALLERS/release-manifest.json",
+      "bytes": 11624,
+      "sha256": "6AC6B6E9F751EC98C3E46672CE83E98A86AC76B5EE4FDED456834DF442BEB57C"
+    },
+    {
+      "path": "LATEST_INSTALLERS/WILDX_release-manifest.json",
+      "bytes": 11624,
+      "sha256": "6AC6B6E9F751EC98C3E46672CE83E98A86AC76B5EE4FDED456834DF442BEB57C"
+    },
+    {
+      "path": "LATEST_INSTALLERS/SHA256SUMS.txt",
+      "bytes": 101,
+      "sha256": "CFAAD5310B3AE3C32C5A2DDCA6C825B10EFDA0451BB44176D83BE84A3CCDEC29"
+    },
+    {
+      "path": "LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.204.exe",
+      "bytes": 7780178,
+      "sha256": "E97E23F680632413A2A032C3E95B26DD5309C7129EFE4B6D3807EC05972B0FA2"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "USB512_interface/USB512_interface/NpLogger/NpFirmwareImage.cs",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\source206-grid\\USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareImage.cs",
+      "sha256": "EED1B99EE9C409B5C9EAEEB802EE53F07714CD021D4A823116BD38BF06C0F926",
+      "role": "actual206compiledsource",
+      "bytes": 15620
+    },
+    {
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\source206-grid\\USB512_interface\\USB512_interface\\Properties\\AssemblyInfo.cs",
+      "sha256": "185BA77E6E4110EFACAD78631928B5E6EFA0DAA051DB63E089B438C131BB0686",
+      "role": "actual206compiledsource",
+      "bytes": 1273
+    },
+    {
+      "path": "Tests/NpFirmwareSparseImageTests.cs",
+      "bytes": 7569,
+      "sha256": "78C71DF54B7F09673F33E93F76D686853660887A95567819BA6BEA7622DF77E0",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpFirmwareSparseImageTests.cs",
+      "role": "focusedparserfixture"
+    },
+    {
+      "path": "test_firmware_sparse_image.ps1",
+      "bytes": 1451,
+      "sha256": "71C72A0AA997E208DCCE06E521EAD45AAD141A03EC2BC6A68F410B3D2939CEF2",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\test_firmware_sparse_image.ps1",
+      "role": "focusedparserfixture"
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/build-grid-lab.ps1",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\build-grid-lab.ps1",
+      "sha256": "1D8812844B96F06BB449DE3969C3FA0689D4C23E5EE1070C37C723EF4572FEFD",
+      "role": "repository-onlysourceprovenance",
+      "bytes": 6337
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/compiled-sources.zip",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\compiled-sources.zip",
+      "sha256": "489C47D082B51A4E38B6AB8350BE91745237593BF5296239E9EE4FB66306BCE7",
+      "role": "repository-onlysourceprovenance",
+      "bytes": 959507
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/host-build-receipt-206.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\host-build-receipt-206.json",
+      "sha256": "9B2516F677019C4B1687EDB93C7870046DA64A1D39348B39ACD30CF26D18EAB3",
+      "role": "repository-onlysourceprovenance",
+      "bytes": 35565
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/sdk-current-source-qualification.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\sdk-current-source-qualification.json",
+      "sha256": "30B8B9903B12E01D54EE89D043B2208582098D916DA2197CB0FF463595BA7935",
+      "role": "repository-onlysourceprovenance",
+      "bytes": 3300
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/source-freeze.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\source-freeze.json",
+      "sha256": "54D37A7F46CD6FFC1FFEFB1B74BA7006B2FC1210F38038F840082A465FE6C7A9",
+      "role": "repository-onlysourceprovenance",
+      "bytes": 3743
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/parser-evidence/NpFirmwareSparseImageTests.cs",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\NpFirmwareSparseImageTests.cs",
+      "sha256": "78C71DF54B7F09673F33E93F76D686853660887A95567819BA6BEA7622DF77E0",
+      "role": "repository-onlyparser-evidence",
+      "bytes": 7569
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/parser-evidence/production.diff",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\production.diff",
+      "sha256": "B9D0195E747590AB00B3AB8DC82A34006996192AAD59CD2C7D1017E4CF9D413E",
+      "role": "repository-onlyparser-evidence",
+      "bytes": 3118
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/parser-evidence/source-freeze.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\source-freeze.json",
+      "sha256": "9A77FC008E1D3EC5C7B4EC1A04DC300CD98292533478BA5CE58F03AB8B47CBC7",
+      "role": "repository-onlyparser-evidence",
+      "bytes": 4117
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/parser-evidence/test-result.txt",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\test-result.txt",
+      "sha256": "C51EF80C340E0B23CE5F258BF10A4703699F565EE4DD8C79794F354802D1E32C",
+      "role": "repository-onlyparser-evidence",
+      "bytes": 145
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/parser-evidence/test_firmware_sparse_image.ps1",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\test_firmware_sparse_image.ps1",
+      "sha256": "71C72A0AA997E208DCCE06E521EAD45AAD141A03EC2BC6A68F410B3D2939CEF2",
+      "role": "repository-onlyparser-evidence",
+      "bytes": 1451
+    },
+    {
+      "path": "ReleaseSources/1.0.0.206/README.md",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\release-notes.md",
+      "sha256": "9CE40E17E7CB3A90258858C265D552CCBCFB73742EBDC7924CE2CA2F1E61F2AA",
+      "bytes": 2180,
+      "role": "final206notes"
+    }
+  ],
+  "git_paths": [
+    ".gitattributes",
+    "LATEST_INSTALLERS/README.md",
+    "LATEST_INSTALLERS/SHA256SUMS.txt",
+    "LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.204.exe",
+    "LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.206.exe",
+    "LATEST_INSTALLERS/WILDX_release-manifest.json",
+    "LATEST_INSTALLERS/legacy/1.0.0.204/README.md",
+    "LATEST_INSTALLERS/legacy/1.0.0.204/SHA256SUMS.txt",
+    "LATEST_INSTALLERS/legacy/1.0.0.204/WILDX_console-Setup-1.0.0.204.exe",
+    "LATEST_INSTALLERS/legacy/1.0.0.204/WILDX_release-manifest.json",
+    "LATEST_INSTALLERS/legacy/1.0.0.204/release-manifest.json",
+    "LATEST_INSTALLERS/release-manifest.json",
+    "ReleaseSources/1.0.0.206/README.md",
+    "ReleaseSources/1.0.0.206/build-grid-lab.ps1",
+    "ReleaseSources/1.0.0.206/compiled-sources.zip",
+    "ReleaseSources/1.0.0.206/host-build-receipt-206.json",
+    "ReleaseSources/1.0.0.206/package-verification.json",
+    "ReleaseSources/1.0.0.206/parser-evidence/NpFirmwareSparseImageTests.cs",
+    "ReleaseSources/1.0.0.206/parser-evidence/production.diff",
+    "ReleaseSources/1.0.0.206/parser-evidence/source-freeze.json",
+    "ReleaseSources/1.0.0.206/parser-evidence/test-result.txt",
+    "ReleaseSources/1.0.0.206/parser-evidence/test_firmware_sparse_image.ps1",
+    "ReleaseSources/1.0.0.206/promote206.ps1",
+    "ReleaseSources/1.0.0.206/promotion-plan.json",
+    "ReleaseSources/1.0.0.206/qualification.json",
+    "ReleaseSources/1.0.0.206/sdk-current-source-qualification.json",
+    "ReleaseSources/1.0.0.206/source-freeze.json",
+    "ReleaseSources/1.0.0.206/validation-summary.json",
+    "Tests/NpFirmwareSparseImageTests.cs",
+    "USB512_interface/USB512_interface/NpLogger/NpFirmwareImage.cs",
+    "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs",
+    "test_firmware_sparse_image.ps1"
+  ],
+  "package_verification_required": "_artifacts/release206/package-verification.json statuspayload_identity_verified /version206/exact57/no unexpected",
+  "source_identity": "Gitbaseline+exactcompiledsourceoverlay; firmwarecatalogsourceCommitsunchanged",
+  "new_scoped_gitattributes": [
+    "/ReleaseSources/1.0.0.206/** -text",
+    "/LATEST_INSTALLERS/legacy/1.0.0.204/** -text"
+  ],
+  "no_commit_or_push_in_script": true,
+  "unrelated_note_wip_excluded": true,
+  "package_verification": {
+    "path": "_artifacts/release206/package-verification.json",
+    "sha256": "69B9E4C70E3838D65F91CCBD5D87F6EBF6A75987680419FC727B23AEE4A00814"
+  },
+  "status": "ready_for_root_promotion_only"
+}

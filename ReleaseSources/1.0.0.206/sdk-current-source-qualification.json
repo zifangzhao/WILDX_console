@@ -1,0 +1,61 @@
+{
+  "format": "wildx.sdk203.combined_freeze",
+  "status": "PASS_FINAL_COMBINED_SDK",
+  "created_utc": "2026-10-30T05:16:59.600135+00:00",
+  "app_build": false,
+  "hardware_calls": 0,
+  "sdk_builds_this_phase": 1,
+  "dll": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\sdk-enabled\\NpV2SdDatExport.dll",
+    "sha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
+    "bytes": 659456
+  },
+  "sdk_build_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\sdk-build-receipt.json",
+    "sha256": "9742451FA75C7341950028DA685CC18459AE6E959F38C4E394D5975724ACC0DF"
+  },
+  "build_script": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\build-sdk203.ps1",
+    "sha256": "0FCC5E518D36F74041C737BEE3519602C58510244AE830A4E7C1F487F9430AE0"
+  },
+  "properties": {
+    "Configuration": "Release",
+    "Platform": "AnyCPU",
+    "TargetFrameworkVersion": "v4.7.2",
+    "EnableNpFirstSync": "true",
+    "EnableNpImuGrid": "not set",
+    "DefineConstants": "TRACE;NP2_CONSOLE_STANDALONE;NP_FIRST_SYNC_ENABLE"
+  },
+  "source_input_count": 51,
+  "all_source_inputs_unchanged_before_after_and_final": true,
+  "compiled_source_snapshot": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\compiled-source",
+  "input_freezes": [
+    {
+      "sha256": "FC0C58E3F9F356D9457D87811778F20AE7B953BB0BBB115B0EC4DD9FA611E36B",
+      "path": "_artifacts/deterministic_imu_next/sd16-v4-protocol/source-freeze.json"
+    },
+    {
+      "sha256": "30F45ABCBB2A1D5974759FC886B4BCA6C860C54507B7A3E3084E55EAA597ECAF",
+      "path": "_artifacts/deterministic_imu_next/sd16-schema2-catalog203/source-freeze.json"
+    }
+  ],
+  "boundary_check": {
+    "checks": 17,
+    "base_compiled_sdk_boundary_checks": 13,
+    "new_schema2_cases": [
+      "valid known lowerbound3/pending_unknown",
+      "valid zero lowerbound0/pending_unknown",
+      "invalid pending boolean nullablesunknown but NN/retainedphasepreserved",
+      "invalid optionalreserved nullablesunknown but NN/retainedphasepreserved"
+    ],
+    "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\NpV2SdGrid16Assembly203Tests.cs",
+    "source_sha256": "A28995372394FCD1D1B9497CA47B8A3222E4294D4E9A457347C684F982197E3B",
+    "exe": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\boundary\\SdkBoundary203.exe",
+    "exe_sha256": "388D79E4C5054F7C9C54BBA44C4188EFF4962F6756B5E0EF2BE4E195A074E409",
+    "log": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sdk203-combined\\boundary\\check.log",
+    "log_sha256": "387BA681E626CCA0CDA6F91C0C32C6A103892B9D7CEA7697CE3B14C655FD17DF",
+    "fixture_directory": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-schema2-catalog203\\exports\\export_tests_d9219dcbcf99417cbd6c7b8b39febfc9",
+    "no_real_recording_or_hardware": true
+  },
+  "next": "Root app203 compilation should reuse this exact DLL; helpers203 source preparation only until actual app203 pins."
+}

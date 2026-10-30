@@ -1,0 +1,88 @@
+{
+  "status": "PASS_FOCUSED_SOURCE_PARSER_QUALIFICATION",
+  "changed_files": [
+    {
+      "path": "USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareImage.cs",
+      "bytes": 15620,
+      "sha256": "EED1B99EE9C409B5C9EAEEB802EE53F07714CD021D4A823116BD38BF06C0F926"
+    },
+    {
+      "path": "Tests\\NpFirmwareSparseImageTests.cs",
+      "bytes": 7569,
+      "sha256": "78C71DF54B7F09673F33E93F76D686853660887A95567819BA6BEA7622DF77E0"
+    },
+    {
+      "path": "test_firmware_sparse_image.ps1",
+      "bytes": 1451,
+      "sha256": "71C72A0AA997E208DCCE06E521EAD45AAD141A03EC2BC6A68F410B3D2939CEF2"
+    }
+  ],
+  "shipping_assets": [
+    {
+      "path": "Firmware\\V2\\V2_fused_RECOVERY_6408DBB8_USB_74A9B98B_APP_194D9B94_RTC_START_20261029.hex",
+      "bytes": 1609373,
+      "sha256": "7FFC34425952074C6AE88F59DDE575B7C7D235E4924C4CE56FFA54AE5DD0A6E6"
+    },
+    {
+      "path": "Firmware\\V1\\V1_fused_BOOT_USB1E73A743_APPFFF283D9_deterministic_IMU_20261030.hex",
+      "bytes": 5745164,
+      "sha256": "5D89FB6E25235867DD2E47F900228A57D60DB56C60BE6358BD624EF713BAFC9C"
+    },
+    {
+      "path": "Firmware\\V1\\V1_APP_FFF283D9_deterministic_IMU_20261030.hex",
+      "bytes": 1030706,
+      "sha256": "6F8428F2A8055BDAD581F424C05FF9C2AE915C7C5172F4FF653F8FB686AB2AA8"
+    }
+  ],
+  "catalog": {
+    "path": "Firmware\\releases.json",
+    "bytes": 22870,
+    "sha256": "3D59BBA8383A29BA07591D05AA661054F8B41C2E6A8CEF9321509E0C6E5AC55E"
+  },
+  "actual_dependency_app": {
+    "path": "_artifacts\\utc_alignment_20261028\\enabled204-grid\\WILDX_console.exe",
+    "bytes": 2737664,
+    "sha256": "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E"
+  },
+  "test_executable": {
+    "path": "_artifacts\\firmware_sparse206_r2\\NpFirmwareSparseImageTests.exe",
+    "bytes": 24576,
+    "sha256": "5F11321C12A7C27F52B18F91F193D5B2E2BD4500F2F566FC080057B3E4DD530F"
+  },
+  "result": {
+    "path": "_artifacts\\firmware_sparse206_r2\\test-result.txt",
+    "bytes": 145,
+    "sha256": "C51EF80C340E0B23CE5F258BF10A4703699F565EE4DD8C79794F354802D1E32C"
+  },
+  "assertions": 8756726,
+  "command": "WindowsPowerShell -NoProfile -ExecutionPolicy Bypass -File test_firmware_sparse_image.ps1 -ConsoleExecutable _artifacts/utc_alignment_20261028/enabled204-grid/WILDX_console.exe -OutputDirectory _artifacts/firmware_sparse206_r2",
+  "dependency_scope": "Production NpFirmwareImage.cs compiled from current source; unchanged actual204 NpDownloadStream.Crc and NpV1Management.ValidateAppBytes invoked through explicit test-only reflection adapters. No Form/connection constructor or programmer execution.",
+  "coverage": [
+    "Actual shipping204V2 catalog-SHA full bundle admitted",
+    "Actual shippingV1 full and APP admitted; V2 viaV1 refused",
+    "Internal recovery hole, vector/reset-code loss, absent-tail reset, truncated instruction refused",
+    "Protected config write, truncated APP/USB manifests and changed payload CRC refused",
+    "Wrong catalogSHA refused",
+    "Sparse shortUSB absent legacyDL accepted; unknown partial legacy payload refused",
+    "Exact byteoverlay for2/4MiB randomized beforeflash",
+    "WritePageHex fullpages preserve omitted samepageboot-tail; protectedconfig/secondbank neveremitted",
+    "Identicalexpectedflash emits no operationfile"
+  ],
+  "limitations": [
+    "No firmware/device/app/installer build or flash executed",
+    "First fixture attempt failed namespace lookup before parser tests; corrected test adapter only, finalr2passes",
+    "New actualGUI206 whole-flow build remains rootowned; existing ExpectedFlash/WritePageHex policy unchanged"
+  ],
+  "actions": {
+    "production_files_changed": 1,
+    "standalone_source_compilation": true,
+    "app_build": false,
+    "firmware_build": false,
+    "hardware": false,
+    "flash": false,
+    "git": false,
+    "package": false
+  },
+  "before_source_sha256": "673C287DFDD2696BFC4946F1627CF920265A47F70384AF075D5C704CBAA674CA",
+  "production_diff_sha256": "CC59A4D5B4729CD8D70A5688770E4255B5573A5512BD6C8B2EF638C4CFBEDBB1"
+}

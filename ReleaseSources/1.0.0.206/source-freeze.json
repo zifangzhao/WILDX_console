@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "version": "1.0.0.206",
+  "status": "pending_final206_tests",
+  "exe": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled206-grid\\WILDX_console.exe",
+    "bytes": 2737664,
+    "sha256": "084A328A72180F8297810EF85E3D8F8078D4C8DF5E93261D74F4B0789CF292CA"
+  },
+  "sdk": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\enabled206-grid\\NpV2SdDatExport.dll",
+    "bytes": 659456,
+    "sha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A"
+  },
+  "build_receipt": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\host-build-receipt-206-grid.json",
+    "bytes": 35565,
+    "sha256": "9B2516F677019C4B1687EDB93C7870046DA64A1D39348B39ACD30CF26D18EAB3"
+  },
+  "source_archive": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\compiled-sources.zip",
+    "bytes": 959507,
+    "sha256": "489C47D082B51A4E38B6AB8350BE91745237593BF5296239E9EE4FB66306BCE7"
+  },
+  "source_inputs": 199,
+  "source_snapshot": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\utc_alignment_20261028\\source206-grid",
+  "source_git_baseline": "16262132449d10ec45075105de66c4d4c2254d15",
+  "source_identity_role": "actual_git_baseline_plus_archived_compiled_source_overlay_not_cleanHEAD",
+  "changed_source_inputs_from204": [
+    {
+      "sha256": "EED1B99EE9C409B5C9EAEEB802EE53F07714CD021D4A823116BD38BF06C0F926",
+      "path": "USB512_interface\\USB512_interface\\NpLogger\\NpFirmwareImage.cs"
+    },
+    {
+      "sha256": "185BA77E6E4110EFACAD78631928B5E6EFA0DAA051DB63E089B438C131BB0686",
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    }
+  ],
+  "sdk_qualification": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\host-source-archive\\sdk-current-source-qualification.json",
+    "bytes": 3300,
+    "sha256": "30B8B9903B12E01D54EE89D043B2208582098D916DA2197CB0FF463595BA7935"
+  },
+  "method_identity_claim": "Not version-only: parser behavior changed. No all-method IL equality claim.",
+  "recipe_label_correction": "Original buildreceipt published_release_unchanged=199 is a stale recipe label. Actual release baseline is published204; original receipt preserved unchanged.",
+  "all56_other_payload_files_unchanged": true,
+  "parser_evidence": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\NpFirmwareSparseImageTests.cs",
+      "bytes": 7569,
+      "sha256": "78C71DF54B7F09673F33E93F76D686853660887A95567819BA6BEA7622DF77E0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\test_firmware_sparse_image.ps1",
+      "bytes": 1451,
+      "sha256": "71C72A0AA997E208DCCE06E521EAD45AAD141A03EC2BC6A68F410B3D2939CEF2"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\source-freeze.json",
+      "bytes": 4117,
+      "sha256": "9A77FC008E1D3EC5C7B4EC1A04DC300CD98292533478BA5CE58F03AB8B47CBC7"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\production.diff",
+      "bytes": 3118,
+      "sha256": "B9D0195E747590AB00B3AB8DC82A34006996192AAD59CD2C7D1017E4CF9D413E"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\release206-prep\\parser-evidence\\test-result.txt",
+      "bytes": 145,
+      "sha256": "C51EF80C340E0B23CE5F258BF10A4703699F565EE4DD8C79794F354802D1E32C"
+    }
+  ],
+  "root_final_tests": "pending"
+}

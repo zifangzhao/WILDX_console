@@ -115,3 +115,7 @@ Firmware/** -text
 /ReleaseSources/1.0.0.204/** -text
 /LATEST_INSTALLERS/legacy/1.0.0.199/** -text
 /LATEST_INSTALLERS/WILDX_release-manifest.json -text
+
+/ReleaseSources/1.0.0.206/** -text
+
+/LATEST_INSTALLERS/legacy/1.0.0.204/** -text
