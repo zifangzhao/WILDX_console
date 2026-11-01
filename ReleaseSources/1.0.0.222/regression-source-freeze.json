@@ -1,0 +1,161 @@
+{
+  "status": "PASS_FOCUSED_SOFTWARE_ONLY",
+  "utc": "2026-11-01T03:22:46.761969+00:00",
+  "checks": 279,
+  "owned_sources": [
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpV2SdSinglePassTests.cs",
+      "bytes": 19886,
+      "sha256": "530473C04D33D07A9A46AD88F396B4401901AE9EFCD3A1550FBC6C62461BAEA0"
+    },
+    {
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\test_v2_sd_single_pass.ps1",
+      "bytes": 1710,
+      "sha256": "73DF9E0B9BFCB1020F158CF9A95A4EF72331DB501DFF30D95FA8FA47E2A705ED"
+    }
+  ],
+  "test_executable": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\regression-r5\\NpV2SdSinglePassTests.exe",
+    "bytes": 29696,
+    "sha256": "A37D73B7337F16C9B83CC7920A243610BB25E18CC73E3830D0C51B4FF2457F7D"
+  },
+  "receipt": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\regression-r5\\exports\\receipt.json",
+    "bytes": 9646,
+    "sha256": "4BA539B1317CA206BC9D883CF132186C404045AF8F3037E074043F7F005376A6"
+  },
+  "sdk": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\build-r1\\NpV2SdDatExport.dll",
+    "bytes": 678400,
+    "sha256": "644D6DCAC68E8D36CE208D2F7D78A1EA87FB0F6DD5F20989B7DCCC5729BDD5C0"
+  },
+  "reference_sdk": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_host\\enabled221-sweep\\NpV2SdDatExport.dll",
+    "sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5"
+  },
+  "retained_generator": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\focused-final\\NpV2SdDatExportTests.exe",
+    "sha256": "4DAEC01F16523086FE49D0922D241C85F0955C904168134E9A2A25AFF70E78E6"
+  },
+  "spill": {
+    "result": {
+      "RecordingComplete": true,
+      "SampleHz": 20000,
+      "Session": 7,
+      "CommittedBlocks": 192,
+      "ProbeMask": 7,
+      "StoredState": 3,
+      "StoredFault": 0,
+      "LogicalPrefixBlocks": 192,
+      "LogicalHighWaterBlocks": 192,
+      "AdmittedHighWaterKnown": true,
+      "AdmittedHighWaterBlocks": 192,
+      "MissingStoredBlocks": 0,
+      "SourceGapCount": 0,
+      "MissingSourceTicks": 0,
+      "DroppedBlocks": 0,
+      "Rows": [
+        4914,
+        4914,
+        4914
+      ],
+      "Phases": [
+        137,
+        448,
+        759
+      ],
+      "Segments": [
+        {
+          "FirstStoredBlock": 0,
+          "StoredBlocks": 192,
+          "FirstLogicalBlock": 0,
+          "LogicalEndExclusive": 192,
+          "SourceStartTick": 0,
+          "SourceEndTick": 7864320,
+          "RowOffsets": [
+            0,
+            0,
+            0
+          ],
+          "Rows": [
+            4914,
+            4914,
+            4914
+          ]
+        }
+      ],
+      "ImuAnalogGridRows": 192,
+      "ImuAnalogGridNpLocked": true,
+      "ImuGridSourceWindowVerified": true,
+      "OptionalImuError": null
+    },
+    "status": "success",
+    "PhysicalSourceBytesRead": 8970240,
+    "PhysicalGroupsRead": 48,
+    "ReorderPeakBytes": 8386560,
+    "ReorderPeakGroups": 47,
+    "ReorderSpilledGroups": 2,
+    "ReorderSpilledBytes": 372736,
+    "TemporarySpillUsed": true,
+    "tracked_payload_bytes": 8970240,
+    "physical_groups": 48,
+    "group_bytes": 186880,
+    "temporary_spill_observed": true,
+    "spill_files_remaining": 0
+  },
+  "interruption_results": {
+    "cancel-after-spill": {
+      "status": "error",
+      "exception": "System.OperationCanceledException",
+      "error": "SD16 reorder cancelled; source unchanged.",
+      "tracked_payload_bytes": 8970240,
+      "physical_groups": 48,
+      "group_bytes": 186880,
+      "temporary_spill_observed": true,
+      "spill_files_remaining": 0
+    },
+    "io-after-spill": {
+      "status": "error",
+      "exception": "System.IO.IOException",
+      "error": "Injected physical source read failure after spill",
+      "tracked_payload_bytes": 8783872,
+      "physical_groups": 48,
+      "group_bytes": 186880,
+      "temporary_spill_observed": true,
+      "spill_files_remaining": 0
+    },
+    "corrupt-after-spill": {
+      "status": "error",
+      "exception": "System.IO.InvalidDataException",
+      "error": "NP2 P1: supersync mismatch at source tick 164663.",
+      "tracked_payload_bytes": 8970240,
+      "physical_groups": 48,
+      "group_bytes": 186880,
+      "temporary_spill_observed": true,
+      "spill_files_remaining": 0
+    }
+  },
+  "coverage": [
+    "Ordered and physical0,2,1: exact221 NN/DAT,AUX/validity,first-source/segment byte/result parity",
+    "Incomplete sealed-prefix,hole,missing-prefix,unknown-admitted suffix: no padding or fabricated captureloss",
+    "Independent segment row/channel interleave parity for unchanged merged-DAT writer",
+    "Strict descriptor/header/SuperSync,duplicate,coverage/reserved/tick negative cases",
+    "Optional badAUX retains neural data and unqualifies grid;221 semantics unchanged",
+    "Every committed physical byte includingNNheaders/AUX read once strictlyforward; only outer metadata seeks exempt",
+    "Reverse48 real localspill exceeds8MiB queue; actual RAM counter bounded",
+    "Cancellation,I/O and corruptSuperSync after actualspill preserve real nonempty NN.partial and deleteall spill files",
+    "Yoshi880688-group index is a valid metadata-only physical permutation; rawsession notused"
+  ],
+  "fixture_corrections_preserved": [
+    "r1 PowerShell default root and precreated outputfolder were test-only defects; no exporter pass claimed",
+    "r2 arbitrary ADC bit mutant was valid data; changed to an actual known SuperSync bit",
+    "r3 large fixture reservation mustalign physical limit to16384sectors; expanded fixturemetadata only",
+    "r4 cancellation occurred before queueinsertion/spill; moved cutoff to observe actualspill; no productchanges"
+  ],
+  "limits": [
+    "No hardware, throughput or Yoshi rawpayload qualification",
+    "QueuedNN memory cap excludes one reusable current group and fixed decoder arrays; metadata remainsO(committedgroups)",
+    "Merged writer itself unchanged/notrecompiled; test independently compares exact segment-aware row/channel interleave",
+    "Candidate SDK builtonce bySDKowner, noSDK/GUI source edits or productbuild bythis testowner"
+  ]
+}

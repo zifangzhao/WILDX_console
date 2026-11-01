@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0.221",
-  "releaseId": "WILDX221_SD_CARD_TEST_20261030",
-  "baselineVersion": "1.0.0.210",
+  "version": "1.0.0.222",
+  "releaseId": "WILDX222_SINGLE_PASS_SD_DOWNLOAD_20261031",
+  "baselineVersion": "1.0.0.221",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.221.exe",
-    "sha256": "4FDDC0E9EFD6BA0EE247A4A59AEC4787E2CDD8F1076B3C24CDB36E35B659CF65",
-    "bytes": 8598886
+    "file": "WILDX_console-Setup-1.0.0.222.exe",
+    "sha256": "27D87190ADDC93B2DE50CAACDE082019F0981FE7E215152C55190056BE39876E",
+    "bytes": 8602209
   },
-  "guiSha256": "90D6D4540E59DDEA3EE45DE43EF075B8DE32C3F539F159C57AA08410B7F367C1",
-  "sdkSha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5",
+  "guiSha256": "D2485F77841699903BAB475131A86E09971999F993468E75EA0C0786A5A519CF",
+  "sdkSha256": "644D6DCAC68E8D36CE208D2F7D78A1EA87FB0F6DD5F20989B7DCCC5729BDD5C0",
   "catalogSha256": "4CE8D280B3004536E97C1D4551C363F33D1ABC666D61CB0E36C9F3CA108DFF91",
-  "sourceArchiveSha256": "CFAE63EA6CA653E900B7BEA20283F99819F9AFD170A7CC09553253F37F70C01E",
-  "sourceGitBaseline": "1b60cf4a8963ba0fbe580681ae71dc5a2f162a56",
+  "sourceArchiveSha256": "5B00B7C64A6CF151551F00558629734C47F014E15806766A57E97D92967A4FF5",
+  "sourceGitBaseline": "1b8f379537cf1195c7058a6cf9097ab9f5dec9f0",
   "sourcePublicationCommit": null,
-  "sourcePublicationCommitRole": "not_assigned_before_publication; baseline_plus_exact_compiled_overlay",
-  "sourceIdentityRole": "Published210 baseline plus exact221 compiled archive overlay; no clean/full-HEAD assertion",
-  "sourceProvenance": "../ReleaseSources/1.0.0.221/host-source-archive/source-manifest.json",
-  "validation": "../ReleaseSources/1.0.0.221/qualification.json",
+  "sourcePublicationCommitRole": "baseline_plus_exact_compiled_overlay; publication commit recorded after push",
+  "sourceIdentityRole": "Published221 baseline plus exact222 compiled archive overlay",
+  "sourceProvenance": "../ReleaseSources/1.0.0.222/host-source-archive/source-manifest.json",
+  "validation": "../ReleaseSources/1.0.0.222/qualification.json",
   "firmware": [
     {
       "family": 1,
@@ -183,13 +183,13 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2824704,
-      "sha256": "90D6D4540E59DDEA3EE45DE43EF075B8DE32C3F539F159C57AA08410B7F367C1"
+      "bytes": 2826752,
+      "sha256": "D2485F77841699903BAB475131A86E09971999F993468E75EA0C0786A5A519CF"
     },
     {
       "path": "NpV2SdDatExport.dll",
-      "bytes": 672768,
-      "sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5"
+      "bytes": 678400,
+      "sha256": "644D6DCAC68E8D36CE208D2F7D78A1EA87FB0F6DD5F20989B7DCCC5729BDD5C0"
     },
     {
       "path": "docs/sd-card-test.md",

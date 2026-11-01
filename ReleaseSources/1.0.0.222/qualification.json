@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "version": "1.0.0.222",
+  "status": "accepted_host_only",
+  "gui_sha256": "D2485F77841699903BAB475131A86E09971999F993468E75EA0C0786A5A519CF",
+  "sdk_sha256": "644D6DCAC68E8D36CE208D2F7D78A1EA87FB0F6DD5F20989B7DCCC5729BDD5C0",
+  "checks": {
+    "sdk_single_pass": 279,
+    "legacy_parity": 37,
+    "production_transport": 800,
+    "built_app_rate": 254,
+    "built_app_eta": 14
+  },
+  "hardware": {
+    "uid": "001A0004434250062039314E",
+    "session": 666227150,
+    "probe_mask": 7,
+    "ap_hz": 20000,
+    "physical_payload_bytes": 365163520,
+    "old_seconds": 25.884704,
+    "new_seconds": 11.816476,
+    "speedup": 2.1905603667286253,
+    "old_usb_source_bytes": 787169792,
+    "new_usb_source_bytes": 371454976,
+    "compared_output_files": 9,
+    "all_output_hashes_equal": true,
+    "catalog_unchanged": true,
+    "idle_and_leases_released": true
+  },
+  "firmware": {
+    "changed": false,
+    "catalog_sha256": "4CE8D280B3004536E97C1D4551C363F33D1ABC666D61CB0E36C9F3CA108DFF91",
+    "acceptance_reused": "../1.0.0.221/qualification.json"
+  },
+  "limits": [
+    "One short V2 SD16/schema3 same-card native export comparison; not a sustained/all-card claim.",
+    "No new recording, firmware flashing, deletion, formatting or mode changes.",
+    "V1 and prior V2 paths retain behavior; no new V1 throughput claim.",
+    "Subsequent combined DAT merge is excluded; burst/control/CRC/decode/output timings may overlap."
+  ],
+  "receipts": [
+    {
+      "file": "host-build.json",
+      "sha256": "907BB151C606DFEC866D25F2DFE25817E0752DB7500EB246D9BF5DDECA0E820B"
+    },
+    {
+      "file": "sdk-build.json",
+      "sha256": "4F238C0E8A8CA398348AB8399B68A6779B341D3776F03682604DE0192A25F228"
+    },
+    {
+      "file": "sdk-freeze.json",
+      "sha256": "415830FBC905B146CF4438EDA53149BA5F7791A52CCE7B668AEF02A0974EAF71"
+    },
+    {
+      "file": "regression.json",
+      "sha256": "4BA539B1317CA206BC9D883CF132186C404045AF8F3037E074043F7F005376A6"
+    },
+    {
+      "file": "regression-source-freeze.json",
+      "sha256": "C8A94E84FA73312BA12B2B8577C6C93CFDEDE6D951D9617FB4728F5218DADC62"
+    },
+    {
+      "file": "legacy-parity.json",
+      "sha256": "4B26080896E2D0FEA9AD799A8100EAA8FE42B01FDFF131B3BE31586F34154C78"
+    },
+    {
+      "file": "hardware-221.json",
+      "sha256": "91F0EDEA1CC20D94343BED4ACAE0369991552BE900543D3A1ABAC1DFDFEC41D8"
+    },
+    {
+      "file": "hardware-222.json",
+      "sha256": "8B1E14EFDAB1B4FF1AC8C041B6565357A7F7162E51F3AD74FFEC716AAE745048"
+    },
+    {
+      "file": "package-verification.json",
+      "sha256": "F5FFA6D35E075E5844E387B1B60018A3EF0D01F453B258D8BF816BD956AA1364"
+    }
+  ]
+}

@@ -63,6 +63,7 @@ internal sealed partial class NpDownloadStream:Stream{
   const int packet=1020*512;
   using(var s=Make()){s.Supported=false;ReadBytes(s,1);Need(s.DownloadedBytes==packet,"Validated legacy payload not counted");ReadBytes(s,17);s.Position=0;ReadBytes(s,1);Need(s.DownloadedBytes==packet,"Cache hits counted as USB transfers");s.Position=packet;ReadBytes(s,1);Need(s.DownloadedBytes==2L*packet,"Next legacy payload not counted");}
   using(var s=Make()){s.BeginSequentialRange(0,4L*packet);ReadBytes(s,1);Need(s.DownloadedBytes==packet,"Burst payload not counted exactly once");ReadBytes(s,packet);Need(s.DownloadedBytes==2L*packet,"Next validated burst payload not counted");}
+  using(var s=Make()){s.BeginSequentialRange(0,2L*packet);ReadBytes(s,2*packet);s.EndSequentialRange();Need(s.timing.BulkCalls==2,"Burst native calls missing from timing");Need(s.timing.BulkBytes==2L*(packet+32),"Burst wire bytes missing from timing");Need(s.timing.BulkTicks>=0,"Burst timing is negative");}
   using(var s=Make()){s.CorruptFirst=true;s.BeginSequentialRange(0,4L*packet);Throws<InvalidDataException>(()=>ReadBytes(s,1));Need(s.DownloadedBytes==0,"Rejected CRC inflated download speed");}
   using(var s=Make()){var field=typeof(NpDownloadStream).GetField("downloadedBytes",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);field.SetValue(s,8L*1024*1024*1024);Need(s.DownloadedBytes==8589934592L,"Byte count truncated above4GiB");}
 

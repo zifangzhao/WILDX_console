@@ -1,11 +1,9 @@
-# WILD-X1.0.0.221
+# WILDX 1.0.0.222
 
-USB Mode now includes **SD card test** without BLE. Select the connected probes and 10-120 seconds per rate (default 60). The test starts at the highest applicable rate and keeps the probe selection fixed, stopping at the first rate that passes full saved-data readback.
+V2 SD16 downloads read the committed payload once and reorder on the PC. A bounded same-device comparison improved native export from 25.9 to 11.8 seconds (2.19x), with identical neural/IMU output. Other PCs/cards may differ.
 
-Results show SD write/service pauses and saved NP gap statistics when available: count, maximum, mean, total missing time, p95 and p99. V1 exposes loss-event/skipped-byte lower bounds and longest write time; exact NP gap durations remain unavailable. Statistics opens the full detail. PC card-reader testing remains available in its own tab.
+No firmware upgrade is required. Existing checked V1/V2/camera firmware and catalog are unchanged. Temporary reorder overflow is removed after use; neural raw and lane8 files are not retained. Download progress now uses the physical stored size, and burst timing counters include actual transfers.
 
-Install the matching full bundled APP and USB firmware before using the USB logger test. Existing firmware remains supported for ordinary recording and download. Test recordings stay on SD; reports go to the selected PC folder. Cancel waits for an accepted finite recording to finish and prevents the next rate.
+Validation:279 single-pass,37 legacy parity,800 transport,254 rate and14 ETA checks. The device stayed idle and all20 existing recordings were preserved. See [development details](../Note/SINGLE_PASS_DOWNLOAD_20261031.md) and [qualification](../ReleaseSources/1.0.0.222/qualification.json).
 
-Development checks used V1 with two probes and V2 with three probes, 10 seconds per rate. Both verified loss at 30 kHz, automatically tried 20 kHz, and passed full readback with scheduled IMU data. Earlier recordings were preserved, and both devices were restored to their original firmware/options/profiles.
-
-Qualification covers this short warm-handoff workflow, selected cards and probe combinations. V1 interrupted profile recovery was fixed and checked in native tests; physical cold interruption, full IMU source-window/final-tail coverage, physical sensor conversion phase and endurance remain unqualified. V1 camera firmware is unchanged.
+Exact compiled source overlay and artifact identities are included here. This release does not claim every mode/card or an endurance qualification.

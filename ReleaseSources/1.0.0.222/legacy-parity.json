@@ -1,0 +1,323 @@
+{
+  "status": "PASS_LEGACY_PUBLIC_SDK_PARITY_SOFTWARE_ONLY",
+  "checks": 37,
+  "candidate_sdk": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\build-r1\\NpV2SdDatExport.dll",
+    "sha256": "644D6DCAC68E8D36CE208D2F7D78A1EA87FB0F6DD5F20989B7DCCC5729BDD5C0"
+  },
+  "reference221_sdk": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_host\\enabled221-sweep\\NpV2SdDatExport.dll",
+    "sha256": "8B80702C9829C62FB12403A7B5B081C7CE8C63195024C84C7B514536B5B883F5"
+  },
+  "existing_compiled_helper": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\regression-r5\\NpV2SdSinglePassTests.exe",
+    "sha256": "A37D73B7337F16C9B83CC7920A243610BB25E18CC73E3830D0C51B4FF2457F7D"
+  },
+  "retained_generator": {
+    "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\focused-final\\NpV2SdDatExportTests.exe",
+    "sha256": "4DAEC01F16523086FE49D0922D241C85F0955C904168134E9A2A25AFF70E78E6"
+  },
+  "cases": [
+    {
+      "format": "format11",
+      "image": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\focused-final\\export_tests_c5fbc575e3ea4ae7a1a93310a5b6bed2\\append16_20000_7.legacy",
+      "candidate_result": {
+        "RecordingComplete": true,
+        "SampleHz": 20000,
+        "Session": 7,
+        "CommittedBlocks": 8,
+        "ProbeMask": 7,
+        "StoredState": 3,
+        "StoredFault": 0,
+        "LogicalPrefixBlocks": 8,
+        "LogicalHighWaterBlocks": 8,
+        "AdmittedHighWaterKnown": false,
+        "AdmittedHighWaterBlocks": 0,
+        "MissingStoredBlocks": 0,
+        "SourceGapCount": 0,
+        "MissingSourceTicks": 0,
+        "DroppedBlocks": 0,
+        "Rows": [
+          203,
+          204,
+          204
+        ],
+        "Phases": [
+          137,
+          448,
+          759
+        ],
+        "Segments": [
+          {
+            "FirstStoredBlock": 0,
+            "StoredBlocks": 8,
+            "FirstLogicalBlock": 0,
+            "LogicalEndExclusive": 8,
+            "SourceStartTick": 0,
+            "SourceEndTick": 327680,
+            "RowOffsets": [
+              0,
+              0,
+              0
+            ],
+            "Rows": [
+              203,
+              204,
+              204
+            ]
+          }
+        ],
+        "ImuAnalogGridRows": 13,
+        "ImuAnalogGridNpLocked": false,
+        "ImuGridSourceWindowVerified": false,
+        "OptionalImuError": null
+      },
+      "files": [
+        {
+          "name": "analogin.dat",
+          "sha256": "076C38E91D0FAEC3033B684F3F7C8B0F6697BE86400776DD77DB70243A5636AC"
+        },
+        {
+          "name": "analogin_encoding.txt",
+          "sha256": "9A059097699A5A6C508CFF0C9319961572FBAE38D3DFB23F0FF50D0C5144760E"
+        },
+        {
+          "name": "analogin_validity.dat",
+          "sha256": "17EC691E7FB58026F13ADD2B2BC8EA7934BCD44C34003B97DFB1F8793E5A4D04"
+        },
+        {
+          "name": "first_sample_timestamps.json",
+          "sha256": "721B0EB354D2E74C6C41F814A8EC075B70F0AE30418D9353D1E28F5C7D2E0F5E"
+        },
+        {
+          "name": "neuropixels_probe1_ap.dat",
+          "sha256": "4AA8E94D8355AA9B46C705BD76D64DDCBD7126205D4572395321A0FD90CAC1E5"
+        },
+        {
+          "name": "neuropixels_probe2_ap.dat",
+          "sha256": "32D625F6CF1FCD9B4ECAF72DFCFACCEF870EE87953EB021B79502D62121201D2"
+        },
+        {
+          "name": "neuropixels_probe3_ap.dat",
+          "sha256": "A050F03B8D072E7DA257BC2C35ACABE125E71F04DC894B3421FBF993AD1AFBF9"
+        }
+      ]
+    },
+    {
+      "format": "format12",
+      "image": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\legacy-acceptance-r1\\format12.img",
+      "candidate_result": {
+        "RecordingComplete": true,
+        "SampleHz": 20000,
+        "Session": 7,
+        "CommittedBlocks": 8,
+        "ProbeMask": 3,
+        "StoredState": 3,
+        "StoredFault": 0,
+        "LogicalPrefixBlocks": 8,
+        "LogicalHighWaterBlocks": 8,
+        "AdmittedHighWaterKnown": false,
+        "AdmittedHighWaterBlocks": 0,
+        "MissingStoredBlocks": 0,
+        "SourceGapCount": 0,
+        "MissingSourceTicks": 0,
+        "DroppedBlocks": 0,
+        "Rows": [
+          306,
+          306
+        ],
+        "Phases": [
+          137,
+          448
+        ],
+        "Segments": [
+          {
+            "FirstStoredBlock": 0,
+            "StoredBlocks": 8,
+            "FirstLogicalBlock": 0,
+            "LogicalEndExclusive": 8,
+            "SourceStartTick": 0,
+            "SourceEndTick": 491520,
+            "RowOffsets": [
+              0,
+              0
+            ],
+            "Rows": [
+              306,
+              306
+            ]
+          }
+        ],
+        "ImuAnalogGridRows": 0,
+        "ImuAnalogGridNpLocked": false,
+        "ImuGridSourceWindowVerified": false,
+        "OptionalImuError": null
+      },
+      "files": [
+        {
+          "name": "first_sample_timestamps.json",
+          "sha256": "13B2982C219AC2A817B7485ED2072BA41D1FE181937EC776137A0959761210FC"
+        },
+        {
+          "name": "neuropixels_probe1_ap.dat",
+          "sha256": "B78AE9D54FDAAD55924E2BE17ABC353FC22C2C4B82043E4FBC58778C74051BAF"
+        },
+        {
+          "name": "neuropixels_probe2_ap.dat",
+          "sha256": "8E0B4A2137E9ED414CC558BADBE44447EDF24C41BCF927B25E51584B76BC1550"
+        }
+      ]
+    },
+    {
+      "format": "format14",
+      "image": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-legacy-append\\export_tests_7c9c961877854f5abd0fea90f0fbeb68\\append_3_3072.img",
+      "candidate_result": {
+        "RecordingComplete": true,
+        "SampleHz": 30000,
+        "Session": 7,
+        "CommittedBlocks": 8,
+        "ProbeMask": 3,
+        "StoredState": 3,
+        "StoredFault": 0,
+        "LogicalPrefixBlocks": 8,
+        "LogicalHighWaterBlocks": 8,
+        "AdmittedHighWaterKnown": false,
+        "AdmittedHighWaterBlocks": 0,
+        "MissingStoredBlocks": 0,
+        "SourceGapCount": 0,
+        "MissingSourceTicks": 0,
+        "DroppedBlocks": 0,
+        "Rows": [
+          306,
+          306
+        ],
+        "Phases": [
+          137,
+          448
+        ],
+        "Segments": [
+          {
+            "FirstStoredBlock": 0,
+            "StoredBlocks": 8,
+            "FirstLogicalBlock": 0,
+            "LogicalEndExclusive": 8,
+            "SourceStartTick": 0,
+            "SourceEndTick": 491520,
+            "RowOffsets": [
+              0,
+              0
+            ],
+            "Rows": [
+              306,
+              306
+            ]
+          }
+        ],
+        "ImuAnalogGridRows": 0,
+        "ImuAnalogGridNpLocked": false,
+        "ImuGridSourceWindowVerified": false,
+        "OptionalImuError": null
+      },
+      "files": [
+        {
+          "name": "first_sample_timestamps.json",
+          "sha256": "2D62FB15F9AE014E88D341FAA69213CDFAD6B1F94FD6801F61BE3B851547E01B"
+        },
+        {
+          "name": "neuropixels_probe1_ap.dat",
+          "sha256": "B78AE9D54FDAAD55924E2BE17ABC353FC22C2C4B82043E4FBC58778C74051BAF"
+        },
+        {
+          "name": "neuropixels_probe2_ap.dat",
+          "sha256": "8E0B4A2137E9ED414CC558BADBE44447EDF24C41BCF927B25E51584B76BC1550"
+        }
+      ]
+    },
+    {
+      "format": "format16_schema2",
+      "image": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\deterministic_imu_next\\sd16-append-host\\focused-final\\export_tests_c5fbc575e3ea4ae7a1a93310a5b6bed2\\g16_20000_3_new.imgschema2_known",
+      "candidate_result": {
+        "RecordingComplete": true,
+        "SampleHz": 20000,
+        "Session": 7,
+        "CommittedBlocks": 8,
+        "ProbeMask": 3,
+        "StoredState": 3,
+        "StoredFault": 0,
+        "LogicalPrefixBlocks": 8,
+        "LogicalHighWaterBlocks": 8,
+        "AdmittedHighWaterKnown": false,
+        "AdmittedHighWaterBlocks": 0,
+        "MissingStoredBlocks": 0,
+        "SourceGapCount": 0,
+        "MissingSourceTicks": 0,
+        "DroppedBlocks": 0,
+        "Rows": [
+          306,
+          306
+        ],
+        "Phases": [
+          137,
+          448
+        ],
+        "Segments": [
+          {
+            "FirstStoredBlock": 0,
+            "StoredBlocks": 8,
+            "FirstLogicalBlock": 0,
+            "LogicalEndExclusive": 8,
+            "SourceStartTick": 0,
+            "SourceEndTick": 491520,
+            "RowOffsets": [
+              0,
+              0
+            ],
+            "Rows": [
+              306,
+              306
+            ]
+          }
+        ],
+        "ImuAnalogGridRows": 8,
+        "ImuAnalogGridNpLocked": true,
+        "ImuGridSourceWindowVerified": true,
+        "OptionalImuError": null
+      },
+      "files": [
+        {
+          "name": "analogin.dat",
+          "sha256": "FC5F9886174D627B877682260DD44C019090596B7D5495F7F5B0F02ED017D330"
+        },
+        {
+          "name": "analogin_encoding.txt",
+          "sha256": "35FF0C59D34DDE3A59C36F9DE6446F03280E3B259E71B62069DB912B8BDFFF32"
+        },
+        {
+          "name": "analogin_validity.dat",
+          "sha256": "81DCBECF88D35D828096DFD9F9B24B252F90EA14529D6198734F562B5C56C705"
+        },
+        {
+          "name": "first_sample_timestamps.json",
+          "sha256": "13B2982C219AC2A817B7485ED2072BA41D1FE181937EC776137A0959761210FC"
+        },
+        {
+          "name": "imu_grid_phase.bin",
+          "sha256": "98C4B89CCBF9360CD6C89D16CE17494EC1F9F23FEFA64E5AEF710F4E8B7E2DE3"
+        },
+        {
+          "name": "imu_grid_sectors.bin",
+          "sha256": "0FE2A8D425D4F7A3AF01E9C2931287259DFB1B68FFC933B9A20BD037CABB4BE5"
+        },
+        {
+          "name": "neuropixels_probe1_ap.dat",
+          "sha256": "B78AE9D54FDAAD55924E2BE17ABC353FC22C2C4B82043E4FBC58778C74051BAF"
+        },
+        {
+          "name": "neuropixels_probe2_ap.dat",
+          "sha256": "8E0B4A2137E9ED414CC558BADBE44447EDF24C41BCF927B25E51584B76BC1550"
+        }
+      ]
+    }
+  ],
+  "limits": "Uses existing frozen fixture generator and compiled helper; no SDK/app/test compilation or hardware. Narrow fmt11/12/14/SD16schema2 output parity, not a full legacy-suite rerun."
+}

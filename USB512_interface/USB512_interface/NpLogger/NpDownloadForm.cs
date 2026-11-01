@@ -301,7 +301,8 @@ namespace CE32_console
             bool makeMedia=convertAfterDownload.Checked;var conversionErrors=new List<string>();var conversionWarnings=new List<string>();
             var calibration=USB512_interface.NpCalibrationStore.Get("offline");
             SetBusy(true);cancelled=false;progress.Value=0;var source=listedSource;
-            var elapsed=new USB512_interface.NpProgressEstimate();double nativeTotal=chosen.Sum(r=>(double)r.Chunks*(r.V2?46592:65536)),nativeDone=0,nativeSeconds=0;
+            Func<NpDownloadRecord,double> sourceBytes=r=>r.FormatVersion==16?(double)r.PhysicalSectors*512:(double)r.Chunks*(r.V2?46592:65536);
+            var elapsed=new USB512_interface.NpProgressEstimate();double nativeTotal=chosen.Sum(sourceBytes),nativeDone=0,nativeSeconds=0;
             bool queueSizeKnown=!(recoverInterrupted&&chosen.Any(r=>r.PowerInterruptedRecovery));
             status.Text="Preparing download · "+elapsed.Percent(0);
             var ui=new Progress<Tuple<int,string>>(p=>{progress.Value=Math.Max(0,Math.Min(100,p.Item1));status.Text=p.Item2;});
@@ -320,14 +321,18 @@ namespace CE32_console
                     var watch=System.Diagnostics.Stopwatch.StartNew();
                     USB512_interface.NpV2SdDatExport.ExportProgress exportStage=null;
                     Action<int> reportProgress=p=>{
-                        double totalBytes=(double)r.Chunks*(r.V2?46592:65536),bytes=totalBytes*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
+                        double totalBytes=sourceBytes(r),bytes=exportStage!=null&&exportStage.PhysicalSourceBytesRead>0?
+                            Math.Min(totalBytes,exportStage.PhysicalSourceBytesRead):totalBytes*p/100,seconds=Math.Max(watch.Elapsed.TotalSeconds,0.001);
                         bool knownSize=!(recoverInterrupted&&r.PowerInterruptedRecovery);
                         int weight=r.Media&&makeMedia?75:merge&&!r.Media?70:100;int local=Math.Min(99,p*weight/100);
                         string speed=download==null?"~"+(bytes/seconds/1e6).ToString("F1")+" MB/s":
                             USB512_interface.NpProgressEstimate.TransferRate(download.DownloadedBytes-transferStart,seconds);
                         string activity=knownSize?"native download ~"+(bytes/1073741824).ToString("F2")+" / "+(totalBytes/1073741824).ToString("F2")+" GiB · "+speed:"read-only prefix recovery";
-                        string stageText=exportStage==null?null:exportStage.Stage+" | "+(exportStage.Total>0&&exportStage.Completed>=exportStage.Total?
+                        string stageName=exportStage==null?null:exportStage.Stage=="Downloading physical groups and decoding neural data"?"Downloading recording":
+                            exportStage.Stage=="Decoding locally reordered neural data"?"Finishing downloaded data":exportStage.Stage;
+                        string stageText=exportStage==null?null:stageName+" | "+(exportStage.Total>0&&exportStage.Completed>=exportStage.Total?
                             "stage complete; preparing next phase":USB512_interface.NpProgressEstimate.Remaining(exportStage.Completed,exportStage.Total,exportStage.ElapsedSeconds,true));
+                        if(exportStage!=null&&exportStage.PhysicalSourceBytesRead>0)stageText+=" | "+(bytes/1073741824).ToString("F2")+" / "+(totalBytes/1073741824).ToString("F2")+" GiB · "+speed;
                         ((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+local)/chosen.Count,"Session "+r.Session+" ("+(index+1)+"/"+chosen.Count+"): "+
                             (stageText??(p>=100?"Finalizing recording files…":p+"% | "+activity+" | "+DownloadTimeRemaining(p,seconds,knownSize)))+
                             " | Selected downloads: "+(exportStage==null?USB512_interface.NpProgressEstimate.Remaining(nativeDone+bytes,nativeTotal,nativeSeconds+seconds,queueSizeKnown):"remaining phases unknown")+" · "+elapsed.Elapsed+"\r\n"+output));
@@ -359,13 +364,15 @@ namespace CE32_console
                             using(var hash=System.Security.Cryptography.SHA256.Create())using(var file=File.OpenRead(executable))sha=BitConverter.ToString(hash.ComputeHash(file)).Replace("-","");
                             WriteDownloadPerformance(output,new{schema_version=1,software_version=typeof(NpDownloadForm).Assembly.GetName().Version.ToString(),executable_sha256=sha,
                                 source_path=source.Path,transport=download==null?"SD card reader":download.TransportDescription,
-                                record=new{session=r.Session,format_version=r.FormatVersion,v2=r.V2,probe_mask=r.ProbeMask,ap_hz=r.ApHz,chunks=r.Chunks,prefix_recovery=recoverInterrupted&&r.PowerInterruptedRecovery},
+                                record=new{session=r.Session,format_version=r.FormatVersion,v2=r.V2,probe_mask=r.ProbeMask,ap_hz=r.ApHz,chunks=r.Chunks,
+                                    start_lba=r.Start,end_lba=r.End,committed_physical_payload_bytes=r.FormatVersion==16?(ulong?)checked(r.PhysicalSectors*512UL):null,
+                                    expected_source_bytes=sourceBytes(r),prefix_recovery=recoverInterrupted&&r.PowerInterruptedRecovery},
                                 export_returned_successfully=exported,error=exportError,wall_seconds=watch.Elapsed.TotalSeconds,read_timing=measured,
                                 firmware_before=firmwareBefore,firmware_after=firmwareAfter,
                                 scope="Native export through flush/close; not subsequent MP4/WAV conversion or report writing. A successful export can contain an explicitly incomplete stored recording. No recording mutation or new USB read/retry policy."});
                         }catch(Exception ex){System.Diagnostics.Trace.WriteLine("Download timing report unavailable: "+ex.Message);}
                     }
-                    nativeDone+=(double)r.Chunks*(r.V2?46592:65536);nativeSeconds+=watch.Elapsed.TotalSeconds;
+                    nativeDone+=sourceBytes(r);nativeSeconds+=watch.Elapsed.TotalSeconds;
                     if(merge && !r.Media && (r.Chunks>0 || recoverInterrupted&&r.PowerInterruptedRecovery))NpSdDatMerge.ExportTimed(output,r.V2,(int)r.ProbeMask,(int)r.ApHz,()=>cancelled,
                         (p,message)=>((IProgress<Tuple<int,string>>)ui).Report(Tuple.Create((index*100+70+Math.Min(29,p*29/100))/chosen.Count,message+"\r\n"+output)));
                     if(r.RecoveryNotice!=null)File.WriteAllText(Path.Combine(output,"download_catalog.txt"),

@@ -68,8 +68,12 @@ namespace CE32_console
             while(got<reply.Length){
                 if(Cancelled!=null&&Cancelled())throw new OperationCanceledException();
                 byte[] part=got==0?reply:new byte[reply.Length-got];uint n;
+                long started=Stopwatch.GetTimestamp();
                 bool ok=NpDownloadNative.WinUsbReadPipe(usb,0x81,part,(uint)(reply.Length-got),out n,IntPtr.Zero);
                 int error=Marshal.GetLastWin32Error();
+                Interlocked.Add(ref timing.BulkTicks,Stopwatch.GetTimestamp()-started);
+                Interlocked.Increment(ref timing.BulkCalls);
+                if(ok&&n<=reply.Length-got)Interlocked.Add(ref timing.BulkBytes,n);
                 if(!ok)throw new NativeBulkReadFailure("SD burst read failed (Windows "+error+"); LBA="+lba+". Partial download retained.",error);
                 if(n==0||n>reply.Length-got)throw new IOException("SD burst returned an invalid transfer length; partial download retained.");
                 if(got!=0)Buffer.BlockCopy(part,0,reply,got,(int)n);got+=(int)n;

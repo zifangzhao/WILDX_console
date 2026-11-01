@@ -1,0 +1,46 @@
+{
+  "readme": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\README.txt",
+    "sha256": "B8725284824ADF4A018AAEFC043A3C692A3EC1DEFE675A51C27D5B1C839A6946"
+  },
+  "build": {
+    "source_inputs_stable": true,
+    "argv_sha256": "CEAB2D838683779944375D8EBD4292B62A04D91070C6CA3E3EB3B944516F21B4",
+    "elapsed_seconds": 20.7619421,
+    "argv": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\build-r1\\build-attempt.json",
+    "result": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\build-r1\\build-result.json",
+    "sha256": "4F238C0E8A8CA398348AB8399B68A6779B341D3776F03682604DE0192A25F228"
+  },
+  "limits": [
+    "Software fixtures only; no hardware speed or Yoshi raw-payload claim",
+    "Only deferred NN payload has constant8MiB cap; index/queue metadata bounded by sealed committed group count",
+    "Unknown phase/tail and optional AUX failures retain prior qualification semantics",
+    "No GUI/app version/firmware/device/Git/publication action"
+  ],
+  "project_sha256": "C54196F6A2652FC90EC8C1917E251B94D22D9B27243C8C883A880586E42EC688",
+  "changed_files": [
+    {
+      "snapshot": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\source\\NpV2SdDatExport.cs",
+      "sha256": "3EAB69189E25FDFE8FA134F22B756E681404E9683DDDD8F39B41BFF328D80445",
+      "path": "D:/Code/WILDX_console/WILDX_console/Neuropixels/SD/NpV2SdDatExport.cs"
+    }
+  ],
+  "focused_checks": {
+    "receipt": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\regression-r5\\exports\\receipt.json",
+    "tests_source_freeze_sha256": "C8A94E84FA73312BA12B2B8577C6C93CFDEDE6D951D9617FB4728F5218DADC62",
+    "checks": 279,
+    "sha256": "4BA539B1317CA206BC9D883CF132186C404045AF8F3037E074043F7F005376A6",
+    "tests_source_freeze": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\regression-source-freeze.json"
+  },
+  "baseline_source_sha256": "C529E7A461F54FE35CF71D719B5C6CAC3068259BCD6D8839F31FE5B74D8D921F",
+  "project_unchanged": true,
+  "sdk": {
+    "builds": 1,
+    "enable_np_first_sync": true,
+    "sha256": "644D6DCAC68E8D36CE208D2F7D78A1EA87FB0F6DD5F20989B7DCCC5729BDD5C0",
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\single_pass_download\\build-r1\\NpV2SdDatExport.dll"
+  },
+  "created_utc": "2026-11-01T03:23:07.8860701Z",
+  "status": "PASS_SOURCE_AND_SDK_FOCUSED_SOFTWARE",
+  "scope": "SD16 schema3 one physical payload pass; strict existing metadata/header/source/SuperSync/decoder and incomplete coverage retained; AUX physical order preserved; bounded NN RAM payload and checked ephemeral local spill"
+}

@@ -25,6 +25,7 @@ namespace USB512_interface
         }
         public sealed class ExportProgress {
             public string Stage;public ulong Completed,Total;public double ElapsedSeconds;
+            public ulong PhysicalSourceBytesRead;public uint LogicalBlocksDecoded;
         }
         public sealed class Result
         {
@@ -42,6 +43,10 @@ namespace USB512_interface
             public bool IndexedGridAppend,AdmittedHighWaterKnown;
             public uint AdmittedHighWaterBlocks,MissingStoredBlocks;
             public double IndexSeconds,DecodeSeconds;
+            public ulong PhysicalSourceBytesRead,ReorderPeakBytes,ReorderSpilledBytes;
+            public uint PhysicalGroupsRead,LogicalBlocksDecoded,ReorderPeakGroups,ReorderSpilledGroups;
+            public bool TemporarySpillUsed;
+            public double PhysicalPassSeconds,LogicalDecodeSeconds,LocalReorderSeconds;
             public string StoppedLossStatsComparison;
             public bool RecordingComplete { get { return StoredState==3 && StoredFault==0 && CommittedBlocks>0 && SourceGapCount==0 && OverflowEvents==0; } }
             public bool Lossless { get { return RecordingComplete; } }
@@ -147,8 +152,8 @@ namespace USB512_interface
             }
             if(hasLossStats && result.CommittedBlocks==0U)
                 throw new InvalidDataException("Stopped loss statistics have no stored header to attest source-gap support.");
-            // Index only the bounded durable physical extent. No output is
-            // created until all four original headers in every RU are checked.
+            // Legacy v14 retains its existing index. SD16 schema3 reads every
+            // physical payload byte once and reorders only on the PC.
             uint[] appendIndex=appendOrder?IndexAppendUnits(card,desc,end,cancelled,progress):null;
             Directory.CreateDirectory(output);
             string receipt = Path.Combine(output, "np2_sd_export_status.txt");
@@ -189,16 +194,6 @@ namespace USB512_interface
                     completed=true;return result;
                 }
                 if(grid16)grid=new NpV2SdGrid(output,end,fineContext);
-                AppendUnit[] gridIndex=null;
-                if(gridAppend){var timer=System.Diagnostics.Stopwatch.StartNew();
-                    gridIndex=IndexGridAppend(card,desc,end,grid,cancelled,(done,total)=>{
-                        if(stageProgress!=null)stageProgress(new ExportProgress{Stage="Indexing neural headers and IMU",Completed=done,Total=total,ElapsedSeconds=timer.Elapsed.TotalSeconds});
-                        if(progress!=null)progress(total==0?25:(int)(done*25/total));
-                    });result.IndexSeconds=timer.Elapsed.TotalSeconds;}
-                if(gridIndex!=null)using(var indexFile=new StreamWriter(Path.Combine(output,"neural_storage_index.csv"))){
-                    indexFile.WriteLine("first_logical_block,physical_group,stored_blocks");
-                    foreach(var unit in gridIndex)indexFile.WriteLine(unit.Logical+","+unit.Physical+",4");
-                }
                 for (int p = 0; p < probes; p++) {
                     files[p] = new FileStream(Path.Combine(output, Name(p) + ".partial"),
                         FileMode.CreateNew, FileAccess.Write, FileShare.Read, 1024 * 1024, FileOptions.SequentialScan);
@@ -224,23 +219,22 @@ namespace USB512_interface
                     hashUsed[p]+=rowBytes.Length;
                     if(hashUsed[p]==hashBuffers[p].Length){hashes[p].TransformBlock(hashBuffers[p],0,hashUsed[p],null,0);hashUsed[p]=0;}
                 };
-                ulong initialSequence=0,initialTick=0;
-                if(gridAppend&&gridIndex.Length!=0){var first=ReadAt(card,checked((long)U(desc,60)*Sector+(long)gridIndex[0].Physical*(364+U(desc,228))*Sector),Sector);
-                    initialSequence=Q(first,24);initialTick=Q(first,32);}
-                var decoder=gridAppend?NpV2SampleDecoder.OfflineSd(onFormat,onRow,initialTick):new NpV2SampleDecoder(onFormat,onRow);
-                var verifier=gridAppend?NpV2WireVerifier.OfflineSd(initialSequence,initialTick):new NpV2WireVerifier(true);
+                ulong initialSequence=0;
+                NpV2SampleDecoder decoder=gridAppend?null:new NpV2SampleDecoder(onFormat,onRow);
+                NpV2WireVerifier verifier=gridAppend?null:new NpV2WireVerifier(true);
                 var decodeTimer=System.Diagnostics.Stopwatch.StartNew();
                 var block = new byte[Block]; byte[] immutable = null,neuralCopy=null;
-                Segment segment=null;ulong nextSource=0UL,nextLogical=initialSequence;
-                card.Position = (long)U(desc, 60) * Sector;
-                for (uint seq = 0; seq < result.CommittedBlocks; seq++) {
+                Segment segment=null;ulong nextSource=0UL,nextLogical=0;
+                uint storedSequence=0;
+                Action<uint> consume=logical=>{
                     if (cancelled != null && cancelled()) throw new OperationCanceledException("SD DAT export cancelled; output remains partial.");
-                    if(gridAppend&&seq%4==0)
-                        card.Position=checked((long)U(desc,60)*Sector+(long)gridIndex[seq/4].Physical*(RuSectors+U(desc,228))*Sector);
-                    else if(appendIndex!=null && seq%4==0)
-                        card.Position=checked((long)U(desc,60)*Sector+(long)(appendIndex[seq/4]-1)*RuSectors*Sector);
-                    uint logical=gridAppend?checked(gridIndex[seq/4].Logical+seq%4):seq;
-                    ReadExact(card, block);
+                    long decodeStarted=System.Diagnostics.Stopwatch.GetTimestamp();
+                    uint seq=storedSequence;
+                    if(verifier==null){
+                        initialSequence=Q(block,24);ulong initialTick=Q(block,32);nextLogical=initialSequence;
+                        decoder=NpV2SampleDecoder.OfflineSd(onFormat,onRow,initialTick);
+                        verifier=NpV2WireVerifier.OfflineSd(initialSequence,initialTick);
+                    }
                     bool marked=(U(block,52)&NpV2WireVerifier.FlagSourceGaps)!=0U;
                     ulong source=Q(block,32);
                     if (Q(block, 24) != logical || !SourceTickValid(source,logical,(uint)ticks,marked) ||
@@ -284,17 +278,38 @@ namespace USB512_interface
                     }
                     decoder.Feed(neural, 0, verifier);
                     nextSource=checked(source+(uint)ticks);nextLogical=checked((ulong)logical+1);
-                    if(grid16&&!gridAppend&&seq%4==3){for(uint a=0;a<U(desc,228);a++){
-                        var aux=new byte[Sector];long position=card.Position;bool read=false;
-                        try{ReadExact(card,aux);read=true;}catch(IOException ex){grid.ReadFailure(ex.Message);}
-                        // A failed optional read cannot change the known fixed
-                        // position of the next NN record. No magic scan/retry.
-                        card.Position=checked(position+Sector);if(read)grid.Feed(aux,seq);
-                    }}
-                    if(seq%64==0||seq+1==result.CommittedBlocks){
-                        if(stageProgress!=null)stageProgress(new ExportProgress{Stage="Downloading and decoding neural data",Completed=seq+1,Total=result.CommittedBlocks,ElapsedSeconds=decodeTimer.Elapsed.TotalSeconds});
-                        if(progress!=null)progress(appendOrder||gridAppend?25+(int)((ulong)(seq+1)*74/result.CommittedBlocks):
-                            (int)((ulong)(seq+1)*99/result.CommittedBlocks));
+                    storedSequence++;
+                    result.LogicalBlocksDecoded=storedSequence;
+                    result.LogicalDecodeSeconds+=(System.Diagnostics.Stopwatch.GetTimestamp()-decodeStarted)/(double)System.Diagnostics.Stopwatch.Frequency;
+                };
+                if(gridAppend){
+                    ReadGridAppend(card,desc,end,grid,output,result,cancelled,(group,logical)=>{
+                        for(uint within=0;within<4;within++){
+                            Buffer.BlockCopy(group,checked((int)within*Block),block,0,Block);consume(checked(logical+within));
+                        }
+                    },(stage,done,total,seconds)=>{
+                        if(stageProgress!=null)stageProgress(new ExportProgress{Stage=stage,Completed=done,Total=total,ElapsedSeconds=seconds,
+                            PhysicalSourceBytesRead=result.PhysicalSourceBytesRead,LogicalBlocksDecoded=result.LogicalBlocksDecoded});
+                        if(progress!=null)progress(total==0?99:stage=="Decoding locally reordered neural data"?
+                            90+(int)Math.Min(9,done*9/total):(int)Math.Min(90,done*90/total));
+                    });
+                }else{
+                    card.Position = (long)U(desc, 60) * Sector;
+                    for (uint seq = 0; seq < result.CommittedBlocks; seq++) {
+                        if(appendIndex!=null && seq%4==0)
+                            card.Position=checked((long)U(desc,60)*Sector+(long)(appendIndex[seq/4]-1)*RuSectors*Sector);
+                        ReadExact(card, block);consume(seq);
+                        if(grid16&&seq%4==3){for(uint a=0;a<U(desc,228);a++){
+                            var aux=new byte[Sector];long position=card.Position;bool read=false;
+                            try{ReadExact(card,aux);read=true;}catch(IOException ex){grid.ReadFailure(ex.Message);}
+                            // Optional AUX failure never changes the next NN position.
+                            card.Position=checked(position+Sector);if(read)grid.Feed(aux,seq);
+                        }}
+                        if(seq%64==0||seq+1==result.CommittedBlocks){
+                            if(stageProgress!=null)stageProgress(new ExportProgress{Stage="Downloading and decoding neural data",Completed=seq+1,Total=result.CommittedBlocks,ElapsedSeconds=decodeTimer.Elapsed.TotalSeconds});
+                            if(progress!=null)progress(appendOrder?25+(int)((ulong)(seq+1)*74/result.CommittedBlocks):
+                                (int)((ulong)(seq+1)*99/result.CommittedBlocks));
+                        }
                     }
                 }
                 decoder.Complete();
@@ -410,6 +425,14 @@ namespace USB512_interface
                     report.AppendLine("Missing stored NN blocks below high-water: "+result.MissingStoredBlocks+"; storage holes are not inferred acquisition drops.");
                     report.AppendLine("Admitted high-water blocks: "+(result.AdmittedHighWaterKnown?result.AdmittedHighWaterBlocks.ToString():"unknown")+"; unknown or unsealed suffix is not fabricated.");
                     report.AppendLine("Index seconds: "+result.IndexSeconds.ToString("F6",CultureInfo.InvariantCulture)+"; download/decode seconds: "+result.DecodeSeconds.ToString("F6",CultureInfo.InvariantCulture));
+                    report.AppendLine("Payload passes: 1; physical groups read: "+result.PhysicalGroupsRead+"; physical payload bytes read: "+result.PhysicalSourceBytesRead+
+                        "; logical blocks decoded: "+result.LogicalBlocksDecoded);
+                    report.AppendLine("Physical pass seconds: "+result.PhysicalPassSeconds.ToString("F6",CultureInfo.InvariantCulture)+
+                        "; logical decode CPU/output seconds: "+result.LogicalDecodeSeconds.ToString("F6",CultureInfo.InvariantCulture)+
+                        "; local reorder finalization seconds: "+result.LocalReorderSeconds.ToString("F6",CultureInfo.InvariantCulture));
+                    report.AppendLine("Reorder RAM payload cap: 8388608 bytes plus one current group and decoder buffers; bounded index metadata separate"+
+                        "; peak deferred groups: "+result.ReorderPeakGroups+"; peak RAM payload bytes: "+result.ReorderPeakBytes+
+                        "; local temporary spill used: "+result.TemporarySpillUsed+"; spilled groups: "+result.ReorderSpilledGroups+"; spilled bytes: "+result.ReorderSpilledBytes);
                     using(var segments=new StreamWriter(Path.Combine(output,"neural_segments.csv"))){
                         segments.WriteLine("segment,probe,first_logical_block,logical_end_exclusive,first_stored_block,stored_blocks,source_start_tick,source_end_tick,file_row_offset,rows,first_row_source_tick");
                         for(int n=0;n<result.Segments.Count;n++){var part=result.Segments[n];for(int p=0;p<probes;p++)
@@ -589,16 +612,22 @@ namespace USB512_interface
         }
 
         struct AppendUnit {internal uint Logical,Physical;}
-        static AppendUnit[] IndexGridAppend(Stream card,byte[] d,byte[] f,NpV2SdGrid grid,Func<bool> cancelled,Action<ulong,ulong> progress)
+        static void ReadGridAppend(Stream card,byte[] d,byte[] f,NpV2SdGrid grid,string output,Result result,
+            Func<bool> cancelled,Action<byte[],uint> consume,Action<string,ulong,ulong,double> progress)
         {
             uint groups=U(f,112),ticks=U(d,44),stride=U(d,232);ulong high=U(f,412);
             var index=new AppendUnit[checked((int)groups)];var header=new byte[Sector];byte[] immutable=null;
             long payload=checked((long)U(d,60)*Sector);
+            var timer=System.Diagnostics.Stopwatch.StartNew();
+            using(var reorder=new GridAppendReorder(output,result,consume,cancelled)){
+            card.Position=payload;
             for(uint physical=0;physical<groups;physical++){
+                if(cancelled!=null&&cancelled())throw new OperationCanceledException("SD16 download cancelled; source unchanged.");
+                byte[] group=reorder.Buffer();ReadExact(card,group);result.PhysicalSourceBytesRead+=(ulong)group.Length;
                 ulong first=0;
                 for(uint within=0;within<4;within++){
                     if(cancelled!=null&&cancelled())throw new OperationCanceledException("SD16 indexing cancelled; source unchanged.");
-                    card.Position=checked(payload+(long)physical*stride*Sector+(long)within*Block);ReadExact(card,header);
+                    Buffer.BlockCopy(group,checked((int)within*Block),header,0,Sector);
                     ulong sequence=Q(header,24);if(within==0){first=sequence;
                         if(first%4!=0||first>UInt32.MaxValue-4UL||first+4>high)throw new InvalidDataException("SD16 original logical group is unaligned or outside declared high-water.");}
                     uint flags=U(header,52);bool sensor=(flags&NpSdImuSnapshot.Flag)!=0;
@@ -622,14 +651,19 @@ namespace USB512_interface
                     }
                 }
                 index[physical]=new AppendUnit{Logical=checked((uint)first),Physical=physical};
-                card.Position=checked(payload+(long)physical*stride*Sector+4L*Block);
                 for(uint a=0;a<U(d,228);a++){
                     var aux=new byte[Sector];long position=card.Position;bool read=false;
-                    try{ReadExact(card,aux);read=true;}catch(IOException ex){grid.ReadFailure(ex.Message);}
+                    try{ReadExact(card,aux);read=true;result.PhysicalSourceBytesRead+=Sector;}catch(IOException ex){grid.ReadFailure(ex.Message);}
                     card.Position=checked(position+Sector);if(read)grid.Feed(aux,first+3);
                 }
-                if(progress!=null&&(physical%64==0||physical+1==groups))progress(physical+1,groups);
+                if(card.Position!=checked(payload+(long)(physical+1)*stride*Sector))
+                    throw new InvalidDataException("SD16 sequential physical group extent changed.");
+                result.PhysicalGroupsRead=physical+1;
+                reorder.Add(checked((uint)first),group);
+                if(progress!=null&&(physical%64==0||physical+1==groups))
+                    progress("Downloading physical groups and decoding neural data",physical+1,groups,timer.Elapsed.TotalSeconds);
             }
+            result.PhysicalPassSeconds=timer.Elapsed.TotalSeconds;
             Array.Sort(index,(a,b)=>a.Logical.CompareTo(b.Logical));
             uint prefix=0,derivedHigh=0;
             for(int n=0;n<index.Length;n++){
@@ -638,7 +672,72 @@ namespace USB512_interface
                 if(logical==prefix)prefix=checked(prefix+4);derivedHigh=checked(logical+4);
             }
             if(prefix!=U(f,408)||derivedHigh!=U(f,412))throw new InvalidDataException("SD16 indexed logical prefix/high-water differs from sealed footer.");
-            return index;
+            using(var indexFile=new StreamWriter(Path.Combine(output,"neural_storage_index.csv"))){
+                indexFile.WriteLine("first_logical_block,physical_group,stored_blocks");
+                foreach(var unit in index)indexFile.WriteLine(unit.Logical+","+unit.Physical+",4");
+            }
+            timer.Restart();uint localStart=reorder.EmittedGroups,localTotal=groups-localStart;
+            for(int n=0;n<index.Length;n++){
+                reorder.Complete(index[n].Logical);
+                if(progress!=null&&localTotal!=0&&(n%64==0||n+1==index.Length))
+                    progress("Decoding locally reordered neural data",reorder.EmittedGroups-localStart,localTotal,timer.Elapsed.TotalSeconds);
+            }
+            result.LocalReorderSeconds=timer.Elapsed.TotalSeconds;
+            }
+        }
+
+        // At most 8MiB of deferred NN payload stays in RAM, plus one current
+        // group and the fixed decoder buffers. Index/queue metadata is bounded
+        // by the sealed physical group count, as with the previous index.
+        // Only overflow is written locally; consumed spill slots are reused.
+        sealed class GridAppendReorder:IDisposable {
+            const int GroupBytes=4*Block,MemoryBytes=8*1024*1024;
+            sealed class Entry {internal byte[] Bytes;internal long Offset;internal uint Crc;}
+            readonly SortedDictionary<uint,Entry> pending=new SortedDictionary<uint,Entry>();
+            readonly Stack<byte[]> spare=new Stack<byte[]>();readonly Stack<long> freeOffsets=new Stack<long>();
+            readonly string folder;readonly Result result;readonly Action<byte[],uint> consume;readonly Func<bool> cancelled;
+            FileStream spill;string spillPath;ulong memory;uint next;
+            internal uint EmittedGroups {get;private set;}
+            internal GridAppendReorder(string folder,Result result,Action<byte[],uint> consume,Func<bool> cancelled){
+                this.folder=folder;this.result=result;this.consume=consume;this.cancelled=cancelled;
+            }
+            internal byte[] Buffer(){return spare.Count==0?new byte[GroupBytes]:spare.Pop();}
+            void Check(){if(cancelled!=null&&cancelled())throw new OperationCanceledException("SD16 reorder cancelled; source unchanged.");}
+            void Emit(uint logical,Entry entry){
+                Check();byte[] bytes=entry.Bytes;
+                if(bytes==null){bytes=Buffer();spill.Position=entry.Offset;ReadExact(spill,bytes);
+                    if(Crc(bytes,bytes.Length)!=entry.Crc)throw new InvalidDataException("Temporary SD16 reorder payload checksum mismatch.");
+                    freeOffsets.Push(entry.Offset);
+                }else memory-=(ulong)bytes.Length;
+                consume(bytes,logical);EmittedGroups++;spare.Push(bytes);next=checked(logical+4);
+            }
+            internal void Add(uint logical,byte[] bytes){
+                Check();if(logical<next||pending.ContainsKey(logical))throw new InvalidDataException("Duplicate SD16 original logical group.");
+                if(logical==next){consume(bytes,logical);EmittedGroups++;spare.Push(bytes);next=checked(logical+4);}
+                else{
+                    var entry=new Entry();
+                    if(memory+(ulong)bytes.Length<=MemoryBytes){entry.Bytes=bytes;memory+=(ulong)bytes.Length;}
+                    else{
+                        if(spill==null){spillPath=Path.Combine(folder,".np2-reorder-"+Guid.NewGuid().ToString("N")+".tmp");
+                            spill=new FileStream(spillPath,FileMode.CreateNew,FileAccess.ReadWrite,FileShare.None,65536,FileOptions.DeleteOnClose|FileOptions.RandomAccess);
+                            result.TemporarySpillUsed=true;
+                        }
+                        entry.Offset=freeOffsets.Count==0?spill.Length:freeOffsets.Pop();entry.Crc=Crc(bytes,bytes.Length);
+                        spill.Position=entry.Offset;spill.Write(bytes,0,bytes.Length);spare.Push(bytes);
+                        result.ReorderSpilledGroups++;result.ReorderSpilledBytes+=(ulong)bytes.Length;
+                    }
+                    pending.Add(logical,entry);
+                    result.ReorderPeakGroups=Math.Max(result.ReorderPeakGroups,checked((uint)pending.Count));
+                    result.ReorderPeakBytes=Math.Max(result.ReorderPeakBytes,memory);
+                }
+                Entry ready;while(pending.TryGetValue(next,out ready)){uint logicalNext=next;pending.Remove(logicalNext);Emit(logicalNext,ready);}
+            }
+            internal void Complete(uint logical){
+                if(logical<next)return;Entry entry;
+                if(!pending.TryGetValue(logical,out entry))throw new InvalidDataException("SD16 deferred logical group is missing.");
+                pending.Remove(logical);Emit(logical,entry);
+            }
+            public void Dispose(){try{if(spill!=null)spill.Dispose();}finally{if(spillPath!=null&&File.Exists(spillPath))File.Delete(spillPath);}}
         }
 
         static bool UnitGeometry(byte[] descriptor)
