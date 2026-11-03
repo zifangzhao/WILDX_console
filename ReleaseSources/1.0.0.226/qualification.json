@@ -1,0 +1,39 @@
+{
+  "app_version": "1.0.0.226",
+  "software": "829 grid integration checks and 637 legacy checks passed. Both builds of the sealed V1/V2 association fixture passed 234 checks each.",
+  "actual_replay": "V1 USB 75080 stamped and V1 SD 38605 stamped; V2 USB/SD observed 75443/37783 uncalibrated and correctly unstamped. Every non-time byte and source artifact was unchanged.",
+  "scope": "File-only replay of retained device evidence plus fixture checks. No new hardware runs.",
+  "build_receipt": "C:/Frank/Code/USB_PCconsole/_artifacts/sd_usb_test_host/host-build-receipt-226-analoginpctime2.json",
+  "cleanup": [
+    {
+      "case": "v1-usb",
+      "replay_bytes": 2402592,
+      "replay_sha256": "4E71A2A9BA104CA1F43BDF8A526E1C52260A0CBAA59D4930502E5FAADA1A28B5",
+      "full_copy_removed": true
+    },
+    {
+      "case": "v1-sd",
+      "replay_bytes": 1235392,
+      "replay_sha256": "9F6898F409ACBE4B56AB617BDA70D380A0ED318BD1E49A54B9D89B0E335EC064",
+      "full_copy_removed": true
+    },
+    {
+      "case": "v2-usb",
+      "replay_bytes": 2414176,
+      "replay_sha256": "81713240028C27247B49B1811F7F2D5DF61691C7E62AF43A3A0BE6E0F062AB4E",
+      "full_copy_removed": true
+    },
+    {
+      "case": "v2-sd",
+      "replay_bytes": 1209056,
+      "replay_sha256": "27248395153AEC1D43E3A100B2121BE53DA7E15FA010446B9265F63966D0ADAB",
+      "full_copy_removed": true
+    }
+  ],
+  "scope_limits": [
+    "V2 timestamp replay used recordings with unqualified PC time.",
+    "The prior bounded closed-loop matrix includes an intermittent detector-off V2 USB overrun.",
+    "Bundled firmware and catalog identities are taken from the published 222 payload."
+  ],
+  "prior_host_evidence": "Local V1/V2 one- and two-channel USB/SD development acceptance and 225 warning regression. Exact 226 compiled source overlay is archived."
+}
