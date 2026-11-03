@@ -53,10 +53,14 @@ internal static class NpFineClockEvidenceImportTests {
     static void NoClock(string output,NpFineClockImportResult r,string why){Need(!r.Associated&&r.JournalPaths.Length==0&&!Directory.GetFiles(output,"ble_clock_*.jsonl").Any(),why);}
     static void Good(string root,int family,bool scheduled=false,bool unknownProfile=false,bool grid16=false){
         string baseDir=Folder(root,"good"+family+scheduled+unknownProfile+grid16),metadata=Folder(baseDir,"metadata"),session=Metadata(metadata),output=Folder(baseDir,"output");
-        var request=Request(family,scheduled,grid16);string attempt=Save(session,Attempt(family,request)),source=Path.Combine(session,"ble_clock_session.jsonl");File.WriteAllBytes(source,Journal);
+        var request=Request(family,scheduled,grid16);
+        var hostAttempt=Attempt(family,request);
+        hostAttempt["host_local_utc_offset_minutes"]=330;
+        string attempt=Save(session,hostAttempt),source=Path.Combine(session,"ble_clock_session.jsonl");File.WriteAllBytes(source,Journal);
         byte[] original=File.ReadAllBytes(attempt);var companion=Companion(family,unknownProfile);byte[] raw=(byte[])companion.Bound.Receipt.Raw.Clone(),anchor=(byte[])companion.Anchor.Clone();
         var r=NpFineClockEvidenceImport.Import(output,companion,metadata);var report=Report(output);
         Need(r.Associated&&r.Status=="imported"&&r.Error==null&&r.JournalPaths.Length==1,"Exact sealed association not imported");
+        Need(r.RecordingPcUtcOffsetMinutes==330,"Recording PC UTC offset lost during exact-bound import");
         Need(File.ReadAllBytes(r.JournalPaths[0]).SequenceEqual(Journal)&&File.ReadAllBytes(source).SequenceEqual(Journal),"Raw partial journal was trimmed or rewritten");
         Need(Path.GetFileName(r.JournalPaths[0])=="ble_clock_import_"+Hash(Journal)+".jsonl","Copied journal name does not hash exact snapshot");
         Need(File.ReadAllBytes(Directory.GetFiles(output,"sd_start_import_*.json").Single()).SequenceEqual(original)&&File.ReadAllBytes(attempt).SequenceEqual(original),"Start attempt raw bytes changed");

@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Web.Script.Serialization;
 
 namespace USB512_interface {
     // Actual firmware slot ordinals, never resampled observations. Optional
@@ -12,6 +15,9 @@ namespace USB512_interface {
         internal ulong Rows {get;private set;} internal ulong Slots {get;private set;} internal ulong Observed,Missing,AgRepeated,MagRepeated;
         ulong segmentSlot,segmentRow;bool sparse;
         ulong? firstObserved,lastObserved;NpImuGridPhaseRecord phase;byte[] phaseRaw;uint phaseSourceHz;string phaseError;
+        ulong phaseReferenceTick;
+        readonly TimeZoneInfo localZone=TimeZoneInfo.Local;
+        const string PcTimeUnavailable="in-row PC time words=unavailable";
         internal bool PhaseQualified {get;private set;}
         internal bool SourceWindowVerified {get;private set;}
         internal bool EnforcedScheduleVerified {get;private set;}
@@ -58,7 +64,7 @@ namespace USB512_interface {
                 if((parsed.Flags&NpImuGridPhase.IntervalValid)!=0&&((a.Flags&64)==0||a.StampKind!=1)&&!measuredStartOnly&&!enforcedCounterOnly)
                     throw new InvalidDataException("Claimed grid phase interval lacks the final NPSTART first-source point proof.");
                 if(phaseRaw!=null){bool same=phaseRaw.Length==raw.Length;for(int i=0;same&&i<raw.Length;i++)same=phaseRaw[i]==raw[i];if(!same)throw new InvalidDataException("Conflicting once-only grid phase.");return phaseError==null;}
-                phaseRaw=(byte[])raw.Clone();phase=parsed;phaseSourceHz=sourceHz;File.WriteAllBytes(Path.Combine(folder,"imu_grid_phase.bin"),phaseRaw);return phaseError==null;
+                phaseRaw=(byte[])raw.Clone();phase=parsed;phaseSourceHz=sourceHz;phaseReferenceTick=r.ReferenceTick;File.WriteAllBytes(Path.Combine(folder,"imu_grid_phase.bin"),phaseRaw);return phaseError==null;
             }catch(InvalidDataException ex){phaseError=ex.Message;PhaseQualified=false;Status(false,phaseError);return false;}
         }
         internal const ulong MaximumGap=1250UL*60; // bounded work per malformed/absent batch
@@ -128,7 +134,101 @@ namespace USB512_interface {
             "RTC_to_NP_uncertainty=separate; see recording_start_utc.json; no per-slot UTC file",
             "observed="+Observed,"missing="+Missing,"ag_repeated="+AgRepeated,"mag_repeated="+MagRepeated,
             "validity_file=analogin_validity.dat; bits observed1,AGvalid2,MAGvalid4,AGrepeat8,MAGrepeat16,error32; missing=0",
-            "gaps_file=imu_grid_gaps.csv; native_sensor_conversion_phase_locked=false; in-row PC time words=unavailable","error="+(error??"none")});PhaseQualified=qualified;}
-        public void Dispose(){if(disposed)return;disposed=true;try{CloseSegment();data.Flush(true);validity.Flush(true);gaps.Flush();segments.Flush();}finally{data.Dispose();validity.Dispose();gaps.Dispose();segments.Dispose();}}
+            "gaps_file=imu_grid_gaps.csv; native_sensor_conversion_phase_locked=false",PcTimeUnavailable,"error="+(error??"none")});PhaseQualified=qualified;}
+
+        void WritePcTime(){
+            if(!completed||!FirstSlotPhaseValid)return;
+            string clockPath=Path.Combine(folder,"recording_start_utc.json");
+            if(!File.Exists(clockPath)||new FileInfo(clockPath).Length>1048576)return;
+            var clock=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(clockPath));
+            if(clock==null)return;
+            object Get(string key){object value;return clock.TryGetValue(key,out value)?value:null;}
+            bool Flag(string key){return Equals(Get(key),true);}
+            ulong Number(string key){ulong n;return UInt64.TryParse(Convert.ToString(Get(key),CultureInfo.InvariantCulture),NumberStyles.None,CultureInfo.InvariantCulture,out n)?n:UInt64.MaxValue;}
+            string uid=String.Format(CultureInfo.InvariantCulture,"{0:X8}{1:X8}{2:X8}",
+                BitConverter.ToUInt32(phase.Uid,0),BitConverter.ToUInt32(phase.Uid,4),BitConverter.ToUInt32(phase.Uid,8));
+            if(!Flag("utc_valid")||!Flag("rtc_local_mapping_qualified")||!Flag("np_start_byte_sync_confirmed")||
+                !Equals(Get("clock_reference"),"device_hardware_rtc")||
+                !String.Equals(Get("device_identity") as string,uid,StringComparison.OrdinalIgnoreCase)||
+                Number("session_id")!=phase.Session||Number("capture_generation")!=generation||
+                Number("source_epoch")!=phase.SourceEpoch||Number("counter_domain")!=phase.CounterDomain||
+                Number("reference_source_tick")!=phaseReferenceTick||Number("reference_source_hz")!=phaseSourceHz)return;
+            var calibration=Get("pc_epoch_calibration") as Dictionary<string,object>;
+            object declared,calGeneration;
+            if(calibration==null||!calibration.TryGetValue("declared",out declared)||!Equals(declared,true)||
+                !calibration.TryGetValue("generation",out calGeneration)||Convert.ToUInt32(calGeneration,CultureInfo.InvariantCulture)==0)return;
+            ulong originUs=Number("recording_start_unix_us");
+            if(originUs<946684800000000UL||originUs>=4102444800000000UL)return;
+            var originUtc=new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddTicks((long)originUs*10);
+            int offsetMinutes;
+            bool originalOffset=Int32.TryParse(Convert.ToString(Get("recording_pc_utc_offset_minutes"),CultureInfo.InvariantCulture),
+                NumberStyles.Integer,CultureInfo.InvariantCulture,out offsetMinutes)&&offsetMinutes>=-840&&offsetMinutes<=840;
+            if(!originalOffset)offsetMinutes=(int)localZone.GetUtcOffset(originUtc).TotalMinutes;
+            const long dayUs=86400000000L;
+            decimal phaseUs=((decimal)phase.LowerNumerator+phase.UpperNumerator)*500000m/(phase.Denominator*(decimal)phaseSourceHz);
+            long firstLocalUs=((long)Math.Floor(originUs+phaseUs)+offsetMinutes*60000000L)%dayUs;
+            string path=Path.Combine(folder,"analogin.dat"),temporary=path+"."+Guid.NewGuid().ToString("N")+".partial";
+            string encodingPath=Path.Combine(folder,"analogin_encoding.txt");
+            string encoding=File.ReadAllText(encodingPath);
+            if(!encoding.Contains(PcTimeUnavailable))return;
+            ulong stamped=0;
+            try{
+                using(var input=new BinaryReader(new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read,65536)))
+                using(var observed=new BinaryReader(new FileStream(Path.Combine(folder,"analogin_validity.dat"),FileMode.Open,FileAccess.Read,FileShare.Read,65536)))
+                using(var output=new FileStream(temporary,FileMode.CreateNew,FileAccess.Write,FileShare.None,65536)){
+                    ulong fileRow=0,previousEnd=0;
+                    foreach(string line in File.ReadLines(Path.Combine(folder,"imu_grid_segments.csv")).Skip(1)){
+                        string[] fields=line.Split(',');
+                        ulong slot,count,start;
+                        if(fields.Length!=3||!UInt64.TryParse(fields[0],out slot)||!UInt64.TryParse(fields[1],out count)||
+                            !UInt64.TryParse(fields[2],out start)||start!=fileRow||slot<previousEnd||count==0||count>Rows-fileRow)
+                            throw new InvalidDataException("Invalid IMU grid segment while writing PC time.");
+                        previousEnd=checked(slot+count);
+                        while(count>0){
+                            int batch=(int)Math.Min(count,2048UL);
+                            byte[] rows=input.ReadBytes(batch*32);
+                            byte[] valid=observed.ReadBytes(batch);
+                            if(rows.Length!=batch*32||valid.Length!=batch)throw new EndOfStreamException("Incomplete IMU grid row or validity data.");
+                            for(int i=0;i<batch;i++,slot++){
+                                if((valid[i]&1)==0||slot<phase.FirstAcceptedSlot||(!PhaseQualified&&slot!=phase.FirstAcceptedSlot))continue;
+                                ulong delta=(slot-phase.FirstAcceptedSlot)%(ulong)(dayUs/800);
+                                uint ms=(uint)(((firstLocalUs+(long)delta*800L)%dayUs)/1000L);
+                                int at=i*32+28;
+                                for(int b=0;b<4;b++)rows[at+b]=(byte)(ms>>(8*b));
+                                stamped++;
+                            }
+                            output.Write(rows,0,rows.Length);
+                            count-=(ulong)batch;
+                            fileRow+=(ulong)batch;
+                        }
+                    }
+                    if(fileRow!=Rows||input.BaseStream.Position!=input.BaseStream.Length||observed.BaseStream.Position!=observed.BaseStream.Length)
+                        throw new InvalidDataException("IMU grid segments do not cover the stored rows.");
+                    output.Flush(true);
+                }
+                if(stamped==0)return;
+                File.Replace(temporary,path,null);
+                string description="in-row PC time words=15-16, uint32 little-endian local milliseconds since midnight, modulo 86400000"+
+                    Environment.NewLine+"pc_time_basis=PC-calibrated device RTC at NP STARTBYTE plus measured first-slot phase midpoint and true slot ordinal"+
+                    Environment.NewLine+"pc_time_local_offset_minutes="+offsetMinutes.ToString(CultureInfo.InvariantCulture)+
+                    Environment.NewLine+"pc_time_local_offset_basis="+(originalOffset||Flag("usb_device_rtc_mapping_selected")?"recording PC":"export PC timezone at recording origin")+
+                    Environment.NewLine+"pc_time_rows="+stamped.ToString(CultureInfo.InvariantCulture)+
+                    Environment.NewLine+"pc_time_scope="+(PhaseQualified?"observed_slots":"first_observed_slot")+
+                    Environment.NewLine+"pc_time_validity=observed slots within the qualified phase scope only; zero also represents midnight";
+                File.WriteAllText(encodingPath,encoding.Replace(PcTimeUnavailable,description));
+            }finally{if(File.Exists(temporary))File.Delete(temporary);}
+        }
+
+        public void Dispose(){
+            if(disposed)return;
+            disposed=true;
+            try{CloseSegment();data.Flush(true);validity.Flush(true);gaps.Flush();segments.Flush();}
+            finally{data.Dispose();validity.Dispose();gaps.Dispose();segments.Dispose();}
+            try{WritePcTime();}
+            catch(Exception ex) when(ex is IOException||ex is InvalidDataException||ex is UnauthorizedAccessException||ex is ArgumentException||
+                ex is InvalidOperationException||ex is FormatException||ex is OverflowException){
+                System.Diagnostics.Trace.WriteLine("Optional IMU PC time: "+ex.Message);
+            }
+        }
     }
 }

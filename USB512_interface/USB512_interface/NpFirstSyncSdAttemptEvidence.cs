@@ -28,6 +28,7 @@ namespace USB512_interface
             var document=new {schema=1,format="neuropixels.sd_first_sync_attempt",attempt_id=attempt.EvidenceId,device_uid=attempt.Uid,device_family=attempt.Family,
                 connection_epoch=attempt.ConnectionEpoch,token_hex=attempt.Token.ToString("X16",CultureInfo.InvariantCulture),request_id=attempt.Id,operation=attempt.Operation,protocol_version=parsed.Version,
                 phase=attempt.EvidencePhase,created_utc_host=attempt.CreatedUtc,evidence_updated_utc_host=attempt.EvidenceUpdatedUtc,
+                host_local_utc_offset_minutes=attempt.HostLocalUtcOffsetMinutes,
                 start_ack_outcome=attempt.Acknowledgement==null?"unconfirmed":attempt.Rejected?"validated_rejection":"validated_queued_or_historical_acceptance",
                 start_transport_entered=attempt.StartTransportEntered,status_transport_entered=attempt.StatusTransportEntered,
                 delivery_scope=!attempt.StartTransportEntered?"Prepared host request only; Start transport was never entered; no delivery or recording is asserted":"ACK and status fields describe control evidence only; transport exceptions may leave delivery unknown",

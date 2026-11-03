@@ -54,6 +54,38 @@ internal static partial class NpImuGridIntegrationTests {
     static byte[] Receipt(uint session=Sid){var r=NpFirstSyncWireTests.Fixture(1,false,15000,3);Put(r,16,session);Put(r,12,BitConverter.ToUInt32(r,12)&~NpFirstSyncWire.AuxGated);r[133]=69;r[134]=64;Put(r,136,UInt32.MaxValue);Put(r,140,UInt32.MaxValue);Put64(r,152,3);Put(r,160,1250);Put64(r,168,0x8000000000000000UL);Put(r,176,0);Seal(r);return r;}
     static byte[] Anchor(){var a=new byte[64];uint[] w={0x5241504e,1,77,0x11f,9,1000,1000,1000000,1000012,128000000,11700000,0,0,15000,1000};for(int i=0;i<w.Length;i++)Put(a,i*4,w[i]);Seal(a);return a;}
     static byte[] Phase(ulong first=3,uint flags=3,uint session=Sid){var b=NpImuGridWriter.PhaseBinding(Uid,Token,NpFirstSyncWire.Parse(Receipt(session)));return NpImuGridPhase.Pack(new NpImuGridPhaseRecord{Uid=b.Uid,Session=b.Session,CaptureGeneration=b.CaptureGeneration,SourceEpoch=b.SourceEpoch,CounterDomain=b.CounterDomain,Token=b.Token,FirstAcceptedSlot=first,LowerNumerator=(flags&1)!=0?15000:Int64.MinValue,UpperNumerator=(flags&1)!=0?15010:Int64.MinValue,Denominator=(flags&1)!=0?1U:0,MaximumJitter=(flags&2)!=0?10U:UInt32.MaxValue,Flags=flags});}
+    static void PcTimes(){
+        // 18:30 UTC plus 330 minutes is midnight at the recording PC.
+        // Choose an origin where the measured first-slot midpoint falls at
+        // 23:59:59.9995, so the next observed row crosses midnight.
+        const ulong origin=1793557799998218UL;
+        var r=NpFirstSyncWire.Parse(Receipt());
+        var binding=NpImuGridWriter.PhaseBinding(Uid,Token,r);
+        foreach(string mode in new[]{"valid","no_calibration","wrong_session","wrong_uid","first_only","no_phase"}){
+            string p=Folder("pc_time_"+mode);
+            var clock=new {
+                utc_valid=true,rtc_local_mapping_qualified=true,np_start_byte_sync_confirmed=true,clock_reference="device_hardware_rtc",
+                device_identity=mode=="wrong_uid"?new string('F',24):Uid,session_id=mode=="wrong_session"?r.Session+1:r.Session,
+                capture_generation=r.Generation,source_epoch=r.SourceEpoch,counter_domain=r.Domain,reference_source_tick=r.ReferenceTick,
+                reference_source_hz=r.SourceHz,recording_start_unix_us=origin,recording_pc_utc_offset_minutes=330,
+                pc_epoch_calibration=new {declared=mode!="no_calibration",generation=7}
+            };
+            File.WriteAllText(Path.Combine(p,"recording_start_utc.json"),new JavaScriptSerializer().Serialize(clock));
+            using(var w=new NpImuGridWriter(p,9,true)){
+                if(mode!="no_phase")Need(w.AcceptPhase(Phase(),binding,r.SourceHz,r),"PC-time fixture phase rejected");
+                w.Feed(Frame(3));w.Feed(Frame(80003));
+                w.Complete(1000000000,r.SourceHz,r.ReferenceTick,mode!="first_only",true);
+            }
+            byte[] data=File.ReadAllBytes(Path.Combine(p,"analogin.dat"));
+            var pc=Enumerable.Range(0,data.Length/32).Select(i=>BitConverter.ToUInt32(data,i*32+28)).ToArray();
+            Need(data.Length==9*32&&BitConverter.ToInt16(data,3*32+2)==4096,"Timestamp export changed row layout or sensor bytes");
+            var expected=mode=="valid"?new uint[]{0,0,0,86399999,0,1,63999,0,64001}:
+                mode=="first_only"?new uint[]{0,0,0,86399999,0,0,0,0,0}:new uint[9];
+            Need(pc.SequenceEqual(expected),"Wrong PC time, midnight wrap, sparse slot, or missing-row policy for "+mode+": "+String.Join(",",pc));
+            string encoding=File.ReadAllText(Path.Combine(p,"analogin_encoding.txt"));
+            Need(encoding.Contains("pc_time_rows="+(mode=="valid"?"4":"1"))==(mode=="valid"||mode=="first_only"),"PC time coverage missing or overstated");
+        }
+    }
     static byte[] SdReceipt(){var r=Receipt();Put64(r,52,0);for(int port=0;port<2;port++){int at=64+port*20;Put64(r,at,0);Put(r,at+8,0);r[at+12]=r[at+13]=0;}Seal(r);return r;}
     static void EnforcedSchedule(){
         var legacy=NpImuGridControl.ParseUsb(Control(3),Uid);Need(legacy.Selected&&!legacy.EnforcedScheduleVerified&&legacy.Version==1,"Old control acquired enforced timing");
@@ -280,5 +312,5 @@ internal static partial class NpImuGridIntegrationTests {
             Need(File.ReadAllText(Path.Combine(p,"capture_status.txt")).Contains("complete=True")&&new FileInfo(Path.Combine(p,"analogin.dat")).Length>0,"Optional startup qualification rejected neural/grid data");
         }
     }}
-    static int Main(string[] args){try{root=Path.Combine(args[0],"grid-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(root);Controls();EnforcedSchedule();ExactOverlap();Carriers();Writers();Phases();UnknownPhases();SourceWindows();Usb();UsbRecoveryRetention();StartOnly();StartWithoutPoint();Sd();SdStartOnly();SdCertifiedStartup();CallerOrder(args[1]);if(args.Length>2)SavedWindow(args[2]);var legacy=typeof(NpV1SdOptionalSensorTests).GetMethod("Main",BindingFlags.Static|BindingFlags.NonPublic);Need((int)legacy.Invoke(null,new object[]{new[]{root}})==0,"Legacy optional sensor regressions");Console.WriteLine("PASS "+checks+" NSG1/NSGP actual V1 control/carrier/writer/USB parent/SD export and caller-order checks; no hardware.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
+    static int Main(string[] args){try{root=Path.Combine(args[0],"grid-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(root);Controls();EnforcedSchedule();ExactOverlap();Carriers();Writers();PcTimes();Phases();UnknownPhases();SourceWindows();Usb();UsbRecoveryRetention();StartOnly();StartWithoutPoint();Sd();SdStartOnly();SdCertifiedStartup();CallerOrder(args[1]);if(args.Length>2)SavedWindow(args[2]);var legacy=typeof(NpV1SdOptionalSensorTests).GetMethod("Main",BindingFlags.Static|BindingFlags.NonPublic);Need((int)legacy.Invoke(null,new object[]{new[]{root}})==0,"Legacy optional sensor regressions");Console.WriteLine("PASS "+checks+" NSG1/NSGP actual V1 control/carrier/writer/USB parent/SD export and caller-order checks; no hardware.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
 }

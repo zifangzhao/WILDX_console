@@ -13,6 +13,7 @@ namespace USB512_interface {
         readonly byte[] request,legacy;
         byte[] acknowledgementRaw,statusRequest,statusRaw;
         internal readonly string EvidenceId=Guid.NewGuid().ToString("N"),CreatedUtc=DateTime.UtcNow.ToString("O");
+        internal readonly int HostLocalUtcOffsetMinutes=(int)DateTimeOffset.Now.Offset.TotalMinutes;
         internal string EvidencePhase {get;private set;}="created";
         internal string EvidenceUpdatedUtc {get;private set;}
         internal string EvidencePath {get;private set;}

@@ -12,6 +12,7 @@ namespace USB512_interface {
         internal string Status="unavailable",Error;
         internal string[] JournalPaths=new string[0];
         internal bool Associated;
+        internal int? RecordingPcUtcOffsetMinutes;
     }
     // The sealed on-card UID/token supplies the association that a persisted
     // host Start attempt alone cannot establish. Clock qualification is separate.
@@ -21,7 +22,7 @@ namespace USB512_interface {
         const string LocatorFile="session-folder.json",LocatorFormat="wildx.ble_session_folder";
         const int MaximumLocatorBytes=16384;
         static readonly JavaScriptSerializer Json=new JavaScriptSerializer {MaxJsonLength=MaximumBytes};
-        sealed class Match {internal string Path,Key,Id,RequestHash;}
+        sealed class Match {internal string Path,Key,Id,RequestHash;internal int? PcUtcOffsetMinutes;}
         static bool Plain(string path){return (File.GetAttributes(path)&FileAttributes.ReparsePoint)==0;}
         static bool PlainDirectory(string path){
             for(var d=new DirectoryInfo(path);d!=null;d=d.Parent)if(!d.Exists||(d.Attributes&FileAttributes.ReparsePoint)!=0)return false;
@@ -80,7 +81,9 @@ namespace USB512_interface {
                 BitConverter.ToUInt32(request,32)!=r.Mask||BitConverter.ToUInt32(request,36)!=r.ApHz||
                 r.Family==1&&BitConverter.ToUInt32(request,48)!=r.Session||Number(d,"request_id")!=q.Id||Number(d,"operation")!=q.Operation)
                 throw new InvalidDataException("Start request does not match the sealed recording profile/session.");
-            string hash=Hash(request);return new Match {Path=path,Id=id,RequestHash=hash,Key=id+":"+hash};
+            object offset;
+            int? minutes=d.TryGetValue("host_local_utc_offset_minutes",out offset)&&offset is int&&(int)offset>=-840&&(int)offset<=840?(int?)offset:null;
+            string hash=Hash(request);return new Match {Path=path,Id=id,RequestHash=hash,Key=id+":"+hash,PcUtcOffsetMinutes=minutes};
         }
         static string Copy(string output,string prefix,byte[] bytes){
             string target=Path.Combine(output,prefix+Hash(bytes)+(prefix=="ble_clock_import_"?".jsonl":".json"));
@@ -130,13 +133,19 @@ namespace USB512_interface {
                     .Distinct(StringComparer.OrdinalIgnoreCase).Take(MaximumFiles+1).ToArray();
                 if(files.Length>MaximumFiles)throw new IOException("Bounded import exceeded 128 files.");
                 // Revalidate each mutable attempt snapshot before any copy.
-                var attempts=new Dictionary<string,byte[]>();foreach(var match in matches){byte[] bytes=Snapshot(match.Path);if(Validate(match.Path,bytes,bound).Key!=match.Key)throw new IOException("Immutable Start attempt changed during import.");attempts[match.Path]=bytes;}
+                var attempts=new Dictionary<string,byte[]>();var offsets=new HashSet<int?>();
+                foreach(var match in matches){
+                    byte[] bytes=Snapshot(match.Path);var snapshot=Validate(match.Path,bytes,bound);
+                    if(snapshot.Key!=match.Key)throw new IOException("Immutable Start attempt changed during import.");
+                    attempts[match.Path]=bytes;offsets.Add(snapshot.PcUtcOffsetMinutes);
+                }
                 var journals=new List<string>();foreach(string path in files){
                     if(!Plain(path))continue;bool journal=Path.GetFileName(path).StartsWith("ble_clock_",StringComparison.OrdinalIgnoreCase);
                     byte[] bytes=journal?Snapshot(path):attempts[path];string target=Copy(output,journal?"ble_clock_import_":"sd_start_import_",bytes);
                     int complete=Array.LastIndexOf(bytes,(byte)10)+1;copied.Add(new {source=path,file=Path.GetFileName(target),snapshot_sha256=Hash(bytes),snapshot_bytes=bytes.Length,complete_lf_bytes=journal?(int?)complete:null,trailing_partial_bytes=journal?(int?)(bytes.Length-complete):null});
                     if(journal)journals.Add(target);
                 }
+                if(offsets.Count==1)result.RecordingPcUtcOffsetMinutes=offsets.Single();
                 result.Associated=true;result.JournalPaths=journals.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();result.Status=journals.Count==0?"matched_no_clock_journals":"imported";
             }catch(Exception ex){result.Status="error";result.Error=ex.Message;result.JournalPaths=new string[0];result.Associated=false;}
             finally {

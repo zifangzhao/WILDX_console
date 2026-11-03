@@ -1982,8 +1982,10 @@ namespace USB512_interface
                         "misc_1250_mode=800 us device-time grid; zero-order hold of latest sensor values; not 1250 Hz acquisition",
                         "analogin_file=analogin.dat",
                         "analogin_schema=CE64-compatible; headerless 32-byte records of 16 little-endian 16-bit words at 1250 Hz",
+                        imuGridSelected?"analogin_words=see analogin_encoding.txt for the indexed IMU layout and PC time coverage":
                         "analogin_words=1:digin(0 unavailable), 2-4:accel(CE64-equivalent counts; 4096/g), 5-7:gyro(CE64-equivalent counts; 16.4/dps), 8-10:mag(300 nT/count), 11:slow_adc(0x8000 unavailable), 12:imu_sequence_test, 13-14:closed_loop(0 idle), 15-16:host_pc_time_ms",
                         "analogin_encoding=analogin_encoding.txt; wire physical units are unchanged; converted counts do not recover raw ADC values",
+                        imuGridSelected?"analogin_pc_time=see analogin_encoding.txt":
                         "analogin_pc_time=local milliseconds since midnight; anchored once at first valid IMU observation and advanced on the device-time grid; not hardware synchronized",
                         "raw_misc_bin_saved=False",
                         "imu_samples="+(sensors==null?0:sensors.ImuSamples),

@@ -140,6 +140,7 @@ namespace USB512_interface {
         static string Raw(byte[] b){return b==null?null:Convert.ToBase64String(b);}
         internal static void Save(NpRecordingSettings settings,string transport,string uid,int epoch,DateTime begin,long qpc,
             bool supported,byte[] probe,NpHardwareRtcCalibration attempt,string error){
+            byte[] commit=attempt==null?null:attempt.CommitRequest;
             settings.Context("hardware_rtc_calibration",NpRecordingSettings.Fields(
                 "transport",transport,"uid",uid,"connection_epoch",epoch==0?null:(object)epoch,"supported_v2",supported,
                 "host_observation_begin_utc",begin==DateTime.MinValue?null:begin.ToString("O"),"host_qpc_begin",qpc,"host_qpc_hz",Stopwatch.Frequency,
@@ -147,7 +148,9 @@ namespace USB512_interface {
                 "setting_generation",attempt==null||attempt.Receipt==null?null:(object)attempt.Receipt.Generation,
                 "declared_pc_calibration_uncertainty_us",attempt==null?null:(object)attempt.PcUncertaintyUs,
                 "readback_pc_phase_lower_us",attempt==null?null:(object)attempt.PhaseLowerUs,"readback_pc_phase_upper_us",attempt==null?null:(object)attempt.PhaseUpperUs,"error",error,
-                "probe_base64",Raw(probe),"commit_request_base64",attempt==null?null:Raw(attempt.CommitRequest),
+                "pc_reference_utc_unix_us_sent",commit==null||!attempt.Confirmed?null:(object)BitConverter.ToUInt64(commit,20),
+                "pc_reference_device_hal_ms",commit==null||!attempt.Confirmed?null:(object)BitConverter.ToUInt32(commit,16),
+                "probe_base64",Raw(probe),"commit_request_base64",Raw(commit),
                 "commit_ack_base64",attempt==null?null:Raw(attempt.CommitAcknowledgement),"last_readback_base64",attempt==null?null:Raw(attempt.LastReply),
                 "scope","Historical stopped control attempt on this bound connection; recording start requires its own on-device RTC/NP cross-stamp."));
         }

@@ -72,6 +72,7 @@ namespace USB512_interface
                 if(state.Bound!=null){
                     var bound=state.Bound;var receipt=bound.Receipt;var binding=Binding(receipt);NpFirstSyncUtcBounds clock=null;
                     bool fineMapped=false;string fineError=null,fineHash=null;object[] fineInputs=null;
+                    int? recordingPcOffset=null;
                     if(clockValid&&coordinateProof&&(receipt.Flags&NpFirstSyncWire.SourceClock)!=0){
                         decimal offset=receipt.ReferenceTick*1000000m/receipt.SourceHz;
                         clock=new NpFirstSyncUtcBounds {DeviceIdentity=bound.Uid,Binding=binding,SourceHz=receipt.SourceHz,ReferenceTick=receipt.ReferenceTick,
@@ -90,7 +91,8 @@ namespace USB512_interface
                         if(File.Exists(rawPath))try{
                             var companion=NpFineClockWire.ReadCompanion(File.ReadAllBytes(rawPath),File.ReadAllBytes(Path.Combine(folder,"recorded_clock.bin")),family,session,apHz,bound.Uid,bound.Token);
                             if(companion!=null){
-                                if(context==null||context.ImportLocalEvidence)NpFineClockEvidenceImport.Import(folder,companion);
+                                if(context==null||context.ImportLocalEvidence)
+                                    recordingPcOffset=NpFineClockEvidenceImport.Import(folder,companion).RecordingPcUtcOffsetMinutes;
                                 var fine=NpFineClockRecording.MapSd(folder,companion,out fineError);
                                 if(fine!=null){
                                     fineHash=Hash(rawPath);fineInputs=FineInputs(folder);clock=fine;fineMapped=true;coordinateProof=true;error=null;
@@ -101,6 +103,7 @@ namespace USB512_interface
                     report=NpFirstSyncUtc.Build(receipt.Raw,binding,bound.Uid,new NpFirstSyncUtcContext {DeviceIdentity=bound.Uid,Binding=binding,
                         IdentityAndBindingValidated=true,Evidence="recorded_clock.bin strict sealed SD UID/token/family/session/AP-rate binding"},NpRecordingUtc.StartsFromNpRows(items),clock);
                     report["sd_bound_first_sync"]=true;report["sd_bound_token_hex"]=bound.Token.ToString("X16",CultureInfo.InvariantCulture);
+                    report["recording_pc_utc_offset_minutes"]=recordingPcOffset;
                     report["sd_recorded_clock_crc32"]=state.OriginalCrc;report["sd_ap_hz"]=apHz;
                     report["sd_profile_crc"]=receipt.ProfileCrc;report["sd_probe_mask"]=receipt.Mask;
                     report["sd_clock_sync_generation"]=state.ClockGeneration;
