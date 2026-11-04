@@ -1,0 +1,228 @@
+{
+  "review": "STARTUP_PARTIAL_SNAPSHOT_REPORTED_SEPARATELY",
+  "folder": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\final-hold-cl1\\export",
+  "strict_result_unchanged": "FAIL",
+  "partial_or_error_snapshots": [
+    {
+      "record_index": 0,
+      "block_sequence": 10,
+      "source_tick": 409600,
+      "enabled": 1,
+      "valid_flags": 1,
+      "imu_error": 0,
+      "ag_sequence": 2013,
+      "ag_source_ms": 209390,
+      "mag_sequence": 0,
+      "mag_source_ms": 0,
+      "mag_values_nano_tesla": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "native_total": 2141,
+  "native_valid_flag_counts": {
+    "1": 1,
+    "3": 2140
+  },
+  "first_both_valid_record": 1,
+  "all_subsequent_snapshots_both_valid_error_free": true,
+  "valid_only": {
+    "ag": {
+      "valid_observations": 2141,
+      "excluded_observations": 0,
+      "first_valid_record": 0,
+      "last_valid_record": 2140,
+      "cadence": {
+        "first": 2013,
+        "last": 4153,
+        "repeat_observations": 0,
+        "forward_transitions": 2140,
+        "forward_step_counts": {
+          "1": 2140
+        },
+        "unobserved_sequence_numbers": 0,
+        "backwards_or_ambiguous_steps": 0,
+        "source_ms_span": 10885,
+        "observed_sequence_advance_hz": 196.6008268259072,
+        "scope": "Sparse saved snapshots; skipped native sequence numbers are not proof of lost physical conversions"
+      },
+      "axes": {
+        "accel_x": {
+          "min": 171875,
+          "max": 181152,
+          "unique_values": 38,
+          "changes": 2046
+        },
+        "accel_y": {
+          "min": 948242,
+          "max": 977050,
+          "unique_values": 117,
+          "changes": 2036
+        },
+        "accel_z": {
+          "min": -115234,
+          "max": -34179,
+          "unique_values": 323,
+          "changes": 2059
+        },
+        "gyro_x": {
+          "min": -975,
+          "max": -182,
+          "unique_values": 14,
+          "changes": 1773
+        },
+        "gyro_y": {
+          "min": -792,
+          "max": -304,
+          "unique_values": 9,
+          "changes": 1596
+        },
+        "gyro_z": {
+          "min": -60,
+          "max": 426,
+          "unique_values": 9,
+          "changes": 1546
+        }
+      }
+    },
+    "mag": {
+      "valid_observations": 2140,
+      "excluded_observations": 1,
+      "first_valid_record": 1,
+      "last_valid_record": 2140,
+      "cadence": {
+        "first": 1008,
+        "last": 2082,
+        "repeat_observations": 1065,
+        "forward_transitions": 1074,
+        "forward_step_counts": {
+          "1": 1074
+        },
+        "unobserved_sequence_numbers": 0,
+        "backwards_or_ambiguous_steps": 0,
+        "source_ms_span": 10880,
+        "observed_sequence_advance_hz": 98.71323529411765,
+        "scope": "Sparse saved snapshots; skipped native sequence numbers are not proof of lost physical conversions"
+      },
+      "axes": {
+        "mag_x": {
+          "min": 37151,
+          "max": 45611,
+          "unique_values": 684,
+          "changes": 1032
+        },
+        "mag_y": {
+          "min": -56793,
+          "max": -42644,
+          "unique_values": 882,
+          "changes": 1052
+        },
+        "mag_z": {
+          "min": -51213,
+          "max": -36106,
+          "unique_values": 609,
+          "changes": 1019
+        }
+      }
+    }
+  },
+  "primary_grid": {
+    "rows": 13629,
+    "counts": {
+      "observed": 13629,
+      "ag_valid": 13629,
+      "mag_valid": 13629,
+      "ag_repeat": 11486,
+      "mag_repeat": 12552
+    },
+    "repeat_value_mismatches": 0,
+    "axes": {
+      "accel_x": {
+        "min": 704,
+        "max": 742,
+        "unique_values": 38,
+        "changes": 2048
+      },
+      "accel_y": {
+        "min": 3884,
+        "max": 4002,
+        "unique_values": 117,
+        "changes": 2038
+      },
+      "accel_z": {
+        "min": -472,
+        "max": -140,
+        "unique_values": 323,
+        "changes": 2061
+      },
+      "gyro_x": {
+        "min": -16,
+        "max": -3,
+        "unique_values": 14,
+        "changes": 1775
+      },
+      "gyro_y": {
+        "min": -13,
+        "max": -5,
+        "unique_values": 9,
+        "changes": 1597
+      },
+      "gyro_z": {
+        "min": -1,
+        "max": 7,
+        "unique_values": 9,
+        "changes": 1546
+      },
+      "mag_x": {
+        "min": 124,
+        "max": 152,
+        "unique_values": 28,
+        "changes": 974
+      },
+      "mag_y": {
+        "min": -189,
+        "max": -142,
+        "unique_values": 45,
+        "changes": 1011
+      },
+      "mag_z": {
+        "min": -189,
+        "max": -120,
+        "unique_values": 36,
+        "changes": 887
+      }
+    },
+    "scaled_native_ag_snapshots_found": 2141,
+    "scaled_native_mag_snapshots_found": 2140
+  },
+  "files": {
+    "imu_sd_records.sns2": {
+      "bytes": 282612,
+      "sha256": "CBE24FFE7E7DA65197E9A1F9BD9FC128D0F50218C9CDE12D66AD7F7DF9BBFB80"
+    },
+    "sensors.csv": {
+      "bytes": 325030,
+      "sha256": "ED92E9991FE9D728A6C7534858BD68D0917467ECB55BAF12FB66CF82CD58C87B"
+    },
+    "analogin_validity.dat": {
+      "bytes": 13629,
+      "sha256": "CDCB059E869C0CB0FEB10FEEF33A779E09660476DAF08BCAE29A04A35DA9103C"
+    },
+    "analogin.dat": {
+      "bytes": 436128,
+      "sha256": "B66396FD0C302E8C89D820AC847543624C76000925AFF80EADD5EC659D54D59B"
+    },
+    "analogin_encoding.txt": {
+      "bytes": 3016,
+      "sha256": "8C2EE17FC02FA455CC39E7BF563D56D63DB75168A328A466715CDACBB3627C78"
+    }
+  },
+  "limits": [
+    "The initial MAG-unavailable snapshot is still unavailable; it is not relabeled valid.",
+    "Valid-only cadence excludes unavailable timestamps such as MAG time0; all original strict failure evidence remains unchanged.",
+    "1250Hz rows are scheduled cached sensor values; measured native cadence describes source updates, not1250Hz conversions.",
+    "This sensor-only review does not qualify NP continuity, closed-loop or the complete recording."
+  ]
+}

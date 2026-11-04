@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0.232",
-  "releaseId": "WILDX_1.0.0.232_CLOSED_LOOP_QUALIFIED",
-  "baselineVersion": "1.0.0.226",
+  "version": "1.0.0.234",
+  "releaseId": "WILDX_1.0.0.234_CLOSED_LOOP_QUALIFIED",
+  "baselineVersion": "1.0.0.232",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.232.exe",
-    "sha256": "D81C439A18C99564DB43ECF51A79BF7D2DB91DF03C29282B3F485D8406B48F2B",
-    "bytes": 8778624
+    "file": "WILDX_console-Setup-1.0.0.234.exe",
+    "sha256": "257B7B6DDDEFB494F237F9F69AEEF34C0019D932BC32740450C299567E7C1F4B",
+    "bytes": 9244516
   },
-  "guiSha256": "B6A71A97BC5D34749A53F0A9150F22DE4B9B55555D3BE20E127AAC073B31495F",
+  "guiSha256": "08242B6B79966517890BB4E53153E5C47D7476D415CE9B05EFDC1014AE1C3B3E",
   "sdkSha256": "A381FFC3CD91A9CC2007E39AECBEFDABD1BB6023E343B481CAB600E371FDD85F",
-  "catalogSha256": "3D7DE22D29F4C36242614EE50F6232E4FD52DA1B9A229EE60F4B9F6B0A7D762D",
-  "sourceArchiveSha256": "772491E78366CB76536724D8D6095A3A81270C6AA88202E9EB6DAA420AB80076",
-  "sourceGitBaseline": "b5732780543eae5d3c26790cb931631cd52a6883",
-  "sourcePublicationCommit": "b5732780543eae5d3c26790cb931631cd52a6883",
+  "catalogSha256": "D9BE3C8390C7C5675CF882831355F4E51AD80AF1958A0B5B0641F2624D3E5084",
+  "sourceArchiveSha256": "73D995CF92B6E50A16B34DB1EDCB29B57A0EA1D76CD47C4FC3722339FD0C1149",
+  "sourceGitBaseline": "d3c1a2d0b1432167f91efe715dd105f308c73cc2",
+  "sourcePublicationCommit": "d3c1a2d0b1432167f91efe715dd105f308c73cc2",
   "sourcePublicationCommitRole": "Pre-publication baseline plus exact compiled source archive",
   "sourceIdentityRole": "Exact compiled host inputs archived with release",
-  "sourceProvenance": "../ReleaseSources/1.0.0.232/host-source-archive/source-manifest.json",
-  "validation": "../ReleaseSources/1.0.0.232/qualification.json",
+  "sourceProvenance": "../ReleaseSources/1.0.0.234/host-source-archive/source-manifest.json",
+  "validation": "../ReleaseSources/1.0.0.234/qualification.json",
   "firmware": [
     {
       "family": 1,
@@ -29,11 +29,11 @@
     },
     {
       "family": 2,
-      "release": "V2_USB_SD_TEST_APP71A5126E_USB2556B4DD_20261030",
-      "app": "71A5126E",
-      "usb": "2556B4DD",
+      "release": "V2_SD_20K_3PROBE_RIPPLE_APP680A1685_USB80E18959_20261104",
+      "app": "680A1685",
+      "usb": "80E18959",
       "recovery": "6408DBB8",
-      "stage": "3P30 loss then automatic 3P20 full readback pass; 10 seconds/rate USB-only warm workflow"
+      "stage": "BOUNDED_SD_ONE_DETECTOR_PASS_SD_TWO_AND_USB_CLOSED_LOOP_DISABLED"
     }
   ],
   "closedLoopQualification": {
@@ -56,16 +56,17 @@
     "V2": {
       "probe_mask": 7,
       "sample_hz": 20000,
+      "filter": 6,
       "usb_detectors": [],
-      "sd_detectors": [],
-      "status": "disabled",
-      "reason": "Candidate ordinary SD baseline failed NP and IMU integrity",
-      "retained_app_crc32": "71A5126E",
-      "retained_usb_crc32": "2556B4DD",
-      "local_usb_one": "pass",
-      "local_usb_two": "fail",
-      "local_sd_zero": "fail",
-      "local_sd_one_two": "blocked"
+      "sd_detectors": [
+        1
+      ],
+      "app_crc32": "680A1685",
+      "usb_crc32": "80E18959",
+      "ordinary_sd": "pass",
+      "one_sd_detector": "Pass, including a controlled 225 ms owner hold",
+      "two_sd_detectors": "Disabled: 107 NP gaps and 283 dropped blocks under the 225 ms hold",
+      "scope": "Bounded same-card recording and full readback; no all-mode or endurance claim"
     }
   },
   "expectedPayloadFiles": 49,
@@ -165,8 +166,8 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 32431,
-      "sha256": "3D7DE22D29F4C36242614EE50F6232E4FD52DA1B9A229EE60F4B9F6B0A7D762D"
+      "bytes": 32491,
+      "sha256": "D9BE3C8390C7C5675CF882831355F4E51AD80AF1958A0B5B0641F2624D3E5084"
     },
     {
       "path": "Firmware/V1/acceptance.json",
@@ -225,23 +226,23 @@
     },
     {
       "path": "Firmware/V2/acceptance.json",
-      "bytes": 4230,
-      "sha256": "BA44D8BD976D23A1A5E132B7AAF10C1F836F364E327A5CF62CC61654112189BF"
+      "bytes": 2930,
+      "sha256": "93D9F7BBF24ADAC1F00EB119DCA8C204DFB1CFE7F970E7A742165C7E5BF94039"
     },
     {
-      "path": "Firmware/V2/V2_APP_71A5126E_USB_SD_TEST_20261030.hex",
-      "bytes": 922884,
-      "sha256": "AC92DBF86F323AB61B6EF37D8F63E057F5EF551AA4B1DCFD4C57FF1657FCFE36"
+      "path": "Firmware/V2/V2_APP680A1685.hex",
+      "bytes": 1007840,
+      "sha256": "78606C2B47FBABF52BF0CBFF63060FC6A30464F7897767E7F904EC829523A63E"
     },
     {
-      "path": "Firmware/V2/V2_APP_71A5126E_USB_SD_TEST_20261030.xenp",
-      "bytes": 335548,
-      "sha256": "36AF5B641C5897E3DA6F719AB2D620654B233F8664F401C7A27AC2666E8C398B"
+      "path": "Firmware/V2/V2_APP680A1685.xenp",
+      "bytes": 366440,
+      "sha256": "103590B78C110983A290C59FFBE3758C4048A567183B920AA2099A0549320FAA"
     },
     {
-      "path": "Firmware/V2/V2_fused_RECOVERY6408DBB8_APP71A5126E_USB2556B4DD_USB_SD_TEST_20261030.hex",
-      "bytes": 1855876,
-      "sha256": "E52CCA609BB1C267A5CACCB11049EBD5B3B5FBE38D59FE6EE93F8F312051CB6B"
+      "path": "Firmware/V2/V2_FUSED_BOOT_USB80E18959_APP680A1685.hex",
+      "bytes": 5745164,
+      "sha256": "F03608A7ABD544869D0619A2B481F81BC25F79E42F8D2479203A780377A850D1"
     },
     {
       "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -249,9 +250,9 @@
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
     {
-      "path": "Firmware/V2/V2_USB_2556B4DD_USB_SD_TEST_20261030.hex",
-      "bytes": 850796,
-      "sha256": "2F9DB76BFC58FC293F30D31FB948E5EF33694BDB878F26513B5D5172059B3A34"
+      "path": "Firmware/V2/V2_USB80E18959.hex",
+      "bytes": 919716,
+      "sha256": "BD2A86F913512472002C38EBC6E0990BBEAA02DDAAB0A6AB71FA6336B8999E27"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -311,7 +312,7 @@
     {
       "path": "WILDX_console.exe",
       "bytes": 2835968,
-      "sha256": "B6A71A97BC5D34749A53F0A9150F22DE4B9B55555D3BE20E127AAC073B31495F"
+      "sha256": "08242B6B79966517890BB4E53153E5C47D7476D415CE9B05EFDC1014AE1C3B3E"
     },
     {
       "path": "WILDX_console.exe.config",

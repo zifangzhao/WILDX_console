@@ -1,0 +1,38 @@
+{
+  "status": "CANONICAL_SOURCE_INTEGRATED_NO_BUILD_OR_HARDWARE",
+  "production_app_crc": "680A1685",
+  "production_body_sha256": "E92F6A26500B3D07993D48A4F05210483A0BAE28AFDB70791B58E2B0F6780E27",
+  "source_overlay_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\integration\\integration-recipe.json",
+  "changes": [
+    {
+      "relative": "Core\\Src\\xe_np_np2_live_sd.c",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\Core\\Src\\xe_np_np2_live_sd.c",
+      "before": "2A705001F3C053DAEF64422FA964DE9979E91B5A542942BBBA0A28DE0408D6FF",
+      "after": "0A8C64AC0F6AC34F1A2B054D1D6207BE2096BCC9B1958808CFDFACD592EB969E"
+    },
+    {
+      "relative": "Core\\Src\\xe_np_np2_dual_sd_catalog_port.c",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\Core\\Src\\xe_np_np2_dual_sd_catalog_port.c",
+      "before": "3AFE592FDAF670ECC453914A6B781EA7BD58636F7AD23131F9666DA1162190B7",
+      "after": "DF87D15ECFAD6444DFB2509581A945324B791A6F37D17C8C166FE8D490A17E94"
+    },
+    {
+      "relative": "Core\\Inc\\xe_np_imu_grid_queue.h",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\integration\\canonical-source\\xe_np_imu_grid_queue.after.h",
+      "before": "904216F846C7D69CF5E50696C90AF92E309BE23165B1DDD932CEEA094C517A14",
+      "after": "8E1D2E8C980D084580120C0F3F47D8F2D6CCA01BD01BE0B12D0CD83BBCF70A46"
+    }
+  ],
+  "header_preimage": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\integration\\canonical-source\\xe_np_imu_grid_queue.before.h",
+  "header_after": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\integration\\canonical-source\\xe_np_imu_grid_queue.after.h",
+  "abi_proof_sha256": "B8D030F8342628FBF8FC95E6BE0E5B33BE0C0C6E4C16AE93514DEBBC7E83BF2E",
+  "preprocessor_proof_sha256": "8FA9955A5A1FC6F8C51F1556DA612667A4FF20401971CA315B1CF98BD43ADE59",
+  "note_path": "D:\\Code\\XE_NP_V2\\Note\\V2_CLOSED_LOOP_SPI_20261027.md",
+  "note_before_sha256": "6BCBA3B498B22FF923F1895A25EBD1876260085F8EA09FE0BAAD5F71C3FF32B7",
+  "note_after_sha256": "153DA7BB8977C48F770FCF09E4C3BFC0AC787FC81D6B50B5EFFC5B9E875A95E0",
+  "compiled_objects": 0,
+  "hardware_access": false,
+  "commit_or_publish": false,
+  "build_configuration": "Shared queue header defaults512 for XE_NP_IMAGE_ROLE=1U, otherwise128; existing explicit overrides retained",
+  "limits": "Source identity and preprocessor equivalence only. Runtime qualification and exact checked-binary packaging owned by main."
+}

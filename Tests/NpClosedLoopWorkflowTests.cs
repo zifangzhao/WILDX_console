@@ -47,7 +47,7 @@ static class NpClosedLoopWorkflowTests
     static void ProfileLimits()
     {
         // USB/SD masks from the selected firmware's qualification matrix.
-        int[] qualifiedCounts={3,3,0,0};
+        int[] qualifiedCounts={3,3,0,1};
         foreach(bool np2 in new[]{false,true}){
             uint acceptedMask=np2?7U:3U, acceptedHz=np2?20000U:15000U;
             foreach(uint mask in Enumerable.Range(0,8).Select(i=>(uint)i))
@@ -63,7 +63,21 @@ static class NpClosedLoopWorkflowTests
                         "Detector count/transport differs from hardware qualification");
                     Need(!NpClosedLoopSettings.CanUseDetectors(np2,sd,acceptedMask,30000U,count),
                         "Unqualified rate admitted a detector");
-                    if(expected)continue;
+                    if(expected){
+                        var modeSettings=Settings();
+                        modeSettings.Channels=Enumerable.Range(0,count).Select(i=>new NpClosedLoopChannel{
+                            Probe=(byte)(np2?3:i+1),Channel=(ushort)(np2?256+i:0),Gain=2
+                        }).ToArray();
+                        var sent=new List<NpClosedLoopControl>();var modeNotices=new List<string>();
+                        var configured=NpClosedLoopSettings.Prepare(modeSettings,np2,acceptedMask,acceptedHz,(request,cancel)=>{
+                            sent.Add(NpClosedLoopControl.Parse(request));return Task.FromResult(Reply(request));
+                        },CancellationToken.None,modeNotices.Add,value=>{},null,sd).GetAwaiter().GetResult();
+                        Need(configured!=null&&sent.Count==2&&modeNotices.Count==0&&modeSettings.MayBeConfigured,
+                            "Qualified detector mode did not confirm its setup");
+                        Need(sent[1].Operation==1&&sent[1].ApHz==acceptedHz&&sent[1].Channels.Length==count,
+                            "Qualified detector setup changed rate or channel count");
+                        continue;
+                    }
                     var s=Settings();s.Channels=new NpClosedLoopChannel[count];s.MayBeConfigured=true;
                     var requests=new List<NpClosedLoopControl>();var warnings=new List<string>();
                     var disabled=NpClosedLoopSettings.Prepare(s,np2,acceptedMask,acceptedHz,(request,cancel)=>{

@@ -1,0 +1,54 @@
+{
+  "status": "FAIL",
+  "mode": "BLE_SD",
+  "detectors": 2,
+  "ap_hz": 20000,
+  "probe_mask": 7,
+  "app_crc": "2D471189",
+  "usb_crc": "1D86BC8B",
+  "checks": {
+    "normal_start_stop": true,
+    "np_all_blocks_verified": false,
+    "np_loss_zero": false,
+    "all_three_probes": true,
+    "imu_schedule_first_and_phase": false,
+    "imu_loss_zero": true,
+    "native_sensor_updates_valid": false,
+    "ble_catalog_record": true,
+    "cl_source_event_loss_zero": false,
+    "cl_active_saved": false,
+    "events_qualified": true,
+    "native_adc_equals_dat": true,
+    "actual225ms_four_owner_command_hold": true,
+    "stopped_metadata_divider8_live_clock_restored": true
+  },
+  "np_blocks": 8128,
+  "source_seconds": 10.40384,
+  "session": 1764678501,
+  "imu_rows": 13469,
+  "native_sensor_updates": 1710,
+  "imu_source_window_verified": "False",
+  "imu_final_slot_known": "False",
+  "events": 418,
+  "instrumented_decode_plus_service_percent": 14.818325117817075,
+  "performance_scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power.",
+  "hold": {
+    "phase": 2,
+    "requested_us": 225000,
+    "actual_us": 225006.4296875,
+    "deferred_released_mask": "0x40f0f",
+    "max_backlog_ticks": 665600
+  },
+  "clock": {
+    "metadata_clkcr": "0x2b4008",
+    "saved_live_clkcr": "0x2b4000",
+    "stopped_register_clkcr": "0x0",
+    "before_arm_bus_hz": 108000000,
+    "scope": "Checked metadata leave writes and reads back saved liveCLKCR before writer initialization; apply_session_clock_save selects108MHz before arm. Healthy stopped WFI may clock-gate SD, making the final raw register read0."
+  },
+  "limits": [
+    "Bounded same-card checks; diagnostic owner-hold timings listed separately from real physical SD write latency",
+    "Native sensor conversion phase and final scheduled IMU tail remain unknown",
+    "source_window_verified recorded separately; first-slot/phase and queue/continuity are checked directly"
+  ]
+}

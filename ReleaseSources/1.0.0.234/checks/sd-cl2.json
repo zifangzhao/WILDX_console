@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "mode": "BLE_SD",
+  "detectors": 2,
+  "ap_hz": 20000,
+  "probe_mask": 7,
+  "app_crc": "F6B24C02",
+  "usb_crc": "1D86BC8B",
+  "checks": {
+    "normal_start_stop": true,
+    "np_all_blocks_verified": true,
+    "np_loss_zero": true,
+    "all_three_probes": true,
+    "imu_schedule_first_and_phase": true,
+    "imu_loss_zero": true,
+    "native_sensor_updates_valid": true,
+    "ble_catalog_record": true,
+    "cl_source_event_loss_zero": true,
+    "cl_active_saved": true,
+    "events_qualified": true,
+    "native_adc_equals_dat": true
+  },
+  "np_blocks": 24556,
+  "source_seconds": 31.43168,
+  "session": 1961777942,
+  "imu_rows": 39288,
+  "native_sensor_updates": 6170,
+  "imu_source_window_verified": "True",
+  "imu_final_slot_known": "False",
+  "events": 324,
+  "instrumented_decode_plus_service_percent": 10.370012983318105,
+  "performance_scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power.",
+  "limits": [
+    "Bounded same-card checks; earlier225ms physical write not reproduced by these normal runs",
+    "Native sensor conversion phase and final scheduled IMU tail remain unknown",
+    "source_window_verified recorded separately; first-slot/phase and queue/continuity are checked directly"
+  ]
+}

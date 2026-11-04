@@ -61,7 +61,7 @@ namespace USB512_interface
 
         // Bit 0 admits one detector; bit 1 admits two. Populate only from the
         // selected firmware's USB and SD qualification receipts.
-        const int V1UsbDetectors=3,V1SdDetectors=3,V2UsbDetectors=0,V2SdDetectors=0;
+        const int V1UsbDetectors=3,V1SdDetectors=3,V2UsbDetectors=0,V2SdDetectors=1;
         internal static bool CanUseDetectors(bool np2,bool sd,uint mask,uint hz,int count)
         {
             int qualified=np2?(sd?V2SdDetectors:V2UsbDetectors):(sd?V1SdDetectors:V1UsbDetectors);

@@ -1,0 +1,49 @@
+{
+  "status": "ACCEPTED",
+  "scope": "Scoped ordinaryV2 recording fix and ONE optional SD detector. Not an all-mode or all-channel validation.",
+  "app_crc32": "680A1685",
+  "usb_crc32": "80E18959",
+  "app_dir": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\build-app-metadata",
+  "usb_dir": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\build-usb-paired-r2",
+  "app_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\build-app-metadata\\V2_APP_SD_QUEUE_CANDIDATE.hex",
+  "usb_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\build-usb-paired-r2\\V2_USB_PAIRED_SD_CANDIDATE.hex",
+  "boot_hex": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_recovery_only_6408DBB8_20261012.hex",
+  "boot_crc32": "6408DBB8",
+  "app_body_sha256": "E92F6A26500B3D07993D48A4F05210483A0BAE28AFDB70791B58E2B0F6780E27",
+  "usb_body_sha256": "6CD18342481160C0CE1ACEAD243B91A68F09CB9C5D82CDECF6C82F090F792B7B",
+  "boot_hex_sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
+  "qualified_sd_detector_counts": [
+    1
+  ],
+  "qualified_usb_detector_counts": [],
+  "sd_profile": {
+    "mask": 7,
+    "hz": 20000,
+    "tested_probe": 3,
+    "tested_channels": [
+      256
+    ],
+    "filter": 6,
+    "gain": 2,
+    "rectify": true
+  },
+  "sd2_stress_failed": {
+    "np_gaps": 107,
+    "dropped_blocks": 283,
+    "missing_source_ticks": 11591680,
+    "held_us": 225006.4296875,
+    "receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\final-hold-cl2\\quality.json"
+  },
+  "restoration_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\restoration-complete.json",
+  "lease_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\owner\\lease.json",
+  "pair_capability_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\final-pair-r2\\read-only-caps.json",
+  "integration_recipe": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\integration\\integration-recipe.json",
+  "source_freeze": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\input-freeze\\manifest.json",
+  "limits": [
+    "One AG-only startupSNS2 header; its MAG unavailable/zero values excluded from cadence, not reclassified valid. All13629primaryIMUgrid rows valid; detailed valid-only review retained.",
+    "Final scheduled IMU tail and native sensor conversion phase remain unknown.",
+    "Ordinary GUI IMRO/application/RTC workflow not newly qualified by transport adapters; unchanged GUI validation reused separately.",
+    "Historical input dependencies lacking exact receipts remain explicitly unresolved; no clean-whole-rebuild claim."
+  ],
+  "created_utc": "2026-11-04T18:50:04.104097+00:00"
+}

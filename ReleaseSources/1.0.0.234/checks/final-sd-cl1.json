@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "mode": "BLE_SD",
+  "detectors": 1,
+  "ap_hz": 20000,
+  "probe_mask": 7,
+  "app_crc": "680A1685",
+  "usb_crc": "1D86BC8B",
+  "checks": {
+    "normal_start_stop": true,
+    "np_all_blocks_verified": true,
+    "np_loss_zero": true,
+    "all_three_probes": true,
+    "imu_schedule_first_and_phase": true,
+    "imu_loss_zero": true,
+    "native_sensor_updates_valid": true,
+    "ble_catalog_record": true,
+    "cl_source_event_loss_zero": true,
+    "cl_active_saved": true,
+    "events_qualified": true,
+    "native_adc_equals_dat": true,
+    "stopped_metadata_divider8_live_clock_restored": true
+  },
+  "np_blocks": 8548,
+  "source_seconds": 10.94144,
+  "session": 1549379782,
+  "imu_rows": 13674,
+  "native_sensor_updates": 2140,
+  "imu_source_window_verified": "True",
+  "imu_final_slot_known": "False",
+  "events": 8,
+  "instrumented_decode_plus_service_percent": 7.876795338981889,
+  "performance_scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power.",
+  "hold": null,
+  "clock": {
+    "metadata_clkcr": "0x2b4008",
+    "saved_live_clkcr": "0x2b4000",
+    "stopped_register_clkcr": "0x0",
+    "before_arm_bus_hz": 108000000,
+    "scope": "Checked metadata leave writes and reads back saved liveCLKCR before writer initialization; apply_session_clock_save selects108MHz before arm. Healthy stopped WFI may clock-gate SD, making the final raw register read0."
+  },
+  "limits": [
+    "Bounded same-card checks; diagnostic owner-hold timings listed separately from real physical SD write latency",
+    "Native sensor conversion phase and final scheduled IMU tail remain unknown",
+    "source_window_verified recorded separately; first-slot/phase and queue/continuity are checked directly"
+  ]
+}

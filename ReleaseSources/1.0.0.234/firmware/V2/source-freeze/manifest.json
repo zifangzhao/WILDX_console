@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "family": 2,
+  "app_crc32": "680A1685",
+  "usb_crc32": "80E18959",
+  "archive": "inputs.zip",
+  "archive_sha256": "2E12098CAEDE11F44812AE853B1E1C83B229652166FDDD77800C4FF4BFF13300",
+  "inputs_manifest": "inputs-manifest.json",
+  "inputs_manifest_sha256": "7EB345A9212FB537B48E71B20FFEF4B82DA0DEF95D25014F937F47A02DBF7DD6",
+  "integration": "integration-recipe.json",
+  "integration_sha256": "85DA794617F95A048BCC34FDE32F285B1F452DB3D1321C2B26055E49BA62F458",
+  "new_usb_overlay": "xe_np_usb_sd_test_job.c",
+  "new_usb_build": "usb-build.json",
+  "scope": "Exact current source pins and dependency snapshots plus inherited object identities. Unresolved historical source claims remain explicit; no clean full rebuild equivalence claimed."
+}

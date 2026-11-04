@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "app_version": "1.0.0.234",
+  "status": "PASS_SCOPED_V2_ORDINARY_SD_AND_ONE_DETECTOR",
+  "qualification": {
+    "V1": {
+      "probe_mask": 3,
+      "sample_hz": 15000,
+      "filter": 6,
+      "usb_detectors": [
+        1,
+        2
+      ],
+      "sd_detectors": [
+        1,
+        2
+      ],
+      "app_crc32": "5F90FD3B",
+      "usb_crc32": "8454D202",
+      "scope": "Bounded recording, observed IMU and native event replay; initial-slot and terminal-coverage limits retained"
+    },
+    "V2": {
+      "probe_mask": 7,
+      "sample_hz": 20000,
+      "filter": 6,
+      "usb_detectors": [],
+      "sd_detectors": [
+        1
+      ],
+      "app_crc32": "680A1685",
+      "usb_crc32": "80E18959",
+      "ordinary_sd": "pass",
+      "one_sd_detector": "Pass, including a controlled 225 ms owner hold",
+      "two_sd_detectors": "Disabled: 107 NP gaps and 283 dropped blocks under the 225 ms hold",
+      "scope": "Bounded same-card recording and full readback; no all-mode or endurance claim"
+    }
+  },
+  "hardware_restored": true,
+  "V2": {
+    "owner_receipt": "v2-qualification.json",
+    "owner_receipt_sha256": "035649005C9FEA1C279ED58365D7DA16C202E33F96BD15863744AE241D4AFDF9",
+    "restoration": "checks/restoration-complete.json",
+    "lease": "checks/lease.json",
+    "full_source_rebuild_equivalence": false
+  },
+  "software": {
+    "workflow_checks": 183,
+    "build": "One incremental build 234; local 233 remained unpublished after the SD2 stress failure",
+    "catalog": "Actual 234 loader and all selected asset hashes passed",
+    "sdk": "Checked SDK 232 bytes reused exactly",
+    "recording_path": "204 compiled inputs match 232 except the qualification mask and version"
+  },
+  "limits": [
+    "Two SD detectors failed the 225 ms stress and are disabled; V2 USB closed-loop is disabled.",
+    "One AG-only native SNS2 startup snapshot remains MAG-unavailable; all 13,629 primary grid rows are valid.",
+    "Final IMU tail, native conversion phase and endurance remain unqualified.",
+    "Historical inherited source closure is partial; new compiled inputs and object hashes are pinned.",
+    "V1 firmware and evidence reused unchanged from 232."
+  ],
+  "validation_note": "../../Note/CLOSED_LOOP_QUALIFICATION_20261104.md",
+  "completed_utc": "2026-11-04T18:51:38.1003257Z"
+}

@@ -1,0 +1,20 @@
+{
+  "baseline": "1.0.0.232",
+  "version": "1.0.0.234",
+  "compiled_inputs": 204,
+  "changed_inputs": [
+    {
+      "sha256": "7BEDBFDD71E6FAEB6C8967F80B72E4039D91DCD97E688A5AA33ABDA79016A54C",
+      "path": "USB512_interface\\USB512_interface\\NpClosedLoopSettings.cs"
+    },
+    {
+      "sha256": "828D327340842D351F371D0E83433328305190A9650DD741665C98BF99722041",
+      "path": "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+    }
+  ],
+  "unchanged_sdk": true,
+  "workflow_checks": 183,
+  "workflow_status": "pass",
+  "fixture_sha256": "4CCC07809A04F4B7E92620EF9866A4BD2068CCD37559AAAB686541601A017C69",
+  "scope": "Recording implementation unchanged; V2 SD one-detector allowance plus version changed; local233 never packaged"
+}

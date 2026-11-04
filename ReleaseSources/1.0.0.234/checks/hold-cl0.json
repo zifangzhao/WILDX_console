@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "mode": "BLE_SD",
+  "detectors": 0,
+  "ap_hz": 20000,
+  "probe_mask": 7,
+  "app_crc": "C929D92B",
+  "usb_crc": "1D86BC8B",
+  "checks": {
+    "normal_start_stop": true,
+    "np_all_blocks_verified": true,
+    "np_loss_zero": true,
+    "all_three_probes": true,
+    "imu_schedule_first_and_phase": true,
+    "imu_loss_zero": true,
+    "native_sensor_updates_valid": true,
+    "ble_catalog_record": true,
+    "cl_source_event_loss_zero": true,
+    "cl_inactive_zero_work": true,
+    "actual225ms_four_owner_command_hold": true
+  },
+  "np_blocks": 8472,
+  "source_seconds": 10.84416,
+  "session": 2942978135,
+  "imu_rows": 13554,
+  "native_sensor_updates": 2123,
+  "imu_source_window_verified": "True",
+  "imu_final_slot_known": "False",
+  "events": 0,
+  "instrumented_decode_plus_service_percent": null,
+  "performance_scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power.",
+  "hold": {
+    "phase": 2,
+    "requested_us": 225000,
+    "actual_us": 225114.0390625,
+    "deferred_released_mask": "0x40f0f",
+    "max_backlog_ticks": 419840
+  },
+  "limits": [
+    "Bounded same-card checks; diagnostic owner-hold timings listed separately from real physical SD write latency",
+    "Native sensor conversion phase and final scheduled IMU tail remain unknown",
+    "source_window_verified recorded separately; first-slot/phase and queue/continuity are checked directly"
+  ]
+}

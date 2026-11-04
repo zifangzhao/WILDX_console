@@ -1,0 +1,10 @@
+{
+    "sd_test_capability":  65536,
+    "uid":  "001A0004434250062039314E",
+    "status":  "PASS",
+    "usb_crc32":  "80E18959",
+    "scope":  "Read-only6E capability+A3 report using frozen production231 parser. No SD-test submission, start, write, cancel, format or reset.",
+    "service_capabilities":  65599,
+    "maximum_seconds":  120,
+    "app_crc32":  "680A1685"
+}

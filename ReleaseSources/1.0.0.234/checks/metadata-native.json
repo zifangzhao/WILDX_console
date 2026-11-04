@@ -1,0 +1,19 @@
+{
+  "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\Core\\Src\\xe_np_np2_dual_sd_catalog_port.c",
+  "sha256": "DF87D15ECFAD6444DFB2509581A945324B791A6F37D17C8C166FE8D490A17E94",
+  "checks": [
+    {
+      "runtime_profiles": 0,
+      "command": "call \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" >nul && cl /nologo /std:c++17 /W4 /WX /TP /O2 /DXE_NP_NP2_DUAL_SD_APP_ENABLE=1 /DXE_NP_NP2_LIVE_SD_RUNTIME_PROFILES=0 \"C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\native-test\\test.c\" /Fo\"C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\native-test\\test.obj\" /Fe\"C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\native-test\\metadata_runtime0.exe\"",
+      "output": "PASS actual metadata functions: clock policy through CPU128, healthy read/write no abort, READY/NONE TXUNDERR cleanup, guarded fresh-TRAN host FIFO retirement, delayed drain, programming-only waits without CMD12, CMD12/status/timeout/foreign-owner fail closed, retained primary error, exact clock restore, no write replay\n"
+    },
+    {
+      "runtime_profiles": 1,
+      "command": "call \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" >nul && cl /nologo /std:c++17 /W4 /WX /TP /O2 /DXE_NP_NP2_DUAL_SD_APP_ENABLE=1 /DXE_NP_NP2_LIVE_SD_RUNTIME_PROFILES=1 \"C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\native-test\\test.c\" /Fo\"C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\native-test\\test.obj\" /Fe\"C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_sd_recording_fix_20261104\\metadata-fix\\native-test\\metadata_runtime1.exe\"",
+      "output": "PASS actual metadata functions: clock policy through CPU128, healthy read/write no abort, READY/NONE TXUNDERR cleanup, guarded fresh-TRAN host FIFO retirement, delayed drain, programming-only waits without CMD12, CMD12/status/timeout/foreign-owner fail closed, retained primary error, exact clock restore, no write replay\n"
+    }
+  ],
+  "hardware_access": false,
+  "firmware_built": false,
+  "limits": "MMIO/card endpoints modeled; physical CMD12 retirement and card timing still require device acceptance."
+}
