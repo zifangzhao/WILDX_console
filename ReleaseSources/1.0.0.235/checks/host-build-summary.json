@@ -1,0 +1,17 @@
+{
+  "status": "APP235_BUILD_PASS",
+  "app_version": "1.0.0.235",
+  "app_compilations": 1,
+  "sdk_compilations": 0,
+  "exe_sha256": "212A02EEDE2F13154215BD3393DBCAF2DB82C6979AE8906BAE37DA42471CA28F",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "source_inputs": 204,
+  "source_stable": true,
+  "source_snapshot": "C:/Frank/Code/USB_PCconsole/_artifacts/sd_usb_test_host/source235-spipair",
+  "build_receipt": "C:/Frank/Code/USB_PCconsole/_artifacts/sd_usb_test_host/host-build-receipt-235-spipair.json",
+  "build_receipt_sha256": "FAA960663DFCC04863A41B725874927EEE02328ECB3436E3830E8416CCE078A8",
+  "published_version_unchanged": "1.0.0.234",
+  "published_commit_unchanged": "3f977348a4a8c0a15144c8346cc196a1a42155e7",
+  "scope": "One app build, new checked SDK reused unchanged, existing runtime companions reused; no packaging/promotion/hardware actions.",
+  "legacy_receipt_note": "build-host224 template published_release_unchanged field says222; actual current published release remains234 as recorded here."
+}

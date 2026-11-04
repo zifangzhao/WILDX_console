@@ -1,0 +1,459 @@
+{
+  "status": "ACCEPTED",
+  "scope": "Bounded V2 SD3P20k P2ADC0/1 selected-word1\u20132detectors. Original recording priority preserved; not all-probe/channel/mode/endurance qualification.",
+  "app_crc32": "99CC44F9",
+  "usb_crc32": "FFC27E5A",
+  "app_dir": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\build-r7",
+  "usb_dir": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\usb-paired-r7",
+  "app_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\build-r7\\V2_APP_SD_QUEUE_CANDIDATE.hex",
+  "usb_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\usb-paired-r7\\V2_USB_PAIRED_SD_CANDIDATE.hex",
+  "boot_hex": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_recovery_only_6408DBB8_20261012.hex",
+  "boot_crc32": "6408DBB8",
+  "app_body_sha256": "1F715FBA5B54DE189A28A709D3C0453A318749141A2B1EC76E70065545FD6157",
+  "usb_body_sha256": "CA608487C39E9FEE5A1947F0EEFEF33BBAA8E516F587C5803C2807697426DBDF",
+  "boot_hex_sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
+  "qualified_sd_detector_counts": [
+    1,
+    2
+  ],
+  "qualified_usb_detector_counts": [],
+  "sd_profile": {
+    "mask": 7,
+    "hz": 20000,
+    "probe": 2,
+    "tested_channels": [
+      0,
+      1
+    ],
+    "two_detector_pair": [
+      0,
+      1
+    ],
+    "filter": 6,
+    "gain": 2,
+    "rectify": true,
+    "training_ms": 1000
+  },
+  "results": [
+    {
+      "status": "PASS_WITH_RETAINED_LIMITS",
+      "app_crc32": "7F0C8BD0",
+      "usb_crc32": "80E18959",
+      "detectors": 1,
+      "profile": {
+        "ap_hz": 20000,
+        "probe_mask": 7,
+        "probe": 2,
+        "channels": [
+          0
+        ],
+        "filter": 6,
+        "gain": 2,
+        "rectify": true,
+        "training_ms": 1000
+      },
+      "checks": {
+        "normal_start_stop": true,
+        "complete_verified_np": true,
+        "np_loss_zero": true,
+        "all_three_probe_outputs": true,
+        "imu_schedule_phase_first": true,
+        "imu_loss_zero": true,
+        "imu_primary_all_valid": true,
+        "source_actual_active": true,
+        "source_carrier_loss_zero": true,
+        "events_valid": true,
+        "selected_native_equals_same_dat": true,
+        "selected_controls_equal_same_dat": true,
+        "ble_record_listed": true,
+        "quiet_private_stop": true
+      },
+      "np_blocks": 23868,
+      "source_ticks": 977633280,
+      "stored_source_seconds": 30.55104,
+      "session": 1375396160,
+      "imu_rows": 38185,
+      "native_sensor_strict_result": "FAIL",
+      "native_sensor_partial_records": 2,
+      "imu_source_window_verified": true,
+      "imu_final_slot_known": false,
+      "events": 4,
+      "native_active_seconds": 30.5479,
+      "perf": {
+        "core_hz": 128000000,
+        "cycles_valid": 1,
+        "buckets": {
+          "decode": {
+            "cycles": 132980301,
+            "work": 610958,
+            "calls": 79555,
+            "max_cycles": 3537
+          },
+          "filter": {
+            "cycles": 72684068,
+            "work": 610949,
+            "calls": 79546,
+            "max_cycles": 2809
+          },
+          "kernel": {
+            "cycles": 26782633,
+            "work": 38162,
+            "calls": 38162,
+            "max_cycles": 3154
+          },
+          "event": {
+            "cycles": 8577,
+            "work": 4,
+            "calls": 4,
+            "max_cycles": 2170
+          },
+          "service": {
+            "cycles": 107867037,
+            "work": 79546,
+            "calls": 79546,
+            "max_cycles": 4722
+          }
+        },
+        "scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power."
+      },
+      "instrumented_percent": {
+        "decode": 3.400916598399563,
+        "filter": 1.8588651961345952,
+        "kernel": 0.6849548424359776,
+        "event": 0.00021935325341512839,
+        "service": 2.7586551827212347,
+        "decode_plus_service": 6.159571781120798,
+        "private_irq": 0.033103671815411205
+      },
+      "hardware_selected_max_lag_rows": 211,
+      "max_irq_us": 6407,
+      "max_offer_us": 9213,
+      "calibration_publish_us": 2417,
+      "scope": "Measured instrumented buckets include preemption/measurement; filter/kernel/event are nested, not additive. CPU/power total not measured; passive SPI adds4MB/s DMA writes."
+    },
+    {
+      "status": "PASS_WITH_RETAINED_LIMITS",
+      "app_crc32": "7F0C8BD0",
+      "usb_crc32": "80E18959",
+      "detectors": 2,
+      "profile": {
+        "ap_hz": 20000,
+        "probe_mask": 7,
+        "probe": 2,
+        "channels": [
+          0,
+          1
+        ],
+        "filter": 6,
+        "gain": 2,
+        "rectify": true,
+        "training_ms": 1000
+      },
+      "checks": {
+        "normal_start_stop": true,
+        "complete_verified_np": true,
+        "np_loss_zero": true,
+        "all_three_probe_outputs": true,
+        "imu_schedule_phase_first": true,
+        "imu_loss_zero": true,
+        "imu_primary_all_valid": true,
+        "source_actual_active": true,
+        "source_carrier_loss_zero": true,
+        "events_valid": true,
+        "selected_native_equals_same_dat": true,
+        "selected_controls_equal_same_dat": true,
+        "ble_record_listed": true,
+        "quiet_private_stop": true
+      },
+      "np_blocks": 24204,
+      "source_ticks": 991395840,
+      "stored_source_seconds": 30.98112,
+      "session": 1103494471,
+      "imu_rows": 38727,
+      "native_sensor_strict_result": "FAIL",
+      "native_sensor_partial_records": 2,
+      "imu_source_window_verified": false,
+      "imu_final_slot_known": false,
+      "events": 8,
+      "native_active_seconds": 30.978,
+      "perf": {
+        "core_hz": 128000000,
+        "cycles_valid": 1,
+        "buckets": {
+          "decode": {
+            "cycles": 144729608,
+            "work": 1239120,
+            "calls": 80675,
+            "max_cycles": 3852
+          },
+          "filter": {
+            "cycles": 105131581,
+            "work": 619560,
+            "calls": 80668,
+            "max_cycles": 3314
+          },
+          "kernel": {
+            "cycles": 46880410,
+            "work": 77400,
+            "calls": 38700,
+            "max_cycles": 6054
+          },
+          "event": {
+            "cycles": 17363,
+            "work": 8,
+            "calls": 8,
+            "max_cycles": 2291
+          },
+          "service": {
+            "cycles": 160511718,
+            "work": 80668,
+            "calls": 80668,
+            "max_cycles": 8168
+          }
+        },
+        "scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power."
+      },
+      "instrumented_percent": {
+        "decode": 3.650009886048163,
+        "filter": 2.6513670235731808,
+        "kernel": 1.1823009978855963,
+        "event": 0.00043788636290270513,
+        "service": 4.048026976806121,
+        "decode_plus_service": 7.698036862854284,
+        "private_irq": 0.032951812576667315
+      },
+      "hardware_selected_max_lag_rows": 217,
+      "max_irq_us": 6407,
+      "max_offer_us": 9429,
+      "calibration_publish_us": 2418,
+      "scope": "Measured instrumented buckets include preemption/measurement; filter/kernel/event are nested, not additive. CPU/power total not measured; passive SPI adds4MB/s DMA writes."
+    },
+    {
+      "status": "PASS_WITH_RETAINED_LIMITS",
+      "app_crc32": "3A2A326D",
+      "usb_crc32": "80E18959",
+      "detectors": 2,
+      "profile": {
+        "ap_hz": 20000,
+        "probe_mask": 7,
+        "probe": 2,
+        "channels": [
+          0,
+          1
+        ],
+        "filter": 6,
+        "gain": 2,
+        "rectify": true,
+        "training_ms": 1000
+      },
+      "checks": {
+        "normal_start_stop": true,
+        "complete_verified_np": true,
+        "np_loss_zero": true,
+        "all_three_probe_outputs": true,
+        "imu_schedule_phase_first": true,
+        "imu_loss_zero": true,
+        "imu_primary_all_valid": true,
+        "source_actual_active": true,
+        "source_carrier_loss_zero": true,
+        "events_valid": true,
+        "selected_native_equals_same_dat": true,
+        "selected_controls_equal_same_dat": true,
+        "ble_record_listed": true,
+        "quiet_private_stop": true
+      },
+      "np_blocks": 24052,
+      "source_ticks": 985169920,
+      "stored_source_seconds": 30.78656,
+      "session": 879617174,
+      "imu_rows": 38483,
+      "native_sensor_strict_result": "FAIL",
+      "native_sensor_partial_records": 4,
+      "imu_source_window_verified": false,
+      "imu_final_slot_known": false,
+      "events": 8,
+      "native_active_seconds": 30.7834,
+      "perf": {
+        "core_hz": 128000000,
+        "cycles_valid": 1,
+        "buckets": {
+          "decode": {
+            "cycles": 146456839,
+            "work": 1231336,
+            "calls": 80168,
+            "max_cycles": 3834
+          },
+          "filter": {
+            "cycles": 105921978,
+            "work": 615662,
+            "calls": 80160,
+            "max_cycles": 3481
+          },
+          "kernel": {
+            "cycles": 47356954,
+            "work": 76914,
+            "calls": 38457,
+            "max_cycles": 6097
+          },
+          "event": {
+            "cycles": 16967,
+            "work": 8,
+            "calls": 8,
+            "max_cycles": 2270
+          },
+          "service": {
+            "cycles": 161133657,
+            "work": 80160,
+            "calls": 80160,
+            "max_cycles": 8377
+          }
+        },
+        "scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power."
+      },
+      "instrumented_percent": {
+        "decode": 3.716919036518058,
+        "filter": 2.6881873123988904,
+        "kernel": 1.2018691993899309,
+        "event": 0.00043060444102990575,
+        "service": 4.08940109056342,
+        "decode_plus_service": 7.806320127081479,
+        "private_irq": 0.03168857342756161
+      },
+      "hardware_selected_max_lag_rows": 220,
+      "max_irq_us": 6406,
+      "max_offer_us": 9541,
+      "calibration_publish_us": 2431,
+      "scope": "Measured instrumented buckets include preemption/measurement; filter/kernel/event are nested, not additive. CPU/power total not measured; passive SPI adds4MB/s DMA writes."
+    },
+    {
+      "status": "PASS_WITH_RETAINED_LIMITS",
+      "app_crc32": "99CC44F9",
+      "usb_crc32": "FFC27E5A",
+      "detectors": 2,
+      "profile": {
+        "ap_hz": 20000,
+        "probe_mask": 7,
+        "probe": 2,
+        "channels": [
+          0,
+          1
+        ],
+        "filter": 6,
+        "gain": 2,
+        "rectify": true,
+        "training_ms": 1000
+      },
+      "checks": {
+        "normal_start_stop": true,
+        "complete_verified_np": true,
+        "np_loss_zero": true,
+        "all_three_probe_outputs": true,
+        "imu_schedule_phase_first": true,
+        "imu_loss_zero": true,
+        "imu_primary_all_valid": true,
+        "source_actual_active": true,
+        "source_carrier_loss_zero": true,
+        "events_valid": true,
+        "selected_native_equals_same_dat": true,
+        "selected_controls_equal_same_dat": true,
+        "ble_record_listed": true,
+        "quiet_private_stop": true
+      },
+      "np_blocks": 8504,
+      "source_ticks": 348323840,
+      "stored_source_seconds": 10.88512,
+      "session": 1610345220,
+      "imu_rows": 13604,
+      "native_sensor_strict_result": "PASS",
+      "native_sensor_partial_records": 0,
+      "imu_source_window_verified": true,
+      "imu_final_slot_known": false,
+      "events": 4,
+      "native_active_seconds": 10.882,
+      "perf": {
+        "core_hz": 128000000,
+        "cycles_valid": 1,
+        "buckets": {
+          "decode": {
+            "cycles": 51483916,
+            "work": 435280,
+            "calls": 28342,
+            "max_cycles": 3808
+          },
+          "filter": {
+            "cycles": 36882472,
+            "work": 217637,
+            "calls": 28334,
+            "max_cycles": 3364
+          },
+          "kernel": {
+            "cycles": 16678227,
+            "work": 27160,
+            "calls": 13580,
+            "max_cycles": 6133
+          },
+          "event": {
+            "cycles": 8512,
+            "work": 4,
+            "calls": 4,
+            "max_cycles": 2182
+          },
+          "service": {
+            "cycles": 56832225,
+            "work": 28334,
+            "calls": 28334,
+            "max_cycles": 8248
+          }
+        },
+        "scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power."
+      },
+      "instrumented_percent": {
+        "decode": 3.6961780348281565,
+        "filter": 2.647898479139864,
+        "kernel": 1.1973777654613122,
+        "event": 0.0006111009005697482,
+        "service": 4.0801484820115785,
+        "decode_plus_service": 7.776326516839735,
+        "private_irq": 0.03303520147950744
+      },
+      "hardware_selected_max_lag_rows": 215,
+      "max_irq_us": 6407,
+      "max_offer_us": 9446,
+      "calibration_publish_us": 2446,
+      "scope": "Measured instrumented buckets include preemption/measurement; filter/kernel/event are nested, not additive. CPU/power total not measured; passive SPI adds4MB/s DMA writes."
+    }
+  ],
+  "pressure": {
+    "requested_us": 225000,
+    "actual_fine_us": 225041,
+    "actual_dwt_us": 225041.1953125,
+    "owner_mask": "0x40f0f",
+    "next_launch_held": true,
+    "diagnostic_crc32": "3A2A326D",
+    "scope": "Diagnostic stayslocal; finalproduction99coldframefix reuses identical Offer/IRQ/Service/writer/filter bodies and pressureobject evidence, plus exhaustive actualInit/geometry/Offer native checks."
+  },
+  "same_app_restart": {
+    "first": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\restart-fixed-first",
+    "second": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\restart-fixed-second",
+    "second_generation": 2,
+    "second_source_epoch": 2,
+    "second_events": 4,
+    "reset_or_mode_switch_between": false
+  },
+  "pair_capability_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\final-pair-r7\\read-only-caps.json",
+  "restoration_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\restoration-complete.json",
+  "lease_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\owner\\lease.json",
+  "source_freeze": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\final-source-freeze\\manifest.json",
+  "source_freeze_zip": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\final-source-freeze\\source-freeze.zip",
+  "source_freeze_zip_sha256": "98C6FB86AA813E267F38B8E11FEAB119B70BE6580271ED6BD514BEC7616563FB",
+  "limits": [
+    "Only P2 lane0 ADC0/1 nativeword DMAwindow measured; allSPIwords stilldrained4MB/s, not ADC-only hardwaredecode. No rewiring/NP/IMU timer/DMA owner changes.",
+    "StartupSNS2 partialMAG-unavailable records2/2/4 in earliernormal/pressure runs remain strictFAIL snapshots; allprimaryIMUgridrows valid. Finalrestart2141nativeSNS2allvalid. Valid-only reviews retained, no unavailablevalue relabeled.",
+    "Earliernormal2 lastretainedIMUslot interval656..975us beyondstoredcompleteNPprefix; pressure16..334us beyond. source_windowFalse preserved. PhysicalterminalNPpartial/nativeconversionphase/finalscheduledordinal unknown. Finalrestartsource_windowTrue.",
+    "RTC/GUI IMRO application not newly qualified by directbenchadapter; unchanged productionworkflow evidence reused separately.",
+    "No totalCPU or electricalpower measurement; bucket percentages normalized nativeactive seconds include preemption. Nested buckets mustnot besummed.",
+    "Historical source dependency closure limitations in priorinputfreeze retained; exactcurrentchangedTUs/commands and actualnativefixtures secured.",
+    "Failed9Cguard,37F0map,40B/71FC/20coldstartup and7F0phase9restart candidates retained asfailures, never relabeledpass; no cardformat/deletion performed."
+  ],
+  "created_utc": "2026-11-04T22:44:12.695522+00:00"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": 76,
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "app_compiled": false,
+  "hardware": false,
+  "test_source_sha256": "B75B1AC39E6E9AB3025AB4E59851FBFB1FB98BB16DDD33DFB984240B9BA721A9",
+  "native_metadata_sha256": "8A1795F5382F13023C52A3B71F816F2EFC3B888F6E9D1AB65883BD66723519A9",
+  "source_delta_against_234": [
+    {
+      "path": "Neuropixels\\ClosedLoop\\NpClosedLoopCarrier.cs",
+      "sha256": "4FFC1F6EAFC4FBBF7995DCE2CAEEFC2871532920E5A28E24CEF531B6F5158374"
+    }
+  ],
+  "scope": "Actual compiled SDK validates native P2 tap2 metadata plus legacy P3tap0x203, v15/v16, rates, CRC and wrong-source negative controls. Existing NP/IMU export sources unchanged."
+}

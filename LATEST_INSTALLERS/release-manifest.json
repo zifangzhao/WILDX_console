@@ -1,23 +1,24 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0.234",
-  "releaseId": "WILDX_1.0.0.234_CLOSED_LOOP_QUALIFIED",
-  "baselineVersion": "1.0.0.232",
+  "version": "1.0.0.235",
+  "releaseId": "WILDX_1.0.0.235_CLOSED_LOOP_QUALIFIED",
+  "baselineVersion": "1.0.0.234",
   "installer": {
-    "file": "WILDX_console-Setup-1.0.0.234.exe",
-    "sha256": "257B7B6DDDEFB494F237F9F69AEEF34C0019D932BC32740450C299567E7C1F4B",
-    "bytes": 9244516
+    "file": "WILDX_console-Setup-1.0.0.235.exe",
+    "sha256": "2457EF7B64E813461C32BD91D09055C03C898B2BEE32A9C4E27D2AE7893112BD",
+    "bytes": 9274205
   },
-  "guiSha256": "08242B6B79966517890BB4E53153E5C47D7476D415CE9B05EFDC1014AE1C3B3E",
-  "sdkSha256": "A381FFC3CD91A9CC2007E39AECBEFDABD1BB6023E343B481CAB600E371FDD85F",
-  "catalogSha256": "D9BE3C8390C7C5675CF882831355F4E51AD80AF1958A0B5B0641F2624D3E5084",
-  "sourceArchiveSha256": "73D995CF92B6E50A16B34DB1EDCB29B57A0EA1D76CD47C4FC3722339FD0C1149",
-  "sourceGitBaseline": "d3c1a2d0b1432167f91efe715dd105f308c73cc2",
-  "sourcePublicationCommit": "d3c1a2d0b1432167f91efe715dd105f308c73cc2",
-  "sourcePublicationCommitRole": "Pre-publication baseline plus exact compiled source archive",
-  "sourceIdentityRole": "Exact compiled host inputs archived with release",
-  "sourceProvenance": "../ReleaseSources/1.0.0.234/host-source-archive/source-manifest.json",
-  "validation": "../ReleaseSources/1.0.0.234/qualification.json",
+  "guiSha256": "212A02EEDE2F13154215BD3393DBCAF2DB82C6979AE8906BAE37DA42471CA28F",
+  "sdkSha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "catalogSha256": "B4DF00666497BD177F5136E89BB3778340A3CAD7151EE0437342CEEEDF8BA7C2",
+  "sourceArchiveSha256": "3BAB0490405DB3546EF58847BA7C989815EEC43C1DC3A7C20E3FBA5DF4712E75",
+  "sourceGitBaseline": "3f977348a4a8c0a15144c8346cc196a1a42155e7",
+  "sourcePublicationCommit": "3f977348a4a8c0a15144c8346cc196a1a42155e7",
+  "sourcePublicationCommitRole": "Pre-publication baseline plus exact compiled host/SDK source archives",
+  "sourceIdentityRole": "Exact compiled host and SDK inputs archived with release",
+  "sourceProvenance": "../ReleaseSources/1.0.0.235/host-source-archive/source-manifest.json",
+  "validation": "../ReleaseSources/1.0.0.235/qualification.json",
+  "sdkSourceProvenance": "../ReleaseSources/1.0.0.235/sdk-source-archive/source-manifest.json",
   "firmware": [
     {
       "family": 1,
@@ -29,11 +30,11 @@
     },
     {
       "family": 2,
-      "release": "V2_SD_20K_3PROBE_RIPPLE_APP680A1685_USB80E18959_20261104",
-      "app": "680A1685",
-      "usb": "80E18959",
+      "release": "V2_SD_20K_3PROBE_P2_SELECTED_RIPPLE_APP99CC44F9_USBFFC27E5A_20261104",
+      "app": "99CC44F9",
+      "usb": "FFC27E5A",
       "recovery": "6408DBB8",
-      "stage": "BOUNDED_SD_ONE_DETECTOR_PASS_SD_TWO_AND_USB_CLOSED_LOOP_DISABLED"
+      "stage": "BOUNDED_SD_P2_SELECTED_ONE_TWO_DETECTOR_PASS_USB_CLOSED_LOOP_DISABLED"
     }
   ],
   "closedLoopQualification": {
@@ -59,14 +60,49 @@
       "filter": 6,
       "usb_detectors": [],
       "sd_detectors": [
+        1,
+        2
+      ],
+      "detector_probe": 2,
+      "adc_channels": [
+        0,
         1
       ],
-      "app_crc32": "680A1685",
-      "usb_crc32": "80E18959",
-      "ordinary_sd": "pass",
-      "one_sd_detector": "Pass, including a controlled 225 ms owner hold",
-      "two_sd_detectors": "Disabled: 107 NP gaps and 283 dropped blocks under the 225 ms hold",
-      "scope": "Bounded same-card recording and full readback; no all-mode or endurance claim"
+      "tap": 2,
+      "app_crc32": "99CC44F9",
+      "usb_crc32": "FFC27E5A",
+      "normal_one": {
+        "np_blocks": 23868,
+        "imu_rows": 38185,
+        "events": 4,
+        "parent_app_crc32": "7F0C8BD0",
+        "scope": "Hot-path evidence reused for unchanged recording/Offer/IRQ/Service/filter bodies; final Init/geometry fix checked independently"
+      },
+      "normal_two": {
+        "np_blocks": 24204,
+        "imu_rows": 38727,
+        "events": 8,
+        "parent_app_crc32": "7F0C8BD0"
+      },
+      "pressure_two": {
+        "np_blocks": 24052,
+        "imu_rows": 38483,
+        "events": 8,
+        "actual_hold_us": 225041,
+        "diagnostic_app_crc32": "3A2A326D",
+        "owner_mask": "0x40f0f",
+        "next_launch_held": true
+      },
+      "same_app_restart": {
+        "generation": 2,
+        "source_epoch": 2,
+        "np_blocks": 8504,
+        "imu_rows": 13604,
+        "events": 4,
+        "source_window_verified": true,
+        "no_reset_or_mode_switch_between": true
+      },
+      "scope": "Bounded SD3P20k P2ADC0/1 Ripple selected-word one/two detectors only. Final same-APP restart and all saved NP/IMU/native/event checks passed. USB closed-loop remains disabled."
     }
   },
   "expectedPayloadFiles": 49,
@@ -166,8 +202,8 @@
     },
     {
       "path": "Firmware/releases.json",
-      "bytes": 32491,
-      "sha256": "D9BE3C8390C7C5675CF882831355F4E51AD80AF1958A0B5B0641F2624D3E5084"
+      "bytes": 33283,
+      "sha256": "B4DF00666497BD177F5136E89BB3778340A3CAD7151EE0437342CEEEDF8BA7C2"
     },
     {
       "path": "Firmware/V1/acceptance.json",
@@ -226,23 +262,23 @@
     },
     {
       "path": "Firmware/V2/acceptance.json",
-      "bytes": 2930,
-      "sha256": "93D9F7BBF24ADAC1F00EB119DCA8C204DFB1CFE7F970E7A742165C7E5BF94039"
+      "bytes": 17165,
+      "sha256": "252D354A0D7A6A78886D9690E5457E79845F165BC84E53BD19940990BB086D23"
     },
     {
-      "path": "Firmware/V2/V2_APP680A1685.hex",
-      "bytes": 1007840,
-      "sha256": "78606C2B47FBABF52BF0CBFF63060FC6A30464F7897767E7F904EC829523A63E"
+      "path": "Firmware/V2/V2_APP99CC44F9.hex",
+      "bytes": 1033332,
+      "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
     },
     {
-      "path": "Firmware/V2/V2_APP680A1685.xenp",
-      "bytes": 366440,
-      "sha256": "103590B78C110983A290C59FFBE3758C4048A567183B920AA2099A0549320FAA"
+      "path": "Firmware/V2/V2_APP99CC44F9.xenp",
+      "bytes": 375712,
+      "sha256": "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
     },
     {
-      "path": "Firmware/V2/V2_FUSED_BOOT_USB80E18959_APP680A1685.hex",
+      "path": "Firmware/V2/V2_FUSED_BOOT_USBFFC27E5A_APP99CC44F9.hex",
       "bytes": 5745164,
-      "sha256": "F03608A7ABD544869D0619A2B481F81BC25F79E42F8D2479203A780377A850D1"
+      "sha256": "5AD4CE8600D3A53FE5B0DC2B8DBED2ED20638F8D60AECAC7CCB6F22138D3F7FB"
     },
     {
       "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -250,9 +286,9 @@
       "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
     },
     {
-      "path": "Firmware/V2/V2_USB80E18959.hex",
+      "path": "Firmware/V2/V2_USBFFC27E5A.hex",
       "bytes": 919716,
-      "sha256": "BD2A86F913512472002C38EBC6E0990BBEAA02DDAAB0A6AB71FA6336B8999E27"
+      "sha256": "16DF81F32A1646778621AD69F4381B3E8E6F86775BF024BDC49D1D7DC841AEFC"
     },
     {
       "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -297,7 +333,7 @@
     {
       "path": "NpV2SdDatExport.dll",
       "bytes": 683520,
-      "sha256": "A381FFC3CD91A9CC2007E39AECBEFDABD1BB6023E343B481CAB600E371FDD85F"
+      "sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB"
     },
     {
       "path": "OpenTK.dll",
@@ -311,8 +347,8 @@
     },
     {
       "path": "WILDX_console.exe",
-      "bytes": 2835968,
-      "sha256": "08242B6B79966517890BB4E53153E5C47D7476D415CE9B05EFDC1014AE1C3B3E"
+      "bytes": 2836480,
+      "sha256": "212A02EEDE2F13154215BD3393DBCAF2DB82C6979AE8906BAE37DA42471CA28F"
     },
     {
       "path": "WILDX_console.exe.config",

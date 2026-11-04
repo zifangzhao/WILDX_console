@@ -25,7 +25,7 @@ namespace USB512_interface
                 foreach(var c in value.Channels)if(c==null||c.Gain<0.1F||c.Gain>1000)throw new InvalidDataException("Invalid saved threshold gain.");
                 NpClosedLoopControl.Request(1,1,15000,value.TrainingStartMs,value.TrainingDurationMs,value.Channels);return value;}
             catch(Exception e) when(e is IOException||e is UnauthorizedAccessException||e is ArgumentException||e is InvalidDataException){
-                return new NpClosedLoopSettings{Channels=new[]{new NpClosedLoopChannel{Probe=(byte)(np2?3:1),Channel=(ushort)(np2?256:0)}}};
+                return new NpClosedLoopSettings{Channels=new[]{new NpClosedLoopChannel{Probe=(byte)(np2?2:1),Channel=0}}};
             }
         }
         internal void Save(bool np2)
@@ -61,11 +61,18 @@ namespace USB512_interface
 
         // Bit 0 admits one detector; bit 1 admits two. Populate only from the
         // selected firmware's USB and SD qualification receipts.
-        const int V1UsbDetectors=3,V1SdDetectors=3,V2UsbDetectors=0,V2SdDetectors=1;
+        const int V1UsbDetectors=3,V1SdDetectors=3,V2UsbDetectors=0,V2SdDetectors=3;
         internal static bool CanUseDetectors(bool np2,bool sd,uint mask,uint hz,int count)
         {
             int qualified=np2?(sd?V2SdDetectors:V2UsbDetectors):(sd?V1SdDetectors:V1UsbDetectors);
             return CanUseProfile(np2,mask,hz)&&count>=1&&count<=2&&(qualified&(1<<(count-1)))!=0;
+        }
+
+        internal static bool CanUseSources(bool np2,bool sd,NpClosedLoopChannel[] channels)
+        {
+            if(!np2||!sd||channels==null||channels.Length!=2)return true;
+            var a=channels[0];var b=channels[1];
+            return a!=null&&b!=null&&a.Probe==2&&b.Probe==2&&a.Channel<=1&&b.Channel<=1&&a.Channel!=b.Channel;
         }
 
         static string ProfileRequirement(bool np2)
@@ -79,9 +86,10 @@ namespace USB512_interface
             try{
                 bool profile=CanUseProfile(np2,mask,hz);
                 bool filter=true;foreach(var c in settings.Channels)if(c==null||c.Filter!=RippleFilter)filter=false;
-                bool enable=settings.Enabled&&filter&&CanUseDetectors(np2,sd,mask,hz,settings.Channels.Length);
+                bool source=CanUseSources(np2,sd,settings.Channels);
+                bool enable=settings.Enabled&&filter&&source&&CanUseDetectors(np2,sd,mask,hz,settings.Channels.Length);
                 if(settings.Enabled && mask!=0 && !enable){
-                    report?.Invoke(!filter?"Closed-loop is off: only the Ripple filter has been qualified.":profile?"Closed-loop is off: this detector count is not qualified for "+(sd?"SD":"USB")+" recording.":
+                    report?.Invoke(!filter?"Closed-loop is off: only the Ripple filter has been qualified.":!source?"Two V2 SD detectors require P2 channels 0 and 1.":profile?"Closed-loop is off: this detector count is not qualified for "+(sd?"SD":"USB")+" recording.":
                         "Closed-loop is off for this recording. Required profile is "+ProfileRequirement(np2)+".");
                 }
                 if(!enable&&!settings.MayBeConfigured)return null;
@@ -122,12 +130,13 @@ namespace USB512_interface
                 foreach(int h in new[]{34,36,78,52,46})layout.RowStyles.Add(new RowStyle(SizeType.Absolute,h));
                 var enabled=new CheckBox{Text="Enable on-device event detection ("+ProfileRequirement(np2)+")",AutoSize=true,Checked=settings.Enabled};layout.Controls.Add(enabled,0,0);
                 var count=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=70};count.Items.AddRange(qualified.ToArray());count.SelectedItem=settings.Channels.Length;if(count.SelectedIndex<0)count.SelectedIndex=0;
-                var countRow=new FlowLayoutPanel{Dock=DockStyle.Fill};countRow.Controls.AddRange(new Control[]{WildXTheme.Label("Channels"),count,WildXTheme.Label("Events only")});layout.Controls.Add(countRow,0,1);
+                var countHint=WildXTheme.Label("Events only");
+                var countRow=new FlowLayoutPanel{Dock=DockStyle.Fill};countRow.Controls.AddRange(new Control[]{WildXTheme.Label("Channels"),count,countHint});layout.Controls.Add(countRow,0,1);
                 var grid=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=6,RowCount=3};layout.Controls.Add(grid,0,2);
                 foreach(string label in new[]{"Detector","Probe","Channel","Band","Threshold gain","Rectify"})grid.Controls.Add(WildXTheme.Label(label),grid.Controls.Count,0);
                 var probes=new NumericUpDown[2];var channels=new NumericUpDown[2];var filters=new ComboBox[2];var gains=new NumericUpDown[2];var rectified=new CheckBox[2];
                 for(int i=0;i<2;i++){
-                    var c=i<settings.Channels.Length?settings.Channels[i]:new NpClosedLoopChannel{Probe=(byte)(np2?3:1),Channel=(ushort)(np2?257:1)};
+                    var c=i<settings.Channels.Length?settings.Channels[i]:new NpClosedLoopChannel{Probe=(byte)(np2?2:1),Channel=1};
                     probes[i]=new NumericUpDown{Minimum=1,Maximum=3,Value=c.Probe,Width=55};channels[i]=new NumericUpDown{Minimum=0,Maximum=383,Value=c.Channel,Width=65};
                     filters[i]=new ComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=125};filters[i].Items.Add("Ripple");filters[i].SelectedIndex=0;
                     gains[i]=new NumericUpDown{Minimum=0.1M,Maximum=1000,DecimalPlaces=1,Increment=0.5M,Value=(decimal)c.Gain,Width=90};rectified[i]=new CheckBox{Checked=c.Rectify,AutoSize=true};
@@ -138,11 +147,12 @@ namespace USB512_interface
                 var training=new FlowLayoutPanel{Dock=DockStyle.Fill};training.Controls.AddRange(new Control[]{WildXTheme.Label("Training starts after (s)"),start,WildXTheme.Label("Duration (s)"),duration});layout.Controls.Add(training,0,3);
                 var save=new Button{Text="Save settings",AutoSize=true};var cancel=new Button{Text="Cancel",AutoSize=true,DialogResult=DialogResult.Cancel};
                 var buttons=new FlowLayoutPanel{Dock=DockStyle.Fill};buttons.Controls.AddRange(new Control[]{save,cancel});layout.Controls.Add(buttons,0,4);
-                Action update=delegate{int selected=(int)count.SelectedItem;grid.Enabled=training.Enabled=count.Enabled=enabled.Checked;for(int i=0;i<2;i++)foreach(Control c in new Control[]{probes[i],channels[i],filters[i],gains[i],rectified[i]})c.Enabled=i<selected;};
+                Action update=delegate{int selected=(int)count.SelectedItem;countHint.Text=np2&&sd&&selected==2?"P2 channels 0 and 1":"Events only";grid.Enabled=training.Enabled=count.Enabled=enabled.Checked;for(int i=0;i<2;i++)foreach(Control c in new Control[]{probes[i],channels[i],filters[i],gains[i],rectified[i]})c.Enabled=i<selected;};
                 enabled.CheckedChanged+=delegate{update();};count.SelectedIndexChanged+=delegate{update();};update();
                 save.Click+=delegate{
                     settings.Enabled=enabled.Checked;settings.TrainingStartMs=(uint)(start.Value*1000);settings.TrainingDurationMs=(uint)(duration.Value*1000);settings.Channels=new NpClosedLoopChannel[(int)count.SelectedItem];
                     for(int i=0;i<settings.Channels.Length;i++)settings.Channels[i]=new NpClosedLoopChannel{Probe=(byte)probes[i].Value,Channel=(ushort)channels[i].Value,Filter=RippleFilter,Gain=(float)gains[i].Value,Rectify=rectified[i].Checked};
+                    if(!CanUseSources(np2,sd,settings.Channels)){MessageBox.Show(form,"Two V2 SD detectors require P2 channels 0 and 1.");return;}
                     if(settings.Channels.Length==2&&settings.Channels[0].Probe==settings.Channels[1].Probe&&settings.Channels[0].Channel==settings.Channels[1].Channel){MessageBox.Show(form,"Select two different channels.");return;}
                     try{settings.Save(np2);form.DialogResult=DialogResult.OK;}
                     catch(Exception e) when(e is IOException||e is UnauthorizedAccessException){MessageBox.Show(form,"Settings could not be saved: "+e.Message);}

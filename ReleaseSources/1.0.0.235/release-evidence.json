@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0.235",
+  "owner_accepted_sha256": "51D6C4754E789CE1039DADE2B4516133272E107F79CEED57C9FDE27EAC97C049",
+  "normalization_scope": "Bundled acceptance bridge only lowercases status; this original receipt remains byte-identical.",
+  "files": [
+    {
+      "path": "v2-qualification.json",
+      "bytes": 16783,
+      "sha256": "51D6C4754E789CE1039DADE2B4516133272E107F79CEED57C9FDE27EAC97C049"
+    },
+    {
+      "path": "checks/restoration-complete.json",
+      "bytes": 588,
+      "sha256": "F7B6B25EF565AA0F7E759EB7E3FCF77C759FC729F8E39A8E93EA3F50EADAEE1A"
+    },
+    {
+      "path": "checks/lease.json",
+      "bytes": 363,
+      "sha256": "E49DFAEAF3733F2E5E1D366CF086AF92B4911506D830415202846C926C75E695"
+    },
+    {
+      "path": "checks/cleanup-complete.json",
+      "bytes": 915,
+      "sha256": "5B461508B3190C62857A568DDDEA1A3EEAAFF4E82207BC3AAA1863F96EC63948"
+    },
+    {
+      "path": "firmware/V2/source-freeze/source-freeze.zip",
+      "bytes": 429051,
+      "sha256": "98C6FB86AA813E267F38B8E11FEAB119B70BE6580271ED6BD514BEC7616563FB"
+    },
+    {
+      "path": "firmware/V2/source-freeze/manifest.json",
+      "bytes": 248594,
+      "sha256": "B674710D3F8947DA1C1C560060453D9434C2CD3BC6FF9AB040306FC7AC2284EE"
+    },
+    {
+      "path": "checks/catalog-loader.json",
+      "bytes": 460,
+      "sha256": "D3A948D0961768D568C38B5B7B9D51A59B4DAC0CED1B5D22ED423D4CDC9AFF5A"
+    },
+    {
+      "path": "checks/catalog-loader.log",
+      "bytes": 164,
+      "sha256": "1227A428E2D896F52A4E26D05FCFCB6579C537F0FD494C02A7BACB488F43DAB0"
+    },
+    {
+      "path": "checks/host-build-summary.json",
+      "bytes": 1073,
+      "sha256": "929C29798DBAFBE793B07EEB26010F67A4974CECB7B6FFA448DC4CB1ADA79779"
+    },
+    {
+      "path": "checks/sdk-tap-legacy.json",
+      "bytes": 759,
+      "sha256": "93D8D02851C02BBAF10EC1B218087DBE47A6C5EE08DE390E8C4C6CC46312A48C"
+    },
+    {
+      "path": "checks/software.json",
+      "bytes": 509,
+      "sha256": "FE2017B0A5CD1B65A396E0725D079DE497842DCB174BA572F814BA2FBD508A40"
+    },
+    {
+      "path": "checks/compact-hil.zip",
+      "bytes": 4404306,
+      "sha256": "417D9023EE208AE645C722E046B5D6635845BF43EA6E1AA4C30BFC8DE269F43F"
+    },
+    {
+      "path": "checks/compact-hil-manifest.json",
+      "bytes": 117521,
+      "sha256": "D690AD75F87F0085B35EF91BE918B1B4739E0FF4525BDBFAB79FBDF66683A42F"
+    },
+    {
+      "path": "checks/canonical-integration.json",
+      "bytes": 3645,
+      "sha256": "5DD63269398A5CA06F5F17A10CAF499BA323E46A06270CA1288017551A097030"
+    }
+  ]
+}

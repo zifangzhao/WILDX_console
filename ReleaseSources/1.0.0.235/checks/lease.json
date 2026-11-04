@@ -1,0 +1,11 @@
+﻿{
+    "pid":  38848,
+    "global_status":  "released",
+    "task":  "closed_loop_fix_20261102/V2",
+    "uid":  "001A0004434250062039314E",
+    "status":  "closed",
+    "acquired_utc":  "2026-11-04T20:24:09.3980476Z",
+    "scope":  "GLOBAL+UID",
+    "started_utc":  "2026-11-04T20:24:09.2015632Z",
+    "closed_utc":  "2026-11-04T22:44:05.1052975Z"
+}

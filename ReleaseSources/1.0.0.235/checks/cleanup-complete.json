@@ -1,0 +1,13 @@
+{
+  "status": "COMPLETE",
+  "removed_generated_payload_bytes": 8589469440,
+  "retained_neural_fragment_bytes": 5308416,
+  "files_removed": 27,
+  "fixture_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\compact\\manifest.json",
+  "fixture_manifest_sha256": "5A739DD41B6B10248E524E30E363954AAA3F2B8B2B1377653529BE026BCFF68A",
+  "original_restore_backups_preserved": true,
+  "scope": "Only owned generated neuralDAT/partial exports under exact testroot; first/last128 complete rows, metadata, raw64native/SPI bootstrap, sensor files and original firmware restore backups retained. No user/on-card recording touched.",
+  "utc": "2026-11-04T22:45:46.466732+00:00",
+  "original_full_backup_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+  "original_options_backup_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F"
+}

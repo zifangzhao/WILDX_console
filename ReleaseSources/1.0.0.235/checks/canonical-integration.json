@@ -1,0 +1,73 @@
+{
+  "status": "EXACT_TARGET_OVERLAY_INTEGRATED_SHARED_CORE_UNCHANGED",
+  "target": "D:\\Code\\XE_NP_V2\\ReleaseSources\\V2_SPI_SELECTED_99CC44F9_FFC27E5A_20261104",
+  "target_recipe_sha256": "97CEFFFA202DB8B737E71FF311CC704EDA83E9B91B893A4F79E2E75120445F03",
+  "source_map": [
+    {
+      "unit": "xe_np_np2_capture_port",
+      "relative": "Core/Src/xe_np_np2_capture_port.c",
+      "sha256": "0750203B9A3D2113C41AAE13A81C725B303C76C92001307EC7042551B5331E9B",
+      "origin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\Core\\Src\\xe_np_np2_capture_port.c"
+    },
+    {
+      "unit": "xe_np_np2_closed_loop_spi",
+      "relative": "Core/Src/xe_np_np2_closed_loop_spi.c",
+      "sha256": "73C6A3DF475529C97A9EC940423180EBC067CF45F587B47498621990F7059B00",
+      "origin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\Core\\Src\\xe_np_np2_closed_loop_spi.c"
+    },
+    {
+      "unit": "xe_np_np2_closed_loop_carrier",
+      "relative": "Core/Src/xe_np_np2_closed_loop_carrier.c",
+      "sha256": "D0EEC0450979105C2EB9994F259D56AB86327022561062D4D77FB648FD63323C",
+      "origin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\Core\\Src\\xe_np_np2_closed_loop_carrier.c"
+    },
+    {
+      "unit": "xe_np_np2_cl_selected",
+      "relative": "Core/Src/xe_np_np2_cl_selected.c",
+      "sha256": "FE4CC62F9422CFF5310559043074F69FA1F8E08BE26B3DF36D18A1AFCCF58F33",
+      "origin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\Core\\Src\\xe_np_np2_cl_selected.c"
+    },
+    {
+      "unit": "xe_np_usb_sd_test_job",
+      "relative": "Core/Src/xe_np_usb_sd_test_job.c",
+      "sha256": "7CE99F311B501C790B688B548D14C6463E61492B5A033A06EB66C1479916D974",
+      "origin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\usb-paired-r7\\xe_np_usb_sd_test_job.c"
+    },
+    {
+      "unit": "selected_header",
+      "relative": "Core/Inc/xe_np_np2_cl_selected.h",
+      "sha256": "F1CC4D063D0899693E10187A3633825492EB15E16C5B7CB87E8601B292A6014C",
+      "origin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\Core\\Inc\\xe_np_np2_cl_selected.h"
+    }
+  ],
+  "shared_core_unchanged": [
+    {
+      "path": "Core\\Src\\xe_np_np2_capture_port.c",
+      "sha256": "3B4BFBE55529017ABEF6A7AED7240B8B88879176C6CFDBA6495E455AC54F357E"
+    },
+    {
+      "path": "Core\\Src\\xe_np_np2_closed_loop_spi.c",
+      "sha256": "B930028B35BC6F1E098F0E10D95D733E0398A700C8D09999C907FAEF3A5CEAE8"
+    },
+    {
+      "path": "Core\\Src\\xe_np_np2_closed_loop_carrier.c",
+      "sha256": "291F7C7701BFA779A4048FB255F8565C5972ED2000D4EA1CFA898B3385D10892"
+    },
+    {
+      "path": "Core\\Src\\xe_np_usb_sd_test_job.c",
+      "sha256": "7CE99F311B501C790B688B548D14C6463E61492B5A033A06EB66C1479916D974"
+    },
+    {
+      "path": "Core\\Inc\\xe_np_imu_grid_queue.h",
+      "sha256": "8E1D2E8C980D084580120C0F3F47D8F2D6CCA01BD01BE0B12D0CD83BBCF70A46"
+    }
+  ],
+  "note_before_sha256": "ED52116E719F94E7CDF3B97E4D1901523176B9FEC0B19FFE709771E220B2F3C0",
+  "note_after_sha256": "AB3BA4BBCE2F4772DDE756FF06F9B8A1A9F62C85BBE89D58E19E1D5ABB2AC26B",
+  "acceptance_sha256": "51D6C4754E789CE1039DADE2B4516133272E107F79CEED57C9FDE27EAC97C049",
+  "source_zip_sha256": "98C6FB86AA813E267F38B8E11FEAB119B70BE6580271ED6BD514BEC7616563FB",
+  "compiled_objects": 0,
+  "hardware_access": false,
+  "commit_or_publish": false,
+  "limits": "SD-only exact overlay integration; common-Core guarded feature integration and clean dependency closure not claimed"
+}

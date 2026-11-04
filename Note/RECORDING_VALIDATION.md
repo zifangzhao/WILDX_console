@@ -33,7 +33,7 @@ The app limits closed-loop requests to the qualified profiles below. The connect
 | Logger and recording profile | USB | BLE-controlled SD |
 |---|---|---|
 | V1 with P1 + P2 at 15 kHz | One/two Ripple detectors passed 60-second checks on APP5F90FD3B/USB8454D202. Initial IMU slot and terminal coverage limits remain explicit. | One/two Ripple detectors passed ~31-second captures and matching-service full readbacks on the same pair. |
-| V2 with P1 + P2 + P3 at 20 kHz | Closed-loop remains disabled after the earlier two-detector producer overrun. Ordinary USB data-path objects are unchanged in the matched service. | APP680A1685/USB80E18959: ordinary recording and one Ripple detector pass full NP/IMU readbacks and controlled 225 ms owner-hold checks. Two detectors lose NP data under the hold and remain disabled. Initial native MAG availability and final-grid-tail limits are explicit. |
+| V2 with P1 + P2 + P3 at 20 kHz | Closed-loop remains disabled after the earlier two-detector producer overrun. Ordinary USB data-path objects are unchanged in the matched service. | APP99CC44F9/USBFFC27E5A: SPI-selected P2 ADC0/1 one/two Ripple detectors pass scoped full NP/IMU readbacks, a two-detector controlled 225 ms owner hold and same-APP restart. Earlier two-detector failures remain recorded. Initial native MAG availability and final-grid-tail limits are explicit. |
 
 ## Current development result
 

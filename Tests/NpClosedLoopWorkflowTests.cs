@@ -47,7 +47,7 @@ static class NpClosedLoopWorkflowTests
     static void ProfileLimits()
     {
         // USB/SD masks from the selected firmware's qualification matrix.
-        int[] qualifiedCounts={3,3,0,1};
+        int[] qualifiedCounts={3,3,0,3};
         foreach(bool np2 in new[]{false,true}){
             uint acceptedMask=np2?7U:3U, acceptedHz=np2?20000U:15000U;
             foreach(uint mask in Enumerable.Range(0,8).Select(i=>(uint)i))
@@ -66,7 +66,7 @@ static class NpClosedLoopWorkflowTests
                     if(expected){
                         var modeSettings=Settings();
                         modeSettings.Channels=Enumerable.Range(0,count).Select(i=>new NpClosedLoopChannel{
-                            Probe=(byte)(np2?3:i+1),Channel=(ushort)(np2?256+i:0),Gain=2
+                            Probe=(byte)(np2?2:i+1),Channel=(ushort)(np2?i:0),Gain=2
                         }).ToArray();
                         var sent=new List<NpClosedLoopControl>();var modeNotices=new List<string>();
                         var configured=NpClosedLoopSettings.Prepare(modeSettings,np2,acceptedMask,acceptedHz,(request,cancel)=>{
@@ -111,7 +111,8 @@ static class NpClosedLoopWorkflowTests
             }
 
             var admitted=Settings();
-            if(!np2)admitted.Channels=new[]{new NpClosedLoopChannel{Probe=1,Channel=0}};
+            admitted.Channels=np2?new[]{new NpClosedLoopChannel{Probe=2,Channel=0},new NpClosedLoopChannel{Probe=2,Channel=1}}:
+                new[]{new NpClosedLoopChannel{Probe=1,Channel=0}};
             var notices=new List<string>();
             var accepted=NpClosedLoopSettings.Prepare(admitted,np2,acceptedMask,acceptedHz,(request,cancel)=>Task.FromResult(Reply(request)),
                 CancellationToken.None,notices.Add,value=>{}).GetAwaiter().GetResult();
@@ -119,6 +120,24 @@ static class NpClosedLoopWorkflowTests
             Need(allowed?accepted!=null&&NpClosedLoopControl.Parse(accepted.Request).ApHz==acceptedHz:accepted==null&&notices.Count==1,
                 "Profile did not respect its qualified USB detector count");
         }
+    }
+    static void SpiSourceLimits()
+    {
+        Func<byte,ushort,NpClosedLoopChannel> channel=(probe,adc)=>new NpClosedLoopChannel{Probe=probe,Channel=adc};
+        Need(NpClosedLoopSettings.CanUseSources(true,true,new[]{channel(2,0),channel(2,1)}),"P2 hardware pair rejected");
+        Need(NpClosedLoopSettings.CanUseSources(true,true,new[]{channel(2,1),channel(2,0)}),"Reversed P2 hardware pair rejected");
+        foreach(var pair in new[]{new[]{channel(3,256),channel(3,257)},new[]{channel(2,0),channel(2,2)},
+            new[]{channel(2,0),channel(2,0)},new[]{channel(2,0),channel(1,1)}}){
+            Need(!NpClosedLoopSettings.CanUseSources(true,true,pair),"Unqualified V2 hardware source admitted");
+            Need(NpClosedLoopSettings.CanUseSources(false,true,pair),"V2 source restriction changed V1");
+        }
+        var settings=Settings();settings.MayBeConfigured=true;
+        var sent=new List<NpClosedLoopControl>();var notices=new List<string>();
+        var disabled=NpClosedLoopSettings.Prepare(settings,true,7,20000,(request,cancel)=>{
+            sent.Add(NpClosedLoopControl.Parse(request));return Task.FromResult(Reply(request,0,256));
+        },CancellationToken.None,notices.Add,value=>{},null,true).GetAwaiter().GetResult();
+        Need(disabled!=null&&sent.Count==2&&sent[1].Channels.Length==0&&!settings.MayBeConfigured&&
+            settings.Enabled&&notices.Count==1&&notices[0].Contains("P2"),"Historical P3 firmware re-enabled two detectors or became a recording gate");
     }
     static byte[] Header(byte[] request,byte[] eventPacket,ulong sequence,bool timing=true,ulong token=Token,uint generation=0xabcd)
     {
@@ -162,7 +181,7 @@ static class NpClosedLoopWorkflowTests
     }
     static int Main(string[] args)
     {
-        try{string root=Folder(args[0],Guid.NewGuid().ToString("N"));Controls(root);ProfileLimits();LiveV2(root,File.ReadAllBytes(args[1]));LiveV1(root,File.ReadAllBytes(args[2]));
+        try{string root=Folder(args[0],Guid.NewGuid().ToString("N"));Controls(root);ProfileLimits();SpiSourceLimits();LiveV2(root,File.ReadAllBytes(args[1]));LiveV1(root,File.ReadAllBytes(args[2]));
             Console.WriteLine("PASS "+checks+" optional setup/legacy/no-replay/disable and bound V1/V2 live event-log checks; no hardware or user preference changes");return 0;}
         catch(Exception e){Console.Error.WriteLine(e);return 1;}
     }

@@ -518,22 +518,22 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_SD_20K_3PROBE_RIPPLE_APP680A1685_USB80E18959_20261104",
+      "release": "V2_SD_20K_3PROBE_P2_SELECTED_RIPPLE_APP99CC44F9_USBFFC27E5A_20261104",
       "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
-      "stage": "BOUNDED_SD_ONE_DETECTOR_PASS_SD_TWO_AND_USB_CLOSED_LOOP_DISABLED",
-      "appVersion": "build680A1685",
-      "usbVersion": "build80E18959",
+      "stage": "BOUNDED_SD_P2_SELECTED_ONE_TWO_DETECTOR_PASS_USB_CLOSED_LOOP_DISABLED",
+      "appVersion": "build99CC44F9",
+      "usbVersion": "buildFFC27E5A",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "680A1685",
-      "usbCrc32": "80E18959",
+      "appCrc32": "99CC44F9",
+      "usbCrc32": "FFC27E5A",
       "recoveryCrc32": "6408DBB8",
-      "limits": "V2 P1+P2+P3 at20kHz, one Ripple detector in BLE-controlled SD only; two detectors disabled after stress-run NP continuity failure; USB closed-loop disabled. Exact bounded acceptance and NP/IMU limits in release234 qualification; no endurance, all-profile, CPU or power claim.",
+      "limits": "V2 P1+P2+P3 at20kHz, one/two Ripple detectors using selected P2 ADC channels0/1 (tap2) in BLE-controlled SD only; USB closed-loop disabled. Previous P3 two-detector stress loss remains in234 history; it is not this selected-reader qualification. Exact bounded acceptance and NP/IMU limits in release235 qualification; no endurance, all-profile, CPU or power claim.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 366312,
-        "codeCrc32": "680A1685",
-        "buildIdHex": "6539326636613236353030623364303739393364343861346630353231303438",
+        "bytes": 375584,
+        "codeCrc32": "99CC44F9",
+        "buildIdHex": "3166373135666261356235346465313839613238613730396433633034353361",
         "manifestFlags": 0,
         "minimumLoaderAbi": 4,
         "generation": 3
@@ -542,49 +542,59 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 334268,
-        "codeCrc32": "80E18959",
-        "buildIdHex": "3663643138333432343831313630633063653161636561643234336239316136",
+        "codeCrc32": "FFC27E5A",
+        "buildIdHex": "6361363038343837633339653966656535613139343766306565666566333362",
         "manifestFlags": 3,
         "minimumLoaderAbi": 4,
         "generation": 3
       },
       "app": {
-        "path": "V2/V2_APP680A1685.hex",
-        "sha256": "78606C2B47FBABF52BF0CBFF63060FC6A30464F7897767E7F904EC829523A63E"
+        "path": "V2/V2_APP99CC44F9.hex",
+        "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
       },
       "full": {
-        "path": "V2/V2_FUSED_BOOT_USB80E18959_APP680A1685.hex",
-        "sha256": "F03608A7ABD544869D0619A2B481F81BC25F79E42F8D2479203A780377A850D1"
+        "path": "V2/V2_FUSED_BOOT_USBFFC27E5A_APP99CC44F9.hex",
+        "sha256": "5AD4CE8600D3A53FE5B0DC2B8DBED2ED20638F8D60AECAC7CCB6F22138D3F7FB"
       },
       "files": [
         {
-          "path": "V2/V2_APP680A1685.hex",
-          "sha256": "78606C2B47FBABF52BF0CBFF63060FC6A30464F7897767E7F904EC829523A63E"
+          "path": "V2/V2_APP99CC44F9.hex",
+          "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
         },
         {
-          "path": "V2/V2_USB80E18959.hex",
-          "sha256": "BD2A86F913512472002C38EBC6E0990BBEAA02DDAAB0A6AB71FA6336B8999E27"
+          "path": "V2/V2_USBFFC27E5A.hex",
+          "sha256": "16DF81F32A1646778621AD69F4381B3E8E6F86775BF024BDC49D1D7DC841AEFC"
         },
         {
-          "path": "V2/V2_APP680A1685.xenp",
-          "sha256": "103590B78C110983A290C59FFBE3758C4048A567183B920AA2099A0549320FAA"
+          "path": "V2/V2_APP99CC44F9.xenp",
+          "sha256": "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_FUSED_BOOT_USB80E18959_APP680A1685.hex",
-          "sha256": "F03608A7ABD544869D0619A2B481F81BC25F79E42F8D2479203A780377A850D1"
+          "path": "V2/V2_FUSED_BOOT_USBFFC27E5A_APP99CC44F9.hex",
+          "sha256": "5AD4CE8600D3A53FE5B0DC2B8DBED2ED20638F8D60AECAC7CCB6F22138D3F7FB"
         },
         {
           "path": "V2/acceptance.json",
-          "sha256": "93D9F7BBF24ADAC1F00EB119DCA8C204DFB1CFE7F970E7A742165C7E5BF94039"
+          "sha256": "252D354A0D7A6A78886D9690E5457E79845F165BC84E53BD19940990BB086D23"
         }
       ],
       "sourceCommitScope": "Recorded repository baseline with exact changed overlays archived in release; binary identities are authoritative.",
-      "sourceProvenance": "../ReleaseSources/1.0.0.234/firmware/V2/source-freeze/manifest.json",
+      "sourceProvenance": "../ReleaseSources/1.0.0.235/firmware/V2/source-freeze/manifest.json",
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 366312,
+          "codeCrc32": "680A1685",
+          "buildIdHex": "6539326636613236353030623364303739393364343861346630353231303438",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1095782449,
           "generation": 3,
@@ -707,6 +717,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 334268,
+          "codeCrc32": "80E18959",
+          "buildIdHex": "3663643138333432343831313630633063653161636561643234336239316136",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1431519793,
           "generation": 3,

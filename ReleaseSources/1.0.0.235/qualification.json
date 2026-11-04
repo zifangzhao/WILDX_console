@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "app_version": "1.0.0.235",
+  "status": "V1_REUSED_V2_SELECTED_P2_SD_ONE_TWO_PASS_ORIGINALS_RESTORED",
+  "qualification": {
+    "V1": {
+      "probe_mask": 3,
+      "sample_hz": 15000,
+      "filter": 6,
+      "usb_detectors": [
+        1,
+        2
+      ],
+      "sd_detectors": [
+        1,
+        2
+      ],
+      "app_crc32": "5F90FD3B",
+      "usb_crc32": "8454D202",
+      "scope": "Bounded recording, observed IMU and native event replay; initial-slot and terminal-coverage limits retained"
+    },
+    "V2": {
+      "probe_mask": 7,
+      "sample_hz": 20000,
+      "filter": 6,
+      "usb_detectors": [],
+      "sd_detectors": [
+        1,
+        2
+      ],
+      "detector_probe": 2,
+      "adc_channels": [
+        0,
+        1
+      ],
+      "tap": 2,
+      "app_crc32": "99CC44F9",
+      "usb_crc32": "FFC27E5A",
+      "normal_one": {
+        "np_blocks": 23868,
+        "imu_rows": 38185,
+        "events": 4,
+        "parent_app_crc32": "7F0C8BD0",
+        "scope": "Hot-path evidence reused for unchanged recording/Offer/IRQ/Service/filter bodies; final Init/geometry fix checked independently"
+      },
+      "normal_two": {
+        "np_blocks": 24204,
+        "imu_rows": 38727,
+        "events": 8,
+        "parent_app_crc32": "7F0C8BD0"
+      },
+      "pressure_two": {
+        "np_blocks": 24052,
+        "imu_rows": 38483,
+        "events": 8,
+        "actual_hold_us": 225041,
+        "diagnostic_app_crc32": "3A2A326D",
+        "owner_mask": "0x40f0f",
+        "next_launch_held": true
+      },
+      "same_app_restart": {
+        "generation": 2,
+        "source_epoch": 2,
+        "np_blocks": 8504,
+        "imu_rows": 13604,
+        "events": 4,
+        "source_window_verified": true,
+        "no_reset_or_mode_switch_between": true
+      },
+      "scope": "Bounded SD3P20k P2ADC0/1 Ripple selected-word one/two detectors only. Final same-APP restart and all saved NP/IMU/native/event checks passed. USB closed-loop remains disabled."
+    }
+  },
+  "software": {
+    "workflow_checks": 195,
+    "sdk_tap_legacy_checks": 76,
+    "app_compilations": 1,
+    "sdk_reused_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+    "catalog": "Actual235 catalog loader check is recorded separately",
+    "source_geometry": "1600 phases, signed offsets, reversed pair, single ADC1, Service timestamps and Offer saved-end boundary checks passed"
+  },
+  "V1": {
+    "result": "Unchanged234 V1 firmware and1/2 USB/SD qualification reused",
+    "qualification": "../1.0.0.234/qualification.json"
+  },
+  "V2": {
+    "receipt": "v2-qualification.json",
+    "sha256": "51D6C4754E789CE1039DADE2B4516133272E107F79CEED57C9FDE27EAC97C049",
+    "result": "ACCEPTED",
+    "source_zip_sha256": "98C6FB86AA813E267F38B8E11FEAB119B70BE6580271ED6BD514BEC7616563FB"
+  },
+  "hardware_restored": true,
+  "restoration": {
+    "receipt": "checks/restoration-complete.json",
+    "sha256": "F7B6B25EF565AA0F7E759EB7E3FCF77C759FC729F8E39A8E93EA3F50EADAEE1A",
+    "lease_closed": true,
+    "original_flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+    "original_options_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F"
+  },
+  "limits": [
+    "Only P2 lane0 ADC0/1 nativeword DMAwindow measured; allSPIwords stilldrained4MB/s, not ADC-only hardwaredecode. No rewiring/NP/IMU timer/DMA owner changes.",
+    "StartupSNS2 partialMAG-unavailable records2/2/4 in earliernormal/pressure runs remain strictFAIL snapshots; allprimaryIMUgridrows valid. Finalrestart2141nativeSNS2allvalid. Valid-only reviews retained, no unavailablevalue relabeled.",
+    "Earliernormal2 lastretainedIMUslot interval656..975us beyondstoredcompleteNPprefix; pressure16..334us beyond. source_windowFalse preserved. PhysicalterminalNPpartial/nativeconversionphase/finalscheduledordinal unknown. Finalrestartsource_windowTrue.",
+    "RTC/GUI IMRO application not newly qualified by directbenchadapter; unchanged productionworkflow evidence reused separately.",
+    "No totalCPU or electricalpower measurement; bucket percentages normalized nativeactive seconds include preemption. Nested buckets mustnot besummed.",
+    "Historical source dependency closure limitations in priorinputfreeze retained; exactcurrentchangedTUs/commands and actualnativefixtures secured.",
+    "Failed9Cguard,37F0map,40B/71FC/20coldstartup and7F0phase9restart candidates retained asfailures, never relabeledpass; no cardformat/deletion performed.",
+    "The earlier7F0C8BD0/3F20B1F9 pair failed phase9 same-APP restart and is not bundled; final99CC44F9/FFC27E5A fixes cold geometry with new physical restart/readback acceptance.",
+    "Underlying transientGET_INFO EP0 failure remains unresolved. Production GUI-wrapper full readbacks passed; no claim that the control-transfer fault itself was repaired.",
+    "V1 qualification retains one initial unavailable IMU slot and unknown terminal/source-window limits from234."
+  ],
+  "validation_note": "../../Note/CLOSED_LOOP_QUALIFICATION_20261104.md",
+  "completed_utc": "2026-11-04T22:50:16.3446707Z"
+}

@@ -46,10 +46,18 @@ namespace WildNpClosedLoop
         public static NpClosedLoopControl ReadV1UtcConfiguration(byte[] b)
         {
             Bounds(b,0,512);if(!Magic(b,144,"NPCLCFG1"))return null;
-            if(U(b,156)!=1||!Zero(b,160,348))throw new InvalidDataException("Unsupported V1 closed-loop clock/config extension.");
+            if(b.Length!=512||U(b,156)!=1)throw new InvalidDataException("Unsupported V1 closed-loop clock/config extension.");
             var q=NpClosedLoopControl.Parse(Slice(b,80,64));
             if(q.Operation!=NpClosedLoopControl.Configure||q.Channels.Length==0||q.ConfigCrc!=U(b,152))
-                throw new InvalidDataException("V1 closed-loop snapshot is not a confirmed enabled configuration.");return q;
+                throw new InvalidDataException("V1 closed-loop snapshot is not a confirmed enabled configuration.");
+            if(!Zero(b,160,348)){
+                // NPSTART shares this sector with NPCLCFG1. Reuse its strict
+                // sector/receipt validator; legacy zero extensions stay valid.
+                var source=USB512_interface.NpFirstSyncSd.ReadSector(b,1,U(b,12),q.ApHz).Receipt;
+                foreach(var channel in q.Channels)if((source.Mask&(1U<<(channel.Probe-1)))==0)
+                    throw new InvalidDataException("V1 closed-loop channel is outside the recorded probe mask.");
+            }
+            return q;
         }
         public static NpClosedLoopControl ReadV1UsbConfiguration(byte[] b,int o,uint session,out NpClosedLoopEvent e)
         {
@@ -114,18 +122,18 @@ namespace WildNpClosedLoop
             if((U(descriptor,8)!=15&&U(descriptor,8)!=16)||(U(descriptor,96)&128)==0){
                 if(!Zero(b,o,160))throw new InvalidDataException("Unadvertised closed-loop configuration extension.");return null;
             }
-            var p=Slice(b,o,160);var q=NpClosedLoopControl.Parse(Slice(p,32,64));uint hz=U(p,24),flags=U(p,120);
+            var p=Slice(b,o,160);var q=NpClosedLoopControl.Parse(Slice(p,32,64));uint hz=U(p,24),flags=U(p,120),tap=U(p,116);
             if(!Magic(p,0,"NPCLCFG1")||U(p,8)!=1||U(p,12)!=160||U(p,156)!=NpClosedLoopEvent.Crc(p,156)||
                U(p,16)!=q.ConfigCrc||q.ConfigCrc!=U(descriptor,132)||q.Operation!=1||q.Channels.Length==0||
                U(p,20)==0||U(p,20)!=U(descriptor,12)||hz!=q.ApHz||hz!=U(descriptor,16)||U(p,28)!=hz*1600U||
                U(p,96)!=1250||U(p,104)!=(22U*(hz/2500U)-2U)*1600U||
                ((flags&4)!=0?U(p,108)>=1600:U(p,108)!=0)||
-               U(p,116)!=0x203||(flags&~15U)!=0||(flags&1)==0||((flags&2)!=0?U(p,100)==0:U(p,100)!=0)||
+               (tap!=2&&tap!=0x203)||(flags&~15U)!=0||(flags&1)==0||((flags&2)!=0?U(p,100)==0:U(p,100)!=0)||
                U(p,124)!=1||U(p,128)!=(hz/1250U)*1600U||U(p,132)!=7||U(descriptor,24)!=7||!Zero(p,136,20)||
                (q.Channels.Length==1?(U(p,112)!=0||(flags&8)!=0):((flags&8)!=0?U(p,112)>=1600:U(p,112)!=0)))
                 throw new InvalidDataException("Invalid closed-loop SPI configuration/timing provenance.");
-            foreach(var channel in q.Channels)if(channel.Probe!=3||channel.Channel<256)
-                throw new InvalidDataException("Unsupported closed-loop SPI tap; confirmed P3 lane 2 is required.");
+            foreach(var channel in q.Channels)if(tap==2?(channel.Probe!=2||channel.Channel>=128):(channel.Probe!=3||channel.Channel<256))
+                throw new InvalidDataException("Closed-loop channels do not match the recorded SPI tap.");
             return q;
         }
     }

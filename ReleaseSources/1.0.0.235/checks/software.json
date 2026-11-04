@@ -1,0 +1,10 @@
+{
+  "status": "PASS_REUSED_DEVELOPMENT_EVIDENCE",
+  "workflow_checks": 195,
+  "workflow_exe_sha256": "429662BB75ADE101E195263EAC66C38E760E60BCF97FDD5CA3BEE8A7AE214B53",
+  "workflow_source_sha256": "996A325C6F622E299F2E8BCF09530BEAB35321B03F6648ABB08C9069C7F6C5C5",
+  "sdk_native_tap_legacy_checks": 76,
+  "app_compilations": 1,
+  "sdk_reused": true,
+  "scope": "Results supplied by the integrating developer and exact previously checked binaries/receipts. No new tests executed during packaging."
+}
