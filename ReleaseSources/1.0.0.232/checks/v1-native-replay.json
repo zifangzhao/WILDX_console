@@ -1,0 +1,179 @@
+{
+  "result": "PASS",
+  "lanes": [
+    {
+      "mode": "usb",
+      "detectors": 1,
+      "lane": 0,
+      "samples": 75489,
+      "events": 56,
+      "matches": {
+        "selected": true,
+        "wrong_channel": false,
+        "wrong_probe": false
+      },
+      "fixtures": [
+        {
+          "name": "selected",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl1\\probe1\\neuropixels_lfp.dat.ch0.bin",
+          "sha256": "531E2B078CEC9203FB397B76326E483DA3D4B030D8AF4324F8BB6153175BDD09"
+        },
+        {
+          "name": "wrong_channel",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl1\\probe1\\neuropixels_lfp.dat.ch1.bin",
+          "sha256": "3FEA4DF2BE5D83AE60F9781AD90195944477FBE71979C1C93209E5E001DCC8DB"
+        },
+        {
+          "name": "wrong_probe",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl1\\probe2\\neuropixels_lfp.dat.ch0.bin",
+          "sha256": "F8DD32C1071B939F64FC26D2C867891214663CDB04A0C2B13A5F2D63BBA58A7D"
+        }
+      ]
+    },
+    {
+      "mode": "usb",
+      "detectors": 2,
+      "lane": 0,
+      "samples": 75325,
+      "events": 6,
+      "matches": {
+        "selected": true,
+        "wrong_channel": false,
+        "wrong_probe": false
+      },
+      "fixtures": [
+        {
+          "name": "selected",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl2\\probe1\\neuropixels_lfp.dat.ch0.bin",
+          "sha256": "26B532AB97A1C73661C009A8C8BC90A0FBDA79DD1C37C58E048ED268026852E8"
+        },
+        {
+          "name": "wrong_channel",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl2\\probe1\\neuropixels_lfp.dat.ch1.bin",
+          "sha256": "20FBDF1378296F53AE416BB5C37F7E62ADFDECCB0B1EE3C2DA91DFAF5B5C1296"
+        },
+        {
+          "name": "wrong_probe",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl2\\probe2\\neuropixels_lfp.dat.ch0.bin",
+          "sha256": "2BC96958A8F37694B1EC2308518F696BACA3B14DC90D4255F48878FBAD65F8CD"
+        }
+      ]
+    },
+    {
+      "mode": "usb",
+      "detectors": 2,
+      "lane": 1,
+      "samples": 75325,
+      "events": 37,
+      "matches": {
+        "selected": true,
+        "wrong_channel": false,
+        "wrong_probe": false
+      },
+      "fixtures": [
+        {
+          "name": "selected",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl2\\probe2\\neuropixels_lfp.dat.ch0.bin",
+          "sha256": "2BC96958A8F37694B1EC2308518F696BACA3B14DC90D4255F48878FBAD65F8CD"
+        },
+        {
+          "name": "wrong_channel",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl2\\probe2\\neuropixels_lfp.dat.ch1.bin",
+          "sha256": "4563E8879AC7CDAF34EDA2632E9EE735099D7E57148C541A1E55E1564E5D0F1C"
+        },
+        {
+          "name": "wrong_probe",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\usb-cl2\\probe1\\neuropixels_lfp.dat.ch0.bin",
+          "sha256": "26B532AB97A1C73661C009A8C8BC90A0FBDA79DD1C37C58E048ED268026852E8"
+        }
+      ]
+    },
+    {
+      "mode": "sd",
+      "detectors": 1,
+      "lane": 0,
+      "samples": 38911,
+      "events": 29,
+      "matches": {
+        "selected": true,
+        "wrong_channel": false,
+        "wrong_probe": false
+      },
+      "fixtures": [
+        {
+          "name": "selected",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl1-verified\\export\\np1_lfp.dat.ch0.bin",
+          "sha256": "C4C7CD7DAA1415843E6EB0B8753C0CA63895CC817D07B064A87902872DB35BDD"
+        },
+        {
+          "name": "wrong_channel",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl1-verified\\export\\np1_lfp.dat.ch1.bin",
+          "sha256": "DA18CA76EA364CA09B087C3704A2355BA61F4815B8F1EA628680FC2AA6D50030"
+        },
+        {
+          "name": "wrong_probe",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl1-verified\\export\\np2_lfp.dat.ch0.bin",
+          "sha256": "9E7F749FCFB9BB6F33E314DFA7F8D68CD7946F8866D01A1E8CF042DB11AD1D48"
+        }
+      ]
+    },
+    {
+      "mode": "sd",
+      "detectors": 2,
+      "lane": 0,
+      "samples": 38858,
+      "events": 33,
+      "matches": {
+        "selected": true,
+        "wrong_channel": false,
+        "wrong_probe": false
+      },
+      "fixtures": [
+        {
+          "name": "selected",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl2-verified\\export\\np1_lfp.dat.ch0.bin",
+          "sha256": "FDE6F1D301CC0C1BAEA22118C12582765CC3727891565B50AEACA3378366AB02"
+        },
+        {
+          "name": "wrong_channel",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl2-verified\\export\\np1_lfp.dat.ch1.bin",
+          "sha256": "63C9FDBEF18F22F11B5780336D659DDEC0FF1ADA1777A276D014D4876B7C2F1D"
+        },
+        {
+          "name": "wrong_probe",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl2-verified\\export\\np2_lfp.dat.ch0.bin",
+          "sha256": "CB892315223F47392617C38C611A47F6698BB15711F305A603C7DCBBF422F291"
+        }
+      ]
+    },
+    {
+      "mode": "sd",
+      "detectors": 2,
+      "lane": 1,
+      "samples": 38858,
+      "events": 579,
+      "matches": {
+        "selected": true,
+        "wrong_channel": false,
+        "wrong_probe": false
+      },
+      "fixtures": [
+        {
+          "name": "selected",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl2-verified\\export\\np2_lfp.dat.ch0.bin",
+          "sha256": "CB892315223F47392617C38C611A47F6698BB15711F305A603C7DCBBF422F291"
+        },
+        {
+          "name": "wrong_channel",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl2-verified\\export\\np2_lfp.dat.ch1.bin",
+          "sha256": "777889E1B30E22309D86FDFB1ED27BD3A6F52DF42BCAA0C11100CEB87BBEE36B"
+        },
+        {
+          "name": "wrong_probe",
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\compact\\sd-cl2-verified\\export\\np1_lfp.dat.ch0.bin",
+          "sha256": "FDE6F1D301CC0C1BAEA22118C12582765CC3727891565B50AEACA3378366AB02"
+        }
+      ]
+    }
+  ]
+}

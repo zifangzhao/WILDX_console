@@ -1,0 +1,1 @@
+These compact wire fixtures were produced by the native closed-loop carrier and event golden generators on 2026-10-27. They contain synthetic protocol records, not recorded neural data. The workflow regression uses them to check event identity, CRC handling and delayed timing-carrier binding without hardware or user preferences.

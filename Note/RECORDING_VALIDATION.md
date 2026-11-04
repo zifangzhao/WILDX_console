@@ -22,6 +22,19 @@ The 60/30-second captures are baseline development samples, not endurance proof.
 
 A relevant failure sends the change back to development. Software checks or another mode passing do not establish that the failing mode works. Missing fine timing in old firmware remains explicitly unknown and must not become a new GUI recording Start gate.
 
+## Closed-loop qualification
+
+Establish recording performance with detectors off first for each affected family and mode. Qualify closed-loop separately on the exact firmware and recording profile. Use matched device runs with zero, one and two detectors where those counts are proposed. Record the logger family, transport, probe count, NP sample rate, detector count, and card model for BLE-controlled SD. For sustained-operation claims, run long enough to exercise the applicable USB or SD write stalls.
+
+Compare sustained throughput, NP loss and largest sample gap, IMU validity and cadence, Start and Stop behavior, and CPU and buffer headroom. Check that detector startup, backlog and failure leave recording usable. Keep closed-loop disabled for any profile with a regression or missing evidence. Publish qualified recording improvements independently of closed-loop qualification.
+
+The app limits closed-loop requests to the qualified profiles below. The connected firmware must also accept the detector channels. Each row is scoped to its own firmware and recording mode. See the [2026-11-04 results and limits](CLOSED_LOOP_QUALIFICATION_20261104.md).
+
+| Logger and recording profile | USB | BLE-controlled SD |
+|---|---|---|
+| V1 with P1 + P2 at 15 kHz | One/two Ripple detectors passed 60-second checks on APP5F90FD3B/USB8454D202. Initial IMU slot and terminal coverage limits remain explicit. | One/two Ripple detectors passed ~31-second captures and matching-service full readbacks on the same pair. |
+| V2 with P1 + P2 + P3 at 20 kHz | One passed locally; two failed with a producer overrun. Closed-loop remains disabled in the release because the new pair's SD baseline failed. | APP997160AF failed the detector-off baseline with NP gaps and IMU queue drops. One/two detector tests are blocked. Retain published V2 firmware. |
+
 ## Current development result
 
 2026-10-29. WILD-X1.0.0.199 passed the four scoped recording checks below. Exact independent reviews and source/component identities are retained in [the release validation summary](../ReleaseSources/1.0.0.199/validation-summary.json). These development results are reused during publication.

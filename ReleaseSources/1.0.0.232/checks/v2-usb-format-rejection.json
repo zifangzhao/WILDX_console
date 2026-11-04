@@ -1,0 +1,12 @@
+{
+  "status": "SUBMISSION_REJECTED_BEFORE_QUEUE",
+  "format_transaction": 0,
+  "format_state": 0,
+  "uid": "001A0004434250062039314E",
+  "cid": "444444584D4E43447202DA60EA980140",
+  "catalog_unchanged": true,
+  "records": 23,
+  "no_reset_since_usb_format_submission": true,
+  "source_proof": "xe_np_usb_sd_format.inc stores transaction, capacity and request before QUEUED/active and before status ACK. State0/Transaction0 persisted after stalled OUT, with no intervening reset and unchanged catalog. No format job was accepted.",
+  "next_step": "Distinct normal BLE Format may be attempted with fresh token/CID/epoch under explicit whole-card approval; no USB replay."
+}

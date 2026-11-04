@@ -100,7 +100,7 @@ namespace USB512_interface
                 finally {loading=false;refresh.Enabled=configuration.Enabled=true;UpdateSelection();}
                 if(error!=null)status.Text=error;
             };
-            closedLoop=new Button{Text="Closed-loop…",AutoSize=true};closedLoop.Click+=delegate{NpClosedLoopSettings.Edit(this,np2);};
+            closedLoop=new Button{Text="Closed-loop…",AutoSize=true};closedLoop.Click+=delegate{NpClosedLoopSettings.Edit(this,np2,sd!=null);};
             var configurationRow=new FlowLayoutPanel{Dock=DockStyle.Fill};configurationRow.Controls.AddRange(new Control[]{configuration,closedLoop});layout.Controls.Add(configurationRow,0,6);
             var buttons=new FlowLayoutPanel { Dock=DockStyle.Fill };
             refresh.Click+=async delegate {await RefreshProfile();};
@@ -155,12 +155,13 @@ namespace USB512_interface
         {
             if(connectorRow==null||rateRow==null||mediaRow==null||configuration==null)return;
             connectorRow.Visible=rateRow.Visible=configuration.Visible=closedLoop.Visible=!Media;mediaRow.Visible=Media;
-            closedLoop.Enabled=!loading;
             channelInfo.Text=Media?"Continuous until Stop":np2?"384 AP channels per probe":"384 AP + 384 LFP channels per probe";
             cameraRate.Enabled=camera.Checked;
             for(int i=0;i<3;i++)ports[i].Enabled=profile!=null && !automatic.Checked && (profile.AvailableMask&(1<<i))!=0;
             rate.Enabled=profile!=null && rate.Items.Count>0;
             int effective=profile==null?0:automatic.Checked?profile.SelectedMask:ProbeMask;
+            closedLoop.Enabled=!loading&&(NpClosedLoopSettings.CanUseDetectors(np2,sd!=null,(uint)effective,(uint)SampleHz,1)||
+                NpClosedLoopSettings.CanUseDetectors(np2,sd!=null,(uint)effective,(uint)SampleHz,2));
             merge.Enabled=NpCaptureMode.Count(effective)>1;
             upsample.Enabled=SampleHz==15000;
             string problem=profile==null?null:Media?(!camera.Checked&&!microphone.Checked?"Select camera or microphone.":null):profile.Validate(effective,SampleHz);

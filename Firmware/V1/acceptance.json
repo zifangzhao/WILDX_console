@@ -1,107 +1,224 @@
 {
   "schema": 1,
-  "status": "qualified_components_for_release204",
-  "uid_tested": "001D00065942500B20313354",
-  "host_sha256": "42BCF00A526503CB93BF16D8F6D23444C762BD43093B5ADC97DEC9BDE8CB910E",
-  "sdk_sha256": "B01C4B3FF45F9875ED8542F1DCF2EF0F3BD7ECB12A6FAD3CDA8FC9690C01D46A",
-  "usb": {
-    "crc32": "1E73A743",
-    "profile": "P1+P2/20000/60seconds",
-    "passed": true,
-    "ap_rows_total": 2402494,
-    "observed_grid_slots": 75057,
-    "missing_initial_slots": 1,
-    "relative_copy_bound_us": 42,
-    "local_rtc_interval_us": 112,
-    "pc_calibration_uncertainty_us": 4593,
-    "source_window_verified": true,
-    "other_component": "original APP82E51DEA",
-    "evidence": [
+  "status": "accepted",
+  "family": 1,
+  "app_crc32": "5F90FD3B",
+  "usb_crc32": "8454D202",
+  "profile": {
+    "probe_mask": 3,
+    "ap_hz": 15000,
+    "native_lfp_hz": 1250
+  },
+  "detectors": {
+    "filter": 6,
+    "filter_name": "Ripple",
+    "gain": 2,
+    "rectify": true,
+    "training_start_ms": 0,
+    "training_duration_ms": 1000,
+    "one": [
       {
-        "path": "F:\\Neuropixel\\V1_PRODUCTION_USB204_20261030_R2\\experiment.json",
-        "bytes": 18184,
-        "sha256": "2B1F4399A47E0A5A5A944A977D96EF71AC9C314390A49D76E2FB349089962FB1"
+        "probe": 1,
+        "channel": 0
+      }
+    ],
+    "two": [
+      {
+        "probe": 1,
+        "channel": 0
       },
       {
-        "path": "F:\\Neuropixel\\V1_PRODUCTION_USB204_20261030_R2\\ordinary-independent-check.json",
-        "bytes": 16952,
-        "sha256": "CC5CFD60D70AFFB9EADB2EDB5740B3956905270A8E55298262229A81A1902679"
+        "probe": 2,
+        "channel": 0
       }
     ]
   },
-  "sd": {
-    "crc32": "FFF283D9",
-    "profile": "P1+P2/20000/30seconds",
-    "passed": true,
-    "session": 1793344023,
-    "verified_bytes": 1006632960,
-    "chunks": 15360,
-    "stored_neural_continuity_verified": true,
-    "observed_grid_slots": 37799,
-    "missing_initial_slots": 1,
-    "relative_copy_bound_us": 42,
-    "local_rtc_interval_us": 111,
-    "pc_calibration_uncertainty_us": 20866,
-    "source_window_verified": false,
-    "other_component": "original USB4F7B521A for recording and readback",
-    "evidence": [
-      {
-        "path": "F:\\Neuropixel\\V1_GRID_PRODUCTION_SD204_REEXPORT_20261030_R1\\hil.json",
-        "bytes": 21688,
-        "sha256": "A512691E56517DC2938735C64A192DF67A8893CECC06099F9CF8B049636F5C08"
-      },
-      {
-        "path": "F:\\Neuropixel\\V1_GRID_PRODUCTION_SD204_REEXPORT_20261030_R1\\imu-grid-independent-check.json",
-        "bytes": 5939,
-        "sha256": "1F741C50C3245F5D372F6FD009DFBBF2993455FC60FA0B023EFE42630040FB55"
-      },
-      {
-        "path": "F:\\Neuropixel\\V1_GRID_PRODUCTION_SD204_REEXPORT_20261030_R1\\physical-imu-check.json",
-        "bytes": 1039,
-        "sha256": "CB209BEEC71787FB56DA27269FAD38E3D6234D80D21EC6D37A575FCD5BAE94BF"
-      }
-    ]
-  },
-  "restoration": [
+  "usb": [
     {
-      "full_flash_options": {
-        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_usb_production_hil_r2\\restore_verified.json",
-        "bytes": 207,
-        "sha256": "9EB9B26543ED1449E7A2B311BFB009AB877FF6AA8CD9FB7D68800ED74B329AC1"
-      },
-      "idle_profile": {
-        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_usb_production_hil_r2\\restored_idle.json",
-        "bytes": 1328,
-        "sha256": "0B70ACFB211EF1B95BD12320C2FCF04C723F112AD03045CAE3413E7492F4E929"
-      },
-      "result": "original flash/options and 3-probe 7.5kHz profile restored and verified"
+      "detectors": 0,
+      "seconds": 60,
+      "result": "PASS",
+      "ap_rows": [
+        903917,
+        903904
+      ],
+      "lfp_rows": [
+        75325,
+        75324
+      ],
+      "midstream_np_losses": 0,
+      "largest_sample_gap": 0,
+      "imu_observed": 75300,
+      "imu_missing_start_slots": 1,
+      "later_missing_imu_slots": 0,
+      "imu_sensor_errors": 0,
+      "source_window_verified": true,
+      "imu_relative_jitter_bound_us": 42,
+      "rtc_to_np_interval_us": 111,
+      "events": 0,
+      "host_peak_queued_blocks": 4,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 15.625,
+      "startup_discarded_bytes": [
+        457,
+        501
+      ],
+      "lossless_from_source_byte_zero": false,
+      "complete_saved_span_continuity": true,
+      "raw_result": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\bench\\usb-cl0\\experiment.json",
+      "raw_result_sha256": "8EFBEC6FA74586401345BF074A184B6DAF13C15B9D71FA57FB1D2487BAC16C11"
     },
     {
-      "full_flash_options": {
-        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_app_production_hil_r1\\restore_verified.json",
-        "bytes": 383,
-        "sha256": "D03013724969545F7DFBEB72F2A5AB66647D84BC2F2EF4DFB8DC64A948794FE5"
-      },
-      "idle_profile": {
-        "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\grid_app_production_hil_r1\\restored_idle.json",
-        "bytes": 1328,
-        "sha256": "FC522F50D2FCBC77947BBD6A89AA2788FC28399FCB6C87ABD3417024258472D4"
-      },
-      "result": "original flash/options and 3-probe 7.5kHz profile restored and verified"
+      "detectors": 1,
+      "seconds": 60,
+      "result": "PASS",
+      "ap_rows": [
+        905931,
+        905879
+      ],
+      "lfp_rows": [
+        75493,
+        75489
+      ],
+      "midstream_np_losses": 0,
+      "largest_sample_gap": 0,
+      "imu_observed": 75468,
+      "imu_missing_start_slots": 1,
+      "later_missing_imu_slots": 0,
+      "imu_sensor_errors": 0,
+      "source_window_verified": true,
+      "imu_relative_jitter_bound_us": 42,
+      "rtc_to_np_interval_us": 111,
+      "events": 56,
+      "host_peak_queued_blocks": 5,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 30.772,
+      "startup_discarded_bytes": [
+        541,
+        543
+      ],
+      "lossless_from_source_byte_zero": false,
+      "complete_saved_span_continuity": true,
+      "raw_result": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\bench\\usb-cl1\\experiment.json",
+      "raw_result_sha256": "1E4111D291E79AB2342ABE0B9A241BDD9566EEC608B1F2437C273EE28110D09B"
+    },
+    {
+      "detectors": 2,
+      "seconds": 60,
+      "result": "PASS",
+      "ap_rows": [
+        903935,
+        903917
+      ],
+      "lfp_rows": [
+        75327,
+        75325
+      ],
+      "midstream_np_losses": 0,
+      "largest_sample_gap": 0,
+      "imu_observed": 75312,
+      "imu_missing_start_slots": 1,
+      "later_missing_imu_slots": 0,
+      "imu_sensor_errors": 0,
+      "source_window_verified": false,
+      "imu_relative_jitter_bound_us": 42,
+      "rtc_to_np_interval_us": 110,
+      "events": 43,
+      "host_peak_queued_blocks": 4,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 15.483,
+      "startup_discarded_bytes": [
+        676,
+        636
+      ],
+      "lossless_from_source_byte_zero": false,
+      "complete_saved_span_continuity": true,
+      "raw_result": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\bench\\usb-cl2\\experiment.json",
+      "raw_result_sha256": "5F3DE70168084DBAB17D26C14A980D643A3D9806E7CE6F987E7947FFFAA8F8F6"
     }
   ],
-  "hardware_leases_released": "reported by hardware owner; no new device query in staging",
-  "retained_observed_grid": "1250Hz/800us HSE-scheduled cached snapshots, explicitly enforced configured deadline; repeats allowed and gaps preserved",
-  "limits": {
-    "best_effort_neural_policy": true,
-    "physical_adc_payload_checksum_claim": false,
-    "native_sensor_conversion_phase_locked": false,
-    "sample0_lock": false,
-    "terminal_tail_qualified": false,
-    "whole_clock_lifetime_qualified": false,
-    "all_stream_alignment_verified": false,
-    "new_components_installed_together": false,
-    "post_stop_full_payload_scan": false
+  "sd": [
+    {
+      "detectors": 0,
+      "seconds": 31,
+      "result": "PASS",
+      "bytes_verified": 775421952,
+      "session": 1793805483,
+      "np_continuity_verified": true,
+      "physical_imu_verified": true,
+      "imu_observed": 38822,
+      "imu_missing_start_slots": 1,
+      "later_missing_imu_slots": 0,
+      "imu_sensor_errors": 0,
+      "source_window_verified": false,
+      "imu_relative_jitter_bound_us": 42,
+      "rtc_to_np_interval_us": 108,
+      "events": 0,
+      "prior_catalog_entries_preserved": true,
+      "raw_result": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\bench\\sd-cl0-verified\\hil.json",
+      "raw_result_sha256": "F7E6A688473505648D677B9DB5102E1BE755A28CBE109914DDB5C3C6BD78E7CD"
+    },
+    {
+      "detectors": 1,
+      "seconds": 31,
+      "result": "PASS",
+      "bytes_verified": 776994816,
+      "session": 1793805545,
+      "np_continuity_verified": true,
+      "physical_imu_verified": true,
+      "imu_observed": 38900,
+      "imu_missing_start_slots": 1,
+      "later_missing_imu_slots": 0,
+      "imu_sensor_errors": 0,
+      "source_window_verified": false,
+      "imu_relative_jitter_bound_us": 42,
+      "rtc_to_np_interval_us": 108,
+      "events": 29,
+      "prior_catalog_entries_preserved": true,
+      "raw_result": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\bench\\sd-cl1-verified\\hil.json",
+      "raw_result_sha256": "419FF888C4B0064F35DCFCCCD4DFD04E1ACAA42E66BC4E8E3E95BC4A20ADA9DE"
+    },
+    {
+      "detectors": 2,
+      "seconds": 31,
+      "result": "PASS",
+      "bytes_verified": 775946240,
+      "session": 1793805607,
+      "np_continuity_verified": true,
+      "physical_imu_verified": true,
+      "imu_observed": 38847,
+      "imu_missing_start_slots": 1,
+      "later_missing_imu_slots": 0,
+      "imu_sensor_errors": 0,
+      "source_window_verified": false,
+      "imu_relative_jitter_bound_us": 42,
+      "rtc_to_np_interval_us": 108,
+      "events": 612,
+      "prior_catalog_entries_preserved": true,
+      "raw_result": "C:\\Frank\\Code\\XE_NP\\_artifacts\\closed_loop_qualification_20261104\\V1\\bench\\sd-cl2-verified\\hil.json",
+      "raw_result_sha256": "34431B649B77E1E20C1EE78EADAD5AA1473DCBC0826C9F8AC27DDF8E82F4E01F"
+    }
+  ],
+  "restoration": {
+    "result": "PASS",
+    "uid": "001D00065942500B20313354",
+    "original_flash_options_verified": true,
+    "original_profile_verified": true,
+    "card_sectors": 500695040,
+    "usb_mode": 3,
+    "idle": true,
+    "protected_profile_verified": true,
+    "cpu_debug_enabled": false
   },
-  "composition_scope": "Fused image is the direct checked-component merge required for delivery; acceptance is reused from the separate USB60 and SD30 components. No new hardware qualification is added by packaging."
+  "limits": [
+    "60-second USB and ~31-second SD checks only; no endurance claim",
+    "Every run has one explicitly unavailable initial IMU slot and no later observed scheduled gap",
+    "USB two-detector and all SD complete retained IMU source-window coverage remain false; terminal coverage unknown",
+    "Cached1250Hz IMU lattice is not physical sensor conversion-phase lock",
+    "CPU and net power not measured; queue occupancy and actual continuity are retained",
+    "SD scope is this same500695040-sector bench card; model/CID unavailable from tested interface",
+    "Training/gain/rectify/filter/channel settings match exact tested preset; other modes remain unqualified"
+  ],
+  "qualification_sha256": "1A56C01B7A8176F9281CE41D77780E2DEA8F6652F9EE3BB58CC53484969F42FF",
+  "completed_utc": "2026-11-04T10:27:51.547985-05:00"
 }

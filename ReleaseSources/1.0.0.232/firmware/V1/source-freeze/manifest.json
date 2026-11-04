@@ -1,0 +1,127 @@
+[
+  {
+    "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb\\stream.c",
+    "archived": "usb-stream.c",
+    "sha256": "3A4648D99E63872CC9BC8A12DABD687D092BFF1FB8C5141D7C45259A5B10262A"
+  },
+  {
+    "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb\\provider.c",
+    "archived": "usb-provider.c",
+    "sha256": "F0B2CD3579741552E7401038E7C75434598DCBFDE6CEF16BB9BD1965B4E7959D"
+  },
+  {
+    "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-warm\\candidate-corrected\\app-provider.c",
+    "archived": "app-provider.c",
+    "sha256": "B81055BB1D1C0F4AE5548BADC6119B0E801D3CB044939D358B91D0B90D3EAE83"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_coefficients.h",
+    "archived": "np_cl_coefficients.h",
+    "sha256": "9232076AE5D2EC3CA2600B0E50EBB09F92D06A0BB970CAD318911CB2CC537280"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_port.h",
+    "archived": "np_cl_control_port.h",
+    "sha256": "D81198DABE5B54795446D2CC6DC5CA6A6760854C75073988AE712AC19C6EE995"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_wire.h",
+    "archived": "np_cl_control_wire.h",
+    "sha256": "47D5C133EFF95E835BFE6D1A58CB954E6C7DEA7D042E1AC302C0E9F7065EBD4D"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_cycle_probe.h",
+    "archived": "np_cl_cycle_probe.h",
+    "sha256": "47377BA69375958E0FC3C800E63FFDC40EB8B81B3CDDD7C5D7036C2E746641DB"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_event_wire.h",
+    "archived": "np_cl_event_wire.h",
+    "sha256": "5E13A70903B38B5AB0E56638809B40BA6F36EB3A8AA62200BD58B666EB8D3815"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_first_bridge.h",
+    "archived": "np_cl_first_bridge.h",
+    "sha256": "D89083437D3F91944C3CB4C747B8E3169109629E94079E5692FE1FDAA36D65CE"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_journal.h",
+    "archived": "np_cl_journal.h",
+    "sha256": "E69FD8346A12A7E07F7681CC8826A064041FC6A9C5B3715ADE4F1FEBC1FA5913"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_kernel.h",
+    "archived": "np_cl_kernel.h",
+    "sha256": "6FA0D0118A1CB487273D86D2B878BE600AAA464A49941E1E92627A4B6267CF4E"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_reset.h",
+    "archived": "np_cl_reset.h",
+    "sha256": "B58A8EE74E1F0C85B75095F8B329A4C5C1658ECE88F9B763CD7DEC6AD3BAAEA2"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source.h",
+    "archived": "np_cl_source.h",
+    "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source_port.h",
+    "archived": "np_cl_source_port.h",
+    "sha256": "54348681909EC277359011E5140F24F2037F45F7A97E6C3DD6561AAA5B793561"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_v1.h",
+    "archived": "np_cl_v1.h",
+    "sha256": "DF5EE8058EE6D662E0CEBEF4E133E98A8163C8E26498583094AA6DD0C6960277"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_workspace.h",
+    "archived": "np_cl_workspace.h",
+    "sha256": "8671B055C41685E1846BCE8AE25FB4F05AEC1BE1C319C6FBA9E1B0D3A3F90E75"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_clocked_reset.inc",
+    "archived": "np_clocked_reset.inc",
+    "sha256": "875F9319C594BDB1DACBEC46BC13B4287117D6DCCCD419FFCCF788D1A091A4D3"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_cycle_port.inc",
+    "archived": "np_cl_cycle_port.inc",
+    "sha256": "6C5BB17C41E930DF9955E9851373E1233AECEF7F6546D99DA3A38D34D1E257D8"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_first_bridge.inc",
+    "archived": "np_cl_first_bridge.inc",
+    "sha256": "FE61780E3124F34B10BF16FB7CD60EA79804BC15427DEF0CE83DC379273BE0B7"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_kernel.c",
+    "archived": "np_cl_kernel.c",
+    "sha256": "0D635161D260B65C0A4C6E3EE2A8DEE8DEAECB32359D5AED48285C602CDAC13F"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd.inc",
+    "archived": "np_cl_sd.inc",
+    "sha256": "79BEA424AFB1CB81F168DB331264A20C39A4570934BEB7A05D082FB7BFE75DE2"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd_control.inc",
+    "archived": "np_cl_sd_control.inc",
+    "sha256": "DC03E1C2AA1F980994F6A91413488DB6B87E7A49F3D7CC5C2CAE14641D68A507"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_usb.inc",
+    "archived": "np_cl_usb.inc",
+    "sha256": "E6B1E0DA8AD0E477AA39DF67E9FD73DD7840D928CFEB59DA843AE974CD77EA6F"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_v1.c",
+    "archived": "np_cl_v1.c",
+    "sha256": "4714542AFED60BAFFB26B90B90FE9FC0E86C8A4AEFFB588D3FF9055E179A7631"
+  },
+  {
+    "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_workspace.c",
+    "archived": "np_cl_workspace.c",
+    "sha256": "956FB1AB9ABDCE86C78D46B6695148EBB200A805A23265DC620338891370FC26"
+  }
+]

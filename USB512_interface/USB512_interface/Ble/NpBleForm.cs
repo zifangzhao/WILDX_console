@@ -679,7 +679,7 @@ namespace USB512_interface
             if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");
             BeginBleRtcRecordingSetup(s);
             await PrepareBleHardwareRtc(s);RequireStartNotCanceled();
-            bleClosedLoopSetup=await NpClosedLoopSettings.Prepare(V2,s.Mask,s.Hz,
+            bleClosedLoopSetup=await NpClosedLoopSettings.Prepare(V2,true,s.Mask,s.Hz,
                 (request,token)=>connection.ExchangeAsync(0xb9,request,token),CancellationToken.None,Append);
             RequireStartNotCanceled();
             var warningProfile=Tuple.Create(s.Mask,s.Hz,s.Capacity);

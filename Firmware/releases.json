@@ -7,56 +7,56 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_USB_SD_RECOVERY_APP76302AC4_USBEF0BC695_20261030",
+      "release": "V1_15K_2PROBE_RIPPLE_APP5F90FD3B_USB8454D202_20261104",
       "sourceCommit": "23edae6de84869b1b9edcf9e52074649c0579cbb",
-      "stage": "PASS_SCOPED_WARM_SD_NATIVE_COLD_RECOVERY",
-      "appVersion": "build76302AC4 (USB SD-test cold-recovery fix)",
-      "usbVersion": "buildEF0BC695 (USB SD-test cold-recovery fix)",
+      "stage": "BOUNDED_RECORDING_CLOSED_LOOP_PASS",
+      "appVersion": "build5F90FD3B",
+      "usbVersion": "build8454D202",
       "recoveryVersion": "Unchanged bootloader / ABI258",
-      "appCrc32": "76302AC4",
-      "usbCrc32": "EF0BC695",
+      "appCrc32": "5F90FD3B",
+      "usbCrc32": "8454D202",
       "recoveryCrc32": null,
       "app": {
-        "path": "V1/V1_APP76302AC4.hex",
-        "sha256": "CFCE7D0EA0234D84C672286A12CC40CD28C7F21E6FD22A5EBA91326E4DB16447"
+        "path": "V1/V1_APP5F90FD3B.hex",
+        "sha256": "42D3ED89E4C339AB35A0D6BB5AAEC262482F15ADBEEC5EC82F3892C398386879"
       },
       "files": [
         {
-          "path": "V1/V1_APP76302AC4.hex",
-          "sha256": "CFCE7D0EA0234D84C672286A12CC40CD28C7F21E6FD22A5EBA91326E4DB16447"
+          "path": "V1/V1_APP5F90FD3B.hex",
+          "sha256": "42D3ED89E4C339AB35A0D6BB5AAEC262482F15ADBEEC5EC82F3892C398386879"
         },
         {
-          "path": "V1/V1_APP76302AC4.xenp",
-          "sha256": "2D2FA9383A93E7663355DD1D119AEC9522FF4A3998FD547900496C80677D5168"
+          "path": "V1/V1_USB8454D202.hex",
+          "sha256": "17A72546CCDCEE9F3626C60C696CD767876E92DDA0B272D0FD02DA2A2EEDFBE7"
         },
         {
-          "path": "V1/V1_USBEF0BC695.hex",
-          "sha256": "333E83C5D609A7DEB21F275F621B7EB9064F10137F39D0E572C0A476486C4598"
+          "path": "V1/V1_APP5F90FD3B.xenp",
+          "sha256": "B025D020100D556CE4DB9040B50CF32594D539647EF1D6254358F6282111FC13"
         },
         {
           "path": "V1/V1_BOOT_DFU_unchanged_20261030.hex",
           "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
         },
         {
-          "path": "V1/V1_BOOT_USBEF0BC695.hex",
-          "sha256": "89C96E3A5DAA2E90BA2E88EF552EEBD50D69B235AE5B12125A353F5FC70DAF96"
+          "path": "V1/V1_FUSED_BOOT_USB8454D202_APP5F90FD3B.hex",
+          "sha256": "9AC7307704D00FFE9E9055BD0D80C6A9C3E265C3CB9B4CDD58D71CDEB1D68A7B"
         },
         {
-          "path": "V1/V1_FUSED_BOOT_USBEF0BC695_APP76302AC4.hex",
-          "sha256": "431673E61783CAA33488832F03B09EBDB719336F97EBBD78F9952D176E1D4445"
+          "path": "V1/acceptance.json",
+          "sha256": "B11B4A652FCC6684B70BC138C0BA63570DF188BBC50B304B86BA3CB6FACF62F9"
         },
         {
-          "path": "V1/V1_SD_TEST_scoped_acceptance.json",
-          "sha256": "9E92F20C5BDE0AA926AC99C67DCD0BDD09810FD03DF3607346C2CDF03571E0EA"
+          "path": "V1/V1_BOOT_USB8454D202.hex",
+          "sha256": "FA6246145E198B96272F9519582E156E11676C322097EA4E2C5C6D765E1C11C2"
         }
       ],
-      "limits": "V1 exact neural gap durations and some device counters remain unavailable; Cold/ambiguous interrupted profile recovery fixed by register-only transaction; native/software reviewed, physical cold interruption not tested; No endurance, universal profile, arbitrary ADC bit-error, full source-window/final-tail or physical sensor conversion-phase claim; Physical cold interruption and general BLE/SD operation were not tested; Source archive is partial; exact main_syncbench source preimage unavailable; No assertion of losslessness outside the bounded 20 kHz test",
+      "limits": "V1 P1+P2 at15kHz, one/two Ripple detectors;60sUSB/~31sSD bounded checks. One initial IMU slot unavailable; terminal/full IMU coverage and CPU/power/endurance not established. See release qualification.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
-        "bytes": 377432,
-        "codeCrc32": "76302AC4",
-        "buildIdHex": "3663666662303831636634353662613735313031383666303735373331373637",
+        "bytes": 409772,
+        "codeCrc32": "5F90FD3B",
+        "buildIdHex": "3532363038646636656435353332666461333435656237616362383335396331",
         "manifestFlags": 0,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -64,14 +64,24 @@
       "usbIdentity": {
         "imageId": 1431519793,
         "baseAddress": 135790592,
-        "bytes": 344000,
-        "codeCrc32": "EF0BC695",
-        "buildIdHex": "3738313739323736646631353332343136646531336330386337316537356234",
+        "bytes": 384960,
+        "codeCrc32": "8454D202",
+        "buildIdHex": "3331303261623462386131643935633563613130383832626561393165646234",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
       },
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 377432,
+          "codeCrc32": "76302AC4",
+          "buildIdHex": "3663666662303831636634353662613735313031383666303735373331373637",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -174,6 +184,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 344000,
+          "codeCrc32": "EF0BC695",
+          "buildIdHex": "3738313739323736646631353332343136646531336330386337316537356234",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -342,28 +362,140 @@
         "a6f2f8054dfdf528038802092c34040cbd29ce48",
         "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
       ],
-      "sourceInputs": {
-        "appBuild": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\app_candidate_cold_r1\\build.json",
-        "usbBuild": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sd_job_20261030\\usb_candidate_cold_r1\\build.json",
-        "sourceArchiveSha256": "805211F0721E49E2FACC1AB5EF887D9372EC9BA5FA4AFD88F869F1094989F0CD",
-        "acceptance": "V1/V1_SD_TEST_scoped_acceptance.json"
-      },
+      "sourceInputs": [
+        {
+          "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb\\stream.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/usb-stream.c",
+          "sha256": "3A4648D99E63872CC9BC8A12DABD687D092BFF1FB8C5141D7C45259A5B10262A"
+        },
+        {
+          "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb\\provider.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/usb-provider.c",
+          "sha256": "F0B2CD3579741552E7401038E7C75434598DCBFDE6CEF16BB9BD1965B4E7959D"
+        },
+        {
+          "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-warm\\candidate-corrected\\app-provider.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/app-provider.c",
+          "sha256": "B81055BB1D1C0F4AE5548BADC6119B0E801D3CB044939D358B91D0B90D3EAE83"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_coefficients.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_coefficients.h",
+          "sha256": "9232076AE5D2EC3CA2600B0E50EBB09F92D06A0BB970CAD318911CB2CC537280"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_port.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_control_port.h",
+          "sha256": "D81198DABE5B54795446D2CC6DC5CA6A6760854C75073988AE712AC19C6EE995"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_wire.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_control_wire.h",
+          "sha256": "47D5C133EFF95E835BFE6D1A58CB954E6C7DEA7D042E1AC302C0E9F7065EBD4D"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_cycle_probe.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_cycle_probe.h",
+          "sha256": "47377BA69375958E0FC3C800E63FFDC40EB8B81B3CDDD7C5D7036C2E746641DB"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_event_wire.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_event_wire.h",
+          "sha256": "5E13A70903B38B5AB0E56638809B40BA6F36EB3A8AA62200BD58B666EB8D3815"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_first_bridge.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_first_bridge.h",
+          "sha256": "D89083437D3F91944C3CB4C747B8E3169109629E94079E5692FE1FDAA36D65CE"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_journal.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_journal.h",
+          "sha256": "E69FD8346A12A7E07F7681CC8826A064041FC6A9C5B3715ADE4F1FEBC1FA5913"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_kernel.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_kernel.h",
+          "sha256": "6FA0D0118A1CB487273D86D2B878BE600AAA464A49941E1E92627A4B6267CF4E"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_reset.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_reset.h",
+          "sha256": "B58A8EE74E1F0C85B75095F8B329A4C5C1658ECE88F9B763CD7DEC6AD3BAAEA2"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_source.h",
+          "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source_port.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_source_port.h",
+          "sha256": "54348681909EC277359011E5140F24F2037F45F7A97E6C3DD6561AAA5B793561"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_v1.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_v1.h",
+          "sha256": "DF5EE8058EE6D662E0CEBEF4E133E98A8163C8E26498583094AA6DD0C6960277"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_workspace.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_workspace.h",
+          "sha256": "8671B055C41685E1846BCE8AE25FB4F05AEC1BE1C319C6FBA9E1B0D3A3F90E75"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_clocked_reset.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_clocked_reset.inc",
+          "sha256": "875F9319C594BDB1DACBEC46BC13B4287117D6DCCCD419FFCCF788D1A091A4D3"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_cycle_port.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_cycle_port.inc",
+          "sha256": "6C5BB17C41E930DF9955E9851373E1233AECEF7F6546D99DA3A38D34D1E257D8"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_first_bridge.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_first_bridge.inc",
+          "sha256": "FE61780E3124F34B10BF16FB7CD60EA79804BC15427DEF0CE83DC379273BE0B7"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_kernel.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_kernel.c",
+          "sha256": "0D635161D260B65C0A4C6E3EE2A8DEE8DEAECB32359D5AED48285C602CDAC13F"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_sd.inc",
+          "sha256": "79BEA424AFB1CB81F168DB331264A20C39A4570934BEB7A05D082FB7BFE75DE2"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd_control.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_sd_control.inc",
+          "sha256": "DC03E1C2AA1F980994F6A91413488DB6B87E7A49F3D7CC5C2CAE14641D68A507"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_usb.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_usb.inc",
+          "sha256": "E6B1E0DA8AD0E477AA39DF67E9FD73DD7840D928CFEB59DA843AE974CD77EA6F"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_v1.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_v1.c",
+          "sha256": "4714542AFED60BAFFB26B90B90FE9FC0E86C8A4AEFFB588D3FF9055E179A7631"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_workspace.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_workspace.c",
+          "sha256": "956FB1AB9ABDCE86C78D46B6695148EBB200A805A23265DC620338891370FC26"
+        }
+      ],
       "full": {
-        "path": "V1/V1_FUSED_BOOT_USBEF0BC695_APP76302AC4.hex",
-        "sha256": "431673E61783CAA33488832F03B09EBDB719336F97EBBD78F9952D176E1D4445"
+        "path": "V1/V1_FUSED_BOOT_USB8454D202_APP5F90FD3B.hex",
+        "sha256": "9AC7307704D00FFE9E9055BD0D80C6A9C3E265C3CB9B4CDD58D71CDEB1D68A7B"
       },
-      "sourceCommitScope": "Baseline commit only; changed local V1 sources require explicit source publication",
-      "sourceProvenance": {
-        "ownerManifest": "V1/source-manifest.json",
-        "ownerManifestSha256": "042D4A49CB60C8449DF5A7537D6732921B893A5E464D4795A11E66386380D148",
-        "packageReceiptSha256": "9F2692AD25032FC4AE9C0EE49666EF9F565CBBF96B03CDD41329251D69F77BB4",
-        "acceptance": "V1/acceptance.json",
-        "acceptanceSha256": "5C079AB670882A95E4858D51A8C8AACA663B21DDDE63F841F6D63AABEE0BA715",
-        "sourceArchive": "ReleaseSources/1.0.0.204/V1_incremental_source_APPFFF283D9_USB1E73A743_20261030.zip",
-        "sourceArchiveSha256": "7EBE95A13DC91F2CA1474BF825C4006210B10305249448D3EE3BE0F1A8BACC35",
-        "canonicalSourceEquivalenceClaimed": false
-      },
-      "sourceCommitRole": "BASELINE_ONLY",
+      "sourceCommitScope": "Recorded repository baseline with partial exact overlays archived in release; binary identities are authoritative.",
+      "sourceProvenance": "../ReleaseSources/1.0.0.232/firmware/V1/source-freeze/manifest.json",
+      "sourceCommitRole": "baseline",
       "retainedBaselineProvenance": {
         "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
         "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",

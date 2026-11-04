@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "detectors": 2,
+  "mode": "USB",
+  "hz": 20000,
+  "probe_mask": 7,
+  "np_verified_prefix_blocks": 2112,
+  "complete": false,
+  "error": "Stage: Capture / PSSI ring overwrite/USB drain backlog. Probe: shared PSSI/SPI/DMA path; no individual probe implicated. Selected: P1+P2+P3, 20,000 Hz. Firmware: capture=4, producer=6, source=0. I2C=0x00000000, chain-fail=0x00000. Detail: IOException: NP2 USB stalled after 2112 blocks because firmware reported capture=4, producer=6, source=0. Accepted data was retained; recording is incomplete.",
+  "imu_error": "V2 AUX device reported error 8; optional stream quality is unverified.",
+  "max_host_completion_gap_ms": 157.6871,
+  "source_gaps": 7,
+  "carrier_quality_unknown": 1,
+  "ordering": "Fault versus long host gap ordering unknown; no causal assignment.",
+  "native_parity": "REFUSED invalid phase/origin after capture failure",
+  "release": "Disabled; no retry relabelled as pass"
+}

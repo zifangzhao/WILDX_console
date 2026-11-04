@@ -1,0 +1,1 @@
+Exact checked V1 component overlays. This is a partial source freeze with retained-object build provenance; it is not a complete independently rebuildable firmware source tree. The hardware-qualified HEX/XENP files are listed in approved-payload.json. Fused firmware directly merges those checked components and the unchanged bootloader.

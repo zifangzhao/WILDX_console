@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "app_version": "1.0.0.232",
+  "status": "V1_SCOPED_PASS_V2_PUBLISHED_FIRMWARE_RETAINED",
+  "qualification": {
+    "V1": {
+      "probe_mask": 3,
+      "sample_hz": 15000,
+      "filter": 6,
+      "usb_detectors": [
+        1,
+        2
+      ],
+      "sd_detectors": [
+        1,
+        2
+      ],
+      "app_crc32": "5F90FD3B",
+      "usb_crc32": "8454D202",
+      "scope": "Bounded recording, observed IMU and native event replay; initial-slot and terminal-coverage limits retained"
+    },
+    "V2": {
+      "probe_mask": 7,
+      "sample_hz": 20000,
+      "usb_detectors": [],
+      "sd_detectors": [],
+      "status": "disabled",
+      "reason": "Candidate ordinary SD baseline failed NP and IMU integrity",
+      "retained_app_crc32": "71A5126E",
+      "retained_usb_crc32": "2556B4DD",
+      "local_usb_one": "pass",
+      "local_usb_two": "fail",
+      "local_sd_zero": "fail",
+      "local_sd_one_two": "blocked"
+    }
+  },
+  "software": {
+    "workflow_checks": 174,
+    "build": "one incremental application build232; SDK reused unchanged",
+    "catalog": "actual232 loader and all asset hashes passed",
+    "recording_path": "unchanged231 recording paths and exact qualified firmware;232 narrows mode/count/filter admission"
+  },
+  "V1": {
+    "receipt": "v1-qualification.json",
+    "sha256": "1A56C01B7A8176F9281CE41D77780E2DEA8F6652F9EE3BB58CC53484969F42FF",
+    "result": "PASS_SCOPED_V1_15K_2PROBE_RECORDING_WITH_1_2_RIPPLE_DETECTORS"
+  },
+  "V2": {
+    "receipt": "v2-qualification.json",
+    "sha256": "BC0F5B82F355A462DDDDA353C9733AB44CEF7D38502B9AB93F9273EF231B65CE",
+    "result": "V2_PAIR_NOT_QUALIFIED_ORIGINALS_RESTORED_LEASE_RELEASED",
+    "failed_candidate_bundled": false
+  },
+  "hardware_restored": true,
+  "limits": [
+    "V1 one initial unavailable IMU slot; full terminal IMU coverage not established.",
+    "V2USB2 failed; SD0 baseline failed, so SD1/2 were blocked. No failed V2 candidate image is included.",
+    "Bounded60sUSB/~31sSD checks, not endurance/all-PC/all-card qualification.",
+    "V2 test-card format was explicitly approved and succeeded via BLE; the USB submission was rejected before queueing."
+  ],
+  "validation_note": "../../Note/CLOSED_LOOP_QUALIFICATION_20261104.md",
+  "completed_utc": "2026-11-04T16:13:45.3939877Z"
+}

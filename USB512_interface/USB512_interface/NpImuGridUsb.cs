@@ -37,17 +37,18 @@ namespace USB512_interface {
                 Need(Finalized&&OuterLossless,"Capture finalization or outer transport continuity unavailable.");
                 Need(Mask==r.Mask&&ApHz==r.ApHz&&r.SourceHz==ApHz*780U,"Final source profile/selected mask mismatch.");
                 Need(Probes!=null&&Probes.Length>0,"No finalized probe source windows.");
-                uint seen=0;long rawBytes=-1;ulong common=UInt64.MaxValue;
+                uint seen=0;ulong common=UInt64.MaxValue;
                 foreach(var p in Probes){
                     Need(p!=null&&p.Port>=1&&p.Port<=3,"Invalid physical probe source window.");uint bit=1U<<(p.Port-1);
                     Need((Mask&bit)!=0&&(seen&bit)==0,"Duplicate/unselected physical probe window.");seen|=bit;
                     Need(p.RawBytes>0&&p.ApRows>0&&p.FramesChecked>0&&p.FirstTick>=0,"Empty or unavailable decoded NP prefix.");
                     var native=r.Probes[p.Port-1];Need((ulong)p.FirstTick==native.FirstTick&&p.FirstCounter==native.Counter,"Decoded first byte/native counter does not match final NPSTART port proof.");
                     Need(p.HostDroppedBytes==0&&p.HostDropEvents==0&&p.FrameErrors==0&&p.CounterErrors==0&&p.GapEvents==0&&p.Relocks==0&&p.RecoveryBytes==0&&p.MissingApRows==0&&p.MissingLfpRows==0&&p.LfpPhaseErrors==0,"NP prefix has actual loss/recovery/framing/counter/phase errors.");
-                    if(rawBytes<0)rawBytes=p.RawBytes;else Need(p.RawBytes==rawBytes,"Selected probes have different retained raw source extents.");
                     ulong validatedEnd=checked((ulong)p.FirstTick+(ulong)p.FramesChecked*60UL);
                     ulong savedEnd=checked((ulong)p.FirstTick+(ulong)p.ApRows*780UL);
                     Need(savedEnd<=validatedEnd&&validatedEnd<=(ulong)p.RawBytes&&(ulong)p.RawBytes-validatedEnd<60UL,"Saved AP prefix/validated-frame/raw extent inconsistency.");
+                    // A clean Stop can leave unequal probe tails. Only the shared
+                    // prefix through the shortest independently verified AP end overlaps.
                     common=Math.Min(common,savedEnd);
                 }
                 Need(seen==Mask&&common!=UInt64.MaxValue&&common>r.ReferenceTick,"Not every selected NP port has a verified saved prefix.");end=common;return true;

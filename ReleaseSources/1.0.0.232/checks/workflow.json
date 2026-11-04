@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "checks": 174,
+  "scope": "optional setup, legacy fallback, profile/count/transport/filter admission, no replay, explicit disable and bound V1/V2 event logs",
+  "hardware": false,
+  "inputs": [
+    {
+      "path": "Tests/NpClosedLoopWorkflowTests.cs",
+      "sha256": "1B9037449A6B7D0B29D7106107858121AA64C6E1E5B272115DEF88AD954B0B2D"
+    },
+    {
+      "path": "test_closed_loop_workflow.ps1",
+      "sha256": "F0D9531D8638004A06FB5E62B3A6B9F72DAAAFA179A3DD9317D4F606E5BC0FF3"
+    },
+    {
+      "path": "Tests/Fixtures/closed-loop/metadata.bin",
+      "sha256": "F1406086BE6EF06404220DC828CCD2EDD5F377069F94802684A7658C18A947C4"
+    },
+    {
+      "path": "Tests/Fixtures/closed-loop/events.npcl",
+      "sha256": "628C4D198D1DC9CF3977AE0061FC1FDF15B684E565478E892BC2153531917A61"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "detectors": 0,
+  "hz": 20000,
+  "probe_mask": 7,
+  "seconds": 60.382,
+  "checks": {
+    "normal_complete": true,
+    "np_all_blocks_verified": true,
+    "np_firmware_errors_zero": true,
+    "imu_no_new_losses": true,
+    "imu_enforced_and_phase": true,
+    "imu_rows_retained": true,
+    "imu_cadence": true,
+    "cl_source_loss_zero": true,
+    "cl_off": true
+  },
+  "np_blocks": 47152,
+  "imu_rows": 75443,
+  "imu_observed": 75443,
+  "imu_cadence_hz": 1249.428637673479,
+  "host_completion_gap_ms": 26.4585,
+  "host_read_backlog_peak": 7,
+  "host_shared_backlog_peak": 118,
+  "imu_source_window_verified": "False",
+  "imu_final_slot_known": "False",
+  "cl_event_count": 0,
+  "cl_decode_service_percent": null,
+  "perf_scope": "Instrumented decode+service only; includes preemption and measurement overhead. Other buckets are nested. Not total CPU or power.",
+  "limits": [
+    "60-second bounded check, not endurance",
+    "Existing full IMU source-window and final-tail coverage remain unknown",
+    "No total CPU/power or analog stimulus qualification"
+  ]
+}
