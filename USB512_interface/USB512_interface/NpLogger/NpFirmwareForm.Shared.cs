@@ -12,7 +12,7 @@ namespace USB512_interface
         sealed class V2Target
         {
             internal string Path,Uid;internal bool Boot;
-            public override string ToString(){return "NP V2 "+Uid+(Path==null?" — reconnect / DFU":Boot?" — recovery":" — USB service");}
+            public override string ToString(){return "WILD-X V2 USB — "+Uid+(Path==null?" — reconnect / DFU":Boot?" — recovery":" — USB service");}
         }
         protected readonly ComboBox bundledPart=new ComboBox{Name="bundledFirmwarePart",DropDownStyle=ComboBoxStyle.DropDownList,Width=245};
         uint selectedFamily;

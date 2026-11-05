@@ -1,0 +1,9 @@
+{
+  "exe_sha256": "BD88E725347F077C5ED20FA784DEFC5308C8A93960676DF8A4A1A5A959808DEA",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "version": "1.0.0.237",
+  "checks_workflow": 211,
+  "checks_source_binding": 326,
+  "qualification_status": "CANDIDATE_USB_HARDWARE_PENDING",
+  "published_installer": "1.0.0.235"
+}

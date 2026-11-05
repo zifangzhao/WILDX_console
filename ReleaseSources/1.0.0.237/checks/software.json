@@ -1,0 +1,11 @@
+{
+  "status": "PASS_REUSED_DEVELOPMENT_EVIDENCE",
+  "workflow_checks": 211,
+  "source_binding_checks": 326,
+  "workflow_exe_sha256": "584E78BDE44CB3F5E977E30950B9618F3E3213AEEFF74E6E8FA61D280AE1917B",
+  "binding_exe_sha256": "D46006BB745399E116F78BCDCE6764E7A1F0DC8D6A00636C091F92573BDBD5B9",
+  "app_version": "1.0.0.237",
+  "app_compilations": 1,
+  "sdk_reused_from": "../1.0.0.235/sdk-build.json",
+  "scope": "Previously recorded development checks and exact test binary identities. No new tests/builds during packaging. Candidate receipt creation predates final accepted hardware/restoration receipt."
+}

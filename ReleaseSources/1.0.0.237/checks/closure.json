@@ -1,0 +1,45 @@
+{
+  "status": "ACCEPTED_RESTORED_AND_COMPACTED_APPEND_ONLY_CLOSURE",
+  "accepted_sha256": "79D657BAF70B7CF8940B6842C06FB565709548BA88FAA28C5A8376DCBF3B57FF",
+  "source_zip_sha256": "13CCA51A3E8B96ACE762908A7373236B90FBBEFCF2FF57645FFC6676BDDEBD78",
+  "files": {
+    "accepted.json": {
+      "bytes": 6128,
+      "sha256": "79D657BAF70B7CF8940B6842C06FB565709548BA88FAA28C5A8376DCBF3B57FF"
+    },
+    "restoration-complete.json": {
+      "bytes": 581,
+      "sha256": "C6611135221948E584336275D87FB54B814E623FF4C1330B3B25752E7EE60B58"
+    },
+    "deployment/Restore-verified.json": {
+      "bytes": 338,
+      "sha256": "1715714EB160DDDFF19F8B25C2848741812870B08356F0663CDABBFEDC112C24"
+    },
+    "owner/lease.json": {
+      "bytes": 343,
+      "sha256": "CFF053166E165E6E8C83894569BB6D21524C2EFFD7C5CAFE7E578BC59BE83233"
+    },
+    "cleanup-complete.json": {
+      "bytes": 773,
+      "sha256": "647938AF1A98792F46B11E4D543841B11B83646665EED7A7C9906139320073CA"
+    },
+    "compact/manifest.json": {
+      "bytes": 24847,
+      "sha256": "37C956455ED193E9F9F9872BC6CA51F093F7CE2E21C6152E52E4E7D42EDC038A"
+    },
+    "finish-restore.ps1": {
+      "bytes": 3211,
+      "sha256": "0E77F35F08D1B1AC9BD5315765FE66A8FE682830FFBC27C295B386130577D48B"
+    },
+    "compact-neural.py": {
+      "bytes": 4326,
+      "sha256": "ADA781D1B7BD9138EB93D511F0A002C0427DBF7A87E56E4DF28DD0EAEA344073"
+    },
+    "accept.py": {
+      "bytes": 4100,
+      "sha256": "75584CD2D4F4AB4A76EAD044D68D676EDC72EF089A8E4CD38CD1CCBBA3B04F08"
+    }
+  },
+  "utc": "2026-11-05T01:08:08.087137+00:00",
+  "scope": "Final closure of unchanged accepted firmware and frozen exact source; no requalification, rebuild or publication."
+}

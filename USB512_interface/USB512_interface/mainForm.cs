@@ -832,8 +832,8 @@ namespace USB512_interface
                 {
                     Path = path,
                     Kind = v2 ? DeviceKind.NpV2 : v1 ? DeviceKind.XeNp : DeviceKind.NpUnavailable,
-                    DisplayName = v2 ? "WILD-X V2 / NP2 USB" :
-                        v1 ? "NP1 USB" :
+                    DisplayName = v2 ? "WILD-X V2 USB" :
+                        v1 ? "WILD-X V1 USB" :
                         (String.IsNullOrWhiteSpace(productName) ? "Unidentified NP USB device" : productName) +
                         " (NP service unavailable; recording disabled)"
                 });

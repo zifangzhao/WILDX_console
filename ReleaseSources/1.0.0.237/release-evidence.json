@@ -1,0 +1,84 @@
+{
+  "version": "1.0.0.237",
+  "owner_accepted_sha256": "79D657BAF70B7CF8940B6842C06FB565709548BA88FAA28C5A8376DCBF3B57FF",
+  "source_zip_sha256": "13CCA51A3E8B96ACE762908A7373236B90FBBEFCF2FF57645FFC6676BDDEBD78",
+  "closure_zip_sha256": "DAC0E4DC787A3759E20B2340661D5EF88B0E7FF9375FA14F8954E4BF0F0988F7",
+  "scope": "Original accepted/source pins preserved; append-only final restoration/cleanup closure is separate. Reused V1/SD/SDK source remains in235.",
+  "files": [
+    {
+      "path": "v2-qualification.json",
+      "bytes": 6128,
+      "sha256": "79D657BAF70B7CF8940B6842C06FB565709548BA88FAA28C5A8376DCBF3B57FF"
+    },
+    {
+      "path": "firmware/V2/source-freeze/source-freeze.zip",
+      "bytes": 307776,
+      "sha256": "13CCA51A3E8B96ACE762908A7373236B90FBBEFCF2FF57645FFC6676BDDEBD78"
+    },
+    {
+      "path": "firmware/V2/source-freeze/manifest.json",
+      "bytes": 225509,
+      "sha256": "6160E31746CF1C78E554138E4982A5C90B78771BDD3E259258F6FD2E7BE61BBC"
+    },
+    {
+      "path": "checks/restoration-complete.json",
+      "bytes": 581,
+      "sha256": "C6611135221948E584336275D87FB54B814E623FF4C1330B3B25752E7EE60B58"
+    },
+    {
+      "path": "checks/lease.json",
+      "bytes": 343,
+      "sha256": "CFF053166E165E6E8C83894569BB6D21524C2EFFD7C5CAFE7E578BC59BE83233"
+    },
+    {
+      "path": "checks/cleanup-complete.json",
+      "bytes": 773,
+      "sha256": "647938AF1A98792F46B11E4D543841B11B83646665EED7A7C9906139320073CA"
+    },
+    {
+      "path": "checks/closure.zip",
+      "bytes": 14567,
+      "sha256": "DAC0E4DC787A3759E20B2340661D5EF88B0E7FF9375FA14F8954E4BF0F0988F7"
+    },
+    {
+      "path": "checks/closure.json",
+      "bytes": 1743,
+      "sha256": "13406FDFAA709A87B3710445FE81D5A41D6DBEC0E00BA025FBD3D47BB86ECDD5"
+    },
+    {
+      "path": "checks/catalog-loader.json",
+      "bytes": 458,
+      "sha256": "94CE547587C05AFC27E33E71B78F30534FEFB12AB96FD7956BD59D03374B02A9"
+    },
+    {
+      "path": "checks/catalog-loader.log",
+      "bytes": 164,
+      "sha256": "3B5987D6217EF45BE0F1CAEC3B1AAA23DD103907DEA2ABF7BD55E0CB979E0FFF"
+    },
+    {
+      "path": "checks/host-candidate.json",
+      "bytes": 362,
+      "sha256": "A11CB7BDCCFAA6F9B7652044B0D9B9C0B4DABC3F95E33C5916CA91662D3F2D3F"
+    },
+    {
+      "path": "checks/software.json",
+      "bytes": 618,
+      "sha256": "08BA2E387EECBD25C0FCF0466701030703823D0A50D0C18E7F42B4F9697EBF31"
+    },
+    {
+      "path": "checks/compact-hil.zip",
+      "bytes": 1906912,
+      "sha256": "AA3CBCE7C9C77EB9DF52E66949B783582EEE6236B54B585C2AEF13E7AF8F2EC8"
+    },
+    {
+      "path": "checks/compact-hil-manifest.json",
+      "bytes": 43726,
+      "sha256": "8BF5687C7A848090F69862CB8A0B8E193D358258FBB442576F7701E281A75BE4"
+    },
+    {
+      "path": "checks/software-source.zip",
+      "bytes": 10185,
+      "sha256": "8FF5D786F6FAB829D46CFB528014BEE9BEE95449E86F3BAB28106EA50BFBB5C3"
+    }
+  ]
+}

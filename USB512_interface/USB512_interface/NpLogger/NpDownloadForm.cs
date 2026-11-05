@@ -37,9 +37,9 @@ namespace CE32_console
         internal string SelectedSourceDescription{get{var source=sources.SelectedItem as Source;return source==null?null:source.Label;}}
         internal static string UsbSourceLabel(string path) {
             string uid=USB512_interface.NpV1Management.UidFromPath(path);
-            if(uid!=null)return "Neuropixels V1 USB — "+uid;
+            if(uid!=null)return "WILD-X V1 USB — "+uid;
             uid=USB512_interface.NpV2FirmwareForm.Uid(path);
-            return uid!=null?"Neuropixels V2 USB — "+uid:"Neuropixels USB — version unknown — "+path;
+            return uid!=null?"WILD-X V2 USB — "+uid:"WILD-X USB — version unknown — "+path;
         }
         IWin32Window DialogOwner{get{return TopLevelControl??this;}}
         internal event Action BusyChanged;

@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "app_version": "1.0.0.237",
+  "exe_sha256": "BD88E725347F077C5ED20FA784DEFC5308C8A93960676DF8A4A1A5A959808DEA",
+  "catalog_sha256": "AA9CB3F20402C7F5F63A5AA72DD30414262A3717B4F1F1DB8C71B69A362B348A",
+  "started_utc": "2026-11-05T01:07:58.6155118Z",
+  "finished_utc": "2026-11-05T01:07:59.1048130Z",
+  "scope": "Actual compiled237 NpFirmwareCatalog.Load on selected explicit firmware tree; no application launch or hardware"
+}

@@ -14,7 +14,7 @@ namespace USB512_interface
     {
         internal string Path, Uid;
         internal bool Recovery;
-        public override string ToString() { return "NP V1 " + Uid + (Path==null ? " — reconnect / DFU" : Recovery ? " — recovery" : " — USB service"); }
+        public override string ToString() { return "WILD-X V1 USB — " + Uid + (Path==null ? " — reconnect / DFU" : Recovery ? " — recovery" : " — USB service"); }
     }
 
     // V1 split protocol only. Never use the generic DFU/V2 updater for an NP V1 app.

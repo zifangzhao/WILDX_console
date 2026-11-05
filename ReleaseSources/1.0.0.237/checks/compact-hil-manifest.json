@@ -1,0 +1,1241 @@
+{
+  "status": "COMPACT_HIL_AND_BOUNDED_REPLAY_FIXTURES_SECURED",
+  "owner_accepted_sha256": "79D657BAF70B7CF8940B6842C06FB565709548BA88FAA28C5A8376DCBF3B57FF",
+  "compact_hil_zip_sha256": "AA3CBCE7C9C77EB9DF52E66949B783582EEE6236B54B585C2AEF13E7AF8F2EC8",
+  "compact_hil_zip_bytes": 1906912,
+  "file_count": 246,
+  "uncompressed_bytes": 2810857,
+  "scope": "Selected run and sensor-review JSON/text/CSV/bin/log <=128KiB, explicit top-level receipts and exact owner-approved neural/timestamp fragments. No full neural/IMU capture or original firmware backup included.",
+  "files": [
+    {
+      "path": "accepted.json",
+      "bytes": 6128,
+      "sha256": "79D657BAF70B7CF8940B6842C06FB565709548BA88FAA28C5A8376DCBF3B57FF"
+    },
+    {
+      "path": "audit/sensors/usb-cl0-review.json",
+      "bytes": 7180,
+      "sha256": "83AF69204A1DBBAF1F99E96E6549406A97B314F8F4356C778F91AB80D200D7F5"
+    },
+    {
+      "path": "audit/sensors/usb-cl1-review.json",
+      "bytes": 7178,
+      "sha256": "668A0E8239B4D9FF9835E40E8FFC927D2933A4B1266FC16B27391162A1247F71"
+    },
+    {
+      "path": "audit/sensors/usb-cl1-window-review.json",
+      "bytes": 5060,
+      "sha256": "16067F0D4C4D29977A3E820B4F6F8D2B3647145538F7C215050B0B4B42A9C530"
+    },
+    {
+      "path": "audit/sensors/usb-cl2-restart-review.json",
+      "bytes": 7150,
+      "sha256": "8390903ED2A4DDC3483F06B28A367525681922629A76E6139D6B2C719238907C"
+    },
+    {
+      "path": "audit/sensors/usb-cl2-restart-window-review.json",
+      "bytes": 5116,
+      "sha256": "5D395AFAEA3BD49E3CFD58781B7072EBDAA821A544BC17D14D890E4E6469C186"
+    },
+    {
+      "path": "audit/sensors/usb-cl2-review.json",
+      "bytes": 7177,
+      "sha256": "0FD8FC128ABBADED3C3CC516100CFE3AED0AF1039147A0E14D0717B29993906A"
+    },
+    {
+      "path": "audit/sensors/usb-cl2-window-review.json",
+      "bytes": 5056,
+      "sha256": "5F05F05A441C40B6A9F8ABC4D729060CCBBD6DB6E693BCD62627B38239291696"
+    },
+    {
+      "path": "cleanup-complete.json",
+      "bytes": 773,
+      "sha256": "647938AF1A98792F46B11E4D543841B11B83646665EED7A7C9906139320073CA"
+    },
+    {
+      "path": "compact/manifest.json",
+      "bytes": 24847,
+      "sha256": "37C956455ED193E9F9F9872BC6CA51F093F7CE2E21C6152E52E4E7D42EDC038A"
+    },
+    {
+      "path": "compact/usb-cl0/probe1/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "6FB0DEFE9B4ADBACEE88E1788E49569F8B94CE4808710E58D647527E044FD765"
+    },
+    {
+      "path": "compact/usb-cl0/probe1/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "1C55148CB623909FC70392A859FA91D9C395D2F9521F262134BBD51E5A58A36F"
+    },
+    {
+      "path": "compact/usb-cl0/probe1/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "B48124E9D47C38850211709D1FD810F1084C3E979B5EF0352C0F0CF0473F7ACC"
+    },
+    {
+      "path": "compact/usb-cl0/probe1/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "FE3E3BBC3DD0E1A34B19A17EC10E1021C863D353BA997D29F434FA24C48DE527"
+    },
+    {
+      "path": "compact/usb-cl0/probe2/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "5A6B103D856F63EC44A327A24B8987E9C10D50F9BE2F8322ABE1917D123478CD"
+    },
+    {
+      "path": "compact/usb-cl0/probe2/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "C510DD9D1AF2F25E931BEC33E4B6B1813CE8E2DBE20DD00D1E7C041E4BF711CF"
+    },
+    {
+      "path": "compact/usb-cl0/probe2/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "8820032C6D5C504843D2567C09EFB5E1315B191AAB27893F13911FAF71F50941"
+    },
+    {
+      "path": "compact/usb-cl0/probe2/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "52DB983FB802BC70E0AA6341B9D597F2311EC5E92DC2857F8D69D60515BEAA2F"
+    },
+    {
+      "path": "compact/usb-cl0/probe3/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "F922F09399B13E04BC13E0958FD35D7E8CADC3BF2DA297FDC4F1EFADA0D36B5D"
+    },
+    {
+      "path": "compact/usb-cl0/probe3/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "36EAB0DF67702AB9B2A96A9CEE04E932D136B3E4B49B6917B18E11A05ECF0B19"
+    },
+    {
+      "path": "compact/usb-cl0/probe3/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "BFE61A65504AF451DCBAB0FC351087778221159FE97FBCFF5FDEAF1DA2BF4C45"
+    },
+    {
+      "path": "compact/usb-cl0/probe3/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "57338B52C9219D5CED1A7A22984F2978D48869914BE4547F0F0522C3FDB9C673"
+    },
+    {
+      "path": "compact/usb-cl1/probe1/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "6C11949BA69DFFE1B80CD6923E78AFB42925EDBCB4A589CD94029BFA07D9BDE5"
+    },
+    {
+      "path": "compact/usb-cl1/probe1/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "FB20D1991E2B2EEBE9C0D47C3888DDBBF3C9272C98D834032DCD84475340929A"
+    },
+    {
+      "path": "compact/usb-cl1/probe1/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "CF89E957ED0B696AED5B471B8533B1382E7BA53F1707C0B02E78189002BD7507"
+    },
+    {
+      "path": "compact/usb-cl1/probe1/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "5D927555D04773E76D34DCB0BC0750B100DD47B44CFE84765E368BE3C2C2BF17"
+    },
+    {
+      "path": "compact/usb-cl1/probe2/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "6E33B9D4382263E00AAE2A425122FA3CC863CE38DB7375C7D0E7770E5F5373CB"
+    },
+    {
+      "path": "compact/usb-cl1/probe2/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "3B35E080EC980844A4B20FC5C1AB8D08C0483603E1849375EE7AD5FB5C2C1B5D"
+    },
+    {
+      "path": "compact/usb-cl1/probe2/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "CD8245F6DE3A9F34AADB703711A03A7867FF48A8B99A9E430FA5F534D7E4CE7F"
+    },
+    {
+      "path": "compact/usb-cl1/probe2/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "6A8D308736C4AD5848DD10EF2C3DE404167F0F61AEE89A34B656582CAA0D5160"
+    },
+    {
+      "path": "compact/usb-cl1/probe3/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "0D34F5C23FF67A2EC0DC8C216E6CE83A97974EA2DD398510ABBACA3A7529523C"
+    },
+    {
+      "path": "compact/usb-cl1/probe3/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "C7488A4032CCF192E034C5EAC5100793F82893083E89A6E9B5CE4C80BF191225"
+    },
+    {
+      "path": "compact/usb-cl1/probe3/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "AE4A3554695BB13C1D1EEA6C97DEC93F1682C7FEEE034EF069069F9B773FCF30"
+    },
+    {
+      "path": "compact/usb-cl1/probe3/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "1D54FFC4232E7824C0D716BC7C0C09CC0AB262C703A0D2F6E0B6426F42AF0E4D"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe1/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "F5B65F7F635D350EA5971C7BFBEA1043229E33D19B02260DC5B1B7859064EC0F"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe1/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "CB6F518069F95F2BC769A9DDE36AE12F0FD884BD11E652227134DBDC1CD79217"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe1/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "87C7C0634C20D99E8937D54BB5CE3129AB7DDE8FB02458128F041F1AAC8D17FA"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe1/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "54523F125114A51ABB0835B92990A2BAED241132AFB99E82CC6424C3C852DED3"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe2/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "90561C21924923892AAB81C0652FBBE245F23F9E58111DCA3C1F1BC8CFBF0D6E"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe2/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "BB35F4A515E44B8ADF876226502514F638A8A4AD08A5D2660A1C0E54B45AE234"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe2/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "806D6BB502946B216F0879AFDFC8B07543AAD3011E1D028605599DE4D95EB45F"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe2/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "6C0967D5C13CA2B1677B3A36C6846F9B426BCDD4BDDAF36DFBA4C3DA00D0AF0F"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe3/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "8EBA289DD5BD328C1B7DC3832F6FB64B8D865A3F9EA861D9963B862EF1C5820A"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe3/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "0A2270D28695E35438D236082521781470098FC767C1F66B33038138040F99FF"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe3/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "AF00A7D11D02AFC0D5E042D6AFF54747BD155A93331B1B7B81B241D31139AEDE"
+    },
+    {
+      "path": "compact/usb-cl2-restart/probe3/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "1CABE0DCC5D31D0430E81C61F004AC14AE01449FFAC18D9709E7C83BDAC46639"
+    },
+    {
+      "path": "compact/usb-cl2/probe1/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "E3E8648F3A6D685E7A30201618C1F5D45D9146ACB033DE8DEEF84DA39DC6BF30"
+    },
+    {
+      "path": "compact/usb-cl2/probe1/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "AB8F5D9C536E1967AD6E447824BDFC0DCA7AC52B476F0043F3C103D933938CAC"
+    },
+    {
+      "path": "compact/usb-cl2/probe1/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "AE0CB95BC896F16F06123D9C9D01C1F12903B9DB7A780D64500F835F84C322F4"
+    },
+    {
+      "path": "compact/usb-cl2/probe1/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "FE5F74EDB69C86AC1AC5586459438C40A4E505FF4AAD52C743B103B6FE6D2BB5"
+    },
+    {
+      "path": "compact/usb-cl2/probe2/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "30B97BE0D4A34A384530C32D7A3723787284E48BF200AB25D1AF2BEFDEEDC40A"
+    },
+    {
+      "path": "compact/usb-cl2/probe2/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "CE68832687E10CC45928059786FB7419A9CE5F645C81C68188A7D9E5A748E6AA"
+    },
+    {
+      "path": "compact/usb-cl2/probe2/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "21F6ABE35CE0F7A7B2373F56646DBAE6E49929982EBDEB00C5EF15B87B304B04"
+    },
+    {
+      "path": "compact/usb-cl2/probe2/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "BAA9334F98AF79BF0ED352104AE9BF02711E483C7934A055AC3EE725C551E3CE"
+    },
+    {
+      "path": "compact/usb-cl2/probe3/neuropixels_ap.dat.head",
+      "bytes": 98304,
+      "sha256": "401752E6B49D6A6C21EB5BEB787153AE07F5D559222CA49181ABC6991E693787"
+    },
+    {
+      "path": "compact/usb-cl2/probe3/neuropixels_ap.dat.tail",
+      "bytes": 98304,
+      "sha256": "44453DC47CBA7BC96267381FF8918F520D0E5CDFCA8AFD7487F3DD4C70097195"
+    },
+    {
+      "path": "compact/usb-cl2/probe3/timestamps.calibrated.dat.head",
+      "bytes": 1024,
+      "sha256": "21F6ABE35CE0F7A7B2373F56646DBAE6E49929982EBDEB00C5EF15B87B304B04"
+    },
+    {
+      "path": "compact/usb-cl2/probe3/timestamps.calibrated.dat.tail",
+      "bytes": 1024,
+      "sha256": "BAA9334F98AF79BF0ED352104AE9BF02711E483C7934A055AC3EE725C551E3CE"
+    },
+    {
+      "path": "helper-receipt.json",
+      "bytes": 805,
+      "sha256": "DFBDD678E5FFA844A28292C5128136542692B3F66339CC407A50D4FF3A1B6575"
+    },
+    {
+      "path": "owner/lease.json",
+      "bytes": 343,
+      "sha256": "CFF053166E165E6E8C83894569BB6D21524C2EFFD7C5CAFE7E578BC59BE83233"
+    },
+    {
+      "path": "performance-summary.json",
+      "bytes": 1520,
+      "sha256": "878049FDB16DD681500338255C6350162FD8354A2BC7BC37F725A40D34910805"
+    },
+    {
+      "path": "restoration-complete.json",
+      "bytes": 581,
+      "sha256": "C6611135221948E584336275D87FB54B814E623FF4C1330B3B25752E7EE60B58"
+    },
+    {
+      "path": "runtime-receipt.json",
+      "bytes": 470,
+      "sha256": "8D7E11B143E953A03C9D9AFC9694F33EFAEDC9DBC9378DC2E1BE8A7326046F18"
+    },
+    {
+      "path": "source-overlay.json",
+      "bytes": 2454,
+      "sha256": "CB93454685BC6D94C51C71BEE31CAA8A1A703C82389471D2CB5E78F07FBD2BD0"
+    },
+    {
+      "path": "source-preimages.json",
+      "bytes": 2091,
+      "sha256": "61255BE1528ED9611B2E3C470B62954369E8BB119BA4BC1A12FCA402F6E387AB"
+    },
+    {
+      "path": "usb-cl0/SystemCoreClock.bin",
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    {
+      "path": "usb-cl0/acquisition_anchor.bin",
+      "bytes": 64,
+      "sha256": "261DD294447C4759654920F193B842B987DB27B88FFB4EC7D97661C9EBBEB6E0"
+    },
+    {
+      "path": "usb-cl0/analogin_encoding.txt",
+      "bytes": 3014,
+      "sha256": "2F22185A8F3B1290F4A12A09148A5060E12D8BC35CE44C7603AC2DC70B8AA0A5"
+    },
+    {
+      "path": "usb-cl0/capture-anchor-raw.bin",
+      "bytes": 44,
+      "sha256": "3736FE7B14AC0C840AD5A2F325AC9FBC08D78202BE1172A12706F19BEC0EAFB0"
+    },
+    {
+      "path": "usb-cl0/cl-workspace.bin",
+      "bytes": 3640,
+      "sha256": "F25AA50390750F51D705195701BA474D3EB27D313CEAD39016B7B1E656E18082"
+    },
+    {
+      "path": "usb-cl0/clock_linear_fit.txt",
+      "bytes": 799,
+      "sha256": "38D0138AF927A1A8BC71AC83EAEA6997BC9F7AA72C792841C270B11B458988F8"
+    },
+    {
+      "path": "usb-cl0/clock_observations.csv",
+      "bytes": 567,
+      "sha256": "DB3D09ECF686A009DC21920CD3D77365FCC18FE50810EE0B8CCD91691350DAF4"
+    },
+    {
+      "path": "usb-cl0/closed_loop_control_receipt.bin",
+      "bytes": 64,
+      "sha256": "6BED93DC0A79A35B9247F77EECC314DDA259F5E507EC7FBB6FF949B404FF30E5"
+    },
+    {
+      "path": "usb-cl0/closed_loop_requested.bin",
+      "bytes": 64,
+      "sha256": "8F40D9B0D8CD680713B3830C850BDFF2BC43AFE3DBC71D535E149B61882E834F"
+    },
+    {
+      "path": "usb-cl0/dwt-registers.bin",
+      "bytes": 8,
+      "sha256": "A071F36F5FEE47157E685F0C0793757A8F3808B9F5A4F39C6C4ADAC7E4493A19"
+    },
+    {
+      "path": "usb-cl0/first_sample_timestamps.json",
+      "bytes": 12331,
+      "sha256": "D8E12BFC59A0AFB98AFB4789E126848ED59518B058A2EA57B2C1EEE7BF15629F"
+    },
+    {
+      "path": "usb-cl0/first_sync_usb_status.json",
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    {
+      "path": "usb-cl0/imu_grid_gaps.csv",
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    {
+      "path": "usb-cl0/imu_grid_phase.bin",
+      "bytes": 84,
+      "sha256": "206E86A6489970D0F02B8E5C52F1F16DAACC0CC3C36174E6739D465E0869EC6B"
+    },
+    {
+      "path": "usb-cl0/imu_grid_segments.csv",
+      "bytes": 48,
+      "sha256": "61AA7791E95C9AEF6F278E2CC24560FF1EFA3020E7A8B9EFD2509576916831D0"
+    },
+    {
+      "path": "usb-cl0/imu_grid_status.txt",
+      "bytes": 625,
+      "sha256": "B8F1E0A6B2833A465D7FCFDAF2AAA2D347BB748852F80E050FDCA0A5086DC969"
+    },
+    {
+      "path": "usb-cl0/imu_grid_terminal.bin",
+      "bytes": 80,
+      "sha256": "D24CF1D5F7937957DAB50C6805682C0F994FD17EA36C97ECC6BB641BFE9D4358"
+    },
+    {
+      "path": "usb-cl0/imu_native_samples_status.json",
+      "bytes": 381,
+      "sha256": "DD5DDBAFB4DE233A61E2B8AD76C8CC6F8F7861C9D81A76FE970D4BA5E818BC0B"
+    },
+    {
+      "path": "usb-cl0/imu_observation_status.txt",
+      "bytes": 838,
+      "sha256": "2444DDCE384147CDF67720A6AB8D23F2C7A8ACE6316A2D9F44B1910595882B23"
+    },
+    {
+      "path": "usb-cl0/neuropixels_np2usb_status.txt",
+      "bytes": 2031,
+      "sha256": "F36F148262F2DC27691E868958A0332379718AF2F966C7392939617188789B52"
+    },
+    {
+      "path": "usb-cl0/np2_usb.bin",
+      "bytes": 296,
+      "sha256": "AC94D75FB2D2DB4F1406E0B36237DD8DA5BEC1C4D1A8ACFAF6120B75B3FBC10D"
+    },
+    {
+      "path": "usb-cl0/pc_clock.json",
+      "bytes": 227,
+      "sha256": "40BA24A45E7958397E8437814BDBB94C62C75D2AB65B57E2BBDBE97C6743DDC5"
+    },
+    {
+      "path": "usb-cl0/producer.bin",
+      "bytes": 152,
+      "sha256": "88E9972D78CD742CDA79469FC38B3A37E190EF5E18F5FF543B7AECBCE6D2BA32"
+    },
+    {
+      "path": "usb-cl0/quality.json",
+      "bytes": 1125,
+      "sha256": "FFDDA91ACBEAE448ADAC17C22CC4290BB8238637E318F58EDB9FD709693EFCF9"
+    },
+    {
+      "path": "usb-cl0/recording_start_pc_estimate.json",
+      "bytes": 5075,
+      "sha256": "3683B96F07CB5483ACEC707F6B7EB7FED45566AB796488BF58736EF65E114569"
+    },
+    {
+      "path": "usb-cl0/recording_start_utc.json",
+      "bytes": 6535,
+      "sha256": "E8D75BF21E4F554B31BDA01896DC5019BF5BF9D36CC04E15DFE07BCD72EFB6A5"
+    },
+    {
+      "path": "usb-cl0/selected-words.bin",
+      "bytes": 2048,
+      "sha256": "E5A00AA9991AC8A5EE3109844D84A55583BD20572AD3FFCD42792F3C36B183AD"
+    },
+    {
+      "path": "usb-cl0/spi1-bootstrap.bin",
+      "bytes": 12288,
+      "sha256": "F3CC103136423A57975750907EBC1D367E2985AC6338976D4D5A439F50323F4A"
+    },
+    {
+      "path": "usb-cl0/stopped-readonly.log",
+      "bytes": 565,
+      "sha256": "63F8171CAAAE7BA855EF540457D3D9E32A41C3C95458685282713D029E401655"
+    },
+    {
+      "path": "usb-cl0/stopped-summary.json",
+      "bytes": 1378,
+      "sha256": "35243E3B4ED40998C50EA1C1370F9C2D2E849EB977327D64E487C711F631B210"
+    },
+    {
+      "path": "usb-cl0/timestamp_calibration.json",
+      "bytes": 6813,
+      "sha256": "3DA2CEF1339F945ADC6BF4BF53704865B12FAC0989BF7E432EAEDD3BDB0DBFA1"
+    },
+    {
+      "path": "usb-cl0/usb-report.json",
+      "bytes": 2741,
+      "sha256": "64D525874FC12971C5DD42C2DB3B96E739DF42DCBD5EE1A7AB8D7E8BB718BA1F"
+    },
+    {
+      "path": "usb-cl0/usb_first_sync_receipt.bin",
+      "bytes": 328,
+      "sha256": "0CAB6C1891B0073008778EEB07761873A2E2E9AA12FBB3E140BFC40EAE54FED6"
+    },
+    {
+      "path": "usb-cl0/usb_rtc_start.bin",
+      "bytes": 128,
+      "sha256": "5512B873F6758CF96A4301E66EA7A14FEB7583C89AF181D8F1634FADA3BDDA1F"
+    },
+    {
+      "path": "usb-cl0/usb_rtc_start_status.json",
+      "bytes": 526,
+      "sha256": "115B60F3D440FC459E5AA6E389EA934A0AECDD9CCE77A1338EB17D79CDAEB861"
+    },
+    {
+      "path": "usb-cl0/usb_timing_status.json",
+      "bytes": 1163,
+      "sha256": "1211299B0EE88724A5BEA11F08882125F606252C7A40E829A8B3B89B8633AF0A"
+    },
+    {
+      "path": "usb-cl0/xe_np_np2_cl_selected_calibration.bin",
+      "bytes": 40,
+      "sha256": "2C34CE1DF23B838C5ABF2A7F6437CCA3D3067ED509FF25F11DF6B11B582B51EB"
+    },
+    {
+      "path": "usb-cl0/xe_np_np2_cl_selected_clock.bin",
+      "bytes": 40,
+      "sha256": "2C34CE1DF23B838C5ABF2A7F6437CCA3D3067ED509FF25F11DF6B11B582B51EB"
+    },
+    {
+      "path": "usb-cl0/xe_np_np2_cl_selected_diag.bin",
+      "bytes": 128,
+      "sha256": "2489843BFAFF13973E6A4EB8B6B9A7911FAD9FEBDBB4CE8922DF1AD4D266EE0A"
+    },
+    {
+      "path": "usb-cl0/xe_np_np2_cl_selected_guard.bin",
+      "bytes": 64,
+      "sha256": "F5A5FD42D16A20302798EF6ED309979B43003D2320D9F0E8EA9831A92759FB4B"
+    },
+    {
+      "path": "usb-cl0/xe_np_np2_sd_fine_diagnostic.bin",
+      "bytes": 224,
+      "sha256": "CFC5E8E33CE73DB8AB9CCA2D546423819C24CFAA206854CF0231A8A3C7781EF0"
+    },
+    {
+      "path": "usb-cl0/xe_np_np2_spi2_d8_diag.bin",
+      "bytes": 84,
+      "sha256": "2156ECA1897D9A8E636A2CA1D117F046AE20112C4EA7A10B73BEDAA82F4AA53A"
+    },
+    {
+      "path": "usb-cl1/SystemCoreClock.bin",
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    {
+      "path": "usb-cl1/acquisition_anchor.bin",
+      "bytes": 64,
+      "sha256": "7EAE40B55975D8D22AF68DCB5702F5CEA677BA97D30A8A122035F8D3DAA82221"
+    },
+    {
+      "path": "usb-cl1/analogin_encoding.txt",
+      "bytes": 3016,
+      "sha256": "FA1038AF7805B5B1FE698095861349B6506AF6EACD5D7797C66EB6FE6E6928CE"
+    },
+    {
+      "path": "usb-cl1/capture-anchor-raw.bin",
+      "bytes": 44,
+      "sha256": "7DB1EF5A0C768BC0A99E5D9F13734110D2913E74F94C97263C4F0372F2D45DC1"
+    },
+    {
+      "path": "usb-cl1/cl-workspace.bin",
+      "bytes": 3640,
+      "sha256": "9A01A845604AB3E3E14D9868FE409C30AC0F6B46CF036CC24133984B85C3DDE7"
+    },
+    {
+      "path": "usb-cl1/clock_linear_fit.txt",
+      "bytes": 793,
+      "sha256": "27CB121EC278AC06B31F7E16DF7F8FE0402E489835C40725D125093E75C2A6BA"
+    },
+    {
+      "path": "usb-cl1/clock_observations.csv",
+      "bytes": 560,
+      "sha256": "F245F32A329073458ED0940917AEDC5CED7FAD03E6B007BF4865FA4821A4BC30"
+    },
+    {
+      "path": "usb-cl1/closed_loop_config.bin",
+      "bytes": 64,
+      "sha256": "AC8A51B895B5982AB26F55CF6D3E700CB2EA8F7BF0B22B2BA1F71924AA862930"
+    },
+    {
+      "path": "usb-cl1/closed_loop_control_receipt.bin",
+      "bytes": 64,
+      "sha256": "F918F8DEAC4AC5144A8730043BDE20B5ED61720620EABDEA6609B00CB9ADDCB9"
+    },
+    {
+      "path": "usb-cl1/closed_loop_events.csv",
+      "bytes": 780,
+      "sha256": "BFDD9FD787E79B970040535EF0E94CABC9A9661B4C0E1307E22C0CFD182CF4E8"
+    },
+    {
+      "path": "usb-cl1/closed_loop_requested.bin",
+      "bytes": 64,
+      "sha256": "AC8A51B895B5982AB26F55CF6D3E700CB2EA8F7BF0B22B2BA1F71924AA862930"
+    },
+    {
+      "path": "usb-cl1/closed_loop_status.txt",
+      "bytes": 212,
+      "sha256": "474FE4A8FE93BD2E3A424ADD6CC94AB23B7A54CAC629A5A9121B9C6BEFD9B8DD"
+    },
+    {
+      "path": "usb-cl1/dwt-registers.bin",
+      "bytes": 8,
+      "sha256": "DABC1194ECC84D711FA8F8F23DE60D8B90F618072344EB2FC6AE230136616A1E"
+    },
+    {
+      "path": "usb-cl1/first_sample_timestamps.json",
+      "bytes": 12322,
+      "sha256": "E6FD18B14906B1A1B6DEFF623AA96695D8465DBE19607244B2B00FE227B58476"
+    },
+    {
+      "path": "usb-cl1/first_sync_usb_status.json",
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    {
+      "path": "usb-cl1/imu_grid_gaps.csv",
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    {
+      "path": "usb-cl1/imu_grid_phase.bin",
+      "bytes": 84,
+      "sha256": "F6104C29626B29A67D38F378797B875DA0C3FAAC3A09D94AC45E06EE03CBBD69"
+    },
+    {
+      "path": "usb-cl1/imu_grid_segments.csv",
+      "bytes": 48,
+      "sha256": "5889ED4228AE706C51F4476A3C84286E6D1D4B5FA45D30F5BBE4B8CA8D46277D"
+    },
+    {
+      "path": "usb-cl1/imu_grid_status.txt",
+      "bytes": 626,
+      "sha256": "361B595A617555A8CC10A4D119925935C1467F2BE818A4D5D5C88122388F0690"
+    },
+    {
+      "path": "usb-cl1/imu_grid_terminal.bin",
+      "bytes": 80,
+      "sha256": "CCC10ADDAFF3EA15B72EDC3E152A56DA1BAC26A2E038098858764D3B166AFC0F"
+    },
+    {
+      "path": "usb-cl1/imu_native_samples_status.json",
+      "bytes": 381,
+      "sha256": "A4D3FC6ED87C58B78FA306638AA98ACD0177988CB489805D6A1DEB16F92643C3"
+    },
+    {
+      "path": "usb-cl1/imu_observation_status.txt",
+      "bytes": 838,
+      "sha256": "544CC206B81B69BA4F6B1F417429D4A96F0107F483EF0B687286ED4677607119"
+    },
+    {
+      "path": "usb-cl1/neuropixels_np2usb_status.txt",
+      "bytes": 2034,
+      "sha256": "B171AB3537E9FBE69F848BED211CCA27B9C22F328067865627CAA8F142C610A1"
+    },
+    {
+      "path": "usb-cl1/np2_usb.bin",
+      "bytes": 296,
+      "sha256": "5BAFF58F544EAFF8AE66BC65F322A37FD5766A87522C83DDA6D4CB1A5308FCBE"
+    },
+    {
+      "path": "usb-cl1/pc_clock.json",
+      "bytes": 230,
+      "sha256": "A4AF8456B1CA06E6FFB7AC4D0F240F481E031A0914C63B81B2596A9D9E94121A"
+    },
+    {
+      "path": "usb-cl1/producer.bin",
+      "bytes": 152,
+      "sha256": "2C4B43250788BD1DBF0EED51178BCE71853F4F38A5441CB269568A38D2BE8719"
+    },
+    {
+      "path": "usb-cl1/quality.json",
+      "bytes": 1217,
+      "sha256": "78A452ABB380669652827AE332EB8CF3EF7E14B2CE42F76B25ED2A4FDAE857B9"
+    },
+    {
+      "path": "usb-cl1/recording_start_pc_estimate.json",
+      "bytes": 5059,
+      "sha256": "D1E63C9EE56ADA827CE3D0AFF7964173D29D9B240650DA3FC3CBBBC795E2A9CA"
+    },
+    {
+      "path": "usb-cl1/recording_start_utc.json",
+      "bytes": 6519,
+      "sha256": "8E8649919CFE9080E93C05778850CCA88D66D651C6B9945F52E5550B0EDFFA04"
+    },
+    {
+      "path": "usb-cl1/selected-native-proof.json",
+      "bytes": 12166,
+      "sha256": "380CC47A6AFA222C54E4823D8B5BAF3B1FCCE43DCE144C3FFF60611F40589B48"
+    },
+    {
+      "path": "usb-cl1/selected-words.bin",
+      "bytes": 2048,
+      "sha256": "5D34ECFA85477395C169D848401D51710FB0952D94DDAA09C83D7D30A549FF22"
+    },
+    {
+      "path": "usb-cl1/spi1-bootstrap.bin",
+      "bytes": 12288,
+      "sha256": "55DA4E10776ECA4CC7919F34F642E26A62EF49728824C0325F282B39CADE815B"
+    },
+    {
+      "path": "usb-cl1/stopped-readonly.log",
+      "bytes": 565,
+      "sha256": "B364D4AC6983874A510BE58BAE2FCA968119B9C17189563A86714E5C101E1E6C"
+    },
+    {
+      "path": "usb-cl1/stopped-summary.json",
+      "bytes": 1549,
+      "sha256": "41726CF8015AF8ADF1C674FF21FAD3FB596776AA6DA274B872B996D866BCBCA2"
+    },
+    {
+      "path": "usb-cl1/timestamp_calibration.json",
+      "bytes": 6854,
+      "sha256": "49674767B6BBFFBDC1A627B6911C7701C5A35191C1C4E191D457ECAB54F61D2E"
+    },
+    {
+      "path": "usb-cl1/usb-report.json",
+      "bytes": 2906,
+      "sha256": "0A02934FC5D4D052C3270EEB70DA08887077356FCB36993CE9F072D728AECD87"
+    },
+    {
+      "path": "usb-cl1/usb_first_sync_receipt.bin",
+      "bytes": 328,
+      "sha256": "E64BA578270A68310F8F81C0E95553DE9F2CE458C78383CED864C34C0AD5E440"
+    },
+    {
+      "path": "usb-cl1/usb_rtc_start.bin",
+      "bytes": 128,
+      "sha256": "FB8AC3E5860CC40668F2A1C2E39E76393869B82A5D39DCDB0875EA4A7C0363A2"
+    },
+    {
+      "path": "usb-cl1/usb_rtc_start_status.json",
+      "bytes": 521,
+      "sha256": "4816BDCCFF863844EC030ECDF37776F6682C54814CA479608733E6495675A4ED"
+    },
+    {
+      "path": "usb-cl1/usb_timing_status.json",
+      "bytes": 1163,
+      "sha256": "419118736A0BD9E82158F03B9D8F96196D50FCDD737E5C560CB125273D621D28"
+    },
+    {
+      "path": "usb-cl1/xe_np_np2_cl_selected_calibration.bin",
+      "bytes": 40,
+      "sha256": "107D9CC43DF67BCDBC45AE18E48B6EAAB895C65A4A8452F618780EDF37E9D319"
+    },
+    {
+      "path": "usb-cl1/xe_np_np2_cl_selected_clock.bin",
+      "bytes": 40,
+      "sha256": "11018E772B75F21A497090E1E0F7B81A832222BDEAD880A9273BEF1EACA9B1CA"
+    },
+    {
+      "path": "usb-cl1/xe_np_np2_cl_selected_diag.bin",
+      "bytes": 128,
+      "sha256": "83043FABFC795187C507EBC9C0874E854625F1A1A594ACD7F647208E4616C8B0"
+    },
+    {
+      "path": "usb-cl1/xe_np_np2_cl_selected_guard.bin",
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    {
+      "path": "usb-cl1/xe_np_np2_sd_fine_diagnostic.bin",
+      "bytes": 224,
+      "sha256": "BFE111214FFB1E1245D324096FD5FDF17148C5DB0E7B69407FC6C365F3146DD7"
+    },
+    {
+      "path": "usb-cl1/xe_np_np2_spi2_d8_diag.bin",
+      "bytes": 84,
+      "sha256": "470BFCC0886F660FF7C4AC84A4072FDBB44557714D42BA866332B21ED509238E"
+    },
+    {
+      "path": "usb-cl2-restart/SystemCoreClock.bin",
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    {
+      "path": "usb-cl2-restart/acquisition_anchor.bin",
+      "bytes": 64,
+      "sha256": "266BB255936016C13E6D0B9C5B08DC9BBAAEF00FA35E0E29994CE25169843E32"
+    },
+    {
+      "path": "usb-cl2-restart/analogin_encoding.txt",
+      "bytes": 3016,
+      "sha256": "0D77C244997461BC6664E77C677280A3A816E956CAEBC8100A5B77ABBC248FC9"
+    },
+    {
+      "path": "usb-cl2-restart/capture-anchor-raw.bin",
+      "bytes": 44,
+      "sha256": "DF4A979A0073D85C5B63BBD1C2F84C298F2B4E5A403AA3F3A859B1EE3ADB12E9"
+    },
+    {
+      "path": "usb-cl2-restart/cl-workspace.bin",
+      "bytes": 3640,
+      "sha256": "698DE5E6715948A330E604C0B27F8DAA9E1DFB10A8B0358D70AE13CEE6D45DC0"
+    },
+    {
+      "path": "usb-cl2-restart/clock_linear_fit.txt",
+      "bytes": 779,
+      "sha256": "96E4047D721A71A52DACC947177EFB6E33DDDB65CEA8E16E7DA1DB9840AF8728"
+    },
+    {
+      "path": "usb-cl2-restart/clock_observations.csv",
+      "bytes": 562,
+      "sha256": "0B7C596FEA95D70ACD7B14F233AC5E9F7F8BC583868EE17A1D0C6AFC77AB12D8"
+    },
+    {
+      "path": "usb-cl2-restart/closed_loop_config.bin",
+      "bytes": 64,
+      "sha256": "2570C1881CCCB86A92CC130B9A4D3A219CDED6684CAF723C877C9DF5FE496D2D"
+    },
+    {
+      "path": "usb-cl2-restart/closed_loop_control_receipt.bin",
+      "bytes": 64,
+      "sha256": "425019EACAB9999EB6EBC61AB5BC08813E42EFF55C98CA85D459CDAEC9634687"
+    },
+    {
+      "path": "usb-cl2-restart/closed_loop_events.csv",
+      "bytes": 460,
+      "sha256": "9A71030BE3BDA3426C13901A13AFA0D8BBC0EBEB9312C834D8858F3E7760D0DF"
+    },
+    {
+      "path": "usb-cl2-restart/closed_loop_requested.bin",
+      "bytes": 64,
+      "sha256": "2570C1881CCCB86A92CC130B9A4D3A219CDED6684CAF723C877C9DF5FE496D2D"
+    },
+    {
+      "path": "usb-cl2-restart/closed_loop_status.txt",
+      "bytes": 212,
+      "sha256": "BBDA6C965665C14075A4C2AE8DEDF07D3A58FB5A1E897DEF67591E2885A17A46"
+    },
+    {
+      "path": "usb-cl2-restart/dwt-registers.bin",
+      "bytes": 8,
+      "sha256": "8D2BEDEA438C615113F51AA39596DA931F89B303C2DD3DC7015A702F9DCC6A5D"
+    },
+    {
+      "path": "usb-cl2-restart/first_sample_timestamps.json",
+      "bytes": 12306,
+      "sha256": "AC644DE3720149B1C1A24E8E7757BDFAB60461769F8F49A2F15BC7B80D218C30"
+    },
+    {
+      "path": "usb-cl2-restart/first_sync_usb_status.json",
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    {
+      "path": "usb-cl2-restart/imu_grid_gaps.csv",
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    {
+      "path": "usb-cl2-restart/imu_grid_phase.bin",
+      "bytes": 84,
+      "sha256": "3C5C33BF3268787C2D00DC78AA886AE942682C0D9861E2A7177E92517A9F40C5"
+    },
+    {
+      "path": "usb-cl2-restart/imu_grid_segments.csv",
+      "bytes": 48,
+      "sha256": "E30F6A3BD1378A21364BD2424B714BF1FBD1EC118E46F9DDA7ECA1414D2AD86F"
+    },
+    {
+      "path": "usb-cl2-restart/imu_grid_status.txt",
+      "bytes": 626,
+      "sha256": "DB385C97358F0CE373F5F12C6DA04CB7D9866FDE9801B3BB0371AB5E96FB9916"
+    },
+    {
+      "path": "usb-cl2-restart/imu_grid_terminal.bin",
+      "bytes": 80,
+      "sha256": "572D5506EF11EE5BDBC43854E7CC1FC846CAA8EA6F2D9D54FECB72007AACE14A"
+    },
+    {
+      "path": "usb-cl2-restart/imu_native_samples_status.json",
+      "bytes": 377,
+      "sha256": "70A10F513D2D94A0559DF5A8957FC21A7D3CC2612EF3B928F6BD5D672316366B"
+    },
+    {
+      "path": "usb-cl2-restart/imu_observation_status.txt",
+      "bytes": 836,
+      "sha256": "1011D80A26D0AB365F01C1FBDD1BB50E66A0BB0690B9087EE6F371AF0266BE83"
+    },
+    {
+      "path": "usb-cl2-restart/imu_snapshots.bin",
+      "bytes": 31500,
+      "sha256": "04FEA122FA5F7D6465F57937C62B115AD569A52F8ADFE92AB7E7F0869A44E292"
+    },
+    {
+      "path": "usb-cl2-restart/neuropixels_np2usb_status.txt",
+      "bytes": 2027,
+      "sha256": "1479A854EAF25CCE6ADBE74707B5B2B4333433BC0F8FE4884134895CC9AF270F"
+    },
+    {
+      "path": "usb-cl2-restart/np2_usb.bin",
+      "bytes": 296,
+      "sha256": "B44C8A493D21F35B0C7C45329C292218BB80E1BD83C6E73F77EA898A2338A2BF"
+    },
+    {
+      "path": "usb-cl2-restart/pc_clock.json",
+      "bytes": 230,
+      "sha256": "2424333F5F99E5D66FCB1C15352AD69E07FABAE72EF96826E0C0079FC392C8FA"
+    },
+    {
+      "path": "usb-cl2-restart/producer.bin",
+      "bytes": 152,
+      "sha256": "99C765A01CA06538529BAD4BC0131180B6AC3F235ABDBF5B84C710CA3ACF6280"
+    },
+    {
+      "path": "usb-cl2-restart/quality.json",
+      "bytes": 1216,
+      "sha256": "E6C22CD648EB14565DD08D5B8D34B7F0CEABE36C319B718DA91FF8CFC141230A"
+    },
+    {
+      "path": "usb-cl2-restart/recording_start_pc_estimate.json",
+      "bytes": 5070,
+      "sha256": "17213402BC62FF9E4D41A51B21C44C261454C7C6295D45911B3C11134B9E8AEA"
+    },
+    {
+      "path": "usb-cl2-restart/recording_start_utc.json",
+      "bytes": 6530,
+      "sha256": "2A1666AB8C7126836BDBDE3848EE948DBB78846946B316E7BABD995B55FA6B35"
+    },
+    {
+      "path": "usb-cl2-restart/selected-native-proof.json",
+      "bytes": 13797,
+      "sha256": "AE9553023F5D830A6A0A62F21B01764EAC262D0E4074A9293DE17329652DC719"
+    },
+    {
+      "path": "usb-cl2-restart/selected-words.bin",
+      "bytes": 2048,
+      "sha256": "148F6BE857D3CBC4A71A666DDEC24D0151D6BC12BA2E95271430306C064075CB"
+    },
+    {
+      "path": "usb-cl2-restart/spi1-bootstrap.bin",
+      "bytes": 12288,
+      "sha256": "2A7125D6F8F37897880D48BD90DC21A07875DA070D8EA267A4F4BC05EF92A74E"
+    },
+    {
+      "path": "usb-cl2-restart/stopped-readonly.log",
+      "bytes": 565,
+      "sha256": "C042D448D9F93BB91768643A4BBF90A69EB1264A7D45AC79A1A7AEE0B4234489"
+    },
+    {
+      "path": "usb-cl2-restart/stopped-summary.json",
+      "bytes": 1537,
+      "sha256": "2ED7395237B3FEFF59413791FB27BDB398028702AE10E2D77EE8FBEEB7A7C316"
+    },
+    {
+      "path": "usb-cl2-restart/timestamp_calibration.json",
+      "bytes": 6688,
+      "sha256": "DC1DE7291BA1AB4DABE7C5AA69D5C74D526B47CBEA15AA958EE932DA1703DF22"
+    },
+    {
+      "path": "usb-cl2-restart/usb-report.json",
+      "bytes": 2921,
+      "sha256": "07150C322B75890EBC75E0A86FA55DA1458971198FFA4302C39C6201795FA44C"
+    },
+    {
+      "path": "usb-cl2-restart/usb_first_sync_receipt.bin",
+      "bytes": 328,
+      "sha256": "FB41767556FA2986C20D0EA14052799C5AB756ED5080CB697A9A0F1F5B36F9EF"
+    },
+    {
+      "path": "usb-cl2-restart/usb_rtc_start.bin",
+      "bytes": 128,
+      "sha256": "ABAA63E1264CE3B20BDAD6AF9557AC8F608170DFB86681EC3E207562B476595B"
+    },
+    {
+      "path": "usb-cl2-restart/usb_rtc_start_status.json",
+      "bytes": 526,
+      "sha256": "C785A06E5CC804ABD6104D9A832FB72BBF018C36684D2A745D460159656A1401"
+    },
+    {
+      "path": "usb-cl2-restart/usb_timing_status.json",
+      "bytes": 1163,
+      "sha256": "24ED467F7E090BCE6107631B6F0F0DCDBAEA31D2D5930169577C382EA22FA303"
+    },
+    {
+      "path": "usb-cl2-restart/xe_np_np2_cl_selected_calibration.bin",
+      "bytes": 40,
+      "sha256": "7A481956A35E202D3AF603D859055D99FE3CFA3B630D82453A32C20704F5C90B"
+    },
+    {
+      "path": "usb-cl2-restart/xe_np_np2_cl_selected_clock.bin",
+      "bytes": 40,
+      "sha256": "5458C8E0D95A162137004D2729CBA97639EE2E5C42CA399E86B9E7C80547B983"
+    },
+    {
+      "path": "usb-cl2-restart/xe_np_np2_cl_selected_diag.bin",
+      "bytes": 128,
+      "sha256": "CD8185D2AC313F6A1C6716476971B5313343E36718F1627C260B204CC7172313"
+    },
+    {
+      "path": "usb-cl2-restart/xe_np_np2_cl_selected_guard.bin",
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    {
+      "path": "usb-cl2-restart/xe_np_np2_sd_fine_diagnostic.bin",
+      "bytes": 224,
+      "sha256": "1C04AFEA03D087C7EE4FE9FD56F4CA909CDF87A765E9DE90E61B52C1BAB3A5FB"
+    },
+    {
+      "path": "usb-cl2-restart/xe_np_np2_spi2_d8_diag.bin",
+      "bytes": 84,
+      "sha256": "7206197484B102892C84119963345C6C084E025C32AEB8C84B982FA7B71A3E5A"
+    },
+    {
+      "path": "usb-cl2/SystemCoreClock.bin",
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    {
+      "path": "usb-cl2/acquisition_anchor.bin",
+      "bytes": 64,
+      "sha256": "8660EC06E996C6783356D716D4DB20DB0CA424C131F60E6E74C662487F82BF17"
+    },
+    {
+      "path": "usb-cl2/analogin_encoding.txt",
+      "bytes": 3016,
+      "sha256": "EC02A1E2DBB68CB1C12AC968643DA07A75EC426D37A9F053FD1ECF11D6213878"
+    },
+    {
+      "path": "usb-cl2/capture-anchor-raw.bin",
+      "bytes": 44,
+      "sha256": "2F9B8ABC5F1982678BF77BF16BD3413C5935F9C051E7DB8F167940F3DCE324F1"
+    },
+    {
+      "path": "usb-cl2/cl-workspace.bin",
+      "bytes": 3640,
+      "sha256": "086843F4E6EEB6259BC824EA10D427709EE1783FBE3E0414D6D3BA15137B117A"
+    },
+    {
+      "path": "usb-cl2/clock_linear_fit.txt",
+      "bytes": 794,
+      "sha256": "7A58BB1CA8C043A037FC600AAB85CB14DA2C90B95B04B028F4615BE00A4BB287"
+    },
+    {
+      "path": "usb-cl2/clock_observations.csv",
+      "bytes": 560,
+      "sha256": "25B76EFB1365D542E2D5BECE21BCC70BF056110896392D0926BC7836CFF6576C"
+    },
+    {
+      "path": "usb-cl2/closed_loop_config.bin",
+      "bytes": 64,
+      "sha256": "6458BC8239E0C3358596D328E532A8991FD1E07716982A74AB1821BD4F7890B1"
+    },
+    {
+      "path": "usb-cl2/closed_loop_control_receipt.bin",
+      "bytes": 64,
+      "sha256": "66B745405F8B3F6EEE6391C279ED4E8D5E73B6516D4570CFD78B376FA638EEB6"
+    },
+    {
+      "path": "usb-cl2/closed_loop_events.csv",
+      "bytes": 762,
+      "sha256": "260C1C502962DE085482A7417AAF56AA3E367A25EA93177656DFD4330E1CC1A9"
+    },
+    {
+      "path": "usb-cl2/closed_loop_requested.bin",
+      "bytes": 64,
+      "sha256": "6458BC8239E0C3358596D328E532A8991FD1E07716982A74AB1821BD4F7890B1"
+    },
+    {
+      "path": "usb-cl2/closed_loop_status.txt",
+      "bytes": 212,
+      "sha256": "474FE4A8FE93BD2E3A424ADD6CC94AB23B7A54CAC629A5A9121B9C6BEFD9B8DD"
+    },
+    {
+      "path": "usb-cl2/dwt-registers.bin",
+      "bytes": 8,
+      "sha256": "96C6FBDDE082914333F421A2963F84AD4161F9CF0A6B17E30B0B4546155101F5"
+    },
+    {
+      "path": "usb-cl2/first_sample_timestamps.json",
+      "bytes": 12334,
+      "sha256": "5DC7115AF36B7926E901DF3DA3314440E515FEB3F146FEEA02289998912D7BCA"
+    },
+    {
+      "path": "usb-cl2/first_sync_usb_status.json",
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    {
+      "path": "usb-cl2/imu_grid_gaps.csv",
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    {
+      "path": "usb-cl2/imu_grid_phase.bin",
+      "bytes": 84,
+      "sha256": "7676F472A1C187BE3BDF899E2BEE8C69CD9311222C50CB0309F083CCFFD7846A"
+    },
+    {
+      "path": "usb-cl2/imu_grid_segments.csv",
+      "bytes": 48,
+      "sha256": "9EDF35E5B49A14D3855A09BD083492DAAE70C8456848D2F266C1E826E39C4B4C"
+    },
+    {
+      "path": "usb-cl2/imu_grid_status.txt",
+      "bytes": 626,
+      "sha256": "DF12954B6750F84E26E3B4245E3609D101484DD858749FE33A0A4C23218E0C2E"
+    },
+    {
+      "path": "usb-cl2/imu_grid_terminal.bin",
+      "bytes": 80,
+      "sha256": "3871F857468B8A8606F028DD124B4C5EC8E70132BCE81DA644B4887F69B1FBA4"
+    },
+    {
+      "path": "usb-cl2/imu_native_samples_status.json",
+      "bytes": 381,
+      "sha256": "A5B1547C36A1720531DB4EB89B87BDA87F2D0B37D4E5FC6D24E3D58FC97CC9C1"
+    },
+    {
+      "path": "usb-cl2/imu_observation_status.txt",
+      "bytes": 838,
+      "sha256": "544CC206B81B69BA4F6B1F417429D4A96F0107F483EF0B687286ED4677607119"
+    },
+    {
+      "path": "usb-cl2/neuropixels_np2usb_status.txt",
+      "bytes": 2034,
+      "sha256": "F3F5DE8EDFA25E248DDF69F969BF7493BE3E795E1056001C722C5E4491D20EC8"
+    },
+    {
+      "path": "usb-cl2/np2_usb.bin",
+      "bytes": 296,
+      "sha256": "0C63D7AFFE898198FB47951DA9D94FFCA4EDC05AB9B064CFE9B57CD8745A2DB1"
+    },
+    {
+      "path": "usb-cl2/pc_clock.json",
+      "bytes": 227,
+      "sha256": "E66D775D66E74F8B53F7F9084446BE0B76B2A3B8FC164E62B9DD1E5C12B1D8F6"
+    },
+    {
+      "path": "usb-cl2/producer.bin",
+      "bytes": 152,
+      "sha256": "C923A7B5153FEC541F7779CEB9A7100A745817267087F21D72BC77912D3623E7"
+    },
+    {
+      "path": "usb-cl2/quality.json",
+      "bytes": 1217,
+      "sha256": "8825450E9A13C9322F2AB38669C2E47979E2D900AD25413835218E39688D86EA"
+    },
+    {
+      "path": "usb-cl2/recording_start_pc_estimate.json",
+      "bytes": 5067,
+      "sha256": "8822829D17DE7B46FCFD3B752F257A9F0FA09B3920A4770F51A993C81A455C35"
+    },
+    {
+      "path": "usb-cl2/recording_start_utc.json",
+      "bytes": 6527,
+      "sha256": "558CA9434669BCDA9C912D6B99CAC067855C6772876F702C4FABA3FEAF1320B7"
+    },
+    {
+      "path": "usb-cl2/selected-native-proof.json",
+      "bytes": 13785,
+      "sha256": "1EC0BC52A47722FC52ED1C974DA7FC6DA1442DDA0EA8C3F7BCD2D66F3DC46E48"
+    },
+    {
+      "path": "usb-cl2/selected-words.bin",
+      "bytes": 2048,
+      "sha256": "3C16065F586A5D8DB298885E90D106E5096F575899ADEA53395DF9818CC0184F"
+    },
+    {
+      "path": "usb-cl2/spi1-bootstrap.bin",
+      "bytes": 12288,
+      "sha256": "40B81B226AFE43D79B625591561F4A8409CE890EA3612A29D51A33C83DD2120B"
+    },
+    {
+      "path": "usb-cl2/stopped-readonly.log",
+      "bytes": 565,
+      "sha256": "36FF48B3A364B59D960918444256154765A798FFE728BB2FFCDB7134321C95E8"
+    },
+    {
+      "path": "usb-cl2/stopped-summary.json",
+      "bytes": 1549,
+      "sha256": "A1E1C4272B10E7D5FF6D6D0C2570F7789E82F9648A956782A15FB2335272BEF0"
+    },
+    {
+      "path": "usb-cl2/timestamp_calibration.json",
+      "bytes": 6818,
+      "sha256": "A74CF39D096F14812200A654C183EF8713085E1788F2EFA76B31EEDE218869F4"
+    },
+    {
+      "path": "usb-cl2/usb-report.json",
+      "bytes": 2914,
+      "sha256": "49E6EA02DECEEA9742A33324E7BD2E03708F2931355984AAC06E0849E0BDDB7F"
+    },
+    {
+      "path": "usb-cl2/usb_first_sync_receipt.bin",
+      "bytes": 328,
+      "sha256": "47720319066663A74E395EA87F49F9769052B01D8EC4DC33961E9AF1D25FEAED"
+    },
+    {
+      "path": "usb-cl2/usb_rtc_start.bin",
+      "bytes": 128,
+      "sha256": "B93B5CAF8826DEAD79172F922A7DFBF94B8A73DD71D55C9B59BD2BB24839F1C4"
+    },
+    {
+      "path": "usb-cl2/usb_rtc_start_status.json",
+      "bytes": 526,
+      "sha256": "AE88EBEE3FEA0211B84B3411A87D1FB6685299C6A74B9DADD6C98234E7A1B930"
+    },
+    {
+      "path": "usb-cl2/usb_timing_status.json",
+      "bytes": 1163,
+      "sha256": "CFCD53194F3939B0471DFC4EAE8A23A5ECEB1EB1ED2231B58D2B3DBDC18418B8"
+    },
+    {
+      "path": "usb-cl2/xe_np_np2_cl_selected_calibration.bin",
+      "bytes": 40,
+      "sha256": "107D9CC43DF67BCDBC45AE18E48B6EAAB895C65A4A8452F618780EDF37E9D319"
+    },
+    {
+      "path": "usb-cl2/xe_np_np2_cl_selected_clock.bin",
+      "bytes": 40,
+      "sha256": "9B8147CA0CEA7B74AD9EB1E11FF807A506610D5B209EE301B3E74064E1F71992"
+    },
+    {
+      "path": "usb-cl2/xe_np_np2_cl_selected_diag.bin",
+      "bytes": 128,
+      "sha256": "BAB73C71F4F46F8277F093BF0CEC5131B5067B497B2AE231C842CE17D750B6BE"
+    },
+    {
+      "path": "usb-cl2/xe_np_np2_cl_selected_guard.bin",
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    {
+      "path": "usb-cl2/xe_np_np2_sd_fine_diagnostic.bin",
+      "bytes": 224,
+      "sha256": "8FACF20F4ED389980482AAB5D4F012210018B4D092F5A7977343E2A1E199368C"
+    },
+    {
+      "path": "usb-cl2/xe_np_np2_spi2_d8_diag.bin",
+      "bytes": 84,
+      "sha256": "EF17FAED5FE9B3C40EA75274FA0638AA4E2A18709A79268014975D72565D8C2E"
+    }
+  ]
+}

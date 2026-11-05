@@ -518,16 +518,16 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_SD_20K_3PROBE_P2_SELECTED_RIPPLE_APP99CC44F9_USBFFC27E5A_20261104",
+      "release": "V2_USB_SD_20K_3PROBE_P2_SELECTED_RIPPLE_APP99CC44F9_USB112066CE_20261105",
       "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
-      "stage": "BOUNDED_SD_P2_SELECTED_ONE_TWO_DETECTOR_PASS_USB_CLOSED_LOOP_DISABLED",
+      "stage": "BOUNDED_SD_ONE_TWO_USB_QUALIFIED_COUNTS_1_2",
       "appVersion": "build99CC44F9",
-      "usbVersion": "buildFFC27E5A",
+      "usbVersion": "build112066CE",
       "recoveryVersion": "build 6408DBB8",
       "appCrc32": "99CC44F9",
-      "usbCrc32": "FFC27E5A",
+      "usbCrc32": "112066CE",
       "recoveryCrc32": "6408DBB8",
-      "limits": "V2 P1+P2+P3 at20kHz, one/two Ripple detectors using selected P2 ADC channels0/1 (tap2) in BLE-controlled SD only; USB closed-loop disabled. Previous P3 two-detector stress loss remains in234 history; it is not this selected-reader qualification. Exact bounded acceptance and NP/IMU limits in release235 qualification; no endurance, all-profile, CPU or power claim.",
+      "limits": "V2 P1+P2+P3 at20kHz, one/two Ripple detectors using selected P2 ADC channels0/1 (tap2) in BLE-controlled SD only; USB closed-loop qualified only for detector count(s) 1,2 at3probes20kHz, Ripple, P2 ADC0/1; all other USB configurations remain disabled. Previous P3 two-detector stress loss remains in234 history; it is not this selected-reader qualification. Exact bounded acceptance and NP/IMU limits in release235 qualification; no endurance, all-profile, CPU or power claim.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -541,9 +541,9 @@
       "usbIdentity": {
         "imageId": 1431519793,
         "baseAddress": 135790592,
-        "bytes": 334268,
-        "codeCrc32": "FFC27E5A",
-        "buildIdHex": "6361363038343837633339653966656535613139343766306565666566333362",
+        "bytes": 343312,
+        "codeCrc32": "112066CE",
+        "buildIdHex": "6235313435363630386661383737393264343563646336613133643831623765",
         "manifestFlags": 3,
         "minimumLoaderAbi": 4,
         "generation": 3
@@ -553,8 +553,8 @@
         "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
       },
       "full": {
-        "path": "V2/V2_FUSED_BOOT_USBFFC27E5A_APP99CC44F9.hex",
-        "sha256": "5AD4CE8600D3A53FE5B0DC2B8DBED2ED20638F8D60AECAC7CCB6F22138D3F7FB"
+        "path": "V2/V2_FUSED_BOOT_USB112066CE_APP99CC44F9.hex",
+        "sha256": "BB18F6A0DAAD972A1FC704AB6D0155D8C3A776A3218E3760665EB2AB2B2E6B0D"
       },
       "files": [
         {
@@ -562,8 +562,8 @@
           "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
         },
         {
-          "path": "V2/V2_USBFFC27E5A.hex",
-          "sha256": "16DF81F32A1646778621AD69F4381B3E8E6F86775BF024BDC49D1D7DC841AEFC"
+          "path": "V2/V2_USB112066CE.hex",
+          "sha256": "8A10A893CA77534D41CE5929D50A9D783EA28B500240B00DF424ACEA15103111"
         },
         {
           "path": "V2/V2_APP99CC44F9.xenp",
@@ -574,16 +574,16 @@
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_FUSED_BOOT_USBFFC27E5A_APP99CC44F9.hex",
-          "sha256": "5AD4CE8600D3A53FE5B0DC2B8DBED2ED20638F8D60AECAC7CCB6F22138D3F7FB"
+          "path": "V2/V2_FUSED_BOOT_USB112066CE_APP99CC44F9.hex",
+          "sha256": "BB18F6A0DAAD972A1FC704AB6D0155D8C3A776A3218E3760665EB2AB2B2E6B0D"
         },
         {
           "path": "V2/acceptance.json",
-          "sha256": "252D354A0D7A6A78886D9690E5457E79845F165BC84E53BD19940990BB086D23"
+          "sha256": "248F3AD6047FA0B046520A6DD9891D6F81F79136EDD088C41B82DE2AEE7D6E85"
         }
       ],
       "sourceCommitScope": "Recorded repository baseline with exact changed overlays archived in release; binary identities are authoritative.",
-      "sourceProvenance": "../ReleaseSources/1.0.0.235/firmware/V2/source-freeze/manifest.json",
+      "sourceProvenance": "../ReleaseSources/1.0.0.237/firmware/V2/source-freeze/manifest.json",
       "previousApps": [
         {
           "imageId": 1095782449,
@@ -721,6 +721,16 @@
           "imageId": 1431519793,
           "baseAddress": 135790592,
           "bytes": 334268,
+          "codeCrc32": "FFC27E5A",
+          "buildIdHex": "6361363038343837633339653966656535613139343766306565666566333362",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 334268,
           "codeCrc32": "80E18959",
           "buildIdHex": "3663643138333432343831313630633063653161636561643234336239316136",
           "manifestFlags": 3,
@@ -827,7 +837,8 @@
           "minimumLoaderAbi": 4,
           "generation": 0
         }
-      ]
+      ],
+      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.235/firmware/V2/source-freeze/manifest.json"
     }
   ]
 }

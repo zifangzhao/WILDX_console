@@ -47,7 +47,7 @@ static class NpClosedLoopWorkflowTests
     static void ProfileLimits()
     {
         // USB/SD masks from the selected firmware's qualification matrix.
-        int[] qualifiedCounts={3,3,0,3};
+        int[] qualifiedCounts={3,3,3,3};
         foreach(bool np2 in new[]{false,true}){
             uint acceptedMask=np2?7U:3U, acceptedHz=np2?20000U:15000U;
             foreach(uint mask in Enumerable.Range(0,8).Select(i=>(uint)i))
@@ -126,9 +126,17 @@ static class NpClosedLoopWorkflowTests
         Func<byte,ushort,NpClosedLoopChannel> channel=(probe,adc)=>new NpClosedLoopChannel{Probe=probe,Channel=adc};
         Need(NpClosedLoopSettings.CanUseSources(true,true,new[]{channel(2,0),channel(2,1)}),"P2 hardware pair rejected");
         Need(NpClosedLoopSettings.CanUseSources(true,true,new[]{channel(2,1),channel(2,0)}),"Reversed P2 hardware pair rejected");
+        Need(NpClosedLoopSettings.CanUseSources(true,false,new[]{channel(2,0),channel(2,1)}),"USB P2 pair rejected");
+        Need(NpClosedLoopSettings.CanUseSources(true,false,new[]{channel(2,1),channel(2,0)}),"Reversed USB P2 pair rejected");
+        foreach(ushort adc in new ushort[]{0,1})Need(NpClosedLoopSettings.CanUseSources(true,false,new[]{channel(2,adc)}),"USB P2 single channel rejected");
+        foreach(var single in new[]{channel(3,256),channel(1,0),channel(2,2)}){
+            Need(!NpClosedLoopSettings.CanUseSources(true,false,new[]{single}),"Unsupported USB source admitted");
+            Need(NpClosedLoopSettings.CanUseSources(true,true,new[]{single}),"Legacy SD single-source policy changed");
+        }
         foreach(var pair in new[]{new[]{channel(3,256),channel(3,257)},new[]{channel(2,0),channel(2,2)},
             new[]{channel(2,0),channel(2,0)},new[]{channel(2,0),channel(1,1)}}){
             Need(!NpClosedLoopSettings.CanUseSources(true,true,pair),"Unqualified V2 hardware source admitted");
+            Need(!NpClosedLoopSettings.CanUseSources(true,false,pair),"Unsupported USB hardware pair admitted");
             Need(NpClosedLoopSettings.CanUseSources(false,true,pair),"V2 source restriction changed V1");
         }
         var settings=Settings();settings.MayBeConfigured=true;

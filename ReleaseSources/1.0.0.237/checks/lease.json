@@ -1,0 +1,11 @@
+{
+  "scope": "GLOBAL+UID",
+  "closed_utc": "2026-11-05T01:03:25.6991870Z",
+  "global_status": "released",
+  "pid": 34228,
+  "acquired_utc": "2026-11-05T00:44:54.6381610Z",
+  "started_utc": "2026-11-05T00:44:54.6040572Z",
+  "task": "v2_usb_selected_detectors_20261105/V2",
+  "status": "closed",
+  "uid": "001A0004434250062039314E"
+}
