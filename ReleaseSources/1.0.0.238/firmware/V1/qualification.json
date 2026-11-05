@@ -1,0 +1,467 @@
+{
+  "status": "accepted",
+  "app_crc32": "5F90FD3B",
+  "usb_crc32": "C91871BD",
+  "qualified_usb_detector_counts": [
+    1,
+    2
+  ],
+  "profile": {
+    "probe_mask": 3,
+    "sample_hz": 15000,
+    "filter": 6,
+    "filter_name": "Ripple",
+    "gain": 2,
+    "rectify": true,
+    "training_ms": 1000,
+    "channels": [
+      {
+        "probe": 1,
+        "channel": 0
+      },
+      {
+        "probe": 2,
+        "channel": 0
+      }
+    ]
+  },
+  "usb_sensor_summary": "V1 two probes at15kHz: native AG198.89\u2013199.40Hz/MAG99.53\u201399.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
+  "original_restored": true,
+  "original_flash_sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+  "original_options_sha256": "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+  "original_app_crc32": "82E51DEA",
+  "original_usb_crc32": "4F7B521A",
+  "uid": "001D00065942500B20313354",
+  "original_profile": {
+    "PresenceFaultMask": 0,
+    "ActiveMask": 7,
+    "Selectable": true,
+    "PresenceState": 0,
+    "Rates": [
+      15,
+      15,
+      3
+    ],
+    "WireId": 118,
+    "PresentMask": 0,
+    "PresenceRequestedMask": 0,
+    "ApHz": 7500,
+    "SupportsStartupAdmission": true,
+    "AvailableMask": 7,
+    "SupportsCameraOnly": true,
+    "SupportsPresence": false,
+    "BatchPackets": 112,
+    "AbsentMask": 0
+  },
+  "restoration": {
+    "result": "PASS",
+    "uid": "001D00065942500B20313354",
+    "original_app": "82E51DEA",
+    "original_usb": "4F7B521A",
+    "original_flash_options_verified": true,
+    "original_profile_verified": true,
+    "card_sectors": 500695040,
+    "usb_mode": 3,
+    "idle": true,
+    "protected_profile_verified": true,
+    "cpu_debug_enabled": false,
+    "completed_utc": "2026-11-05T15:01:10.1422254Z"
+  },
+  "lease": {
+    "status": "CLOSED",
+    "global_status": "released",
+    "uid": "001D00065942500B20313354",
+    "holder_pid": 7072,
+    "holder_exited": true,
+    "restoration": "bench/restoration-complete.json",
+    "closed_utc": "2026-11-05T15:01:19.2757003Z"
+  },
+  "firmware": {
+    "app": {
+      "role": "app",
+      "test_only": true,
+      "path": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-warm\\candidate-corrected\\app\\APP_TEST_ONLY.hex",
+      "sha256": "42D3ED89E4C339AB35A0D6BB5AAEC262482F15ADBEEC5EC82F3892C398386879",
+      "image_crc32": "5F90FD3B",
+      "body_bin": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-warm\\candidate-corrected\\app\\APP_body.bin",
+      "body_bin_sha256": "52608DF6ED5532FDA345EB7ACB8359C1E9CD4456B3E0732FB171C9E8073629F0",
+      "slot_manifest": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-warm\\candidate-corrected\\app\\APP_manifest.bin",
+      "slot_manifest_sha256": "731A98A0EA7B2D92DE98D52344A27293F9C40F38DBC52E6F4A7F57B52FF33F3C",
+      "manifest_address": 134340608,
+      "body_address": 134348800,
+      "hardware_tested": false,
+      "published": false
+    },
+    "usb": {
+      "role": "usb",
+      "test_only": true,
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\build-r2\\USB_TEST_ONLY.hex",
+      "sha256": "721EBE135DB48CA0A4E633491A883A1A8A8A0F6C359228AD8874886EF0DBC855",
+      "image_crc32": "C91871BD",
+      "body_bin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\build-r2\\USB_body.bin",
+      "body_bin_sha256": "1765A681648D7029DA049E5F1BCD5C946EA3AE1568E9909921B317CB45DA9085",
+      "slot_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\build-r2\\USB_manifest.bin",
+      "slot_manifest_sha256": "AC0C0011FDA0A839F18D759CE918191A7546F78B8647512BFAD3C82BD15B23C1",
+      "manifest_address": 135782400,
+      "body_address": 135790592,
+      "hardware_tested": false,
+      "published": false
+    },
+    "scope": "V1USBMAG100 at15k2probes, unchangedAPP5F90FD3B"
+  },
+  "runs": [
+    {
+      "result": "PASS_SCOPED",
+      "detectors": 0,
+      "seconds": 60,
+      "usb_crc32": "C91871BD",
+      "app_crc32": "5F90FD3B",
+      "profile": "V1P1+P2/15k/Ripple6",
+      "ag_hz": 199.40278699402788,
+      "mag_hz": 99.74284529240978,
+      "imu_observed": 75348,
+      "imu_unavailable_startup_slots": 1,
+      "later_missing_imu_slots": 0,
+      "sensor_errors": 0,
+      "midstream_np_losses": 0,
+      "ap_rows": [
+        904499,
+        904480
+      ],
+      "lfp_rows": [
+        75374,
+        75373
+      ],
+      "startup_discarded_bytes": [
+        486,
+        428
+      ],
+      "preserved_original_lossless_flag": "False",
+      "retained_source_window_verified": true,
+      "rtc_to_np_interval_us": 110,
+      "relative_copy_jitter_bound_us": 42,
+      "native_oracle": "not applicable",
+      "host_peak_queue": 3,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 9.503,
+      "cpu_load": "not measured",
+      "limits": [
+        "Bounded recording check; not endurance qualification.",
+        "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+        "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+        "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+      ]
+    },
+    {
+      "result": "PASS_SCOPED",
+      "detectors": 1,
+      "seconds": 60,
+      "usb_crc32": "C91871BD",
+      "app_crc32": "5F90FD3B",
+      "profile": "V1P1+P2/15k/Ripple6",
+      "ag_hz": 198.88658080598256,
+      "mag_hz": 99.53465181984377,
+      "imu_observed": 75228,
+      "imu_unavailable_startup_slots": 1,
+      "later_missing_imu_slots": 0,
+      "sensor_errors": 0,
+      "midstream_np_losses": 0,
+      "ap_rows": [
+        903045,
+        902996
+      ],
+      "lfp_rows": [
+        75253,
+        75249
+      ],
+      "startup_discarded_bytes": [
+        474,
+        478
+      ],
+      "preserved_original_lossless_flag": "False",
+      "retained_source_window_verified": true,
+      "rtc_to_np_interval_us": 111,
+      "relative_copy_jitter_bound_us": 42,
+      "native_oracle": "PASS",
+      "host_peak_queue": 3,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 9.597,
+      "cpu_load": "not measured",
+      "limits": [
+        "Bounded recording check; not endurance qualification.",
+        "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+        "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+        "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+      ]
+    },
+    {
+      "result": "PASS_SCOPED",
+      "detectors": 2,
+      "seconds": 60,
+      "usb_crc32": "C91871BD",
+      "app_crc32": "5F90FD3B",
+      "profile": "V1P1+P2/15k/Ripple6",
+      "ag_hz": 199.08542646961362,
+      "mag_hz": 99.56588016967126,
+      "imu_observed": 75456,
+      "imu_unavailable_startup_slots": 1,
+      "later_missing_imu_slots": 0,
+      "sensor_errors": 0,
+      "midstream_np_losses": 0,
+      "ap_rows": [
+        905661,
+        905653
+      ],
+      "lfp_rows": [
+        75471,
+        75470
+      ],
+      "startup_discarded_bytes": [
+        632,
+        606
+      ],
+      "preserved_original_lossless_flag": "False",
+      "retained_source_window_verified": false,
+      "rtc_to_np_interval_us": 110,
+      "relative_copy_jitter_bound_us": 42,
+      "native_oracle": "PASS",
+      "host_peak_queue": 5,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 8.795,
+      "cpu_load": "not measured",
+      "limits": [
+        "Bounded recording check; not endurance qualification.",
+        "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+        "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+        "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+      ]
+    },
+    {
+      "result": "PASS_SCOPED",
+      "detectors": 2,
+      "seconds": 30,
+      "usb_crc32": "C91871BD",
+      "app_crc32": "5F90FD3B",
+      "profile": "V1P1+P2/15k/Ripple6",
+      "ag_hz": 199.1424802110818,
+      "mag_hz": 99.54810832206353,
+      "imu_observed": 37908,
+      "imu_unavailable_startup_slots": 1,
+      "later_missing_imu_slots": 0,
+      "sensor_errors": 0,
+      "midstream_np_losses": 0,
+      "ap_rows": [
+        455119,
+        455069
+      ],
+      "lfp_rows": [
+        37925,
+        37921
+      ],
+      "startup_discarded_bytes": [
+        422,
+        392
+      ],
+      "preserved_original_lossless_flag": "False",
+      "retained_source_window_verified": false,
+      "rtc_to_np_interval_us": 110,
+      "relative_copy_jitter_bound_us": 42,
+      "native_oracle": "PASS",
+      "host_peak_queue": 3,
+      "host_queue_capacity": 2048,
+      "max_usb_completion_interval_ms": 8.474,
+      "cpu_load": "not measured",
+      "limits": [
+        "Bounded recording check; not endurance qualification.",
+        "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+        "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+        "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+      ]
+    }
+  ],
+  "source_freeze": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\source-freeze-candidate.zip",
+    "sha256": "B408B57DA35F81EBB09131DB28CAD85822F7ECCF455B837217C15765599B21AE",
+    "status": "Immutable software-checked source/dependency/recipe parent; hardware closure is this receipt."
+  },
+  "cleanup": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\compact\\manifest.json",
+    "sha256": "8273EB0D9D79F713B375D2A67EBAE59F1CF195648CCCCCD0DED777E9B64C35D8",
+    "removed_bytes": 5326897008,
+    "retained_bytes": 3701392
+  },
+  "evidence": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\assessment.json",
+      "sha256": "2FA20A004E10C36168B1DFA0760A99A59E38CFBEF6394E7E4BDDA10429B02643"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\experiment.json",
+      "sha256": "261CEA7E487A563E65B5067F1F109A647DE0A9200AF337A4171E04C951FAA7CF"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\sensor-review.json",
+      "sha256": "888CB5C55C5BB8B6CEA5510D08ED50EFEAB943499D5224F4C941C4B797E2669A"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\imu-grid-current-assessment.json",
+      "sha256": "38B8C94D25483DF0CA817CA7B11DEF065574969E9A350D6F77F26D53D75702A6"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\recording_start_utc.json",
+      "sha256": "8FA0D9674D4F9FF0104F75ADFCBAA659D44ED93DBFB2B024EB066EB0DB3CEC45"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\neuropixels_capture_status.txt",
+      "sha256": "DA36D380296441903B07346B3AC38FC8F9FEBB69A16E28DAD3B211344F147A28"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0\\neuropixels_probes.txt",
+      "sha256": "BCD6EF26BE598F3EBEF154CC93FE29F38B19B0D2B775F88EB25F7256F2D5B7E5"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl0_stopped\\proof.json",
+      "sha256": "3457D422A2630217C7C59DD061174456BF4363585DD3143C5C4BE447DE1FF010"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\assessment.json",
+      "sha256": "EE729A05A1C67F99A9E8827D5509A4BD68735490F554F0B2D673C418C108DB53"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\experiment.json",
+      "sha256": "D47A31C240372E30843DC0FA70C44A7D036EDA5EC8560882C51CAA5A09EEE596"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\sensor-review.json",
+      "sha256": "A857400C3927F137D9B451CC07C5A7D2E01C6C0D1830C4BE4C2C6D84B3C528DA"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\imu-grid-current-assessment.json",
+      "sha256": "E6D42EBCA1694EDE581ABA75E3532AFEBA58A215069FD3B2C49A15A6F4808968"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\recording_start_utc.json",
+      "sha256": "E470EA9B315BB8451BE2145A6DF146084B5F7E9E0E8CCB8053727583C5C2BF06"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\neuropixels_capture_status.txt",
+      "sha256": "0C699D0C2794ACFA68EF21F778465BC8FD40ADD4B60320AA6B16B453F6C1387D"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\neuropixels_probes.txt",
+      "sha256": "7B11EE9273B7C57B68A3FFB5A9332BBFFD8BC51B9D0FABF612EA4E8D81C6DF56"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1\\native_cl_identity.json",
+      "sha256": "F6381EB13DD60EBA8808BF4B9A5E5E485710F13F7D002A4C7CD4B4E72282C345"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl1_stopped\\proof.json",
+      "sha256": "7C425FBECD2EC1578BF17196D46ADB8E3C8456B270A90169ECFC58F7B968F8BF"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\assessment.json",
+      "sha256": "BD1EDB047B5148ADF2D3AE9B3769240A527FE8A5B4F06903C33A7ADE5E8CABBE"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\experiment.json",
+      "sha256": "556DD62502246813EDB7493150D7A6C60565BCE531CBB4071E5A06C11E6090AD"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\sensor-review.json",
+      "sha256": "4BB800FD68795878C4A95637062F9C2F39C227773214EC32422B9D40CBF62541"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\imu-grid-current-assessment.json",
+      "sha256": "76E69E1C1761EA65AF43DA99CD9B34F359671CF1F9D1C6FB75A8992E50845BE9"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\recording_start_utc.json",
+      "sha256": "442F581C4C5E717A2AA301D137260AC7F97C3DAE16116E9468FE341F2D156B08"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\neuropixels_capture_status.txt",
+      "sha256": "D91877572C38BD4BC658D71604CDD05789C0E707E9D1F14A95C649C63BFF4673"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\neuropixels_probes.txt",
+      "sha256": "EB0847FE7574E493A1F9EF790B311CCE1468E24A67FDE6DA5AAD53C076E440C1"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2\\native_cl_identity.json",
+      "sha256": "121F28ACF66A0D7DD91470AEC1CF46D00DC631C34FE0D40999ACF2878AF7D861"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2_stopped\\proof.json",
+      "sha256": "C8843D1DA2E38365B95DE2883AE8E2D85BB2823D98C8A6114A6B02D80543F9CB"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\assessment.json",
+      "sha256": "95D47FA9C2D594AB74538A4DF4CFDDFA1C67135F216C0D0C358584D7591CF703"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\experiment.json",
+      "sha256": "009E4D5CE1A3F8FCF053646338C1A4C5134B8D2BED2CCBE41D0895C561EB37D1"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\sensor-review.json",
+      "sha256": "E377D6727E13B00409D4C9AA5F88B1774F83DAAD782B4C1A6DF42113B944D951"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\imu-grid-current-assessment.json",
+      "sha256": "53AF622BE2138847884EC26AFDBFCB9C9B90C39ECB9C5EC4EE75C685F40AEB71"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\recording_start_utc.json",
+      "sha256": "1D351034A267B8BCAEBAAE1D3571FFAE600D0F3D93615AC310ABA7B6882F593C"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\neuropixels_capture_status.txt",
+      "sha256": "D06922A92DD89C236905C123FC5CF1607D3A3A05D32E1DDBA3DD7A7DBA601930"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\neuropixels_probes.txt",
+      "sha256": "87E082A294A54042AB0058EE67D3BF4DB27B241AADBC535387B7A3E539824B3F"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2\\native_cl_identity.json",
+      "sha256": "2DE8773522CC34D9CD26C5A1428CDD7E8F9940132049D94D091BDCD5A425D8E8"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\usb-cl2-r2_stopped\\proof.json",
+      "sha256": "AB954370004CD6B58819435E67B1DF6553B953B1F2E0D9F98EFF85CE8CF3F07F"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\restore_verified.json",
+      "sha256": "0446E7DB72E53EED58EDD33DFB925FEBB30AE51687302121CFC91C120FA87835"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\restoration-complete.json",
+      "sha256": "C14555F8717A578B0E360C730DDB9A8793585EEC03EEC10E1E90D6209F5D6765"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\lease-closed.json",
+      "sha256": "5AF02F75FA6B8AF7FB12CDEBB1705E8FB8D9EE690472F515C08DD18A37125856"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\final_profile_ap\\protected_profile.json",
+      "sha256": "546E889E19F0FE76C29CFE1920C0D8CDF8463B7B963A96822A54574C99A1D37D"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\initial_status.json",
+      "sha256": "5CE91AABBA9CE61917494A3EC48E9B2DBE512007593777740D8D28A5BCBBB38F"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\bench\\restored-final-status.json",
+      "sha256": "C4094275DD7AA79CFF179DB9044750C138A309A4EE80AE5B07D8CF3DA12DE09D"
+    }
+  ],
+  "accepted_utc": "2026-11-05T15:03:18.481342+00:00",
+  "limits": [
+    "This is affected USB15kHz/two-probe qualification, not a claim for every V1 USB/media profile or endurance.",
+    "Unchanged APP/SD behavior reuses prior qualification, not a new SD test.",
+    "Native sensor conversion-phase lock, CPU/power usage and complete unknown terminal tail are not established.",
+    "Original lossless=False startup-trimming flags, partial native snapshots and two-detector retained source-window=False remain preserved.",
+    "The30s raw helper correctly fails its fixed55s span threshold; actual30s restart separately passes a25s minimum observed-span assessment. The raw helper result is not relabeled."
+  ]
+}

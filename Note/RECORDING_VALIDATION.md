@@ -32,8 +32,10 @@ The app limits closed-loop requests to the qualified profiles below. The connect
 
 | Logger and recording profile | USB | BLE-controlled SD |
 |---|---|---|
-| V1 with P1 + P2 at 15 kHz | One/two Ripple detectors passed 60-second checks on APP5F90FD3B/USB8454D202. Initial IMU slot and terminal coverage limits remain explicit. | One/two Ripple detectors passed ~31-second captures and matching-service full readbacks on the same pair. |
-| V2 with P1 + P2 + P3 at 20 kHz | USB112066CE: SPI-selected P2 ADC0/1 one/two Ripple detectors pass scoped 60-second recording, NP/IMU and same-source event checks. USB restart uses the existing idle mode cycle; terminal IMU/NP coverage remains unknown. | APP99CC44F9: SPI-selected P2 ADC0/1 one/two Ripple detectors retain scoped full NP/IMU readbacks, a two-detector controlled 225 ms owner hold and same-APP restart. Earlier failures and native MAG/final-grid-tail limits remain explicit. |
+| V1 with P1 + P2 at 15 kHz | APP5F90FD3B/USBC91871BD: one/two Ripple detectors and 100 Hz MAG pass scoped 60-second recording/native checks and 30-second restart. Initial IMU slot and terminal coverage limits remain explicit. | Unchanged APP5F90FD3B reuses the earlier one/two-detector captures and matching-service full readbacks. |
+| V2 with P1 + P2 + P3 at 20 kHz | USBD43FE162: SPI-selected P2 ADC0/1 one/two Ripple detectors, 100 Hz MAG and bounded IMU handoff pass recording/native checks and reset-separated restart. Strict actual zero-gap checks passed; terminal IMU/NP coverage remains unknown. | Unchanged APP99CC44F9 reuses scoped full NP/IMU readbacks, the two-detector controlled 225 ms owner hold and same-APP restart. Earlier failures and final-grid-tail limits remain explicit. |
+
+The [2026-11-05 USB sensor results](USB_SENSOR_MEDIA_RATES_20261105.md) retain the earlier failed candidates and exact source/acceptance identities. Forced native pressure checks verify one logged interval/reset and full WILD retraining without changing NP/IMU T0. The final hardware runs did not need a startup waiver; any actual later interruption remains recorded.
 
 ## Current development result
 

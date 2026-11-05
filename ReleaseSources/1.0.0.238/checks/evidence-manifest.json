@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0.238",
+  "role": "Curated compact source/HIL/restoration/cleanup evidence; no original neural captures",
+  "files": [
+    {
+      "path": "checks/v2-r3-source-freeze.zip",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\checks\\v2-r3-source-freeze.zip",
+      "bytes": 615485,
+      "sha256": "B29ABB6BA6DA0140E185A5F1132E6573CFCD8EFDCFF008A3804B87D3646AED0B"
+    },
+    {
+      "path": "checks/v2-r3-source-manifest.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\checks\\v2-r3-source-manifest.json",
+      "bytes": 46521,
+      "sha256": "5357CAE9E64D634809EFA3F6B389C75D6B7E92567D319DF2496FA7AD55826300"
+    },
+    {
+      "path": "checks/v2-r3-source-receipt.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\checks\\v2-r3-source-receipt.json",
+      "bytes": 483,
+      "sha256": "03E33596D0C6528C124BD02F3DE3CC0A34A5FCA9F2E8BF73B0C58E8E97EF1523"
+    },
+    {
+      "path": "firmware/V1/closure.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V1\\closure.json",
+      "bytes": 34215,
+      "sha256": "631AEF1ECC56B715E151D9C92B5A327AB89D68BEEAD4E09B29312CF55B6EF8F6"
+    },
+    {
+      "path": "firmware/V1/closure.zip",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V1\\closure.zip",
+      "bytes": 2617671,
+      "sha256": "9AE073FB45BEEC211F9D45A11CBF488A6D1851AD8E9E2AE820E6CBA5B709EC3C"
+    },
+    {
+      "path": "firmware/V1/qualification.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V1\\qualification.json",
+      "bytes": 20385,
+      "sha256": "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201"
+    },
+    {
+      "path": "firmware/V1/source-freeze/manifest.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V1\\source-freeze\\manifest.json",
+      "bytes": 30496,
+      "sha256": "DB31C97575AE6D190F240F5CC55631FB906CEF9F13D05CDC8E49618EDE0DDE13"
+    },
+    {
+      "path": "firmware/V1/source-freeze/source-freeze.zip",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V1\\source-freeze\\source-freeze.zip",
+      "bytes": 735705,
+      "sha256": "B408B57DA35F81EBB09131DB28CAD85822F7ECCF455B837217C15765599B21AE"
+    },
+    {
+      "path": "firmware/V2/cleanup.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\cleanup.json",
+      "bytes": 762,
+      "sha256": "F170DF0CE331F90A2515800F2FCE6E89A1CB302ACB718F2228F01A8148C3112C"
+    },
+    {
+      "path": "firmware/V2/lease.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\lease.json",
+      "bytes": 361,
+      "sha256": "0583FBE4BAB5A70EB02ACDE8C29564A32E998D0E707C3AE8F26F6A9CE6F6D1D5"
+    },
+    {
+      "path": "firmware/V2/qualification.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\qualification.json",
+      "bytes": 8147,
+      "sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366"
+    },
+    {
+      "path": "firmware/V2/restoration.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\restoration.json",
+      "bytes": 581,
+      "sha256": "3874E8B2AD330755969CCC7408F354A46F6AA24FF79F37698AD31FD39E24C775"
+    },
+    {
+      "path": "firmware/V2/source-freeze/manifest.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\source-freeze\\manifest.json",
+      "bytes": 39618,
+      "sha256": "8AE992127E3661CF0839C4FFA3DC5CD92644ED38E72F572A260B9B49F65895A1"
+    },
+    {
+      "path": "firmware/V2/source-freeze/receipt.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\source-freeze\\receipt.json",
+      "bytes": 545,
+      "sha256": "58E41854144E0E3F87F30C25AEB16581DAF42071F4BA351BA00EABD7E16F4C48"
+    },
+    {
+      "path": "firmware/V2/source-freeze/source-freeze.zip",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\source-freeze\\source-freeze.zip",
+      "bytes": 406749,
+      "sha256": "E9814DE808B4AC5DB58DF35950654862D5BC8A7022398FFDCC4D8FBB3F58D4D6"
+    },
+    {
+      "path": "firmware/V2/closure.zip",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\closure.zip",
+      "bytes": 3697158,
+      "sha256": "817F4374CEB059C2B134127390FD6C577C7391E93CF1F841B56E3BB5FAF45570"
+    },
+    {
+      "path": "firmware/V2/closure.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\evidence\\firmware\\V2\\closure.json",
+      "bytes": 60000,
+      "sha256": "5A5115D6947B0E75ED365C4CEB9535EEE60084144D66A71D881AA488C885A3FE"
+    },
+    {
+      "path": "checks/catalog-loader.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\usb_media_rate_20261105\\release238\\catalog-loader.json",
+      "bytes": 330,
+      "sha256": "B541351DB45D8B20B66C4E4CAF544B078EF7F160BD1628E1ECBB88F7E2DBBBB3"
+    }
+  ],
+  "total_bytes": 8315212.0
+}

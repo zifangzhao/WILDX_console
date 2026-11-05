@@ -7,14 +7,14 @@
         65537
       ],
       "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
-      "release": "V1_15K_2PROBE_RIPPLE_APP5F90FD3B_USB8454D202_20261104",
+      "release": "V1_USB_IMU_APP5F90FD3B_USBC91871BD_20261105",
       "sourceCommit": "23edae6de84869b1b9edcf9e52074649c0579cbb",
-      "stage": "BOUNDED_RECORDING_CLOSED_LOOP_PASS",
+      "stage": "BOUNDED_USB_IMU_QUALIFIED_COUNTS_1_2",
       "appVersion": "build5F90FD3B",
-      "usbVersion": "build8454D202",
+      "usbVersion": "buildC91871BD",
       "recoveryVersion": "Unchanged bootloader / ABI258",
       "appCrc32": "5F90FD3B",
-      "usbCrc32": "8454D202",
+      "usbCrc32": "C91871BD",
       "recoveryCrc32": null,
       "app": {
         "path": "V1/V1_APP5F90FD3B.hex",
@@ -26,8 +26,8 @@
           "sha256": "42D3ED89E4C339AB35A0D6BB5AAEC262482F15ADBEEC5EC82F3892C398386879"
         },
         {
-          "path": "V1/V1_USB8454D202.hex",
-          "sha256": "17A72546CCDCEE9F3626C60C696CD767876E92DDA0B272D0FD02DA2A2EEDFBE7"
+          "path": "V1/V1_USBC91871BD.hex",
+          "sha256": "721EBE135DB48CA0A4E633491A883A1A8A8A0F6C359228AD8874886EF0DBC855"
         },
         {
           "path": "V1/V1_APP5F90FD3B.xenp",
@@ -38,19 +38,19 @@
           "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
         },
         {
-          "path": "V1/V1_FUSED_BOOT_USB8454D202_APP5F90FD3B.hex",
-          "sha256": "9AC7307704D00FFE9E9055BD0D80C6A9C3E265C3CB9B4CDD58D71CDEB1D68A7B"
+          "path": "V1/V1_FUSED_BOOT_USBC91871BD_APP5F90FD3B.hex",
+          "sha256": "CB56DB582046EE23BD2A8BB147AD3E97D9D342E636DB4E342E2A5AF35C436F24"
         },
         {
           "path": "V1/acceptance.json",
-          "sha256": "B11B4A652FCC6684B70BC138C0BA63570DF188BBC50B304B86BA3CB6FACF62F9"
+          "sha256": "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201"
         },
         {
-          "path": "V1/V1_BOOT_USB8454D202.hex",
-          "sha256": "FA6246145E198B96272F9519582E156E11676C322097EA4E2C5C6D765E1C11C2"
+          "path": "V1/V1_BOOT_USBC91871BD.hex",
+          "sha256": "2E84BA8AC36835042D21569E9809A8E8738314B5B924F9A4783F5DC3D2BB2811"
         }
       ],
-      "limits": "V1 P1+P2 at15kHz, one/two Ripple detectors;60sUSB/~31sSD bounded checks. One initial IMU slot unavailable; terminal/full IMU coverage and CPU/power/endurance not established. See release qualification.",
+      "limits": "V1 P1+P2 at15kHz, one/two Ripple detectors;60sUSB/~31sSD bounded checks. One initial IMU slot unavailable; terminal/full IMU coverage and CPU/power/endurance not established. See release qualification. USB sensor update: V1 two probes at15kHz: native AG198.89–199.40Hz/MAG99.53–99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited. Camera/audio host support and highest simultaneous media throughput are not newly qualified.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -65,8 +65,8 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 384960,
-        "codeCrc32": "8454D202",
-        "buildIdHex": "3331303261623462386131643935633563613130383832626561393165646234",
+        "codeCrc32": "C91871BD",
+        "buildIdHex": "3137363561363831363438643730323964613034396535663162636435633934",
         "manifestFlags": 1,
         "minimumLoaderAbi": 258,
         "generation": 1
@@ -184,6 +184,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 384960,
+          "codeCrc32": "8454D202",
+          "buildIdHex": "3331303261623462386131643935633563613130383832626561393165646234",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -490,11 +500,11 @@
         }
       ],
       "full": {
-        "path": "V1/V1_FUSED_BOOT_USB8454D202_APP5F90FD3B.hex",
-        "sha256": "9AC7307704D00FFE9E9055BD0D80C6A9C3E265C3CB9B4CDD58D71CDEB1D68A7B"
+        "path": "V1/V1_FUSED_BOOT_USBC91871BD_APP5F90FD3B.hex",
+        "sha256": "CB56DB582046EE23BD2A8BB147AD3E97D9D342E636DB4E342E2A5AF35C436F24"
       },
-      "sourceCommitScope": "Recorded repository baseline with partial exact overlays archived in release; binary identities are authoritative.",
-      "sourceProvenance": "../ReleaseSources/1.0.0.232/firmware/V1/source-freeze/manifest.json",
+      "sourceCommitScope": "Published baseline and exact changed USB source archive; binary identities authoritative; APP unchanged.",
+      "sourceProvenance": "../ReleaseSources/1.0.0.238/firmware/V1/source-freeze/manifest.json",
       "sourceCommitRole": "baseline",
       "retainedBaselineProvenance": {
         "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
@@ -512,22 +522,28 @@
           "acceptanceSha256": "DAF895B31EEB3B6C876E3906D76EFB51E15DDF7811BD40F5CEE8D954A680D346",
           "canonicalSourceEquivalenceClaimed": false
         }
-      }
+      },
+      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.232/firmware/V1/source-freeze/manifest.json",
+      "usbSensorQualification": "V1 two probes at15kHz: native AG198.89–199.40Hz/MAG99.53–99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
+      "qualifiedUsbDetectorCounts": [
+        1,
+        2
+      ]
     },
     {
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_USB_SD_20K_3PROBE_P2_SELECTED_RIPPLE_APP99CC44F9_USB112066CE_20261105",
+      "release": "V2_USB_IMU_APP99CC44F9_USBD43FE162_20261105",
       "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
-      "stage": "BOUNDED_SD_ONE_TWO_USB_QUALIFIED_COUNTS_1_2",
+      "stage": "BOUNDED_USB_IMU_QUALIFIED_COUNTS_1_2",
       "appVersion": "build99CC44F9",
-      "usbVersion": "build112066CE",
+      "usbVersion": "buildD43FE162",
       "recoveryVersion": "build 6408DBB8",
       "appCrc32": "99CC44F9",
-      "usbCrc32": "112066CE",
+      "usbCrc32": "D43FE162",
       "recoveryCrc32": "6408DBB8",
-      "limits": "V2 P1+P2+P3 at20kHz, one/two Ripple detectors using selected P2 ADC channels0/1 (tap2) in BLE-controlled SD only; USB closed-loop qualified only for detector count(s) 1,2 at3probes20kHz, Ripple, P2 ADC0/1; all other USB configurations remain disabled. Previous P3 two-detector stress loss remains in234 history; it is not this selected-reader qualification. Exact bounded acceptance and NP/IMU limits in release235 qualification; no endurance, all-profile, CPU or power claim.",
+      "limits": "V2 P1+P2+P3 at20kHz, one/two Ripple detectors using selected P2 ADC channels0/1 (tap2) in BLE-controlled SD only; USB closed-loop qualified only for detector count(s) 1,2 at3probes20kHz, Ripple, P2 ADC0/1; all other USB configurations remain disabled. Previous P3 two-detector stress loss remains in234 history; it is not this selected-reader qualification. Exact bounded acceptance and NP/IMU limits in release235 qualification; no endurance, all-profile, CPU or power claim. USB sensor update: V2 USB3P20k: nominalAG200/MAG100 measured199.03–199.06/99.51–99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate. Camera/audio host support and highest simultaneous media throughput are not newly qualified.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
@@ -541,9 +557,9 @@
       "usbIdentity": {
         "imageId": 1431519793,
         "baseAddress": 135790592,
-        "bytes": 343312,
-        "codeCrc32": "112066CE",
-        "buildIdHex": "6235313435363630386661383737393264343563646336613133643831623765",
+        "bytes": 345392,
+        "codeCrc32": "D43FE162",
+        "buildIdHex": "6137326166323062616164373138383330303635306163363763316235623031",
         "manifestFlags": 3,
         "minimumLoaderAbi": 4,
         "generation": 3
@@ -553,8 +569,8 @@
         "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
       },
       "full": {
-        "path": "V2/V2_FUSED_BOOT_USB112066CE_APP99CC44F9.hex",
-        "sha256": "BB18F6A0DAAD972A1FC704AB6D0155D8C3A776A3218E3760665EB2AB2B2E6B0D"
+        "path": "V2/V2_FUSED_BOOT_USBD43FE162_APP99CC44F9.hex",
+        "sha256": "B4A1962067B0A47F391BCADD8E34FD94839F8A20D1E8463717CF97FAC551C4C4"
       },
       "files": [
         {
@@ -562,8 +578,8 @@
           "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
         },
         {
-          "path": "V2/V2_USB112066CE.hex",
-          "sha256": "8A10A893CA77534D41CE5929D50A9D783EA28B500240B00DF424ACEA15103111"
+          "path": "V2/V2_USBD43FE162.hex",
+          "sha256": "2671D91FA8638EBC114FD8979950ECD2F8A5CF16F156B50C4BD74D87E29C4790"
         },
         {
           "path": "V2/V2_APP99CC44F9.xenp",
@@ -574,16 +590,16 @@
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_FUSED_BOOT_USB112066CE_APP99CC44F9.hex",
-          "sha256": "BB18F6A0DAAD972A1FC704AB6D0155D8C3A776A3218E3760665EB2AB2B2E6B0D"
+          "path": "V2/V2_FUSED_BOOT_USBD43FE162_APP99CC44F9.hex",
+          "sha256": "B4A1962067B0A47F391BCADD8E34FD94839F8A20D1E8463717CF97FAC551C4C4"
         },
         {
           "path": "V2/acceptance.json",
-          "sha256": "248F3AD6047FA0B046520A6DD9891D6F81F79136EDD088C41B82DE2AEE7D6E85"
+          "sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366"
         }
       ],
-      "sourceCommitScope": "Recorded repository baseline with exact changed overlays archived in release; binary identities are authoritative.",
-      "sourceProvenance": "../ReleaseSources/1.0.0.237/firmware/V2/source-freeze/manifest.json",
+      "sourceCommitScope": "Published baseline and exact changed USB source archive; binary identities authoritative; APP unchanged.",
+      "sourceProvenance": "../ReleaseSources/1.0.0.238/firmware/V2/source-freeze/manifest.json",
       "previousApps": [
         {
           "imageId": 1095782449,
@@ -720,6 +736,16 @@
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
+          "bytes": 343312,
+          "codeCrc32": "112066CE",
+          "buildIdHex": "6235313435363630386661383737393264343563646336613133643831623765",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
           "bytes": 334268,
           "codeCrc32": "FFC27E5A",
           "buildIdHex": "6361363038343837633339653966656535613139343766306565666566333362",
@@ -838,7 +864,12 @@
           "generation": 0
         }
       ],
-      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.235/firmware/V2/source-freeze/manifest.json"
+      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.237/firmware/V2/source-freeze/manifest.json",
+      "usbSensorQualification": "V2 USB3P20k: nominalAG200/MAG100 measured199.03–199.06/99.51–99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
+      "qualifiedUsbDetectorCounts": [
+        1,
+        2
+      ]
     }
   ]
 }

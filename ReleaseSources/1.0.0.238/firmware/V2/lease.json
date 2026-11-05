@@ -1,0 +1,11 @@
+﻿{
+    "pid":  47400,
+    "global_status":  "released",
+    "task":  "v2_usb_imu100_20261105/V2",
+    "uid":  "001A0004434250062039314E",
+    "status":  "closed",
+    "acquired_utc":  "2026-11-05T15:02:07.4516062Z",
+    "scope":  "GLOBAL+UID",
+    "started_utc":  "2026-11-05T15:02:07.3917232Z",
+    "closed_utc":  "2026-11-05T15:45:19.2009981Z"
+}

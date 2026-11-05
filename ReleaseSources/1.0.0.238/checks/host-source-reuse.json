@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "old_version": "1.0.0.237",
+  "new_version": "1.0.0.238",
+  "compared": 204,
+  "changed": [
+    "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+  ],
+  "version_only": true,
+  "exe_sha256": "571816C39F7786F4D8B8EA395BA06B1AD99D552014A96A4FFF7FD37B4D3BB95E",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "scope": "Application source differs only in assembly/file version; existing algorithm/workflow checks are reused. New exact catalog loader check remains required."
+}

@@ -1,0 +1,11 @@
+{
+  "status": "COMPLETE",
+  "removed_generated_payload_bytes": 11815175792,
+  "retained_neural_fragment_bytes": 3173376,
+  "files_removed": 30,
+  "fixture_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\compact\\manifest.json",
+  "fixture_manifest_sha256": "42BDED443C6DC2A19C0E9D157543D72BFD839BE68791C51AD970FD9F0A29DF34",
+  "original_restore_backups_preserved": true,
+  "scope": "Only owned generated per-probe USB neural DAT and calibrated timestamp arrays; head/tail128 rows and complete64-row selected-source oracles retained. Metadata, raw native workspace/bootstrap, primary IMU/sensor observations and firmware backups preserved. No user or on-device recording changed.",
+  "utc": "2026-11-05T15:45:47.412696+00:00"
+}

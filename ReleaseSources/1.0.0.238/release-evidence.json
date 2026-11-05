@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0.238",
+  "baseline": "1.0.0.237",
+  "installer_sha256": "55B03F6CFE5E2E12D10644E293D8CE09BFFB6A77E45F950F9B51880CFF01C61D",
+  "evidence_manifest_sha256": "196D73BF528E8E11772B3BAA1E8ED8C816690B39A71D7E9ECEF2649ABD254242",
+  "firmware_acceptance": {
+    "V1": {
+      "status": "accepted",
+      "receipt": {
+        "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_sensor_media_20261105\\accepted.json",
+        "bytes": 20385,
+        "sha256": "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201"
+      }
+    },
+    "V2": {
+      "status": "accepted",
+      "receipt": {
+        "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\accepted.json",
+        "bytes": 8147,
+        "sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366"
+      }
+    }
+  },
+  "qualified_host_receipt_sha256": "94D6BC662E4D03D0992B2B0D879DEC67298D609B5ECE16C2556879CE3E39161E",
+  "raw_host_receipt_sha256": "E436BF1180D0329777387658B95F90D0EFE5E573D305A3E6597F847AE8D3AED3",
+  "source_reuse_sha256": "F56378580370803D2BF4D9789655A951BF1EF2CF8B5B47863E133E29D752B50A",
+  "sdk_reused_from": "1.0.0.235",
+  "qualification": "qualification.json",
+  "publication_pending": true,
+  "final_v2_closure_zip_sha256": "817F4374CEB059C2B134127390FD6C577C7391E93CF1F841B56E3BB5FAF45570",
+  "final_v2_closure_json_sha256": "5A5115D6947B0E75ED365C4CEB9535EEE60084144D66A71D881AA488C885A3FE"
+}

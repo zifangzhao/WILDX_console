@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "version": "1.0.0.238",
+  "runtime": "Windows PowerShell5.1/.NET Framework",
+  "utc": "2026-11-05T15:49:28.7600560+00:00",
+  "scope": "Actual compiled NpFirmwareCatalog.Load and asset hashes",
+  "first_powershell7_attempt": "Loader runtime mismatch; no catalog rejection or installer invocation"
+}

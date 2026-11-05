@@ -1,0 +1,1458 @@
+{
+  "status": "ACCEPTED_RESTORED_COMPACT_CLOSURE",
+  "accepted_sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366",
+  "files": {
+    "accept-final.py": {
+      "bytes": 5871,
+      "sha256": "988D61B9B8CF292B711C3F69C331818E58A9955296DA7C6DEA06544AC7730618"
+    },
+    "accepted.json": {
+      "bytes": 8147,
+      "sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366"
+    },
+    "analyze-extra.py": {
+      "bytes": 2297,
+      "sha256": "A745CC98819A218D54A5813F042E1B3E92133902D80376C7D825C20AB4A50B2C"
+    },
+    "analyze-readiness.py": {
+      "bytes": 3972,
+      "sha256": "4B5F64BDA2295B9A907EE6D8E1ABF10B9BCF13A5D7F7C9B3F45A251F90B3FA53"
+    },
+    "audit\\host-window-analysis.json": {
+      "bytes": 3377,
+      "sha256": "C7ECACA2C30B46859150E8975F9090258E310DFD24DECA6998B3B281FE7CF544"
+    },
+    "audit\\sensors\\review_usb_sensors.py": {
+      "bytes": 7852,
+      "sha256": "CB737472583FAD02B8FD7D49FC32B1B185594FE689AFF0BB966C9547426574A1"
+    },
+    "audit\\sensors\\review_usb_window.py": {
+      "bytes": 5129,
+      "sha256": "2F105A8A3541DAF3567AB161BA99A81330B423CB984E0A643070680F74A5C571"
+    },
+    "audit\\sensors\\usb-r3-cl0-review.json": {
+      "bytes": 7230,
+      "sha256": "690645F4CE47D16ACCFC09AD8E68CC005DB2665EE7B346AC05E498D149A04E97"
+    },
+    "audit\\sensors\\usb-r3-cl1-review.json": {
+      "bytes": 7231,
+      "sha256": "C23CD35E708FAEC567DE54106FE78D4A684370EE667D7F3C60CB5A9B8539B465"
+    },
+    "audit\\sensors\\usb-r4-cl1-review.json": {
+      "bytes": 7239,
+      "sha256": "3FF2F0CC94A042025C210A2D458905F87F6469181D8A6DAAD39296D407B18BBF"
+    },
+    "audit\\sensors\\usb-r4-cl2-restart-review.json": {
+      "bytes": 7211,
+      "sha256": "4A50CC036728B26AF63A0CB00B12757C7F2711AB4F16C63F1592496B59E93B0A"
+    },
+    "audit\\sensors\\usb-r4-cl2-review.json": {
+      "bytes": 7236,
+      "sha256": "E2F48BCBFD67F4CC42961D865941D02166764B9B2BC45AE3F35D3B3220FACB0C"
+    },
+    "cleanup-complete.json": {
+      "bytes": 762,
+      "sha256": "F170DF0CE331F90A2515800F2FCE6E89A1CB302ACB718F2228F01A8148C3112C"
+    },
+    "cleanup-failed.json": {
+      "bytes": 655,
+      "sha256": "543E0B0707A1708AB598D9918BAAE58BFBBCED469FC2A16D99D4DEC55C773B11"
+    },
+    "compact\\manifest.json": {
+      "bytes": 31585,
+      "sha256": "42BDED443C6DC2A19C0E9D157543D72BFD839BE68791C51AD970FD9F0A29DF34"
+    },
+    "compact\\usb-r3-cl0\\probe1\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "A789462FD736D8F4741C5C0098E466AFDB849369FD3D95428E253EE808DE3CD5"
+    },
+    "compact\\usb-r3-cl0\\probe1\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "10253D7ADDD13D5762F47F4357891A358C5605822BD7CCFCE21C3DD3CF9B2C46"
+    },
+    "compact\\usb-r3-cl0\\probe1\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "FA9277BD0131450A47C9F0C9A82A19ADF887D6D05F6DCB4A2D0EAC12E4B9B498"
+    },
+    "compact\\usb-r3-cl0\\probe1\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "F418AB21B080D87298D357A2D4011F12C1ED5023EE3FAC7ADA25E58681AB2488"
+    },
+    "compact\\usb-r3-cl0\\probe2\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "E9049618C04417865A22A0472811D1E263EECE83A25F82517EFA210CBDD8AE0A"
+    },
+    "compact\\usb-r3-cl0\\probe2\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "EE6934A09E6B58DBA0B464DC42BC2C176859814706F5212E80D01D678673C5EF"
+    },
+    "compact\\usb-r3-cl0\\probe2\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "11C98CD5F6AFCBE81DEC638A8C4D53FACC0D6E33BCFB4B63E1C48C1C2D1B8D94"
+    },
+    "compact\\usb-r3-cl0\\probe2\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "A1149E170D3545ADAEEB6880230093541E5DF479171432B0C3AB7D16728D50B6"
+    },
+    "compact\\usb-r3-cl0\\probe3\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "3BC540E5F258A5DD9AFC5543DD7FA46101BBCC25BA304F1591AA8E617B1B335B"
+    },
+    "compact\\usb-r3-cl0\\probe3\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "9EA0F876FD25C35FBF9A19145D3C069444FA4BCC8CE96A993257CB0796740A7D"
+    },
+    "compact\\usb-r3-cl0\\probe3\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "1A8846C4CE7DACCB9D780F889BF479421A68523E7FEB8004FCEAF6510858DB80"
+    },
+    "compact\\usb-r3-cl0\\probe3\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "090C6B93E01D4899B1502B55C95EA4F458569D055FD6B2EE78367DD0AB0DA925"
+    },
+    "compact\\usb-r3-cl1\\probe1\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "C7CF4CCB54E2A5448A8B30DDA06E0FDF97F63AB4826157431E1D71A8BC86254B"
+    },
+    "compact\\usb-r3-cl1\\probe1\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "D07486451BA23F43928FEACE823A9944059B7FA98ACCD88C829A5DDC96C55AEC"
+    },
+    "compact\\usb-r3-cl1\\probe1\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "5178FB502BFBDBE7C91EC71D42CA8F1F093A6DBAA57C722B7BEA2F686ED2B94D"
+    },
+    "compact\\usb-r3-cl1\\probe1\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "1EA77B9283F403923A9B4D26A72005451D1F56A015B95202F9D04138699012C1"
+    },
+    "compact\\usb-r3-cl1\\probe2\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "971FC688792761B3A80363517D4F9005BBBC8BA5703EA2CC2141A50294C46AEE"
+    },
+    "compact\\usb-r3-cl1\\probe2\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "B3F4FCE074EBB50A20C0E3A7B7A505AE4F5EBBE97DFFEADFFB145522493EAD3D"
+    },
+    "compact\\usb-r3-cl1\\probe2\\selected-native-complete-rows.dat": {
+      "bytes": 48384,
+      "sha256": "AF9BE198BF793574D502395349783412AE491711327061DD498DA1698252D3AA"
+    },
+    "compact\\usb-r3-cl1\\probe2\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "0E8494D80DE423EB7DED87AFB10E1DBDF01F998CE47156FC47A671F033FE6FDB"
+    },
+    "compact\\usb-r3-cl1\\probe2\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "D8160BBE135CD8BE72DA5713E6C061300513650291CD1BE7454F06FBAB99D1FD"
+    },
+    "compact\\usb-r3-cl1\\probe3\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "14EEC3360350BC55235116E9D08F68528BAA320FF22B590FE23437EBFB141425"
+    },
+    "compact\\usb-r3-cl1\\probe3\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "A80A502D3E71895752A26C31CE99B2970795DE4A98874E04FF1B293D6D078DB2"
+    },
+    "compact\\usb-r3-cl1\\probe3\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "13FD44C71D7A83940ABA41F02BC9357D038056EA8787036FCA0FFEEEA92A957E"
+    },
+    "compact\\usb-r3-cl1\\probe3\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "EBE0D40C77DE20BB27CD7B1382291B0B004D4FA55C409C6D53A9C1FE283E668D"
+    },
+    "compact\\usb-r4-cl1\\probe1\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "F255E2D2C942EF3E2F5C22A416780C90E5B23C08CF527DC569FE6D77562413C5"
+    },
+    "compact\\usb-r4-cl1\\probe1\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "2BA6B0E507A4C68FB824F89AE58E33570287209F8CBBCD321C12859EF9915C72"
+    },
+    "compact\\usb-r4-cl1\\probe1\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "A4089D8D8A381B8260162BC880FF8D9835E5F26330CDC7373AC10D20F873086F"
+    },
+    "compact\\usb-r4-cl1\\probe1\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "549FA96C3F9D7BE586C09963A455DBEF3B1EDED2DD5D3AB64686E89515231339"
+    },
+    "compact\\usb-r4-cl1\\probe2\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "3C10DDDDA788B0ADF26684C1B7BCC14D994D70A12FF03111F3EF95B3D6FD0A38"
+    },
+    "compact\\usb-r4-cl1\\probe2\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "FE87876F964B2BB9A237CC82799F48FAA41AB7B68123467B9886FFBC08E80487"
+    },
+    "compact\\usb-r4-cl1\\probe2\\selected-native-complete-rows.dat": {
+      "bytes": 48384,
+      "sha256": "7BF5EBC8B4B34DCFB42D8FC58BB1C0154BB11E7D5C543F0A7B66C31F837692CD"
+    },
+    "compact\\usb-r4-cl1\\probe2\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "5E771B29912E4E243415AEDC4A42CC3009EB5F0B04AB0CE238BD72F450531D5C"
+    },
+    "compact\\usb-r4-cl1\\probe2\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "27A2F475F9150E5EE7F9CDD77A9CDAF944513DBA80B5DFC52962BF8EBADF0178"
+    },
+    "compact\\usb-r4-cl1\\probe3\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "EFD13540E6A5E5204D3ADC8E49D0A30C79876B3C995383142C67EA2CF6A9D868"
+    },
+    "compact\\usb-r4-cl1\\probe3\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "10479B51731BF48F61B85CFB68050B4E12633F77C50C861BC4F0FFD4DD285E5B"
+    },
+    "compact\\usb-r4-cl1\\probe3\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "1801A5C020FD24AA8B71B17C42531FE53B9848761A304F769212696B5663AE8E"
+    },
+    "compact\\usb-r4-cl1\\probe3\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "5F98AE43618C149CE13C7534BB153A80F3D3A54CF75CE6104906E4B8123BF9C7"
+    },
+    "compact\\usb-r4-cl2\\probe1\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "AF55D6A70FD33A195F1A9D4FBFE01C2C029999D5ADB572C44AE744C2702DC6E0"
+    },
+    "compact\\usb-r4-cl2\\probe1\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "13CF711FD66432F941597B0104C7728DD5C5F63609AFCF700FF03BAD9E6926A8"
+    },
+    "compact\\usb-r4-cl2\\probe1\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "DD63D6EB07C9B2765A068A5E62E3377C6AEDEAF934A7DF2026D4F1719128C15A"
+    },
+    "compact\\usb-r4-cl2\\probe1\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "6758FFF84D973623A4005A5A54ED988B7F27AD94DD008277314CD1C134680022"
+    },
+    "compact\\usb-r4-cl2\\probe2\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "DCF9DCA0CBCC14C5F18DC401BE0C912E885B38BB7E5C3B4972F84230E7BB9A3E"
+    },
+    "compact\\usb-r4-cl2\\probe2\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "7E0E3EF8655B2D269790EE0F3839F24E279B71F18DAC6747F79AD6FC507D2962"
+    },
+    "compact\\usb-r4-cl2\\probe2\\selected-native-complete-rows.dat": {
+      "bytes": 48384,
+      "sha256": "0375ABD1D42C55B3CDDAD8207C1AFEF2F0D327F632D09B1424BB95F7C537768A"
+    },
+    "compact\\usb-r4-cl2\\probe2\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "DAFCD9A1933F8271263F0118BD0F32FCC5F80A611D5FF32E3AE9AE58E9B0994A"
+    },
+    "compact\\usb-r4-cl2\\probe2\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "98F864C1F84F823F8AD21B50B5C64334E17898E3D94DEA451A7A9AADB506C78C"
+    },
+    "compact\\usb-r4-cl2\\probe3\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "02BF504A1D1205C1F281C75AD162704DFF4972DE5E56887B52D65DFE605B820D"
+    },
+    "compact\\usb-r4-cl2\\probe3\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "897500B4EEE86A2CB13B0FDFA015368487D5A06FADB98EC9C2FD94B749A247C1"
+    },
+    "compact\\usb-r4-cl2\\probe3\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "CDD723BCE05222BDE64C0C2127D417382D8FE590F0876359BD0DCEA5A7CE22DE"
+    },
+    "compact\\usb-r4-cl2\\probe3\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "AC366308707E06623126F1172D3807491A7E7C225AEA939F5BE41BD00CFC9C57"
+    },
+    "compact\\usb-r4-cl2-restart\\probe1\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "44DE61CDCCC05E91F936BE740A557CCB19DAB9FC79E78B8215C580794E3B03E6"
+    },
+    "compact\\usb-r4-cl2-restart\\probe1\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "9D713860DC099C5ED84625CBC942836DFA712CEB36F04585A56D84E1568FABAD"
+    },
+    "compact\\usb-r4-cl2-restart\\probe1\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "7795477FFA6798BE757DE1DF005664FA26047B89CC66BE83A28208E02691DFA3"
+    },
+    "compact\\usb-r4-cl2-restart\\probe1\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "031B1E68639C6B6DB5E41D2B587626A2BB5CBC1E8A5B3767DF025039047904A4"
+    },
+    "compact\\usb-r4-cl2-restart\\probe2\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "F74BBE188C6678D467EAB50B48B6BFAEDDFE23A71E1E755936C1F9A03D18D78D"
+    },
+    "compact\\usb-r4-cl2-restart\\probe2\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "ADB7C778092B8C3EBACD611DC4E4F0AE7C5D7645A053716BAF1B998D8635E0AF"
+    },
+    "compact\\usb-r4-cl2-restart\\probe2\\selected-native-complete-rows.dat": {
+      "bytes": 48384,
+      "sha256": "C3D8CA0432F13AA9C08CBAA14A00C9032C8FBC0A0986528817E79F14062BDFBE"
+    },
+    "compact\\usb-r4-cl2-restart\\probe2\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "B8D696978477432F89286FFF471D5B94185D5F2C4BE87E55EF1C21C8CE904BF3"
+    },
+    "compact\\usb-r4-cl2-restart\\probe2\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "A069830649743ECEC889D344D1ADBCD918165047DDB63A51B791D20A0D86E542"
+    },
+    "compact\\usb-r4-cl2-restart\\probe3\\neuropixels_ap.dat.head": {
+      "bytes": 98304,
+      "sha256": "5EAE34A3C5850E85DFC3D583F57215DF2AF214834FE7275213BAB1655F43C886"
+    },
+    "compact\\usb-r4-cl2-restart\\probe3\\neuropixels_ap.dat.tail": {
+      "bytes": 98304,
+      "sha256": "6FC19B20FAC1FCF426C88106D3ADB573F90E4ADA5D38B9CE6A5EC8F3F3A8FC73"
+    },
+    "compact\\usb-r4-cl2-restart\\probe3\\timestamps.calibrated.dat.head": {
+      "bytes": 1024,
+      "sha256": "BE077B1CA3ABEEF1753712B4DC5287C737185ADF3CFA71F38B0B75AFE1B944B9"
+    },
+    "compact\\usb-r4-cl2-restart\\probe3\\timestamps.calibrated.dat.tail": {
+      "bytes": 1024,
+      "sha256": "819D64183BAB006C96CD77FCF120676FF9EE2F5E2B827EDDF524180464D5AA0B"
+    },
+    "compact-failures\\manifest.json": {
+      "bytes": 11254,
+      "sha256": "F5DD7DC9644D1C87A61D84AB9B696B5E641B6068D1E961F4A58913CD98600117"
+    },
+    "deployment-r4\\Restore-verified.json": {
+      "bytes": 338,
+      "sha256": "B80B31DC319593C2F45E5F793F11B9CAD8DEAA90371B9B070CD762115387C787"
+    },
+    "original-r3\\receipt.json": {
+      "bytes": 730,
+      "sha256": "D09515EE7E591F8FA0A63890813052EBA12C2EDA501B8DE599236824996E3D03"
+    },
+    "owner-r3\\lease.json": {
+      "bytes": 361,
+      "sha256": "0583FBE4BAB5A70EB02ACDE8C29564A32E998D0E707C3AE8F26F6A9CE6F6D1D5"
+    },
+    "restoration-complete.json": {
+      "bytes": 581,
+      "sha256": "3874E8B2AD330755969CCC7408F354A46F6AA24FF79F37698AD31FD39E24C775"
+    },
+    "usb-r3-cl0\\acquisition_anchor.bin": {
+      "bytes": 64,
+      "sha256": "9B5FF07F684F478DFE79A422CD76126D83FEC8794D3DF15015042224838963C1"
+    },
+    "usb-r3-cl0\\acquisition_clock_queries.jsonl": {
+      "bytes": 15318,
+      "sha256": "D0D75BA81D61DD0A2AECF5AC2378E8751748B47AF080AEB932685D6FDE838F62"
+    },
+    "usb-r3-cl0\\analogin_encoding.txt": {
+      "bytes": 3015,
+      "sha256": "7483210FCC7CB052EAAF9E0F30112C225903A07A69A6762B7F9D9ED95429B989"
+    },
+    "usb-r3-cl0\\capture-anchor-raw.bin": {
+      "bytes": 44,
+      "sha256": "7D29C930B84A1A2C6E816A6FE3E64AA34C051D0515918F014CA5771CCEE1386C"
+    },
+    "usb-r3-cl0\\cl-workspace.bin": {
+      "bytes": 3640,
+      "sha256": "F25AA50390750F51D705195701BA474D3EB27D313CEAD39016B7B1E656E18082"
+    },
+    "usb-r3-cl0\\clock_linear_fit.txt": {
+      "bytes": 796,
+      "sha256": "D518A30583B9236E8AA1869B34A47D1F9ED220FBD8A5341DD59424A4C21AA626"
+    },
+    "usb-r3-cl0\\clock_observations.csv": {
+      "bytes": 564,
+      "sha256": "DA82E057698FD73DE1330D2ACCB89EECDA9472AFAA47EF91D6E2CA111B049E33"
+    },
+    "usb-r3-cl0\\closed_loop_control_receipt.bin": {
+      "bytes": 64,
+      "sha256": "C7CFA7B99443B12F77A43E992859916F2D4A5041C168291A00A6A5238BB6AEFE"
+    },
+    "usb-r3-cl0\\closed_loop_requested.bin": {
+      "bytes": 64,
+      "sha256": "30DEFBC5D0BA9C695D85A031A180979B2D0CF05F6CC972F48CD002673938831D"
+    },
+    "usb-r3-cl0\\dwt-registers.bin": {
+      "bytes": 8,
+      "sha256": "2A9069ABD8C537F72E08C6C73DBEE165B34BDFAEC11A8B580070881A9D5D6D82"
+    },
+    "usb-r3-cl0\\first_sample_timestamps.json": {
+      "bytes": 12336,
+      "sha256": "178027822590813838A5C91DF94686C8BB54472D0FEA497EFC3750ED36A80AD2"
+    },
+    "usb-r3-cl0\\first_sync_usb_status.json": {
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    "usb-r3-cl0\\i2c5-timing.bin": {
+      "bytes": 4,
+      "sha256": "6B07F775A75F2DD447AA0A962C4DF1149B3B1C069B87856612748D9FC798A1EA"
+    },
+    "usb-r3-cl0\\imu100-extra.json": {
+      "bytes": 2472,
+      "sha256": "56072BF1E8DCB790EAF1F0A7A6FF87B058E58B1B44DD6030BE0E75538231234A"
+    },
+    "usb-r3-cl0\\imu_grid_gaps.csv": {
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    "usb-r3-cl0\\imu_grid_phase.bin": {
+      "bytes": 84,
+      "sha256": "FAA6CA5B67BE54B64E36358D784164BD9C3A2150FAC5FD42388891FDEA722652"
+    },
+    "usb-r3-cl0\\imu_grid_segments.csv": {
+      "bytes": 48,
+      "sha256": "5889ED4228AE706C51F4476A3C84286E6D1D4B5FA45D30F5BBE4B8CA8D46277D"
+    },
+    "usb-r3-cl0\\imu_grid_status.txt": {
+      "bytes": 626,
+      "sha256": "2682DDE54156318619529B708F01EBF07FDA120738BA54BA31D86B476E3EB579"
+    },
+    "usb-r3-cl0\\imu_grid_terminal.bin": {
+      "bytes": 80,
+      "sha256": "C3F962C917BDFC6F51FD07A2A848B710446BFD674228FF44B3A047065DC476BD"
+    },
+    "usb-r3-cl0\\imu_native_samples.jsonl": {
+      "bytes": 927818,
+      "sha256": "974F741601E7849DD2208C13CEC29278907A1F680C57C1393EA1BAC2D53027AD"
+    },
+    "usb-r3-cl0\\imu_native_samples_status.json": {
+      "bytes": 381,
+      "sha256": "E3B78769C66E026C4803EE07D43B9F3202A4382BDA703A1C642CE16B8DCFEC12"
+    },
+    "usb-r3-cl0\\imu_observation_status.txt": {
+      "bytes": 838,
+      "sha256": "2444DDCE384147CDF67720A6AB8D23F2C7A8ACE6316A2D9F44B1910595882B23"
+    },
+    "usb-r3-cl0\\imu_snapshots.bin": {
+      "bytes": 168560,
+      "sha256": "F430B89F343CF7107B7E74F42413A8307E4172D3ABD0DB92B079DA04D82DBDB9"
+    },
+    "usb-r3-cl0\\neuropixels_np2usb_status.txt": {
+      "bytes": 2032,
+      "sha256": "C6E0BD79EF089A4D385983F87494A622B43C977968D664CA9A68CD6F9610FC9E"
+    },
+    "usb-r3-cl0\\np2_usb.bin": {
+      "bytes": 296,
+      "sha256": "755AE2F6A09B2718C0F97180C8B3D7B48A9AFF8AACC81203462DC859A2470BEC"
+    },
+    "usb-r3-cl0\\pc_clock.json": {
+      "bytes": 228,
+      "sha256": "E2E999554C314F64B7969BF71EDC5145EC828EB2073579418AA536CD163A5910"
+    },
+    "usb-r3-cl0\\producer.bin": {
+      "bytes": 152,
+      "sha256": "07507160B8127DAC96EE13EBE075EC089E8A7AACF8F6EB6480F411E4789D2AFF"
+    },
+    "usb-r3-cl0\\quality.json": {
+      "bytes": 1139,
+      "sha256": "B5464291012823AD396E5229CF556D4E9F5BE6423FCAE6BE7848C8CBC364A42D"
+    },
+    "usb-r3-cl0\\rcc-ccipr2.bin": {
+      "bytes": 4,
+      "sha256": "DF3F619804A92FDB4057192DC43DD748EA778ADC52BC498CE80524C014B81119"
+    },
+    "usb-r3-cl0\\rcc-cfgr2.bin": {
+      "bytes": 4,
+      "sha256": "7140703F51F95FC29B244C8F7A6839D684758B62A01D7A979BC8CE1E60A29D5A"
+    },
+    "usb-r3-cl0\\recording_start_pc_estimate.json": {
+      "bytes": 5078,
+      "sha256": "9DA966C414F02810886EBF34CC36A50BAF11D0C1823E072B1C92D950259B533F"
+    },
+    "usb-r3-cl0\\recording_start_utc.json": {
+      "bytes": 6538,
+      "sha256": "4D0519975ED53DC5CFF9EA5196928AB1F6E0C4AA201C3F890FC27E72429A14BC"
+    },
+    "usb-r3-cl0\\selected-words.bin": {
+      "bytes": 2048,
+      "sha256": "E5A00AA9991AC8A5EE3109844D84A55583BD20572AD3FFCD42792F3C36B183AD"
+    },
+    "usb-r3-cl0\\spi1-bootstrap.bin": {
+      "bytes": 12288,
+      "sha256": "F3CC103136423A57975750907EBC1D367E2985AC6338976D4D5A439F50323F4A"
+    },
+    "usb-r3-cl0\\stopped-summary.json": {
+      "bytes": 1378,
+      "sha256": "2BF2433D0185758980182086F3CD35204CE5DCB336986A40653499631621B056"
+    },
+    "usb-r3-cl0\\SystemCoreClock.bin": {
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    "usb-r3-cl0\\time_observations.jsonl": {
+      "bytes": 387042,
+      "sha256": "4426AF61795FC3015A991E33AE40F3D821BD96516565F6146C6FB52EE84EC60A"
+    },
+    "usb-r3-cl0\\timestamp_calibration.json": {
+      "bytes": 6827,
+      "sha256": "CF419ECB466EE3C9591726F4E10DAF4257361ECCACFF7FF596C52526BF4F8D30"
+    },
+    "usb-r3-cl0\\usb-report.json": {
+      "bytes": 2762,
+      "sha256": "5F62278ED238A47A3B32B91A45ACD10CB31E72464DBE752E0D155EC9E22F6ECD"
+    },
+    "usb-r3-cl0\\usb_first_sync_receipt.bin": {
+      "bytes": 328,
+      "sha256": "B4D94B641765F5EFBB2DAF5B2A568404E811BE3ACB4933787816CC7879345ABE"
+    },
+    "usb-r3-cl0\\usb_read_history_lab.csv": {
+      "bytes": 150331,
+      "sha256": "F38C05DE30BE4639CF4206E22265AF4A44817CEB82D564793E639DE956C9B650"
+    },
+    "usb-r3-cl0\\usb_rtc_start.bin": {
+      "bytes": 128,
+      "sha256": "390259B8598E67C799CCF5F0D06A98C4BB8161358EE4BB887E41ADD23D43D5C3"
+    },
+    "usb-r3-cl0\\usb_rtc_start_status.json": {
+      "bytes": 526,
+      "sha256": "E8153B3A47BC0A9DD874C626B07DCF187970D495BED0484379726BB2443656DB"
+    },
+    "usb-r3-cl0\\usb_timing_evidence.jsonl": {
+      "bytes": 6759,
+      "sha256": "582709E1E60B62C76E122DA052003336DC28C31FC62ACE8084FD9929FA2EF68D"
+    },
+    "usb-r3-cl0\\usb_timing_status.json": {
+      "bytes": 1163,
+      "sha256": "6F331EFAE3C04D2D5F803F223DD860F1C3513FA592607A13F63EA3EA41D1389F"
+    },
+    "usb-r3-cl0\\xe_np_aux_cost_diag.bin": {
+      "bytes": 64,
+      "sha256": "B065BD4A16428D17FC3736B9F9D695A575BF9AF00C7918B73B256CE3911410C0"
+    },
+    "usb-r3-cl0\\xe_np_grid_retained_diag.bin": {
+      "bytes": 32,
+      "sha256": "3C329AF446813E8461DF5C0F9D90224DA2D63DC44253C153870D7D40AE0D5B82"
+    },
+    "usb-r3-cl0\\xe_np_np2_cl_selected_calibration.bin": {
+      "bytes": 40,
+      "sha256": "2C34CE1DF23B838C5ABF2A7F6437CCA3D3067ED509FF25F11DF6B11B582B51EB"
+    },
+    "usb-r3-cl0\\xe_np_np2_cl_selected_clock.bin": {
+      "bytes": 40,
+      "sha256": "2C34CE1DF23B838C5ABF2A7F6437CCA3D3067ED509FF25F11DF6B11B582B51EB"
+    },
+    "usb-r3-cl0\\xe_np_np2_cl_selected_diag.bin": {
+      "bytes": 128,
+      "sha256": "2489843BFAFF13973E6A4EB8B6B9A7911FAD9FEBDBB4CE8922DF1AD4D266EE0A"
+    },
+    "usb-r3-cl0\\xe_np_np2_cl_selected_guard.bin": {
+      "bytes": 64,
+      "sha256": "F5A5FD42D16A20302798EF6ED309979B43003D2320D9F0E8EA9831A92759FB4B"
+    },
+    "usb-r3-cl0\\xe_np_np2_sd_fine_diagnostic.bin": {
+      "bytes": 224,
+      "sha256": "2AED998AACB43B2AC1EEA7842AC231C07EE7D663629356619179DA97FE9C909A"
+    },
+    "usb-r3-cl0\\xe_np_np2_spi2_d8_diag.bin": {
+      "bytes": 84,
+      "sha256": "FD5F76EBABE0BC0AE9909F661840F7D611546C603F8B5F8C964330A8B681ED3E"
+    },
+    "usb-r3-cl1\\acquisition_anchor.bin": {
+      "bytes": 64,
+      "sha256": "DEBDCDABEC78D494A680F7FD707643F632D08355009DC6E464B461374EDAB67F"
+    },
+    "usb-r3-cl1\\acquisition_clock_queries.jsonl": {
+      "bytes": 15298,
+      "sha256": "14836F90320EFA771504EBCDC9EA8AA473DEDA26A620F83F5D606E1846E703E6"
+    },
+    "usb-r3-cl1\\analogin_encoding.txt": {
+      "bytes": 3016,
+      "sha256": "B37C51D11C37A9C6DFE260F3DB2303D6BD4A4AE24C6FBF69D41F4FE3316C2099"
+    },
+    "usb-r3-cl1\\capture-anchor-raw.bin": {
+      "bytes": 44,
+      "sha256": "0214701F14CD46AA86CAE5F965243BD94EDC7321FA7BF818488B2E159261AD2C"
+    },
+    "usb-r3-cl1\\cl-workspace.bin": {
+      "bytes": 3640,
+      "sha256": "266063037B7DD39C3E7008CFF0F5B5D646C17C8394C1A26534F4183BF21C7C0C"
+    },
+    "usb-r3-cl1\\clock_linear_fit.txt": {
+      "bytes": 795,
+      "sha256": "6022D1081923EFFB3A350D8C38BE76A2DEFB7FA454A6D1DB5B682A9A07449C9D"
+    },
+    "usb-r3-cl1\\clock_observations.csv": {
+      "bytes": 560,
+      "sha256": "2A8E0F25E42A3A81DAD4EA11EB22DD5D14D12EC46500DD1C000FC2DA978DBFA9"
+    },
+    "usb-r3-cl1\\closed_loop_config.bin": {
+      "bytes": 64,
+      "sha256": "0BFC88D3E63C3D31D1B54662A477C7D819AA311669730112B87448DCE4A44CDC"
+    },
+    "usb-r3-cl1\\closed_loop_control_receipt.bin": {
+      "bytes": 64,
+      "sha256": "6C39423DB591A3A1F561C7C7CB33A62FCF9D3B34B2B76EFF0543BB414C90515B"
+    },
+    "usb-r3-cl1\\closed_loop_events.csv": {
+      "bytes": 2043,
+      "sha256": "A6C8821F099BD6270BDFD4CD63AFF611A5B8F2D719D529CBE9D80DE53A327227"
+    },
+    "usb-r3-cl1\\closed_loop_requested.bin": {
+      "bytes": 64,
+      "sha256": "0BFC88D3E63C3D31D1B54662A477C7D819AA311669730112B87448DCE4A44CDC"
+    },
+    "usb-r3-cl1\\closed_loop_status.txt": {
+      "bytes": 213,
+      "sha256": "D8F4432126B2F8E6AEE0C3D0CB5C4163F66DE35C7E2753B669B3A1F1FDADB185"
+    },
+    "usb-r3-cl1\\dwt-registers.bin": {
+      "bytes": 8,
+      "sha256": "CAC3A5DE4BF71F63A626268A07A55B59E2BCB719437890EB434EDD6F676AED62"
+    },
+    "usb-r3-cl1\\failure-analysis.json": {
+      "bytes": 664,
+      "sha256": "68BE5C06C0506657E7E0A8E197FEF4BF52183AC8CBDBBC0C4D3770C8CBC5B0B7"
+    },
+    "usb-r3-cl1\\first_sample_timestamps.json": {
+      "bytes": 12281,
+      "sha256": "8573B5D1D018BD1BC094805FAD275B91B9B3BC28F7B793174B4E9954843C9333"
+    },
+    "usb-r3-cl1\\first_sync_usb_status.json": {
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    "usb-r3-cl1\\i2c5-timing.bin": {
+      "bytes": 4,
+      "sha256": "6B07F775A75F2DD447AA0A962C4DF1149B3B1C069B87856612748D9FC798A1EA"
+    },
+    "usb-r3-cl1\\imu_grid_gaps.csv": {
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    "usb-r3-cl1\\imu_grid_phase.bin": {
+      "bytes": 84,
+      "sha256": "DF67CA9749E37375D4301992C959AE74A2BEDA6354CEF8B45F67760690501B19"
+    },
+    "usb-r3-cl1\\imu_grid_segments.csv": {
+      "bytes": 48,
+      "sha256": "5889ED4228AE706C51F4476A3C84286E6D1D4B5FA45D30F5BBE4B8CA8D46277D"
+    },
+    "usb-r3-cl1\\imu_grid_status.txt": {
+      "bytes": 626,
+      "sha256": "52F52E59C682B798654A0F3A2ECF1CFCA9057A893A01B5774AE5D9223CA6B7CA"
+    },
+    "usb-r3-cl1\\imu_grid_terminal.bin": {
+      "bytes": 80,
+      "sha256": "3A5B6EF038D1A3F39B8C4F4D17A9FFD490DA80B61ED9DF3FF092B8BF352E8BB8"
+    },
+    "usb-r3-cl1\\imu_native_samples.jsonl": {
+      "bytes": 923687,
+      "sha256": "BCC9064B78A3DFAF3196DDE5F9FE951177F2FD6E6AF5A841D450A209A5A9C1FC"
+    },
+    "usb-r3-cl1\\imu_native_samples_status.json": {
+      "bytes": 381,
+      "sha256": "A4D3FC6ED87C58B78FA306638AA98ACD0177988CB489805D6A1DEB16F92643C3"
+    },
+    "usb-r3-cl1\\imu_observation_status.txt": {
+      "bytes": 838,
+      "sha256": "544CC206B81B69BA4F6B1F417429D4A96F0107F483EF0B687286ED4677607119"
+    },
+    "usb-r3-cl1\\imu_snapshots.bin": {
+      "bytes": 168000,
+      "sha256": "62B88571631D1112E3BE6093A0041E228F95FEA4C3322200B469C8AE4CB9861A"
+    },
+    "usb-r3-cl1\\neuropixels_np2usb_status.txt": {
+      "bytes": 2034,
+      "sha256": "36CA102A954356999739747CFA7152B945206B788234B09826E50DAD9D0A7146"
+    },
+    "usb-r3-cl1\\np2_usb.bin": {
+      "bytes": 296,
+      "sha256": "48CF7DED43663118424FF25A7E2CD5C9FAC7934B3353BB896916D04E4229E4E7"
+    },
+    "usb-r3-cl1\\pc_clock.json": {
+      "bytes": 228,
+      "sha256": "F4FAFB3E55173C2A2E774BA48A07C7E5373FEECC48ED15576ED02D3509472904"
+    },
+    "usb-r3-cl1\\producer.bin": {
+      "bytes": 152,
+      "sha256": "76CBA9E9B78A9B2B5A5E9A2915BE7359C4BF3382A768828BCB34A5378D9674A8"
+    },
+    "usb-r3-cl1\\quality.json": {
+      "bytes": 1215,
+      "sha256": "E99059DEDC626D527DC2B1795856516A70946C43AE0346DC48CFACD692C10671"
+    },
+    "usb-r3-cl1\\rcc-ccipr2.bin": {
+      "bytes": 4,
+      "sha256": "DF3F619804A92FDB4057192DC43DD748EA778ADC52BC498CE80524C014B81119"
+    },
+    "usb-r3-cl1\\rcc-cfgr2.bin": {
+      "bytes": 4,
+      "sha256": "7140703F51F95FC29B244C8F7A6839D684758B62A01D7A979BC8CE1E60A29D5A"
+    },
+    "usb-r3-cl1\\recording_start_pc_estimate.json": {
+      "bytes": 5068,
+      "sha256": "678455EBA483CF72C14A167DBC09B60E434A1DF5BBA22415C2D666E8806C2B17"
+    },
+    "usb-r3-cl1\\recording_start_utc.json": {
+      "bytes": 6528,
+      "sha256": "4A334E35784C90C08748BC3CE43BB78AC51EF8361BA136DC8F0D56B042429A2F"
+    },
+    "usb-r3-cl1\\selected-native-proof.json": {
+      "bytes": 12162,
+      "sha256": "B8A70D058B7AF4ABC409C305F8795B4D47DCB491DDB0C2CBE6B34AD50FA9076F"
+    },
+    "usb-r3-cl1\\selected-words.bin": {
+      "bytes": 2048,
+      "sha256": "660F0B98E30E145C4C661C4FBCC4B00AA5120C958B203D40F6EC8FC1BFC925DF"
+    },
+    "usb-r3-cl1\\spi1-bootstrap.bin": {
+      "bytes": 12288,
+      "sha256": "67B6C264F370CD7B31984151CEABD5D7F261B98A416949E209B5E582B38D281C"
+    },
+    "usb-r3-cl1\\stopped-summary.json": {
+      "bytes": 1559,
+      "sha256": "D34B3A290D4CC78CC7D47183453A109FDB26A166ADFD32B3EE882A57A6573871"
+    },
+    "usb-r3-cl1\\SystemCoreClock.bin": {
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    "usb-r3-cl1\\time_observations.jsonl": {
+      "bytes": 387156,
+      "sha256": "272C5CB5BB15EFE7DCD2468C44D633E623F22BAD6277C91500487AA5473339C7"
+    },
+    "usb-r3-cl1\\timestamp_calibration.json": {
+      "bytes": 6823,
+      "sha256": "087D36CA0BF0EF7D1549D8E3D5CF5D5A3FE660F79157E2FA818374C1D5523591"
+    },
+    "usb-r3-cl1\\usb-report.json": {
+      "bytes": 2924,
+      "sha256": "420BB665D3CC23CDA79F987D893A4B6C9244B3FF9C53B2E32B7CFBCEC5278E71"
+    },
+    "usb-r3-cl1\\usb_first_sync_receipt.bin": {
+      "bytes": 328,
+      "sha256": "FE2B2E7ADB55A3EBC9E3C319903922081C56C34CB8E102D7ADD06AF1E952A5D2"
+    },
+    "usb-r3-cl1\\usb_read_history_lab.csv": {
+      "bytes": 150331,
+      "sha256": "EB7DAFA8919D69892A7E23385273E0E96DEECF909347FA618079A2D18D9CAE88"
+    },
+    "usb-r3-cl1\\usb_rtc_start.bin": {
+      "bytes": 128,
+      "sha256": "630C15C39C8AB18C6D3276B89CE10531A1BA1308B3E3CC1D509D0ED09D768400"
+    },
+    "usb-r3-cl1\\usb_rtc_start_status.json": {
+      "bytes": 525,
+      "sha256": "1272A6470B734FDB4E772D7E7FDB18C8A52C67037353FB1267E74E195A258F71"
+    },
+    "usb-r3-cl1\\usb_timing_evidence.jsonl": {
+      "bytes": 6759,
+      "sha256": "43E8B90852ADD81F10234229CFAA7D86787F11904DA6E3F799FAF5A4A6FFF454"
+    },
+    "usb-r3-cl1\\usb_timing_status.json": {
+      "bytes": 1163,
+      "sha256": "9F661F6193A6C44AB219C95768A87200C05F927F2379B8502442383AB853DD44"
+    },
+    "usb-r3-cl1\\xe_np_aux_cost_diag.bin": {
+      "bytes": 64,
+      "sha256": "C40EC1194AD2FB959BFCDE603C22B45302EB885C7C280BC20BCAA4D751791E6E"
+    },
+    "usb-r3-cl1\\xe_np_grid_retained_diag.bin": {
+      "bytes": 32,
+      "sha256": "AE098C120C7FE4B7953DF4F44FA74EFDF894EE1B518350E43E39940E0E87B185"
+    },
+    "usb-r3-cl1\\xe_np_np2_cl_selected_calibration.bin": {
+      "bytes": 40,
+      "sha256": "8E4A9D64B668E50CE6F4ABA0F9D3D2CE9D8266E7518934B39E5FEA0A4AE0998F"
+    },
+    "usb-r3-cl1\\xe_np_np2_cl_selected_clock.bin": {
+      "bytes": 40,
+      "sha256": "5C2620D21422E1EE5F51A62535BB6A82A09EE65C60DE2FEE9983D16B74DA6534"
+    },
+    "usb-r3-cl1\\xe_np_np2_cl_selected_diag.bin": {
+      "bytes": 128,
+      "sha256": "56BE4070A0F77A5410A6890AABF03C4D1B045CCFBCBF117BF0C099C0B237A2E7"
+    },
+    "usb-r3-cl1\\xe_np_np2_cl_selected_guard.bin": {
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    "usb-r3-cl1\\xe_np_np2_sd_fine_diagnostic.bin": {
+      "bytes": 224,
+      "sha256": "319B602209F65DEA728884F46A5C9299A67E101DEB803C456354078A3F2CCEA1"
+    },
+    "usb-r3-cl1\\xe_np_np2_spi2_d8_diag.bin": {
+      "bytes": 84,
+      "sha256": "67A03CCADCCA9E86960B10C349338C67D5BBFE354BC34A907796593F8E8D763D"
+    },
+    "usb-r4-cl1\\acquisition_anchor.bin": {
+      "bytes": 64,
+      "sha256": "C9CBCDD9948D9EA1E72C96E871F44E7962CB496173D54E19F6F85F4C4B45E277"
+    },
+    "usb-r4-cl1\\acquisition_clock_queries.jsonl": {
+      "bytes": 15371,
+      "sha256": "B2C9798299112179803E9E2E23A0717278DBF8D5C63C987A8A4D3CFA2C32F206"
+    },
+    "usb-r4-cl1\\analogin_encoding.txt": {
+      "bytes": 3016,
+      "sha256": "9F8A90EF6C65E3C9099C1305C67C45E4E731D46D612C73EFFA813B8C68DB6908"
+    },
+    "usb-r4-cl1\\capture-anchor-raw.bin": {
+      "bytes": 44,
+      "sha256": "73963B326A0F33F20ABF91624C723BA3549CF6CF7ECA9A80718C99014110277E"
+    },
+    "usb-r4-cl1\\cl-workspace.bin": {
+      "bytes": 3640,
+      "sha256": "115E0EC43F59D77B90CFF5F5E144098497D2BDAE5E6F30B90DD21BE99CAA0F73"
+    },
+    "usb-r4-cl1\\clock_linear_fit.txt": {
+      "bytes": 797,
+      "sha256": "A03DD0D900792C896C2D85686F9D8C37D4FA2F890214540ECD742A900E1BE002"
+    },
+    "usb-r4-cl1\\clock_observations.csv": {
+      "bytes": 565,
+      "sha256": "6A6E92FA3EF67891F90AE69BFA0A06AD96457E2243889E7B9ADA999C52594F80"
+    },
+    "usb-r4-cl1\\closed_loop_config.bin": {
+      "bytes": 64,
+      "sha256": "DC4AAE614DECD66324A3F8BF55BF90DA2B251C1D3BE85CAB3D209D98B1E49306"
+    },
+    "usb-r4-cl1\\closed_loop_control_receipt.bin": {
+      "bytes": 64,
+      "sha256": "F3F7E5D4C72F7986ECD41E40C411748C67FA85B35C601EBD2C2935A6D9B4947A"
+    },
+    "usb-r4-cl1\\closed_loop_events.csv": {
+      "bytes": 926,
+      "sha256": "3C22C9E5AF43A988FD7F0817ACB24D14CB5EC47AC0641C90E2F445497409A87A"
+    },
+    "usb-r4-cl1\\closed_loop_requested.bin": {
+      "bytes": 64,
+      "sha256": "DC4AAE614DECD66324A3F8BF55BF90DA2B251C1D3BE85CAB3D209D98B1E49306"
+    },
+    "usb-r4-cl1\\closed_loop_status.txt": {
+      "bytes": 213,
+      "sha256": "50CDF4F679AA643DAE5DE3195ACD0893585CB5BE40EEC4B5BA8882E56D3A224B"
+    },
+    "usb-r4-cl1\\dwt-registers.bin": {
+      "bytes": 8,
+      "sha256": "4A5712BE72FF14E17752AAC4DDFE5DA67E655C1790299B9FBED4E2B237376C37"
+    },
+    "usb-r4-cl1\\first_sample_timestamps.json": {
+      "bytes": 12352,
+      "sha256": "B307C8CD3CD95A6D288F57D50D27E351FAFF0D1EB582525AE66C8B1F8D167FF2"
+    },
+    "usb-r4-cl1\\first_sync_usb_status.json": {
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    "usb-r4-cl1\\imu_grid_gaps.csv": {
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    "usb-r4-cl1\\imu_grid_phase.bin": {
+      "bytes": 84,
+      "sha256": "6B43B11E9AD59DBB447A6636766EF63ACAFB77F6FFA8F5D035405B63FA48D089"
+    },
+    "usb-r4-cl1\\imu_grid_segments.csv": {
+      "bytes": 48,
+      "sha256": "CA8D279B048BF0C74427AE097EFDECF0975873F122ACDE6725DAD5D61EABEB66"
+    },
+    "usb-r4-cl1\\imu_grid_status.txt": {
+      "bytes": 626,
+      "sha256": "1CBB3F39279042A8CF23C98F6EF2F585ACBE8C80F16EBB3434F071BDD4D5BEDE"
+    },
+    "usb-r4-cl1\\imu_grid_terminal.bin": {
+      "bytes": 80,
+      "sha256": "EC956562554F9DE7DF1AE003D2E0CED44E0EEFF9140FF415291C03D28E2A26EB"
+    },
+    "usb-r4-cl1\\imu_native_samples.jsonl": {
+      "bytes": 940436,
+      "sha256": "48B0035DBB29493C54D12111F44A285438F9895F1654AFB683AC17EAC04DAE5B"
+    },
+    "usb-r4-cl1\\imu_native_samples_status.json": {
+      "bytes": 381,
+      "sha256": "73957B894B321CB34C36D15DD06B0EF1677BF04EB84257400EBFC881221A74F3"
+    },
+    "usb-r4-cl1\\imu_observation_status.txt": {
+      "bytes": 838,
+      "sha256": "F169FC05E3A1813FAF76F13E136F1EE127D7C99438000DDB264073E3C4072A09"
+    },
+    "usb-r4-cl1\\imu_snapshots.bin": {
+      "bytes": 170660,
+      "sha256": "6A314289B7755063ACF17C8B130E80C5BAF666C0E3EA0C3E4BE10364C9820EF7"
+    },
+    "usb-r4-cl1\\neuropixels_np2usb_status.txt": {
+      "bytes": 2034,
+      "sha256": "FD72F526FB562D78E7D06B067DC0CBEA5429C20FEF181DC49BFBF50E9B42A1C2"
+    },
+    "usb-r4-cl1\\np2_cl_pressure_proto_diag.bin": {
+      "bytes": 16,
+      "sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+    },
+    "usb-r4-cl1\\np2_usb.bin": {
+      "bytes": 296,
+      "sha256": "8A468B0E17565845BA4A4331FF42BFB64D05B886A26263F53560A49AAD348F31"
+    },
+    "usb-r4-cl1\\pc_clock.json": {
+      "bytes": 231,
+      "sha256": "BB5CDA70A3C93F8F230603AD35C2C39A64D2D36F3E7A3708C6CA4AD5256B08E7"
+    },
+    "usb-r4-cl1\\producer.bin": {
+      "bytes": 152,
+      "sha256": "503342DC478F94F30C05BE6299A40623FB0EEC1A06A0B98437F44370A1776E55"
+    },
+    "usb-r4-cl1\\quality.json": {
+      "bytes": 1229,
+      "sha256": "78B43B3C1B45705B9AB357B2889463B1D900BC6CDF7DADAF04D59713183AE328"
+    },
+    "usb-r4-cl1\\readiness-scope.json": {
+      "bytes": 1583,
+      "sha256": "837F1A1B6DAA0277A52B1B9F5563715AF327C96E23F41F132931CB0E62D654EC"
+    },
+    "usb-r4-cl1\\recording_start_pc_estimate.json": {
+      "bytes": 5069,
+      "sha256": "3CBE7604F70BCB9F498F900FFFBD06ADB47DC72F723AAD8CD07DB716BD2B2694"
+    },
+    "usb-r4-cl1\\recording_start_utc.json": {
+      "bytes": 6529,
+      "sha256": "84965389F6F8FA1B2577979EE103B5C13EC7605573C033F6895D88EF27BF03A4"
+    },
+    "usb-r4-cl1\\selected-native-proof.json": {
+      "bytes": 12087,
+      "sha256": "46078381EF5C1982FE1ABF9274A0DD1E84F42F6D2563DE17F0FB52C0F163B5D4"
+    },
+    "usb-r4-cl1\\selected-words.bin": {
+      "bytes": 2048,
+      "sha256": "D77A524CE19EEE18BFD870B9BF9F1D561B82E88754CFA09632CE4ADA8A27B524"
+    },
+    "usb-r4-cl1\\spi1-bootstrap.bin": {
+      "bytes": 12288,
+      "sha256": "0034A8F955D2E8DD0ADCB48B2374130EB7F5F2F5646B371818CFBDA39881A5FD"
+    },
+    "usb-r4-cl1\\stopped-summary.json": {
+      "bytes": 1552,
+      "sha256": "37192006FD86E45B46C34B8F1B28ED10791E974CD01F5E2EC1A0478A29594CA2"
+    },
+    "usb-r4-cl1\\SystemCoreClock.bin": {
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    "usb-r4-cl1\\time_observations.jsonl": {
+      "bytes": 395730,
+      "sha256": "C22F3EE312A7EF86200034378F930C34DD4A97AE82CFAABDCFB41AA4E0557333"
+    },
+    "usb-r4-cl1\\timestamp_calibration.json": {
+      "bytes": 6837,
+      "sha256": "97A38BFE46FB4D77F27840A6414406E44374F0AF9D1F01AA375D4CD1E1850836"
+    },
+    "usb-r4-cl1\\usb-report.json": {
+      "bytes": 2924,
+      "sha256": "DEFBE8BCB0D1FE763C6A567A228AC2B3621FD1A7AFD57748FD7D335D13B00A2D"
+    },
+    "usb-r4-cl1\\usb_first_sync_receipt.bin": {
+      "bytes": 328,
+      "sha256": "29A1306B2D5A0DE7F92BD5A7B429B382E1D99F1C43BE86F621A121B18DE1C9E4"
+    },
+    "usb-r4-cl1\\usb_read_history_lab.csv": {
+      "bytes": 150331,
+      "sha256": "8EE437BA7130DFA5E05AA09A97554C3B0813C911F980E3598DCBC84D7747A3C8"
+    },
+    "usb-r4-cl1\\usb_rtc_start.bin": {
+      "bytes": 128,
+      "sha256": "0438ADF72370C6050BC87EF706905D4BED03104ACEA3C0C196400AE8667269DD"
+    },
+    "usb-r4-cl1\\usb_rtc_start_status.json": {
+      "bytes": 525,
+      "sha256": "7E41EDE4C082527864104528E427E914D7613AE28C49BDFDDF3FD2F543AF65E7"
+    },
+    "usb-r4-cl1\\usb_timing_evidence.jsonl": {
+      "bytes": 6762,
+      "sha256": "7F5C3982A27D7C0608D9B23AFE2F1584F462D51670F28DBA194EB562FBA8CFD2"
+    },
+    "usb-r4-cl1\\usb_timing_status.json": {
+      "bytes": 1163,
+      "sha256": "CABF673EDB12A6603179D53A941A09440F50875B1623C35DF0E8FB449EC4DD74"
+    },
+    "usb-r4-cl1\\xe_np_aux_cost_diag.bin": {
+      "bytes": 64,
+      "sha256": "3AAFD18D8A2BCD63870A2B204AC90816D691D07D02F6D7DA35E391E1301FA749"
+    },
+    "usb-r4-cl1\\xe_np_grid_retained_diag.bin": {
+      "bytes": 32,
+      "sha256": "5FBD3CA564F21D9CBC4F7DF4FEBF52671431ED1E349EA366A68321FAC5B74E7B"
+    },
+    "usb-r4-cl1\\xe_np_np2_cl_selected_calibration.bin": {
+      "bytes": 40,
+      "sha256": "D78EBC6940AE9020DA270CF733B3557D5E7E7F08BAB0FF7E41A6FCA931F011CA"
+    },
+    "usb-r4-cl1\\xe_np_np2_cl_selected_clock.bin": {
+      "bytes": 40,
+      "sha256": "71464BC46C5881DC1B25909F2B1A784A186DF914910C6E05C8A06AB48A4A5BCF"
+    },
+    "usb-r4-cl1\\xe_np_np2_cl_selected_diag.bin": {
+      "bytes": 128,
+      "sha256": "560E105C4BCC66CA148DEE6F8170D47AD04623F89E257CBA11DA22AD58871478"
+    },
+    "usb-r4-cl1\\xe_np_np2_cl_selected_guard.bin": {
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    "usb-r4-cl1\\xe_np_np2_sd_fine_diagnostic.bin": {
+      "bytes": 224,
+      "sha256": "4CBE3DC2C686E7C8DB84B0C3F3C2A2BD63E6E0D8792E8E42FBAFCF7A717ED5F5"
+    },
+    "usb-r4-cl1\\xe_np_np2_spi2_d8_diag.bin": {
+      "bytes": 84,
+      "sha256": "4CA1448C8DE48805DDC6E2BA53DC5DAA77D979D0B0E6CCCA8AA5CCBBB41C7B20"
+    },
+    "usb-r4-cl2\\acquisition_anchor.bin": {
+      "bytes": 64,
+      "sha256": "BE9D8D8998A8D41F3738E2FD95ACA53062F59F6E51DB03C214FD9C3F0A35B224"
+    },
+    "usb-r4-cl2\\acquisition_clock_queries.jsonl": {
+      "bytes": 15370,
+      "sha256": "28ED4C3D7EA37E9AA439A3E8BA86469B5C9325EBBF6BCD3EB99AD068C2147754"
+    },
+    "usb-r4-cl2\\analogin_encoding.txt": {
+      "bytes": 3016,
+      "sha256": "F51336E9AA89117C302C6487EA58C21D7F79F3609E9C24861DD75BA379CB9D16"
+    },
+    "usb-r4-cl2\\capture-anchor-raw.bin": {
+      "bytes": 44,
+      "sha256": "AEB3DF089A14A3A3C75EF31F711EBD5114D5174670560B88F80989FDB2027700"
+    },
+    "usb-r4-cl2\\cl-workspace.bin": {
+      "bytes": 3640,
+      "sha256": "4EC3FF655E9D0EED5718607304E9A8E14F9FA1E9AF0C6015A7040EA582AFF445"
+    },
+    "usb-r4-cl2\\clock_linear_fit.txt": {
+      "bytes": 797,
+      "sha256": "3160BAEA5BF086E8DF578D1607266077DCD0CAC0226254CFE187343E1AA44F20"
+    },
+    "usb-r4-cl2\\clock_observations.csv": {
+      "bytes": 564,
+      "sha256": "000546797FECB342AAB525CC1CB55741C4FBEC038A7464E24C97915A8EBAD5F1"
+    },
+    "usb-r4-cl2\\closed_loop_config.bin": {
+      "bytes": 64,
+      "sha256": "431B9EB4A4B0EEF2259DC2C547B59C0DC2E1F156ABCD8ED31CB0DE8F039D50CC"
+    },
+    "usb-r4-cl2\\closed_loop_control_receipt.bin": {
+      "bytes": 64,
+      "sha256": "75168F5601708BF0E4C10ABF8346C6F10F4B9E2EB61DC6A799CFDF90A08D6196"
+    },
+    "usb-r4-cl2\\closed_loop_events.csv": {
+      "bytes": 611,
+      "sha256": "6F572244B7891ECDCF1A6EBE455B57CA2C95B5B3378086608718767871EFF2FA"
+    },
+    "usb-r4-cl2\\closed_loop_requested.bin": {
+      "bytes": 64,
+      "sha256": "431B9EB4A4B0EEF2259DC2C547B59C0DC2E1F156ABCD8ED31CB0DE8F039D50CC"
+    },
+    "usb-r4-cl2\\closed_loop_status.txt": {
+      "bytes": 212,
+      "sha256": "5807615C3155F14393FEBF189513B4052338AE12E790C39A52A034A299BF52A8"
+    },
+    "usb-r4-cl2\\dwt-registers.bin": {
+      "bytes": 8,
+      "sha256": "C8E1181E1B31621B5FC4A31EB5C5DD56B42092DA24134F3EF89DD4EFBDA77B77"
+    },
+    "usb-r4-cl2\\first_sample_timestamps.json": {
+      "bytes": 12351,
+      "sha256": "C842EFEAFE2E75B393F49C95A412C963603AB6A1383E60A02340A3406D1AD2C0"
+    },
+    "usb-r4-cl2\\first_sync_usb_status.json": {
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    "usb-r4-cl2\\imu_grid_gaps.csv": {
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    "usb-r4-cl2\\imu_grid_phase.bin": {
+      "bytes": 84,
+      "sha256": "AF6416DB816CA766F92366DEFAE055E0CB5A7D5D88B094BE93D3AAAD30968DC7"
+    },
+    "usb-r4-cl2\\imu_grid_segments.csv": {
+      "bytes": 48,
+      "sha256": "5889ED4228AE706C51F4476A3C84286E6D1D4B5FA45D30F5BBE4B8CA8D46277D"
+    },
+    "usb-r4-cl2\\imu_grid_status.txt": {
+      "bytes": 626,
+      "sha256": "4EBB68A51178BA4E934B7D00EBEEA8EF75EBCDA675B381423EB28D56BF7648FD"
+    },
+    "usb-r4-cl2\\imu_grid_terminal.bin": {
+      "bytes": 80,
+      "sha256": "E6071CBAA73C724D7DA84D0EDEE7FD7ED20681F716B48049808A80702C9A8552"
+    },
+    "usb-r4-cl2\\imu_native_samples.jsonl": {
+      "bytes": 923684,
+      "sha256": "E53B8BF8B6B7009BCC521EB0E904A11AAAB67383A3DD88B65E4A2C96E827F7D8"
+    },
+    "usb-r4-cl2\\imu_native_samples_status.json": {
+      "bytes": 381,
+      "sha256": "A5B1547C36A1720531DB4EB89B87BDA87F2D0B37D4E5FC6D24E3D58FC97CC9C1"
+    },
+    "usb-r4-cl2\\imu_observation_status.txt": {
+      "bytes": 838,
+      "sha256": "544CC206B81B69BA4F6B1F417429D4A96F0107F483EF0B687286ED4677607119"
+    },
+    "usb-r4-cl2\\imu_snapshots.bin": {
+      "bytes": 168000,
+      "sha256": "AFD9C3B12B3B0701D398A47E51414261ECC1068F5E3C687B7943B872F2BE4348"
+    },
+    "usb-r4-cl2\\neuropixels_np2usb_status.txt": {
+      "bytes": 2034,
+      "sha256": "EC8E773CAD3A3EDC8BC0850B68DF181582C441A7F9699E9C43816FA4C62044DC"
+    },
+    "usb-r4-cl2\\np2_cl_pressure_proto_diag.bin": {
+      "bytes": 16,
+      "sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+    },
+    "usb-r4-cl2\\np2_usb.bin": {
+      "bytes": 296,
+      "sha256": "7B2B7D196FA17A1189EF47D9F5695EC53B12CC3FE13A8F969F80B2A7EFA6B58B"
+    },
+    "usb-r4-cl2\\pc_clock.json": {
+      "bytes": 231,
+      "sha256": "4809198442EFB29DADD2C132AD59D3655C3B79A8D0DFE8DD45361408148349B0"
+    },
+    "usb-r4-cl2\\producer.bin": {
+      "bytes": 152,
+      "sha256": "CECE0A7B5FAB95898D8BE49E3BE705C03335DE0DCBECA938581B4814ACA7899D"
+    },
+    "usb-r4-cl2\\quality.json": {
+      "bytes": 1228,
+      "sha256": "4839948BB526155E47BA0259ED1EDA90AB7DF9D86A2EAB409AF98A93A73ECDA1"
+    },
+    "usb-r4-cl2\\readiness-scope.json": {
+      "bytes": 2025,
+      "sha256": "8BD310B44822658041B902D61F9719BF0B8D842EC54DA7FA1467EE6A04CE2244"
+    },
+    "usb-r4-cl2\\recording_start_pc_estimate.json": {
+      "bytes": 5069,
+      "sha256": "6CFBF5A663B7320C36965EE829377144DB1D2F84FC6A1BA0535099579E394206"
+    },
+    "usb-r4-cl2\\recording_start_utc.json": {
+      "bytes": 6529,
+      "sha256": "77C28C52D28FEDDBA574F20F7493D9A36D7BDC472850A2A8D16E1A870C15FE2F"
+    },
+    "usb-r4-cl2\\selected-native-proof.json": {
+      "bytes": 13814,
+      "sha256": "49D0322C591B606D3F52A31525B478CE2FFDA3CEFEC169F7DED0D20787DA4CAE"
+    },
+    "usb-r4-cl2\\selected-words.bin": {
+      "bytes": 2048,
+      "sha256": "617B279ADD9FCDCB67E10029E312D65D6F9B33FB9D3239A29F5A00A610D1CE05"
+    },
+    "usb-r4-cl2\\spi1-bootstrap.bin": {
+      "bytes": 12288,
+      "sha256": "29ED35ACD41823464A932A7EC6087F999F5E6051165017DFB97370E259A60714"
+    },
+    "usb-r4-cl2\\stopped-summary.json": {
+      "bytes": 1550,
+      "sha256": "6598AAA61E4FCF488FC9FECBA4D4F37CE5A8A64BDA5A673A6FF751FFED19CF43"
+    },
+    "usb-r4-cl2\\SystemCoreClock.bin": {
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    "usb-r4-cl2\\time_observations.jsonl": {
+      "bytes": 389331,
+      "sha256": "91FFC8B430F0F9A28D120B7E0833DA843F185AA2C7FBDB819D4A1398D78436AF"
+    },
+    "usb-r4-cl2\\timestamp_calibration.json": {
+      "bytes": 6850,
+      "sha256": "B5B4EA8FC05597F19D14FCE228476E6EA91402FC3D0081DFC5AF8DF71E2774B6"
+    },
+    "usb-r4-cl2\\usb-report.json": {
+      "bytes": 2939,
+      "sha256": "6C9A35028730105C0F638A258A98F550CB0C21059A9DD274CDD3380B19DF365E"
+    },
+    "usb-r4-cl2\\usb_first_sync_receipt.bin": {
+      "bytes": 328,
+      "sha256": "29FD545B6C3628778B9AD2362D2DF79417B7F6565C24AB08BB5A5B3BDC364D76"
+    },
+    "usb-r4-cl2\\usb_read_history_lab.csv": {
+      "bytes": 150331,
+      "sha256": "6EDACBB0DA409E659C2E3F2F974F97D3C52FEDA2D0DDF11B28C883651EB42108"
+    },
+    "usb-r4-cl2\\usb_rtc_start.bin": {
+      "bytes": 128,
+      "sha256": "F3BEBFD4EB9D201A6AE81D44D5D610531E4F5DED5FB434FED0287D3BCA608092"
+    },
+    "usb-r4-cl2\\usb_rtc_start_status.json": {
+      "bytes": 526,
+      "sha256": "78EBE7FBE4B66164A967F6C385FC92B095C82F76427A3E3185F887944A98E680"
+    },
+    "usb-r4-cl2\\usb_timing_evidence.jsonl": {
+      "bytes": 6762,
+      "sha256": "AA933C0D65B7DB67EA578901627953C7B3483BD41F7E1CB94F01E403B7087A1A"
+    },
+    "usb-r4-cl2\\usb_timing_status.json": {
+      "bytes": 1163,
+      "sha256": "6793D96AB057CD5BD47B99DB301BCB2D7606743761E808506F68CE258E26AB5B"
+    },
+    "usb-r4-cl2\\xe_np_aux_cost_diag.bin": {
+      "bytes": 64,
+      "sha256": "AD4C30B4BD6724D79570F71543CDECA52C19405BD8D70C49A59DAB31C3AE62CE"
+    },
+    "usb-r4-cl2\\xe_np_grid_retained_diag.bin": {
+      "bytes": 32,
+      "sha256": "1BFDCA69F0DEB2D6333F71A90B45789E2F03850D1FDFDA0715B88D986701CE47"
+    },
+    "usb-r4-cl2\\xe_np_np2_cl_selected_calibration.bin": {
+      "bytes": 40,
+      "sha256": "D7A5097D887AB61ACB82EFFE67E81616B0181FE1DCC1EADDE8BA9C3677987183"
+    },
+    "usb-r4-cl2\\xe_np_np2_cl_selected_clock.bin": {
+      "bytes": 40,
+      "sha256": "BE96C4751FA8D34CE542731FFA05C8E18F0A7BED6F1FB1DFDB4174ED55C39393"
+    },
+    "usb-r4-cl2\\xe_np_np2_cl_selected_diag.bin": {
+      "bytes": 128,
+      "sha256": "8AB33A120DC300BF4EE313AF206CD1167E989DCADFCE00E0A601A1D23ACF0BC1"
+    },
+    "usb-r4-cl2\\xe_np_np2_cl_selected_guard.bin": {
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    "usb-r4-cl2\\xe_np_np2_sd_fine_diagnostic.bin": {
+      "bytes": 224,
+      "sha256": "CF58F6968FC1A407D1346E97814C561C36DFD0998F367721CA2DACE93678E03B"
+    },
+    "usb-r4-cl2\\xe_np_np2_spi2_d8_diag.bin": {
+      "bytes": 84,
+      "sha256": "4A1299DFA742B8C3928BEF0A6AE13A4BCFA30F83330CF092025D6D9587406B1A"
+    },
+    "usb-r4-cl2-restart\\acquisition_anchor.bin": {
+      "bytes": 64,
+      "sha256": "590658411E639AFA13EF50399D86ADE3564DC4F7E7345264ABFB40EC9F8AAF04"
+    },
+    "usb-r4-cl2-restart\\acquisition_clock_queries.jsonl": {
+      "bytes": 15368,
+      "sha256": "4E57B5353E188B23B3D5EE239DE06CB73F362BEBDB62895E5CB9DF1B14FAB203"
+    },
+    "usb-r4-cl2-restart\\analogin_encoding.txt": {
+      "bytes": 3016,
+      "sha256": "C1295B00779DAA6DEEBBC45C16C4E5A258BEFE1F2FCFF5AE3CD5A08C33865DEA"
+    },
+    "usb-r4-cl2-restart\\capture-anchor-raw.bin": {
+      "bytes": 44,
+      "sha256": "706B0602E84716F3C88ACA85EB3D0CE6D8E8925696EC46FB6BE9F4EC7798B073"
+    },
+    "usb-r4-cl2-restart\\cl-workspace.bin": {
+      "bytes": 3640,
+      "sha256": "AF4DD8DC15BA2E4AD3C4676868B0FF3997474F90F446E4AA494D459F9F68FB11"
+    },
+    "usb-r4-cl2-restart\\clock_linear_fit.txt": {
+      "bytes": 779,
+      "sha256": "9B0793CF8EAA67B2FBC9D5A3B4565BA59B058840ADE9668B15B19919B87ED732"
+    },
+    "usb-r4-cl2-restart\\clock_observations.csv": {
+      "bytes": 562,
+      "sha256": "EB3D39FCD9DE424456E33F0C782AC1E809ED702C7CF06269C92739A42E978142"
+    },
+    "usb-r4-cl2-restart\\closed_loop_config.bin": {
+      "bytes": 64,
+      "sha256": "5D4A4F9F9399E983DDF7941ACA6A0520A1838CF968753E5622EE3A0CC82A0480"
+    },
+    "usb-r4-cl2-restart\\closed_loop_control_receipt.bin": {
+      "bytes": 64,
+      "sha256": "F4E1C9AA3FE220299A1658538BD929CC98FDDBF699C702CAE808C46FB88E3DDA"
+    },
+    "usb-r4-cl2-restart\\closed_loop_events.csv": {
+      "bytes": 618,
+      "sha256": "8FC39B90434B1DF8C6FD4402AC5B9D52AF806468D204B3196F84D4D6F1CC770D"
+    },
+    "usb-r4-cl2-restart\\closed_loop_requested.bin": {
+      "bytes": 64,
+      "sha256": "5D4A4F9F9399E983DDF7941ACA6A0520A1838CF968753E5622EE3A0CC82A0480"
+    },
+    "usb-r4-cl2-restart\\closed_loop_status.txt": {
+      "bytes": 212,
+      "sha256": "5807615C3155F14393FEBF189513B4052338AE12E790C39A52A034A299BF52A8"
+    },
+    "usb-r4-cl2-restart\\dwt-registers.bin": {
+      "bytes": 8,
+      "sha256": "DF41056F953F892D8A55128CCE4B93E527ECBBDDCE0978F85F939448D572DB91"
+    },
+    "usb-r4-cl2-restart\\first_sample_timestamps.json": {
+      "bytes": 12339,
+      "sha256": "D825AA1E1EACC86F6071C0C4AD234109E84C48D045944E493B81B85AC5D57005"
+    },
+    "usb-r4-cl2-restart\\first_sync_usb_status.json": {
+      "bytes": 290,
+      "sha256": "4394B421E337272CDA495E408743A02CDB27681D90FAB1FC16C4C7B9D7591001"
+    },
+    "usb-r4-cl2-restart\\imu_grid_gaps.csv": {
+      "bytes": 30,
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+    },
+    "usb-r4-cl2-restart\\imu_grid_phase.bin": {
+      "bytes": 84,
+      "sha256": "66FC8B4ABCD23E69A47FECD6B8A86B8A37DA28B1473FD86D39035655FBD850CA"
+    },
+    "usb-r4-cl2-restart\\imu_grid_segments.csv": {
+      "bytes": 48,
+      "sha256": "E30F6A3BD1378A21364BD2424B714BF1FBD1EC118E46F9DDA7ECA1414D2AD86F"
+    },
+    "usb-r4-cl2-restart\\imu_grid_status.txt": {
+      "bytes": 626,
+      "sha256": "68145741354F53A23A2227826E6E8CDA8CD26A2C53E13ACD9BC940B0C46BB599"
+    },
+    "usb-r4-cl2-restart\\imu_grid_terminal.bin": {
+      "bytes": 80,
+      "sha256": "4435F19328EA9E9502E9982BF35AF15B388B25F46D0C99711B098665F2AA3CE3"
+    },
+    "usb-r4-cl2-restart\\imu_native_samples.jsonl": {
+      "bytes": 172497,
+      "sha256": "6C7ADE84CC5975B907E50A59D5156AB4AD5534D3B8722A1F5C46205650BD0628"
+    },
+    "usb-r4-cl2-restart\\imu_native_samples_status.json": {
+      "bytes": 377,
+      "sha256": "70A10F513D2D94A0559DF5A8957FC21A7D3CC2612EF3B928F6BD5D672316366B"
+    },
+    "usb-r4-cl2-restart\\imu_observation_status.txt": {
+      "bytes": 836,
+      "sha256": "1011D80A26D0AB365F01C1FBDD1BB50E66A0BB0690B9087EE6F371AF0266BE83"
+    },
+    "usb-r4-cl2-restart\\imu_snapshots.bin": {
+      "bytes": 31500,
+      "sha256": "06C352BB5363CAA432097DAB8E70AA1B96567093BD3E5F4B4C5A0BC084D2924D"
+    },
+    "usb-r4-cl2-restart\\neuropixels_np2usb_status.txt": {
+      "bytes": 2027,
+      "sha256": "69DF7C5A06477BDDE353A413739A3C91FC01544B98EA4EB0A6C036996197BE6E"
+    },
+    "usb-r4-cl2-restart\\np2_cl_pressure_proto_diag.bin": {
+      "bytes": 16,
+      "sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+    },
+    "usb-r4-cl2-restart\\np2_usb.bin": {
+      "bytes": 296,
+      "sha256": "AE068E0187FE1D9109C7AC077A3E500F575D2AD82BAB0B49A9414AE40BC031DD"
+    },
+    "usb-r4-cl2-restart\\pc_clock.json": {
+      "bytes": 231,
+      "sha256": "0CD0958C3C9F443B19A5EDBE864C021811F3359F69B1EEF34FA015A3CF16557B"
+    },
+    "usb-r4-cl2-restart\\producer.bin": {
+      "bytes": 152,
+      "sha256": "D1ED0403C157A79A8027C441CBAF7FFE4BCA4212F57B4231C4E98AF3821D6FB5"
+    },
+    "usb-r4-cl2-restart\\quality.json": {
+      "bytes": 1227,
+      "sha256": "3AC631A058B4C03C1AC96166423094183DD43F8CA3134799EADCA4AD8C4E3EB6"
+    },
+    "usb-r4-cl2-restart\\readiness-scope.json": {
+      "bytes": 2025,
+      "sha256": "93141A2659D9292861628AC72ED75331CF05F25A3ABD09C50C8A6E0B40C4E594"
+    },
+    "usb-r4-cl2-restart\\recording_start_pc_estimate.json": {
+      "bytes": 5071,
+      "sha256": "B1033B5346BECA41DBFA4A2F7454D3597843CC9C9CFA7B2E8AC4D932218E445B"
+    },
+    "usb-r4-cl2-restart\\recording_start_utc.json": {
+      "bytes": 6531,
+      "sha256": "F297E787C97DFB6406A6C4828FDE721D341DE81FEC47B8A7A905FC9FBBBC7706"
+    },
+    "usb-r4-cl2-restart\\selected-native-proof.json": {
+      "bytes": 13636,
+      "sha256": "ACEEC346E33D58C13E73A3F25664D32C5B2EEEBF8DCA1036CEFAB0A2DD617A96"
+    },
+    "usb-r4-cl2-restart\\selected-words.bin": {
+      "bytes": 2048,
+      "sha256": "64D9B97294209F9DE25557E31FEDB49B16F86132C7A6DA2C65F4231C96BD9755"
+    },
+    "usb-r4-cl2-restart\\spi1-bootstrap.bin": {
+      "bytes": 12288,
+      "sha256": "90A4A089B4AC373496E8E01A697C3E7DF4D048B72A090DC9D2311228690BC286"
+    },
+    "usb-r4-cl2-restart\\stopped-summary.json": {
+      "bytes": 1539,
+      "sha256": "DF8D6B5BE36B4F762D168EC10B12C4462891E4E5581A5A43797982448BC4A744"
+    },
+    "usb-r4-cl2-restart\\SystemCoreClock.bin": {
+      "bytes": 4,
+      "sha256": "E7F0D38CAF43318E8113CA981C71E2D23E4AF94DFD4650213C54759B4E8826B4"
+    },
+    "usb-r4-cl2-restart\\time_observations.jsonl": {
+      "bytes": 75528,
+      "sha256": "55C55744CF0252E2C47361C7B3190A4F9983D579DF4FF5CCB419C700ACEE13C1"
+    },
+    "usb-r4-cl2-restart\\timestamp_calibration.json": {
+      "bytes": 6691,
+      "sha256": "A5B2E83E31EE04A5DE3CA68CB2BE9FCC1E418554E58B766756BAE2A1290ADE38"
+    },
+    "usb-r4-cl2-restart\\usb-report.json": {
+      "bytes": 2939,
+      "sha256": "0DCF9106788C2C1A04B9BCC17B3AA0B21C6A29052CE51014EA767155623A7FDB"
+    },
+    "usb-r4-cl2-restart\\usb_first_sync_receipt.bin": {
+      "bytes": 328,
+      "sha256": "3543C885FC973FAD42B451CF46F44B51EEE243E5C82E721DBF12A0CBAC70C71F"
+    },
+    "usb-r4-cl2-restart\\usb_read_history_lab.csv": {
+      "bytes": 144248,
+      "sha256": "287F544FA966F9F000DD49B66F311B125D036626D188926EB85A9092F62E0585"
+    },
+    "usb-r4-cl2-restart\\usb_rtc_start.bin": {
+      "bytes": 128,
+      "sha256": "0EED5AD080925A61A50BE50931F639A46B3DCEC19BF0E9E343BA278462848007"
+    },
+    "usb-r4-cl2-restart\\usb_rtc_start_status.json": {
+      "bytes": 526,
+      "sha256": "D4DEBA5105A68E5B34BB8778E5F846E7806E0A75D9CD4E0113119CFCD05CB4D8"
+    },
+    "usb-r4-cl2-restart\\usb_timing_evidence.jsonl": {
+      "bytes": 6762,
+      "sha256": "E4DFD5691593EF4BC92C7B97C1041464BEA1B0CAAC31F0D8A620A8238B04D90F"
+    },
+    "usb-r4-cl2-restart\\usb_timing_status.json": {
+      "bytes": 1163,
+      "sha256": "7C5DDB6BEEE4DD042BC84BD1771F4D6748B493412A4EB6CCDEF27A2013D16702"
+    },
+    "usb-r4-cl2-restart\\xe_np_aux_cost_diag.bin": {
+      "bytes": 64,
+      "sha256": "6604559AA3789B7589A0AD2E0D4FBF92DB31361C792F15908FAC233960D42141"
+    },
+    "usb-r4-cl2-restart\\xe_np_grid_retained_diag.bin": {
+      "bytes": 32,
+      "sha256": "D5934786E3F58B1937A585884A9DEB863A1C5180753ED238BBC6990A03328A63"
+    },
+    "usb-r4-cl2-restart\\xe_np_np2_cl_selected_calibration.bin": {
+      "bytes": 40,
+      "sha256": "D7705447E11B2C59BA5857B76BEB3630902C9A318B622DE2A69B4EB1DDFE6F54"
+    },
+    "usb-r4-cl2-restart\\xe_np_np2_cl_selected_clock.bin": {
+      "bytes": 40,
+      "sha256": "90C036906FD2DD6F21022124D2D505AB6404B9068BBB06E9D3D8767E142702B8"
+    },
+    "usb-r4-cl2-restart\\xe_np_np2_cl_selected_diag.bin": {
+      "bytes": 128,
+      "sha256": "AEAB9078689BFF2D609A726682E513EA6FB00E78F9FD096A08B133083D89719F"
+    },
+    "usb-r4-cl2-restart\\xe_np_np2_cl_selected_guard.bin": {
+      "bytes": 64,
+      "sha256": "3308242BA251EE94252554D6203B899686B91725178C699C6D2CED3C77E6E6B2"
+    },
+    "usb-r4-cl2-restart\\xe_np_np2_sd_fine_diagnostic.bin": {
+      "bytes": 224,
+      "sha256": "F0F9718B2A74CEEF3F9AA3036D606E2F5C7680BA9C01938A89E55B6DEAE9674A"
+    },
+    "usb-r4-cl2-restart\\xe_np_np2_spi2_d8_diag.bin": {
+      "bytes": 84,
+      "sha256": "AD858F07DEF399E80170C913BA192582B93450E890D3BC81BA117D550905C1BE"
+    },
+    "work-package.json": {
+      "bytes": 1372,
+      "sha256": "988129C0DBB79A0D636CE01B9EDD8615E6795676C3F02D0EF2439D4686ECE3AE"
+    }
+  },
+  "source_archives": [
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\usb_media_rate_20261105\\v2-r3-source-freeze\\source-freeze.zip",
+      "sha256": "B29ABB6BA6DA0140E185A5F1132E6573CFCD8EFDCFF008A3804B87D3646AED0B"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\usb_media_rate_20261105\\v2-r4-source-freeze\\source-freeze.zip",
+      "sha256": "E9814DE808B4AC5DB58DF35950654862D5BC8A7022398FFDCC4D8FBB3F58D4D6"
+    }
+  ],
+  "scope": "Compact acceptance, realHILsidecars/nativeoracles/sensor+IMUvalues, failedcandidate metadata and exactrestore proof only; no fullneuralpayload, firmwarebackup, firmwareimage or installer. Sourcearchives remainimmutable separate.",
+  "utc": "2026-11-05T15:48:21.608136+00:00"
+}

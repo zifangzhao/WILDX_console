@@ -1,0 +1,8 @@
+{
+  "app_version": "1.0.0.238",
+  "baseline": "1.0.0.237",
+  "qualified_receipt_sha256": "94D6BC662E4D03D0992B2B0D879DEC67298D609B5ECE16C2556879CE3E39161E",
+  "raw_receipt_sha256": "E436BF1180D0329777387658B95F90D0EFE5E573D305A3E6597F847AE8D3AED3",
+  "reuse_receipt_sha256": "F56378580370803D2BF4D9789655A951BF1EF2CF8B5B47863E133E29D752B50A",
+  "role": "Preserves raw compilation evidence and records correction of stale helper metadata; hardware qualification is separate."
+}
