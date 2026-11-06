@@ -1,0 +1,23 @@
+{
+  "status": "ACCEPTED_ORIGINALS_RESTORED",
+  "app_version": "1.0.0.246",
+  "exe_sha256": "FA744968A3DE0AC9A87F6FD77F8F3ED40BFAB3FBD062ABD9B33BEE3E233E8953",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "host_compiled_inputs": 208,
+  "software_stage": "checks/host-acceptance246.json",
+  "hardware_acceptance": "firmware/V1/acceptance.json",
+  "hardware_acceptance_sha256": "97A728DAEB38878E1C2C7BA98AFF1534B9314B926B91EB5FEEBF8901F8190AF7",
+  "selected_v1": {
+    "app": "4A677F83",
+    "usb": "11646986"
+  },
+  "selected_v2": {
+    "reuse": "../1.0.0.241/V2/acceptance.json",
+    "usb": "EDEB6C3A",
+    "app": "99CC44F9"
+  },
+  "recording_scope": "V1 2P15k CLoff; source-specific inheritance and startup/tail limits in acceptance/qualification",
+  "storage_scope": "USB/BLE delete; quietCP0/CP1 VEEhold5s+MCUreset recovery; protected74metadata/payloadwindowfingerprints; no wholedevice/electrical0V/controlleruniversalclaim",
+  "historical_stage_records": "Earlier software-stage pending flags and raw build published222 annotation are immutable historical records, superseded by this final acceptance and qualification.json",
+  "utc": "2026-11-06T00:10:12.9343936Z"
+}

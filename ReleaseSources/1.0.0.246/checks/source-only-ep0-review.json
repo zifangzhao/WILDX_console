@@ -1,0 +1,67 @@
+{
+  "status": "SOURCE_ONLY_REVIEW_COMPLETE",
+  "hardware_calls": 0,
+  "builds": 0,
+  "product_edits": 0,
+  "parent": "71AE291B",
+  "candidate": "F00A1382",
+  "parent_stream_sha256": "3A1732557B0E71DC8C2B72C3A13C27E96F15DDBC94454E8C7A52AA6A01C140A4",
+  "r9_stream_sha256": "DC6BCD793BA0DED6817CBE3EFA2912291512A8828014BE9F66AC13CF58D15C9D",
+  "functions": {
+    "XE_NP_UsbStream_ClearCtlInState": {
+      "found": true,
+      "equal": true,
+      "parent_sha256": "5BDA617B7AB09993FA43D7AEB0446ED49F84F2A7162DBC35FDBC6410AF19E62D",
+      "r9_sha256": "5BDA617B7AB09993FA43D7AEB0446ED49F84F2A7162DBC35FDBC6410AF19E62D"
+    },
+    "XE_NP_UsbStream_CtlSend": {
+      "found": true,
+      "equal": true,
+      "parent_sha256": "7731DE6D3B6D7ED6201D97221CD5B2FD5D352AF992F120A710BC67CADC6396A4",
+      "r9_sha256": "7731DE6D3B6D7ED6201D97221CD5B2FD5D352AF992F120A710BC67CADC6396A4"
+    },
+    "XE_NP_UsbStream_CtlStatus": {
+      "found": true,
+      "equal": true,
+      "parent_sha256": "C415B7CD3C6393D95F6887AB2F30D3C2DBFE24E128FEAD0EAA2D4B145CEAE03A",
+      "r9_sha256": "C415B7CD3C6393D95F6887AB2F30D3C2DBFE24E128FEAD0EAA2D4B145CEAE03A"
+    },
+    "XE_NP_UsbStream_PrepareSetup": {
+      "found": true,
+      "equal": true,
+      "parent_sha256": "73F6796CFB2774CE95B302FC98669C8CB32A19A2C68A84C196D4EFE7B5FE8283",
+      "r9_sha256": "73F6796CFB2774CE95B302FC98669C8CB32A19A2C68A84C196D4EFE7B5FE8283"
+    },
+    "HAL_PCD_DataInStageCallback": {
+      "found": true,
+      "equal": true,
+      "parent_sha256": "6C83E66FB14703DBF27E0F1C5F3A19C15CA502B13DF8AB86472D0030E9D63754",
+      "r9_sha256": "6C83E66FB14703DBF27E0F1C5F3A19C15CA502B13DF8AB86472D0030E9D63754"
+    }
+  },
+  "includes": {
+    "np_sd_usb_ep0.inc": {
+      "parent": [
+        "C:/Frank/Code/XE_NP/_artifacts/v1_usb_fast_startup_r79r2_20261006/source/Core/Src/np_sd_usb_ep0.inc"
+      ],
+      "r9": [
+        "C:/Frank/Code/XE_NP/_artifacts/v1_usb_fast_startup_r79r2_20261006/source/Core/Src/np_sd_usb_ep0.inc"
+      ],
+      "same": true
+    },
+    "np_sd_usb_download.inc": {
+      "parent": [
+        "C:/Frank/Code/XE_NP/_artifacts/v1_rtc_20261029/usb_source/frozen/Firmware/V1/Core/Src/np_sd_usb_download.inc"
+      ],
+      "r9": [
+        "C:/Frank/Code/XE_NP/_artifacts/v1_rtc_20261029/usb_source/frozen/Firmware/V1/Core/Src/np_sd_usb_download.inc"
+      ],
+      "same": true
+    }
+  },
+  "conclusion": "NPD0x60 uses static32B np_download_info then unchanged CtlSend/unchanged SRAM EP0 staging helper; no new stack-backed reply or cache mechanism found. Owner reported actual4096Bstartupstack and catalog-like USBstate overwrites; this review does not contradict that measured fault. No hardware branch or stack peak measured by reviewer.",
+  "limits": [
+    "Source comparison only; equality does not establish live IRQ delivery or hardware EP0 completion.",
+    "Owner independently implements stack fix; no alternate hardware hypothesis promoted."
+  ]
+}

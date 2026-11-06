@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "status": "CHECKED_DEVELOPMENT_BUNDLE",
+  "utc": "2026-11-05T20:12:45.1422388Z",
+  "application": "1.0.0.241",
+  "published_installer_unchanged": "1.0.0.238",
+  "packaged_or_pushed": false,
+  "families": [
+    {
+      "family": 1,
+      "acceptance_sha256": "683D51E09AE6C126EBD0235FF303E91B0685E66B1F1FBBD2662A6A755974BC79",
+      "originals_restored": true,
+      "app_crc32": "D05473D6",
+      "usb_crc32": "71AE291B"
+    },
+    {
+      "family": 2,
+      "acceptance_sha256": "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B",
+      "originals_restored": true,
+      "app_crc32": "99CC44F9",
+      "usb_crc32": "EDEB6C3A"
+    }
+  ],
+  "host_receipt": "host-acceptance.json",
+  "catalog_receipt": "catalog-verification.json",
+  "scope": "Idle SD Info, automatic USB quality mode, receipt-gated BLE preview, >=500Hz V1 native LFP preview, and V2 guarded USB Delete Last; existing SD job/pairing and prior unchanged CL qualification retained",
+  "limits": [
+    "V1 FS2 Delete Last unavailable; no filesystem-generation change",
+    "CL and BLE preview are mutually exclusive",
+    "Bounded tests; known startup/IMU-tail/source-window limits retained",
+    "Fused images are compositions of checked components; no new whole-image flash claim"
+  ]
+}

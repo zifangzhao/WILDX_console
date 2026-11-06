@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T22:51:14.802460+00:00",
+  "finished_utc": "2026-11-05T22:51:15.886978+00:00",
+  "seconds": 1.0865101000090363,
+  "delete_port_sha256": "8D6D48E48B5B48DB840714FA3732B5D5252790045A17EE0466DE3172888BBBB9",
+  "format_port_sha256": "5B537C770096BBD7785B36AA8441BC3D177997180327098461A987D15AB122C5",
+  "actual_functions_sha256": "FEB4BDB6869F275D35C518B3A45F3AF1F243BC40AA60C40F99B70538424A6B4C",
+  "reused_retire_proof_sha256": "00EE1C896720B65E709EF956F9C1D63AEEB5B1E8F26EF76481CCF3A1753AEDA5",
+  "reused_helpers_byte_identical": [
+    "np_usb_delete_physical_quiet",
+    "np_usb_delete_quiet",
+    "np_usb_delete_retire",
+    "np_usb_delete_read",
+    "np_usb_delete_write",
+    "np_usb_delete_clock_begin",
+    "np_usb_delete_clock_end"
+  ],
+  "result_sha256": "99C03AAC9921E61496D4B9443B41E9AE9E22422BCE7FA3A75C6D0591DDFD50EF",
+  "scope": "Actual metadata-reader and cold foreground service with real store/wire and modeled successful polling HAL residue; no firmware/app build, hardware, broad suite or physical power-loss claim"
+}

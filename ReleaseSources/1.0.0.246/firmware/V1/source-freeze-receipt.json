@@ -1,0 +1,9 @@
+{
+  "zip": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\source-freeze-final.zip",
+  "zip_sha256": "F73A52932EFA69EBD50C4C2240BD6F54063DE364618128CD228496111C341E1E",
+  "bytes": 3035096,
+  "manifest_sha256": "DC6088F623A6020CEA315EF46713242D7D4DA613FC64A1C8C2DD2520642BEBD7",
+  "files": 485,
+  "app_xenp": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\APP_TEST_ONLY.xenp",
+  "app_xenp_sha256": "13A714C7616F9E73E51962176E643B5217EA779151ED78C4464EEFD64BE96C67"
+}

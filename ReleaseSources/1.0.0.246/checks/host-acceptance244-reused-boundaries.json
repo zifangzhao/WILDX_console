@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "utc": "2026-11-05T22:10:41.6658869Z",
+  "version": "1.0.0.244",
+  "exe_sha256": "E78D45428A78AB5B96B12D5F117591A907345EE4A283DC3E24AF310E25B84144",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "source_inputs_stable": 208,
+  "checks": [
+    {
+      "count": 6793,
+      "assembly": "244",
+      "result": "PASS",
+      "name": "actual V1 USB/BLE framing/correlation and native/torn PC views"
+    },
+    {
+      "count": 1893,
+      "result": "PASS",
+      "name": "actual-source legacy BLE transport"
+    },
+    {
+      "count": 220,
+      "assembly": "242",
+      "reuse": "unchanged corresponding sources",
+      "result": "PASS",
+      "name": "maintenance including V2 compatibility"
+    },
+    {
+      "count": 390,
+      "assembly": "242",
+      "reuse": "unchanged corresponding sources",
+      "result": "PASS",
+      "name": "legacy FS2/catalog"
+    }
+  ],
+  "metadata_vectors_sha256": "7D6B7047E6C2CF754A4E436FEE5E1BA78431030D02EA287FFEFE67CEBCE4CB5C",
+  "iteration_scope": [
+    "242 host/PC/client integration",
+    "243 real BLE A7 framing/receipt integration",
+    "244 pure framing dependencies with legacy transport regression"
+  ],
+  "firmware_hil": "pending",
+  "installer_or_publication": false
+}

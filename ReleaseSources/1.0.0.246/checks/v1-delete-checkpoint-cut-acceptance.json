@@ -1,0 +1,32 @@
+{
+  "result": "PASS",
+  "uid": "001D00065942500B20313354",
+  "app_crc32": "4A677F83",
+  "usb_crc32": "03C0FADD",
+  "before_count": 76,
+  "after_count": 75,
+  "reclaimed_frontier": 132202496,
+  "cp0_verified_before_cp1_by_actual_production_control_flow": true,
+  "expected_after_crc32": "266BDBAE",
+  "captured_ram_sector_is_old_cp1": true,
+  "both_recovered_checkpoints_equal_independently_reconstructed_after": true,
+  "both_journals_cleared": true,
+  "protected_earlier_recordings": 74,
+  "earlier_fingerprints_unchanged": true,
+  "cpu_debug_disabled": true,
+  "automatic_recovery_completed": true,
+  "scope": "Production delete interrupted after verified intent+CP0 before CP1. Captured RAM sector is the just-read oldCP1 (legacy filename sayscp0readback). PF2 storage rail off request/readback held5s with CPU halted, then fresh MCUreset/RAMdiscard. No measuredVDD0/whole-device/in-flight-controller/tornwrite claim; torn persistence covered separately by native fault injection.",
+  "files": {
+    "delete-checkpoint-rail-cut-r13\\verified-cp0-readback.bin": "4450C52490CD76C5F12F76F7A3E5AC926C957F9C3D112A96B2AB6DF7AB24605E",
+    "delete-checkpoint-rail-cut-r13\\boundary-registers.txt": "A44BB2EF8289BBCA4FF060D1365A6B5DF770D46F3B5FA63737418A8634C04DCA",
+    "delete-checkpoint-rail-cut-r13\\sdmmc.bin": "FF988541BF8F6A77B7E29B80F930E4E0A44498CD7650A62BCA02EAB636607CC7",
+    "delete-checkpoint-rail-cut-r13\\vee-off-gpio.bin": "EF0A56F8216C319FC73FEF239305B08F789C92A514997446C9704AF8F5047B3D",
+    "delete-checkpoint-rail-cut-r13\\reset-performed.txt": "EDD2E32022B261F4DE64A6D34EB2A35B26B4A900E4814C419E036E6EA8A3944C",
+    "after-delete-cut-recovery\\result.json": "7BC6E252D333AAF8C9AE1E4582005230436051CA7EF03622AD4B318F165CBBF2",
+    "after-delete-cut-recovery\\lba112.bin": "53C3AE0FCB5264A0AA45A9007FA4EE9DE7EEDEBF42229C59BAF61EC8D02FBEF9",
+    "after-delete-cut-recovery\\lba113.bin": "53C3AE0FCB5264A0AA45A9007FA4EE9DE7EEDEBF42229C59BAF61EC8D02FBEF9",
+    "after-delete-cut-recovery\\lba114.bin": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+    "after-delete-cut-recovery\\lba115.bin": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+    "post-delete-cut-final-map\\receipt.json": "31FFABB5844990180434534E02DC8189605FC62D54FCB5E68FDD9B331C2436D2"
+  }
+}

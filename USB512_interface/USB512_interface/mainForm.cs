@@ -324,7 +324,9 @@ namespace USB512_interface
             btnSdInfo=new Button { Text="SD Info",Location=new Point(360,106),Size=new Size(105,32),Enabled=false };
             btnSdInfo.Click+=delegate {
                 if(running || npSettingsApplying || systemInfoActive!=0 || (selectedDeviceKind!=DeviceKind.XeNp&&selectedDeviceKind!=DeviceKind.NpV2) || String.IsNullOrWhiteSpace(devicePath))return;
-                using(var dialog=new XeNpSdInfoForm(devicePath,true,SystemInfoDeviceName()))dialog.ShowDialog(this);
+                firmwareManagementActive=true;UpdateStartEnabled();
+                try {using(var dialog=new XeNpSdInfoForm(devicePath,true,SystemInfoDeviceName()))dialog.ShowDialog(this);}
+                finally {firmwareManagementActive=false;UpdateStartEnabled();}
                 RefreshSystemInfo();
             };
             Controls.Add(btnSdInfo);
@@ -832,10 +834,11 @@ namespace USB512_interface
                 {
                     Path = path,
                     Kind = v2 ? DeviceKind.NpV2 : v1 ? DeviceKind.XeNp : DeviceKind.NpUnavailable,
-                    DisplayName = v2 ? "WILD-X V2 USB" :
+                    DisplayName = NpUsbDeviceLabel.For(v2 ? "WILD-X V2 USB" :
                         v1 ? "WILD-X V1 USB" :
                         (String.IsNullOrWhiteSpace(productName) ? "Unidentified NP USB device" : productName) +
-                        " (NP service unavailable; recording disabled)"
+                        " (NP service unavailable; recording disabled)", path,
+                        v1 ? NpV1Management.UidFromPath(path) : NpV2FirmwareForm.Uid(path))
                 });
             }
 

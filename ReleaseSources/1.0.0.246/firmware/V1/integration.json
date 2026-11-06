@@ -1,0 +1,55 @@
+{
+  "status": "accepted_components_integrated",
+  "app": "4A677F83",
+  "usb": "11646986",
+  "acceptance_sha256": "97A728DAEB38878E1C2C7BA98AFF1534B9314B926B91EB5FEEBF8901F8190AF7",
+  "source_manifest_sha256": "176AFA90CCB5068A311673BE80693C2C0D7E22DC6BEF725624DC7284F612D93C",
+  "source_archive_sha256": "F73A52932EFA69EBD50C4C2240BD6F54063DE364618128CD228496111C341E1E",
+  "source_patch_sha256": "CA4937F8FF69CA93ED2FC71149659EC32BDA4CBB55D2F37B9F8C3B715A3BE6C6",
+  "catalog_sha256": "2377174E8CFFB45A697E645FE3F97B21391D4AB525755B9678DE4CA66AC747F3",
+  "files": [
+    {
+      "path": "Firmware/V1/V1_APP4A677F83.hex",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\V1_APP4A677F83.hex",
+      "bytes": 1160376,
+      "sha256": "95FBCA5A9DE0970AA84A2252531FFEF4B638866DAC732CDE1506A8CED0995C7F"
+    },
+    {
+      "path": "Firmware/V1/V1_USB11646986.hex",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\V1_USB11646986.hex",
+      "bytes": 1096860,
+      "sha256": "E75CD9CF54706DEE50E2918964D40520263942EE6C72473622AF45A3B944E5FD"
+    },
+    {
+      "path": "Firmware/V1/V1_APP4A677F83.xenp",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\V1_APP4A677F83.xenp",
+      "bytes": 421904,
+      "sha256": "13A714C7616F9E73E51962176E643B5217EA779151ED78C4464EEFD64BE96C67"
+    },
+    {
+      "path": "Firmware/V1/V1_BOOT_DFU_unchanged_20261030.hex",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\V1_BOOT_DFU_unchanged_20261030.hex",
+      "bytes": 322607,
+      "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
+    },
+    {
+      "path": "Firmware/V1/V1_FUSED_BOOT_USB11646986_APP4A677F83.hex",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\V1_FUSED_BOOT_USB11646986_APP4A677F83.hex",
+      "bytes": 5745164,
+      "sha256": "EE75228318AFF5C441A1317C564BE4ADCEDD3EEEAA9ED5914BAF0D85A9D8A1F1"
+    },
+    {
+      "path": "Firmware/V1/acceptance.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\acceptance.json",
+      "bytes": 23313,
+      "sha256": "97A728DAEB38878E1C2C7BA98AFF1534B9314B926B91EB5FEEBF8901F8190AF7"
+    },
+    {
+      "path": "Firmware/V1/V1_BOOT_USB11646986.hex",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\Firmware\\V1\\V1_BOOT_USB11646986.hex",
+      "bytes": 1412284,
+      "sha256": "116A26DAC3AF479DAA67404F0177D20B7FCBF7C954537498F4C02FE6C9ED1D4F"
+    }
+  ],
+  "utc": "2026-11-06T00:07:52.2019447Z"
+}

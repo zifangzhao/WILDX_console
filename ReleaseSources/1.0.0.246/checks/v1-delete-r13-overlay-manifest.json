@@ -1,0 +1,173 @@
+{
+  "status": "SOURCE_OVERLAY_FROZEN_ACCEPTANCE_SEPARATE",
+  "created_utc": "2026-11-05T23:36:01.390608+00:00",
+  "app_crc32": "4A677F83",
+  "usb_crc32": "03C0FADD",
+  "base": {
+    "archive": "source-freeze.zip",
+    "sha256": "F73A52932EFA69EBD50C4C2240BD6F54063DE364618128CD228496111C341E1E",
+    "app_crc32": "4A677F83",
+    "usb_crc32": "019438C8"
+  },
+  "change": "Distinct automatic durable-recovery scope ignores host cancellation only while finishing validatedredo; ordinaryclientcancellation stillapplies.",
+  "compiled_object": {
+    "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\stream.o",
+    "sha256": "63CEF9AB0162BD4B29DCC07BADCC998AB473C28B4BC65283F8BA18487ACF2D1F"
+  },
+  "files": [
+    {
+      "path": "build/candidate.htm",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\candidate.htm",
+      "bytes": 751601,
+      "sha256": "A51EE49335F5AB958E7B7EA6F302FC28BDE39DC8E8295FA54799963E53A7977C"
+    },
+    {
+      "path": "build/candidate.lnp",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\candidate.lnp",
+      "bytes": 9406,
+      "sha256": "615B7CFD962561C88667E8671D5359C0855E5E343EC6778D9C39C47866235624"
+    },
+    {
+      "path": "build/candidate.map",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\candidate.map",
+      "bytes": 2132509,
+      "sha256": "2BF81EAAD79B5B450C686CF45B02BCFAE4B17BEB71366E7C8F497C58607BC41C"
+    },
+    {
+      "path": "build/candidate.sct",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\candidate.sct",
+      "bytes": 1642,
+      "sha256": "4D7B3EDB3AA1D5362C2C3879C22AD82A6C3A084BCD7371F4B3218B7C40C74DFF"
+    },
+    {
+      "path": "build/compile.log",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\compile.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "build/identity.json",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\identity.json",
+      "bytes": 788,
+      "sha256": "633370EAF52572613ACBD298424AC800470F3436076C3EB22460A9D9C0C51B5C"
+    },
+    {
+      "path": "build/receipt.json",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\receipt.json",
+      "bytes": 22495,
+      "sha256": "9088F51B3B7758EF823BB1F4F97033E0C797DF07BBEFB5F76A1591D592B1AB2C"
+    },
+    {
+      "path": "build/stream.d",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r13\\stream.d",
+      "bytes": 19250,
+      "sha256": "DDC4F7137A452985D41F9FEF2C6E5F299385B40F05A843E42E156C648DA53C84"
+    },
+    {
+      "path": "native/actual_bus_hooks.txt",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\actual_bus_hooks.txt",
+      "bytes": 2237,
+      "sha256": "6D2134679DCD1A5C64FA9ABF695255BD5C6EF4CFD97E125C9543BF51743D2BF1"
+    },
+    {
+      "path": "native/actual_recovery_cancel.inc",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\actual_recovery_cancel.inc",
+      "bytes": 6839,
+      "sha256": "D1272B805893589E0134B167F199A5E0D49F00A62BC6B20825899CB850A46746"
+    },
+    {
+      "path": "native/command.txt",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\command.txt",
+      "bytes": 544,
+      "sha256": "95BD466E9744B01268EFCF56523A7656C77D31E982EA274691B92839132322E8"
+    },
+    {
+      "path": "native/compile.log",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\compile.log",
+      "bytes": 109,
+      "sha256": "D2B7FB48B6B8775DC49D8DF359DD82DF64A11FFF1EDDC2232F1EEFEE24A84CCF"
+    },
+    {
+      "path": "native/fixture.c",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\fixture.c",
+      "bytes": 8538,
+      "sha256": "7716A03AE15E723EAF6978F732B2A545F60A065A4FE699D5208D1FF9FF6E05B4"
+    },
+    {
+      "path": "native/np_sd_fast_crc.h",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B"
+    },
+    {
+      "path": "native/np_store_v2.h",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\np_store_v2.h",
+      "bytes": 12976,
+      "sha256": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA"
+    },
+    {
+      "path": "native/np_store_v2_delete.h",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\np_store_v2_delete.h",
+      "bytes": 14507,
+      "sha256": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71"
+    },
+    {
+      "path": "native/np_store_v2_delete_wire.h",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\np_store_v2_delete_wire.h",
+      "bytes": 4446,
+      "sha256": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18"
+    },
+    {
+      "path": "native/prove_recovery_cancel.py",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\prove_recovery_cancel.py",
+      "bytes": 4347,
+      "sha256": "341018647A73D74A8E4DD46B726F9A70F9FDA9B6F192CDB714F49E884A84AC5C"
+    },
+    {
+      "path": "native/receipt.json",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\receipt.json",
+      "bytes": 875,
+      "sha256": "669D4877514F7A5A038C6C472C3111C10908582030B94AABCD9AA1563D5B83D1"
+    },
+    {
+      "path": "native/result.txt",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\result.txt",
+      "bytes": 153,
+      "sha256": "5D3DACC9F20F33E7339A11FDDD5C39D502F7F1F02CB5299556E56F19532BED4E"
+    },
+    {
+      "path": "native/xe_np_sd_info.h",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\xe_np_sd_info.h",
+      "bytes": 3506,
+      "sha256": "890073F8ABA0685D32E44708CEE9A7E1ED7ADBC171350991B11C389427ADF67A"
+    },
+    {
+      "path": "recipes/build_component.py",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build_component.py",
+      "bytes": 2901,
+      "sha256": "9C2DC406B7A8CE93161155803E3438AC060498837AFFB8D929D1BE868EF8A8EC"
+    },
+    {
+      "path": "recipes/seal_component.py",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\seal_component.py",
+      "bytes": 1286,
+      "sha256": "A533376E5AC4E648C3B0EEE8107E76F15E4D4AC104640426E50FDD5682079EAA"
+    },
+    {
+      "path": "source/usb-delete.inc",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\delete.inc",
+      "bytes": 8821,
+      "sha256": "5BBFE4889A61DCCA8D3799EA33456B8A3F2716B7DF3FD1AEBA61175C92571151"
+    },
+    {
+      "path": "source/usb-stream.c",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\stream.c",
+      "bytes": 184952,
+      "sha256": "C82F218CB428A42DA2CED393FE095E139BAFF34D68D95A8224689FBD37EFE674"
+    }
+  ],
+  "limits": [
+    "Source/native proof only; final HIL and exact original restoration recorded separately.",
+    "No inherited dependency tree duplicated; source base remains identified as019438C8."
+  ]
+}

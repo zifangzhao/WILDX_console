@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T23:15:14.220805+00:00",
+  "finished_utc": "2026-11-05T23:15:15.355836+00:00",
+  "seconds": 1.1353641000023345,
+  "stream_sha256": "C82F218CB428A42DA2CED393FE095E139BAFF34D68D95A8224689FBD37EFE674",
+  "delete_port_sha256": "8D6D48E48B5B48DB840714FA3732B5D5252790045A17EE0466DE3172888BBBB9",
+  "actual_functions_sha256": "BDEC9EA1BAD5EBC50D2E2FCC4C5E8170C1CA9B7CC4277B8BAD874F93E77B0A30",
+  "caller_source_pins": {
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\np_usb_backend.inc": "007C1E5615FBE2AE1EDA0EBFEECA81785FBB3E6AB735B39FDA8E0E0C6B8AB537",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_usb_sd_reset.inc": "35F963092B0307148B72FDFAD5ADE420F9C9F785BE3E026C23A9A1C4ABE35E9C",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\np_sd_info_v1_service.inc": "3ED6D242B738DB8AACABCFE1E21217B6CCA895D496698F27611663134D3E736A"
+  },
+  "retire85_helpers_byte_identical": true,
+  "result_sha256": "543CEA40831BE28B897C857646EAFBD3610F5528148B6AC0B06FFE7C196B2B1F",
+  "scope": "Actual shared wrapper, PrepareDownload, SDInfo restore,0x68service and queued A7 with real store/wire and mocked initializer/pollingHAL; no firmware/app build, hardware or broad core rerun"
+}

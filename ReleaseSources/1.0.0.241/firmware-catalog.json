@@ -1,0 +1,915 @@
+{
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "family": 1,
+      "boardIds": [
+        65537
+      ],
+      "board": "V1 old NP board with 91k/91k battery divider; not V1Camera or V2",
+      "release": "V1_GUI_SUPPORT_APPD05473D6_USB71AE291B_20261105",
+      "sourceCommit": "23edae6de84869b1b9edcf9e52074649c0579cbb",
+      "stage": "BOUNDED_RECORDING_SDINFO_PREVIEW_QUALIFIED",
+      "appVersion": "buildD05473D6",
+      "usbVersion": "build71AE291B",
+      "recoveryVersion": "Unchanged bootloader / ABI258",
+      "appCrc32": "D05473D6",
+      "usbCrc32": "71AE291B",
+      "recoveryCrc32": null,
+      "app": {
+        "path": "V1/V1_APPD05473D6.hex",
+        "sha256": "297B96BBDC1871A55B7EF9304C8E6E159160E303D77CE8936F4187016729130A"
+      },
+      "files": [
+        {
+          "path": "V1/V1_APPD05473D6.hex",
+          "sha256": "297B96BBDC1871A55B7EF9304C8E6E159160E303D77CE8936F4187016729130A"
+        },
+        {
+          "path": "V1/V1_USB71AE291B.hex",
+          "sha256": "FBDC9C54593FC740B5E4C39F17C7343E21503D33A75E00C1FE83BEF562988D25"
+        },
+        {
+          "path": "V1/V1_APPD05473D6.xenp",
+          "sha256": "8E2C6773121338D4E26964B0E0A802B32A913E444FC8278021FBE95D4F7CD28C"
+        },
+        {
+          "path": "V1/V1_BOOT_DFU_unchanged_20261030.hex",
+          "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
+        },
+        {
+          "path": "V1/V1_FUSED_BOOT_USB71AE291B_APPD05473D6.hex",
+          "sha256": "A7A72120EE0529779A9F73F00D8B801A35BCC8F6D8A31B5C13776BDAD12EC5F7"
+        },
+        {
+          "path": "V1/acceptance.json",
+          "sha256": "683D51E09AE6C126EBD0235FF303E91B0685E66B1F1FBBD2662A6A755974BC79"
+        },
+        {
+          "path": "V1/V1_BOOT_USB71AE291B.hex",
+          "sha256": "71FB2FE485B5A918DE5EF4F83C70ABC60B590330ACB59ADE0ED44263FDE18F4D"
+        }
+      ],
+      "limits": "SD Info and two-channel LFP preview qualified with two probes at15kHz in bounded30s checks. Preview source625Hz; no observed gaps/drops. Preview and closed-loop are mutually exclusive. Prior1/2-detector qualification retained from unchanged processing. One unavailable startup IMU slot and unknown SD terminal-tail completeness remain explicit. V1 FS2 USB Delete Last is unavailable.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "baseAddress": 134348800,
+        "bytes": 409804,
+        "codeCrc32": "D05473D6",
+        "buildIdHex": "6662646333333361613662383136666633356632386639633938393261353365",
+        "manifestFlags": 0,
+        "minimumLoaderAbi": 258,
+        "generation": 1
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "baseAddress": 135790592,
+        "bytes": 383816,
+        "codeCrc32": "71AE291B",
+        "buildIdHex": "6461616336643866636536393338353638616666383865663966666531643966",
+        "manifestFlags": 1,
+        "minimumLoaderAbi": 258,
+        "generation": 1
+      },
+      "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 409772,
+          "codeCrc32": "5F90FD3B",
+          "buildIdHex": "3532363038646636656435353332666461333435656237616362383335396331",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 377432,
+          "codeCrc32": "76302AC4",
+          "buildIdHex": "3663666662303831636634353662613735313031383666303735373331373637",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 366296,
+          "codeCrc32": "FFF283D9",
+          "buildIdHex": "3866366237323165306263343265323636326338366262656236373135666139",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 365520,
+          "codeCrc32": "87109990",
+          "buildIdHex": "3663643136636432326464303164303534316566653032326333336336306139",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 298268,
+          "codeCrc32": "B1758369",
+          "buildIdHex": "3862363563313361396133393262323438646237623230303835616236366236",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 296380,
+          "codeCrc32": "82E51DEA",
+          "buildIdHex": "3561636438633237373132353430633533616633346134636662393632613738",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 293564,
+          "codeCrc32": "CC50D8D2",
+          "buildIdHex": "3738666561656437363464643431396233386466386334613065333038616436",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 286012,
+          "codeCrc32": "654824DE",
+          "buildIdHex": "3833643434356263626333396334323666363332623962633832356333656265",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272336,
+          "codeCrc32": "FA2016E7",
+          "buildIdHex": "6630396433303531666335636535363665303138636633636665316461663264",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272112,
+          "codeCrc32": "8FD89229",
+          "buildIdHex": "3466663135343162613266386430633239373231363634636261306232353839",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 272080,
+          "codeCrc32": "BC6B506E",
+          "buildIdHex": "6439626331393337336338666131343262623961613939316264313965623931",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 270512,
+          "codeCrc32": "BB1C7399",
+          "buildIdHex": "6633306230376638646337303461636636623963653161613536363632323066",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        }
+      ],
+      "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 384960,
+          "codeCrc32": "C91871BD",
+          "buildIdHex": "3137363561363831363438643730323964613034396535663162636435633934",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 384960,
+          "codeCrc32": "8454D202",
+          "buildIdHex": "3331303261623462386131643935633563613130383832626561393165646234",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 344000,
+          "codeCrc32": "EF0BC695",
+          "buildIdHex": "3738313739323736646631353332343136646531336330386337316537356234",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 330344,
+          "codeCrc32": "1E73A743",
+          "buildIdHex": "3466353665396462373865613166373362376366666233656531323639663630",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 330344,
+          "codeCrc32": "9D595E4D",
+          "buildIdHex": "6361636435353064306662323333616665313839306537393536636531303962",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 264808,
+          "codeCrc32": "4F7B521A",
+          "buildIdHex": "3634383838383933393633613764663131636134343462353837383563613936",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "F2D80C4F",
+          "buildIdHex": "3664613030333361326137613962373337353665303965333466646134366437",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "F8E721C2",
+          "buildIdHex": "3062343931383364333239356131353139373430383763343532333336303865",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "B5FC4876",
+          "buildIdHex": "6637613863326236303266633134623663643238393962393031633637343863",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "D75CA6F9",
+          "buildIdHex": "6635363336646238343734306535316532336432616362613363343630663135",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "6CD1917C",
+          "buildIdHex": "3862656534316137316130633961363837653964396264313534623665626131",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "037CF67C",
+          "buildIdHex": "6435336435363937633331643032666662313032373534396435336635333264",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "22D0792B",
+          "buildIdHex": "6164393939666365633231663835623837303137343237623735316331373039",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "0E542BBD",
+          "buildIdHex": "3562376436356661333739636538623534336465653464646566316134326637",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "76E544AB",
+          "buildIdHex": "3062313861643431373365653131346131663262323562363133346465316436",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 248552,
+          "codeCrc32": "02FF93A9",
+          "buildIdHex": "3337393932383938376566366337613336323261653730666432393730613733",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "40D39075",
+          "buildIdHex": "3934386332396537623530363963656166656433653063326162366635613962",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 0
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "681B6C2A",
+          "buildIdHex": "3035613735613038383534346236623564343433376566633166313730613163",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 240488,
+          "codeCrc32": "2F1C6BD5",
+          "buildIdHex": "3061393165653230303761656666636534656235613166623361376265383935",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 258,
+          "generation": 1
+        }
+      ],
+      "historySources": [
+        "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+        "e831a5f10c28c1df596766b195d4a48aeb38991d",
+        "72c432b59002d394e4d396b1dd078e203547981a",
+        "a6f2f8054dfdf528038802092c34040cbd29ce48",
+        "cfd58a0a5cd93ad1c41ee629e77ab1e3c5e43b26"
+      ],
+      "sourceInputs": [
+        {
+          "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb\\stream.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/usb-stream.c",
+          "sha256": "3A4648D99E63872CC9BC8A12DABD687D092BFF1FB8C5141D7C45259A5B10262A"
+        },
+        {
+          "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb\\provider.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/usb-provider.c",
+          "sha256": "F0B2CD3579741552E7401038E7C75434598DCBFDE6CEF16BB9BD1965B4E7959D"
+        },
+        {
+          "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-warm\\candidate-corrected\\app-provider.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/app-provider.c",
+          "sha256": "B81055BB1D1C0F4AE5548BADC6119B0E801D3CB044939D358B91D0B90D3EAE83"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_coefficients.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_coefficients.h",
+          "sha256": "9232076AE5D2EC3CA2600B0E50EBB09F92D06A0BB970CAD318911CB2CC537280"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_port.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_control_port.h",
+          "sha256": "D81198DABE5B54795446D2CC6DC5CA6A6760854C75073988AE712AC19C6EE995"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_wire.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_control_wire.h",
+          "sha256": "47D5C133EFF95E835BFE6D1A58CB954E6C7DEA7D042E1AC302C0E9F7065EBD4D"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_cycle_probe.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_cycle_probe.h",
+          "sha256": "47377BA69375958E0FC3C800E63FFDC40EB8B81B3CDDD7C5D7036C2E746641DB"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_event_wire.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_event_wire.h",
+          "sha256": "5E13A70903B38B5AB0E56638809B40BA6F36EB3A8AA62200BD58B666EB8D3815"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_first_bridge.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_first_bridge.h",
+          "sha256": "D89083437D3F91944C3CB4C747B8E3169109629E94079E5692FE1FDAA36D65CE"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_journal.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_journal.h",
+          "sha256": "E69FD8346A12A7E07F7681CC8826A064041FC6A9C5B3715ADE4F1FEBC1FA5913"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_kernel.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_kernel.h",
+          "sha256": "6FA0D0118A1CB487273D86D2B878BE600AAA464A49941E1E92627A4B6267CF4E"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_reset.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_reset.h",
+          "sha256": "B58A8EE74E1F0C85B75095F8B329A4C5C1658ECE88F9B763CD7DEC6AD3BAAEA2"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_source.h",
+          "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source_port.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_source_port.h",
+          "sha256": "54348681909EC277359011E5140F24F2037F45F7A97E6C3DD6561AAA5B793561"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_v1.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_v1.h",
+          "sha256": "DF5EE8058EE6D662E0CEBEF4E133E98A8163C8E26498583094AA6DD0C6960277"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_workspace.h",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_workspace.h",
+          "sha256": "8671B055C41685E1846BCE8AE25FB4F05AEC1BE1C319C6FBA9E1B0D3A3F90E75"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_clocked_reset.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_clocked_reset.inc",
+          "sha256": "875F9319C594BDB1DACBEC46BC13B4287117D6DCCCD419FFCCF788D1A091A4D3"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_cycle_port.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_cycle_port.inc",
+          "sha256": "6C5BB17C41E930DF9955E9851373E1233AECEF7F6546D99DA3A38D34D1E257D8"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_first_bridge.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_first_bridge.inc",
+          "sha256": "FE61780E3124F34B10BF16FB7CD60EA79804BC15427DEF0CE83DC379273BE0B7"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_kernel.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_kernel.c",
+          "sha256": "0D635161D260B65C0A4C6E3EE2A8DEE8DEAECB32359D5AED48285C602CDAC13F"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_sd.inc",
+          "sha256": "79BEA424AFB1CB81F168DB331264A20C39A4570934BEB7A05D082FB7BFE75DE2"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd_control.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_sd_control.inc",
+          "sha256": "DC03E1C2AA1F980994F6A91413488DB6B87E7A49F3D7CC5C2CAE14641D68A507"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_usb.inc",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_usb.inc",
+          "sha256": "E6B1E0DA8AD0E477AA39DF67E9FD73DD7840D928CFEB59DA843AE974CD77EA6F"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_v1.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_v1.c",
+          "sha256": "4714542AFED60BAFFB26B90B90FE9FC0E86C8A4AEFFB588D3FF9055E179A7631"
+        },
+        {
+          "source": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_workspace.c",
+          "archived": "ReleaseSources/1.0.0.232/firmware/V1/source-freeze/np_cl_workspace.c",
+          "sha256": "956FB1AB9ABDCE86C78D46B6695148EBB200A805A23265DC620338891370FC26"
+        }
+      ],
+      "full": {
+        "path": "V1/V1_FUSED_BOOT_USB71AE291B_APPD05473D6.hex",
+        "sha256": "A7A72120EE0529779A9F73F00D8B801A35BCC8F6D8A31B5C13776BDAD12EC5F7"
+      },
+      "sourceCommitScope": "Published baseline and exact changed USB source archive; binary identities authoritative; APP unchanged.",
+      "sourceProvenance": "../ReleaseSources/1.0.0.238/firmware/V1/source-freeze/manifest.json",
+      "sourceCommitRole": "baseline",
+      "retainedBaselineProvenance": {
+        "release": "V1_RTC_IMU_APP87109990_USB9D595E4D_20261029",
+        "sourceCommit": "e92b8cbb9dabdc99ce7a140d09e7c822b1da7150",
+        "sourceInputs": {
+          "baselineRelease": "APP82E51DEA",
+          "sourceOverlaySha256": "102D0F6B7ED7DC59AEA302FF4D9DD5CB208249EE0C3AC498BD5F3A99BBC35135",
+          "evidence": "ReleaseSources/1.0.0.158/firmware/V1"
+        },
+        "sourceProvenance": {
+          "ownerManifest": "V1/source-manifest.json",
+          "ownerManifestSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+          "packageReceiptSha256": "212E7D808A2435862F569E7DFD1384C93BB0FDF25344F04B911CFCE6115AFC12",
+          "acceptance": "V1/acceptance.json",
+          "acceptanceSha256": "DAF895B31EEB3B6C876E3906D76EFB51E15DDF7811BD40F5CEE8D954A680D346",
+          "canonicalSourceEquivalenceClaimed": false
+        }
+      },
+      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.232/firmware/V1/source-freeze/manifest.json",
+      "usbSensorQualification": "V1 two probes at15kHz: native AG198.89–199.40Hz/MAG99.53–99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
+      "qualifiedUsbDetectorCounts": [
+        1,
+        2
+      ]
+    },
+    {
+      "family": 2,
+      "boardIds": [],
+      "board": "WILD-X V2 / NP2",
+      "release": "V2_GUI_SUPPORT_APP99CC44F9_USBEDEB6C3A_20261105",
+      "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
+      "stage": "BOUNDED_RECORDING_SDINFO_USB_MAINTENANCE_QUALIFIED",
+      "appVersion": "build99CC44F9",
+      "usbVersion": "buildEDEB6C3A",
+      "recoveryVersion": "build 6408DBB8",
+      "appCrc32": "99CC44F9",
+      "usbCrc32": "EDEB6C3A",
+      "recoveryCrc32": "6408DBB8",
+      "limits": "SD Info, completed-cache maintenance and USB Delete Last qualified on the exact tested pair. Deletion requires a complete last entry and explicit confirmation; it is metadata-only, not secure erase. Prior three-probe20kHz NP/IMU and1/2-detector qualification retained from unchanged processing. Preview and closed-loop coexistence remains unavailable; no endurance or new media-rate claim.",
+      "appIdentity": {
+        "imageId": 1095782449,
+        "baseAddress": 134348800,
+        "bytes": 375584,
+        "codeCrc32": "99CC44F9",
+        "buildIdHex": "3166373135666261356235346465313839613238613730396433633034353361",
+        "manifestFlags": 0,
+        "minimumLoaderAbi": 4,
+        "generation": 3
+      },
+      "usbIdentity": {
+        "imageId": 1431519793,
+        "baseAddress": 135790592,
+        "bytes": 353584,
+        "codeCrc32": "EDEB6C3A",
+        "buildIdHex": "6637656662653261636231336361303066376266363736386565383538393633",
+        "manifestFlags": 3,
+        "minimumLoaderAbi": 4,
+        "generation": 3
+      },
+      "app": {
+        "path": "V2/V2_APP99CC44F9.hex",
+        "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
+      },
+      "full": {
+        "path": "V2/V2_FUSED_BOOT_USBEDEB6C3A_APP99CC44F9.hex",
+        "sha256": "91B3E56C59C3CD19B37DAFF40C5F67EF5B3A1BB601AAD46D39B71B16738191F9"
+      },
+      "files": [
+        {
+          "path": "V2/V2_APP99CC44F9.hex",
+          "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
+        },
+        {
+          "path": "V2/V2_USBEDEB6C3A.hex",
+          "sha256": "FDC0E16303AD40C301815A4830B011A2C0347C19C3A458B31990FCDC7FAF898B"
+        },
+        {
+          "path": "V2/V2_APP99CC44F9.xenp",
+          "sha256": "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
+        },
+        {
+          "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
+          "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+        },
+        {
+          "path": "V2/V2_FUSED_BOOT_USBEDEB6C3A_APP99CC44F9.hex",
+          "sha256": "91B3E56C59C3CD19B37DAFF40C5F67EF5B3A1BB601AAD46D39B71B16738191F9"
+        },
+        {
+          "path": "V2/acceptance.json",
+          "sha256": "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B"
+        }
+      ],
+      "sourceCommitScope": "Published baseline and exact changed USB source archive; binary identities authoritative; APP unchanged.",
+      "sourceProvenance": "../ReleaseSources/1.0.0.238/firmware/V2/source-freeze/manifest.json",
+      "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 375584,
+          "codeCrc32": "99CC44F9",
+          "buildIdHex": "3166373135666261356235346465313839613238613730396433633034353361",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 366312,
+          "codeCrc32": "680A1685",
+          "buildIdHex": "6539326636613236353030623364303739393364343861346630353231303438",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "generation": 3,
+          "baseAddress": 134348800,
+          "bytes": 335420,
+          "codeCrc32": "71A5126E",
+          "buildIdHex": "6239366662383531643933343531623736623430373663393166373963653238",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4
+        },
+        {
+          "imageId": 1095782449,
+          "generation": 3,
+          "baseAddress": 134348800,
+          "bytes": 324028,
+          "codeCrc32": "7F238587",
+          "buildIdHex": "6263626362353536363733396264613764383262343465306336623036356166",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4
+        },
+        {
+          "imageId": 1095782449,
+          "generation": 3,
+          "baseAddress": 134348800,
+          "bytes": 274764,
+          "codeCrc32": "194D9B94",
+          "buildIdHex": "6431393737323465333761666464353131313937363461666661626661343165",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 279852,
+          "codeCrc32": "46DF5009",
+          "buildIdHex": "3638656433343063666236633234623534353830366364306136616562396562",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 211436,
+          "codeCrc32": "EC5C2198",
+          "buildIdHex": "3366386166343761376636313835343639333934666331396335386638313165",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 212364,
+          "codeCrc32": "C250DF48",
+          "buildIdHex": "3662616531323266386465343434373165646632646234323430323834343264",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 205164,
+          "codeCrc32": "8DE56637",
+          "buildIdHex": "3065323336356162653238356433313438356133653061363664623065373031",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 189740,
+          "codeCrc32": "D44907A5",
+          "buildIdHex": "3764353638633737326438376661653530356231316636633730363864313864",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 184716,
+          "codeCrc32": "660A6DA4",
+          "buildIdHex": "3831626561303066323366383536393438343834616237326434636639393834",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 181680,
+          "codeCrc32": "15FAE47B",
+          "buildIdHex": "6161353261646565316163316662306439343561323666643966343731316133",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 172400,
+          "codeCrc32": "B60291EE",
+          "buildIdHex": "3935343863363038383263383531373731646136666161323639323265363636",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 2
+        },
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 172400,
+          "codeCrc32": "136172A5",
+          "buildIdHex": "3663306638383639326430303435626263373961646535616235313234313831",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        }
+      ],
+      "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 345392,
+          "codeCrc32": "D43FE162",
+          "buildIdHex": "6137326166323062616164373138383330303635306163363763316235623031",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 343312,
+          "codeCrc32": "112066CE",
+          "buildIdHex": "6235313435363630386661383737393264343563646336613133643831623765",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 334268,
+          "codeCrc32": "FFC27E5A",
+          "buildIdHex": "6361363038343837633339653966656535613139343766306565666566333362",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 334268,
+          "codeCrc32": "80E18959",
+          "buildIdHex": "3663643138333432343831313630633063653161636561643234336239316136",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "generation": 3,
+          "baseAddress": 135790592,
+          "bytes": 309212,
+          "codeCrc32": "2556B4DD",
+          "buildIdHex": "3062346366663965633333323031313332376561303362343437366235356663",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4
+        },
+        {
+          "imageId": 1431519793,
+          "generation": 3,
+          "baseAddress": 135790592,
+          "bytes": 295868,
+          "codeCrc32": "74FC7104",
+          "buildIdHex": "3532376263636563383663636637633436656436393239326162353536393561",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4
+        },
+        {
+          "imageId": 1431519793,
+          "generation": 3,
+          "baseAddress": 135790592,
+          "bytes": 267228,
+          "codeCrc32": "74A9B98B",
+          "buildIdHex": "6563343136373737623263353765663764636232613830373065343365363361",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 237668,
+          "codeCrc32": "62910614",
+          "buildIdHex": "6364666230316562333162633565303534643232613332656330303235666430",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 187716,
+          "codeCrc32": "A71BDECC",
+          "buildIdHex": "6237356438643139633833613061396533323562663435623534663139646363",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 184740,
+          "codeCrc32": "13ED1F8E",
+          "buildIdHex": "6330383438373565383131316430643634643535623538393335653966633636",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 184740,
+          "codeCrc32": "1D3262FB",
+          "buildIdHex": "3339316561376634633466393534623737366539653137653433376631356138",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 176608,
+          "codeCrc32": "B6099A0E",
+          "buildIdHex": "6636396235343538613763616539306533633238646637666666643137623630",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 4
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 172512,
+          "codeCrc32": "E323A06A",
+          "buildIdHex": "6465633132346261313030393634363735366335383836323330306432653938",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 159296,
+          "codeCrc32": "2E07799E",
+          "buildIdHex": "6563333565636665343430343235373164376566303065616437393465323738",
+          "manifestFlags": 1,
+          "minimumLoaderAbi": 4,
+          "generation": 0
+        }
+      ],
+      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.237/firmware/V2/source-freeze/manifest.json",
+      "usbSensorQualification": "V2 USB3P20k: nominalAG200/MAG100 measured199.03–199.06/99.51–99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
+      "qualifiedUsbDetectorCounts": [
+        1,
+        2
+      ]
+    }
+  ]
+}

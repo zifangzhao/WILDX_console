@@ -1,0 +1,144 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-11-05T22:20:50.598981+00:00",
+  "scope": "Existing actual storage/wire fault matrix plus one legitimate interrupted grant, emptyLastEnd0 and unavailable descriptor failure; no firmware/app build, hardware or ARM stack-usage claim",
+  "pins": {
+    "core": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA",
+    "delete": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71",
+    "wire": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18"
+  },
+  "stale_grant_vector": {
+    "path": "storage/stale-grant-vector.bin",
+    "format": "NPS2CUT1",
+    "image": 0,
+    "pending": 1,
+    "count": 2,
+    "frontier": 24576,
+    "generation": 8,
+    "descriptor_reserved_end": 32768,
+    "before_frontier": 40960,
+    "sha256": "A737560CA67C34526517865A5AC5A2E2AA8B8F2DA07045FA9668320CE5C0B7B3"
+  },
+  "files": [
+    {
+      "path": "storage/actual_api.inc",
+      "bytes": 695,
+      "sha256": "73CD514A98CAC70E83165BFE6894C3032507CA5EF59A37BA5A44F45611386630"
+    },
+    {
+      "path": "storage/card_fixture.inc",
+      "bytes": 2997,
+      "sha256": "A3D6C178F253818B32954336BAB6807604ADCE4BF05458FD2893393FB1F0D9F0"
+    },
+    {
+      "path": "storage/command.txt",
+      "bytes": 496,
+      "sha256": "59F87B449400046787D5AD4B52FAD8403D1FCC66CECE75B3FB9EDE56D436B7F4"
+    },
+    {
+      "path": "storage/compile.log",
+      "bytes": 109,
+      "sha256": "D2B7FB48B6B8775DC49D8DF359DD82DF64A11FFF1EDDC2232F1EEFEE24A84CCF"
+    },
+    {
+      "path": "storage/fixture.c",
+      "bytes": 12449,
+      "sha256": "B94CD770C47FB7E834F94F93C8FFAEE1E10AE9D92CF475AF1224CAAF97AF63C1"
+    },
+    {
+      "path": "storage/metadata-vectors.bin",
+      "bytes": 43396,
+      "sha256": "7D6B7047E6C2CF754A4E436FEE5E1BA78431030D02EA287FFEFE67CEBCE4CB5C"
+    },
+    {
+      "path": "storage/np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B"
+    },
+    {
+      "path": "storage/np_store_v2.h",
+      "bytes": 12976,
+      "sha256": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA"
+    },
+    {
+      "path": "storage/np_store_v2_delete.h",
+      "bytes": 14507,
+      "sha256": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71"
+    },
+    {
+      "path": "storage/prove.py",
+      "bytes": 3613,
+      "sha256": "7B95CBB7070D61426A1F58B7778E683298E442D093C968AF3D3398449E1392DC"
+    },
+    {
+      "path": "storage/receipt.json",
+      "bytes": 2291,
+      "sha256": "CBDF6C9DDE38E3724E68AEDEA4B358750657D933F8AE6D6F96347CD25881259A"
+    },
+    {
+      "path": "storage/result.txt",
+      "bytes": 694,
+      "sha256": "59A6E6DCF090349DF1F299E0DA97CDE17313E44DAB5774084B13C837F4429714"
+    },
+    {
+      "path": "storage/stale-grant-vector.bin",
+      "bytes": 6220,
+      "sha256": "A737560CA67C34526517865A5AC5A2E2AA8B8F2DA07045FA9668320CE5C0B7B3"
+    },
+    {
+      "path": "wire/card_fixture.inc",
+      "bytes": 2997,
+      "sha256": "A3D6C178F253818B32954336BAB6807604ADCE4BF05458FD2893393FB1F0D9F0"
+    },
+    {
+      "path": "wire/command.txt",
+      "bytes": 500,
+      "sha256": "7F88751BC943960EBDD6BBD2D2B8B220ECC92514DEBE92C037B8081A82A66063"
+    },
+    {
+      "path": "wire/compile.log",
+      "bytes": 109,
+      "sha256": "D2B7FB48B6B8775DC49D8DF359DD82DF64A11FFF1EDDC2232F1EEFEE24A84CCF"
+    },
+    {
+      "path": "wire/fixture.c",
+      "bytes": 8492,
+      "sha256": "0B70AA7970165E307AC1A181F33307972695FAC8D2907FFC4FBE0FC075129FB7"
+    },
+    {
+      "path": "wire/np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B"
+    },
+    {
+      "path": "wire/np_store_v2.h",
+      "bytes": 12976,
+      "sha256": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA"
+    },
+    {
+      "path": "wire/np_store_v2_delete.h",
+      "bytes": 14507,
+      "sha256": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71"
+    },
+    {
+      "path": "wire/np_store_v2_delete_wire.h",
+      "bytes": 4446,
+      "sha256": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18"
+    },
+    {
+      "path": "wire/prove_wire.py",
+      "bytes": 2424,
+      "sha256": "CE3D0AF80B16051647638C7F3A8F124A22B3435CBC3295BF5CA8C77B128136E4"
+    },
+    {
+      "path": "wire/receipt.json",
+      "bytes": 1857,
+      "sha256": "2024F9D0C5EBC1745436589F8D4802CB14D5944031FB93AD84EA224D11BCE85C"
+    },
+    {
+      "path": "wire/result.txt",
+      "bytes": 127,
+      "sha256": "013CD503A277894138558C0D7DDB84F1562A9F8511A7E6C42960ED798723B6E3"
+    }
+  ]
+}

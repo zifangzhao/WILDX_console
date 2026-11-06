@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T23:32:59.853502+00:00",
+  "finished_utc": "2026-11-05T23:33:01.228274+00:00",
+  "seconds": 1.3756658999918727,
+  "stream_sha256": "C82F218CB428A42DA2CED393FE095E139BAFF34D68D95A8224689FBD37EFE674",
+  "delete_port_sha256": "5BBFE4889A61DCCA8D3799EA33456B8A3F2716B7DF3FD1AEBA61175C92571151",
+  "actual_functions_sha256": "D1272B805893589E0134B167F199A5E0D49F00A62BC6B20825899CB850A46746",
+  "actual_bus_hooks_sha256": "6D2134679DCD1A5C64FA9ABF695255BD5C6EF4CFD97E125C9543BF51743D2BF1",
+  "result_sha256": "5D3DACC9F20F33E7339A11FDDD5C39D502F7F1F02CB5299556E56F19532BED4E",
+  "scope": "Actual automatic recovery/client service/cancel and realstorage with modeled bus-event common-hook calls betweenwrites; actual3USBbus hook wiring checkedsource-only; no firmware/appbuild/hardware or unchangedcore/parser suite"
+}

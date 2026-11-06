@@ -16,6 +16,7 @@ namespace USB512_interface
             Action<uint> updateCapacity=null;
             Action target=()=>{if(!connection.Connected || connection.Epoch!=generation || recorderVersion!=version)throw new IOException("Connection changed. Close and reopen Recordings.");};
             var v2=new NpV2BleCatalog(ReadStatus,connection.ExchangeAsync,Send,target);
+            var v1Delete=new NpBleDeleteLast(bleDeviceUid??firmwareIdentity?.Uid,q=>connection.ExchangeAsync(0xa7,q,System.Threading.CancellationToken.None),ReadStatus,target);
             Func<Task<NpBleCatalog>> read=async()=>{
                 target();if(version==2)return await v2.Read();var before=await ReadStatus();
                 if(before.Capacity!=initial.Capacity)throw new IOException("Card capacity changed. Reopen Recordings before reading storage.");
@@ -27,12 +28,25 @@ namespace USB512_interface
                 target();var after=await ReadStatus();
                 if(!NpBleCatalog.CanReadV1(after) || before.Capacity!=after.Capacity || before.Start!=after.Start ||
                     NpV1BleProtocol.HasReadOnlyCatalog(before)!=NpV1BleProtocol.HasReadOnlyCatalog(after))throw new IOException("Storage changed while listing recordings. Refresh before modifying it.");
+                if(NpBleDeleteLast.Supported(after)){
+                    try {
+                        var inspected=await v1Delete.Inspect();
+                        if(inspected.Capacity!=catalog.Capacity || inspected.Frontier!=catalog.NextStart)throw new IOException("V1 card changed during deletion inspection. Refresh before modifying it.");
+                        catalog.V1Delete=inspected;
+                        var last=catalog.Records.Count==0?null:catalog.Records[catalog.Records.Count-1];
+                        catalog.V1CanDeleteLast=inspected.CanDelete && last!=null && last.Id==inspected.Ordinal+1 && last.Start==inspected.Start && last.End<=inspected.End;
+                    }catch(Exception ex) when(ex is IOException || ex is InvalidDataException || ex is TimeoutException){
+                        target();catalog.V1Delete=null;catalog.V1CanDeleteLast=false;
+                        catalog.V1Warning=(catalog.V1Warning??"")+" Delete Last unavailable: "+ex.Message+" Refresh before modifying storage.";
+                    }
+                }
                 return catalog;
             };
             Func<NpBleCatalog,Task<NpBleCatalog>> delete=async snapshot=>{
                 if(version==2)return await v2.Delete(snapshot);
                 if(snapshot==null || !snapshot.CanDeleteLast)throw new IOException("A stopped, mounted, writable V1 catalog is required for deletion.");
                 target();var fresh=await read();if(!fresh.CanDeleteLast || !snapshot.SameAs(fresh) || fresh.Records.Count==0)throw new IOException("The recording list changed. Refresh and confirm the last recording again.");
+                if(fresh.V1Delete!=null){await v1Delete.Delete(fresh.V1Delete);var deleted=await read();if(deleted.Records.Count!=fresh.Records.Count-1)throw new IOException("Deleted V1 catalog was not confirmed; no command replayed.");return deleted;}
                 var s=await ReadStatus();target();if(!NpV1BleProtocol.CanConfigure(s) || !NpBleCatalog.CanReadV1(s) || s.Capacity!=fresh.Capacity || s.Start!=fresh.NextStart || (s.Flags&17)!=17 || (s.Flags&NpV1BleProtocol.CatalogReadOnly)!=0)throw new IOException("Stopped, unchanged, writable V1 storage required.");
                 uint remaining=BitConverter.ToUInt32(await connection.ExchangeV1Storage(0,true),0);
                 if(remaining!=(uint)fresh.Records.Count-1)throw new IOException("Delete result differs from the confirmed list. Refresh before any further action.");
@@ -144,7 +158,8 @@ namespace USB512_interface
         async Task DeleteLast()
         {
             if(catalog==null || !catalog.CanDeleteLast)return;var last=catalog.Records[catalog.Records.Count-1];
-            if(MessageBox.Show(this,"Delete recording "+last.Id+" ("+last.MiB.ToString("N2")+" MiB) from "+peer+"?\r\nIts storage can be overwritten by later recordings.","Delete last recording",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes)return;
+            string description=catalog.V1Delete==null?"Recording "+last.Id+" ("+last.MiB.ToString("N2")+" MiB) from "+peer:catalog.V1Delete.Description;
+            if(MessageBox.Show(this,"Delete this last recording?\r\n\r\n"+description+"\r\n\r\nIts storage can be overwritten by later recordings.","Delete last recording",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes)return;
             ShowCatalog(await delete(catalog));
         }
         async Task FormatCard()

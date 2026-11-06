@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "uid": "001D00065942500B20313354",
+  "original_flash_options_verified": true,
+  "original_profile_verified": true,
+  "protected_profile_verified": true,
+  "cpu_debug_enabled": false,
+  "card_sectors": 500695040,
+  "usb_mode": 3,
+  "idle": true,
+  "finished_utc": "2026-11-05T19:50:25.9884189Z",
+  "postreset_enumeration_initially_early": true,
+  "flash_not_replayed": true
+}

@@ -121,6 +121,7 @@
     <Compile Include="ImpedanceReportForm.cs" />
     <Compile Include="EisSpectrumForm.cs" />
     <Compile Include="XeNpWinUsb.cs" />
+    <Compile Include="NpUsbDeviceLabel.cs" />
     <Compile Include="..\..\Neuropixels\USBConsoleV2\NpV2UsbConsole.cs"><Link>NpV2UsbConsole.cs</Link></Compile>
     <Compile Include="XeNpStreamDecoder.cs" />
     <Compile Include="NpCaptureModes.cs" />
@@ -247,6 +248,9 @@
     <Compile Include="NpLogger\NpDownloadForm.cs" />
 
     <Compile Include="NpLogger\NpUsbCatalogRepair.cs" />
+    <Compile Include="NpLogger\NpUsbDeleteLast.cs" />
+    <Compile Include="Ble\NpBleDeleteLast.cs" />
+    <Compile Include="NpLogger\NpV1StoreV2.Delete.cs" />
     <Compile Include="NpLogger\NpV2FirmwareForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScopeForm_drawbank.cs">

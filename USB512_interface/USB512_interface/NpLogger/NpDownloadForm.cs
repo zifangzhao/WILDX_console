@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace CE32_console
 {
     internal sealed class NpDownloadForm : Form {
-        private sealed class Source {internal string Path,Label,MediaType;internal bool Usb;internal bool CanDelete{get{return !Usb && NpCardFormat.IsRemovableMedia(MediaType);}}internal bool CanFormat{get{return CanDelete || Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(Path);}}public override string ToString(){return Label;}}
+        private sealed class Source {internal string Path,Label,MediaType;internal bool Usb,UsbDeleteSupported;internal bool CanDelete{get{return Usb?UsbDeleteSupported:NpCardFormat.IsRemovableMedia(MediaType);}}internal bool CanFormat{get{return !Usb && CanDelete || Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(Path);}}public override string ToString(){return Label;}}
         private readonly ComboBox sources=new ComboBox{Dock=DockStyle.Top,DropDownStyle=ComboBoxStyle.DropDownList};
         private readonly CheckedListBox records=new CheckedListBox{Dock=DockStyle.Fill,CheckOnClick=true};
         private readonly TextBox sessionLabel=new TextBox{Name="downloadSessionLabel",Dock=DockStyle.Fill,MaxLength=80,AccessibleName="Session label"};
@@ -37,9 +37,9 @@ namespace CE32_console
         internal string SelectedSourceDescription{get{var source=sources.SelectedItem as Source;return source==null?null:source.Label;}}
         internal static string UsbSourceLabel(string path) {
             string uid=USB512_interface.NpV1Management.UidFromPath(path);
-            if(uid!=null)return "WILD-X V1 USB — "+uid;
+            if(uid!=null)return USB512_interface.NpUsbDeviceLabel.For("WILD-X V1 USB",path,uid);
             uid=USB512_interface.NpV2FirmwareForm.Uid(path);
-            return uid!=null?"WILD-X V2 USB — "+uid:"WILD-X USB — version unknown — "+path;
+            return uid!=null?USB512_interface.NpUsbDeviceLabel.For("WILD-X V2 USB",path,uid):USB512_interface.NpUsbDeviceLabel.For("WILD-X USB — version unknown",path,path);
         }
         IWin32Window DialogOwner{get{return TopLevelControl??this;}}
         internal event Action BusyChanged;
@@ -106,7 +106,7 @@ namespace CE32_console
             }finally{refreshing=false;UpdateControls();}
         }
         private void ClearListing(){records.Items.Clear();listedSource=null;listedRecoverySearch=false;progress.Value=0;}
-        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=mergeDat.Enabled=!busy;list.Enabled=save.Enabled=!busy && source!=null && !(usbBlocked && source.Usb);recover.Enabled=!busy && source!=null && HeaderRecoveryEligible(source.Usb,source.Path) && !(usbBlocked && source.Usb);deleteLast.Enabled=!busy && source!=null && source.CanDelete;format.Enabled=!busy && source!=null && source.CanFormat && !(usbBlocked && source.Usb);repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=true;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. Catalog repair requires supported USB firmware and confirmation; Format is a separate erase action.":"Recover is read-only; delete/format require removable SD media.";cancel.Enabled=busy && !maintenanceActive;}
+        private void UpdateControls(){var source=sources.SelectedItem as Source;sessionLabel.Enabled=calibrationButton.Enabled=refresh.Enabled=sources.Enabled=records.Enabled=play.Enabled=convert.Enabled=convertAfterDownload.Enabled=mergeDat.Enabled=!busy;list.Enabled=save.Enabled=!busy && source!=null && !(usbBlocked && source.Usb);recover.Enabled=!busy && source!=null && HeaderRecoveryEligible(source.Usb,source.Path) && !(usbBlocked && source.Usb);deleteLast.Enabled=!busy && source!=null && source.CanDelete && !(usbBlocked && source.Usb);format.Enabled=!busy && source!=null && source.CanFormat && !(usbBlocked && source.Usb);repairCatalog.Enabled=!busy && !usbBlocked && source!=null && source.Usb && USB512_interface.NpUsbCatalogRepair.IsEligiblePath(source.Path);cardHelp.Visible=true;cardHelp.Text=source!=null && source.Usb?"Downloads are read-only. List recordings to check USB Delete Last support. Delete, repair and format require supported firmware and confirmation.":"Recover is read-only; delete/format require removable SD media.";cancel.Enabled=busy && !maintenanceActive;}
         private void SetBusy(bool value){busy=value;destination.Enabled=browseDestination.Enabled=!busy;UpdateControls();var changed=BusyChanged;if(changed!=null)changed();}
         internal async Task RepairUsbCatalogAsync(string path) {
             if(busy || usbBlocked || !USB512_interface.NpUsbCatalogRepair.IsEligiblePath(path))return;
@@ -176,9 +176,22 @@ namespace CE32_console
         }
         private bool ConfirmUsbFormat(string generation,string description){return MessageBox.Show(DialogOwner,"Erase the recording catalog on this "+generation+" SD card?\r\n\r\n"+description+"\r\n\r\nAll recordings become unavailable and may be overwritten, including interrupted data still recoverable now. Recover needed data FIRST. A broken/foreign catalog is allowed. Settings are retained; this is not a secure erase.\r\nDo not remove power or swap the card until finished.","Destructive "+generation+" USB SD Quick Format",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)==DialogResult.Yes;}
         private async Task DeleteLastAsync() {
-            var source=sources.SelectedItem as Source;if(source==null || !source.CanDelete)return;
-            maintenanceActive=true;SetBusy(true);
+            var source=sources.SelectedItem as Source;if(source==null || !source.CanDelete || source.Usb && usbBlocked)return;
+            maintenanceActive=true;cancelled=false;SetBusy(true);
             try {
+                if(source.Usb) {
+                    await PrepareSourceAsync(source);
+                    using(var manager=new USB512_interface.NpUsbDeleteLast(source.Path,()=>!usbBlocked && !IsDisposed)) {
+                        status.Text="Inspecting the last recording…";
+                        var last=await Task.Run(()=>manager.Inspect());
+                        if(!last.CanDelete){status.Text="The last entry is empty, active or not deletable by this firmware. No recording deleted.";return;}
+                        if(MessageBox.Show(DialogOwner,"Delete this last recording?\r\n\r\n"+last.Description+"\r\n\r\nEarlier recordings and settings will be retained. Deleted space may be overwritten. Keep USB/power connected until finished.","Delete last recording",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes){status.Text="Delete cancelled; no recording deleted.";return;}
+                        status.Text="Deleting and verifying the confirmed catalog entry…";
+                        ClearListing();await Task.Run(()=>manager.Delete(last));
+                        status.Text="Last recording deleted. Earlier recordings and settings retained. List recordings to refresh.";
+                    }
+                    return;
+                }
                 var target=await Task.Run(()=>NpCardFormat.Inspect(source.Path));
                 var latest=await Task.Run(()=>{using(var stream=NpDownloadStream.OpenDisk(target.Path))return NpCardFormat.Latest(stream);});
                 if(MessageBox.Show(DialogOwner,"Delete the last recording on this card:\r\n\r\n"+target.Description+"\r\n\r\n"+latest.Record+"\r\nLBA "+latest.Record.Start+"–"+latest.Record.End+"\r\n\r\nEarlier recordings and settings will be kept. The deleted space can be overwritten. This is not a secure erase.\r\nDo not swap cards until finished.\r\n\r\nDelete this recording?","Delete last recording",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2)!=DialogResult.Yes){status.Text="Delete cancelled; nothing written.";return;}
@@ -248,6 +261,10 @@ namespace CE32_console
             else if(USB512_interface.NpV2FirmwareForm.Uid(path)!=null)
                 path=await USB512_interface.NpV2FirmwareForm.EnsureDownload(path,()=>cancelled);
             source.Path=boundSourcePath=path;source.Label=UsbSourceLabel(path);
+            source.UsbDeleteSupported=false;
+            try {
+                source.UsbDeleteSupported=await Task.Run(()=>{using(var control=new USB512_interface.NpSystemInfoControl(path))return USB512_interface.NpUsbDeleteLast.Supported(control.Read(0xc0,0x6e,0,32),USB512_interface.NpV1Management.UidFromPath(path)??USB512_interface.NpV2FirmwareForm.Uid(path));});
+            }catch(Exception ex) when(ex is IOException || ex is System.ComponentModel.Win32Exception || ex is ArgumentException) { /* Optional capability; ordinary download stays available. */ }
             if(cancelled)throw new OperationCanceledException();
         }
         private Task ListAsync(){return ListCoreAsync(false);}

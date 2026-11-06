@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "utc": "2026-11-05T22:19:57.7583829Z",
+  "version": "1.0.0.246",
+  "exe_sha256": "FA744968A3DE0AC9A87F6FD77F8F3ED40BFAB3FBD062ABD9B33BEE3E233E8953",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "source_inputs_stable": 208,
+  "checks": [
+    {
+      "result": "PASS",
+      "count": 6798,
+      "assembly": "246",
+      "name": "actual V1 USB/BLE framing/correlation, native/torn PC views and stale grant"
+    },
+    {
+      "result": "PASS",
+      "count": 1893,
+      "name": "actual-source legacy BLE transport",
+      "reuse": "unchanged244 wire source"
+    },
+    {
+      "result": "PASS",
+      "count": 220,
+      "assembly": "242",
+      "name": "maintenance including V2 compatibility",
+      "reuse": "unchanged corresponding sources"
+    },
+    {
+      "result": "PASS",
+      "count": 390,
+      "assembly": "242",
+      "name": "legacy FS2/catalog",
+      "reuse": "unchanged corresponding sources"
+    }
+  ],
+  "metadata_vectors_sha256": "7D6B7047E6C2CF754A4E436FEE5E1BA78431030D02EA287FFEFE67CEBCE4CB5C",
+  "stale_grant_vector_sha256": "A737560CA67C34526517865A5AC5A2E2AA8B8F2DA07045FA9668320CE5C0B7B3",
+  "firmware_hil": "pending",
+  "installer_or_publication": false
+}

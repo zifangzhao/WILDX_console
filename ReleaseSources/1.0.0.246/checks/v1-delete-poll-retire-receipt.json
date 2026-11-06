@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T22:37:57.460036+00:00",
+  "finished_utc": "2026-11-05T22:37:58.509217+00:00",
+  "seconds": 1.0536374999937834,
+  "port_sha256": "842E3C640038ECB6EBA10503A7B82E049A5EEF41BF0890B7D6A713331D4348E9",
+  "actual_functions": [
+    "np_usb_delete_physical_quiet",
+    "np_usb_delete_quiet",
+    "np_usb_delete_retire",
+    "np_usb_delete_read",
+    "np_usb_delete_write",
+    "np_usb_delete_clock_begin",
+    "np_usb_delete_clock_end"
+  ],
+  "actual_functions_sha256": "DC4396BBBB710C62FE3CD27594F26BFB2F0DB905769004CDBDEA802E4EA9B7B7",
+  "headers": {
+    "np_store_v2.h": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA",
+    "np_store_v2_delete.h": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71",
+    "np_store_v2_delete_wire.h": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18"
+  },
+  "result_sha256": "DD272ABA7BCD3884BD9AE932210FB13F5BD4949AC11118EC25157AA1504F1E16",
+  "scope": "Actual extracted USB metadata retirement/read/write/clock functions with modeled HAL polling residual context and physical quiet flags; no actual HAL command, firmware/app build or hardware"
+}

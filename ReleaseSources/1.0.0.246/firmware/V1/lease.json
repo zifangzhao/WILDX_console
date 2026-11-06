@@ -1,0 +1,16 @@
+{
+  "status": "closed",
+  "uid": "001D00065942500B20313354",
+  "holder_pid": 608,
+  "global_status": "released",
+  "scope": "GLOBAL+exactV1",
+  "acquired_utc": "2026-11-05T22:19:50.6036414Z",
+  "closed_utc": "2026-11-06T00:06:24.5648833Z",
+  "holder_exit_code": 0,
+  "original_restored": true,
+  "mutexes_verified_available": [
+    "Local\\WILDX_NP_TIMING_HIL",
+    "Local\\XE_NP_V1_001D00065942500B20313354"
+  ],
+  "restoration_sha256": "545E55203B12B1F96654DA2AA0E7647635DBF5CD5FD527F05E92F0B4869CACC5"
+}

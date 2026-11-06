@@ -1,0 +1,17 @@
+{
+  "status": "EXACT_ORIGINAL_FLASH_OPTIONS_AND_PREFERENCES_RESTORED_IDLE",
+  "uid": "001A0004434250062039314E",
+  "app_crc32": "7F238587",
+  "usb_crc32": "74FC7104",
+  "flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+  "options_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+  "mode": 2,
+  "busy": 0,
+  "target": 0,
+  "preference_absent": true,
+  "own_record_verified": true,
+  "own_delete_verified": true,
+  "card_format": false,
+  "card_actions_scope": "See explicit SD-job and delete-own receipts; no old recording deletion authorized",
+  "utc": "2026-11-05T20:06:31.9818188Z"
+}

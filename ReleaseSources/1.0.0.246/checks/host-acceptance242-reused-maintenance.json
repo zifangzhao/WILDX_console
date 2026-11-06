@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "utc": "2026-11-05T22:00:16.2368937Z",
+  "version": "1.0.0.242",
+  "exe_sha256": "C88110561D8B28A926E2F531E447710A4AB8DF98F4A1C393594D378E64303205",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "source_inputs_stable": 208,
+  "checks": [
+    {
+      "result": "PASS",
+      "name": "actual V1 USB/BLE and native-boundary PC views",
+      "count": 6259
+    },
+    {
+      "result": "PASS",
+      "name": "actual maintenance including V2 compatibility",
+      "count": 220
+    },
+    {
+      "result": "PASS",
+      "name": "legacy FS2/catalog",
+      "count": 390
+    }
+  ],
+  "metadata_vectors_sha256": "7D6B7047E6C2CF754A4E436FEE5E1BA78431030D02EA287FFEFE67CEBCE4CB5C",
+  "firmware_hil": "pending",
+  "installer_or_publication": false
+}

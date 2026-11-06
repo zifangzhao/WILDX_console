@@ -47,8 +47,11 @@ namespace USB512_interface
         bool activeCompact;uint[] activeChannels;
         int selectionVersion,activeSelection;
         Exception error;int dropped,packets;ulong previousEnd;long gaps;
+        double previewHz;
         static uint Next(){uint id=unchecked((uint)Interlocked.Increment(ref sequence));return id==0?Next():id;}
         internal static bool CanPreview(NpSdStatus s){return s!=null && s.State==1 && (s.Flags&(8|NpV1BleProtocol.Waiting|NpV1BleProtocol.Preparing))==0 && s.Fault==0 && s.Mask!=0 && (s.Flags&NpV1BleProtocol.Preview)!=0;}
+        internal Func<bool?> ClosedLoopState;
+        bool HostPreviewAllowed(){return ClosedLoopState==null || NpBleForm.CanPreviewHost(true,ClosedLoopState());}
         internal NpV1BlePreviewForm(NpBleConnection source,Func<NpSdStatus> readStatus,Func<bool> ownerBusy,NpCalibrationSet corrections)
         {
             connection=source;epoch=source.Epoch;status=readStatus;controlsBusy=ownerBusy;calibration=corrections==null?null:corrections.Copy();
@@ -81,7 +84,7 @@ namespace USB512_interface
         static bool SameChannels(uint[] expected,ushort[] actual){if(expected==null||actual==null||expected.Length!=actual.Length)return false;for(int i=0;i<expected.Length;i++)if(expected[i]!=actual[i])return false;return true;}
         byte[] StreamRequest(uint id,uint kind){return activeCompact?NpV1PreviewBurst.CompactRequest(id,kind,activeProbe,activeChannels,phase,session,activeBand):NpV1PreviewBurst.Request(id,kind,activeProbe,activeChannel,phase,session,activeBand);}
         void RefreshRecordingInfo(){try{string text=RecordingInfo==null?null:RecordingInfo();recordingInfo.Text=String.IsNullOrWhiteSpace(text)?String.Empty:text;recordingInfo.Visible=recordingInfo.Text.Length!=0;}catch(Exception ex){recordingInfo.Text="Recording information unavailable: "+ex.Message;recordingInfo.Visible=true;}}
-        bool Current(){var s=status();return !closed && enabled.Checked && connection.Connected && connection.Epoch==epoch && CanPreview(s) && (s.Mask&(1U<<((int)probe.Value-1)))!=0 && (activeId==0 || s.Hz==hz);}
+        bool Current(){var s=status();return !closed && enabled.Checked && connection.Connected && connection.Epoch==epoch && HostPreviewAllowed() && CanPreview(s) && (s.Mask&(1U<<((int)probe.Value-1)))!=0 && (activeId==0 || s.Hz==hz);}
         void Receive(int generation,byte[] body)
         {
             lock(gate){
@@ -125,7 +128,7 @@ namespace USB512_interface
                 connection.PreviewReceived-=receive;
                 if(sent && !complete){
                     uint actualSession;lock(sync){actualSession=burst.Session;}
-                    if(actualSession!=0)try{await connection.TryWritePreview(NpV1PreviewBurst.Request(burst.Id,3,p,c,0,actualSession,b),epoch,CancellationToken.None);}catch{}
+                    if(actualSession!=0 && HostPreviewAllowed())try{await connection.TryWritePreview(NpV1PreviewBurst.Request(burst.Id,3,p,c,0,actualSession,b),epoch,CancellationToken.None);}catch{}
                     // An origin owns its own request ID even while activeId=0.
                     // Without a device ACK, let its last lease expire before retry.
                     int remaining=Math.Max(0,2100-(int)lease.ElapsedMilliseconds);
@@ -136,7 +139,7 @@ namespace USB512_interface
         async Task StopPreview(bool waitForExpiry=false)
         {
             uint old;lock(gate){old=activeId;activeId=0;pending.Clear();}
-            if(old==0)return;
+            if(old==0 || !HostPreviewAllowed())return; // Do not touch the shared device workspace after CL takes ownership.
             bool sent=false;
             try{sent=await connection.TryWritePreview(StreamRequest(old,3),epoch,CancellationToken.None);}catch{ /* The device's two-second preview lease expires independently. */ }
             // Preview writes have no device ACK. Before changing selection,
@@ -147,6 +150,10 @@ namespace USB512_interface
         {
             if(closed)return;RefreshRecordingInfo();if(busy)return;busy=true;int generation=selectionVersion;
             try{
+                if(!HostPreviewAllowed()){
+                    lock(gate){activeId=0;pending.Clear();}phases.Clear();workspaceUnavailable=false;
+                    info.Text=NpBleForm.PreviewBlockedReason(ClosedLoopState());return;
+                }
                 if(!Current()){workspaceUnavailable=false;phases.Clear();await StopPreview();info.Text=enabled.Checked?"Waiting for an active probe recording…":"Paused";return;}
                 if(workspaceUnavailable)return;
                 if(activeId!=0 && activeSelection!=generation){await StopPreview(true);info.Text="Waiting for new preview selection…";return;}
@@ -166,7 +173,7 @@ namespace USB512_interface
                     phases[p]=Tuple.Create(sourceSession,rate,(int)ph);activeFromCache=cached;
                     lock(gate){activeProbe=p;activeChannel=c;activeChannels=selected;activeCompact=CompactSupported();activeBand=b;activeSelection=generation;phase=ph;session=sourceSession;hz=rate;error=null;pending.Clear();dropped=packets=0;previousEnd=0;gaps=0;activeId=Next();silence.Restart();}
                     if(!await connection.TryWritePreview(StreamRequest(activeId,activeCompact?5U:2U),epoch,lifetime.Token)){lock(gate){activeId=0;pending.Clear();}info.Text="Waiting for controls…";return;}
-                    SetPlotChannels(selected);ClearPlots(hz*780.0);renew.Restart();
+                    previewHz=0;SetPlotChannels(selected);ClearPlots(hz*780.0);renew.Restart();
                 }
                 if(generation!=selectionVersion)return;
                 if(!controlBusy && renew.ElapsedMilliseconds>=750 && await connection.TryWritePreview(StreamRequest(activeId,4),epoch,lifetime.Token))renew.Restart();
@@ -174,6 +181,7 @@ namespace USB512_interface
                 List<NpV1PreviewBurst> frames;int hostDrops;long idle;
                 lock(gate){if(error!=null)throw error;frames=new List<NpV1PreviewBurst>(pending);pending.Clear();hostDrops=dropped;idle=silence.ElapsedMilliseconds;}
                 foreach(var frame in frames){
+                    previewHz=frame.PreviewHz;
                     if(previousEnd!=0 && frame.FirstTick<previousEnd)continue;
                     if(previousEnd!=0 && frame.FirstTick!=previousEnd)gaps++;
                     var rows=activeCompact?frame.DecodeCompact(phase):new[]{frame.DecodeRolling(phase)};var profile=calibration==null?null:calibration.Get((int)activeProbe);
@@ -188,7 +196,7 @@ namespace USB512_interface
                     foreach(var trace in plots)trace.SetTimeEnd(latest);
                     previousEnd=frame.FirstTick+16UL*frame.Stride;packets++;
                 }
-                info.Text=(activeBand==0?"AP":"LFP")+" preview · "+(hz*780.0/((activeBand==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))).ToString("F1")+" samples/s per channel"+(!activeCompact?" · Legacy: one channel":"")+(gaps!=0 || hostDrops!=0?" · Preview gaps":"");
+                info.Text=(activeBand==0?"AP":"LFP")+" preview · "+(previewHz==0?"waiting for samples":previewHz.ToString("F1")+" samples/s per channel")+(!activeCompact?" · Legacy: one channel":"")+(gaps!=0 || hostDrops!=0?" · Preview gaps":"");
                 diagnostics.SetToolTip(info,"Subsampled preview; channel timestamps preserve their ADC offsets · gaps "+gaps+" · host drops "+hostDrops+" · packets "+packets);
                 if(idle>5000)throw new TimeoutException("LFP preview is waiting for data.");
             }catch(OperationCanceledException){}
@@ -213,7 +221,7 @@ namespace USB512_interface
         sealed class Plot : Control
         {
             internal string ChannelLabel=String.Empty;
-            const int Capacity=500*MaxWindowSeconds;readonly double[] values=new double[Capacity];readonly ulong[] ticks=new ulong[Capacity];
+            const int Capacity=625*MaxWindowSeconds;readonly double[] values=new double[Capacity];readonly ulong[] ticks=new ulong[Capacity];
             int count,write;double ticksPerSecond,windowSeconds=4,gain=1;ulong stride;
             ulong displayEnd;bool sharedEnd;
             const double ReferenceCounts=64; // Match the USB NP1 AP display at 1×.

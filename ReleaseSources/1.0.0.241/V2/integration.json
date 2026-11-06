@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "utc": "2026-11-05T20:12:06.0584021Z",
+  "family": 2,
+  "status": "ACCEPTED_RESTORED_COMPONENTS_INTEGRATED",
+  "app": "99CC44F9",
+  "usb": "EDEB6C3A",
+  "files": [
+    {
+      "path": "Firmware/V2/V2_APP99CC44F9.hex",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\gui_support241\\integration\\Firmware\\V2\\V2_APP99CC44F9.hex",
+      "bytes": 1033332,
+      "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
+    },
+    {
+      "path": "Firmware/V2/V2_USBEDEB6C3A.hex",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\gui_support241\\integration\\Firmware\\V2\\V2_USBEDEB6C3A.hex",
+      "bytes": 972832,
+      "sha256": "FDC0E16303AD40C301815A4830B011A2C0347C19C3A458B31990FCDC7FAF898B"
+    },
+    {
+      "path": "Firmware/V2/V2_APP99CC44F9.xenp",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\gui_support241\\integration\\Firmware\\V2\\V2_APP99CC44F9.xenp",
+      "bytes": 375712,
+      "sha256": "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
+    },
+    {
+      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\gui_support241\\integration\\Firmware\\V2\\V2_recovery_only_6408DBB8_20261012.hex",
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    {
+      "path": "Firmware/V2/V2_FUSED_BOOT_USBEDEB6C3A_APP99CC44F9.hex",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\gui_support241\\integration\\Firmware\\V2\\V2_FUSED_BOOT_USBEDEB6C3A_APP99CC44F9.hex",
+      "bytes": 5745164,
+      "sha256": "91B3E56C59C3CD19B37DAFF40C5F67EF5B3A1BB601AAD46D39B71B16738191F9"
+    },
+    {
+      "path": "Firmware/V2/acceptance.json",
+      "source": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\gui_support241\\integration\\Firmware\\V2\\acceptance.json",
+      "bytes": 9354,
+      "sha256": "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B"
+    }
+  ],
+  "catalog_sha256": "AB1563D8075839F76D0EC667F44A563BA356491E999753CA108308BFBF95CDF4",
+  "qualification": {
+    "receipt": "C:/Frank/Code/XE_NP/_artifacts/v2_gui_support_fix_20261105/accepted.json",
+    "sha256": "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B",
+    "scope": "Exact owner acceptance only; no new qualification inferred by data assembly",
+    "original_restored": true
+  },
+  "provenance": {
+    "source_freeze": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v2_gui_support_source_freeze_20261105\\source-freeze.zip",
+      "sha256": "A40BB40B99422D9898B1618B05C6848D48715B0302BE1A8DFC8BD4EB9F834CCB"
+    },
+    "restoration": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\restoration-final-complete.json",
+      "sha256": "5A870E95C361E6517ED75F853B25B7F1A7521D5CCFF897A5D923CF8BBF18EAF9"
+    },
+    "lease": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\owner-final\\lease.json",
+      "sha256": "DC7C1996185EE5F5E3B9E87A7476B663756AC16111CFC73AAB3E659E615A10D7"
+    },
+    "boot_reused_from": "1.0.0.238",
+    "fused_scope": "Direct merge of checked components; no new whole-image hardware claim"
+  },
+  "installer_or_publication": false
+}

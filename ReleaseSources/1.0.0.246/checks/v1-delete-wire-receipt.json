@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T22:17:49.224703+00:00",
+  "finished_utc": "2026-11-05T22:17:50.426023+00:00",
+  "seconds": 1.1995472999988124,
+  "scope": "Actual frozen wire engine and storage headers with RAM sector I/O; no firmware/app build or hardware",
+  "source_inputs": [
+    {
+      "path": "np_store_v2.h",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2.h",
+      "sha256": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA"
+    },
+    {
+      "path": "np_store_v2_delete.h",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete.h",
+      "sha256": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71"
+    },
+    {
+      "path": "np_store_v2_delete_wire.h",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete_wire.h",
+      "sha256": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18"
+    },
+    {
+      "path": "np_sd_fast_crc.h",
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_sd_fast_crc.h",
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B"
+    },
+    {
+      "path": "fixture.c",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\wire_fixture.c",
+      "sha256": "0B70AA7970165E307AC1A181F33307972695FAC8D2907FFC4FBE0FC075129FB7"
+    },
+    {
+      "path": "card_fixture.inc",
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\card_fixture.inc",
+      "sha256": "A3D6C178F253818B32954336BAB6807604ADCE4BF05458FD2893393FB1F0D9F0"
+    }
+  ],
+  "result_sha256": "013CD503A277894138558C0D7DDB84F1562A9F8511A7E6C42960ED798723B6E3"
+}

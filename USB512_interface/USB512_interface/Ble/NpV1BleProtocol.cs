@@ -36,6 +36,7 @@ namespace CE32_console {
   // Versioned V1 filesystem, not the V2 logger board or payload format.
   internal const uint StoreV2=0x02000000,StoreV2Selected=0x04000000;
   internal const uint CompactPreview=0x08000000;
+  internal const uint TransactionalDelete=0x10000000;
   internal static bool HasReadOnlyCatalog(NpSdStatus s){return s!=null&&(s.Flags&CatalogReadOnly)!=0&&(s.Flags&16)==0&&s.Start==0&&s.Capacity>8192;}
   internal static bool IsMedia(NpSdStatus s){return s!=null&&s.Mask==0&&s.Hz==0&&(s.Flags&(MediaCapability|MediaSelected))==(MediaCapability|MediaSelected);}
   internal static bool TheoreticalMode(uint mask,uint hz){
@@ -259,6 +260,12 @@ namespace CE32_console {
   internal byte[] Data;
   internal ushort[] Channels,ValidMasks;
   internal uint[] TickOffsets;
+  internal double PreviewHz{get{return Stride==0?0:Hz*780.0/Stride;}}
+  internal static bool ValidStride(uint hz,uint band,uint stride){
+   if(!NpV1BleProtocol.TheoreticalMode(1,hz)||band>1)return false;
+   if(band==0)return stride==((hz+499)/500)*780;
+   return stride==((hz+5999)/6000)*9360 || stride==Math.Max(1U,hz/6000)*9360;
+  }
   int received;
   internal NpV1PreviewBurst(uint id){Id=id;}
   internal static byte[] Request(uint id,uint kind,uint probe,uint channel,uint phase,uint session,uint band){
@@ -298,7 +305,7 @@ namespace CE32_console {
    if(kind==5)return AcceptCompact(b,session,hz,probe,band,channel,first,range,stride,dropped);
    if(session==0||probe<1||probe>3||!NpV1BleProtocol.TheoreticalMode(1U<<(int)(probe-1),hz)||channel>=384||band>1||
       (kind!=0&&kind!=2)||total!=(kind==0?1560:160)||
-      stride!=(band==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))throw new IOException("Invalid V1 preview metadata");
+      !ValidStride(hz,band,stride))throw new IOException("Invalid V1 preview metadata");
    if(kind==2){ValidMask=(uint)at;if(ValidMask==0)throw new IOException("Empty preview");at=0;}
    if(Data==null){if(at!=0)throw new IOException("Missing preview beginning");Data=new byte[total];Session=session;Hz=hz;
     Probe=probe;Kind=kind;Band=band;Channel=channel;FirstTick=first;Stride=stride;Dropped=dropped;}
@@ -312,7 +319,7 @@ namespace CE32_console {
    if(Data!=null||NpSdGeometry.U(b,220)!=NpSdControl.Crc(b,220)||session==0||probe<1||probe>3||
       !NpV1BleProtocol.TheoreticalMode(1U<<(int)(probe-1),hz)||band>1||channel>=384||range!=((128U<<16)|16U)||
       count<1||count>4||NpSdGeometry.U(b,204)!=1||NpSdGeometry.U(b,208)!=0||NpSdGeometry.U(b,212)!=0||NpSdGeometry.U(b,216)!=0||
-      stride!=(band==0?((hz+499)/500)*780:((hz+5999)/6000)*9360))throw new IOException("Invalid compact V1 preview metadata");
+      !ValidStride(hz,band,stride))throw new IOException("Invalid compact V1 preview metadata");
    var channels=new ushort[count];var masks=new ushort[count];var offsets=new uint[count];uint any=0,period=band==0?780U:9360U;
    for(int i=0;i<4;i++){
     ushort ch=BitConverter.ToUInt16(b,160+i*2),mask=BitConverter.ToUInt16(b,168+i*2);uint offset=NpSdGeometry.U(b,176+i*4);

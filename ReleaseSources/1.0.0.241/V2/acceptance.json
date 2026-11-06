@@ -1,0 +1,160 @@
+{
+  "status": "accepted",
+  "family": "V2",
+  "uid": "001A0004434250062039314E",
+  "app_crc32": "99CC44F9",
+  "usb_crc32": "EDEB6C3A",
+  "boot_crc32": "6408DBB8",
+  "boot_hex": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_recovery_only_6408DBB8_20261012.hex",
+  "original_restored": true,
+  "restoration_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\restoration-final-complete.json",
+  "restoration_sha256": "5A870E95C361E6517ED75F853B25B7F1A7521D5CCFF897A5D923CF8BBF18EAF9",
+  "lease_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\owner-final\\lease.json",
+  "lease_sha256": "DC7C1996185EE5F5E3B9E87A7476B663756AC16111CFC73AAB3E659E615A10D7",
+  "qualified_usb_detector_counts": [
+    1,
+    2
+  ],
+  "qualified_sd_detector_counts": [
+    1,
+    2
+  ],
+  "closed_loop_scope": "Existing checked 3P20k, P2ADC0/1, Ripple6 qualification inherited unchanged; no new CL mode or preview coexistence admitted",
+  "usb_sensor_summary": "Post-SDInfo E66410.368s 3P20k/CLoff:8088of8088NPblocks,12940validscheduledIMUrows; nativeAG199.08/MAG99.54Hz,zeroNP/grid/queue/scheduler/errors. EDEB changesonlyidleA1/A7 cachehandoff; exact NP/IMU/CLobjects andcaptureaddresses retained.",
+  "firmware": {
+    "app_body": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\build-r7\\application.bin",
+    "app_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\build-r7\\application.manifest.bin",
+    "app_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_spi_selected_detectors_20261104\\build-r7\\V2_APP_SD_QUEUE_CANDIDATE.hex",
+    "app_body_sha256": "1F715FBA5B54DE189A28A709D3C0453A318749141A2B1EC76E70065545FD6157",
+    "usb_body": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\build-r4\\application.bin",
+    "usb_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\build-r4\\application.manifest.bin",
+    "usb_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_gui_support_fix_20261105\\build-r4\\V2_USB_GUI_SUPPORT_CANDIDATE.hex",
+    "usb_body_sha256": "F7EFBE2ACB13CA00F7BF6768EE858963510996F09D6ED22FA509E99C9C16B181",
+    "usb_manifest_sha256": "CEC7DACBB85273E590B205BE278950419EDE8DBD540E454F8FAC9A6301D30BA9",
+    "usb_hex_sha256": "FDC0E16303AD40C301815A4830B011A2C0347C19C3A458B31990FCDC7FAF898B"
+  },
+  "host_tested_version": "1.0.0.240",
+  "host_sha256": "BD0416D30E53946B65380D8F925AE002C277D9C835D22F6A59598D1675F26ECD",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "sdinfo": {
+    "streaming_hil_crc": "E664B82A",
+    "download_hil_crcs": [
+      "E664B82A",
+      "EDEB6C3A"
+    ],
+    "ready": true,
+    "same_card_strict": true,
+    "commands": "A5IN384/A6OUT0seq16 cap20000; legacy4B4Cretained",
+    "reuse": "SDInfo functions unchanged by EDEB idle-cache exception; final2192nativechecks includebothpaths"
+  },
+  "quality": {
+    "outcome": "completed",
+    "validated_bytes": 159283200,
+    "blocks": 305,
+    "seconds": 10.0132406,
+    "MB_s": 15.907257836189416,
+    "scope": "Read-only SD-backed data + header/sequence/CRC"
+  },
+  "sd_job": {
+    "session": 407228873,
+    "start": 36462592,
+    "end": 37183994,
+    "probe_mask": 7,
+    "hz": 20000,
+    "seconds_requested": 10,
+    "np_blocks": 7816,
+    "verified_bytes": 365163520,
+    "neural_gaps": 0,
+    "maximum_neural_gap_ms": 0,
+    "maximum_write_ms": 25,
+    "mean_write_ms": 5.890625,
+    "maximum_service_ms": 9,
+    "imu_rows": 12506,
+    "imu_observed": 12506,
+    "imu_queue_dropped": 0,
+    "imu_scheduler_missing": 0,
+    "imu_known_accepted_unsaved": 0,
+    "imu_source_window_verified": false,
+    "imu_final_slot_known": false,
+    "submit_count": 1,
+    "readback": "Actual240 RefreshTerminal/FreshReport then Verify of SAME completed ticket; no second Start",
+    "initial_adapter_failure": "Original helper omitted terminal refresh; nullable current-card facts failed beforepayloadread. Original failure retained; adapter corrected, not firmware re-recorded."
+  },
+  "delete_last": {
+    "status": "PASS",
+    "operation": "Actual240 guarded inspect/echo/delete; only own new verified COMPLETE session",
+    "before_count": 23,
+    "after_count": 22,
+    "previous_recordings_preserved": 22,
+    "frontier_restored": 36462592,
+    "no_format": true,
+    "payload_erase": false
+  },
+  "native": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v2_gui_maintenance_native_20261105\\receipt.json",
+    "sha256": "2BA1BDEC2EEF0909DF2A5A551FCE71375FB300BE2063E9D4B462728BBC0E4D0A",
+    "checks": 2192,
+    "immutable_crc_snapshots": 671
+  },
+  "source_freeze": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v2_gui_support_source_freeze_20261105\\source-freeze.zip",
+    "sha256": "A40BB40B99422D9898B1618B05C6848D48715B0302BE1A8DFC8BD4EB9F834CCB"
+  },
+  "evidence": {
+    "sdinfo-r3-stream/sdif384.bin": "35CE46947D21465461B51379520728BFAEA4A82A37AC8BF42F167C57F01EF470",
+    "sdinfo-r3-download/sdif384.bin": "E946BC8EF0C7138D813CB2ACD83F662245D5D5C3B19FDD2A6E6FF873ED560E06",
+    "sdinfo-final-download/sdif384.bin": "2FDEBD56FE6BB2E8211FAAE3195594CEF55775E6423BBF7F25DA01F148A18E9F",
+    "quality-final/result.json": "C46533FB2E18922CF635AD34839867DE60B776142B0DEF96BB67CFF23E40520F",
+    "inspect-final-after-quality/receipt128.bin": "692329F969362E3A50478E54DEB74FB0E15EBD7A60DCA68EA7A53619C4464D57",
+    "a1-final-after-catalog/a1-inspection64.bin": "541BEB798AFC8C74888DDC10A9AFCE06A7AE1CD443D8601F3DEDBB1272D6D983",
+    "sd-job-final/before256.bin": "71351ED6E1E5481DCAA58CFEDE0222020113F06F615B3E94AA9FADB78B9C893B",
+    "sd-job-final/request128.bin": "62D28699347FD76CE01A56AA69978EFA34EE1DCCF212E81BB1D7EC9C5E6C070C",
+    "sd-job-final/after256.bin": "EAF0680EAC985799CC3ED45828043AEEE504754B4EA51926077866F611484EEE",
+    "sd-job-final/result.json": "D4BD2C7D869DEB076E179973BDCD59205DFEBDA4EB422EFD3D516A74B6CC16C0",
+    "sd-job-final-readback/fresh-after256.bin": "D2952FF8831D8D141E6D81CF4461B2C1AC74A5D542A3A86E2DCA52970E115311",
+    "sd-job-final-readback/result.json": "420C46EF8EFAA8211C77A228F1183FD8D75A14D458052914C9278D42C17E12A0",
+    "sd-job-final-readback/own-verified.json": "C61FC013948F694E3D6C10B63E7AB89303815C098899D92EF2C1C30D9BF17E76",
+    "delete-own-final/confirmed128.bin": "E480CB9FFAEAA1804698E2359C6AB75D0649AF1CC9EA82864DE2E6FE1FE0299C",
+    "delete-own-final/complete128.bin": "3AAD4B7CF4F4F4B3AD60CDB37A5BA245104126AFD6D85419535FE2CCC99F1732",
+    "delete-own-final/preserved.json": "F85269E7458CF096EBFBD6A0990CDCE03896DE3C048E9E099BEFFB644AD1B584",
+    "final-idle-inspection-before-restore/receipt128.bin": "3136E044270F2F734993235EFEDD7D23290C2BAB696FA1E970501EF17A80318F",
+    "post-sdinfo-usb-cl0/quality.json": "A582ACDF2F8EC2BEDAA35D3C97F02F6EDC38E142E9A03767156F0F451FC75AA3",
+    "compact/post-sdinfo-usb-cl0/sensor-review.json": "7ABC1E10DAF83A848567E2B82FEC0BA00E1E4DB3E876207373A4E0D69C482CD3",
+    "compact/post-sdinfo-usb-cl0/cleanup.json": "C3581CC0FCC267AB0E7A97B5A00FE9107A6F087EE7EBBE5ACEB3C6B36DDD9C57",
+    "compact/post-sdinfo-usb-cl0/timestamp-cleanup.json": "E37299B550D7B91689E6EDF286D4BD8E54AC75C10E96199427FD74FDB20FB874",
+    "restoration-final-complete.json": "5A870E95C361E6517ED75F853B25B7F1A7521D5CCFF897A5D923CF8BBF18EAF9",
+    "owner-final/lease.json": "DC7C1996185EE5F5E3B9E87A7476B663756AC16111CFC73AAB3E659E615A10D7",
+    "build-r4/memory-proof.json": "1E3CED3A555E7BBE94A84787E04756C9094C4E7DB24169F9573259446B3ED3FE",
+    "build-r4/receipt.json": "808D0DEEF65008613D05DC02DD13AE563ABD9E3E38016878C9AEED1798749918"
+  },
+  "iterations": [
+    {
+      "crc": "0CDE584C",
+      "status": "local_unqualified_review",
+      "reason": "Postbuildreview tightened immutablepublication/precisejournalwhitelist/queryCIDproof beforeHIL; noflash"
+    },
+    {
+      "crc": "C7A2A84D",
+      "status": "local_failed_admission",
+      "reason": "Exact inherited GetRuntime stub returnsNULL; genericlegacy guard denied A6; no query accepted"
+    },
+    {
+      "crc": "E664B82A",
+      "status": "partial_pass_local",
+      "reason": "SDInfo/NPIMU/quality passed; A7 refused only completed idleprefetch cache; readonlyAPsnapshot provedallrealownersquiet; restoredbeforeofflinefix"
+    },
+    {
+      "crc": "EDEB6C3A",
+      "status": "accepted",
+      "reason": "A1/A7 clearonlycompletedcache.valid afterallphysical/ownershipguards atforegroundboundary; no activecancel/epoch/pipe reset; A2 staysstrict"
+    }
+  ],
+  "limits": [
+    "Bounded development checks, not endurance or a universal SD-card certification.",
+    "Existing retained IMU source-window/final-tail limits are explicit; SD source_window=False remainsFalse, no conversion-phase lock or all-tail claim.",
+    "Original22record catalog identities verified unchanged; only new own verified last entry removed logically via journal. No payload erase or format.",
+    "Host241 SDInfo wording-only identity delta is owned by root; actual control HIL used frozen240.",
+    "Prior published238 qualification reused for unchanged APP99 and exact recording/IMU/CLobjects; no CL-preview coexistence enabled."
+  ],
+  "completed_utc": "2026-11-05T20:08:14.006984+00:00"
+}

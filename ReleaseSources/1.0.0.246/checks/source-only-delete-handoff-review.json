@@ -1,0 +1,75 @@
+{
+  "status": "SOURCE_REVIEW_COMPLETE_CENTRAL_CALLER_FIX_COVERS_SCOPED_HANDOFFS",
+  "scope": "Read-only caller/admission analysis; no product edits, firmware/native build, hardware access or agents. Current wrapper implemented by owner during review, distinct from prior BFD45 inline fix.",
+  "inputs": {
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\stream.c": "C82F218CB428A42DA2CED393FE095E139BAFF34D68D95A8224689FBD37EFE674",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\delete.inc": "8D6D48E48B5B48DB840714FA3732B5D5252790045A17EE0466DE3172888BBBB9",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\format.inc": "5B537C770096BBD7785B36AA8441BC3D177997180327098461A987D15AB122C5",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\np_sd_info_v1_service.inc": "3ED6D242B738DB8AACABCFE1E21217B6CCA895D496698F27611663134D3E736A",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\np_sd_info_v1_port.inc": "96C27DB0F8EE0465E8E91B6570D1F8E9DD07D4489C0BFD7EAC769AD47DC94170",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\modes.inc": "6337E458EF01B9742C3E1329ECE5350DFA3A8451F7C44A14F2AD5B1D8495821B",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete_wire.h": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\np_usb_backend.inc": "007C1E5615FBE2AE1EDA0EBFEECA81785FBB3E6AB735B39FDA8E0E0C6B8AB537",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_usb_sd_reset.inc": "35F963092B0307148B72FDFAD5ADE420F9C9F785BE3E026C23A9A1C4ABE35E9C",
+    "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_usb_sd_job_platform.inc": "701BE900CDC0317D0C06488D3D28D51C5E13187212602274D191C1DF2B9D90D6",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Src\\np_sd_read_crc.inc": "7820B17214BF0CFE5AD70F29D4BA11F6F88F23B909D72BDD076E2B7644A6DFA7",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\main.c": "4E6C4744ECF90478B1927C83E1A85F4E82BB2D41C9C868DDE9604420E5BC303D"
+  },
+  "historical_diagnosis": {
+    "reviewed_delete_sha256": "BFD45B25B355DCA258D03665928E55636948562394C918C0BDF61AF943F8175F",
+    "covered": "Common queued op1/op2 fresh initializer retirement only.",
+    "residual": "Cold PrepareDownload, both SDInfo init/restore callers and explicit0x68 reset still received successful initializer tuningREAD context. Cold clock_begin could wait for optional job observation or production fused bulk reads to clear it."
+  },
+  "current_common_fix": {
+    "source_lines": "stream.c2989-2999",
+    "real_initializer_once": "The wrapper calls the real external NP_USB_ReinitializeSd before the macro is defined; no recursion.",
+    "successful_only": "if(result)return result; only original initializer success reaches matching retire(READ_SINGLE). Failed/foreign/error/active contexts still refuse.",
+    "scope": "Local macro precedes exact included backend,modes/reset,format,SDInfo,delete sources; there is no undef. No generic clock_begin relaxation."
+  },
+  "callpath_matrix": [
+    {
+      "callpath": "Cold NP_USB_PrepareDownload -> clock_begin -> auto-recovery",
+      "review": "Initial successful tune read now retired by common wrapper; first clock_begin no longer depends on an unrelated read."
+    },
+    {
+      "callpath": "Queued op1 Inspect and op2 Delete -> reinit -> before/after CID/cap/epoch -> clock_begin",
+      "review": "Both share common wrapped initializer. Redundant inline retire removed in delete8D6D. Existing identity and physical guards unchanged."
+    },
+    {
+      "callpath": "SDInfo Board diagnostic initializer -> low-level read-only commands -> deinit -> final service initializer -> publish",
+      "review": "Both initializer calls covered by macro; final restore hands off ContextNONE or reports unavailable on wrapperfailure."
+    },
+    {
+      "callpath": "Explicit0x68 foreground reset -> reinit -> ready receipt",
+      "review": "Included reset uses wrapped initializer; no successful ready on retire failure."
+    },
+    {
+      "callpath": "Format identify -> sector write -> verify read",
+      "review": "Identify uses wrapped initializer; successful owned legacy HAL read uses matching retire. Successful format writes are followed by fixed verification read; no additional successful format-completion logical residue found."
+    },
+    {
+      "callpath": "Optional job PlatformObserve -> legacy identity/catalog reader",
+      "review": "np_v1_job_platform_read_sector uses fixed np_usb_format_read. Former masking read remains safe but is no longer needed to unblock initial recovery."
+    },
+    {
+      "callpath": "Production fused bulk reader",
+      "review": "stream defines FUSED_CRC1; exact fused cleanup ends ContextNONE after physical retirement. Nonfused HAL fallback is compiled out and is not inferred qualified."
+    },
+    {
+      "callpath": "Own delete read/write and clock_end",
+      "review": "Each successful HAL command reaches exact retirement; failure does not replay or blanket-clear. Clock_end restores only after ContextNONE retirement; failed accepted drain remains held."
+    }
+  ],
+  "clock_begin_callsite_count": 2,
+  "remaining_concrete_caller_gap_found": false,
+  "focused_check_requirements": [
+    "Cold initializerHAL_OK/READY/READ_SINGLE/Error0/quiet must lead to auto_checked without optional job or host read.",
+    "Common queued op1 AND2 must accept successful initializerREAD_SINGLE orNONE; original failure, foreignREAD_MULTI/WRITE context, ErrorCode, activeDPSM/CPSM/BUSYD0/DTEN/IDMA must fail without clear/mutation or clock release.",
+    "Exercise SDInfo final restore and explicit0x68 through actual wrapper or exact caller extraction to show readiness is withheld on failedretirement.",
+    "Retain strict clock_begin/clock_end, no epoch/pipe reset or write replay. Existing own read/write/legacyread tests reusable for unchangedbytes."
+  ],
+  "limitations": [
+    "Source review only. Actual native/HIL qualification belongs to owner; no PASS inferred from source coverage.",
+    "Historical C9 stack/IRQ evidence does not automatically prove new wrapper build maximum; owner should reuse updated linked callgraph and applicable scope."
+  ]
+}

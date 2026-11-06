@@ -1,5 +1,13 @@
 # Recording validation during development
 
+2026-11-05: crash-safe V1 USB/BLE Delete Last development and its scoped
+acceptance are recorded in [V1 Delete Last](V1_DELETE_LAST_20261105.md).
+
+2026-11-05: app241 SD Info/maintenance/preview implementation completed its
+focused V1/V2 development checks and restoration. Exact conditions, reused
+evidence and remaining limits are in
+[GUI support implementation](GUI_SUPPORT_IMPLEMENTATION_20261105.md).
+
 Revised 2026-10-29. The developer runs this checklist with changes to recording, clocks, sensors, storage or transport. This is development acceptance. UI-only changes use relevant software/control checks without an incidental hardware recording.
 
 Select affected families, modes and claims once. Complete implementation, one incremental build, focused checks and applicable bounded recordings as one authorized work package. Reuse evidence for unchanged bytes and conditions. V1 and V2 source/build/analysis run concurrently with separate owners/outputs; hardware retains existing leases and isolation.

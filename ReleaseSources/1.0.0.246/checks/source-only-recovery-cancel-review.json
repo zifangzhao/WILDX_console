@@ -1,0 +1,28 @@
+{
+  "status": "CONCRETE_SOURCE_GAP_CONFIRMED",
+  "scope": "Read-only final019438C8 lineage cancellation/recovery seam only. No product edits, build, tests or hardware actions. Owner current cut HIL must not be interrupted.",
+  "inputs": {
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\stream.c": "C82F218CB428A42DA2CED393FE095E139BAFF34D68D95A8224689FBD37EFE674",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\delete.inc": "8D6D48E48B5B48DB840714FA3732B5D5252790045A17EE0466DE3172888BBBB9",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete_wire.h": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete.h": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71"
+  },
+  "sequence": [
+    "delete.inc10 reports owned when auto_running or clock_held.",
+    "stream.c4304/4327/4339 Reset/Disconnect/Suspend callback increments host epoch and invokes np_usb_delete_cancel for owned delete/recovery.",
+    "delete.inc75 -> wire.h58 sets cancelled1; queued host work is canceled when notrunning. auto recovery has no queued wire request, but its shared flag is still set.",
+    "delete.inc47 shared write rejects cancelled before each HAL command, including automatic recovery writes.",
+    "A HAL write already entered still completes and undergoes physical retirement; the bus callback does not cancel its accepted SD write. A later required CP/journal write is refused.",
+    "core delete.h151-159 recovery may need CP0/CP1 repair then both journal clears, so cancellation between those writes returns IO with durable journal authority retained.",
+    "delete.inc118 sets auto_checked1 even on error, then port_error1. No same-boot reset/retry of auto_checked exists in the reviewed sources. New inspect can clear wire.cancelled but does not schedule automatic recovery again."
+  ],
+  "effect": "Accepted durable-intent recovery can be prematurely stopped by host enumeration/reset while the device remains powered; it stays safely journal-recoverable on a later MCU boot, but the current boot does not automatically finish. This is not an abort of an active accepted HAL write.",
+  "fix_constraints": [
+    "Separate automatic validated-journal recovery from cancellation of host request intent; keep physical ownership/error/card guards unchanged.",
+    "Do not use auto_running alone as durable recovery proof: queued op1/op2 also set it before invoking wire service. A simple cancelled&&!auto_running gate would suppress pre-intent host cancellation too.",
+    "Retain cancellation before durable intent, exact confirmed card/source binding and normal unknown host outcome after bus change; no mutation replay of arbitrary unconfirmed requests.",
+    "After physical I/O error or unretired ownership, preserve HOLD; do not blindly retry an unknown accepted write."
+  ],
+  "minimal_targeted_check": "Actual automatic recovery with valid pending journal, inject Reset/Disconnect between required CP/journal writes; assert existing HAL command drains, remaining durable recovery completes independent of configured/host cancellation, and unconfirmed queued host delete still cancels without writes. No request for another hardware run from this reviewer.",
+  "limitations": "Source causal proof only, not a claim that the current physical cut run encountered this timing."
+}

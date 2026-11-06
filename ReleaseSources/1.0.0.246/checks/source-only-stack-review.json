@@ -1,0 +1,170 @@
+{
+  "status": "SCOPED_SOURCE_BOUND_NOT_A_FULL_SYSTEM_STACK_PROOF",
+  "scope": "Read-only C9DF45FE applicable NPS2 foreground callbacks and conditional idle interrupt additions; no builds, hardware actions, product edits or broad audit.",
+  "identity": {
+    "role": "usb",
+    "test_only": true,
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\USB_TEST_ONLY.hex",
+    "sha256": "F93BECCEBAD365F94F238D194F22A262EDDB172B22AA53C087406216872B9D4B",
+    "image_crc32": "C9DF45FE",
+    "body_bin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\USB_body.bin",
+    "body_bin_sha256": "115B860F5663C938784D6BB817F4062E2DCA071824853681813D41E73A965EC8",
+    "slot_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\USB_manifest.bin",
+    "slot_manifest_sha256": "783E8D1ACC6FEEC21C66654A9BE9AB8965F776B915B9AFD025CB6A5306D9C054",
+    "manifest_address": 135782400,
+    "body_address": 135790592,
+    "hardware_tested": false,
+    "published": false
+  },
+  "inputs": {
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\candidate.htm": "FB3588317ED71AD99886640F89C8228DCF11173EF5611BA4A90271BE83B68DEB",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\candidate.map": "B15678A551DC1E7982D24D3357A7766023FDD5BBB0EAAC7FBF1F599A5B4A63D9",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\receipt.json": "18DFD1EBB80E32F7DCFE292BA36F7952B570628666A5713F86B04DA40B90989C",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\delete.inc": "8D6D48E48B5B48DB840714FA3732B5D5252790045A17EE0466DE3172888BBBB9",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2.h": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete.h": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete_wire.h": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18"
+  },
+  "stack": {
+    "allocated": 8192,
+    "base": "0x20019710",
+    "top": "0x2001B710",
+    "foreground_chain": [
+      {
+        "main": 64
+      },
+      {
+        "XE_NP_UsbStream_Service": 656
+      },
+      {
+        "nps2_delete_wire_service": 528
+      },
+      {
+        "nps2_delete_recover": 2440
+      },
+      {
+        "nps2_delete_inspect": 1488
+      },
+      {
+        "nps2_delete_records_match": 48
+      },
+      {
+        "nps2_delete_read_record": 1104
+      },
+      {
+        "np_usb_delete_read": 40
+      },
+      {
+        "HAL_SD_ReadBlocks": 56
+      },
+      {
+        "SDMMC_ConfigData": 8
+      }
+    ],
+    "foreground_bytes": 6432,
+    "remaining_before_exceptions": 1760
+  },
+  "callback_resolution": {
+    "read": "np_usb_delete_read max104 B; direct resolved critical chain already includes it.",
+    "write": "np_usb_delete_write max104 B; direct resolved; not cumulative with read.",
+    "mount_read": "nps2_mount_raw own1064 plus actual read104 =1168 B, less than records_match1256 B child already dominating inspect.",
+    "publish": "Single supplied target np_usb_delete_publish masks PRIMASK and memcpy128; inlined (no final symbol); copies are <=8 B runtime child already within wire_service frame. Does not invoke filesystem or recurse.",
+    "runtime_memclr": "Actual final aliases start MOV.W r2,#0; __aeabi_memclr4/8 falls through to _memset_w; unaligned alias tail-branches. _memset_w linker own/max4 B and binary single PUSH{LR}/POP LR. These small leaves do not raise the critical chain.",
+    "raw_runtime_bytes": {
+      "0x81809dc": "4ff000020429c0f0128010f0030c00f01b80ccf1040cbcf1020f18bf00f8012ba8bf20f8022ba1eb0c0100f00db85feac17c24bf00f8012b00f8012b48bf00f8012b7047",
+      "0x8180a20": "4ff0000200b5134694469646203922bfa0e80c50a0e80c50b1f12001bff4f7af090728bfa0e80c5048bf0cc05df804eb890028bf40f8042b08bf704748bf20f8022b11f0804f18bf00f8012b7047"
+    }
+  },
+  "linked_irq_components": {
+    "OTG_HS_IRQHandler": {
+      "own": 0,
+      "max_known": 552,
+      "unknown_label": true
+    },
+    "HAL_PCD_IRQHandler": {
+      "own": 64,
+      "max_known": 552,
+      "unknown_label": true
+    },
+    "HAL_PCD_SetupStageCallback": {
+      "own": 120,
+      "max_known": 488,
+      "unknown_label": true
+    },
+    "HAL_PCD_DataInStageCallback": {
+      "own": 32,
+      "max_known": 328,
+      "unknown_label": true
+    },
+    "HAL_PCD_DataOutStageCallback": {
+      "own": 232,
+      "max_known": 344,
+      "unknown_label": true
+    },
+    "SysTick_Handler": {
+      "own": 0,
+      "max_known": 0,
+      "unknown_label": false
+    },
+    "TIM5_IRQHandler": {
+      "own": 0,
+      "max_known": 0,
+      "unknown_label": false
+    },
+    "USART1_IRQHandler": {
+      "own": 8,
+      "max_known": 576,
+      "unknown_label": true
+    },
+    "SDMMC1_IRQHandler": {
+      "own": 0,
+      "max_known": 48,
+      "unknown_label": false
+    },
+    "TIM6_IRQHandler": {
+      "own": 192,
+      "max_known": 192,
+      "unknown_label": false
+    },
+    "I2C5_EV_IRQHandler": {
+      "own": 0,
+      "max_known": 0,
+      "unknown_label": false
+    },
+    "I2C5_ER_IRQHandler": {
+      "own": 0,
+      "max_known": 40,
+      "unknown_label": false
+    },
+    "I2C6_EV_IRQHandler": {
+      "own": 0,
+      "max_known": 0,
+      "unknown_label": false
+    },
+    "I2C6_ER_IRQHandler": {
+      "own": 0,
+      "max_known": 40,
+      "unknown_label": false
+    }
+  },
+  "conditional_examples": [
+    {
+      "assumptions": "Foreground + one USB IRQ + SysTick; conservative108 B per exception (extended104 B + alignment4). IRQ known path552; no unbounded indirect target admitted.",
+      "bytes": 7200,
+      "margin": 992
+    },
+    {
+      "assumptions": "Foreground + USB552 + USART1 RX576 + SysTick + TIM5 all nested; four conservative108 B exception frames. More pessimistic than some equal-priority configurations.",
+      "bytes": 7992,
+      "margin": 200
+    }
+  ],
+  "known_exclusions": "Delete service explicitly disables SDMMC1 IRQ before queued operation. NP/SPI/DMA ownership must be quiet by admission; no healthy recording activity is assumed concurrent.",
+  "remaining_unknowns": [
+    "This source-only review did not establish the actual runtime NVIC enable/priority grouping and all simultaneous/nested idle interrupts. Therefore neither linker6432 nor the conditional examples prove full system worst-case stack.",
+    "I2C_EV function-pointer dispatch and any TIM6/sensor/camera activity must be separately excluded or accounted if enabled during metadata. TIM6 would add own192 + exception108 B beyond the strongest example, so that example would exceed8192.",
+    "Asynchronous faults/NMI/TrustZone exception policy and stack corruption outside the scoped well-formed path are not bounded by this normal idle analysis.",
+    "Runtime high-water/canary evidence can corroborate the tested condition but cannot replace a static all-input/nesting proof."
+  ],
+  "conclusion": "8192 B repairs the concrete4096 B vs6432 B foreground mismatch. Applicable filesystem callbacks do not increase6432. Full all-interrupt stack sufficiency remains conditional, not proven by the compiler unknown label."
+}

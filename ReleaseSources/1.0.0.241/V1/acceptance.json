@@ -1,0 +1,164 @@
+{
+  "status": "accepted",
+  "family": 1,
+  "uid": "001D00065942500B20313354",
+  "app_crc32": "D05473D6",
+  "usb_crc32": "71AE291B",
+  "pair": {
+    "app": {
+      "role": "app",
+      "test_only": true,
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-app\\APP_TEST_ONLY.hex",
+      "sha256": "297B96BBDC1871A55B7EF9304C8E6E159160E303D77CE8936F4187016729130A",
+      "image_crc32": "D05473D6",
+      "body_bin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-app\\APP_body.bin",
+      "body_bin_sha256": "FBDC333AA6B816FF35F28F9C9892A53E1D7EAEF0AF311D2C338C0DEAB625D902",
+      "slot_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-app\\APP_manifest.bin",
+      "slot_manifest_sha256": "A27FB60CEB4DFD9F7654AECC94AB7CF6D76174C2E7ECFE74370B0BB2D16C685B",
+      "manifest_address": 134340608,
+      "body_address": 134348800,
+      "hardware_tested": false,
+      "published": false
+    },
+    "usb": {
+      "role": "usb",
+      "test_only": true,
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-usb\\USB_TEST_ONLY.hex",
+      "sha256": "FBDC9C54593FC740B5E4C39F17C7343E21503D33A75E00C1FE83BEF562988D25",
+      "image_crc32": "71AE291B",
+      "body_bin": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-usb\\USB_body.bin",
+      "body_bin_sha256": "DAAC6D8FCE6938568AFF88EF9FFE1D9F529EDD17048CA5F9D318E00EB59950B9",
+      "slot_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-usb\\USB_manifest.bin",
+      "slot_manifest_sha256": "22D2D785BE07E9AE4D50169BA0966948E17C8377B900766FFD689EC78D9044CB",
+      "manifest_address": 135782400,
+      "body_address": 135790592,
+      "hardware_tested": false,
+      "published": false
+    }
+  },
+  "host_version": 240,
+  "host_sha256": "BD0416D30E53946B65380D8F925AE002C277D9C835D22F6A59598D1675F26ECD",
+  "original_restored": true,
+  "restore_receipt": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\bench\\restoration-complete.json",
+    "sha256": "A1D49266D562F64286D9BFF676797F55191C777D1462DF752218677B9C5D8A6A"
+  },
+  "lease_receipt": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\owner\\lease.json",
+    "sha256": "3B1F76F1DBB519F8A400E904F421DF0C1E847464828A7244655D3DCE0C3ECC00"
+  },
+  "sd_info": {
+    "status": "PASS",
+    "scope": "Actual GUI ReadCard A6/A5 cold and after ordinary completed bulk read; sameCID/capacity, sequence1/2, Error0, Flags15, idleRole3 restored; post-query30s USB NP/IMU capture passed",
+    "capability": "0x20000",
+    "in_request": "0xA5 IN384",
+    "refresh_request": "0xA6 OUT0",
+    "refresh_role": 3,
+    "delete_last_supported": false,
+    "delete_capability_advertised": false
+  },
+  "preview": {
+    "offered_hz_per_channel": 625,
+    "offered_uart_8n1_bps": 89062.5,
+    "stream_wall_seconds": 30.265609599999998,
+    "packets": 1176,
+    "delivered_rows_per_channel": 18816,
+    "delivered_hz_per_channel": 621.6957216021184,
+    "source_span_hz_per_channel": 625,
+    "source_first_tick": 10324686,
+    "source_end_tick": 362560206,
+    "source_gaps": 0,
+    "source_gap_ticks": 0,
+    "source_missing_rows": 0,
+    "source_max_gap_ms": 0,
+    "max_host_packet_interval_ms": 76.43320000000031,
+    "out_of_order": 0,
+    "explicit_valid_samples": 37632,
+    "explicit_invalid_samples": 0,
+    "device_dropped_max": 0,
+    "lease_renewals": 23,
+    "errors": [],
+    "gap_free": true
+  },
+  "preview_source_oracle": {
+    "result": "PASS bounded first/middle/last actual raw10 comparisons",
+    "source_format": 6,
+    "packets_selected": [
+      0,
+      588,
+      1175
+    ],
+    "matches": 96,
+    "explicit_missing": 0,
+    "physical_blocks": 16,
+    "retained_bytes": 1048576,
+    "scope": "Three compact packets; exact source bits, no repaired/rephased data; full recording NP/IMU checked by production export separately"
+  },
+  "usb_recording": {
+    "status": "PASS_SCOPED",
+    "rate_hz": 15000,
+    "probe_mask": 3,
+    "detectors": 0,
+    "minimum_observed_seconds": 25,
+    "observed_slots": 37896,
+    "missing_slots": 1,
+    "np_relative_phase_qualified": true,
+    "source_window_verified": true,
+    "native_ag_hz": 199.39965694682675,
+    "native_mag_hz": 99.97690302570363
+  },
+  "sd_recording": {
+    "status": "PASS",
+    "rate_hz": 15000,
+    "probe_mask": 3,
+    "detectors": 0,
+    "chunks": 11920,
+    "lossless": true,
+    "firmware_losses": 0,
+    "sensor_queue_overflow": 0,
+    "grid_rows": 39111,
+    "grid_observed": 39110,
+    "grid_missing": 1,
+    "grid_errors": 0,
+    "source_window_verified": false,
+    "rtc_np_local_interval_width_us": 110,
+    "native_ag_hz": 199.39895776719206,
+    "native_mag_hz": 99.66745539425722
+  },
+  "unchanged_closed_loop_qualification": {
+    "parent_receipt": "C:/Frank/Code/XE_NP/_artifacts/v1_usb_sensor_media_20261105/accepted.json",
+    "parent_sha256": "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201",
+    "counts": [
+      1,
+      2
+    ],
+    "profile": "15kHz/two probes",
+    "scope": "Unchanged CL source/kernel/ownership/buffers; current physical preview test CLoff; host now explicitly prevents preview/CL coexistence. No fresh1/2-detector rerun claimed."
+  },
+  "source_zip": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\source-freeze-candidate.zip",
+    "sha256": "C76D37DA7057A0B13EABD7DDBFD9813D06D57F1404F41FF21FDB12C5AD5C1B0C"
+  },
+  "final_closure": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\source-freeze-final.zip",
+    "sha256": "7FC02B7EFE10637B4038D2B9EE8A3C2AD1F2C99218DD08982DF450CB73BDBBC6",
+    "bytes": 1906934
+  },
+  "app_xenp": {
+    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\build-app\\APP_TEST_ONLY.xenp",
+    "sha256": "8E2C6773121338D4E26964B0E0A802B32A913E444FC8278021FBE95D4F7CD28C"
+  },
+  "cleanup": {
+    "removed_bytes": 1554628996,
+    "fixture_bytes": 198912
+  },
+  "limits": [
+    "Physical preview qualification is two LFP channels0/24 onP1 at15kHz/two-probe SDrecording for30.27s; other rates have native metadata/parser checks, not this physical run.",
+    "V1 USB lossless=False startup label and unequal startup retained extents remain recorded; no midstream NP gap/frame/counter/relock/drop observed.",
+    "Both grids retain one unavailable initial slot; SD native startup has5AG/7MAG unavailable snapshots; primary observed slots are valid/errorfree.",
+    "SD source_window=False and no final scheduled-slot marker mean terminal tail completeness remains unknown; not relabeled.",
+    "RTC-to-NP local bound110us excludes independent PC/network calibration uncertainty; native sensor conversion/filter phase not attested.",
+    "V1 FS2 USB DeleteLast remains unavailable; no filesystem-generation semantics changed. No format/delete performed; one bounded completed SD test session remains on card.",
+    "No installer, publication or new camera/audio performance claim is part of this work."
+  ]
+}

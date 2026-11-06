@@ -1,0 +1,3424 @@
+{
+  "status": "SOURCE_FROZEN_ACCEPTANCE_RECORDED_SEPARATELY",
+  "app_crc32": "4A677F83",
+  "usb_crc32": "019438C8",
+  "files": [
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_sd_fast_crc.h",
+      "archived": "inputs/0000-np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2.h",
+      "archived": "inputs/0001-np_store_v2.h",
+      "bytes": 12976,
+      "sha256": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete.h",
+      "archived": "inputs/0002-np_store_v2_delete.h",
+      "bytes": 14507,
+      "sha256": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete_wire.h",
+      "archived": "inputs/0003-np_store_v2_delete_wire.h",
+      "bytes": 4446,
+      "sha256": "507BCC48738E08DB772F03A1311C4E1E362DE64C487D3E467711EF91523A0D18",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\smoke.c",
+      "archived": "inputs/0004-smoke.c",
+      "bytes": 1098,
+      "sha256": "980A0C0FEEDC04A882CFFF1BEB4841FD1CDACD067BD43C450F53F5856EF4163B",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\control.inc",
+      "archived": "inputs/0005-control.inc",
+      "bytes": 28238,
+      "sha256": "A5D18A32CFD4C819DA9B91BF49BFFD99EF75D249EF1711E98E300FFC6ACA0DF4",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\delete.inc",
+      "archived": "inputs/0006-delete.inc",
+      "bytes": 2732,
+      "sha256": "6CB3D55E71395D5C862AC867D1213ADC58CAC29F4FB44670DDF159F83F965F4D",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\firmware.inc",
+      "archived": "inputs/0007-firmware.inc",
+      "bytes": 61815,
+      "sha256": "2A7049564D262EC53B7DB88680AEC2EDD8F6485A5B9B75601F27A812D64EE689",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\np_ble_preview.h",
+      "archived": "inputs/0008-np_ble_preview.h",
+      "bytes": 10874,
+      "sha256": "B1D1D79129D154899A03D0DCF0C26A1C97245B933FB33A9C75C60EF58C47EF01",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\np_ce64_firmware.inc",
+      "archived": "inputs/0009-np_ce64_firmware.inc",
+      "bytes": 6746,
+      "sha256": "94ABB2B1B52DAC902AA0F119EA369A1412A5C3FDA6F0F158DB9277B2DA858E11",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\np_sd_fast_crc.h",
+      "archived": "inputs/0010-np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\np_store_v2_adapter.inc",
+      "archived": "inputs/0011-np_store_v2_adapter.inc",
+      "bytes": 11414,
+      "sha256": "B88B6B1650BF701CEF65416D407C9587B67F675260788C5A7A55F3A875546F27",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\preview.inc",
+      "archived": "inputs/0012-preview.inc",
+      "bytes": 10965,
+      "sha256": "69496F13492575329B5899F05DCAC19B828AB6272CFD3F9E5275F97CAABA10E9",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\provider.c",
+      "archived": "inputs/0013-provider.c",
+      "bytes": 609157,
+      "sha256": "EF4C3E6849A449AE22B66CD12C96A68200DDC719118B54D028AA197573A1619C",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\app-source\\xe_np_online_impl.h",
+      "archived": "inputs/0014-xe_np_online_impl.h",
+      "bytes": 2678,
+      "sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\delete.inc",
+      "archived": "inputs/0015-delete.inc",
+      "bytes": 8343,
+      "sha256": "8D6D48E48B5B48DB840714FA3732B5D5252790045A17EE0466DE3172888BBBB9",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\format.inc",
+      "archived": "inputs/0016-format.inc",
+      "bytes": 5321,
+      "sha256": "5B537C770096BBD7785B36AA8441BC3D177997180327098461A987D15AB122C5",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\modes.inc",
+      "archived": "inputs/0017-modes.inc",
+      "bytes": 6139,
+      "sha256": "6337E458EF01B9742C3E1329ECE5350DFA3A8451F7C44A14F2AD5B1D8495821B",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\np_sd_info_v1_port.inc",
+      "archived": "inputs/0018-np_sd_info_v1_port.inc",
+      "bytes": 4592,
+      "sha256": "96C27DB0F8EE0465E8E91B6570D1F8E9DD07D4489C0BFD7EAC769AD47DC94170",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\np_sd_info_v1_service.inc",
+      "archived": "inputs/0019-np_sd_info_v1_service.inc",
+      "bytes": 4167,
+      "sha256": "3ED6D242B738DB8AACABCFE1E21217B6CCA895D496698F27611663134D3E736A",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\startup_stm32u595xx.s",
+      "archived": "inputs/0020-startup_stm32u595xx.s",
+      "bytes": 28192,
+      "sha256": "E662425EE20819A7A6CC0013568B35120C28A3C392724FEDA3C1972A59F3D2F9",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\stream.c",
+      "archived": "inputs/0021-stream.c",
+      "bytes": 184952,
+      "sha256": "C82F218CB428A42DA2CED393FE095E139BAFF34D68D95A8224689FBD37EFE674",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\xe_np_sd_info.h",
+      "archived": "inputs/0022-xe_np_sd_info.h",
+      "bytes": 3506,
+      "sha256": "890073F8ABA0685D32E44708CEE9A7E1ED7ADBC171350991B11C389427ADF67A",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\AcceptanceCurrentPins.cs",
+      "archived": "inputs/0023-AcceptanceCurrentPins.cs",
+      "bytes": 7860,
+      "sha256": "BAC7506F0314FE88918FE0976794F18F9D0E8958043FA43A3493CE62150A8315",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\EnforcedGrid226Evidence.cs",
+      "archived": "inputs/0024-EnforcedGrid226Evidence.cs",
+      "bytes": 30303,
+      "sha256": "660EFBF004101EC59785F155AB68DCBE944DF3359C05290D1DBF09A894BBA5D7",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\NpFirstSyncV1SdCurrent.cs",
+      "archived": "inputs/0025-NpFirstSyncV1SdCurrent.cs",
+      "bytes": 50534,
+      "sha256": "E4BE4E65127EEFC8444266C0EC917B063C158A3B2BFDFAD76865BFA01A069825",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\NpSdDownloadControl.cs",
+      "archived": "inputs/0026-NpSdDownloadControl.cs",
+      "bytes": 51302,
+      "sha256": "019717B2364E9A809EBD6508240F4A01E95265F6514B4174CB1E5B4C945747CE",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\VeeRecord.cs",
+      "archived": "inputs/0027-VeeRecord.cs",
+      "bytes": 50880,
+      "sha256": "C792D5374D6B0EF5C6C0299BFDEAC04E5F4D40ED416E0D63E54F49AAF596553C",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-harness\\Bench.cs",
+      "archived": "inputs/0028-Bench.cs",
+      "bytes": 17023,
+      "sha256": "1CB7A4E5F2425C7E9F5B673FF2755AEE995F91F59542AE92D7181AD86CA460A3",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-harness\\EnforcedGrid226Evidence.cs",
+      "archived": "inputs/0029-EnforcedGrid226Evidence.cs",
+      "bytes": 30303,
+      "sha256": "5FB3D57B9CC8663CBBBBF03013F9542021419FAF79A1A7C89D9FB474A43042FD",
+      "scope": "actual changed source or bounded HIL helper"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build_component.py",
+      "archived": "inputs/0030-build_component.py",
+      "bytes": 2873,
+      "sha256": "87AFB8C28B6401537D45E0995D349B9D273D64F8DF89F34D9E8C86C94B609F74",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build_ce32_app.py",
+      "archived": "inputs/0031-build_ce32_app.py",
+      "bytes": 2146,
+      "sha256": "F47C44DE8C1307AFC76891A1E54C8D9C43E29BDE4AAF1C2832A0973B7DCA6F71",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\seal_component.py",
+      "archived": "inputs/0032-seal_component.py",
+      "bytes": 1279,
+      "sha256": "3B8DCF2960FC4B40C4173679971275234F92934AB8A06EEC882D02F74609AECD",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\seal_stack.py",
+      "archived": "inputs/0033-seal_stack.py",
+      "bytes": 1847,
+      "sha256": "1CB8A4ACD4096DFADDDCA70B961D06E23B2019794D383B206F44FB60461BE5B8",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\stage_sources.py",
+      "archived": "inputs/0034-stage_sources.py",
+      "bytes": 1822,
+      "sha256": "C45F5B0C4317E4F312DFD01564CBDDDDF9AA16CA4150D15596F37094AD6BD3EE",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\source-preimages.json",
+      "archived": "inputs/0035-source-preimages.json",
+      "bytes": 3916,
+      "sha256": "2B7C4CCF69A327F8B2ACFC5E3EDC26B919FB2FCD80FAE3E275357CC8C9240D97",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\A7Bench.cs",
+      "archived": "inputs/0036-A7Bench.cs",
+      "bytes": 12713,
+      "sha256": "D888FC2CAAF7552BAF55E126B0604AE5E5B02D1F86FAB77514B8EAD01E112C46",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\arm_delete_cut.py",
+      "archived": "inputs/0037-arm_delete_cut.py",
+      "bytes": 4595,
+      "sha256": "6967BF536CB7BA207E862C749E596F7A3A68F6B98CB6727583AF9CD7C3026987",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\vee_control.py",
+      "archived": "inputs/0038-vee_control.py",
+      "bytes": 3348,
+      "sha256": "A7652F6DB9EA22D388702AF1C2A54768F249965D173FF43E212D08DFC70FF71F",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\replace_pair_r6_r12.py",
+      "archived": "inputs/0039-replace_pair_r6_r12.py",
+      "bytes": 5828,
+      "sha256": "B95468EF9F41B96C0263EC85750CB60ED70FC65BF06E6B051694F5703363E4BC",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\update_final_hil_inputs.py",
+      "archived": "inputs/0040-update_final_hil_inputs.py",
+      "bytes": 1443,
+      "sha256": "00571E2B32AEDFF5427E0C10BD3BE7A1C0B7631BEB2FD5D92BFA0E2C2A374AD7",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\pins.py",
+      "archived": "inputs/0041-pins.py",
+      "bytes": 1855,
+      "sha256": "44DBC7344267598E127DA6D2A757DFF9BD9AEAC05D86890D4F5A9FCABFCD7E07",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\helper-inputs.json",
+      "archived": "inputs/0042-helper-inputs.json",
+      "bytes": 2229,
+      "sha256": "916BCC5CA1097009A6B984B4BEEA32226012B9838E57A33B023920D3EA679A2A",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\matched-test-pair.json",
+      "archived": "inputs/0043-matched-test-pair.json",
+      "bytes": 1654,
+      "sha256": "0832A9C08141A96BD695B00136DA0C951354081615E6DEDFB671DF3C2759A7FB",
+      "scope": "exact build/staging/qualification recipe"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\receipt.json",
+      "archived": "inputs/0044-receipt.json",
+      "bytes": 21337,
+      "sha256": "79649027E7E6B06F284D359F59CFB3C018CF61308E4AD2AF04D993D2C8B53DB0",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\identity.json",
+      "archived": "inputs/0045-identity.json",
+      "bytes": 785,
+      "sha256": "8CF82A727A1E4B59DC96347AFAB269FC261B69B2758EADA1BE4840CFBBC021EF",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\candidate.lnp",
+      "archived": "inputs/0046-candidate.lnp",
+      "bytes": 7683,
+      "sha256": "8BBFA9D962B7BA7A06FB6C51943B147DE379ED020F4C559EC74B7512568E8716",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\candidate.sct",
+      "archived": "inputs/0047-candidate.sct",
+      "bytes": 1973,
+      "sha256": "47D92E79A0BFAF513B1F8544004A5AF2D5C4D459497244E42CA97D6E0CB91BD8",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\candidate.map",
+      "archived": "inputs/0048-candidate.map",
+      "bytes": 2167200,
+      "sha256": "7031518CBA9E05017897604920735731A9A8D553AC1BEF53BD4B7E51CF622B55",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\candidate.htm",
+      "archived": "inputs/0049-candidate.htm",
+      "bytes": 757295,
+      "sha256": "BF049B3EA80365A178DB3694DDBE1AEA663A2E87C752C7A16A26AE9573FDFDBA",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\compile.log",
+      "archived": "inputs/0050-compile.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r4\\provider.d",
+      "archived": "inputs/0051-provider.d",
+      "bytes": 24535,
+      "sha256": "153ADB6D2BE211A31C2E80FD13863E8597136FA27C9F2381568C4AF065414105",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_internal_memory.h",
+      "archived": "inputs/0052-np_sd_internal_memory.h",
+      "bytes": 437,
+      "sha256": "A4403D051499618D2F5CC0C4D0900978358347928F2E23FC1237304FF22690EE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stdint.h",
+      "archived": "inputs/0053-stdint.h",
+      "bytes": 9004,
+      "sha256": "ECB59E04B0703AB780391D6DB7ECF339E24F9B1641EE4DB2932FF80656558E24",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_modes.h",
+      "archived": "inputs/0054-np_modes.h",
+      "bytes": 426,
+      "sha256": "0AA441B3B02A8EF41ADAD3905D896083BF2FC6AE5B3D48E4E56D2A5326781C81",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_rate_plan.h",
+      "archived": "inputs/0055-np_sd_rate_plan.h",
+      "bytes": 1735,
+      "sha256": "7A600DFF5CE2463855561E2B7892C6971B7F0D55D865A05B658ECA77BCA04F7E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\probe_identity.h",
+      "archived": "inputs/0056-probe_identity.h",
+      "bytes": 2841,
+      "sha256": "13E869B1F12C47685014B3AA1B7D513D652D2D1C21C0E4F726BE36D8661B2361",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\stddef.h",
+      "archived": "inputs/0057-stddef.h",
+      "bytes": 3642,
+      "sha256": "53F8785B90B4F178183FEA3A384D41E946BA533C8655993C8F4CD3C73FFD5EA3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\string.h",
+      "archived": "inputs/0058-string.h",
+      "bytes": 25072,
+      "sha256": "57F0F46E41327D504CCB51DEA2DD20AB4E3A64E7C6C9C1C54B31A85AC4EED217",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_config_port.h",
+      "archived": "inputs/0059-np_config_port.h",
+      "bytes": 956,
+      "sha256": "F72C660D9B51751DD265744C0DAA4959D465855C4E9A201C4C27147ADC228140",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_config.h",
+      "archived": "inputs/0060-np_config.h",
+      "bytes": 1503,
+      "sha256": "C1A59CB9384CCA7382A9B2188D4FA5E42247C6295F643C274F15DA6180A1E25B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_nric.h",
+      "archived": "inputs/0061-xe_np_nric.h",
+      "bytes": 4878,
+      "sha256": "B312633BFF1EBF0E4BF6C8FA18CCC2E5A9B8EA0E339FC14F7C0E150DDFF66626",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_board.h",
+      "archived": "inputs/0062-xe_np_board.h",
+      "bytes": 15890,
+      "sha256": "B3C0ED26281459DA51F089C5355D6DF08B205DA018F04458FBD116CDFE92034F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_hal.h",
+      "archived": "inputs/0063-xe_np_hal.h",
+      "bytes": 2982,
+      "sha256": "A8658EF8F7C42B6BFB2828AFFDB7158E6BB018801FDB171A9F25DC05ECAC8234",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal.h",
+      "archived": "inputs/0064-stm32u5xx_hal.h",
+      "bytes": 40194,
+      "sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\stm32u5xx_hal_conf.h",
+      "archived": "inputs/0065-stm32u5xx_hal_conf.h",
+      "bytes": 20031,
+      "sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc.h",
+      "archived": "inputs/0066-stm32u5xx_hal_rcc.h",
+      "bytes": 253877,
+      "sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_def.h",
+      "archived": "inputs/0067-stm32u5xx_hal_def.h",
+      "bytes": 7867,
+      "sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5xx.h",
+      "archived": "inputs/0068-stm32u5xx.h",
+      "bytes": 11035,
+      "sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u595xx.h",
+      "archived": "inputs/0069-stm32u595xx.h",
+      "bytes": 2135616,
+      "sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\core_cm33.h",
+      "archived": "inputs/0070-core_cm33.h",
+      "bytes": 192801,
+      "sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_version.h",
+      "archived": "inputs/0071-cmsis_version.h",
+      "bytes": 1719,
+      "sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_compiler.h",
+      "archived": "inputs/0072-cmsis_compiler.h",
+      "bytes": 9764,
+      "sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\cmsis_armclang.h",
+      "archived": "inputs/0073-cmsis_armclang.h",
+      "bytes": 49920,
+      "sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Include\\mpu_armv8.h",
+      "archived": "inputs/0074-mpu_armv8.h",
+      "bytes": 11722,
+      "sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\system_stm32u5xx.h",
+      "archived": "inputs/0075-system_stm32u5xx.h",
+      "bytes": 2822,
+      "sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h",
+      "archived": "inputs/0076-stm32_hal_legacy.h",
+      "bytes": 245366,
+      "sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\math.h",
+      "archived": "inputs/0077-math.h",
+      "bytes": 50806,
+      "sha256": "E0FFC7783AAE749727B446C500C7E6C45D39193A90251AF5D147892278DA30B3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc_ex.h",
+      "archived": "inputs/0078-stm32u5xx_hal_rcc_ex.h",
+      "bytes": 124586,
+      "sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio.h",
+      "archived": "inputs/0079-stm32u5xx_hal_gpio.h",
+      "bytes": 16656,
+      "sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio_ex.h",
+      "archived": "inputs/0080-stm32u5xx_hal_gpio_ex.h",
+      "bytes": 17301,
+      "sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_icache.h",
+      "archived": "inputs/0081-stm32u5xx_hal_icache.h",
+      "bytes": 9846,
+      "sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcache.h",
+      "archived": "inputs/0082-stm32u5xx_hal_dcache.h",
+      "bytes": 14955,
+      "sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma.h",
+      "archived": "inputs/0083-stm32u5xx_hal_dma.h",
+      "bytes": 46300,
+      "sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma_ex.h",
+      "archived": "inputs/0084-stm32u5xx_hal_dma_ex.h",
+      "bytes": 39534,
+      "sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cortex.h",
+      "archived": "inputs/0085-stm32u5xx_hal_cortex.h",
+      "bytes": 16981,
+      "sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc.h",
+      "archived": "inputs/0086-stm32u5xx_hal_adc.h",
+      "bytes": 163688,
+      "sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_adc.h",
+      "archived": "inputs/0087-stm32u5xx_ll_adc.h",
+      "bytes": 542955,
+      "sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc_ex.h",
+      "archived": "inputs/0088-stm32u5xx_hal_adc_ex.h",
+      "bytes": 85420,
+      "sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac.h",
+      "archived": "inputs/0089-stm32u5xx_hal_dac.h",
+      "bytes": 26211,
+      "sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac_ex.h",
+      "archived": "inputs/0090-stm32u5xx_hal_dac_ex.h",
+      "bytes": 14305,
+      "sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash.h",
+      "archived": "inputs/0091-stm32u5xx_hal_flash.h",
+      "bytes": 57726,
+      "sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash_ex.h",
+      "archived": "inputs/0092-stm32u5xx_hal_flash_ex.h",
+      "bytes": 9218,
+      "sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c.h",
+      "archived": "inputs/0093-stm32u5xx_hal_i2c.h",
+      "bytes": 40135,
+      "sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c_ex.h",
+      "archived": "inputs/0094-stm32u5xx_hal_i2c_ex.h",
+      "bytes": 13723,
+      "sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp.h",
+      "archived": "inputs/0095-stm32u5xx_hal_opamp.h",
+      "bytes": 17380,
+      "sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp_ex.h",
+      "archived": "inputs/0096-stm32u5xx_hal_opamp_ex.h",
+      "bytes": 2262,
+      "sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr.h",
+      "archived": "inputs/0097-stm32u5xx_hal_pwr.h",
+      "bytes": 49967,
+      "sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr_ex.h",
+      "archived": "inputs/0098-stm32u5xx_hal_pwr_ex.h",
+      "bytes": 47744,
+      "sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ospi.h",
+      "archived": "inputs/0099-stm32u5xx_hal_ospi.h",
+      "bytes": 64424,
+      "sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_dlyb.h",
+      "archived": "inputs/0100-stm32u5xx_ll_dlyb.h",
+      "bytes": 3650,
+      "sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd.h",
+      "archived": "inputs/0101-stm32u5xx_hal_sd.h",
+      "bytes": 42804,
+      "sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_sdmmc.h",
+      "archived": "inputs/0102-stm32u5xx_ll_sdmmc.h",
+      "bytes": 76348,
+      "sha256": "75C802F6E7ABE6F17C38F6D7B03B4074D6EAE4FCD3938306AAA2BCF6723D1595",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd_ex.h",
+      "archived": "inputs/0103-stm32u5xx_hal_sd_ex.h",
+      "bytes": 4520,
+      "sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi.h",
+      "archived": "inputs/0104-stm32u5xx_hal_spi.h",
+      "bytes": 59495,
+      "sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi_ex.h",
+      "archived": "inputs/0105-stm32u5xx_hal_spi_ex.h",
+      "bytes": 11657,
+      "sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim.h",
+      "archived": "inputs/0106-stm32u5xx_hal_tim.h",
+      "bytes": 155267,
+      "sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim_ex.h",
+      "archived": "inputs/0107-stm32u5xx_hal_tim_ex.h",
+      "bytes": 69441,
+      "sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart.h",
+      "archived": "inputs/0108-stm32u5xx_hal_uart.h",
+      "bytes": 91827,
+      "sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart_ex.h",
+      "archived": "inputs/0109-stm32u5xx_hal_uart_ex.h",
+      "bytes": 26710,
+      "sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd.h",
+      "archived": "inputs/0110-stm32u5xx_hal_pcd.h",
+      "bytes": 27097,
+      "sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_usb.h",
+      "archived": "inputs/0111-stm32u5xx_ll_usb.h",
+      "bytes": 49669,
+      "sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd_ex.h",
+      "archived": "inputs/0112-stm32u5xx_hal_pcd_ex.h",
+      "bytes": 2949,
+      "sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_exti.h",
+      "archived": "inputs/0113-stm32u5xx_hal_exti.h",
+      "bytes": 16154,
+      "sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r1\\app\\xe_np_app.h",
+      "archived": "inputs/0114-xe_np_app.h",
+      "bytes": 16966,
+      "sha256": "7E7171C11030B6CC4999F49212B6FC3A0649DB5CF726BC52C89E0B0B533B5C1D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_first_sync_port.h",
+      "archived": "inputs/0115-np_first_sync_port.h",
+      "bytes": 5506,
+      "sha256": "BB4F8BBFFB7C012CA95B3F8621CFF32420A5D8DA561D46114446342005CA5D12",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_cl_source.h",
+      "archived": "inputs/0116-np_cl_source.h",
+      "bytes": 5088,
+      "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_cl_reset.h",
+      "archived": "inputs/0117-np_cl_reset.h",
+      "bytes": 5582,
+      "sha256": "B58A8EE74E1F0C85B75095F8B329A4C5C1658ECE88F9B763CD7DEC6AD3BAAEA2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_capture_start_diag.h",
+      "archived": "inputs/0118-np_capture_start_diag.h",
+      "bytes": 2126,
+      "sha256": "EAF76C0963FD314FA87A5B361D3019F315842ACF47109860356CAF4435B6398C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_runtime.h",
+      "archived": "inputs/0119-xe_np_runtime.h",
+      "bytes": 4415,
+      "sha256": "0A9F8950A0331BAAA50B3DE4E43FC928330BB555A504F3E5027CC049F4E4A6BE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_COMMAND.h",
+      "archived": "inputs/0120-CE32_COMMAND.h",
+      "bytes": 2300,
+      "sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_Sync.h",
+      "archived": "inputs/0121-CE32_Sync.h",
+      "bytes": 2539,
+      "sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\ce32_wire.h",
+      "archived": "inputs/0122-ce32_wire.h",
+      "bytes": 4127,
+      "sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\dataMGR.h",
+      "archived": "inputs/0123-dataMGR.h",
+      "bytes": 11069,
+      "sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_capture.h",
+      "archived": "inputs/0124-xe_np_capture.h",
+      "bytes": 11711,
+      "sha256": "7FCC8B6C42C5FA1239F91239A2B84C542025D4BF5ABDCC58850617F26753D414",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r1\\app\\np_cl_source_port.h",
+      "archived": "inputs/0125-np_cl_source_port.h",
+      "bytes": 2937,
+      "sha256": "11DEBD9BC43526A2325F157FB48B4CADA162A5DB8F541050BAB01625AEC06A5A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r1\\app\\np_cl_source.h",
+      "archived": "inputs/0126-np_cl_source.h",
+      "bytes": 5088,
+      "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_system.h",
+      "archived": "inputs/0127-CE32_system.h",
+      "bytes": 736,
+      "sha256": "5F87F835795F4F9B0BFAF80411B34B0D3B917B81C7949F90EB6BF6CB5CF5B9B5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_ADC.h",
+      "archived": "inputs/0128-CE32_ADC.h",
+      "bytes": 1099,
+      "sha256": "9813E9FABE11AC4D02D00790B7847FF1D6D1384350D82CCE3EFD7D9469A8FD15",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\stm32f4xx_hal.h",
+      "archived": "inputs/0129-stm32f4xx_hal.h",
+      "bytes": 112,
+      "sha256": "D77D254AE8BBFD028191A96CEF92720365A5352209FCF985FFE2FAFBF38FEAD7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_macro.h",
+      "archived": "inputs/0130-CE32_macro.h",
+      "bytes": 2016,
+      "sha256": "2C3BED1B10EB8942C68E17BB45AC779C88DE653BC7D26A4FD12E141CD1872C68",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_BMX160.h",
+      "archived": "inputs/0131-CE32_BMX160.h",
+      "bytes": 5031,
+      "sha256": "8E16A3BD1B9F4BC212EE31466314DFCE07DD9B5A27D6D4707CC3FD4C4D3F2315",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_HJ580.h",
+      "archived": "inputs/0132-CE32_HJ580.h",
+      "bytes": 6825,
+      "sha256": "385D3CA4F03ADC6ECDE4631B7647BD4CB7B97FC43836DA5EDFDBC9AF9D1D6F4C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\main.h",
+      "archived": "inputs/0133-main.h",
+      "bytes": 5223,
+      "sha256": "078F3EEB4DB335DD053C9E386DB1FC140CC504D987A617221B85D52AA8C43B70",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_UART_INTERCOM.h",
+      "archived": "inputs/0134-CE32_UART_INTERCOM.h",
+      "bytes": 5464,
+      "sha256": "5384EE6AA7243215AFA166338AB6A3F0CED33C6C50C9E3449608A26D2DD090BB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_filesystem.h",
+      "archived": "inputs/0135-CE32_filesystem.h",
+      "bytes": 8000,
+      "sha256": "8CBE9E56814303F68A5480226B02D4FB5ED28D7105BDF40C410E45D5C1DCF58D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\HD32_SD_driver.h",
+      "archived": "inputs/0136-HD32_SD_driver.h",
+      "bytes": 2395,
+      "sha256": "E520B4B3778B1AC3AF21FCB09F0E3FA0FB54798AE141CC9E256A82A80E8DB6E5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\CE32_ClosedLoop.h",
+      "archived": "inputs/0137-CE32_ClosedLoop.h",
+      "bytes": 584,
+      "sha256": "9FA22E52B8DEBEFA085CA8050B8F990A78EB645F43C5C9DB8ED206249990AC04",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_legacy_fs.h",
+      "archived": "inputs/0138-xe_np_legacy_fs.h",
+      "bytes": 1733,
+      "sha256": "E7343022F808CE1BD414640DEFACF3CD4F285347B95E22BD6834ECB38C695F89",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_psram.h",
+      "archived": "inputs/0139-xe_np_psram.h",
+      "bytes": 2554,
+      "sha256": "E098507D1C94D07D51F9B0413007841E914A2C6D4852E6CFC2ED8BA543F98FF8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_probe_config_generated.h",
+      "archived": "inputs/0140-xe_np_probe_config_generated.h",
+      "bytes": 6098,
+      "sha256": "E5D9D6942DC310F9282B0016FEB8E3A56BD561DD08547F542911F05DB35E22B9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_app.h",
+      "archived": "inputs/0141-xe_np_app.h",
+      "bytes": 17003,
+      "sha256": "B63911C8F9AA630A9DCA5A6A29993C246BCEF7BD6AC6E85EB91097C82A99D180",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_usb_stream.h",
+      "archived": "inputs/0142-xe_np_usb_stream.h",
+      "bytes": 6204,
+      "sha256": "5786C9744123D2F223C6A0B9280789F5E0822FB892EF8A02E05BF538353D8D5C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\03470e94b3da_c7ffae20c1da_np_capture_anchor_port.inc",
+      "archived": "inputs/0143-03470e94b3da_c7ffae20c1da_np_capture_anchor_port.inc",
+      "bytes": 15140,
+      "sha256": "9FB4643162DAF14B4D7229BD7117D8236C2E0B041DB0E34DCF76C962C7801781",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\app_source2\\Core\\Inc\\np_capture_anchor.h",
+      "archived": "inputs/0144-np_capture_anchor.h",
+      "bytes": 886,
+      "sha256": "2549C88A0205754D377A3A2223874C6F9E92093356B131A24CB8B21866804BB2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\app_source2\\Core\\Inc\\xe_np_acquisition_anchor.h",
+      "archived": "inputs/0145-xe_np_acquisition_anchor.h",
+      "bytes": 1881,
+      "sha256": "9A52C336151FE5F91DEDD03F99202B27B79388634690601E75A4C161D4BD29D5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\xe_np_online_impl.h",
+      "archived": "inputs/0146-xe_np_online_impl.h",
+      "bytes": 2678,
+      "sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\xe_np_online.h",
+      "archived": "inputs/0147-xe_np_online.h",
+      "bytes": 451,
+      "sha256": "7658A2DB3F8ABC5D5298637BFDF57411D38161D0F1E7E665B2194EACE9915A39",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\app_source2\\Core\\Inc\\np_capture_origin.h",
+      "archived": "inputs/0148-np_capture_origin.h",
+      "bytes": 2404,
+      "sha256": "6B8400A0CD12E078C8A2264B7A06C7B5B50F745BFA9AE856DECDC7B6513467B0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\app_source2\\Core\\Inc\\np_cl_source_port.h",
+      "archived": "inputs/0149-np_cl_source_port.h",
+      "bytes": 2266,
+      "sha256": "B9455168DDCE691BFA94EFCE98133CB1CA88547EDDCF23C31B83150B2662FAF1",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_capture_first_source.h",
+      "archived": "inputs/0150-np_capture_first_source.h",
+      "bytes": 501,
+      "sha256": "21C04FBCDA0E0219F47E74CB590D479447BFF0D00683E8D2F16BE53965402935",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Src\\np_capture_start_diag.inc",
+      "archived": "inputs/0151-np_capture_start_diag.inc",
+      "bytes": 4188,
+      "sha256": "C637B30796EB513532A6C691F7072C7C425F483196FED37A999D3FFC547E29C5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\39515e612867_2be3440354c5_np_v1_fine_clock.inc",
+      "archived": "inputs/0152-39515e612867_2be3440354c5_np_v1_fine_clock.inc",
+      "bytes": 16153,
+      "sha256": "4D96DA472E2FD6DE73EE4507808087B7AB60A66DFBE6106FF2210818F6CFCF79",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_v1_fine_clock.h",
+      "archived": "inputs/0153-np_v1_fine_clock.h",
+      "bytes": 1435,
+      "sha256": "E7C90B9BD5E263FEEBA4FA7C7B103B3C2642B6C4BCFE80249908F9E49FD481ED",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\cd24eca5cfda_np_v1_rtc.h",
+      "archived": "inputs/0154-cd24eca5cfda_np_v1_rtc.h",
+      "bytes": 2654,
+      "sha256": "52A0C1249D5D7CFEF317C56107F510F8B07A6A59CFFA38CAE1E1B1CFD394ADB4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\2eea8c93fdb4_np_sensor_grid_timer.h",
+      "archived": "inputs/0155-2eea8c93fdb4_np_sensor_grid_timer.h",
+      "bytes": 3201,
+      "sha256": "F3C87A692F61E8CBEDBCBD01D57E36FFEC70ED79B3EACCC50B935A92A08A515B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_sensor_grid.h",
+      "archived": "inputs/0156-np_sensor_grid.h",
+      "bytes": 2678,
+      "sha256": "B064BF4FDA27B9CAC536F2A8F48FE74E39E43ED74EAB36B05095CBB40457FA96",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\xe_np_sensors.h",
+      "archived": "inputs/0157-xe_np_sensors.h",
+      "bytes": 4552,
+      "sha256": "42EDFEF760B02E90226F36F1B5D1620A9C8CD80A9F119977BB8F69BDA60CFEB2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280.h",
+      "archived": "inputs/0158-bme280.h",
+      "bytes": 13095,
+      "sha256": "0476F04E3BBC24AB97EF735170A983A566276CDDF593EBA39331F4CC053A0ED6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280_defs.h",
+      "archived": "inputs/0159-bme280_defs.h",
+      "bytes": 16915,
+      "sha256": "E4BFF60BB29C49C1FD68B1EA91A362063D5814FEE202F444D57F95595A577D0E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150.h",
+      "archived": "inputs/0160-bmm150.h",
+      "bytes": 16463,
+      "sha256": "BB51F04F957BA372F638FF45F33934A4D150FF57DB3F419C604EDF426F7C778A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150_defs.h",
+      "archived": "inputs/0161-bmm150_defs.h",
+      "bytes": 23463,
+      "sha256": "BCCBE06B31F8F1A46DE6317DE67CE23AE13182B2B5C9E1230ADE0491C7078FDB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\f3cdbcc36fdf_3774aad57e55_np_first_sync_port.inc",
+      "archived": "inputs/0162-f3cdbcc36fdf_3774aad57e55_np_first_sync_port.inc",
+      "bytes": 29234,
+      "sha256": "B19373EB7DFE9426EECC6CAB1AE0B28A63C4C49FBB8D2A8EE7D56E92092F30A8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\26e2d09cd388_np_v1_rtc_port.h",
+      "archived": "inputs/0163-26e2d09cd388_np_v1_rtc_port.h",
+      "bytes": 917,
+      "sha256": "A387EE92ECE861741476FAC2DA39C93ADC933096CBEE4A8BD80BFD95A7D1608F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_first_sync_record.h",
+      "archived": "inputs/0164-np_first_sync_record.h",
+      "bytes": 11495,
+      "sha256": "3E77FFC9FC80A0460F0F316E2A3FDC29CB670A816C779F17B1F51CA2F9C8BC0D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_first_sync_v1.h",
+      "archived": "inputs/0165-np_first_sync_v1.h",
+      "bytes": 4149,
+      "sha256": "DE3923EB469193E6DB43DF3167EE211469895AD1AAED86ACD16AFB8E7AA06779",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_first_sync_wire.h",
+      "archived": "inputs/0166-np_first_sync_wire.h",
+      "bytes": 11699,
+      "sha256": "95BCCC8951D70138327D79F456C34507B158CF01AB00BC9F9BD5ABAC402A437C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_first_sync_layout.h",
+      "archived": "inputs/0167-np_first_sync_layout.h",
+      "bytes": 2027,
+      "sha256": "C64343D159083EBEC580B94883A5CE327DD19F6BC1DCD3B2381E1628DBC22C41",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_first_bridge.inc",
+      "archived": "inputs/0168-np_cl_first_bridge.inc",
+      "bytes": 1875,
+      "sha256": "FE61780E3124F34B10BF16FB7CD60EA79804BC15427DEF0CE83DC379273BE0B7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r1\\app\\np_cl_first_bridge.h",
+      "archived": "inputs/0169-np_cl_first_bridge.h",
+      "bytes": 2061,
+      "sha256": "1574205C30DC41DCCD6F951901F493484BA2EE476F2DEAF3EDA6B0F9D4B85693",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_ring_observer.h",
+      "archived": "inputs/0170-np_sd_ring_observer.h",
+      "bytes": 1339,
+      "sha256": "9543D9822A8AFC3A71F463BB12900182D51DCE9D6193D0CBDADE39141015E626",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\operation_led.h",
+      "archived": "inputs/0171-operation_led.h",
+      "bytes": 460,
+      "sha256": "7E64988D003A2AB3F0293BF6DA29DB12E75672A6A35F6D3F33280502544594AD",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_capture_timer_stop.inc",
+      "archived": "inputs/0172-np_capture_timer_stop.inc",
+      "bytes": 365,
+      "sha256": "EB1246ADEDB5545A7D3E019147DC83531C205CDDEDE3E33E2DE620381C2B4E4D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Src\\np_continuous_clock_reset.inc",
+      "archived": "inputs/0173-np_continuous_clock_reset.inc",
+      "bytes": 727,
+      "sha256": "6AA6BF69552D2F75B0D4FB89D6D4F253959816FBB5E05AB499A2CD3D13E75816",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Src\\np_capture_admit.inc",
+      "archived": "inputs/0174-np_capture_admit.inc",
+      "bytes": 1310,
+      "sha256": "14D43A3CEF9D926CF9120E5A6C9C3293A98FD9102D5E13CEEBD434044A934C4C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r1\\app\\np3_producer.inc",
+      "archived": "inputs/0175-np3_producer.inc",
+      "bytes": 14145,
+      "sha256": "CA4C914FE3478EDD32DEC502F96117002E330527016FBAC2F4A16693778DB940",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\app_source2\\closure\\xe_np_app\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Src\\np_capture_origin_producer.inc",
+      "archived": "inputs/0176-np_capture_origin_producer.inc",
+      "bytes": 2349,
+      "sha256": "0BBBA0D6F41B7277AAF60F6C6265B052889C412D70313F319DD448D911EA5EFA",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Src\\np_capture_first_source.inc",
+      "archived": "inputs/0177-np_capture_first_source.inc",
+      "bytes": 6378,
+      "sha256": "AF62E04704EC8AB522863545FC569B2B5BEFAEDEA773C9EEB15EA715D4328ED5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\app_source2\\closure\\xe_np_app\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_first_sync_sd_port.h",
+      "archived": "inputs/0178-np_first_sync_sd_port.h",
+      "bytes": 1159,
+      "sha256": "59F17BD5A21E2BE0AE5C3F91C80E5E2F6F5E13DF73D34BB25CD9136B7EAC935A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_first_sync_sd.h",
+      "archived": "inputs/0179-np_first_sync_sd.h",
+      "bytes": 18134,
+      "sha256": "0A36AD9E35D338898385CB27E62F60829919E9D909B1457F95D95F0C17267B5A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_camera_exposure.h",
+      "archived": "inputs/0180-np_camera_exposure.h",
+      "bytes": 2416,
+      "sha256": "F8BDC9C93C79BBAE7B7D9C7D666F4B42F83FF4DF177585DA7E8A5CC99098F1C8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_media_metadata.h",
+      "archived": "inputs/0181-np_media_metadata.h",
+      "bytes": 4086,
+      "sha256": "D921B5B4032F72F642BF7766DB010BBE5488D5B1E02B0DB50F0FA9CDA80A1554",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_workspace.h",
+      "archived": "inputs/0182-np_cl_workspace.h",
+      "bytes": 3096,
+      "sha256": "8671B055C41685E1846BCE8AE25FB4F05AEC1BE1C319C6FBA9E1B0D3A3F90E75",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_v1.h",
+      "archived": "inputs/0183-np_cl_v1.h",
+      "bytes": 5501,
+      "sha256": "DF5EE8058EE6D662E0CEBEF4E133E98A8163C8E26498583094AA6DD0C6960277",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_kernel.h",
+      "archived": "inputs/0184-np_cl_kernel.h",
+      "bytes": 4077,
+      "sha256": "6FA0D0118A1CB487273D86D2B878BE600AAA464A49941E1E92627A4B6267CF4E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_journal.h",
+      "archived": "inputs/0185-np_cl_journal.h",
+      "bytes": 4004,
+      "sha256": "E69FD8346A12A7E07F7681CC8826A064041FC6A9C5B3715ADE4F1FEBC1FA5913",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_event_wire.h",
+      "archived": "inputs/0186-np_cl_event_wire.h",
+      "bytes": 2788,
+      "sha256": "5E13A70903B38B5AB0E56638809B40BA6F36EB3A8AA62200BD58B666EB8D3815",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_control_wire.h",
+      "archived": "inputs/0187-np_cl_control_wire.h",
+      "bytes": 4257,
+      "sha256": "47D5C133EFF95E835BFE6D1A58CB954E6C7DEA7D042E1AC302C0E9F7065EBD4D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_source.h",
+      "archived": "inputs/0188-np_cl_source.h",
+      "bytes": 5088,
+      "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_cl_cycle_probe.h",
+      "archived": "inputs/0189-np_cl_cycle_probe.h",
+      "bytes": 9365,
+      "sha256": "47377BA69375958E0FC3C800E63FFDC40EB8B81B3CDDD7C5D7036C2E746641DB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r1\\app\\np_sd_log.h",
+      "archived": "inputs/0190-np_sd_log.h",
+      "bytes": 10413,
+      "sha256": "B1F59B5F30D37632D60721C4D4DB38536B9E54AE302B85EE280645E9E2D49ED4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_sd_control.h",
+      "archived": "inputs/0191-np_sd_control.h",
+      "bytes": 5836,
+      "sha256": "25825560B8D21056C4EC9A27E8DF92D165D85BB5AE014F668A8BC9DBD57768FA",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_fast_crc.h",
+      "archived": "inputs/0192-np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_stage_timing.h",
+      "archived": "inputs/0193-np_sd_stage_timing.h",
+      "bytes": 4223,
+      "sha256": "06DE7F734218620C37EBABD88B6FA3AFC7D9C338FE1C27A6D242BE6DCDB36FF5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_dma_chain.h",
+      "archived": "inputs/0194-np_sd_dma_chain.h",
+      "bytes": 867,
+      "sha256": "C8AA8946749204523EB1873D753A71BC32037F62995252AD6CFBA9EFBF8AFBBB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\xe_np_sensors_port.h",
+      "archived": "inputs/0195-xe_np_sensors_port.h",
+      "bytes": 1743,
+      "sha256": "AA4234C9A83DE88C136560788B7FCFB7235AC0D58C9950DD568B53A8E10F69F9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_sd_sensors.h",
+      "archived": "inputs/0196-np_sd_sensors.h",
+      "bytes": 1136,
+      "sha256": "E0965E275C9508BCF1EF762D0A90BC0907BB75DF7D097974DC812675606C2A65",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_sd_log.h",
+      "archived": "inputs/0197-np_sd_log.h",
+      "bytes": 10293,
+      "sha256": "D78CECB854769FEA338ADF0B4BE5BEF3E83A95CFB5537C6EDEFAD10B9BBF3419",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_chunk_pool.h",
+      "archived": "inputs/0198-np_sd_chunk_pool.h",
+      "bytes": 6334,
+      "sha256": "80A8AE280371ED0C203F3E7EC2E5677EBF935350F31784EFAD684E7F746A3DA9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_scratch_pair_state.inc",
+      "archived": "inputs/0199-np_sd_scratch_pair_state.inc",
+      "bytes": 2971,
+      "sha256": "24D207845334BDE71B4AFE63F8DF0A8DDC5A7C7B6D54AD83FB2268B21646D54F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\678d3ce04d0e_np_sd_chunk_memory.inc",
+      "archived": "inputs/0200-678d3ce04d0e_np_sd_chunk_memory.inc",
+      "bytes": 6685,
+      "sha256": "0B698B0FB885B57B162F8552331E31D7F57A1377804849AD231CDB2196F6C1FC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\f2400f22a67e_np_sensor_grid_sd.h",
+      "archived": "inputs/0201-f2400f22a67e_np_sensor_grid_sd.h",
+      "bytes": 11255,
+      "sha256": "2B2D70F277D9D84990061586CC28C665A32B0DA1C2B9DABFEBDA1C1EC90F2787",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_imu_grid_wire.h",
+      "archived": "inputs/0202-np_imu_grid_wire.h",
+      "bytes": 6657,
+      "sha256": "ADA66508252D16D7ACFFAEFC9AFFA34164B072F70C65A47B8652F6233FD1136E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_sensor_grid_phase_wire.h",
+      "archived": "inputs/0203-np_sensor_grid_phase_wire.h",
+      "bytes": 2781,
+      "sha256": "61A9B64A8FC9AFBDA0A6FDCE6DF4634B7A40800E7DBA2EA300034AFE2BED05CB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_imu_grid_phase.h",
+      "archived": "inputs/0204-np_imu_grid_phase.h",
+      "bytes": 5460,
+      "sha256": "54D1FEE3FCD103D0BFE0549BC3BF9D644433B1FD6BA2889895FB250574878F3D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\01eedd0318db_np_sd_scratch_pair_service.inc",
+      "archived": "inputs/0205-01eedd0318db_np_sd_scratch_pair_service.inc",
+      "bytes": 2529,
+      "sha256": "1CDDD2BDAEBCF7B487B84B0E21CA5D4EB8B47734F0CF6C065C83F54A797EAE73",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_preset_stage.inc",
+      "archived": "inputs/0206-np_sd_preset_stage.inc",
+      "bytes": 4395,
+      "sha256": "CBF35BD7C70670DB5AD94E49CFA66F0FBFDD95E6D1B49E70001F5F3ECE6BDC9B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_fast_stage.h",
+      "archived": "inputs/0207-np_sd_fast_stage.h",
+      "bytes": 907,
+      "sha256": "0B1B3490089A789384AB29B867BBB1D15DB24626D3057F207634D5C809FEFDDF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ce64.h",
+      "archived": "inputs/0208-np_ce64.h",
+      "bytes": 7172,
+      "sha256": "7F804372F866ED7B0536019D4817B3F47E93F5FF23CAC28EE69B7AE74249A47C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_log.h",
+      "archived": "inputs/0209-np_sd_log.h",
+      "bytes": 10084,
+      "sha256": "A2066595F6C13EF2F9387BAB864B0C77673712EC757808C4B343FDC90C9A394C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ce64_metadata.h",
+      "archived": "inputs/0210-np_ce64_metadata.h",
+      "bytes": 3676,
+      "sha256": "467777EBAED62BE2F7EB6123B9D4A7476B44413BF19A12352F5081A2D7819B3A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_store_v2_binding.h",
+      "archived": "inputs/0211-np_store_v2_binding.h",
+      "bytes": 715,
+      "sha256": "771FCC45A89C471F89A91304A63780CBB97E5675998297A409AF308C716C8D05",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_store_v2.h",
+      "archived": "inputs/0212-np_store_v2.h",
+      "bytes": 12689,
+      "sha256": "3632CFD46B5DDCCADD3FE5F1C45D3168DB4E9AA1A58698604CD2BD8EC3741047",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_usb_camera_driver.inc",
+      "archived": "inputs/0213-np_usb_camera_driver.inc",
+      "bytes": 99522,
+      "sha256": "326A86D6AB319A0D28982D0B03498F604A5805702C592C2D486971A5F3A04040",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_timing.h",
+      "archived": "inputs/0214-np_camera_timing.h",
+      "bytes": 1483,
+      "sha256": "1F14D483326C83FB0AC6D1AE9E9C0FE85A1E57B4F155CE4ABA234DC3CD49F8DB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\usb512_camera.h",
+      "archived": "inputs/0215-usb512_camera.h",
+      "bytes": 4473,
+      "sha256": "829F7D1B8E3C0765551D185B69B5DA87D2D2C5C2968DB5C522D626CE7F2F29B4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_alignment.h",
+      "archived": "inputs/0216-np_camera_alignment.h",
+      "bytes": 2207,
+      "sha256": "5CFC80153CA226CDDD4672DF78ECAF8EC8C5FD5EE53256A690937EDDA6151F79",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_storage.inc",
+      "archived": "inputs/0217-np_camera_storage.inc",
+      "bytes": 559,
+      "sha256": "5711EC7855CF0CC6E4EA55A6CB73CE5CE6BF17CB37D383E18B9E126CBB5BDC21",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_camera_hardware.inc",
+      "archived": "inputs/0218-np_camera_hardware.inc",
+      "bytes": 4928,
+      "sha256": "34750C7B497F1986074D42471187BFECBA910DE8A65D76E8873BC84E2D65F410",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_camera.inc",
+      "archived": "inputs/0219-np_sd_camera.inc",
+      "bytes": 14637,
+      "sha256": "D7711692AD8139C61CD0DD44417C221527B030F14D20C5F65C39BDA41BF7FEC4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_camera_preview.h",
+      "archived": "inputs/0220-np_camera_preview.h",
+      "bytes": 2464,
+      "sha256": "AAD31AFF83D362C43F470486CDB76023B895CEBC6DE6B68E7A89E5B0C9BC29D4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_microphone.inc",
+      "archived": "inputs/0221-np_sd_microphone.inc",
+      "bytes": 18986,
+      "sha256": "56C619A10A9379C0321E9707A2CD267CAACD2DC41F6D9B94A52084164EBF270E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_battery_adc2.inc",
+      "archived": "inputs/0222-np_battery_adc2.inc",
+      "bytes": 3899,
+      "sha256": "9A77E7FE3E105591B4A0B57AD157434BC531BE5159032291814FCC85E6AB93B7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_vsc.inc",
+      "archived": "inputs/0223-np_sd_vsc.inc",
+      "bytes": 3854,
+      "sha256": "63D0909C0A6C1D99C9FD6AEA9EF7FF08681B218EE1C62F9604436EC2906AE0FF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_vsc_dir.h",
+      "archived": "inputs/0224-np_sd_vsc_dir.h",
+      "bytes": 2592,
+      "sha256": "D427ED0E648730B3FD27FA650792DC4673719C42156AE4B2D5D6E44ED2C5837F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\sd_modes.inc",
+      "archived": "inputs/0225-sd_modes.inc",
+      "bytes": 1095,
+      "sha256": "C2C0137531F3775448EE3D1A200FE98DBCA122A722760E7865347638AF24DF7B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\mode_policy.h",
+      "archived": "inputs/0226-mode_policy.h",
+      "bytes": 823,
+      "sha256": "478F8704BB40ECA68645AA25E7BC929724FCF1F063886E3FCE8542D7952E42FD",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_boot_contract.h",
+      "archived": "inputs/0227-xe_np_boot_contract.h",
+      "bytes": 5386,
+      "sha256": "1AFB776187A82D5D244818ED1248D3A4448CF72E234B062E1EF879395498BFCE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_stream.inc",
+      "archived": "inputs/0228-np_sd_stream.inc",
+      "bytes": 19158,
+      "sha256": "C9B088C91F7B1D52A8DCFFC22B9E2A132BA7630F89DC4C81943AE7D5A49B1C1B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_transaction.h",
+      "archived": "inputs/0229-np_sd_transaction.h",
+      "bytes": 4914,
+      "sha256": "9198B5B8F1EFC5EFEE60FA658A9015BD946A6C5299C12CC264D27823A14F1882",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_idma_list.h",
+      "archived": "inputs/0230-np_sd_idma_list.h",
+      "bytes": 1222,
+      "sha256": "D0154B9721C8BD1443180D4385A64F0BB79B513D8F9A381310D6FA07E6DBBA67",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_store_v2_async.inc",
+      "archived": "inputs/0231-np_store_v2_async.inc",
+      "bytes": 6336,
+      "sha256": "A15D5E32C15451B71D566AE38F6E68629B8C32E29F6ED0D21C6854583A557698",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_store_v2_grow.h",
+      "archived": "inputs/0232-np_store_v2_grow.h",
+      "bytes": 4907,
+      "sha256": "A375A5DA0CA2C21315A79F4FB1F3A9556941A463FB487D3D150AD822303F647C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_qualification.h",
+      "archived": "inputs/0233-np_sd_qualification.h",
+      "bytes": 198,
+      "sha256": "6DC0E4AD27C819C5AD15D2DD52CFA0D72910FA3672104A87B2A2958EF11DEDE9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_sd_rate_port.h",
+      "archived": "inputs/0234-np_sd_rate_port.h",
+      "bytes": 199,
+      "sha256": "7A16CFFE7E536556E1152A1856CEEE641A9E0612FA3211F418B8D6B4BE9DC2EC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_schedule.h",
+      "archived": "inputs/0235-np_ble_schedule.h",
+      "bytes": 1597,
+      "sha256": "BB062BDFF491EB71AB40340F1E63E498FE85D4569E4EC7873CFE7937919E2B3E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\xe_np_online_impl.h",
+      "archived": "inputs/0236-xe_np_online_impl.h",
+      "bytes": 2678,
+      "sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_dfu.h",
+      "archived": "inputs/0237-np_ble_dfu.h",
+      "bytes": 133,
+      "sha256": "D66AF05BCF892351F7CECEB326236E69D60ADDDBA978004203CD1348B211DB66",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Inc\\np_ble_storage.h",
+      "archived": "inputs/0238-np_ble_storage.h",
+      "bytes": 2308,
+      "sha256": "6A61CF46C67332039DB0603B6EAFC3DED3A6AB0642DADD37A8FE00C261E8CAFE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd.inc",
+      "archived": "inputs/0239-np_cl_sd.inc",
+      "bytes": 5739,
+      "sha256": "79BEA424AFB1CB81F168DB331264A20C39A4570934BEB7A05D082FB7BFE75DE2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_cycle_port.inc",
+      "archived": "inputs/0240-np_cl_cycle_port.inc",
+      "bytes": 711,
+      "sha256": "6C5BB17C41E930DF9955E9851373E1233AECEF7F6546D99DA3A38D34D1E257D8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_imu_fast_release_20261028\\source\\Core\\Src\\np_ble_sensors.inc",
+      "archived": "inputs/0241-np_ble_sensors.inc",
+      "bytes": 3772,
+      "sha256": "3202932EEE3D3A554155352FF1F25F1485A412D3E54789801F82A3745D511FBC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Src\\np_ble_fine_clock.inc",
+      "archived": "inputs/0242-np_ble_fine_clock.inc",
+      "bytes": 3834,
+      "sha256": "85776885E036D32DD18208C289D31040AD32FA280429F5EE2141A5056EF3FCBF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_fine_clock_wire.h",
+      "archived": "inputs/0243-np_fine_clock_wire.h",
+      "bytes": 13004,
+      "sha256": "E62521B7D988E8D4E8A9465F6A547C66F3A58874F7D070852FEF51C8309FC45E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_ble_fine_rx.h",
+      "archived": "inputs/0244-np_ble_fine_rx.h",
+      "bytes": 1291,
+      "sha256": "9DC620E7F23C83DF8D466EA4F05D76D2FE68F7030D25AA0A3F9BAF8EDE49A67B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\67be570a9039_np_v1_rtc_app.inc",
+      "archived": "inputs/0245-67be570a9039_np_v1_rtc_app.inc",
+      "bytes": 1518,
+      "sha256": "B2AE0EE0B47D73816AB0BC05747341B867419D4756A6863152320FD144380BA5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\5511a503924e_np_v1_rtc_port.inc",
+      "archived": "inputs/0246-5511a503924e_np_v1_rtc_port.inc",
+      "bytes": 4107,
+      "sha256": "D418FB8A223F796851DC0D4DDA8405418D348D1B05632D644AA28F20DFFB63D5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\91b36876f84e_np_v1_rtc_control.h",
+      "archived": "inputs/0247-91b36876f84e_np_v1_rtc_control.h",
+      "bytes": 4618,
+      "sha256": "16F7C73252CFCCFC1C861DCBAF8566479694ADE6E5931F5C77BAA6F32DA68A33",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_v1_rtc_calendar.h",
+      "archived": "inputs/0248-np_v1_rtc_calendar.h",
+      "bytes": 3606,
+      "sha256": "9E77567849932CAEF4D599FA3FEBC73761FEFEEEB08C80581C87D142FBA167A7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_sd_control.inc",
+      "archived": "inputs/0249-np_cl_sd_control.inc",
+      "bytes": 775,
+      "sha256": "DC03E1C2AA1F980994F6A91413488DB6B87E7A49F3D7CC5C2CAE14641D68A507",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\40ffd88fa4a7_np_first_sync_sd_port.inc",
+      "archived": "inputs/0250-40ffd88fa4a7_np_first_sync_sd_port.inc",
+      "bytes": 13456,
+      "sha256": "7242738FD16FE0D0A8F15DB7BB30027377A1497498811F497A11F35E8D1B3FC0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_first_sync_sd_port.h",
+      "archived": "inputs/0251-np_first_sync_sd_port.h",
+      "bytes": 1159,
+      "sha256": "59F17BD5A21E2BE0AE5C3F91C80E5E2F6F5E13DF73D34BB25CD9136B7EAC935A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_rtc_pending_incremental_r1\\xe_np_app\\c10075ee67fb_np_v1_rtc_start.h",
+      "archived": "inputs/0252-c10075ee67fb_np_v1_rtc_start.h",
+      "bytes": 810,
+      "sha256": "D84C44864DBF9F15759F0EF49D250F3948ACC1B3E5F730BB9CDFD0BF90187499",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_rtc_start_wire.h",
+      "archived": "inputs/0253-np_rtc_start_wire.h",
+      "bytes": 11809,
+      "sha256": "1B0A56D2F525A51B7E811D6F28BF66D5841F73E475DDD8D6208942BF34F60671",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\closure\\_artifacts\\v1_rtc_20261029\\app_source\\Core\\Inc\\np_first_sync_usb.h",
+      "archived": "inputs/0254-np_first_sync_usb.h",
+      "bytes": 11347,
+      "sha256": "DDF3485889CE1F03D68048BD2673ABBC4E264A30A941EE217531F02C17EBD2E3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\limits.h",
+      "archived": "inputs/0255-limits.h",
+      "bytes": 3027,
+      "sha256": "3C972D5FAE117C024D762CE8658E5D7BCC53BC94F129BE3C236795E928C57707",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_ble_ce32_info.inc",
+      "archived": "inputs/0256-np_ble_ce32_info.inc",
+      "bytes": 1166,
+      "sha256": "FC115CCFD2EB73250E1BC5B9AA8021D153EE1E88E897CF4A6CEBCDB5650F14F2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_media_ble.inc",
+      "archived": "inputs/0257-np_media_ble.inc",
+      "bytes": 9152,
+      "sha256": "5A334F2AE8F52F01225B75ABBC9E783577B770A652FB1DF5E9E89756E24B8E1E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_battery_ble.inc",
+      "archived": "inputs/0258-np_battery_ble.inc",
+      "bytes": 1419,
+      "sha256": "C1CFA1D9536747F646AC51EC748AD34238EFBF6EEA0A79695969F8B72BE9BF90",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\531e2467eb20_np_sensor_grid_sd_port.inc",
+      "archived": "inputs/0259-531e2467eb20_np_sensor_grid_sd_port.inc",
+      "bytes": 6398,
+      "sha256": "7E3832FF6F2BC5A59E5B705AF34FC29365EFA47129F6AD61EB205AB9F508CF27",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\251f5dbffe6c_np_sensor_grid_sd_adapter.h",
+      "archived": "inputs/0260-251f5dbffe6c_np_sensor_grid_sd_adapter.h",
+      "bytes": 6267,
+      "sha256": "9D0FC57B9B6E4530A1D4E77F3E1A93C39DEA907953CF078D4961BA646A2FA136",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_r7_source\\xe_np_app\\Inc\\np_sensor_grid_batch.h",
+      "archived": "inputs/0261-np_sensor_grid_batch.h",
+      "bytes": 6462,
+      "sha256": "4F7237EF0303ED16F69765D02EFCB5824E4099F8BEDDC3E058E81247D0A50876",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\122bf5471973_np_sensor_grid_session.h",
+      "archived": "inputs/0262-122bf5471973_np_sensor_grid_session.h",
+      "bytes": 7660,
+      "sha256": "7BD44820DC30AD566A0D3FB3DC678EFC777DEA9FA24CFFA06E05F4A6F1605680",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\app_grid_enforced_incremental_r1\\xe_np_app\\0b9fa4949e13_np_sensor_grid_phase.h",
+      "archived": "inputs/0263-0b9fa4949e13_np_sensor_grid_phase.h",
+      "bytes": 2130,
+      "sha256": "7EB2514556132261641B857B3DB565FC163D685681B2282074C1B8B02E17A18F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_media_capture_metadata.inc",
+      "archived": "inputs/0264-np_media_capture_metadata.inc",
+      "bytes": 4568,
+      "sha256": "B2CBEAAE481037CB9151D533BB129458010E62185FE778D25DA340EEB7A6F9D6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_sd_usb_job_app.inc",
+      "archived": "inputs/0265-np_sd_usb_job_app.inc",
+      "bytes": 13828,
+      "sha256": "A72C097FA534A379587D0429D04A961F70D6E42DE733596A4E17CB8058F38591",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_plan.h",
+      "archived": "inputs/0266-np_sd_usb_job_plan.h",
+      "bytes": 2474,
+      "sha256": "390AFED7365FD665EA821E283DB2D5C135ED07331F77EFDA549CF8CCA0CCEC7F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_usb_sd_test.h",
+      "archived": "inputs/0267-np_usb_sd_test.h",
+      "bytes": 6832,
+      "sha256": "9F638AED4A97C11B91221258C4AF8AF1FCDDD67804F7766D99E2FD2969BC7963",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_first_sync_sd.h",
+      "archived": "inputs/0268-np_first_sync_sd.h",
+      "bytes": 18044,
+      "sha256": "106DB70498C3A1F91E30D5C9B984B0BF3F1F0BD53156CF470874AEF94C41EBF5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_rate_plan.h",
+      "archived": "inputs/0269-np_sd_rate_plan.h",
+      "bytes": 1735,
+      "sha256": "7A600DFF5CE2463855561E2B7892C6971B7F0D55D865A05B658ECA77BCA04F7E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_guard.h",
+      "archived": "inputs/0270-np_sd_usb_job_guard.h",
+      "bytes": 1709,
+      "sha256": "A06A7450D4A419A4797C2406D11763605796EE0C45A2FE593F5C8CA616C6D069",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_sd_usb_job_owner.inc",
+      "archived": "inputs/0271-np_sd_usb_job_owner.inc",
+      "bytes": 8534,
+      "sha256": "D4CA35223BE15330C0C3290F58F675379528ACA374EE89141B2A32B5C49B47F1",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_storage.h",
+      "archived": "inputs/0272-np_sd_usb_job_storage.h",
+      "bytes": 1772,
+      "sha256": "E541C7962FB87EF37E370A21755AC847180ECDDB4D8CC5922D9EA7046BF32D25",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_journal.h",
+      "archived": "inputs/0273-np_sd_usb_job_journal.h",
+      "bytes": 4199,
+      "sha256": "4011263EB574E9E40996304F66CAB117FC47BFA16F6DDB369AB6A3FD319C5AE7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_reset.h",
+      "archived": "inputs/0274-np_sd_usb_job_reset.h",
+      "bytes": 1991,
+      "sha256": "37DF6391CB1A1D68A2B3DAFFC8FC3568B3EC0455A6AE4F4F1BEEC219C72BFE03",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_profile.h",
+      "archived": "inputs/0275-np_sd_usb_job_profile.h",
+      "bytes": 4621,
+      "sha256": "F34C5B6084FDC259F519D7371E98D1BA4C2B955B1D1CCBFDE18C1F42D9419464",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_sd_usb_job_early.inc",
+      "archived": "inputs/0276-np_sd_usb_job_early.inc",
+      "bytes": 4937,
+      "sha256": "A4F86C51505DB25DE15884AF1EC62946368C67E3C517BC2E49AE26DFAC7DEA81",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_ble_compact_preview_20261025\\app_source\\Core\\Src\\np_sd_idle_sleep.inc",
+      "archived": "inputs/0277-np_sd_idle_sleep.inc",
+      "bytes": 4168,
+      "sha256": "AB3C6806C849C58B233F0874A253F10724BD4CC2B4187FE4856593DCDC933AB8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\receipt.json",
+      "archived": "inputs/0278-receipt.json",
+      "bytes": 21840,
+      "sha256": "F13A24919609184390CFC752526BE588182DC773A7BD37A0D15D9846FF6B6540",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\identity.json",
+      "archived": "inputs/0279-identity.json",
+      "bytes": 785,
+      "sha256": "542A88A5823FBFE4F8C0C0D4979B2B326AFEAAEB1E2CB1554B18BFF5828C46BC",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\candidate.lnp",
+      "archived": "inputs/0280-candidate.lnp",
+      "bytes": 7683,
+      "sha256": "CCA3A12F8575305BB8B6CCB57497996CF9578D3305F261B47074A38CFD689C6B",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\candidate.sct",
+      "archived": "inputs/0281-candidate.sct",
+      "bytes": 1973,
+      "sha256": "47D92E79A0BFAF513B1F8544004A5AF2D5C4D459497244E42CA97D6E0CB91BD8",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\candidate.map",
+      "archived": "inputs/0282-candidate.map",
+      "bytes": 2169341,
+      "sha256": "D9F49E6B315FF16F866FC4C338ABEAFE9A8AE7440E9F6E99A39F11741D26CE8B",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\candidate.htm",
+      "archived": "inputs/0283-candidate.htm",
+      "bytes": 757903,
+      "sha256": "F860888EAC6F674BA4DFE96F5B4A750941ED679253E5BB15FDC7BC93466870A4",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\compile.log",
+      "archived": "inputs/0284-compile.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\ce32_uart_intercom_npconfig.d",
+      "archived": "inputs/0285-ce32_uart_intercom_npconfig.d",
+      "bytes": 5289,
+      "sha256": "1DCD83CD3C67314C8C5576A5573EBA93167654AC994776D8C4D932DD1F04A8B6",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\ce32-rx\\CE32_UART_INTERCOM.c",
+      "archived": "inputs/0286-CE32_UART_INTERCOM.c",
+      "bytes": 29249,
+      "sha256": "38107F899C4079A5251C705C9F3ADD436092FCF9F3D9EBCD03E313D0A265EFD0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\CE32_UART_INTERCOM.h",
+      "archived": "inputs/0287-CE32_UART_INTERCOM.h",
+      "bytes": 5464,
+      "sha256": "5384EE6AA7243215AFA166338AB6A3F0CED33C6C50C9E3449608A26D2DD090BB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\CE32_macro.h",
+      "archived": "inputs/0288-CE32_macro.h",
+      "bytes": 2016,
+      "sha256": "2C3BED1B10EB8942C68E17BB45AC779C88DE653BC7D26A4FD12E141CD1872C68",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\stm32f4xx_hal.h",
+      "archived": "inputs/0289-stm32f4xx_hal.h",
+      "bytes": 112,
+      "sha256": "D77D254AE8BBFD028191A96CEF92720365A5352209FCF985FFE2FAFBF38FEAD7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\xe_np_hal.h",
+      "archived": "inputs/0290-xe_np_hal.h",
+      "bytes": 2982,
+      "sha256": "A8658EF8F7C42B6BFB2828AFFDB7158E6BB018801FDB171A9F25DC05ECAC8234",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\stm32u5xx_hal_conf.h",
+      "archived": "inputs/0291-stm32u5xx_hal_conf.h",
+      "bytes": 20031,
+      "sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\dataMGR.h",
+      "archived": "inputs/0292-dataMGR.h",
+      "bytes": 11069,
+      "sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\ce32_wire.h",
+      "archived": "inputs/0293-ce32_wire.h",
+      "bytes": 4127,
+      "sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\CE32_COMMAND.h",
+      "archived": "inputs/0294-CE32_COMMAND.h",
+      "bytes": 2300,
+      "sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\CE32_Sync.h",
+      "archived": "inputs/0295-CE32_Sync.h",
+      "bytes": 2539,
+      "sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\CE32_HJ580.h",
+      "archived": "inputs/0296-CE32_HJ580.h",
+      "bytes": 6825,
+      "sha256": "385D3CA4F03ADC6ECDE4631B7647BD4CB7B97FC43836DA5EDFDBC9AF9D1D6F4C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\main.h",
+      "archived": "inputs/0297-main.h",
+      "bytes": 5223,
+      "sha256": "078F3EEB4DB335DD053C9E386DB1FC140CC504D987A617221B85D52AA8C43B70",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\CE32_ClosedLoop.h",
+      "archived": "inputs/0298-CE32_ClosedLoop.h",
+      "bytes": 584,
+      "sha256": "9FA22E52B8DEBEFA085CA8050B8F990A78EB645F43C5C9DB8ED206249990AC04",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\xe_np_ble_rescue.h",
+      "archived": "inputs/0299-xe_np_ble_rescue.h",
+      "bytes": 925,
+      "sha256": "3E5E928920B484D54B176E69F84D3EAB4E7AFF3177C68EC64DA237AFC85C63B7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\xe_np_boot_contract.h",
+      "archived": "inputs/0300-xe_np_boot_contract.h",
+      "bytes": 5386,
+      "sha256": "1AFB776187A82D5D244818ED1248D3A4448CF72E234B062E1EF879395498BFCE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_ble_poll_tx.inc",
+      "archived": "inputs/0301-np_ble_poll_tx.inc",
+      "bytes": 4579,
+      "sha256": "B5C20F1D2D9E3B01EBF3CB0829BB22A367FD870CACE1831DA6430B34DA427833",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\receipt.json",
+      "archived": "inputs/0302-receipt.json",
+      "bytes": 22495,
+      "sha256": "9605C34AC943EC97C86ECC1D2F325568A6C92135117C6373F737E0497D5AEBE1",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\identity.json",
+      "archived": "inputs/0303-identity.json",
+      "bytes": 788,
+      "sha256": "3DCB5CAC7A1895934AAA9FFC9D2E4023E5312E6C903F8C11D27AA1B915734558",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\candidate.lnp",
+      "archived": "inputs/0304-candidate.lnp",
+      "bytes": 9406,
+      "sha256": "D80782D8C22EF89376F6071C7B9E6D7AA80357F3DDC1B54FAB8FF1F27B8CF62B",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\candidate.sct",
+      "archived": "inputs/0305-candidate.sct",
+      "bytes": 1642,
+      "sha256": "4D7B3EDB3AA1D5362C2C3879C22AD82A6C3A084BCD7371F4B3218B7C40C74DFF",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\candidate.map",
+      "archived": "inputs/0306-candidate.map",
+      "bytes": 2132166,
+      "sha256": "169B522D333F027311E1E437B636CCB0803DAE9BCB478FECEA003ED802FC82FD",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\candidate.htm",
+      "archived": "inputs/0307-candidate.htm",
+      "bytes": 751601,
+      "sha256": "CFE0DF1C11E6EF52D338A61BAC377EC9684A8A30CC848B1A1581FB083E22A5B0",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\compile.log",
+      "archived": "inputs/0308-compile.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r12\\stream.d",
+      "archived": "inputs/0309-stream.d",
+      "bytes": 19250,
+      "sha256": "A57183360B0E1C5DD01F2673154DB09A0573B138264863C7F86823FD1EF70B57",
+      "scope": "exact build/command/object/map custody"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_source_port.h",
+      "archived": "inputs/0310-np_cl_source_port.h",
+      "bytes": 3079,
+      "sha256": "54348681909EC277359011E5140F24F2037F45F7A97E6C3DD6561AAA5B793561",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_source.h",
+      "archived": "inputs/0311-np_cl_source.h",
+      "bytes": 5088,
+      "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_reset.h",
+      "archived": "inputs/0312-np_cl_reset.h",
+      "bytes": 5582,
+      "sha256": "B58A8EE74E1F0C85B75095F8B329A4C5C1658ECE88F9B763CD7DEC6AD3BAAEA2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\2f3a2f7566fd_np_v1_rtc_port.h",
+      "archived": "inputs/0313-2f3a2f7566fd_np_v1_rtc_port.h",
+      "bytes": 933,
+      "sha256": "BC04B64966038BE521C6D51A5CB95A5ABBFE0A6196B44B116B66B50D6435A85B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\069d17a6128b_np_v1_rtc.h",
+      "archived": "inputs/0314-069d17a6128b_np_v1_rtc.h",
+      "bytes": 2654,
+      "sha256": "52A0C1249D5D7CFEF317C56107F510F8B07A6A59CFFA38CAE1E1B1CFD394ADB4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\np_config_port.h",
+      "archived": "inputs/0315-np_config_port.h",
+      "bytes": 956,
+      "sha256": "F72C660D9B51751DD265744C0DAA4959D465855C4E9A201C4C27147ADC228140",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\np_config.h",
+      "archived": "inputs/0316-np_config.h",
+      "bytes": 1503,
+      "sha256": "C1A59CB9384CCA7382A9B2188D4FA5E42247C6295F643C274F15DA6180A1E25B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_nric.h",
+      "archived": "inputs/0317-xe_np_nric.h",
+      "bytes": 4878,
+      "sha256": "B312633BFF1EBF0E4BF6C8FA18CCC2E5A9B8EA0E339FC14F7C0E150DDFF66626",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_board.h",
+      "archived": "inputs/0318-xe_np_board.h",
+      "bytes": 15890,
+      "sha256": "B3C0ED26281459DA51F089C5355D6DF08B205DA018F04458FBD116CDFE92034F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_hal.h",
+      "archived": "inputs/0319-xe_np_hal.h",
+      "bytes": 2982,
+      "sha256": "A8658EF8F7C42B6BFB2828AFFDB7158E6BB018801FDB171A9F25DC05ECAC8234",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal.h",
+      "archived": "inputs/0320-stm32u5xx_hal.h",
+      "bytes": 40194,
+      "sha256": "23667A979FC9751AE762B958C8889793ADB89303B67EC40185F5CEE990C31573",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\stm32u5xx_hal_conf.h",
+      "archived": "inputs/0321-stm32u5xx_hal_conf.h",
+      "bytes": 20031,
+      "sha256": "4D7FF0E6A6929F4EF643322CD22BA15276E61E30458AF3BB2B6265422E04137E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc.h",
+      "archived": "inputs/0322-stm32u5xx_hal_rcc.h",
+      "bytes": 253877,
+      "sha256": "0954DC8FE732C92AC2F13947B1D6DCC5BE8BC5F127F7A08A6ACE426A5D38E3DC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_def.h",
+      "archived": "inputs/0323-stm32u5xx_hal_def.h",
+      "bytes": 7867,
+      "sha256": "46FC68FB243048CCA1915DE609DD21ABA5AD5F3643050CB13C3612D2D122FBE3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u5xx.h",
+      "archived": "inputs/0324-stm32u5xx.h",
+      "bytes": 11035,
+      "sha256": "A068D7F0020C564DC08EDEE53E28D65E5FD004AE025F3000F0B7683E48B634AB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\stm32u595xx.h",
+      "archived": "inputs/0325-stm32u595xx.h",
+      "bytes": 2135616,
+      "sha256": "E8A2647E5F301F49D3DD157589500BE2EA1179F3798B1AA0F544B3EC68806650",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Include\\core_cm33.h",
+      "archived": "inputs/0326-core_cm33.h",
+      "bytes": 192801,
+      "sha256": "D5C5FC559CBBBC1E495AF4AC2EA81959BCADB35AA69ECB1C20D183C3ED9CFEAE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Include\\cmsis_version.h",
+      "archived": "inputs/0327-cmsis_version.h",
+      "bytes": 1719,
+      "sha256": "8CDA7AC3FF6F0EB5E83C4FE613DD195151B24DA54167F5C3C007E599A03F1EDC",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Include\\cmsis_compiler.h",
+      "archived": "inputs/0328-cmsis_compiler.h",
+      "bytes": 9764,
+      "sha256": "869640702D811C4C63ABB52206715C891A93FD03BE954DF5AD40D378355AF3D6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Include\\cmsis_armclang.h",
+      "archived": "inputs/0329-cmsis_armclang.h",
+      "bytes": 49920,
+      "sha256": "11B39B96DDC1125124762B3423A77B90DD40EA5B4582A3513830245046B24311",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Include\\mpu_armv8.h",
+      "archived": "inputs/0330-mpu_armv8.h",
+      "bytes": 11722,
+      "sha256": "467A5CE9D65D9B37FC32E01001ED184500D56576F303713D27B76E68DD67911C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\CMSIS\\Device\\ST\\STM32U5xx\\Include\\system_stm32u5xx.h",
+      "archived": "inputs/0331-system_stm32u5xx.h",
+      "bytes": 2822,
+      "sha256": "02FBE05F5BF2D6DE0FD9A90A92D760EF8C89BE6B737C918DE03ACD75765071D7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h",
+      "archived": "inputs/0332-stm32_hal_legacy.h",
+      "bytes": 245366,
+      "sha256": "EECA89EF33BD709F9C180BE8603286B5817E1A4330ECF3D7E9D323BEE1914A6C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_rcc_ex.h",
+      "archived": "inputs/0333-stm32u5xx_hal_rcc_ex.h",
+      "bytes": 124586,
+      "sha256": "8853A8DB875E4B50982DFEE13C194C676B040CB2E8D7548425A1A198B82A3463",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio.h",
+      "archived": "inputs/0334-stm32u5xx_hal_gpio.h",
+      "bytes": 16656,
+      "sha256": "FF6D21DF7FD0902105FD1A503126AD224F421874F7DE8E6A622E0FC2A76A2B92",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_gpio_ex.h",
+      "archived": "inputs/0335-stm32u5xx_hal_gpio_ex.h",
+      "bytes": 17301,
+      "sha256": "A556A5BAA6B3AF7AFB5517C02CEE6BABB3CD201665ADAE0DE2F09CB726AC6840",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_icache.h",
+      "archived": "inputs/0336-stm32u5xx_hal_icache.h",
+      "bytes": 9846,
+      "sha256": "9A808F07C8B4F4BAF99AC36A66224A129FA06670E10DE938417AF9BB182C9141",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dcache.h",
+      "archived": "inputs/0337-stm32u5xx_hal_dcache.h",
+      "bytes": 14955,
+      "sha256": "6DC2198078CB35D34C173D6810F65A87F518930445AA2CA00E7DC7DDF211FE67",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma.h",
+      "archived": "inputs/0338-stm32u5xx_hal_dma.h",
+      "bytes": 46300,
+      "sha256": "621C3737F89CD2C445BBF69B7E65E3A64C04673C4D26319CAD0B800833B00596",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dma_ex.h",
+      "archived": "inputs/0339-stm32u5xx_hal_dma_ex.h",
+      "bytes": 39534,
+      "sha256": "61C726DFF075A302413950771DBB38A4A2B3F65AF1F062E0F3AC5555418CFAE3",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_cortex.h",
+      "archived": "inputs/0340-stm32u5xx_hal_cortex.h",
+      "bytes": 16981,
+      "sha256": "3271BBDD31E5BD1C2459CF9CFD1D86F63F0560A800C38B4DE26023FBA3AFD9BE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc.h",
+      "archived": "inputs/0341-stm32u5xx_hal_adc.h",
+      "bytes": 163688,
+      "sha256": "57A90BBFB0D1FBE7ECD12B82FEA1D4AF1FECFD842D9F7F4576E3982BB7B32B38",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_adc.h",
+      "archived": "inputs/0342-stm32u5xx_ll_adc.h",
+      "bytes": 542955,
+      "sha256": "BAAF9D593E22FF77E76A3CBA23250529E5B15396953D65637BE5A58E7538D7E4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_adc_ex.h",
+      "archived": "inputs/0343-stm32u5xx_hal_adc_ex.h",
+      "bytes": 85420,
+      "sha256": "D1287CB42E52CB5DCF187DB3CDD02097CA7DA1F60699977AA1A28E29096233E2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac.h",
+      "archived": "inputs/0344-stm32u5xx_hal_dac.h",
+      "bytes": 26211,
+      "sha256": "A5C2CA180E643A2CAB21AF2A94312CD0C91F6757B5375459A2C289BD82D31788",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_dac_ex.h",
+      "archived": "inputs/0345-stm32u5xx_hal_dac_ex.h",
+      "bytes": 14305,
+      "sha256": "D846D26390F9349E5B65F641499CC15DE67AAF2C5D62102A784E0AD675443518",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash.h",
+      "archived": "inputs/0346-stm32u5xx_hal_flash.h",
+      "bytes": 57726,
+      "sha256": "0600ABEAE0486B2EF007002F5FBEAFF318D1FBBB28109AF3E4E08FF43B392E40",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_flash_ex.h",
+      "archived": "inputs/0347-stm32u5xx_hal_flash_ex.h",
+      "bytes": 9218,
+      "sha256": "A17DB825FC1175BBE56A7D46DC12998F7610F7558B597709B416C43A56788907",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c.h",
+      "archived": "inputs/0348-stm32u5xx_hal_i2c.h",
+      "bytes": 40135,
+      "sha256": "21A212FF9060637E8ED74B9AD562283EEC219B38CAF00153082B1A4AD5AAD9FA",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_i2c_ex.h",
+      "archived": "inputs/0349-stm32u5xx_hal_i2c_ex.h",
+      "bytes": 13723,
+      "sha256": "371ACA77B8CDB17A372D92BA928E7AA4729799CBC75CFA09A1751D1BDDE74EB9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp.h",
+      "archived": "inputs/0350-stm32u5xx_hal_opamp.h",
+      "bytes": 17380,
+      "sha256": "78787AA841E910A0AFC5774C0B8F6D9AE1E124192CBFD396E0CFC7E47D74EFF8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_opamp_ex.h",
+      "archived": "inputs/0351-stm32u5xx_hal_opamp_ex.h",
+      "bytes": 2262,
+      "sha256": "B1F6DA3651DABB3C5144E88C747157A533E99D6A1956462A12C2A0EEB59A78A5",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr.h",
+      "archived": "inputs/0352-stm32u5xx_hal_pwr.h",
+      "bytes": 49967,
+      "sha256": "3979A05CC8250E7B25A086BBC7907B8C9A0D089858499B902AC155FE22DDC7D0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pwr_ex.h",
+      "archived": "inputs/0353-stm32u5xx_hal_pwr_ex.h",
+      "bytes": 47744,
+      "sha256": "569539557ADF7C86A7AD8811E3BAB944D85013452101D5235CF6EC252D7A6AFF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_ospi.h",
+      "archived": "inputs/0354-stm32u5xx_hal_ospi.h",
+      "bytes": 64424,
+      "sha256": "DE4381A9E1D99682468255E333095808325014BEC9728F4DEA037D5FF4596356",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_dlyb.h",
+      "archived": "inputs/0355-stm32u5xx_ll_dlyb.h",
+      "bytes": 3650,
+      "sha256": "8DE94CF15BC89FA562CF3AB74AF25018F26A401363BC5FD61FC87631890F4105",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd.h",
+      "archived": "inputs/0356-stm32u5xx_hal_sd.h",
+      "bytes": 42804,
+      "sha256": "79AAF96DD28F5185ED90187D851CC91CC3AD44216AEAE728D0150F124FFC0B4A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_sdmmc.h",
+      "archived": "inputs/0357-stm32u5xx_ll_sdmmc.h",
+      "bytes": 76348,
+      "sha256": "75C802F6E7ABE6F17C38F6D7B03B4074D6EAE4FCD3938306AAA2BCF6723D1595",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_sd_ex.h",
+      "archived": "inputs/0358-stm32u5xx_hal_sd_ex.h",
+      "bytes": 4520,
+      "sha256": "235DA204B0408D0A4E7A2FE8E41C75542B1BADB6DBE35DC0EB343666F774ABE1",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi.h",
+      "archived": "inputs/0359-stm32u5xx_hal_spi.h",
+      "bytes": 59495,
+      "sha256": "EEC23E2CB6358B9F770D5361287348B11A78FD61D9972B4EBB4A857AEE1B14E4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_spi_ex.h",
+      "archived": "inputs/0360-stm32u5xx_hal_spi_ex.h",
+      "bytes": 11657,
+      "sha256": "1025DF504096E90757A6E9419A12E17E3981F61EA9501382CF0A3713EB45892F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim.h",
+      "archived": "inputs/0361-stm32u5xx_hal_tim.h",
+      "bytes": 155267,
+      "sha256": "1C4D315B0FC7C4BF6C9E1835D361CE123AFEF70E00BAC309F8EA61BCA7771B78",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_tim_ex.h",
+      "archived": "inputs/0362-stm32u5xx_hal_tim_ex.h",
+      "bytes": 69441,
+      "sha256": "892205C1F0EED2F45EF8F5A11EC3CA4FB9A242DCA216E9F550D4995719BF17E4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart.h",
+      "archived": "inputs/0363-stm32u5xx_hal_uart.h",
+      "bytes": 91827,
+      "sha256": "E809A13DB32F384FE1DD000791A53036CEA36DD121A79D37D77D0F4BF5B3E6A8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_uart_ex.h",
+      "archived": "inputs/0364-stm32u5xx_hal_uart_ex.h",
+      "bytes": 26710,
+      "sha256": "AFB91095752CFCED2D92102317AAA768C8DF1989993067FA859F712E8FD8FE5F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd.h",
+      "archived": "inputs/0365-stm32u5xx_hal_pcd.h",
+      "bytes": 27097,
+      "sha256": "34160F725D397749D14BDB6179A6E10A32A6483D07B26B3E6A62B93AFFA81AA8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_ll_usb.h",
+      "archived": "inputs/0366-stm32u5xx_ll_usb.h",
+      "bytes": 49669,
+      "sha256": "E87F8253F0166932BD7009295B18DEEE2519645895009D0BFB459F4C7A9ACE1D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_pcd_ex.h",
+      "archived": "inputs/0367-stm32u5xx_hal_pcd_ex.h",
+      "bytes": 2949,
+      "sha256": "DF2A28FD1277F8CB3FD069844B501BED80C7F54E1CC129C45FB1F8ECB3AB116C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Drivers\\STM32U5xx_HAL_Driver\\Inc\\stm32u5xx_hal_exti.h",
+      "archived": "inputs/0368-stm32u5xx_hal_exti.h",
+      "bytes": 16154,
+      "sha256": "3CECF9C4F31D20992628B45BC5D192C277F404C2C692FC798C14A0AC4EE85525",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\xe_np_sensors_port.h",
+      "archived": "inputs/0369-xe_np_sensors_port.h",
+      "bytes": 1750,
+      "sha256": "CC952586D999532B6A3F10B5B5A2CDB53FF4BECE2113FF6F2E7E6A50AE5E33D6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_sensors.h",
+      "archived": "inputs/0370-xe_np_sensors.h",
+      "bytes": 4486,
+      "sha256": "5078FBF2C159C2C7D4F53A60B3B596F38E16387F2F8A115AC79C4D01B22AE642",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280.h",
+      "archived": "inputs/0371-bme280.h",
+      "bytes": 13095,
+      "sha256": "0476F04E3BBC24AB97EF735170A983A566276CDDF593EBA39331F4CC053A0ED6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Middlewares\\Bosch\\BME280_SensorAPI\\bme280_defs.h",
+      "archived": "inputs/0372-bme280_defs.h",
+      "bytes": 16915,
+      "sha256": "E4BFF60BB29C49C1FD68B1EA91A362063D5814FEE202F444D57F95595A577D0E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150.h",
+      "archived": "inputs/0373-bmm150.h",
+      "bytes": 16463,
+      "sha256": "BB51F04F957BA372F638FF45F33934A4D150FF57DB3F419C604EDF426F7C778A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_auto_sd_r78_20261005\\source\\Middlewares\\Bosch\\BMM150_SensorAPI\\bmm150_defs.h",
+      "archived": "inputs/0374-bmm150_defs.h",
+      "bytes": 23463,
+      "sha256": "BCCBE06B31F8F1A46DE6317DE67CE23AE13182B2B5C9E1230ADE0491C7078FDB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\usb_policy_check\\misc.h",
+      "archived": "inputs/0375-misc.h",
+      "bytes": 2082,
+      "sha256": "D5545638D38468A19D86B8614F338E77DA6F3E615FAEFC5CFF6708353A42C73F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Inc\\np_direct_packets.h",
+      "archived": "inputs/0376-np_direct_packets.h",
+      "bytes": 5737,
+      "sha256": "F8A6EA22E8F84F753A2446B0C4A7462B68D2E9D92C37AA677E439694AAF0CF8F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\np_modes.h",
+      "archived": "inputs/0377-np_modes.h",
+      "bytes": 581,
+      "sha256": "D56C237EBDF5AEBDA7B1A708DF2C803DF2E3BD5253A1A8DD7D538DA4F4886A4D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\np_usb20_release.h",
+      "archived": "inputs/0378-np_usb20_release.h",
+      "bytes": 754,
+      "sha256": "FB5A104604D5B47D385C7239A1BF4EB80C1148242EDF59F3FB9B3D28C3EDFFFB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\mode_policy.h",
+      "archived": "inputs/0379-mode_policy.h",
+      "bytes": 858,
+      "sha256": "F9B00A072F1A2F68A2CD6D02F1C4D9AAD8252F64EA8E39F3F08745C830ACA4FD",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\np_usb_auto_sd.h",
+      "archived": "inputs/0380-np_usb_auto_sd.h",
+      "bytes": 703,
+      "sha256": "B45879E8DA6796EC377D56BA8A264D68FC5C49E7F99BC4F8BA9E88C971175D6F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\mode_policy.h",
+      "archived": "inputs/0381-mode_policy.h",
+      "bytes": 823,
+      "sha256": "478F8704BB40ECA68645AA25E7BC929724FCF1F063886E3FCE8542D7952E42FD",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_boot_contract.h",
+      "archived": "inputs/0382-xe_np_boot_contract.h",
+      "bytes": 4915,
+      "sha256": "1EC1A4D4EC7262077C5F7516419BBBD5B4B70E7ADA1BC16B2FD93B14AD471758",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\np_sd_usb_identity.h",
+      "archived": "inputs/0383-np_sd_usb_identity.h",
+      "bytes": 518,
+      "sha256": "9BFF1F677E34DC21BC51180A227DBF64B6D0B064761FB7F384D3A34930AA310F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\np_sd_dma_chain.h",
+      "archived": "inputs/0384-np_sd_dma_chain.h",
+      "bytes": 867,
+      "sha256": "C8AA8946749204523EB1873D753A71BC32037F62995252AD6CFBA9EFBF8AFBBB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_usb_stream.h",
+      "archived": "inputs/0385-xe_np_usb_stream.h",
+      "bytes": 6292,
+      "sha256": "D0EC18E1AC24D2DF241F00AB88A374612D3FC00D4C3E00437B3CB3FDB5AD2D6E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\dataMGR.h",
+      "archived": "inputs/0386-dataMGR.h",
+      "bytes": 11069,
+      "sha256": "E1CED8BC7EA6683C3D0BFD858B03EF1DB820F8CC6BC0F50FE0A0943F8BB34594",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\ce32_wire.h",
+      "archived": "inputs/0387-ce32_wire.h",
+      "bytes": 4127,
+      "sha256": "4C3B56B9EA4ECA7C150CC48C83CA6D0F5BFF59FFF0440D6A1DFBA17C6D7F34C7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\main.h",
+      "archived": "inputs/0388-main.h",
+      "bytes": 5222,
+      "sha256": "AA7B93C2CE5102081045CE7C17DC285EEA9C021FF0745DAB57CE243840D5F867",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r2\\usb\\xe_np_app.h",
+      "archived": "inputs/0389-xe_np_app.h",
+      "bytes": 16862,
+      "sha256": "2C92CB7544EA35520974CC582D14B4D5D17E08FFFB1E7E0C3B0DF1FBB9EA6DED",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_runtime.h",
+      "archived": "inputs/0390-xe_np_runtime.h",
+      "bytes": 4415,
+      "sha256": "0A9F8950A0331BAAA50B3DE4E43FC928330BB555A504F3E5027CC049F4E4A6BE",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\CE32_COMMAND.h",
+      "archived": "inputs/0391-CE32_COMMAND.h",
+      "bytes": 2300,
+      "sha256": "D07BCCFF76745D7D172729276A7A9BC8843229E09296167631B7F9532F48D465",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\CE32_Sync.h",
+      "archived": "inputs/0392-CE32_Sync.h",
+      "bytes": 2539,
+      "sha256": "FA01E108F2ADCCDAE6E2099F0DAEEC0B6BBC4CA5E532C45CB91F13EC2F2738F6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_capture.h",
+      "archived": "inputs/0393-xe_np_capture.h",
+      "bytes": 11711,
+      "sha256": "7FCC8B6C42C5FA1239F91239A2B84C542025D4BF5ABDCC58850617F26753D414",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_incremental_r1\\xe_np_app\\613c69a88064_np_first_sync_port.h",
+      "archived": "inputs/0394-613c69a88064_np_first_sync_port.h",
+      "bytes": 5485,
+      "sha256": "149132BAAD6F55798A781750E807589B5E46C55943BB3E9DAEF896C7B241DD42",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_cl_source.h",
+      "archived": "inputs/0395-np_cl_source.h",
+      "bytes": 5088,
+      "sha256": "4C2EA7543DFE2B381912B246DFFCCC85B1EDD516D3E15BFF919C7FF8A87D654A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_app\\Inc\\np_capture_start_diag.h",
+      "archived": "inputs/0396-np_capture_start_diag.h",
+      "bytes": 2126,
+      "sha256": "EAF76C0963FD314FA87A5B361D3019F315842ACF47109860356CAF4435B6398C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\source_r2\\usb\\np_cl_source_port.h",
+      "archived": "inputs/0397-np_cl_source_port.h",
+      "bytes": 2993,
+      "sha256": "A2218719B5CD23AB5AFAC90139607D9B4A1886297E6BC81BA466CD04BF7A4E2A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Inc\\xe_np_psram.h",
+      "archived": "inputs/0398-xe_np_psram.h",
+      "bytes": 2554,
+      "sha256": "E098507D1C94D07D51F9B0413007841E914A2C6D4852E6CFC2ED8BA543F98FF8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\usb_loss_generic_profile\\np_usb_block_probe.h",
+      "archived": "inputs/0399-np_usb_block_probe.h",
+      "bytes": 7131,
+      "sha256": "C9F36F9D67DF9BFF246B2693FDA928A818492083C32217CD2BAF6F8B9F9E3789",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_sd_usb_ep0.inc",
+      "archived": "inputs/0400-np_sd_usb_ep0.inc",
+      "bytes": 938,
+      "sha256": "598FB91008E82E660EEBADE2C891E3B6316B2ED0A64A9CE6F4B09A3FD626BC2F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\_artifacts\\v1_usb_uhs200_restore_20261020\\retained-r2\\source\\np_usb_backend.inc",
+      "archived": "inputs/0401-np_usb_backend.inc",
+      "bytes": 2074,
+      "sha256": "007C1E5615FBE2AE1EDA0EBFEECA81785FBB3E6AB735B39FDA8E0E0C6B8AB537",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_usb_camera_arena.h",
+      "archived": "inputs/0402-np_usb_camera_arena.h",
+      "bytes": 1680,
+      "sha256": "35592F2061FD3721BAD813F804840B62C779CF1F3443A49C0C4B1D1C45F68229",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Src\\np_sd_read_crc.inc",
+      "archived": "inputs/0403-np_sd_read_crc.inc",
+      "bytes": 8446,
+      "sha256": "7820B17214BF0CFE5AD70F29D4BA11F6F88F23B909D72BDD076E2B7644A6DFA7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Src\\np_usb_camera_driver.inc",
+      "archived": "inputs/0404-np_usb_camera_driver.inc",
+      "bytes": 72337,
+      "sha256": "33F2D58135F2FFA4D61ECE45093EA9F37F89E69263D3FE8088E45AE3C25F1301",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_camera_timing.h",
+      "archived": "inputs/0405-np_camera_timing.h",
+      "bytes": 1483,
+      "sha256": "1F14D483326C83FB0AC6D1AE9E9C0FE85A1E57B4F155CE4ABA234DC3CD49F8DB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Src\\usb512_camera.h",
+      "archived": "inputs/0406-usb512_camera.h",
+      "bytes": 3812,
+      "sha256": "B74C28C37EA8F52F6C4262921062AC0FA4846A7CC9B268D1B7626674155DCA2B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_camera_storage.inc",
+      "archived": "inputs/0407-np_camera_storage.inc",
+      "bytes": 279,
+      "sha256": "949FAEAC0B20F9E75D20B07D3C986E20711C63E9C99E8BA62B6761725A5FAA3B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Src\\np_usb_camera_transport.inc",
+      "archived": "inputs/0408-np_usb_camera_transport.inc",
+      "bytes": 17593,
+      "sha256": "CF83C8ED31BCCD3D16DB7FCF35090BBBAFFE4114DAB82E2D626AEF0666D4FF2A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_usb_camera_submit.inc",
+      "archived": "inputs/0409-np_usb_camera_submit.inc",
+      "bytes": 1246,
+      "sha256": "9E75E87A3C72CCA08A4973434903FF2A56C94E9BF47F4BC881AF725F060F84EA",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_camera_hardware.inc",
+      "archived": "inputs/0410-np_camera_hardware.inc",
+      "bytes": 4871,
+      "sha256": "CFDE2883C7FB4C9CD45D6A2CA197762F959656E78F879E18DEBC66E2EBD83316",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Src\\np_usb_camera_only.inc",
+      "archived": "inputs/0411-np_usb_camera_only.inc",
+      "bytes": 1158,
+      "sha256": "FE9E10C55477CD25B18925F592342C74C286C486AED582E26EF58E17EB359335",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Src\\np_sd_usb_download.inc",
+      "archived": "inputs/0412-np_sd_usb_download.inc",
+      "bytes": 14070,
+      "sha256": "C98C575B8CBE6E2EC656CDCDB1E752F21FF5629E1C74F6B62E24DF28977EBD3F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\np_usb_download_link.h",
+      "archived": "inputs/0413-np_usb_download_link.h",
+      "bytes": 1073,
+      "sha256": "F56A9931241DB26D30027467C1E0426ED47A6E08A2C75DA0FFBEA477960ACBC0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Src\\np_usb_download_retire.inc",
+      "archived": "inputs/0414-np_usb_download_retire.inc",
+      "bytes": 4018,
+      "sha256": "7BCFE66D76622623DF7D941BE4B33245CE8C6D5280F7FA778EA1B5991D65205D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\np_usb_catalog.h",
+      "archived": "inputs/0415-np_usb_catalog.h",
+      "bytes": 1189,
+      "sha256": "CE4214E561535792F3DD9D29936C2D47C06DFE3C6F9DB74400117A67770A3634",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Src\\np_capture_anchor_usb.inc",
+      "archived": "inputs/0416-np_capture_anchor_usb.inc",
+      "bytes": 1078,
+      "sha256": "9783DADBAC143598D9D4F6D6E3EE5314F28C4BA96E8A1143DE524B44CB02F97B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\np_capture_anchor.h",
+      "archived": "inputs/0417-np_capture_anchor.h",
+      "bytes": 886,
+      "sha256": "2549C88A0205754D377A3A2223874C6F9E92093356B131A24CB8B21866804BB2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\xe_np_acquisition_anchor.h",
+      "archived": "inputs/0418-xe_np_acquisition_anchor.h",
+      "bytes": 3128,
+      "sha256": "36F9F3C27CCD97AE522B871226851F2B1AA52250A6C7F07CDE1C2A9A8BAF66F1",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\xe_np_online_impl.h",
+      "archived": "inputs/0419-xe_np_online_impl.h",
+      "bytes": 2678,
+      "sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\xe_np_online.h",
+      "archived": "inputs/0420-xe_np_online.h",
+      "bytes": 451,
+      "sha256": "7658A2DB3F8ABC5D5298637BFDF57411D38161D0F1E7E665B2194EACE9915A39",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\5da66f94e785_timing.inc",
+      "archived": "inputs/0421-5da66f94e785_timing.inc",
+      "bytes": 12386,
+      "sha256": "C4D6BAFBEF4F25BE7AE6F3D4F11199F4F882CC59C408EC006EF52B755B9A3469",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\header_closure_proposal\\usb\\Core\\Inc\\np_usb_timing.h",
+      "archived": "inputs/0422-np_usb_timing.h",
+      "bytes": 9693,
+      "sha256": "E01BCA399CB22544EE0161A4842DF57996F3C90F6D3E95E51F495D7E7F8B330A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\startup_first_source_diag_r2\\header_closure_proposal\\usb\\Core\\Inc\\np_capture_anchor.h",
+      "archived": "inputs/0423-np_capture_anchor.h",
+      "bytes": 886,
+      "sha256": "2549C88A0205754D377A3A2223874C6F9E92093356B131A24CB8B21866804BB2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_first_sync_port.h",
+      "archived": "inputs/0424-np_first_sync_port.h",
+      "bytes": 5513,
+      "sha256": "0478B522ABB41404F7DC3D0172B1465FE01D4B51FB69CDAEAC9253E2BDEBD2B6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\0093963236a5_np_usb_first_sync.inc",
+      "archived": "inputs/0425-0093963236a5_np_usb_first_sync.inc",
+      "bytes": 10036,
+      "sha256": "0AA96083FC27CB2A11867767F6F7B0F8944006992F0E8EE54EEE833C2A1C1496",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\closure\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_first_sync_usb.h",
+      "archived": "inputs/0426-np_first_sync_usb.h",
+      "bytes": 11354,
+      "sha256": "08479EA6C7E039890B99E91EFF0E4BB36F83FC9B0B43860F65248B8453F2B9C9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_first_sync_wire.h",
+      "archived": "inputs/0427-np_first_sync_wire.h",
+      "bytes": 11699,
+      "sha256": "95BCCC8951D70138327D79F456C34507B158CF01AB00BC9F9BD5ABAC402A437C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\76bd5fb9a932_np_v1_rtc_start.h",
+      "archived": "inputs/0428-76bd5fb9a932_np_v1_rtc_start.h",
+      "bytes": 833,
+      "sha256": "65F1710EA9F2AD27E702F662EA4AE4FBCF41755350F477013157854D705DAC08",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\closure\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_rtc_start_wire.h",
+      "archived": "inputs/0429-np_rtc_start_wire.h",
+      "bytes": 11823,
+      "sha256": "B374C7C35A1F5BB0B9F641A1E716FF0FFD13B83407BAC3B1461DD1B9365BD096",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\closure\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_fine_clock_wire.h",
+      "archived": "inputs/0430-np_fine_clock_wire.h",
+      "bytes": 13011,
+      "sha256": "AB147B73C6E9D1CC7951C131A7D9B637E4B33B29936A3378EC283C5F41CBA5D8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\closure\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_first_sync_sd.h",
+      "archived": "inputs/0431-np_first_sync_sd.h",
+      "bytes": 18141,
+      "sha256": "ABC5AA1E48831A7E98201CDD988DCFCC42D2723EDEB9FA7DFB84295AE5E89AE6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_v1_fine_clock.h",
+      "archived": "inputs/0432-np_v1_fine_clock.h",
+      "bytes": 1435,
+      "sha256": "E7C90B9BD5E263FEEBA4FA7C7B103B3C2642B6C4BCFE80249908F9E49FD481ED",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_usb_sd_reset.inc",
+      "archived": "inputs/0433-np_usb_sd_reset.inc",
+      "bytes": 2082,
+      "sha256": "35F963092B0307148B72FDFAD5ADE420F9C9F785BE3E026C23A9A1C4ABE35E9C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\73bab3d5dfed_np_config_usb.inc",
+      "archived": "inputs/0434-73bab3d5dfed_np_config_usb.inc",
+      "bytes": 2660,
+      "sha256": "D73251D065231DE8D59C9AF30D9AE4FD9CC7C60425A86534CBB92B4D5BCD87E9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Src\\np_usb_config_hold.inc",
+      "archived": "inputs/0435-np_usb_config_hold.inc",
+      "bytes": 703,
+      "sha256": "A66C8FB3BD6A59A3427DC52890B6A53F552F82A5C7AFD7CEEA519B654EC598E1",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\7bfda12557e6_np_v1_rtc_usb.inc",
+      "archived": "inputs/0436-7bfda12557e6_np_v1_rtc_usb.inc",
+      "bytes": 1092,
+      "sha256": "E9E304D012BE25B89F2915F5B5DF76B000C174673AE550E4624FDFEBC98E429C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\c640d27bedeb_np_v1_rtc_port.inc",
+      "archived": "inputs/0437-c640d27bedeb_np_v1_rtc_port.inc",
+      "bytes": 4139,
+      "sha256": "0BD40E1B7C26EAEFA3D542FD1E86EA5E08AEAD5E3760183E8D3B63F0086D545C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_rtc_settled_capacity_incremental_r1\\xe_np_usb_stream\\fbb14bc6d66a_np_v1_rtc_control.h",
+      "archived": "inputs/0438-fbb14bc6d66a_np_v1_rtc_control.h",
+      "bytes": 4634,
+      "sha256": "83EED1751C2594908D29FD8CF7A252AC2AD60370632C96F762C83F7603D4AED4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\np_v1_rtc_calendar.h",
+      "archived": "inputs/0439-np_v1_rtc_calendar.h",
+      "bytes": 3606,
+      "sha256": "9E77567849932CAEF4D599FA3FEBC73761FEFEEEB08C80581C87D142FBA167A7",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\Core\\Inc\\xe_np_online_impl.h",
+      "archived": "inputs/0440-xe_np_online_impl.h",
+      "bytes": 2678,
+      "sha256": "68A6B7988E5F3CC0C8FFC06E5CEA3C43762FBFD7ACCE3726725BC8B595AFEFF9",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\ep0_integrated_r1\\usb_source\\Core\\Src\\np_usb_start_ack.inc",
+      "archived": "inputs/0441-np_usb_start_ack.inc",
+      "bytes": 3641,
+      "sha256": "A4DE9BE880D90015E31D3807F5E3873C07A592EA38359BC829E2DED86B986237",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_integrity_20261016\\paired_restore\\source\\Core\\Src\\np_modes_usb.inc",
+      "archived": "inputs/0442-np_modes_usb.inc",
+      "bytes": 2088,
+      "sha256": "9A26E684AFC52B4FCB19EDDA129C846B3EDC99D62275CEBD619E82A8919691F4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\startup_diag_usb.inc",
+      "archived": "inputs/0443-startup_diag_usb.inc",
+      "bytes": 821,
+      "sha256": "E5DE28F674BDBCAF44644FCB7BE32AD6E9648F76B594A6AA26A7E42CA7671BF0",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\startup_admission_usb.inc",
+      "archived": "inputs/0444-startup_admission_usb.inc",
+      "bytes": 1047,
+      "sha256": "CA89F6C13C75916B64D477901B589BD31BC1443829CA203553AD9ACB619609E2",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_usb_fast_startup_r79r2_20261006\\source\\Core\\Src\\np_phase_sweep_usb.inc",
+      "archived": "inputs/0445-np_phase_sweep_usb.inc",
+      "bytes": 838,
+      "sha256": "621E11027979C0932F76107D032643A605A8795E231BDA20CC66BCEF16AF1ABD",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\np_usb_sd_format.h",
+      "archived": "inputs/0446-np_usb_sd_format.h",
+      "bytes": 7400,
+      "sha256": "DE863B06D727BE747EA5CD5562BB8C64AB126847346A497842876DCA06C65C8B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\usb_source\\frozen\\Firmware\\V1\\Core\\Inc\\np_sd_fast_crc.h",
+      "archived": "inputs/0447-np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_usb_sd_job_service.inc",
+      "archived": "inputs/0448-np_usb_sd_job_service.inc",
+      "bytes": 4608,
+      "sha256": "912CD3CC45E43B12E7FECA32AF3F82D3A6C7AB677DD02264516DA15D35BE0F62",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_usb_sd_job_backend.inc",
+      "archived": "inputs/0449-np_usb_sd_job_backend.inc",
+      "bytes": 14533,
+      "sha256": "292E0C96AF11FAD33ED716FC8F278C1535BA0C67924FB612E63A3C3631017639",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_usb_job_reconcile.h",
+      "archived": "inputs/0450-np_sd_usb_job_reconcile.h",
+      "bytes": 1928,
+      "sha256": "0F25BF1EC7AD9F94391C3F999DF5C47C55752F1C32E5E96E3D8268D46DB02397",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_usb_sd_job_platform.inc",
+      "archived": "inputs/0451-np_usb_sd_job_platform.inc",
+      "bytes": 11411,
+      "sha256": "701BE900CDC0317D0C06488D3D28D51C5E13187212602274D191C1DF2B9D90D6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_ce64.h",
+      "archived": "inputs/0452-np_ce64.h",
+      "bytes": 7015,
+      "sha256": "366F648FB9F3685F997A9D6FA2E768CAF98D96CF8667E9A2663631AB98D5D87C",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_log.h",
+      "archived": "inputs/0453-np_sd_log.h",
+      "bytes": 10503,
+      "sha256": "175438E019DCEDA5BF93915EBBBF5650532D53953E5E13C63B79F4863958A76F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_control.h",
+      "archived": "inputs/0454-np_sd_control.h",
+      "bytes": 5844,
+      "sha256": "AFC7C4A27A327CFC994B765CCBE82AF8B13972B2762735580181F9DB40B65CAB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_modes.h",
+      "archived": "inputs/0455-np_modes.h",
+      "bytes": 426,
+      "sha256": "0AA441B3B02A8EF41ADAD3905D896083BF2FC6AE5B3D48E4E56D2A5326781C81",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_sd_fast_crc.h",
+      "archived": "inputs/0456-np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Inc\\np_store_v2.h",
+      "archived": "inputs/0457-np_store_v2.h",
+      "bytes": 12689,
+      "sha256": "3632CFD46B5DDCCADD3FE5F1C45D3168DB4E9AA1A58698604CD2BD8EC3741047",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\usb_policy_check\\grid.inc",
+      "archived": "inputs/0458-grid.inc",
+      "bytes": 9367,
+      "sha256": "DD36EDBD6CE1FD11D4A4C888B35E02C75F9015E3C9599F98E6A9BA0C18FABBE4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_enforced_incremental_r1\\xe_np_usb_stream\\20157d434578_4187eddd4f83_np_sensor_grid_usb_adapter.h",
+      "archived": "inputs/0459-20157d434578_4187eddd4f83_np_sensor_grid_usb_adapter.h",
+      "bytes": 5614,
+      "sha256": "6F93EC27342EE45D5B9E72ADEC9CE851157F6B8E36462E6192EF6234CB3E6805",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_sensor_grid_batch.h",
+      "archived": "inputs/0460-np_sensor_grid_batch.h",
+      "bytes": 6476,
+      "sha256": "5040B515A8397C43F8EA6082C75201B31E65B3E8F2EF58706D36BF2C2C77DACF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_sensor_grid.h",
+      "archived": "inputs/0461-np_sensor_grid.h",
+      "bytes": 2693,
+      "sha256": "D500E1B33870FECF9ADA3F8F9B6656AD5A30F9CEEAF6E8E5C363B287F4E5FDC6",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_imu_grid_wire.h",
+      "archived": "inputs/0462-np_imu_grid_wire.h",
+      "bytes": 6657,
+      "sha256": "ADA66508252D16D7ACFFAEFC9AFFA34164B072F70C65A47B8652F6233FD1136E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_enforced_incremental_r1\\xe_np_usb_stream\\78864d88bb60_np_usb_grid_port.inc",
+      "archived": "inputs/0463-78864d88bb60_np_usb_grid_port.inc",
+      "bytes": 6337,
+      "sha256": "8335F9C9BC51704222E2E243998327B46EBF6ABE3FFBAFCB59E8D9F6035C755A",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_enforced_incremental_r1\\xe_np_usb_stream\\ad29d830bb50_np_usb_grid_control.h",
+      "archived": "inputs/0464-ad29d830bb50_np_usb_grid_control.h",
+      "bytes": 3642,
+      "sha256": "5D73B8DBEA2C7027E8F2A3019F34D8077267687DBFCE990EC408D4C9B3C6919E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_sensor_grid_phase_wire.h",
+      "archived": "inputs/0465-np_sensor_grid_phase_wire.h",
+      "bytes": 2795,
+      "sha256": "1493DA8529AB00A491B3C893440E31052E5B730D00DBDA19F5F45B8A67B3C5C4",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_r7_source\\xe_np_usb_stream\\Inc\\np_imu_grid_phase.h",
+      "archived": "inputs/0466-np_imu_grid_phase.h",
+      "bytes": 5460,
+      "sha256": "54D1FEE3FCD103D0BFE0549BC3BF9D644433B1FD6BA2889895FB250574878F3D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_enforced_incremental_r1\\xe_np_usb_stream\\702d802b43c6_np_sensor_grid_session.h",
+      "archived": "inputs/0467-702d802b43c6_np_sensor_grid_session.h",
+      "bytes": 7670,
+      "sha256": "66F1414E11714C20F359946C8B5CEABB9F4FFF444D63355292B60FF12E1C0775",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_enforced_incremental_r1\\xe_np_usb_stream\\228a653e62b3_np_sensor_grid_timer.h",
+      "archived": "inputs/0468-228a653e62b3_np_sensor_grid_timer.h",
+      "bytes": 3215,
+      "sha256": "36660BC56D6AFF229418DA25486DF1042DDF0A0C816AD0FAB090E18433E89365",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\usb_grid_enforced_incremental_r1\\xe_np_usb_stream\\4cc1dc0f937c_np_sensor_grid_phase.h",
+      "archived": "inputs/0469-4cc1dc0f937c_np_sensor_grid_phase.h",
+      "bytes": 2130,
+      "sha256": "7EB2514556132261641B857B3DB565FC163D685681B2282074C1B8B02E17A18F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_rtc_20261029\\control_reject_diag_r2\\usb_source\\Core\\Src\\np_usb_control_reject.inc",
+      "archived": "inputs/0470-np_usb_control_reject.inc",
+      "bytes": 2922,
+      "sha256": "A980F6823BD8436BA760834ED826FF4444818A4A1F541BDC18FEA0ECBB0ED58F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_deterministic_20261029\\diagnostic\\usb_lifecycle_diag.inc",
+      "archived": "inputs/0471-usb_lifecycle_diag.inc",
+      "bytes": 2473,
+      "sha256": "E704B6D4EC45CD0E602C3023F32B01DBD993CC621C83F465C22BE2225EBDD9BF",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\Firmware\\V1\\Core\\Src\\np_cl_usb.inc",
+      "archived": "inputs/0472-np_cl_usb.inc",
+      "bytes": 8724,
+      "sha256": "E6B1E0DA8AD0E477AA39DF67E9FD73DD7840D928CFEB59DA843AE974CD77EA6F",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_control_port.h",
+      "archived": "inputs/0473-np_cl_control_port.h",
+      "bytes": 384,
+      "sha256": "D81198DABE5B54795446D2CC6DC5CA6A6760854C75073988AE712AC19C6EE995",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_workspace.h",
+      "archived": "inputs/0474-np_cl_workspace.h",
+      "bytes": 3096,
+      "sha256": "8671B055C41685E1846BCE8AE25FB4F05AEC1BE1C319C6FBA9E1B0D3A3F90E75",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_v1.h",
+      "archived": "inputs/0475-np_cl_v1.h",
+      "bytes": 5501,
+      "sha256": "DF5EE8058EE6D662E0CEBEF4E133E98A8163C8E26498583094AA6DD0C6960277",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_kernel.h",
+      "archived": "inputs/0476-np_cl_kernel.h",
+      "bytes": 4077,
+      "sha256": "6FA0D0118A1CB487273D86D2B878BE600AAA464A49941E1E92627A4B6267CF4E",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_journal.h",
+      "archived": "inputs/0477-np_cl_journal.h",
+      "bytes": 4004,
+      "sha256": "E69FD8346A12A7E07F7681CC8826A064041FC6A9C5B3715ADE4F1FEBC1FA5913",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_event_wire.h",
+      "archived": "inputs/0478-np_cl_event_wire.h",
+      "bytes": 2788,
+      "sha256": "5E13A70903B38B5AB0E56638809B40BA6F36EB3A8AA62200BD58B666EB8D3815",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_control_wire.h",
+      "archived": "inputs/0479-np_cl_control_wire.h",
+      "bytes": 4257,
+      "sha256": "47D5C133EFF95E835BFE6D1A58CB954E6C7DEA7D042E1AC302C0E9F7065EBD4D",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "D:\\Code\\WILDX_console\\WILDX_console\\_artifacts\\v1-cl-published\\candidate\\usb-headers\\np_cl_cycle_probe.h",
+      "archived": "inputs/0480-np_cl_cycle_probe.h",
+      "bytes": 9365,
+      "sha256": "47377BA69375958E0FC3C800E63FFDC40EB8B81B3CDDD7C5D7036C2E746641DB",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\usb_policy_check\\sensors.inc",
+      "archived": "inputs/0481-sensors.inc",
+      "bytes": 3424,
+      "sha256": "E34E41E612ADD4FA4FED80856C56BCB865EF36224AFF91B55241FD15AA22A04B",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\closed_loop_fix_20261102\\V1\\usb_ready_profile\\queue.inc",
+      "archived": "inputs/0482-queue.inc",
+      "bytes": 12205,
+      "sha256": "C6C0A1331434D9953F7E127E5ADC08C52357FC5C668C123CA31C46252DD7F2D8",
+      "scope": "actual compiler dependency closure; inherited objects pinned separately"
+    },
+    {
+      "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r10\\receipt.json",
+      "archived": "inputs/0483-receipt.json",
+      "bytes": 23415,
+      "sha256": "18DFD1EBB80E32F7DCFE292BA36F7952B570628666A5713F86B04DA40B90989C",
+      "scope": "exact8KiB startup assembly/link custody"
+    },
+    {
+      "original": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\ce32-rx\\source-receipt.json",
+      "archived": "inputs/0484-source-receipt.json",
+      "bytes": 784,
+      "sha256": "958AE70F00FAAE8D20ACBAC90C8A78F70CC875AFC2BDADD4A75A10844D78B10F",
+      "scope": "actual CE32 source preimage custody"
+    }
+  ],
+  "parents": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\accepted.json",
+      "bytes": 7215,
+      "sha256": "683D51E09AE6C126EBD0235FF303E91B0685E66B1F1FBBD2662A6A755974BC79"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\source-freeze-candidate.zip",
+      "bytes": 2545832,
+      "sha256": "C76D37DA7057A0B13EABD7DDBFD9813D06D57F1404F41FF21FDB12C5AD5C1B0C"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_gui_support_20261105\\source-freeze-final.zip",
+      "bytes": 1906934,
+      "sha256": "7FC02B7EFE10637B4038D2B9EE8A3C2AD1F2C99218DD08982DF450CB73BDBBC6"
+    }
+  ],
+  "limits": [
+    "Inherited dependency/object custody references the prior accepted archive; no fresh qualification is inferred.",
+    "USB actual stack reservation8192; observed download-mode conditional bound7380, not a universal interrupt-stack proof.",
+    "SD-rail request/readback plus MCUreset is not an electricalVDD0/whole-devicepowercut measurement."
+  ]
+}

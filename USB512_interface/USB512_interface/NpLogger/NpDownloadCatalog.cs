@@ -190,6 +190,7 @@ namespace CE32_console
         static List<NpDownloadRecord> ReadStoreV2(Stream s,bool available) {
             var store=NpV1StoreV2.Read(s);var list=new List<NpDownloadRecord>();
             string allocation="V1 filesystem2 checkpoint generation "+store.Generation+", allocation frontier "+store.Frontier+". Card unchanged; no tail reclaimed or free space inferred. ";
+            if(store.DeleteRecoveryNote!=null)allocation=store.DeleteRecoveryNote+" "+allocation;
             foreach(var entry in store.Entries) {
                 if(!entry.Available) {
                     var missing=Unavailable(0,0,"Filesystem2 record "+entry.Index+": "+entry.ValidationError);

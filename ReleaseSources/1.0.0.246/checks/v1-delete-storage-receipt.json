@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T22:17:44.766298+00:00",
+  "finished_utc": "2026-11-05T22:17:48.743129+00:00",
+  "seconds": 3.9767237000050955,
+  "scope": "Actual frozen storage header with sector persistence/power-cut callbacks; no firmware/app build, hardware, SD controller atomicity or physical power-cut claim",
+  "checks": {
+    "checks": 1689632,
+    "delete_cuts": 6156,
+    "recovery_cuts": 5643,
+    "corruptions": 1109,
+    "append_cases": 6
+  },
+  "source_inputs": [
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2.h",
+      "bytes": 12976,
+      "sha256": "703A07BFBA2A2D6BE766266D53885B2F18E78943BBF263304E99F5FFC7B225DA"
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_store_v2_delete.h",
+      "bytes": 14507,
+      "sha256": "DF05B9DCBDAAB476B7B12D1B85E3076F4E3121DEBA885A175BCF719B98CEBA71"
+    },
+    {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\core\\np_sd_fast_crc.h",
+      "bytes": 754,
+      "sha256": "40765FE1EB24A52839639AA65E90E344074E20F12EB0EEE5DF1394A1DD143E0B"
+    },
+    {
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\actual_api.inc",
+      "bytes": 695,
+      "sha256": "73CD514A98CAC70E83165BFE6894C3032507CA5EF59A37BA5A44F45611386630"
+    },
+    {
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\fixture.c",
+      "bytes": 12449,
+      "sha256": "B94CD770C47FB7E834F94F93C8FFAEE1E10AE9D92CF475AF1224CAAF97AF63C1"
+    },
+    {
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\card_fixture.inc",
+      "bytes": 2997,
+      "sha256": "A3D6C178F253818B32954336BAB6807604ADCE4BF05458FD2893393FB1F0D9F0"
+    },
+    {
+      "source": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\prove.py",
+      "bytes": 3613,
+      "sha256": "7B95CBB7070D61426A1F58B7778E683298E442D093C968AF3D3398449E1392DC"
+    }
+  ],
+  "result_sha256": "59A6E6DCF090349DF1F299E0DA97CDE17313E44DAB5774084B13C837F4429714",
+  "command_sha256": "59F87B449400046787D5AD4B52FAD8403D1FCC66CECE75B3FB9EDE56D436B7F4"
+}

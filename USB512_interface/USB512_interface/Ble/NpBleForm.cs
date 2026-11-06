@@ -10,6 +10,7 @@ using CE32_console;
 using WildNpConfiguration;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
+using WildNpClosedLoop;
 
 namespace USB512_interface
 {
@@ -68,6 +69,10 @@ namespace USB512_interface
         readonly HashSet<Tuple<uint,uint,uint>> acknowledgedSdProfiles=new HashSet<Tuple<uint,uint,uint>>();
         string configurationReadError;
         Form preview;
+        readonly Label previewAvailability=new Label{AutoSize=true,Visible=false,MaximumSize=new Size(850,0)};
+        volatile int previewClosedLoop=-1; // Per connection: unknown/off/configured, from device receipts.
+        long previewLeaseRetireUntil;
+        bool? PreviewClosedLoop {get{return previewClosedLoop<0?(bool?)null:previewClosedLoop!=0;}}
         NpSdStatus current;
         int recorderVersion;
         uint np2AvailableMask;
@@ -138,7 +143,7 @@ namespace USB512_interface
             };
             recordingSettings=Add(actions,"Recording settings",OpenRecordingSettings);
             Add(actions, "Sync PC time", () => SyncClock());
-            previewButton=Add(actions,"NP Preview",()=>{OpenPreview();return Task.CompletedTask;});
+            previewButton=Add(actions,"NP Preview",OpenPreview);
             recordingsButton=Add(actions,"Recordings…",OpenRecordings);
             overwriteRecording=Add(actions,"Overwrite from last known position…",OverwriteFromLastKnownPosition);
             var reportButton=new Button {Text="Report…",AutoSize=true};
@@ -159,7 +164,7 @@ namespace USB512_interface
             maintenanceActions.SetFlowBreak(maintenanceActions.Controls[maintenanceActions.Controls.Count-1],true);
             maintenanceActions.Controls.Add(maintenanceResult);
             var statusPanel = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Top, FlowDirection=FlowDirection.TopDown,WrapContents=false,Padding=Padding.Empty };
-            statusPanel.Controls.Add(recordingTime);statusPanel.Controls.Add(state);statusPanel.Controls.Add(firmwareStatus);statusPanel.Controls.Add(mediaStatus);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
+            statusPanel.Controls.Add(recordingTime);statusPanel.Controls.Add(state);statusPanel.Controls.Add(previewAvailability);statusPanel.Controls.Add(firmwareStatus);statusPanel.Controls.Add(mediaStatus);statusPanel.Controls.Add(clockStatus);statusPanel.Controls.Add(configurationStatus);statusPanel.Controls.Add(reportButton);
             statusPanel.SizeChanged+=delegate {foreach(var label in new[]{state,firmwareStatus,mediaStatus,clockStatus,configurationStatus})label.MaximumSize=new Size(Math.Max(1,statusPanel.ClientSize.Width),0);};
             InitializeBleImu(statusPanel);
             maintenanceActions.SizeChanged+=delegate {maintenancePeer.MaximumSize=new Size(Math.Max(1,maintenanceActions.ClientSize.Width),0);};
@@ -299,7 +304,10 @@ namespace USB512_interface
                 (linked && recorderVersion!=0 || HasHostRecording());
             recordingSettings.Enabled=ready && pendingStop==null && (V2?NpV2SdControl.CanConfigure(current):NpV1BleProtocol.CanManageStorage(current));
             usbDownload.Visible=recorderVersion==1;
-            previewButton.Visible=recorderVersion!=0;previewButton.Enabled=ready && (V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current));
+            bool devicePreview=V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current);
+            previewButton.Visible=recorderVersion!=0;previewButton.Enabled=ready && CanPreviewHost(devicePreview,PreviewClosedLoop);
+            previewAvailability.Text=PreviewBlockedReason(PreviewClosedLoop);
+            previewAvailability.Visible=linked && recorderVersion!=0 && previewAvailability.Text.Length!=0;
             recordingsButton.Enabled=ready;
             // Manual V2 START is a request, not a cached host admission decision.
             // Firmware owns storage/profile acceptance and returns its rejection.
@@ -313,7 +321,7 @@ namespace USB512_interface
             overwriteRecording.Enabled=ready && V2 && NpV2SdControl.CanOverwriteFromLastKnownPosition(current);
         }
         void ClosePreview(){if(preview!=null){preview.Close();preview.Dispose();preview=null;}}
-        void ResetDevice(){ResetBleFirstSync();ClearBleProbePreparation();ResetBleImu();ForgetPendingStop();RetireBleRecordingMetadata();bleDeviceUid=null;ClosePreview();ResetMedia();recordingSeconds=0;recordingTime.Text=RecordingTimeText(0);connectedAddress=0;mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();acknowledgedSdProfiles.Clear();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
+        void ResetDevice(){ResetBleFirstSync();ClearBleProbePreparation();ResetBleImu();ForgetPendingStop();RetireBleRecordingMetadata();bleDeviceUid=null;ClosePreview();previewClosedLoop=-1;previewLeaseRetireUntil=0;bleClosedLoopSetup=null;ResetMedia();recordingSeconds=0;recordingTime.Text=RecordingTimeText(0);connectedAddress=0;mediaSettingsChanged=stopRequested=false;clock.Reset();clockStatus.Text="";configurationReceipts.Reset();acknowledgedSdProfiles.Clear();configurationStatus.Text="";configurationReadError=null;current=null;recorderVersion=0;np2AvailableMask=0;firmwareIdentity=null;firmwareStatus.Visible=false;firmwareStatus.Text="";Profiles(null);UpdateControls();}
         async Task Run(Func<Task> action)
         {
             if (busy || hostBusy) return; busy = true; UpdateControls();
@@ -421,6 +429,7 @@ namespace USB512_interface
                 connectedAddress=value;
                 var s=await ReadStatus();if(V2)await InitializeClock(s);
                 await WarmBleFirstSyncCapabilities();
+                await RefreshPreviewClosedLoop();
                 if(!connection.Connected)throw new IOException("BLE disconnected during initialization.");
                 Append("Connected to " + selected + ".");
             }catch{connection.Disconnect();ResetDevice();throw;}
@@ -677,10 +686,11 @@ namespace USB512_interface
             if(p.Mask!=s.Mask || p.Hz!=s.Hz || !V2 && p.Mask==0 && mediaSettingsChanged){await Apply();s=await ReadStatus();}
             RequireStartNotCanceled();
             if(p.Mask!=s.Mask || p.Hz!=s.Hz)throw new IOException("Device recording settings differ from the request. Recording was not started.");
+            await RequirePreviewRetiredForClosedLoop(NpClosedLoopSettings.Load(V2),s);RequireStartNotCanceled();
             BeginBleRtcRecordingSetup(s);
             await PrepareBleHardwareRtc(s);RequireStartNotCanceled();
             bleClosedLoopSetup=await NpClosedLoopSettings.Prepare(V2,true,s.Mask,s.Hz,
-                (request,token)=>connection.ExchangeAsync(0xb9,request,token),CancellationToken.None,Append);
+                ExchangeClosedLoopForPreview,CancellationToken.None,Append);
             RequireStartNotCanceled();
             var warningProfile=Tuple.Create(s.Mask,s.Hz,s.Capacity);
             if(!V2 && (!s.Qualified || s.Mask==3 && s.Hz==30000) && !acknowledgedSdProfiles.Contains(warningProfile)) {
@@ -841,12 +851,60 @@ namespace USB512_interface
             if(!V2 || !connection.Connected){clock.Reset();clockStatus.Text="";return;}
             ShowClock();
         }
-        void OpenPreview()
+        internal static bool CanPreviewHost(bool deviceCanPreview,bool? closedLoop)
+        {return deviceCanPreview && closedLoop==false;}
+        internal static string PreviewBlockedReason(bool? closedLoop)
+        {return closedLoop==true?"BLE preview unavailable while closed-loop is configured or active.":closedLoop==null?"BLE preview unavailable: firmware did not confirm closed-loop state.":String.Empty;}
+        internal static bool? ClosedLoopPreviewState(byte[] request,byte[] response)
         {
-            if(V2?!NpV2SdControl.CanPreview(current):!NpV1BlePreviewForm.CanPreview(current))throw new IOException("Start a probe recording with device preview support before opening Preview.");
+            var q=NpClosedLoopControl.Parse(request);
+            var r=NpClosedLoopControl.ParseReply(response,q.Operation,q.RequestId);
+            if(r.Result!=0)return null;
+            bool configured=(r.Flags&2U)!=0;
+            if(q.Operation==1 && (configured!=(q.Channels.Length!=0) || configured && r.ConfigCrc!=q.ConfigCrc))return null;
+            return configured;
+        }
+        async Task<byte[]> ExchangeClosedLoopForPreview(byte[] request,CancellationToken cancel)
+        {
+            int epoch=connection.Epoch;ulong peer=connectedAddress;
+            if(NpClosedLoopControl.Parse(request).Operation==1){previewClosedLoop=-1;Ui(UpdateControls);}
+            byte[] response=await connection.ExchangeAsync(0xb9,request,cancel);
+            bool? configured=ClosedLoopPreviewState(request,response);
+            if(connection.Connected && connection.Epoch==epoch && connectedAddress==peer){previewClosedLoop=configured.HasValue?(configured.Value?1:0):-1;Ui(UpdateControls);}
+            return response;
+        }
+        async Task RefreshPreviewClosedLoop()
+        {
+            int epoch=connection.Epoch;ulong peer=connectedAddress;
+            try{using(var timeout=new CancellationTokenSource(1500))await ExchangeClosedLoopForPreview(NpClosedLoopControl.Request(2,Next()),timeout.Token);}
+            catch(Exception){if(connection.Epoch==epoch && connectedAddress==peer)previewClosedLoop=-1;}
+            UpdateControls(); // An unavailable optional query never gates recording or connection.
+        }
+        async Task RequirePreviewRetiredForClosedLoop(NpClosedLoopSettings settings,NpSdStatus s)
+        {
+            if(!settings.Enabled || !NpClosedLoopSettings.CanUseDetectors(V2,true,s.Mask,s.Hz,settings.Channels.Length) ||
+                !NpClosedLoopSettings.CanUseSources(V2,true,settings.Channels) || settings.Channels.Any(c=>c==null || c.Filter!=6))return;
+            if(preview!=null && !preview.IsDisposed)throw new IOException("Close NP Preview before configuring closed-loop. Recording has not started.");
+            if(previewLeaseRetireUntil!=0){
+                // Start's successful ReadStatus is a connection-transaction
+                // barrier behind the closed preview's last write. Age its
+                // unacknowledged lease after that barrier, not after Close.
+                int epoch=connection.Epoch;
+                await Task.Delay(2250);
+                if(!connection.Connected || connection.Epoch!=epoch)throw new IOException("Connection changed while retiring the preview lease. Recording has not started.");
+                previewLeaseRetireUntil=0;
+            }
+        }
+        async Task OpenPreview()
+        {
+            await RefreshPreviewClosedLoop();
+            if(!CanPreviewHost(V2?NpV2SdControl.CanPreview(current):NpV1BlePreviewForm.CanPreview(current),PreviewClosedLoop))throw new IOException(PreviewBlockedReason(PreviewClosedLoop).Length!=0?PreviewBlockedReason(PreviewClosedLoop):"Start a probe recording with device preview support before opening Preview.");
             if(preview!=null && !preview.IsDisposed){preview.Activate();return;}
             var calibration=NpCalibrationStore.Get("ble:"+address.Text.Trim().ToUpperInvariant());calibration.RequireModel(V2,(int)current.Mask);
-            preview=V2?(Form)new NpBlePreviewForm(connection,()=>V2?current:null,()=>busy || hostBusy || connection.PreviewLowerPriorityBusy,calibration){RecordingInfo=()=>recordingTime.Text}:new NpV1BlePreviewForm(connection,()=>recorderVersion==1?current:null,()=>busy || hostBusy || connection.PreviewLowerPriorityBusy,calibration){RecordingInfo=()=>recordingTime.Text};
+            Func<string> recordingInfo=()=>recordingTime.Text+(PreviewClosedLoop==false?String.Empty:" · "+PreviewBlockedReason(PreviewClosedLoop));
+            preview=V2?(Form)new NpBlePreviewForm(connection,()=>V2&&CanPreviewHost(true,PreviewClosedLoop)?current:null,()=>busy || hostBusy || connection.PreviewLowerPriorityBusy,calibration){RecordingInfo=recordingInfo}:new NpV1BlePreviewForm(connection,()=>recorderVersion==1?current:null,()=>busy || hostBusy || connection.PreviewLowerPriorityBusy,calibration){RecordingInfo=recordingInfo,ClosedLoopState=()=>PreviewClosedLoop};
+            int epoch=connection.Epoch;
+            preview.FormClosed+=delegate{if(connection.Epoch==epoch)previewLeaseRetireUntil=System.Diagnostics.Stopwatch.GetTimestamp()+(long)Math.Ceiling(2.25*System.Diagnostics.Stopwatch.Frequency);};
             preview.Show();
         }
         async Task ConfigureChannels(IWin32Window owner)

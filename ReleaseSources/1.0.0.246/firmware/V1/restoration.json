@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "uid": "001D00065942500B20313354",
+  "original_restored": true,
+  "original_app_crc32": "82E51DEA",
+  "original_usb_crc32": "4F7B521A",
+  "flash_sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+  "options_sha256": "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+  "original_profile_verified": true,
+  "protected_profile_verified": true,
+  "usb_mode": 3,
+  "idle": true,
+  "card_sectors": 500695040,
+  "protected_recordings": 74,
+  "cpu_debug_enabled": false,
+  "restore_receipt": "restore_2_verified.json",
+  "finished_utc": "2026-11-06T00:06:08.2836491Z"
+}

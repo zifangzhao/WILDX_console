@@ -1,0 +1,734 @@
+{
+  "status": "ACCEPTED_RESTORED_CLOSED",
+  "accepted_sha256": "97A728DAEB38878E1C2C7BA98AFF1534B9314B926B91EB5FEEBF8901F8190AF7",
+  "app_crc32": "4A677F83",
+  "usb_crc32": "11646986",
+  "files": {
+    "accepted.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\accepted.json",
+      "sha256": "97A728DAEB38878E1C2C7BA98AFF1534B9314B926B91EB5FEEBF8901F8190AF7",
+      "bytes": 23313,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "cleanup-complete.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\cleanup-complete.json",
+      "sha256": "37D526DEE870AB97225009432B419CEFDC86EFF4E51803569A544E9F5A38905B",
+      "bytes": 12158,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "A7Bench.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\A7Bench.cs",
+      "sha256": "27306B3F8A5F9300D3AC2126D21973F4616373063E950CD87719FF223259F3EF",
+      "bytes": 13710,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "arm_delete_cut.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\arm_delete_cut.py",
+      "sha256": "6967BF536CB7BA207E862C749E596F7A3A68F6B98CB6727583AF9CD7C3026987",
+      "bytes": 4595,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "prove_checkpoint_cut.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\prove_checkpoint_cut.py",
+      "sha256": "520688A1D897FC39AE5C4CDE07E19E02938118EBF58371DDA268FB860F498975",
+      "bytes": 3288,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "final_restore_r14.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\final_restore_r14.py",
+      "sha256": "47D66E4CC1F7A7249D11575DABC762B8C7B2400C58BC49A8BD900D7296660D66",
+      "bytes": 1139,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "bench_final_profile.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench_final_profile.py",
+      "sha256": "0B0968E5E522FAC351FEE0251FAF0E9F5A333374D13C78CCB7A368EA7B38D1BF",
+      "bytes": 414,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "retire_original_debug.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\retire_original_debug.py",
+      "sha256": "ECF55523C0D8B8CB78AA22CEFC4040D426E09074FA90F39F8B17131D410F4808",
+      "bytes": 2274,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "finalize_acceptance.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\finalize_acceptance.py",
+      "sha256": "EB8445C34FD3CE413E397F6424FEEB39DF8F2A5206B172839F6FFF2DA0A7E936",
+      "bytes": 5112,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "pins.py": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\pins.py",
+      "sha256": "64C74E24E6E6920A5C89223F9E95031CFE263A9526B907BEA38EACF01A9F0730",
+      "bytes": 1878,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "matched-test-pair.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\matched-test-pair.json",
+      "sha256": "5639243309583B1E97224981D908468D1B9F02FB9DC010D3616BAA691461E563",
+      "bytes": 1654,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "helper-inputs.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\helper-inputs.json",
+      "sha256": "3591D27A51A9C09EBFDC17573DB39770173330F70DB79392705D9E919244F63D",
+      "bytes": 2229,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "owner/lease.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\owner\\lease.json",
+      "sha256": "30BEB2ACBD29F3E4CD7214692EDE94B029E621EE8719E7015B1BE142382C9BD9",
+      "bytes": 523,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "owner/lease-active.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\owner\\lease-active.json",
+      "sha256": "0D317C86430431D7FDC9E48A27571A961A09BFFE2E3CA195FB1828E0C06C8C4F",
+      "bytes": 197,
+      "scope": "Exact final acceptance/helper/lifecycle identity"
+    },
+    "bench/baseline-r5/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\baseline-r5\\result.json",
+      "sha256": "5A9662EFF5720E2825282EF85984B098D9D8526A9A718B29E314AD96DF40B2FE",
+      "bytes": 141439,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/baseline-r5/lba112.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\baseline-r5\\lba112.bin",
+      "sha256": "31EC7F38E13FD542C61880E753C2A63FB03295A58C0EECBE545292C97F286522",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/baseline-r5/lba113.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\baseline-r5\\lba113.bin",
+      "sha256": "31EC7F38E13FD542C61880E753C2A63FB03295A58C0EECBE545292C97F286522",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/baseline-r5/lba114.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\baseline-r5\\lba114.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/baseline-r5/lba115.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\baseline-r5\\lba115.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/owned-open-before-cut-ready/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\owned-open-before-cut-ready\\result.json",
+      "sha256": "7AADBD629D70A073F3F97B041B2F53089032198EA05BB70D9F28E974AD08A515",
+      "bytes": 143200,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/owned-open-before-cut-ready/allowed-last.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\owned-open-before-cut-ready\\allowed-last.json",
+      "sha256": "CE54EDDD7F2C3DC8C103ABAFB4B90502F5D6CA36CF023B5AD547919DE75B9F4F",
+      "bytes": 207,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/owned-open-before-cut-ready/lba112.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\owned-open-before-cut-ready\\lba112.bin",
+      "sha256": "974376A0800008F49CFB2B326E9DD4B05C70A18DE068C7F6987705AE970B467A",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/owned-open-before-cut-ready/lba113.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\owned-open-before-cut-ready\\lba113.bin",
+      "sha256": "4450C52490CD76C5F12F76F7A3E5AC926C957F9C3D112A96B2AB6DF7AB24605E",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/plan.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\plan.json",
+      "sha256": "AE2DA07B838ADD06F8957F4300BBF18381FCC3C36F9132B804A118AF3AE4F7D9",
+      "bytes": 1264,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/arm.tcl": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\arm.tcl",
+      "sha256": "B2C75030F5EBEFDE5F897ED60754987F6C38C843F323CDE74BEDF2F54C865FED",
+      "bytes": 3161,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/openocd.log": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\openocd.log",
+      "sha256": "54A9098A98289DA68FD7DA93CD3ED472A32078C12893E2B638C5EBCD979C47C8",
+      "bytes": 2193,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/boundary-registers.txt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\boundary-registers.txt",
+      "sha256": "A44BB2EF8289BBCA4FF060D1365A6B5DF770D46F3B5FA63737418A8634C04DCA",
+      "bytes": 71,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/verified-cp0-readback.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\verified-cp0-readback.bin",
+      "sha256": "4450C52490CD76C5F12F76F7A3E5AC926C957F9C3D112A96B2AB6DF7AB24605E",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/engine.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\engine.bin",
+      "sha256": "75A4213BD870FE9216344E9D857F2021B336D4571698D612F082D1F6018CE37E",
+      "bytes": 744,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/sdmmc.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\sdmmc.bin",
+      "sha256": "FF988541BF8F6A77B7E29B80F930E4E0A44498CD7650A62BCA02EAB636607CC7",
+      "bytes": 96,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/vee-off-gpio.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\vee-off-gpio.bin",
+      "sha256": "EF0A56F8216C319FC73FEF239305B08F789C92A514997446C9704AF8F5047B3D",
+      "bytes": 40,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/vee-off-core.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\vee-off-core.bin",
+      "sha256": "905C3E0E1BF85991FC02BB18A99F986EC86D99DAF813AA29F256D3D6209A7465",
+      "bytes": 4,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/delete-checkpoint-rail-cut-r13/reset-performed.txt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\delete-checkpoint-rail-cut-r13\\reset-performed.txt",
+      "sha256": "EDD2E32022B261F4DE64A6D34EB2A35B26B4A900E4814C419E036E6EA8A3944C",
+      "bytes": 87,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/after-delete-cut-recovery/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\after-delete-cut-recovery\\result.json",
+      "sha256": "7BC6E252D333AAF8C9AE1E4582005230436051CA7EF03622AD4B318F165CBBF2",
+      "bytes": 141477,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/after-delete-cut-recovery/allowed-last.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\after-delete-cut-recovery\\allowed-last.json",
+      "sha256": "3EC783565EC1BDB15AD9A8ABB853241D3589002B4BB128AC35819B96DF8B37FE",
+      "bytes": 208,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/after-delete-cut-recovery/lba112.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\after-delete-cut-recovery\\lba112.bin",
+      "sha256": "53C3AE0FCB5264A0AA45A9007FA4EE9DE7EEDEBF42229C59BAF61EC8D02FBEF9",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/after-delete-cut-recovery/lba113.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\after-delete-cut-recovery\\lba113.bin",
+      "sha256": "53C3AE0FCB5264A0AA45A9007FA4EE9DE7EEDEBF42229C59BAF61EC8D02FBEF9",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/after-delete-cut-recovery/lba114.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\after-delete-cut-recovery\\lba114.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/after-delete-cut-recovery/lba115.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\after-delete-cut-recovery\\lba115.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-delete-cut-r13/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-delete-cut-r13\\result.json",
+      "sha256": "574ECB5AD07285F0882DBEA4F52533C112105B2449A187B8E347908AD78307C5",
+      "bytes": 1447,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-delete-cut-r13/inspected.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-delete-cut-r13\\inspected.json",
+      "sha256": "5DADBFF4DFED1A736A1AB229C4B7BCC17E90BD48493284963480727A616D5BA2",
+      "bytes": 603,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-delete-owned-final/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-delete-owned-final\\result.json",
+      "sha256": "F35B1061655BF02BCAE3A46A5192967715D4A6731FA1B82FD4D1B2BA08BAC3CA",
+      "bytes": 1812,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-delete-own-predecessor-settled/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-delete-own-predecessor-settled\\result.json",
+      "sha256": "C29940AD921D83BDC1C48A65BE4015C665F1ECE683E796CF070B5903C52D85D2",
+      "bytes": 1820,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/ble-delete-post-recovery/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\ble-delete-post-recovery\\result.json",
+      "sha256": "375B20448190F91750A6DFFAA0BED3CA775ED59B7B35958182EA9D578ACC5548",
+      "bytes": 15939,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final-card-preservation/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-card-preservation\\result.json",
+      "sha256": "C1A03B1E1B4491484F8B121BF47300E198DFFDF204D37571E9210508F8C54E2F",
+      "bytes": 139406,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final-card-preservation/lba112.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-card-preservation\\lba112.bin",
+      "sha256": "CE35DA6283286CD543736C3F7C31183785934215A83DA5F05ED2B4D1D2F2FF3D",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final-card-preservation/lba113.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-card-preservation\\lba113.bin",
+      "sha256": "CE35DA6283286CD543736C3F7C31183785934215A83DA5F05ED2B4D1D2F2FF3D",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final-card-preservation/lba114.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-card-preservation\\lba114.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final-card-preservation/lba115.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-card-preservation\\lba115.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final-cold-readiness/result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-cold-readiness\\result.json",
+      "sha256": "E84180F5661B0EE617B2FBA5FA81C0F4C342557C0CD41D32BFA3DCFD2363541D",
+      "bytes": 1462,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/experiment.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\experiment.json",
+      "sha256": "F27864FC10041F1EDD703CFA56E88403D3E06EA1B9176F4D09A3D0DB9ABA75AB",
+      "bytes": 12076,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/neuropixels_capture_status.txt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\neuropixels_capture_status.txt",
+      "sha256": "B1EFBBCC7EBAA8B3E767A4887FDBBEA243817E845127033051D6984D4D9476BE",
+      "bytes": 3758,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/neuropixels_probes.txt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\neuropixels_probes.txt",
+      "sha256": "4E58F403C32115FBCC0C777D4275D56ACD44D9143EB5131B40C1ADC8F9621EB9",
+      "bytes": 5061,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/analogin_encoding.txt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\analogin_encoding.txt",
+      "sha256": "75045DA87C5568266805C12380B483EB0F68FD69B2594AB0314BB1D96563F161",
+      "bytes": 3450,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/imu_grid_phase.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\imu_grid_phase.bin",
+      "sha256": "6A982C93CDBE60E2A012A2AAC9305DF7025416C7A9064B00AA297CB1EE4E6F5F",
+      "bytes": 84,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/imu_grid_gaps.csv": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\imu_grid_gaps.csv",
+      "sha256": "138B87BDCA009E08C183A95C9320F0BE6C7170D87BB0CB0375CDA880B66B5CCB",
+      "bytes": 49,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/usb-cl0/analogin_validity.dat": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\analogin_validity.dat",
+      "sha256": "3D6B73AC347FB83E4545AFC191C54525460923E9B1BCBC467F352014EAA0D4D0",
+      "bytes": 37741,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery/hil.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery\\hil.json",
+      "sha256": "3462CC0252E74D65C3EB1DC9994E1E4029FDBBB2068AA2D3267C971D8885CCAD",
+      "bytes": 21128,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery/recording-result.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery\\recording-result.json",
+      "sha256": "30396391BFE8E0C8653C7BDAD87201DBC9808AFF740DFF4CF0D5C68590DB2BE2",
+      "bytes": 1204,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery_stopped/proof.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery_stopped\\proof.json",
+      "sha256": "035B5091BD26110BCC71AB07FC3EAD54C68FE8C5AF23026EFD89E7C273F2B7A9",
+      "bytes": 230,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery_stopped/receipt.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery_stopped\\receipt.json",
+      "sha256": "2D66A5088DA8BFE9A92990BA350839218B8E7FD8D77F69A35C13BA3C92F51A65",
+      "bytes": 3954,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery-verified/hil.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\hil.json",
+      "sha256": "B6ABCBFB892BEA82339B5370FE3FB2AD932086272C0C02566D63180B6CACE44F",
+      "bytes": 21594,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery-verified/export/analogin_encoding.txt": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\analogin_encoding.txt",
+      "sha256": "441112302762C71A9B527B3B363E59276C6FE682B8C1AD84091F6CE05B230510",
+      "bytes": 3451,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery-verified/export/imu_grid_phase.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\imu_grid_phase.bin",
+      "sha256": "18E4E631BADCCD43271482B2F7523D05AE2670763DB8C9BD2BCD3FED272B6F81",
+      "bytes": 84,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery-verified/export/imu_grid_gaps.csv": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\imu_grid_gaps.csv",
+      "sha256": "138B87BDCA009E08C183A95C9320F0BE6C7170D87BB0CB0375CDA880B66B5CCB",
+      "bytes": 49,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/sd-post-recovery-verified/export/analogin_validity.dat": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\analogin_validity.dat",
+      "sha256": "78DC9CA11F65DC901BD9B23DD9860B08F17E193F4E168E30AB5771D114352EC0",
+      "bytes": 39111,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final_profile_ap/protected_profile.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final_profile_ap\\protected_profile.json",
+      "sha256": "546E889E19F0FE76C29CFE1920C0D8CDF8463B7B963A96822A54574C99A1D37D",
+      "bytes": 226,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final_profile_ap/receipt.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final_profile_ap\\receipt.json",
+      "sha256": "E9C838813E6B4EBE5F54A1348944CAB3EFB413705FB129C284BD2D103DDF58AD",
+      "bytes": 2557,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final_profile_ap/bkp.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final_profile_ap\\bkp.bin",
+      "sha256": "E87CAA4331F7CCD09E4744F0651D18727F09C51B77209879089966B10ABE3C1D",
+      "bytes": 128,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final_profile_ap/core.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final_profile_ap\\core.bin",
+      "sha256": "B40711A88C7039756FB8A73827EABE2C0FE5A0346CA7E0A104ADC0FC764F528D",
+      "bytes": 4,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final_profile_ap/uid.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final_profile_ap\\uid.bin",
+      "sha256": "300F21D40B7FBE16304FEFC74B22AC7A8C46BC85B2E01DD589FC3537EF63BCB9",
+      "bytes": 12,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/final_profile_ap/vtor.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final_profile_ap\\vtor.bin",
+      "sha256": "9F3B4E48C55FCEBDEADFF57CB809647908638D7383A02EFD8EC7F7E6BE9478BE",
+      "bytes": 4,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/original-debug-retired/receipt.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\original-debug-retired\\receipt.json",
+      "sha256": "123F4AE73A744192CA9E8B1E754966D5EA12D607FB5B633DC16E435BECC82824",
+      "bytes": 352,
+      "scope": "Compact actual acceptance/independent replay evidence; no full neural payload"
+    },
+    "bench/checkpoint-cut-acceptance.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\checkpoint-cut-acceptance.json",
+      "sha256": "C7E2804E800FC739927683AB824975682E85992DA5FD83B79801D7F86D6133F2",
+      "bytes": 2348,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/restoration-complete.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\restoration-complete.json",
+      "sha256": "545E55203B12B1F96654DA2AA0E7647635DBF5CD5FD527F05E92F0B4869CACC5",
+      "bytes": 648,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/restore_2_verified.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\restore_2_verified.json",
+      "sha256": "8EBD3AE97156CE0C461A2CD0DD7CEAFB3E4EDEF82C7639828C34D678A6D84528",
+      "bytes": 429,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/restored-final-status.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\restored-final-status.json",
+      "sha256": "15385939DC796C59EC0841BB92B31189010CA24BD92627F51CBEC87FB20AC197",
+      "bytes": 1489,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/restored-profile-final.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\restored-profile-final.json",
+      "sha256": "FCC82AE801B43A8985E9D2EE98698019D1980BD2034D728520732948D839298C",
+      "bytes": 1328,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/restore-controller-binding.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\restore-controller-binding.json",
+      "sha256": "08CFB34B8BCCD112B7DB99F00DA3D40D6ABE2BD53F471A6AACEE71D1F9D7263B",
+      "bytes": 219,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/lease_held.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\lease_held.json",
+      "sha256": "9CDC717DE83D32F9E49780938B9B397A8F82C816C0A74F772291F680A9601B49",
+      "bytes": 82,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "bench/owner-sd-preflight-v7.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\owner-sd-preflight-v7.json",
+      "sha256": "8DA67ED5EC0C2BCD756CA0F0FB10A0621B9342F88957229665CCC0D70884BE98",
+      "bytes": 1351,
+      "scope": "Final protection/restoration and source-delta proof"
+    },
+    "compact/manifest.json": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\manifest.json",
+      "sha256": "37D526DEE870AB97225009432B419CEFDC86EFF4E51803569A544E9F5A38905B",
+      "bytes": 12158,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_ap.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.head.bin",
+      "sha256": "4FAF8B4457714AF01DB318D9EA9B4C47AE1403AA2D50FD822C48C329D59FD5B0",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_ap.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.tail.bin",
+      "sha256": "3ECD99F16DB5383D1980B05BA1777334448EA4F35B326E0A71B1C4CEC6D37D09",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_ap.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "29210BE6F460B0DFB355BA23D77BF77C388179D08D2681BB2581CD82788F4348",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_ap.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "CC6066F558D14E37CFC7534C787BF84A0310B1F38C845F50D87417B9A8124099",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_lfp.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.head.bin",
+      "sha256": "242039A638C3408FE80183C153217206EBF7E154430B24D71F429B78C6C4DE61",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_lfp.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.tail.bin",
+      "sha256": "58D6B406647BFC7C942BF6D47D0ABB4D90BCDF6050C64BC4D995FDBD20A9A137",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_lfp.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "E1CD1A0F91AE63EA769B6C40E8257A4C6A214991AA0C29E76DD16CFBF489B11E",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np1_lfp.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "300A862DC8A4BE913B8772B01EC8BD805A07BCCA4D1CC92FB27F38B5BE3D2438",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_ap.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.head.bin",
+      "sha256": "F3145BECC62FDA813643BCCF1796B21EBE04D6583BA1D6CD1F1FECA963C01ACB",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_ap.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.tail.bin",
+      "sha256": "1591712EB9D0DC8CF5674D7A9421892D46EFDD7C9523E942A59E3DB96F27111B",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_ap.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "F8B138AD629C4902A1837F64A9C3B6C71344C2795E15311EED2650A1F8DE353A",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_ap.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "61F6591A18A94D282ECA669054C3547726E77BF929B2FD847DEE2778E00820D0",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_lfp.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.head.bin",
+      "sha256": "231F7BABBFF108CD867ADFE4174564AF51DAD3B7D20691B2016DB358E0F1AA7C",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_lfp.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.tail.bin",
+      "sha256": "B0C21A0E113F8A034D7DE9C8712EE7F578E5C29CF84A59794A5B3B5AF6007BAA",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_lfp.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "8DC4C87FB042086A9F9CFA33BAD4C653838A205C40B746D468A8694325F3FADE",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/sd-post-recovery-np2_lfp.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "9706E7C04ACFE592E0503B368C36F320C8C1BD636D904B2A7727E76B83994397",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_ap.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.head.bin",
+      "sha256": "EB5340CE2EC35DA5B500C71836D57511252F7FF25B74CB228E5E0DCC09A7C550",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_ap.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.tail.bin",
+      "sha256": "3B765972D20F3EEBAC3B76A2290CB23F0E6A2B914C01756E2EF54FA3FCF67E6F",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_ap.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "0A574828DE8CB20ADD1161267B27CC30937756B9CA4B3DFAF315A482710F6AAC",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_ap.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "5E3DCDD9FC7F003C42868BE41C0898B49043515CA2E1DBC35D4EE59804E0B4E6",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_lfp.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.head.bin",
+      "sha256": "089B7B05D9515682CA09F754367343CDF3CD5054C65B7CDFB6A0E03587544536",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_lfp.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.tail.bin",
+      "sha256": "A9FCFD3FD6ACF256E3A76D220FE96F37AB4DF2523139BCD96CD7FD491C123AE8",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_lfp.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "4565E14CF616F15C4CBA3A2EF3400BF2A8AB6FEA540451F80EA186136AC3148D",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe1_neuropixels_lfp.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "FFD0B651ADC14697135F0FF2FA18ED743814B30985C5B40B476E161DBC38C6BA",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_ap.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.head.bin",
+      "sha256": "CDF087FFDF3350A8009FAA1D2425E852F2A6ABF2664B1AFE71F6CC721A7FA281",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_ap.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.tail.bin",
+      "sha256": "95E818C7210571DFF56BC421D4F36C2E7C801EEB38F6205017C183D583294747",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_ap.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "12054CA1AC4092D4C7E07F0820AB0E0E5C7093D57FFC1DE2634DDF602B310732",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_ap.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "EAF6457E290E389E3DCA517420F6BBAE33026CC2233A1ED02D9062B18D1F3A89",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_lfp.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.head.bin",
+      "sha256": "75AB2A1765D5B13C90175618FDB829367DB785441A13733C524AA91408A48A6C",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_lfp.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.tail.bin",
+      "sha256": "0842C687498B304C7A59EA74B9442C50C939BBB4DF6623498D758A9DD7EA2CB9",
+      "bytes": 49152,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_lfp.dat.timestamps.calibrated.dat.head.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.timestamps.calibrated.dat.head.bin",
+      "sha256": "314B0509502EB89F985E5C70A5C4AC3EC80871D5979BFA32F3FCC2F661616BD5",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "compact/usb-cl0-probe2_neuropixels_lfp.dat.timestamps.calibrated.dat.tail.bin": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.timestamps.calibrated.dat.tail.bin",
+      "sha256": "A2F349F397D848FAEB9E4EDB6580136B9A786D4482A71A3F60E926CE8BC9958B",
+      "bytes": 512,
+      "scope": "Bounded complete neural rows/timestamps retained after accepted full-payload analysis"
+    },
+    "sd-harness/NpFirstSyncV1SdCurrent.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\NpFirstSyncV1SdCurrent.cs",
+      "sha256": "E4BE4E65127EEFC8444266C0EC917B063C158A3B2BFDFAD76865BFA01A069825",
+      "bytes": 50534,
+      "scope": "Actual used production-host reflection acceptance helper"
+    },
+    "sd-harness/NpSdDownloadControl.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\NpSdDownloadControl.cs",
+      "sha256": "705D0215D213342E811BAD1CED21B3B189F304BB22F5FF975D694E53FAECD6C7",
+      "bytes": 51302,
+      "scope": "Actual used production-host reflection acceptance helper"
+    },
+    "sd-harness/AcceptanceCurrentPins.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\AcceptanceCurrentPins.cs",
+      "sha256": "BAC7506F0314FE88918FE0976794F18F9D0E8958043FA43A3493CE62150A8315",
+      "bytes": 7860,
+      "scope": "Actual used production-host reflection acceptance helper"
+    },
+    "sd-harness/EnforcedGrid226Evidence.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\sd-harness\\EnforcedGrid226Evidence.cs",
+      "sha256": "660EFBF004101EC59785F155AB68DCBE944DF3359C05290D1DBF09A894BBA5D7",
+      "bytes": 30303,
+      "scope": "Actual used production-host reflection acceptance helper"
+    },
+    "usb-harness/Bench.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-harness\\Bench.cs",
+      "sha256": "1CB7A4E5F2425C7E9F5B673FF2755AEE995F91F59542AE92D7181AD86CA460A3",
+      "bytes": 17023,
+      "scope": "Actual used production-host reflection acceptance helper"
+    },
+    "usb-harness/EnforcedGrid226Evidence.cs": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-harness\\EnforcedGrid226Evidence.cs",
+      "sha256": "5FB3D57B9CC8663CBBBBF03013F9542021419FAF79A1A7C89D9FB474A43042FD",
+      "bytes": 30303,
+      "scope": "Actual used production-host reflection acceptance helper"
+    }
+  },
+  "limits": [
+    "Production delete interrupted after verified intent+CP0 before CP1. Captured RAM sector is the just-read oldCP1 (legacy filename sayscp0readback). PF2 storage rail off request/readback held5s with CPU halted, then fresh MCUreset/RAMdiscard. No measuredVDD0/whole-device/in-flight-controller/tornwrite claim; torn persistence covered separately by native fault injection.",
+    "Retained observed1250Hz lattice and valid AG/MAG values passed; pre-existing unavailable initialslot0 and unknown terminal tail/source-window remain explicit.",
+    "Earlier recording preservation: all descriptors/header/footer hashes and bounded payload windows unchanged; firmware write whitelist excludes their payload/descriptor sectors.",
+    "Original full-flash/options restore backup contents remain protected locally; only their verified identities are published."
+  ]
+}

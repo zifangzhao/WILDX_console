@@ -1,0 +1,20 @@
+{
+    "schema":  1,
+    "utc":  "2026-11-05T19:21:55.8770419Z",
+    "version":  "1.0.0.241",
+    "result":  "PASS 2 actual-assembly SD Info label assertions; source delta limited to two SD Info strings and version",
+    "source_delta":  [
+                         {
+                             "sha256":  "77D99E14599DE91A4AD48E9A24580A9C14F7DF9DFF10ADE1F9E9DA6523565211",
+                             "path":  "USB512_interface\\USB512_interface\\XeNpSdInfo.cs"
+                         },
+                         {
+                             "sha256":  "7CFA2584E213D4CB5416B63F9E1003575F7E7C7A311350D08BB07A350445DA0C",
+                             "path":  "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+                         }
+                     ],
+    "exe_sha256":  "64D15385E9F5D257C102F83AA0F466AE64C7F23C4840F9938BED4E8283788C88",
+    "sdk_sha256":  "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+    "reuse":  "240 protocol/preview/HIL bodies unchanged; prior focused acceptance reused",
+    "hardware":  false
+}

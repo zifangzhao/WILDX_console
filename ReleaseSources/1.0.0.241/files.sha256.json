@@ -1,0 +1,107 @@
+[
+  {
+    "path": "app-build.json",
+    "bytes": 36747,
+    "sha256": "ADB14CEC5DCCB886C2B3D137AD25E0061CBCB831B17E917A52475B956242EEBB"
+  },
+  {
+    "path": "app-source.zip",
+    "bytes": 1007944,
+    "sha256": "2F1ED3248CBA78A37F93215C98E788F01321536D2B132ECDD88789A0BA8C4A0A"
+  },
+  {
+    "path": "catalog-verification.json",
+    "bytes": 3820,
+    "sha256": "B80AD4E469568E995CE901AA41DD8795B79EAD2093224D281135A2FA8172B22B"
+  },
+  {
+    "path": "firmware-catalog.json",
+    "bytes": 36849,
+    "sha256": "55F089B634B94811F5F8AA74B7739E1B211D66A359AF345130BBF41F2B69D2BF"
+  },
+  {
+    "path": "functional-build240.json",
+    "bytes": 36747,
+    "sha256": "FD16887F2F236A27F0BFDCAD37808829D0B4BE5356F87F503CDBC3C880B531F9"
+  },
+  {
+    "path": "gui-native-evidence.zip",
+    "bytes": 174682,
+    "sha256": "B5F9CEDCF1AD99342D3A8300D6B61E78FFB19F3D7586952FBCBD7B91E90F9F7C"
+  },
+  {
+    "path": "host-acceptance.json",
+    "bytes": 1968,
+    "sha256": "A7B1AEBEF3617FFC7059561AD4BB54E694016D90C317DAA7C8C0D5845179222A"
+  },
+  {
+    "path": "labels-and-delta.json",
+    "bytes": 1090,
+    "sha256": "928132A5F70F5CB410D72964DD56AAB4822923C2DEF3EA5B2B000A0EE7E4F8F9"
+  },
+  {
+    "path": "qualification.json",
+    "bytes": 1319,
+    "sha256": "C1AF90B907A3E75D775083F893554FC4C39BD44313B08FAABFA419163FE58700"
+  },
+  {
+    "path": "README.md",
+    "bytes": 2374,
+    "sha256": "CE6C05375439A45939487C8F4B49363AA20DC2245AB46F197262090515206F82"
+  },
+  {
+    "path": "V1/acceptance.json",
+    "bytes": 7215,
+    "sha256": "683D51E09AE6C126EBD0235FF303E91B0685E66B1F1FBBD2662A6A755974BC79"
+  },
+  {
+    "path": "V1/final-closure.zip",
+    "bytes": 1906934,
+    "sha256": "7FC02B7EFE10637B4038D2B9EE8A3C2AD1F2C99218DD08982DF450CB73BDBBC6"
+  },
+  {
+    "path": "V1/integration.json",
+    "bytes": 3715,
+    "sha256": "1E4640D84C440F8DE425F127BC94B8AE26FBCFDB8E55710E46EB0DA4B52E39E4"
+  },
+  {
+    "path": "V1/restoration.json",
+    "bytes": 413,
+    "sha256": "A1D49266D562F64286D9BFF676797F55191C777D1462DF752218677B9C5D8A6A"
+  },
+  {
+    "path": "V1/source-freeze.zip",
+    "bytes": 2545832,
+    "sha256": "C76D37DA7057A0B13EABD7DDBFD9813D06D57F1404F41FF21FDB12C5AD5C1B0C"
+  },
+  {
+    "path": "V2/acceptance.json",
+    "bytes": 9354,
+    "sha256": "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B"
+  },
+  {
+    "path": "V2/closure.json",
+    "bytes": 29369,
+    "sha256": "DED6940F2A8B76A6F46599675F6DA7140E0F8AAAE42AAB1520554CC2CC6D7D5F"
+  },
+  {
+    "path": "V2/final-closure.zip",
+    "bytes": 624285,
+    "sha256": "D183955333BC09C9EB10806A206CF865E5D4F671C96B66A3F41F5C0D514D66B7"
+  },
+  {
+    "path": "V2/integration.json",
+    "bytes": 3403,
+    "sha256": "1F0DBFB9C34F971179FF315EE28A8C056A364A26FE38C7A9AE311FB2D07DBA04"
+  },
+  {
+    "path": "V2/restoration.json",
+    "bytes": 665,
+    "sha256": "5A870E95C361E6517ED75F853B25B7F1A7521D5CCFF897A5D923CF8BBF18EAF9"
+  },
+  {
+    "path": "V2/source-freeze.zip",
+    "bytes": 810194,
+    "sha256": "A40BB40B99422D9898B1618B05C6848D48715B0302BE1A8DFC8BD4EB9F834CCB"
+  }
+]

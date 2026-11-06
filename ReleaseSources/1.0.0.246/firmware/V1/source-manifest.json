@@ -1,0 +1,33 @@
+{
+  "status": "SOURCE_FROZEN_ACCEPTANCE_RECORDED_SEPARATELY",
+  "app_crc32": "4A677F83",
+  "usb_crc32": "11646986",
+  "created_utc": "2026-11-05T23:55:44.373788+00:00",
+  "base": {
+    "archive": "source-freeze.zip",
+    "sha256": "F73A52932EFA69EBD50C4C2240BD6F54063DE364618128CD228496111C341E1E",
+    "app_crc32": "4A677F83",
+    "usb_crc32": "019438C8",
+    "manifest": "source-base-manifest.json",
+    "manifest_sha256": "DC6088F623A6020CEA315EF46713242D7D4DA613FC64A1C8C2DD2520642BEBD7"
+  },
+  "parent_overlay": {
+    "archive": "../../checks/v1-delete-r13-source-overlay.zip",
+    "sha256": "B7E31171413C2441F617541DD4844BD7594D80D91934BECC1856BEF872798BBF",
+    "usb_crc32": "03C0FADD"
+  },
+  "overlay": {
+    "archive": "source-overlay.zip",
+    "sha256": "CA4937F8FF69CA93ED2FC71149659EC32BDA4CBB55D2F37B9F8C3B715A3BE6C6",
+    "manifest_sha256": "7C96768B6AA38246E93EAF52A67BD3209F9A31A4F8D04FD3694E1FF6EC89D45E",
+    "compiled_object": {
+      "source": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r14\\stream.o",
+      "sha256": "FF52CB4B233D6292DAC2F85A20B0788CF13F40AAEB0986FCFA44CB7D13FC3941"
+    },
+    "build_receipt_sha256": "205BF235A1A6A2F56457BB80D92C8670B9529E48DCFEB4C8A161E4D45FEAE930",
+    "identity_sha256": "8DFD83DC27A71ADCF609472E527F6C460E3A306226814A967FAA38E069AC4234"
+  },
+  "scope": "APP4A677F83 is exact base; final USB11646986 is base019438C8 with full explicitly listed r14 changed source and 8KiB startup retained from base. r13 archive preserves durable-recovery change/native proof as immutable parent. No source archive is relabeled as hardware acceptance.",
+  "acceptance": "acceptance.json",
+  "qualification": "../../qualification.json"
+}

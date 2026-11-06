@@ -1,0 +1,375 @@
+{
+  "status": "accepted",
+  "uid": "001D00065942500B20313354",
+  "app_crc32": "4A677F83",
+  "usb_crc32": "11646986",
+  "host_version": 246,
+  "original_restored": true,
+  "original_flash_sha256": "01CC90B06C44B2B52962DD214AB82C4F9600F06F13BB11D4BCCE7F21F2B66A75",
+  "original_options_sha256": "4A4541ADDDBC566412A1000C87E5A1F0212B3F00AA3393BA0B44D468D80A4225",
+  "protected_recordings": 74,
+  "card_preserved": true,
+  "usb_delete_last": true,
+  "ble_fs2_delete_last": true,
+  "components": {
+    "app": {
+      "crc32": "4A677F83",
+      "files": {
+        "APP_TEST_ONLY.hex": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\APP_TEST_ONLY.hex",
+          "sha256": "95FBCA5A9DE0970AA84A2252531FFEF4B638866DAC732CDE1506A8CED0995C7F",
+          "bytes": 1160376
+        },
+        "APP_body.bin": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\APP_body.bin",
+          "sha256": "E52A1DA767666AE3A4AFABF29A5BD54136EB623F5E878F9E7257D997EF71F8F2",
+          "bytes": 421776
+        },
+        "APP_manifest.bin": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\APP_manifest.bin",
+          "sha256": "6C19E0C05A5B7A761A8707935F01DCC513A48E9B5C364AB474EA1D269FD92D63",
+          "bytes": 128
+        },
+        "receipt.json": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\receipt.json",
+          "sha256": "F13A24919609184390CFC752526BE588182DC773A7BD37A0D15D9846FF6B6540",
+          "bytes": 21840
+        },
+        "identity.json": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\identity.json",
+          "sha256": "542A88A5823FBFE4F8C0C0D4979B2B326AFEAAEB1E2CB1554B18BFF5828C46BC",
+          "bytes": 785
+        },
+        "APP_TEST_ONLY.xenp": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-app-r6\\APP_TEST_ONLY.xenp",
+          "sha256": "13A714C7616F9E73E51962176E643B5217EA779151ED78C4464EEFD64BE96C67",
+          "bytes": 421904
+        }
+      }
+    },
+    "usb": {
+      "crc32": "11646986",
+      "files": {
+        "USB_TEST_ONLY.hex": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r14\\USB_TEST_ONLY.hex",
+          "sha256": "E75CD9CF54706DEE50E2918964D40520263942EE6C72473622AF45A3B944E5FD",
+          "bytes": 1096860
+        },
+        "USB_body.bin": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r14\\USB_body.bin",
+          "sha256": "DE063CF0C8754465E43564CE5ECA32B97834AED5B014AB2A84E5749ECE9906CC",
+          "bytes": 398676
+        },
+        "USB_manifest.bin": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r14\\USB_manifest.bin",
+          "sha256": "22EA2244303B12537219B9CD3ADB9239AFAAF00D4B39C1B2B32FB8D7F7E143C0",
+          "bytes": 128
+        },
+        "receipt.json": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r14\\receipt.json",
+          "sha256": "205BF235A1A6A2F56457BB80D92C8670B9529E48DCFEB4C8A161E4D45FEAE930",
+          "bytes": 22495
+        },
+        "identity.json": {
+          "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\build-usb-r14\\identity.json",
+          "sha256": "8DFD83DC27A71ADCF609472E527F6C460E3A306226814A967FAA38E069AC4234",
+          "bytes": 788
+        }
+      }
+    }
+  },
+  "proofs": {
+    "storage": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\run4\\receipt.json",
+      "sha256": "CBDF6C9DDE38E3724E68AEDEA4B358750657D933F8AE6D6F96347CD25881259A"
+    },
+    "wire": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\wire3\\receipt.json",
+      "sha256": "2024F9D0C5EBC1745436589F8D4802CB14D5944031FB93AD84EA224D11BCE85C"
+    },
+    "ep0": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\front2\\receipt.json",
+      "sha256": "F92BEC987E659312C48D1701B91316936283EE7D413E4AFC1753B337800B8E82"
+    },
+    "polling_retirement": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\retire2\\receipt.json",
+      "sha256": "00EE1C896720B65E709EF956F9C1D63AEEB5B1E8F26EF76481CCF3A1753AEDA5"
+    },
+    "cold_reader": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\cold2\\receipt.json",
+      "sha256": "A8642ED07EA594935821B971586DF16341A90B7FD545DA4304191309D17E1230"
+    },
+    "ce32_actual_rx": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\ce32-rx\\native3\\receipt.json",
+      "sha256": "1FC2DD31C84CDB9C5B90E6EF7DB39FE7EEA4B1DA4BA523EF3933F184FCB4A94F"
+    },
+    "owned_initializer": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\initializer2\\receipt.json",
+      "sha256": "4017000F6D185BDB49F38CADCC6EFC1D5D8DB679EDEBFDDECE62268B9B60ECB7"
+    },
+    "durable_recovery_cancellation": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\recovery-cancel1\\receipt.json",
+      "sha256": "669D4877514F7A5A038C6C472C3111C10908582030B94AABCD9AA1563D5B83D1"
+    },
+    "cold_readiness": {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\readiness1\\receipt.json",
+      "sha256": "0487471E4B46B794645692AA8E09D17CC75AEF66C6936589FBB8315F568EA26A"
+    },
+    "usb_recording": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\experiment.json",
+      "sha256": "F27864FC10041F1EDD703CFA56E88403D3E06EA1B9176F4D09A3D0DB9ABA75AB"
+    },
+    "sd_recording": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery\\hil.json",
+      "sha256": "3462CC0252E74D65C3EB1DC9994E1E4029FDBBB2068AA2D3267C971D8885CCAD"
+    },
+    "sd_full_readback": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\hil.json",
+      "sha256": "B6ABCBFB892BEA82339B5370FE3FB2AD932086272C0C02566D63180B6CACE44F"
+    },
+    "ble_delete": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\ble-delete-post-recovery\\result.json",
+      "sha256": "375B20448190F91750A6DFFAA0BED3CA775ED59B7B35958182EA9D578ACC5548"
+    },
+    "usb_delete": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-delete-own-predecessor-settled\\result.json",
+      "sha256": "C29940AD921D83BDC1C48A65BE4015C665F1ECE683E796CF070B5903C52D85D2"
+    },
+    "checkpoint_interruption": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\checkpoint-cut-acceptance.json",
+      "sha256": "C7E2804E800FC739927683AB824975682E85992DA5FD83B79801D7F86D6133F2"
+    },
+    "cold_inspect": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-cold-readiness\\result.json",
+      "sha256": "E84180F5661B0EE617B2FBA5FA81C0F4C342557C0CD41D32BFA3DCFD2363541D"
+    },
+    "protected_card": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\final-card-preservation\\result.json",
+      "sha256": "C1A03B1E1B4491484F8B121BF47300E198DFFDF204D37571E9210508F8C54E2F"
+    },
+    "original_restore": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\restoration-complete.json",
+      "sha256": "545E55203B12B1F96654DA2AA0E7647635DBF5CD5FD527F05E92F0B4869CACC5"
+    },
+    "closed_lease": {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\owner\\lease.json",
+      "sha256": "30BEB2ACBD29F3E4CD7214692EDE94B029E621EE8719E7015B1BE142382C9BD9"
+    }
+  },
+  "source_archives": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\source-freeze-final.zip",
+      "sha256": "F73A52932EFA69EBD50C4C2240BD6F54063DE364618128CD228496111C341E1E"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\overlay-r13\\source-overlay.zip",
+      "sha256": "B7E31171413C2441F617541DD4844BD7594D80D91934BECC1856BEF872798BBF"
+    },
+    {
+      "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\overlay-r14\\source-overlay.zip",
+      "sha256": "CA4937F8FF69CA93ED2FC71149659EC32BDA4CBB55D2F37B9F8C3B715A3BE6C6"
+    }
+  ],
+  "source_manifest": {
+    "path": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\v1_delete_last_native_20261105\\packaging\\overlay-r14\\source-manifest.json",
+    "sha256": "176AFA90CCB5068A311673BE80693C2C0D7E22DC6BEF725624DC7284F612D93C"
+  },
+  "readiness_delta_reuses_usb03_cut_and_recording_evidence": {
+    "storage_port_body_hashes_unchanged": {
+      "np_usb_delete_write": "AF383D730C08ED1036FCCC82166D7B266D7CE2320C14BD6190ED9CDE4A9A909D",
+      "np_usb_delete_read": "FE275961C4C39B190C6387C48D65447B5CB98DC2E608DA22A96B0292A20D13BC",
+      "np_usb_delete_cancel": "8AA7A112D1D4CFE1BD90F81CE9130DB235927BB1A63C9206F43099B34E771340",
+      "np_usb_delete_service": "416E3F70FC1BAE4F69BBD187B776ADF7E9BDB13C606F7B6B71C104CE1A141026",
+      "np_usb_delete_retire": "B7E1C4442499FD999DCCF2665D77F71F5F79F68D990A3C8DE1539EC8EC11CD32",
+      "np_usb_delete_clock_begin": "70EC8CE226F6AFD2A1F29260F5A61092289888BC687D5259509F3711E14991B1",
+      "np_usb_delete_clock_end": "C23CC3066D30F9FE95193495CC834DABC225FC83805B4A2D6FAB12E183ACFC0E"
+    },
+    "scope": "Final1164 changes only cold prepare Busy lifetime and A7 admission; actual cold mode cycle/Inspect passed;03C durability/cancellation and recording proofs reused by exact source delta."
+  },
+  "recording_scope": "USB and BLE-controlled SD:2probes15kHz,CLoff,bounded30s; no widened closed-loop or all-profile claim.",
+  "imu_scope": "Retained observed1250Hz lattice and valid AG/MAG values passed; pre-existing unavailable initialslot0 and unknown terminal tail/source-window remain explicit.",
+  "power_interruption_scope": "Production delete interrupted after verified intent+CP0 before CP1. Captured RAM sector is the just-read oldCP1 (legacy filename sayscp0readback). PF2 storage rail off request/readback held5s with CPU halted, then fresh MCUreset/RAMdiscard. No measuredVDD0/whole-device/in-flight-controller/tornwrite claim; torn persistence covered separately by native fault injection.",
+  "cleanup": {
+    "scope": "Only generated neural payloads/timestamps from accepted owned USB/SD tests. Full sensor/metadata/failure/restore evidence retained. No user recording or firmware backup removed.",
+    "files": [
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe1\\neuropixels_ap.dat",
+        "bytes": 348080640,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "EB5340CE2EC35DA5B500C71836D57511252F7FF25B74CB228E5E0DCC09A7C550",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.tail.bin",
+        "tail_offset": 348031488,
+        "tail_bytes": 49152,
+        "tail_sha256": "3B765972D20F3EEBAC3B76A2290CB23F0E6A2B914C01756E2EF54FA3FCF67E6F"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe1\\neuropixels_ap.dat.timestamps.calibrated.dat",
+        "bytes": 3625840,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "0A574828DE8CB20ADD1161267B27CC30937756B9CA4B3DFAF315A482710F6AAC",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_ap.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 3625328,
+        "tail_bytes": 512,
+        "tail_sha256": "5E3DCDD9FC7F003C42868BE41C0898B49043515CA2E1DBC35D4EE59804E0B4E6"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe1\\neuropixels_lfp.dat",
+        "bytes": 29005824,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "089B7B05D9515682CA09F754367343CDF3CD5054C65B7CDFB6A0E03587544536",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.tail.bin",
+        "tail_offset": 28956672,
+        "tail_bytes": 49152,
+        "tail_sha256": "A9FCFD3FD6ACF256E3A76D220FE96F37AB4DF2523139BCD96CD7FD491C123AE8"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe1\\neuropixels_lfp.dat.timestamps.calibrated.dat",
+        "bytes": 302144,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "4565E14CF616F15C4CBA3A2EF3400BF2A8AB6FEA540451F80EA186136AC3148D",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe1_neuropixels_lfp.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 301632,
+        "tail_bytes": 512,
+        "tail_sha256": "FFD0B651ADC14697135F0FF2FA18ED743814B30985C5B40B476E161DBC38C6BA"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe2\\neuropixels_ap.dat",
+        "bytes": 348024576,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "CDF087FFDF3350A8009FAA1D2425E852F2A6ABF2664B1AFE71F6CC721A7FA281",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.tail.bin",
+        "tail_offset": 347975424,
+        "tail_bytes": 49152,
+        "tail_sha256": "95E818C7210571DFF56BC421D4F36C2E7C801EEB38F6205017C183D583294747"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe2\\neuropixels_ap.dat.timestamps.calibrated.dat",
+        "bytes": 3625256,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "12054CA1AC4092D4C7E07F0820AB0E0E5C7093D57FFC1DE2634DDF602B310732",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_ap.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 3624744,
+        "tail_bytes": 512,
+        "tail_sha256": "EAF6457E290E389E3DCA517420F6BBAE33026CC2233A1ED02D9062B18D1F3A89"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe2\\neuropixels_lfp.dat",
+        "bytes": 29001216,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "75AB2A1765D5B13C90175618FDB829367DB785441A13733C524AA91408A48A6C",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.tail.bin",
+        "tail_offset": 28952064,
+        "tail_bytes": 49152,
+        "tail_sha256": "0842C687498B304C7A59EA74B9442C50C939BBB4DF6623498D758A9DD7EA2CB9"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\usb-cl0\\probe2\\neuropixels_lfp.dat.timestamps.calibrated.dat",
+        "bytes": 302096,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "314B0509502EB89F985E5C70A5C4AC3EC80871D5979BFA32F3FCC2F661616BD5",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\usb-cl0-probe2_neuropixels_lfp.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 301584,
+        "tail_bytes": 512,
+        "tail_sha256": "A2F349F397D848FAEB9E4EDB6580136B9A786D4482A71A3F60E926CE8BC9958B"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np1_ap.dat",
+        "bytes": 360547584,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "4FAF8B4457714AF01DB318D9EA9B4C47AE1403AA2D50FD822C48C329D59FD5B0",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.tail.bin",
+        "tail_offset": 360498432,
+        "tail_bytes": 49152,
+        "tail_sha256": "3ECD99F16DB5383D1980B05BA1777334448EA4F35B326E0A71B1C4CEC6D37D09"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np1_ap.dat.timestamps.calibrated.dat",
+        "bytes": 3755704,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "29210BE6F460B0DFB355BA23D77BF77C388179D08D2681BB2581CD82788F4348",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_ap.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 3755192,
+        "tail_bytes": 512,
+        "tail_sha256": "CC6066F558D14E37CFC7534C787BF84A0310B1F38C845F50D87417B9A8124099"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np1_lfp.dat",
+        "bytes": 30044928,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "242039A638C3408FE80183C153217206EBF7E154430B24D71F429B78C6C4DE61",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.tail.bin",
+        "tail_offset": 29995776,
+        "tail_bytes": 49152,
+        "tail_sha256": "58D6B406647BFC7C942BF6D47D0ABB4D90BCDF6050C64BC4D995FDBD20A9A137"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np1_lfp.dat.timestamps.calibrated.dat",
+        "bytes": 312968,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "E1CD1A0F91AE63EA769B6C40E8257A4C6A214991AA0C29E76DD16CFBF489B11E",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np1_lfp.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 312456,
+        "tail_bytes": 512,
+        "tail_sha256": "300A862DC8A4BE913B8772B01EC8BD805A07BCCA4D1CC92FB27F38B5BE3D2438"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np2_ap.dat",
+        "bytes": 360547584,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "F3145BECC62FDA813643BCCF1796B21EBE04D6583BA1D6CD1F1FECA963C01ACB",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.tail.bin",
+        "tail_offset": 360498432,
+        "tail_bytes": 49152,
+        "tail_sha256": "1591712EB9D0DC8CF5674D7A9421892D46EFDD7C9523E942A59E3DB96F27111B"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np2_ap.dat.timestamps.calibrated.dat",
+        "bytes": 3755704,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "F8B138AD629C4902A1837F64A9C3B6C71344C2795E15311EED2650A1F8DE353A",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_ap.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 3755192,
+        "tail_bytes": 512,
+        "tail_sha256": "61F6591A18A94D282ECA669054C3547726E77BF929B2FD847DEE2778E00820D0"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np2_lfp.dat",
+        "bytes": 30044928,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.head.bin",
+        "head_bytes": 49152,
+        "head_sha256": "231F7BABBFF108CD867ADFE4174564AF51DAD3B7D20691B2016DB358E0F1AA7C",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.tail.bin",
+        "tail_offset": 29995776,
+        "tail_bytes": 49152,
+        "tail_sha256": "B0C21A0E113F8A034D7DE9C8712EE7F578E5C29CF84A59794A5B3B5AF6007BAA"
+      },
+      {
+        "original": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\bench\\sd-post-recovery-verified\\export\\np2_lfp.dat.timestamps.calibrated.dat",
+        "bytes": 312968,
+        "head_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.timestamps.calibrated.dat.head.bin",
+        "head_bytes": 512,
+        "head_sha256": "8DC4C87FB042086A9F9CFA33BAD4C653838A205C40B746D468A8694325F3FADE",
+        "tail_file": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\compact\\sd-post-recovery-np2_lfp.dat.timestamps.calibrated.dat.tail.bin",
+        "tail_offset": 312456,
+        "tail_bytes": 512,
+        "tail_sha256": "9706E7C04ACFE592E0503B368C36F320C8C1BD636D904B2A7727E76B83994397"
+      }
+    ],
+    "removed_bytes": 1551289960,
+    "retained_bytes": 794624
+  }
+}

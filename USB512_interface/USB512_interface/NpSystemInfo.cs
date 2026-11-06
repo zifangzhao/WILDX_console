@@ -5,6 +5,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Threading;
 using CE32_console;
 using Microsoft.Win32.SafeHandles;
 
@@ -19,6 +21,9 @@ namespace USB512_interface
         internal XeNpSdInfo Sd;
         internal NpFirmwareIdentity Firmware;
         internal bool DeviceIdle;
+        internal bool CardRefreshed;
+        internal uint ServiceRole,DeviceCapabilities;
+        internal const uint SdInfoCapability = 0x20000;
         uint Family { get { return Device == "NP V1" ? 1U : Device == "NP V2" ? 2U : 0U; } }
         internal DateTime ReceivedAt;
 
@@ -46,7 +51,9 @@ namespace USB512_interface
         }
         // The injected reader is also used by the offline tests. Every request is
         // IN-only; no mode change, card initialization, bulk read or pipe reset.
-        internal static NpSystemInfo ReadSnapshot(string path, string device, Func<byte, byte, ushort, int, byte[]> read)
+        internal static NpSystemInfo ReadSnapshot(string path,string device,Func<byte,byte,ushort,int,byte[]> read)
+        {return ReadSnapshotCore(path,device,read,null);}
+        internal static NpSystemInfo ReadSnapshotCore(string path, string device, Func<byte, byte, ushort, int, byte[]> read, Action<ushort> refreshCard)
         {
             var result = Empty(path, device);
             try {
@@ -79,6 +86,7 @@ namespace USB512_interface
                     result.Protocol = "NPS2 ABI " + state.Abi + " (protocol ABI, not firmware version)";
                 }
                 result.Mode = role == 2 ? "USB streaming service" : role == 3 ? "SD download service" : role == 4 ? "Recovery / update service" : "SD application";
+                result.ServiceRole=role;result.DeviceCapabilities=BitConverter.ToUInt32(service,12);
                 result.Status = busy != 0 ? "Device busy; SD information not queried" : pending != 0 ? "Mode transition pending; SD information not queried" : "Idle snapshot";
                 if (busy != 0 || pending != 0) return result;
                 result.DeviceIdle = true;
@@ -96,17 +104,24 @@ namespace USB512_interface
                         throw new InvalidDataException("Unsupported passive SD download information");
                     result.Capacity = CapacityText(BitConverter.ToUInt32(capacity, 8));
                     result.CardSource = "Passive download-service capacity; card identity and speed are not exposed";
-                    if(result.Family==1)try {
-                        var card=NpV1Management.ParseSdFormatInfo(read(0xc0,0x79,0,64),NpV1Management.UidFromPath(path));
+                    if(result.Family==1 || (BitConverter.ToUInt32(service,12)&NpV2UsbFormat.Capability)!=0)try {
+                        var card=NpV1Management.ParseSdFormatInfo(read(0xc0,0x79,0,64),result.Family==1?NpV1Management.UidFromPath(path):NpV2FirmwareForm.Uid(path));
                         if((card.Capabilities&1)!=0&&card.Capacity!=0)result.Capacity=CapacityText(card.Capacity);
-                        if((card.Capabilities&2)!=0) {result.Card="CID "+card.Cid;result.CardSource="Passive V1 card identity receipt; allocation and bus mode not reported";}
+                        if((card.Capabilities&2)!=0) {result.Card="CID "+card.Cid;result.CardSource="Passive card identity receipt; allocation and bus mode not reported";}
                     }catch(Exception ex) when(ex is IOException || ex is Win32Exception || ex is TimeoutException || ex is ArgumentException) {
                         result.CardSource="Passive download capacity; optional card identity not reported by this firmware";
                     }
-                } else if (role == 2) {
-                    byte[] cached = read(0xc0, 0x4b, 0, XeNpSdInfo.WireBytes);
+                }
+                bool detailed = (BitConverter.ToUInt32(service,12)&SdInfoCapability)!=0;
+                if ((role==2 || role==3) && (detailed || role==2)) {
+                    byte request=detailed?(byte)0xa5:(byte)0x4b;
+                    byte[] cached = read(0xc0, request, 0, XeNpSdInfo.WireBytes);
+                    if(detailed && refreshCard!=null) {
+                        result.CardRefreshed=true;
+                        cached=RefreshCard(path,device,role,read,refreshCard,cached);
+                    }
                     result.Sd = XeNpSdInfo.Parse(cached, cached == null ? 0 : cached.Length);
-                    result.CardSource = "Cached SD Info: " + result.Sd.SummaryState + "; snapshot " + result.Sd.Sequence + "; device uptime " + result.Sd.Tick + " ms";
+                    result.CardSource = (result.CardRefreshed?"Refreshed":"Cached")+" SD Info: " + result.Sd.SummaryState + "; snapshot " + result.Sd.Sequence + "; device uptime " + result.Sd.Tick + " ms";
                     if ((result.Sd.State == 2 || result.Sd.State == 3) && (result.Sd.Flags & 1) != 0) {
                         result.Card = result.Sd.Ascii(67, 5) + " / OEM " + result.Sd.Ascii(65, 2) + " / MID 0x" + result.Sd.Raw[64].ToString("X2");
                         result.Capacity = CapacityText(result.Sd.Sectors);
@@ -118,6 +133,36 @@ namespace USB512_interface
                 result.Status += "; unavailable query: " + ex.Message.Replace("\r", " ").Replace("\n", " ");
             } finally { result.ReceivedAt = DateTime.Now; }
             return result;
+        }
+        // A6 has a separate advertised capability. Legacy V1 OUT4C controls
+        // camera exposure and must never be used as an SD refresh fallback.
+        internal static byte[] RefreshCard(string path,string device,uint role,Func<byte,byte,ushort,int,byte[]> read,Action<ushort> send,byte[] previous)
+        {
+            var prior=XeNpSdInfo.Parse(previous,previous==null?0:previous.Length);
+            if(prior.State==1)throw new IOException("An SD Info query is already running; wait before refreshing.");
+            ushort sequence=(ushort)(prior.Sequence%65535+1);
+            // Recheck identity, ownership and the advertised capability immediately
+            // before the single OUT. No reset, mode change or command replay.
+            Action<bool> check=idle=>{
+                byte[] bytes=read(0xc0,0x6e,0,32);uint mode,busy,pending,caps;
+                if(device=="NP V1") {var s=NpV1Management.ParseSplitStatus(bytes,NpV1Management.UidFromPath(path));mode=s.Role;busy=s.Busy;pending=s.PendingMode;caps=s.Capabilities;}
+                else {var s=NpV2ServiceStatus.Parse(bytes);s.RequireUid(NpV2FirmwareForm.Uid(path));mode=s.Mode;busy=s.Busy;pending=s.Target;caps=s.Capabilities;}
+                if(mode!=role || pending!=0 || idle && busy!=0 || (caps&SdInfoCapability)==0)
+                    throw new IOException("SD Info device state changed; finish the current operation before refreshing.");
+            };
+            check(true);
+            try {send(sequence);}catch(Exception ex) when(ex is IOException || ex is Win32Exception) {
+                throw new IOException("SD Info refresh acknowledgement unavailable. The command was not replayed; wait for the device before retrying.",ex);
+            }
+            var watch=Stopwatch.StartNew();
+            while(watch.ElapsedMilliseconds<20000) {
+                byte[] bytes=read(0xc0,0xa5,0,XeNpSdInfo.WireBytes);var reply=XeNpSdInfo.Parse(bytes,bytes.Length);
+                if(reply.Sequence!=sequence)throw new IOException("SD Info transaction changed; refresh was not replayed.");
+                if(reply.State==2 || reply.State==3){check(true);return bytes;}
+                if(reply.State!=1)throw new IOException("SD Info refresh was not accepted; no command replayed.");
+                Thread.Sleep(100);
+            }
+            throw new IOException("SD Info refresh timed out. Keep the device connected; no reset or command replayed.");
         }
         internal string Summary()
         {
@@ -148,12 +193,24 @@ namespace USB512_interface
             text.AppendLine("Cached query-session speed is not the recording application's operating mode."); text.AppendLine();
             text.AppendLine("STATUS"); text.AppendLine("Mode: " + Mode); text.AppendLine("Query: " + Status);
             text.AppendLine("Received: " + (ReceivedAt == default(DateTime) ? "Not queried" : ReceivedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
-            text.AppendLine("Read-only snapshot. No card initialization, tuning or capture command was sent.");
+            text.AppendLine(CardRefreshed?"Idle card-register refresh requested; no recording sectors written. See query status for completion. This is not a recording-speed test.":"Read-only snapshot. No card initialization, tuning or capture command was sent.");
             return text.ToString();
         }
         internal static NpSystemInfo Read(string path, string device)
         {
             using (var control = new NpSystemInfoControl(path)) return ReadSnapshot(path, device, control.Read);
+        }
+        internal static NpSystemInfo ReadCard(string path,string device)
+        {
+            if(device=="NP V1") {
+                NpSystemInfo snapshot;
+                using(var passive=new NpSystemInfoControl(path))snapshot=ReadSnapshot(path,device,passive.Read);
+                if(!snapshot.DeviceIdle || (snapshot.DeviceCapabilities&SdInfoCapability)==0 || snapshot.ServiceRole!=2 && snapshot.ServiceRole!=3)return snapshot;
+                // V1's proven card initialization is download-only. Release the
+                // passive handle before the existing exact-UID mode transition.
+                if(snapshot.ServiceRole==2)path=NpV1Management.EnsureDownload(path);
+            }
+            using(var control=new NpSystemInfoControl(path,true))return ReadSnapshotCore(path,device,control.Read,control.RefreshCard);
         }
     }
 
@@ -163,9 +220,9 @@ namespace USB512_interface
     {
         SafeFileHandle file;
         IntPtr usb;
-        internal NpSystemInfoControl(string path)
+        internal NpSystemInfoControl(string path,bool exclusive=false)
         {
-            file = NpDownloadNative.CreateFile(path, 0xc0000000, 3, IntPtr.Zero, 3, 0x40000080, IntPtr.Zero);
+            file = NpDownloadNative.CreateFile(path, 0xc0000000, exclusive?0U:3U, IntPtr.Zero, 3, 0x40000080, IntPtr.Zero);
             try {
                 if (file.IsInvalid || !NpDownloadNative.WinUsbInitialize(file, out usb)) throw new Win32Exception(Marshal.GetLastWin32Error());
                 // WinUSB's documented control-transfer timeout is five seconds.
@@ -182,6 +239,13 @@ namespace USB512_interface
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             if (received != length) throw new IOException("Short system-info reply");
             return bytes;
+        }
+        internal void RefreshCard(ushort sequence)
+        {
+            if(sequence==0)throw new ArgumentException("SD Info sequence must be nonzero");
+            uint n;var setup=new NpDownloadNative.WINUSB_SETUP_PACKET{RequestType=0x40,Request=0xa6,Value=sequence,Length=0};
+            if(!NpDownloadNative.WinUsbControlTransfer(usb,setup,new byte[0],0,out n,IntPtr.Zero))throw new Win32Exception(Marshal.GetLastWin32Error());
+            if(n!=0)throw new IOException("Invalid SD Info acknowledgement");
         }
         public void Dispose() { if (usb != IntPtr.Zero) { NpDownloadNative.WinUsbFree(usb); usb = IntPtr.Zero; } if (file != null) file.Dispose(); }
     }

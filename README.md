@@ -1,8 +1,8 @@
 # WILD-X Neuropixels Console
 
-Independent Windows console for Neuropixels devices. Current published version **1.0.0.189**.
+Independent Windows console for Neuropixels devices. Current published version **1.0.0.246**.
 
-[Latest installer](LATEST_INSTALLERS/README.md) includes V1/V2 IMU support, shorter Stop finalization, saved first-sample timing evidence and the checked V2 hardware RTC firmware. A V2 SD recording with three probes at 20 kHz passed neural/IMU readback and bounded the first NP start to a 120 µs full interval relative to its RTC. [Results, source provenance and limits](ReleaseSources/1.0.0.189/README.md). Pre-arm remains disabled; V1 RTC and all-stream alignment testing continues.
+[Latest installer](LATEST_INSTALLERS/README.md) includes guarded V1 USB/BLE Delete Last with interrupted-transaction recovery, V1/V2 SD Info and USB port labels. [Development results and limits](Note/V1_DELETE_LAST_20261105.md) and [exact release qualification](ReleaseSources/1.0.0.246/qualification.json) describe the tested recording and maintenance conditions. Pre-arm remains disabled.
 
 The application uses the Neuropixels acquisition and preview code from USB512_console / USB_PCconsole, the BLE control and catalog contracts from WILD_console, and the NP2 firmware updater from XE_NP. All required source and helper projects are stored here; building and running WILDX does not require those repositories.
 
@@ -55,7 +55,7 @@ Download validates the selected source, catalog, committed recording extent and 
 
 V1 and V2 use the same outer CE64 catalog. Desktop listing, removable-card inspection and explicit Quick Format recognize `NP_CE64_1`, `NP_PSSI_6` and `NP_PSSI_7`; Quick Format retains the card's existing identity and settings. Recording headers still select the appropriate V1/V2 decoder, and legacy writer eligibility remains separate. See [catalog maintenance checks](docs/catalog-maintenance.md).
 
-NP2 updates are APP-only. Factory / USB service replacement still uses separate firmware tooling. NP1 HEX / ROM DFU operations require STM32CubeProgrammer CLI and the reviewed firmware layout described in [the inherited firmware manager contract](Neuropixels/FIRMWARE_FLASH.md).
+V1 and V2 share the firmware update window, with family-specific bundled APP and full images. Programming requires an explicit device and image selection; HEX / ROM DFU operations require STM32CubeProgrammer CLI. See [bundled firmware and compatibility limits](Firmware/README.md).
 
 The three checked four-shank NP2/type2013 examples are in [ProbeConfig](ProbeConfig). Load them using **Probe configuration… → Load IMRO / JSON…**, and choose the physical connector explicitly; IMRO filenames do not specify a connector. Save the request and select **Apply before next recording** to stage it during preparation. Matching device receipts confirm application.
 
@@ -63,7 +63,7 @@ The source build also includes resident V2 USB self-test and manual rail-hold ac
 
 ## Install and run
 
-The current installer is [WILD-X 1.0.0.189](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.189.exe). V2 APP 46DF5009, USB 62910614 and recovery 6408DBB8 are included; V1 and camera bundles remain unchanged. No separate update ZIP is needed. [Scope and validation](ReleaseSources/1.0.0.189/README.md).
+The current installer is [WILD-X 1.0.0.246](LATEST_INSTALLERS/WILDX_console-Setup-1.0.0.246.exe). It includes V1 APP4A677F83/USB11646986 and V2 APP99CC44F9/USBEDEB6C3A with their matching catalog. No separate update ZIP is needed. [Scope and validation](ReleaseSources/1.0.0.246/README.md).
 
 The installer installs to `%LOCALAPPDATA%\WILDX_console`, creates its own Start menu entry and uninstall registration, and offers **Run WILD-X** on completion. Its bundled firmware is recorded in the release manifest; [separate newer firmware candidates and limits](Firmware/README.md) are published independently. Firmware programming requires an explicit device and image selection.
 

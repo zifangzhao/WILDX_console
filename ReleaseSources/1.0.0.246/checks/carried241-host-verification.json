@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "utc": "2026-11-05T19:29:10.1570261Z",
+  "version": "1.0.0.241",
+  "exe_sha256": "64D15385E9F5D257C102F83AA0F466AE64C7F23C4840F9938BED4E8283788C88",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "source_inputs_stable": 206,
+  "build_receipt": "C:/Frank/Code/USB_PCconsole/_artifacts/sd_usb_test_host/host-build-receipt-241-sdinfo.json",
+  "build_receipt_sha256": "ADB14CEC5DCCB886C2B3D137AD25E0061CBCB831B17E917A52475B956242EEBB",
+  "actual241_maintenance_checks": 220,
+  "labels_and_source_delta": "_artifacts/gui_support241/labels-and-delta.json",
+  "reused240_checks": [
+    {
+      "runner": "test_usb_maintenance.ps1",
+      "result": "PASS",
+      "name": "actual-assembly USB maintenance guards and legacy fallback",
+      "count": 218
+    },
+    {
+      "runner": "Neuropixels/Tests/test_np_system_info.ps1 -DataOnly",
+      "result": "PASS",
+      "name": "legacy passive system info",
+      "count": 437
+    },
+    {
+      "runner": "test_usb_device_labels.ps1",
+      "result": "PASS",
+      "name": "USB port labels",
+      "count": 26
+    },
+    {
+      "name": "preview admission and actual240 parser, old/new strides, 121 native firmware vectors",
+      "runner": "test_ble_preview_admission.ps1 -InstalledExecutable enabled240-guiops/WILDX_console.exe",
+      "receipt_sha256": "35CDBFF48CC73F363CCA7E7302FCDB40C0A1F15260A62751907A7C5F2BF7103B",
+      "result": "PASS",
+      "count": 708,
+      "receipt": "C:/Frank/Code/USB_PCconsole/_artifacts/ble_preview_admission_20261105/actual240/receipt.json"
+    }
+  ],
+  "reuse_reason": "Only two SD Info display strings and assembly version differ; SDK/control/preview/recording sources identical",
+  "firmware_hardware_acceptance": "pending V1/V2 owner receipts",
+  "published_release_unchanged": "1.0.0.238",
+  "packaged_or_pushed": false
+}

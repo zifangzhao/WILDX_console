@@ -7,7 +7,7 @@ using System.Text;
 namespace CE32_console {
     // V1 filesystem version2, not the V2 logger or a payload-format version.
     // Mirrors np_store_v2.h read semantics. No adoption, repair or card writes.
-    internal static class NpV1StoreV2 {
+    internal static partial class NpV1StoreV2 {
         internal const uint FilesystemVersion=2,DataStart=8192,MaxRecords=4032;
         internal const int Ok=0,Invalid=-1,Missing=-3;
         internal sealed class Store {
@@ -16,6 +16,8 @@ namespace CE32_console {
             internal uint Capacity,Frontier,Count,Start,End,Session,Open;
             internal uint IdentityLba,CheckpointLba;
             internal byte[] Identity,Checkpoint;
+            internal bool DeleteRecoveryPending;
+            internal string DeleteRecoveryNote;
             internal readonly List<Entry> Entries=new List<Entry>();
         }
         internal sealed class Entry {
@@ -66,10 +68,13 @@ namespace CE32_console {
                 throw new InvalidDataException("V1 filesystem2 identity copies are unavailable, unsupported or conflicting.");
             byte[] identity=va?a:b;uint identityLba=va?16U:24U;ulong epoch=U64(identity,56);
             a=Sector(card,112,cancelled);b=Sector(card,113,cancelled);
+            string recoveryNote;bool recoveryPending;
+            byte[] projection=DeleteProjection(card,capacity,epoch,a,b,cancelled,out recoveryPending,out recoveryNote);
             va=CheckpointValid(a,capacity,epoch);vb=CheckpointValid(b,capacity,epoch);
-            if(!va && !vb)throw new InvalidDataException("No valid matching V1 filesystem2 allocation checkpoint.");
+            if(projection==null && !va && !vb)throw new InvalidDataException("No valid matching V1 filesystem2 allocation checkpoint.");
             byte[] selected;uint checkpointLba;
-            if(va && vb) {
+            if(projection!=null){selected=projection;checkpointLba=0;}
+            else if(va && vb) {
                 ulong ga=U64(a,24),gb=U64(b,24);byte[] hi=ga>=gb?a:b,lo=ga>=gb?b:a;
                 if(ga==gb?!a.SequenceEqual(b):U64(hi,24)-U64(lo,24)!=1 || U(hi,32)<U(lo,32) ||
                     U(hi,36)<U(lo,36) || U(hi,36)-U(lo,36)>1)
@@ -78,7 +83,8 @@ namespace CE32_console {
             }else{selected=va?a:b;checkpointLba=va?112U:113U;}
             return new Store{Ready=true,Capacity=capacity,Epoch=epoch,Generation=U64(selected,24),Frontier=U(selected,32),Count=U(selected,36),
                 Start=U(selected,40),End=U(selected,44),Session=U(selected,48),Open=U(selected,52),
-                IdentityLba=identityLba,CheckpointLba=checkpointLba,Identity=identity,Checkpoint=selected};
+                IdentityLba=identityLba,CheckpointLba=checkpointLba,Identity=identity,Checkpoint=selected,
+                DeleteRecoveryPending=recoveryPending,DeleteRecoveryNote=recoveryNote};
         }
         static bool RecordValid(byte[] b,Store s,uint index) {
             return Crc(b) && Magic(b,0,"NPS2REC1") && U(b,8)==FilesystemVersion && U(b,12)==s.Capacity &&

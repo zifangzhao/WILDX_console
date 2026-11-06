@@ -390,6 +390,7 @@ namespace USB512_interface
         }
         internal static bool Matches(byte command, byte[] request, byte receivedCommand, byte[] response)
         {
+            if(command==0xa7)return receivedCommand==command && NpBleWire.DeleteMatches(request,response);
             if(command==NpFirmwareIdentity.BleCommand)return request!=null && request.Length==0 && receivedCommand==command && response!=null &&
                 response.Length==NpFirmwareIdentity.WireBytes && BitConverter.ToUInt32(response,188)==NpSdControl.Crc(response,188);
             if(command==0xb9&&NpFineClockWire.IsRequest(request)){

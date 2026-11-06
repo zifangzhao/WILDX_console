@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-11-05T23:54:25.655676+00:00",
+  "finished_utc": "2026-11-05T23:54:27.469124+00:00",
+  "seconds": 1.82636089999869,
+  "source_pins": {
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\backend.inc": "045FE1100A82A83DF8E675BC493AC4A8287A710CD192B90439055864BFF566D7",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\delete.inc": "61F83308562B98986662B666001FC534619DA0CC9121738BBE3134936391F7F1",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\modes.inc": "6337E458EF01B9742C3E1329ECE5350DFA3A8451F7C44A14F2AD5B1D8495821B",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\np_sd_info_v1_service.inc": "3ED6D242B738DB8AACABCFE1E21217B6CCA895D496698F27611663134D3E736A",
+    "C:\\Frank\\Code\\XE_NP\\_artifacts\\v1_delete_last_20261105\\usb-source\\stream.c": "B4F97C3642AE46826B24F807E523A460D113DCDBFB7D2E6DB235DDED2783E39B"
+  },
+  "actual_functions_sha256": "D41E1EE07E28A52EFA458CFC0D4168D215A8FB003BFF41AE18AAE49774CF7B6C",
+  "result_sha256": "E59AE52DF5EF15C126A3D747710450CB2B76F32CCC6D465986202B2AEDC7246A",
+  "sdinfo_source_unchanged_from_initializer889": true,
+  "scope": "Actual PrepareDownload, A7 request/admission/card/owned, mode Busy and unchanged SDInfo idle predicate; callbacks inside mocked initializer and IRQ-disable; real unchanged store/wire headers. No hardware, firmware/app build, broad suite rerun or shared product edits."
+}

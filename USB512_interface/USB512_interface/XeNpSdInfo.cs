@@ -73,7 +73,7 @@ namespace USB512_interface
             s.AppendLine("WILDX SD INFO - CARD-REPORTED DATA, NOT A CURRENT MEASUREMENT");
             s.AppendLine("Snapshot "+Sequence+"; device uptime "+Tick+" ms; "+SummaryState.ToLowerInvariant());
             s.AppendLine("Error: 0x"+Error.ToString("X8")+"; initialization stage: "+InitStage);
-            s.AppendLine("Diagnostic identification only. No sectors written; no high-speed mode selected.");
+            s.AppendLine("Diagnostic identification only. No recording sectors written. Bus settings describe the USB query session.");
             s.AppendLine("This is NOT the separate SD recording application's operating configuration.");
             s.AppendLine();
             if((Flags&1)==0) {
@@ -217,7 +217,7 @@ namespace USB512_interface
                 "No valid card identity was obtained. A missing card and an initialization/power failure cannot always be distinguished.",2);
 
             var bus=Add(root,"bus","Connection / query session","",
-                "The temporary safe-clock identification session, not the recording application's operating mode. The SD host is deinitialized after the query.");
+                "Bus settings observed during this USB query session, not the SD recording application's operating configuration.");
             Add(bus,"mode","Bus mode",identified?XeNpSdInfo.Mode(info.ActiveFunction,uhs):"Unavailable");
             Add(bus,"width","Bus width",identified?info.BusWidth+"-bit":"Unavailable");
             Add(bus,"clock","Bus clock",identified?(info.ClockHz/1000000.0).ToString("F3",CultureInfo.InvariantCulture)+" MHz":"Unavailable");
@@ -335,7 +335,7 @@ namespace USB512_interface
             bar.Items.AddRange(new ToolStripItem[] {refresh,new ToolStripSeparator(),expand,collapse,new ToolStripSeparator(),copy,save});
             var caution=new Label { Dock=DockStyle.Top,Height=46,Padding=new Padding(8),
                 BackColor=SystemColors.Info,ForeColor=SystemColors.InfoText,
-                Text="Card-reported properties only — not measured voltage/current or a peak-power guarantee.\r\nRead-only diagnostics; not the separate SD recording application's configuration." };
+                Text="Card-reported properties; not measured voltage/current or a recording-speed test.\r\nRefresh requires an idle logger. Recording sectors are not written." };
             var split=new SplitContainer { Dock=DockStyle.Fill,SplitterWidth=5,Size=new Size(1060,630),
                 Panel1MinSize=280,Panel2MinSize=240,SplitterDistance=530 };
             split.Panel1.Controls.Add(attributes);
@@ -421,7 +421,7 @@ namespace USB512_interface
             if(busy)return;busy=true;refresh.Enabled=false;
             ShowMessage("Reading SD card...","Reading the information supported by this device and USB mode. Please wait.");
             try {
-                ShowBasicSnapshot(await Task.Run(()=>NpSystemInfo.Read(path,deviceName)));
+                ShowBasicSnapshot(await Task.Run(()=>NpSystemInfo.ReadCard(path,deviceName)));
             } catch(Exception ex) {
                 ShowMessage("SD Info unavailable",ex.Message+"\r\nThe current firmware or USB mode does not expose this information.");
             } finally { busy=false;refresh.Enabled=true; }

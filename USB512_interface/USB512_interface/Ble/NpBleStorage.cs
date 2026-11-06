@@ -17,6 +17,7 @@ namespace USB512_interface
         internal readonly List<byte[]> Pages=new List<byte[]>();
         internal uint Capacity,NextStart;
         internal bool V1CanDeleteLast;
+        internal NpUsbDeleteLast.Receipt V1Delete;
         internal bool V1ReadOnly,V1Full;
         internal string V1Warning;
         internal const int ReadOnlyPageLimit=16;
@@ -97,6 +98,7 @@ namespace USB512_interface
         internal bool SameAs(NpBleCatalog other)
         {
             if(other==null || Capacity!=other.Capacity || NextStart!=other.NextStart || Pages.Count!=other.Pages.Count || V1ReadOnly!=other.V1ReadOnly || V1Full!=other.V1Full)return false;
+            if(!NpUsbDeleteLast.SameTarget(V1Delete,other.V1Delete))return false;
             if(V2!=null || other.V2!=null){
                 if(V2==null || other.V2==null || !V2.SameAs(other.V2) || Records.Count!=other.Records.Count)return false;
                 for(int i=0;i<Records.Count;i++)if(!NpV2BleCatalog.SameRecord(Records[i],other.Records[i]))return false;

@@ -13,18 +13,34 @@ namespace USB512_interface
         long consumed;
         internal long ReceivedBytes {get{return consumed+pending.Count;}}
         internal void Clear() { pending.Clear();consumed=0; }
+        internal static bool DeleteRequestValid(byte[] q)
+        {
+            if(q==null)return false;
+            if(q.Length==8){uint op=BitConverter.ToUInt32(q,0),nonce=BitConverter.ToUInt32(q,4);return op==0?nonce==0:op==1&&nonce!=0;}
+            return q.Length==128 && BitConverter.ToUInt32(q,0)==0x3155444e && BitConverter.ToUInt32(q,4)==1 &&
+                BitConverter.ToUInt32(q,8)==2 && BitConverter.ToUInt32(q,16)!=0 && BitConverter.ToUInt32(q,124)==NpSdControl.Crc(q,124);
+        }
+        internal static bool DeleteMatches(byte[] q,byte[] b)
+        {
+            if(!DeleteRequestValid(q)||b==null||b.Length!=128||BitConverter.ToUInt32(b,0)!=0x3155444e||BitConverter.ToUInt32(b,4)!=1||
+                BitConverter.ToUInt32(b,124)!=NpSdControl.Crc(b,124))return false;
+            uint op=BitConverter.ToUInt32(b,8),phase=BitConverter.ToUInt32(b,12),nonce=BitConverter.ToUInt32(b,16);
+            if(op>2||phase>4||(op==0)!=(phase==0)||op!=0&&nonce==0)return false;
+            if(q.Length==8)return BitConverter.ToUInt32(q,0)==0 || op==1&&nonce==BitConverter.ToUInt32(q,4);
+            return op==2&&nonce==BitConverter.ToUInt32(q,16)&&BitConverter.ToUInt32(b,96)==BitConverter.ToUInt32(q,96);
+        }
         internal static byte[] Frame(byte command, byte[] body)
         {
-            if (body == null || body.Length != 64) throw new ArgumentException("64-byte NP request required.");
-            var frame = new byte[67]; frame[0] = 0x3c; frame[1] = command; frame[66] = 0x3e;
-            Buffer.BlockCopy(body, 0, frame, 2, 64); return frame;
+            if (body == null || (command==0xa7 ? !DeleteRequestValid(body) : body.Length!=64)) throw new ArgumentException("Invalid NP request size or envelope.");
+            var frame = new byte[body.Length+3]; frame[0] = 0x3c; frame[1] = command; frame[frame.Length-1] = 0x3e;
+            Buffer.BlockCopy(body, 0, frame, 2, body.Length); return frame;
         }
         int CheckedControlAfter(int start)
         {
             for(int i=start;i+67<=pending.Count;i++){
                 byte lead=pending[i],cmd=pending[i+1];
-                if((lead!=0x3c&&lead!=0xad)||(cmd!=0xb8&&cmd!=0xb9))continue;
-                int bodyBytes=cmd==0xb9&&BitConverter.ToUInt32(pending.GetRange(i+2,4).ToArray(),0)==NpFineClockWire.ReplyMagic?80:64;
+                if((lead!=0x3c&&lead!=0xad)||(cmd!=0xb8&&cmd!=0xb9&&cmd!=0xa7))continue;
+                int bodyBytes=cmd==0xa7?128:cmd==0xb9&&BitConverter.ToUInt32(pending.GetRange(i+2,4).ToArray(),0)==NpFineClockWire.ReplyMagic?80:64;
                 int length=bodyBytes+(lead==0xad?4:3);if(i+length>pending.Count)continue;
                 if(lead==0xad?(pending[i+bodyBytes+2]!=0xda||pending[i+bodyBytes+3]!=0xda):pending[i+bodyBytes+2]!=0x3e)continue;
                 var body=pending.GetRange(i+2,bodyBytes).ToArray();
@@ -43,7 +59,7 @@ namespace USB512_interface
             int at = 0;
             while (at + 2 <= pending.Count) {
                 byte lead = pending[at], command = pending[at + 1];
-                if ((lead != 0x3c && lead != 0xad) || (command != 0xb9 && command != 0xb8 && command!=0xba && command!=0xbc && command!=0x90 && command!=0x94 && command!=0x95)) { at++; continue; }
+                if ((lead != 0x3c && lead != 0xad) || (command != 0xb9 && command != 0xb8 && command!=0xba && command!=0xbc && command!=0x90 && command!=0x94 && command!=0x95 && command!=0xa7)) { at++; continue; }
                 bool preview=command==0xba;
                 bool identity=command==0xbc;
                 bool native=command==0x90 || command==0x94 || command==0x95;
@@ -53,7 +69,7 @@ namespace USB512_interface
                     previewMagic=BitConverter.ToUInt32(pending.GetRange(at+2,4).ToArray(),0);
                     if(previewMagic!=NpV2PreviewBurst.Magic && previewMagic!=0x3156504eU){at++;continue;}
                 }
-                int bodyLength=identity?192:command==0x95?4:native?512:preview?224:64;
+                int bodyLength=command==0xa7?128:identity?192:command==0x95?4:native?512:preview?224:64;
                 if(command==0xb9&&pending.Count-at>=6&&BitConverter.ToUInt32(pending.GetRange(at+2,4).ToArray(),0)==NpFineClockWire.ReplyMagic)bodyLength=80;
                 int length = bodyLength+(lead == 0x3c ? 3 : 4);
                 if(preview && previewMagic==0x3156504eU && pending.Count-at>=34){

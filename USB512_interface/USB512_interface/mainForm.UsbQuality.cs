@@ -20,6 +20,11 @@ namespace USB512_interface {
             var watch=Stopwatch.StartNew();
             var progress=new Progress<long>(bytes=>{if(!usbQualityRunning)return;TimeSpan elapsed=watch.Elapsed;usbQualityStatus="USB test"+(continuous?" (continuous)":"")+" | "+((long)elapsed.TotalHours).ToString("00")+":"+elapsed.Minutes.ToString("00")+":"+elapsed.Seconds.ToString("00")+" | "+(bytes/1048576.0).ToString("F1")+" MiB validated…";RefreshRecordingSummary(DateTime.UtcNow);});
             try {
+                if(!allowAcquisition) {
+                    usbQualityStatus="USB test: entering idle SD download mode…";RefreshRecordingSummary(DateTime.UtcNow);
+                    path=await NpV2FirmwareForm.EnsureDownload(path,()=>usbQualityCancel);
+                    usbQualityPath=path;
+                }
                 var result=await Task.Run(()=>UsbQualityTest.RunDevice(path,allowAcquisition,()=>usbQualityCancel,bytes=>((IProgress<long>)progress).Report(bytes),continuous));
                 usbQualityStatus=result.Summary;lastUsbQualityReport=result.Report+"\r\n"+UsbHealth.DiagnosticReport(path);
             }catch(Exception ex){usbQualityStatus="USB test unavailable: "+ex.Message;var native=ex as Win32Exception;lastUsbQualityReport=usbQualityStatus+"\r\n\r\n"+(native==null?"":"Windows error "+native.NativeErrorCode+"\r\n")+ex+"\r\n"+UsbHealth.DiagnosticReport(path);}

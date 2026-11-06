@@ -1,577 +1,579 @@
 {
-  "schemaVersion": 1,
-  "version": "1.0.0.238",
-  "releaseId": "WILDX_1.0.0.238_USB_IMU_QUALIFIED",
-  "baselineVersion": "1.0.0.237",
-  "installer": {
-    "file": "WILDX_console-Setup-1.0.0.238.exe",
-    "sha256": "55B03F6CFE5E2E12D10644E293D8CE09BFFB6A77E45F950F9B51880CFF01C61D",
-    "bytes": 9299460
-  },
-  "guiSha256": "571816C39F7786F4D8B8EA395BA06B1AD99D552014A96A4FFF7FD37B4D3BB95E",
-  "sdkSha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
-  "catalogSha256": "D75920C4F24D859903E12AB9BFF14D891DF7A37D58F8060DE662F2D1C6268A7E",
-  "sourceArchiveSha256": "F45B97A02E530B99097BEC88DA51AD46D94101505D7339DC17724C680BC105D3",
-  "sourceGitBaseline": "ef96a85e3d50907629987fdde068bc5f6274c560",
-  "sourcePublicationCommit": "ef96a85e3d50907629987fdde068bc5f6274c560",
-  "sourcePublicationCommitRole": "Pre-publication baseline plus exact compiled host source archive",
-  "sourceIdentityRole": "Exact compiled host inputs archived; unchanged SDK inputs reused from235",
-  "sourceProvenance": "../ReleaseSources/1.0.0.238/host-source-archive/source-manifest.json",
-  "validation": "../ReleaseSources/1.0.0.238/qualification.json",
-  "sdkSourceProvenance": "../ReleaseSources/1.0.0.235/sdk-source-archive/source-manifest.json",
-  "firmware": [
-    {
-      "family": 1,
-      "release": "V1_USB_IMU_APP5F90FD3B_USBC91871BD_20261105",
-      "app": "5F90FD3B",
-      "usb": "C91871BD",
-      "recovery": null,
-      "stage": "BOUNDED_USB_IMU_QUALIFIED_COUNTS_1_2"
-    },
-    {
-      "family": 2,
-      "release": "V2_USB_IMU_APP99CC44F9_USBD43FE162_20261105",
-      "app": "99CC44F9",
-      "usb": "D43FE162",
-      "recovery": "6408DBB8",
-      "stage": "BOUNDED_USB_IMU_QUALIFIED_COUNTS_1_2"
-    }
-  ],
-  "closedLoopQualification": {
-    "V1": {
-      "app_crc32": "5F90FD3B",
-      "usb_crc32": "C91871BD",
-      "probe_mask": 3,
-      "sample_hz": 15000,
-      "filter": 6,
-      "usb_detectors": [
-        1,
-        2
-      ],
-      "sd_detectors": [
-        1,
-        2
-      ],
-      "sd_scope": "Unchanged APP5F90FD3B; existing SD qualification reused",
-      "summary": "V1 two probes at15kHz: native AG198.89–199.40Hz/MAG99.53–99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
-      "runs": [
-        {
-          "result": "PASS_SCOPED",
-          "detectors": 0,
-          "seconds": 60,
-          "usb_crc32": "C91871BD",
-          "app_crc32": "5F90FD3B",
-          "profile": "V1P1+P2/15k/Ripple6",
-          "ag_hz": 199.40278699402788,
-          "mag_hz": 99.74284529240978,
-          "imu_observed": 75348,
-          "imu_unavailable_startup_slots": 1,
-          "later_missing_imu_slots": 0,
-          "sensor_errors": 0,
-          "midstream_np_losses": 0,
-          "ap_rows": [
-            904499,
-            904480
-          ],
-          "lfp_rows": [
-            75374,
-            75373
-          ],
-          "startup_discarded_bytes": [
-            486,
-            428
-          ],
-          "preserved_original_lossless_flag": "False",
-          "retained_source_window_verified": true,
-          "rtc_to_np_interval_us": 110,
-          "relative_copy_jitter_bound_us": 42,
-          "native_oracle": "not applicable",
-          "host_peak_queue": 3,
-          "host_queue_capacity": 2048,
-          "max_usb_completion_interval_ms": 9.503,
-          "cpu_load": "not measured",
-          "limits": [
-            "Bounded recording check; not endurance qualification.",
-            "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
-            "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
-            "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
-          ]
-        },
-        {
-          "result": "PASS_SCOPED",
-          "detectors": 1,
-          "seconds": 60,
-          "usb_crc32": "C91871BD",
-          "app_crc32": "5F90FD3B",
-          "profile": "V1P1+P2/15k/Ripple6",
-          "ag_hz": 198.88658080598256,
-          "mag_hz": 99.53465181984377,
-          "imu_observed": 75228,
-          "imu_unavailable_startup_slots": 1,
-          "later_missing_imu_slots": 0,
-          "sensor_errors": 0,
-          "midstream_np_losses": 0,
-          "ap_rows": [
-            903045,
-            902996
-          ],
-          "lfp_rows": [
-            75253,
-            75249
-          ],
-          "startup_discarded_bytes": [
-            474,
-            478
-          ],
-          "preserved_original_lossless_flag": "False",
-          "retained_source_window_verified": true,
-          "rtc_to_np_interval_us": 111,
-          "relative_copy_jitter_bound_us": 42,
-          "native_oracle": "PASS",
-          "host_peak_queue": 3,
-          "host_queue_capacity": 2048,
-          "max_usb_completion_interval_ms": 9.597,
-          "cpu_load": "not measured",
-          "limits": [
-            "Bounded recording check; not endurance qualification.",
-            "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
-            "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
-            "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
-          ]
-        },
-        {
-          "result": "PASS_SCOPED",
-          "detectors": 2,
-          "seconds": 60,
-          "usb_crc32": "C91871BD",
-          "app_crc32": "5F90FD3B",
-          "profile": "V1P1+P2/15k/Ripple6",
-          "ag_hz": 199.08542646961362,
-          "mag_hz": 99.56588016967126,
-          "imu_observed": 75456,
-          "imu_unavailable_startup_slots": 1,
-          "later_missing_imu_slots": 0,
-          "sensor_errors": 0,
-          "midstream_np_losses": 0,
-          "ap_rows": [
-            905661,
-            905653
-          ],
-          "lfp_rows": [
-            75471,
-            75470
-          ],
-          "startup_discarded_bytes": [
-            632,
-            606
-          ],
-          "preserved_original_lossless_flag": "False",
-          "retained_source_window_verified": false,
-          "rtc_to_np_interval_us": 110,
-          "relative_copy_jitter_bound_us": 42,
-          "native_oracle": "PASS",
-          "host_peak_queue": 5,
-          "host_queue_capacity": 2048,
-          "max_usb_completion_interval_ms": 8.795,
-          "cpu_load": "not measured",
-          "limits": [
-            "Bounded recording check; not endurance qualification.",
-            "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
-            "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
-            "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
-          ]
-        },
-        {
-          "result": "PASS_SCOPED",
-          "detectors": 2,
-          "seconds": 30,
-          "usb_crc32": "C91871BD",
-          "app_crc32": "5F90FD3B",
-          "profile": "V1P1+P2/15k/Ripple6",
-          "ag_hz": 199.1424802110818,
-          "mag_hz": 99.54810832206353,
-          "imu_observed": 37908,
-          "imu_unavailable_startup_slots": 1,
-          "later_missing_imu_slots": 0,
-          "sensor_errors": 0,
-          "midstream_np_losses": 0,
-          "ap_rows": [
-            455119,
-            455069
-          ],
-          "lfp_rows": [
-            37925,
-            37921
-          ],
-          "startup_discarded_bytes": [
-            422,
-            392
-          ],
-          "preserved_original_lossless_flag": "False",
-          "retained_source_window_verified": false,
-          "rtc_to_np_interval_us": 110,
-          "relative_copy_jitter_bound_us": 42,
-          "native_oracle": "PASS",
-          "host_peak_queue": 3,
-          "host_queue_capacity": 2048,
-          "max_usb_completion_interval_ms": 8.474,
-          "cpu_load": "not measured",
-          "limits": [
-            "Bounded recording check; not endurance qualification.",
-            "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
-            "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
-            "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
-          ]
-        }
-      ],
-      "acceptance_sha256": "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201",
-      "original_restored": true
-    },
-    "V2": {
-      "app_crc32": "99CC44F9",
-      "usb_crc32": "D43FE162",
-      "probe_mask": 7,
-      "sample_hz": 20000,
-      "filter": 6,
-      "detector_probe": 2,
-      "adc_channels": [
-        0,
-        1
-      ],
-      "usb_detectors": [
-        1,
-        2
-      ],
-      "sd_detectors": [
-        1,
-        2
-      ],
-      "sd_scope": "Unchanged APP99CC44F9; existing SD qualification reused",
-      "summary": "V2 USB3P20k: nominalAG200/MAG100 measured199.03–199.06/99.51–99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
-      "results": [
-        {
-          "run": "usb-r3-cl0",
-          "usb_crc32": "72C9F2C6",
-          "detectors": 0,
-          "seconds": 60.378,
-          "np_blocks": 47152,
-          "np_or_IMU_dropped": 0,
-          "imu_observed": 75443,
-          "native_AG_hz": 199.0568544102019,
-          "native_MAG_hz": 99.52842720510095,
-          "source_gaps": 0,
-          "carrier_drops": 0,
-          "quality": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r3-cl0\\quality.json",
-          "quality_sha256": "B5464291012823AD396E5229CF556D4E9F5BE6423FCAE6BE7848C8CBC364A42D",
-          "sensor_review": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r3-cl0-review.json",
-          "readiness": null
-        },
-        {
-          "run": "usb-r4-cl1",
-          "usb_crc32": "D43FE162",
-          "detectors": 1,
-          "seconds": 61.368,
-          "np_blocks": 47928,
-          "np_or_IMU_dropped": 0,
-          "imu_observed": 76685,
-          "native_AG_hz": 199.03912148249827,
-          "native_MAG_hz": 99.51956074124914,
-          "source_gaps": 0,
-          "carrier_drops": 0,
-          "quality": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl1\\quality.json",
-          "quality_sha256": "78B43B3C1B45705B9AB357B2889463B1D900BC6CDF7DADAF04D59713183AE328",
-          "sensor_review": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r4-cl1-review.json",
-          "readiness": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl1\\readiness-scope.json"
-        },
-        {
-          "run": "usb-r4-cl2",
-          "usb_crc32": "D43FE162",
-          "detectors": 2,
-          "seconds": 60.378,
-          "np_blocks": 47152,
-          "np_or_IMU_dropped": 0,
-          "imu_observed": 75443,
-          "native_AG_hz": 199.02719213785318,
-          "native_MAG_hz": 99.51363643908836,
-          "source_gaps": 0,
-          "carrier_drops": 0,
-          "quality": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2\\quality.json",
-          "quality_sha256": "4839948BB526155E47BA0259ED1EDA90AB7DF9D86A2EAB409AF98A93A73ECDA1",
-          "sensor_review": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r4-cl2-review.json",
-          "readiness": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2\\readiness-scope.json"
-        },
-        {
-          "run": "usb-r4-cl2-restart",
-          "usb_crc32": "D43FE162",
-          "detectors": 2,
-          "seconds": 11.366,
-          "np_blocks": 8868,
-          "np_or_IMU_dropped": 0,
-          "imu_observed": 14189,
-          "native_AG_hz": 199.03691813804173,
-          "native_MAG_hz": 99.51845906902086,
-          "source_gaps": 0,
-          "carrier_drops": 0,
-          "quality": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2-restart\\quality.json",
-          "quality_sha256": "3AC631A058B4C03C1AC96166423094183DD43F8CA3134799EADCA4AD8C4E3EB6",
-          "sensor_review": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r4-cl2-restart-review.json",
-          "readiness": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2-restart\\readiness-scope.json"
-        }
-      ],
-      "detector_off_reuse": "72C9F2C6off60s evidence reused: finalD43 changes only SPIclosed-loop gap handling, unreachable whenCLdisabled. All other objects/capture buffers/IMU/media code unchanged; final1/2/restart actuallyD43.",
-      "acceptance_sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366",
-      "original_restored": true
-    }
-  },
-  "expectedPayloadFiles": 49,
-  "firstSyncEnabled": true,
-  "preparationEnabled": false,
-  "allModeOrEnduranceQualified": false,
-  "payload": [
-    {
-      "path": "Correct-RecordingTime.ps1",
-      "bytes": 9172,
-      "sha256": "B2FC559668F9B9A5663CE022BEF560519D46B1141663C4FD3ACD7DA821B2177B"
-    },
-    {
-      "path": "docs/adc-calibration.md",
-      "bytes": 8165,
-      "sha256": "D2F284DFD3F5201331AD59D30B6426198518D8A2E20FEF2CD1675844B6354FFD"
-    },
-    {
-      "path": "docs/catalog-maintenance.md",
-      "bytes": 2971,
-      "sha256": "E0B1EC25981601002DB05E391D65F64C09CEA5E839F3E36FEFF3A6DA8A08F81A"
-    },
-    {
-      "path": "docs/folder-naming.md",
-      "bytes": 1787,
-      "sha256": "161545C86D66CE0D1492C6930C94D110DFC302223B448A24788435D1579B5DEC"
-    },
-    {
-      "path": "docs/imu-time-correction.md",
-      "bytes": 11391,
-      "sha256": "35BFDA2F5DF6941FFBDF6CDC4B31E9170030C143DFEF76EB5AECBB0AE34B1400"
-    },
-    {
-      "path": "docs/network-time.md",
-      "bytes": 2338,
-      "sha256": "D88F3AFF026D8D5CBD4260E9B0E94040DEDDAA561A23A0E7F22220B77BED4288"
-    },
-    {
-      "path": "docs/recording-bundles.md",
-      "bytes": 2619,
-      "sha256": "1D7BA3E3425156382AE8CA9FEE7C520DE82393FAF82677145D6B163E1FA2771E"
-    },
-    {
-      "path": "docs/recording-time-correction.md",
-      "bytes": 14389,
-      "sha256": "CC9EF5B75399374824EAEA61C9E46D681B81528D08112B70D3073CD2AE49DD8D"
-    },
-    {
-      "path": "docs/sd-card-test.md",
-      "bytes": 2857,
-      "sha256": "5EAD8FE6DA956462D4692D5358DBEA99723D0A55D0FEE8232F11FA2EE1D46533"
-    },
-    {
-      "path": "docs/universal-workflow.md",
-      "bytes": 9843,
-      "sha256": "07B88B3A29BF44A2138A99A678361C821645BC707E7A4857CDF5DAFD33E29E55"
-    },
-    {
-      "path": "docs/usb-media-preview.md",
-      "bytes": 4615,
-      "sha256": "D585A7BA0F0FA758A16456C1A921BDC7B95487EEBB406980C7A215E12C25DEE8"
-    },
-    {
-      "path": "docs/v2-ble-connect-cancel.md",
-      "bytes": 2895,
-      "sha256": "537416966B77F0933B93BEDDBA0580277030C13D3E602C7BC1196D892B60897F"
-    },
-    {
-      "path": "docs/v2-ble-frame-write.md",
-      "bytes": 3126,
-      "sha256": "AC7F50EDE1226CD506CB02BD3F09EE164F189F80C433E89059C9DF756A916AD6"
-    },
-    {
-      "path": "docs/v2-ble-integration.md",
-      "bytes": 6510,
-      "sha256": "59ACC33B61ABEB14150859E4148BA2100BA3B6BC0A5AD5071365A24093FA18BF"
-    },
-    {
-      "path": "docs/v2-ble-sync16.md",
-      "bytes": 4088,
-      "sha256": "0530FB17827A7F3616777A6AC9389126328E2DE8004748C5E05017F1A05013CA"
-    },
-    {
-      "path": "docs/v2-ble-warm-timeout.md",
-      "bytes": 2779,
-      "sha256": "E995C310FE1A989D65700C68C26D3317325094B26E3C74B632A43A968DFF97BD"
-    },
-    {
-      "path": "docs/v2-sd-v12.md",
-      "bytes": 5442,
-      "sha256": "89AE2AAF5BA86150A2458AEACF5621BA55CD00AC2FD8889D12090ABA1A848EE9"
-    },
-    {
-      "path": "docs/v2-usb-selftest-integration.md",
-      "bytes": 5210,
-      "sha256": "B757D7D3B938FE1680F717F983BAC476F1D032CD08026547AFF5952905297ADA"
-    },
-    {
-      "path": "Firmware/releases.json",
-      "bytes": 36150,
-      "sha256": "D75920C4F24D859903E12AB9BFF14D891DF7A37D58F8060DE662F2D1C6268A7E"
-    },
-    {
-      "path": "Firmware/V1/acceptance.json",
-      "bytes": 20385,
-      "sha256": "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201"
-    },
-    {
-      "path": "Firmware/V1/V1_APP5F90FD3B.hex",
-      "bytes": 1127368,
-      "sha256": "42D3ED89E4C339AB35A0D6BB5AAEC262482F15ADBEEC5EC82F3892C398386879"
-    },
-    {
-      "path": "Firmware/V1/V1_APP5F90FD3B.xenp",
-      "bytes": 409900,
-      "sha256": "B025D020100D556CE4DB9040B50CF32594D539647EF1D6254358F6282111FC13"
-    },
-    {
-      "path": "Firmware/V1/V1_BOOT_DFU_unchanged_20261030.hex",
-      "bytes": 322607,
-      "sha256": "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
-    },
-    {
-      "path": "Firmware/V1/V1_BOOT_USBC91871BD.hex",
-      "bytes": 1374540,
-      "sha256": "2E84BA8AC36835042D21569E9809A8E8738314B5B924F9A4783F5DC3D2BB2811"
-    },
-    {
-      "path": "Firmware/V1/V1_FUSED_BOOT_USBC91871BD_APP5F90FD3B.hex",
-      "bytes": 5745164,
-      "sha256": "CB56DB582046EE23BD2A8BB147AD3E97D9D342E636DB4E342E2A5AF35C436F24"
-    },
-    {
-      "path": "Firmware/V1/V1_USBC91871BD.hex",
-      "bytes": 1059116,
-      "sha256": "721EBE135DB48CA0A4E633491A883A1A8A8A0F6C359228AD8874886EF0DBC855"
-    },
-    {
-      "path": "Firmware/V1Camera/README.md",
-      "bytes": 1640,
-      "sha256": "3EF6FAFBC2C2F24F03BDB879B8C8F95B774C9A8576B7B702B6AC3C91220C8B9C"
-    },
-    {
-      "path": "Firmware/V1Camera/release.json",
-      "bytes": 1386,
-      "sha256": "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC"
-    },
-    {
-      "path": "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
-      "bytes": 5875757,
-      "sha256": "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
-    },
-    {
-      "path": "Firmware/V1Camera/V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
-      "bytes": 755800,
-      "sha256": "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
-    },
-    {
-      "path": "Firmware/V2/acceptance.json",
-      "bytes": 8147,
-      "sha256": "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366"
-    },
-    {
-      "path": "Firmware/V2/V2_APP99CC44F9.hex",
-      "bytes": 1033332,
-      "sha256": "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
-    },
-    {
-      "path": "Firmware/V2/V2_APP99CC44F9.xenp",
-      "bytes": 375712,
-      "sha256": "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
-    },
-    {
-      "path": "Firmware/V2/V2_FUSED_BOOT_USBD43FE162_APP99CC44F9.hex",
-      "bytes": 5745164,
-      "sha256": "B4A1962067B0A47F391BCADD8E34FD94839F8A20D1E8463717CF97FAC551C4C4"
-    },
-    {
-      "path": "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
-      "bytes": 84090,
-      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
-    },
-    {
-      "path": "Firmware/V2/V2_USBD43FE162.hex",
-      "bytes": 950304,
-      "sha256": "2671D91FA8638EBC114FD8979950ECD2F8A5CF16F156B50C4BD74D87E29C4790"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
-      "bytes": 449,
-      "sha256": "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.dll",
-      "bytes": 55808,
-      "sha256": "3BEA6D5DE99ED085AADA286591FFEF38C098931F3D707B296FEB3DF607D8AA2F"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.exe",
-      "bytes": 152064,
-      "sha256": "D78107469DE53D447B8A6176564E4D97698D7654784CDE587DCC3C9A91A75425"
-    },
-    {
-      "path": "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
-      "bytes": 340,
-      "sha256": "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.deps.json",
-      "bytes": 434,
-      "sha256": "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.dll",
-      "bytes": 375808,
-      "sha256": "F3B7F1F3E62C8CA6D491D3FE0B5A694FEB2CF72F04B352AC5113C1CB10A64706"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.exe",
-      "bytes": 151552,
-      "sha256": "50CEB214418A79BDC77BC2B3BE2285C28634218BCCF40B909AF941069996394E"
-    },
-    {
-      "path": "NPConfigurator/NPConfigurator.runtimeconfig.json",
-      "bytes": 458,
-      "sha256": "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
-    },
-    {
-      "path": "NpV2SdDatExport.dll",
-      "bytes": 683520,
-      "sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB"
-    },
-    {
-      "path": "OpenTK.dll",
-      "bytes": 5757952,
-      "sha256": "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
-    },
-    {
-      "path": "OpenTK.GLControl.dll",
-      "bytes": 24576,
-      "sha256": "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
-    },
-    {
-      "path": "WILDX_console.exe",
-      "bytes": 2836480,
-      "sha256": "571816C39F7786F4D8B8EA395BA06B1AD99D552014A96A4FFF7FD37B4D3BB95E"
-    },
-    {
-      "path": "WILDX_console.exe.config",
-      "bytes": 532,
-      "sha256": "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
-    }
-  ]
+    "schemaVersion":  1,
+    "version":  "1.0.0.246",
+    "releaseId":  "WILDX_1.0.0.246_GUI_STORAGE_QUALIFIED",
+    "baselineVersion":  "1.0.0.238",
+    "installer":  {
+                      "file":  "WILDX_console-Setup-1.0.0.246.exe",
+                      "sha256":  "C2F4B7AE0F8EECC5EF8B5D6909E7E93087996C3186DE4D62DD195F3663B0F94F",
+                      "bytes":  9410754
+                  },
+    "guiSha256":  "FA744968A3DE0AC9A87F6FD77F8F3ED40BFAB3FBD062ABD9B33BEE3E233E8953",
+    "sdkSha256":  "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+    "catalogSha256":  "2377174E8CFFB45A697E645FE3F97B21391D4AB525755B9678DE4CA66AC747F3",
+    "sourceArchiveSha256":  "4F9E7503CE522D4B302066628BB927B4FBC57D89A8623FF6F6841A1BFED4E61E",
+    "sourceGitBaseline":  "b9a8e47d15a2f1b4465368365946e9cca2bc9b6a",
+    "sourcePublicationCommit":  "b9a8e47d15a2f1b4465368365946e9cca2bc9b6a",
+    "sourcePublicationCommitRole":  "Pre-publication baseline plus exact compiled host source archive",
+    "sourceIdentityRole":  "Exact compiled host inputs archived; unchanged SDK inputs reused from235",
+    "sourceProvenance":  "../ReleaseSources/1.0.0.246/host-source-archive/source-manifest.json",
+    "validation":  "../ReleaseSources/1.0.0.246/qualification.json",
+    "sdkSourceProvenance":  "../ReleaseSources/1.0.0.235/sdk-source-archive/source-manifest.json",
+    "firmware":  [
+                     {
+                         "family":  1,
+                         "release":  "V1_FS2_DELETE_APP4A677F83_USB11646986_20261105",
+                         "app":  "4A677F83",
+                         "usb":  "11646986",
+                         "recovery":  null,
+                         "stage":  "BOUNDED_RECORDING_CRASH_SAFE_DELETE_QUALIFIED"
+                     },
+                     {
+                         "family":  2,
+                         "release":  "V2_GUI_SUPPORT_APP99CC44F9_USBEDEB6C3A_20261105",
+                         "app":  "99CC44F9",
+                         "usb":  "EDEB6C3A",
+                         "recovery":  "6408DBB8",
+                         "stage":  "BOUNDED_RECORDING_SDINFO_USB_MAINTENANCE_QUALIFIED"
+                     }
+                 ],
+    "closedLoopQualification":  {
+                                    "V1":  {
+                                               "app_crc32":  "4A677F83",
+                                               "usb_crc32":  "11646986",
+                                               "probe_mask":  3,
+                                               "sample_hz":  15000,
+                                               "filter":  6,
+                                               "usb_detectors":  [
+                                                                     1,
+                                                                     2
+                                                                 ],
+                                               "sd_detectors":  [
+                                                                    1,
+                                                                    2
+                                                                ],
+                                               "sd_scope":  "Prior recording/detector qualification is reused for unchanged processing. New FS2 maintenance, NP/IMU and interruption acceptance is recorded separately for the current pair.",
+                                               "summary":  "V1 two probes at15kHz: native AG198.89Ã¢â‚¬â€œ199.40Hz/MAG99.53Ã¢â‚¬â€œ99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
+                                               "runs":  [
+                                                            {
+                                                                "result":  "PASS_SCOPED",
+                                                                "detectors":  0,
+                                                                "seconds":  60,
+                                                                "usb_crc32":  "C91871BD",
+                                                                "app_crc32":  "5F90FD3B",
+                                                                "profile":  "V1P1+P2/15k/Ripple6",
+                                                                "ag_hz":  199.40278699402788,
+                                                                "mag_hz":  99.74284529240978,
+                                                                "imu_observed":  75348,
+                                                                "imu_unavailable_startup_slots":  1,
+                                                                "later_missing_imu_slots":  0,
+                                                                "sensor_errors":  0,
+                                                                "midstream_np_losses":  0,
+                                                                "ap_rows":  [
+                                                                                904499,
+                                                                                904480
+                                                                            ],
+                                                                "lfp_rows":  [
+                                                                                 75374,
+                                                                                 75373
+                                                                             ],
+                                                                "startup_discarded_bytes":  [
+                                                                                                486,
+                                                                                                428
+                                                                                            ],
+                                                                "preserved_original_lossless_flag":  "False",
+                                                                "retained_source_window_verified":  true,
+                                                                "rtc_to_np_interval_us":  110,
+                                                                "relative_copy_jitter_bound_us":  42,
+                                                                "native_oracle":  "not applicable",
+                                                                "host_peak_queue":  3,
+                                                                "host_queue_capacity":  2048,
+                                                                "max_usb_completion_interval_ms":  9.503,
+                                                                "cpu_load":  "not measured",
+                                                                "limits":  [
+                                                                               "Bounded recording check; not endurance qualification.",
+                                                                               "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+                                                                               "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+                                                                               "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "result":  "PASS_SCOPED",
+                                                                "detectors":  1,
+                                                                "seconds":  60,
+                                                                "usb_crc32":  "C91871BD",
+                                                                "app_crc32":  "5F90FD3B",
+                                                                "profile":  "V1P1+P2/15k/Ripple6",
+                                                                "ag_hz":  198.88658080598256,
+                                                                "mag_hz":  99.53465181984377,
+                                                                "imu_observed":  75228,
+                                                                "imu_unavailable_startup_slots":  1,
+                                                                "later_missing_imu_slots":  0,
+                                                                "sensor_errors":  0,
+                                                                "midstream_np_losses":  0,
+                                                                "ap_rows":  [
+                                                                                903045,
+                                                                                902996
+                                                                            ],
+                                                                "lfp_rows":  [
+                                                                                 75253,
+                                                                                 75249
+                                                                             ],
+                                                                "startup_discarded_bytes":  [
+                                                                                                474,
+                                                                                                478
+                                                                                            ],
+                                                                "preserved_original_lossless_flag":  "False",
+                                                                "retained_source_window_verified":  true,
+                                                                "rtc_to_np_interval_us":  111,
+                                                                "relative_copy_jitter_bound_us":  42,
+                                                                "native_oracle":  "PASS",
+                                                                "host_peak_queue":  3,
+                                                                "host_queue_capacity":  2048,
+                                                                "max_usb_completion_interval_ms":  9.597,
+                                                                "cpu_load":  "not measured",
+                                                                "limits":  [
+                                                                               "Bounded recording check; not endurance qualification.",
+                                                                               "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+                                                                               "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+                                                                               "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "result":  "PASS_SCOPED",
+                                                                "detectors":  2,
+                                                                "seconds":  60,
+                                                                "usb_crc32":  "C91871BD",
+                                                                "app_crc32":  "5F90FD3B",
+                                                                "profile":  "V1P1+P2/15k/Ripple6",
+                                                                "ag_hz":  199.08542646961362,
+                                                                "mag_hz":  99.56588016967126,
+                                                                "imu_observed":  75456,
+                                                                "imu_unavailable_startup_slots":  1,
+                                                                "later_missing_imu_slots":  0,
+                                                                "sensor_errors":  0,
+                                                                "midstream_np_losses":  0,
+                                                                "ap_rows":  [
+                                                                                905661,
+                                                                                905653
+                                                                            ],
+                                                                "lfp_rows":  [
+                                                                                 75471,
+                                                                                 75470
+                                                                             ],
+                                                                "startup_discarded_bytes":  [
+                                                                                                632,
+                                                                                                606
+                                                                                            ],
+                                                                "preserved_original_lossless_flag":  "False",
+                                                                "retained_source_window_verified":  false,
+                                                                "rtc_to_np_interval_us":  110,
+                                                                "relative_copy_jitter_bound_us":  42,
+                                                                "native_oracle":  "PASS",
+                                                                "host_peak_queue":  5,
+                                                                "host_queue_capacity":  2048,
+                                                                "max_usb_completion_interval_ms":  8.795,
+                                                                "cpu_load":  "not measured",
+                                                                "limits":  [
+                                                                               "Bounded recording check; not endurance qualification.",
+                                                                               "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+                                                                               "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+                                                                               "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "result":  "PASS_SCOPED",
+                                                                "detectors":  2,
+                                                                "seconds":  30,
+                                                                "usb_crc32":  "C91871BD",
+                                                                "app_crc32":  "5F90FD3B",
+                                                                "profile":  "V1P1+P2/15k/Ripple6",
+                                                                "ag_hz":  199.1424802110818,
+                                                                "mag_hz":  99.54810832206353,
+                                                                "imu_observed":  37908,
+                                                                "imu_unavailable_startup_slots":  1,
+                                                                "later_missing_imu_slots":  0,
+                                                                "sensor_errors":  0,
+                                                                "midstream_np_losses":  0,
+                                                                "ap_rows":  [
+                                                                                455119,
+                                                                                455069
+                                                                            ],
+                                                                "lfp_rows":  [
+                                                                                 37925,
+                                                                                 37921
+                                                                             ],
+                                                                "startup_discarded_bytes":  [
+                                                                                                422,
+                                                                                                392
+                                                                                            ],
+                                                                "preserved_original_lossless_flag":  "False",
+                                                                "retained_source_window_verified":  false,
+                                                                "rtc_to_np_interval_us":  110,
+                                                                "relative_copy_jitter_bound_us":  42,
+                                                                "native_oracle":  "PASS",
+                                                                "host_peak_queue":  3,
+                                                                "host_queue_capacity":  2048,
+                                                                "max_usb_completion_interval_ms":  8.474,
+                                                                "cpu_load":  "not measured",
+                                                                "limits":  [
+                                                                               "Bounded recording check; not endurance qualification.",
+                                                                               "Initial trimming and unavailable startup slot are preserved; source-byte-zero completeness is not claimed.",
+                                                                               "1250Hz scheduled cache stream is not1250Hz physical sensor conversions; terminal-tail completeness remains unknown.",
+                                                                               "Original worker/assessor outcomes are retained; current15k/32-byte schema assessment is separate."
+                                                                           ]
+                                                            }
+                                                        ],
+                                               "acceptance_sha256":  "08C0E2C7F11120240080998526E832863683EC9C958A52D86A8D30985C9E9201",
+                                               "original_restored":  true,
+                                               "retained_run_identity_scope":  "The historical runs below retain their original firmware identities; recording/CL evidence is reused only for unchanged processing with preview off. New maintenance acceptance is separate."
+                                           },
+                                    "V2":  {
+                                               "app_crc32":  "99CC44F9",
+                                               "usb_crc32":  "EDEB6C3A",
+                                               "probe_mask":  7,
+                                               "sample_hz":  20000,
+                                               "filter":  6,
+                                               "detector_probe":  2,
+                                               "adc_channels":  [
+                                                                    0,
+                                                                    1
+                                                                ],
+                                               "usb_detectors":  [
+                                                                     1,
+                                                                     2
+                                                                 ],
+                                               "sd_detectors":  [
+                                                                    1,
+                                                                    2
+                                                                ],
+                                               "sd_scope":  "Unchanged APP99CC44F9; existing SD qualification reused",
+                                               "summary":  "V2 USB3P20k: nominalAG200/MAG100 measured199.03Ã¢â‚¬â€œ199.06/99.51Ã¢â‚¬â€œ99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
+                                               "results":  [
+                                                               {
+                                                                   "run":  "usb-r3-cl0",
+                                                                   "usb_crc32":  "72C9F2C6",
+                                                                   "detectors":  0,
+                                                                   "seconds":  60.378,
+                                                                   "np_blocks":  47152,
+                                                                   "np_or_IMU_dropped":  0,
+                                                                   "imu_observed":  75443,
+                                                                   "native_AG_hz":  199.0568544102019,
+                                                                   "native_MAG_hz":  99.52842720510095,
+                                                                   "source_gaps":  0,
+                                                                   "carrier_drops":  0,
+                                                                   "quality":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r3-cl0\\quality.json",
+                                                                   "quality_sha256":  "B5464291012823AD396E5229CF556D4E9F5BE6423FCAE6BE7848C8CBC364A42D",
+                                                                   "sensor_review":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r3-cl0-review.json",
+                                                                   "readiness":  null
+                                                               },
+                                                               {
+                                                                   "run":  "usb-r4-cl1",
+                                                                   "usb_crc32":  "D43FE162",
+                                                                   "detectors":  1,
+                                                                   "seconds":  61.368,
+                                                                   "np_blocks":  47928,
+                                                                   "np_or_IMU_dropped":  0,
+                                                                   "imu_observed":  76685,
+                                                                   "native_AG_hz":  199.03912148249827,
+                                                                   "native_MAG_hz":  99.51956074124914,
+                                                                   "source_gaps":  0,
+                                                                   "carrier_drops":  0,
+                                                                   "quality":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl1\\quality.json",
+                                                                   "quality_sha256":  "78B43B3C1B45705B9AB357B2889463B1D900BC6CDF7DADAF04D59713183AE328",
+                                                                   "sensor_review":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r4-cl1-review.json",
+                                                                   "readiness":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl1\\readiness-scope.json"
+                                                               },
+                                                               {
+                                                                   "run":  "usb-r4-cl2",
+                                                                   "usb_crc32":  "D43FE162",
+                                                                   "detectors":  2,
+                                                                   "seconds":  60.378,
+                                                                   "np_blocks":  47152,
+                                                                   "np_or_IMU_dropped":  0,
+                                                                   "imu_observed":  75443,
+                                                                   "native_AG_hz":  199.02719213785318,
+                                                                   "native_MAG_hz":  99.51363643908836,
+                                                                   "source_gaps":  0,
+                                                                   "carrier_drops":  0,
+                                                                   "quality":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2\\quality.json",
+                                                                   "quality_sha256":  "4839948BB526155E47BA0259ED1EDA90AB7DF9D86A2EAB409AF98A93A73ECDA1",
+                                                                   "sensor_review":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r4-cl2-review.json",
+                                                                   "readiness":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2\\readiness-scope.json"
+                                                               },
+                                                               {
+                                                                   "run":  "usb-r4-cl2-restart",
+                                                                   "usb_crc32":  "D43FE162",
+                                                                   "detectors":  2,
+                                                                   "seconds":  11.366,
+                                                                   "np_blocks":  8868,
+                                                                   "np_or_IMU_dropped":  0,
+                                                                   "imu_observed":  14189,
+                                                                   "native_AG_hz":  199.03691813804173,
+                                                                   "native_MAG_hz":  99.51845906902086,
+                                                                   "source_gaps":  0,
+                                                                   "carrier_drops":  0,
+                                                                   "quality":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2-restart\\quality.json",
+                                                                   "quality_sha256":  "3AC631A058B4C03C1AC96166423094183DD43F8CA3134799EADCA4AD8C4E3EB6",
+                                                                   "sensor_review":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\audit\\sensors\\usb-r4-cl2-restart-review.json",
+                                                                   "readiness":  "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_usb_imu100_20261105\\usb-r4-cl2-restart\\readiness-scope.json"
+                                                               }
+                                                           ],
+                                               "detector_off_reuse":  "72C9F2C6off60s evidence reused: finalD43 changes only SPIclosed-loop gap handling, unreachable whenCLdisabled. All other objects/capture buffers/IMU/media code unchanged; final1/2/restart actuallyD43.",
+                                               "acceptance_sha256":  "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366",
+                                               "original_restored":  true,
+                                               "retained_run_identity_scope":  "The historical runs below retain their original firmware identities; recording/CL evidence is reused only for unchanged processing with preview off. New maintenance acceptance is separate."
+                                           }
+                                },
+    "expectedPayloadFiles":  49,
+    "firstSyncEnabled":  true,
+    "preparationEnabled":  false,
+    "allModeOrEnduranceQualified":  false,
+    "payload":  [
+                    {
+                        "path":  "Correct-RecordingTime.ps1",
+                        "bytes":  9172,
+                        "sha256":  "B2FC559668F9B9A5663CE022BEF560519D46B1141663C4FD3ACD7DA821B2177B"
+                    },
+                    {
+                        "path":  "docs/adc-calibration.md",
+                        "bytes":  8165,
+                        "sha256":  "D2F284DFD3F5201331AD59D30B6426198518D8A2E20FEF2CD1675844B6354FFD"
+                    },
+                    {
+                        "path":  "docs/catalog-maintenance.md",
+                        "bytes":  2971,
+                        "sha256":  "E0B1EC25981601002DB05E391D65F64C09CEA5E839F3E36FEFF3A6DA8A08F81A"
+                    },
+                    {
+                        "path":  "docs/folder-naming.md",
+                        "bytes":  1787,
+                        "sha256":  "161545C86D66CE0D1492C6930C94D110DFC302223B448A24788435D1579B5DEC"
+                    },
+                    {
+                        "path":  "docs/imu-time-correction.md",
+                        "bytes":  11391,
+                        "sha256":  "35BFDA2F5DF6941FFBDF6CDC4B31E9170030C143DFEF76EB5AECBB0AE34B1400"
+                    },
+                    {
+                        "path":  "docs/network-time.md",
+                        "bytes":  2338,
+                        "sha256":  "D88F3AFF026D8D5CBD4260E9B0E94040DEDDAA561A23A0E7F22220B77BED4288"
+                    },
+                    {
+                        "path":  "docs/recording-bundles.md",
+                        "bytes":  2619,
+                        "sha256":  "1D7BA3E3425156382AE8CA9FEE7C520DE82393FAF82677145D6B163E1FA2771E"
+                    },
+                    {
+                        "path":  "docs/recording-time-correction.md",
+                        "bytes":  14389,
+                        "sha256":  "CC9EF5B75399374824EAEA61C9E46D681B81528D08112B70D3073CD2AE49DD8D"
+                    },
+                    {
+                        "path":  "docs/sd-card-test.md",
+                        "bytes":  2857,
+                        "sha256":  "5EAD8FE6DA956462D4692D5358DBEA99723D0A55D0FEE8232F11FA2EE1D46533"
+                    },
+                    {
+                        "path":  "docs/universal-workflow.md",
+                        "bytes":  9843,
+                        "sha256":  "07B88B3A29BF44A2138A99A678361C821645BC707E7A4857CDF5DAFD33E29E55"
+                    },
+                    {
+                        "path":  "docs/usb-media-preview.md",
+                        "bytes":  4615,
+                        "sha256":  "D585A7BA0F0FA758A16456C1A921BDC7B95487EEBB406980C7A215E12C25DEE8"
+                    },
+                    {
+                        "path":  "docs/v2-ble-connect-cancel.md",
+                        "bytes":  2895,
+                        "sha256":  "537416966B77F0933B93BEDDBA0580277030C13D3E602C7BC1196D892B60897F"
+                    },
+                    {
+                        "path":  "docs/v2-ble-frame-write.md",
+                        "bytes":  3126,
+                        "sha256":  "AC7F50EDE1226CD506CB02BD3F09EE164F189F80C433E89059C9DF756A916AD6"
+                    },
+                    {
+                        "path":  "docs/v2-ble-integration.md",
+                        "bytes":  6510,
+                        "sha256":  "59ACC33B61ABEB14150859E4148BA2100BA3B6BC0A5AD5071365A24093FA18BF"
+                    },
+                    {
+                        "path":  "docs/v2-ble-sync16.md",
+                        "bytes":  4088,
+                        "sha256":  "0530FB17827A7F3616777A6AC9389126328E2DE8004748C5E05017F1A05013CA"
+                    },
+                    {
+                        "path":  "docs/v2-ble-warm-timeout.md",
+                        "bytes":  2779,
+                        "sha256":  "E995C310FE1A989D65700C68C26D3317325094B26E3C74B632A43A968DFF97BD"
+                    },
+                    {
+                        "path":  "docs/v2-sd-v12.md",
+                        "bytes":  5442,
+                        "sha256":  "89AE2AAF5BA86150A2458AEACF5621BA55CD00AC2FD8889D12090ABA1A848EE9"
+                    },
+                    {
+                        "path":  "docs/v2-usb-selftest-integration.md",
+                        "bytes":  5210,
+                        "sha256":  "B757D7D3B938FE1680F717F983BAC476F1D032CD08026547AFF5952905297ADA"
+                    },
+                    {
+                        "path":  "Firmware/releases.json",
+                        "bytes":  31081,
+                        "sha256":  "2377174E8CFFB45A697E645FE3F97B21391D4AB525755B9678DE4CA66AC747F3"
+                    },
+                    {
+                        "path":  "Firmware/V1/acceptance.json",
+                        "bytes":  23313,
+                        "sha256":  "97A728DAEB38878E1C2C7BA98AFF1534B9314B926B91EB5FEEBF8901F8190AF7"
+                    },
+                    {
+                        "path":  "Firmware/V1/V1_APP4A677F83.hex",
+                        "bytes":  1160376,
+                        "sha256":  "95FBCA5A9DE0970AA84A2252531FFEF4B638866DAC732CDE1506A8CED0995C7F"
+                    },
+                    {
+                        "path":  "Firmware/V1/V1_APP4A677F83.xenp",
+                        "bytes":  421904,
+                        "sha256":  "13A714C7616F9E73E51962176E643B5217EA779151ED78C4464EEFD64BE96C67"
+                    },
+                    {
+                        "path":  "Firmware/V1/V1_BOOT_DFU_unchanged_20261030.hex",
+                        "bytes":  322607,
+                        "sha256":  "02807C6AF1784D05E76F0D8B9F621CE7B178D4012CC6986F6EE92C5C662BE4C9"
+                    },
+                    {
+                        "path":  "Firmware/V1/V1_BOOT_USB11646986.hex",
+                        "bytes":  1412284,
+                        "sha256":  "116A26DAC3AF479DAA67404F0177D20B7FCBF7C954537498F4C02FE6C9ED1D4F"
+                    },
+                    {
+                        "path":  "Firmware/V1/V1_FUSED_BOOT_USB11646986_APP4A677F83.hex",
+                        "bytes":  5745164,
+                        "sha256":  "EE75228318AFF5C441A1317C564BE4ADCEDD3EEEAA9ED5914BAF0D85A9D8A1F1"
+                    },
+                    {
+                        "path":  "Firmware/V1/V1_USB11646986.hex",
+                        "bytes":  1096860,
+                        "sha256":  "E75CD9CF54706DEE50E2918964D40520263942EE6C72473622AF45A3B944E5FD"
+                    },
+                    {
+                        "path":  "Firmware/V1Camera/README.md",
+                        "bytes":  1640,
+                        "sha256":  "3EF6FAFBC2C2F24F03BDB879B8C8F95B774C9A8576B7B702B6AC3C91220C8B9C"
+                    },
+                    {
+                        "path":  "Firmware/V1Camera/release.json",
+                        "bytes":  1386,
+                        "sha256":  "6253A3408FA20FC12721DD084FF1195682557BBD1796A248EA4F5391C184C9AC"
+                    },
+                    {
+                        "path":  "Firmware/V1Camera/V1_fused_bootloader_USB_SD_BLE_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+                        "bytes":  5875757,
+                        "sha256":  "0FB9890A2FE16500DF842F47FA5F5C5457ABDF0E91911D9366BB39FF36D9D5A3"
+                    },
+                    {
+                        "path":  "Firmware/V1Camera/V1_SD_BLE_app_only_v1.0.121-camera40-default-candidate_20261015T012531Z.hex",
+                        "bytes":  755800,
+                        "sha256":  "6A6A45857B73F0D55EFF308312A7BFF4D841AFB8DFFFE02A26435072360DDB16"
+                    },
+                    {
+                        "path":  "Firmware/V2/acceptance.json",
+                        "bytes":  9354,
+                        "sha256":  "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B"
+                    },
+                    {
+                        "path":  "Firmware/V2/V2_APP99CC44F9.hex",
+                        "bytes":  1033332,
+                        "sha256":  "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
+                    },
+                    {
+                        "path":  "Firmware/V2/V2_APP99CC44F9.xenp",
+                        "bytes":  375712,
+                        "sha256":  "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
+                    },
+                    {
+                        "path":  "Firmware/V2/V2_FUSED_BOOT_USBEDEB6C3A_APP99CC44F9.hex",
+                        "bytes":  5745164,
+                        "sha256":  "91B3E56C59C3CD19B37DAFF40C5F67EF5B3A1BB601AAD46D39B71B16738191F9"
+                    },
+                    {
+                        "path":  "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
+                        "bytes":  84090,
+                        "sha256":  "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+                    },
+                    {
+                        "path":  "Firmware/V2/V2_USBEDEB6C3A.hex",
+                        "bytes":  972832,
+                        "sha256":  "FDC0E16303AD40C301815A4830B011A2C0347C19C3A458B31990FCDC7FAF898B"
+                    },
+                    {
+                        "path":  "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
+                        "bytes":  449,
+                        "sha256":  "098C225185770E2DC27FBAE67EB762FC5D8462D6268610C475D49E2CF4DFFE01"
+                    },
+                    {
+                        "path":  "FirmwareUpdater/XeNpFirmwareUpdater.dll",
+                        "bytes":  55808,
+                        "sha256":  "3BEA6D5DE99ED085AADA286591FFEF38C098931F3D707B296FEB3DF607D8AA2F"
+                    },
+                    {
+                        "path":  "FirmwareUpdater/XeNpFirmwareUpdater.exe",
+                        "bytes":  152064,
+                        "sha256":  "D78107469DE53D447B8A6176564E4D97698D7654784CDE587DCC3C9A91A75425"
+                    },
+                    {
+                        "path":  "FirmwareUpdater/XeNpFirmwareUpdater.runtimeconfig.json",
+                        "bytes":  340,
+                        "sha256":  "28329CF08F6505E73806B17558B187C02F0C1C516FE47EBFB7A013D082AAA306"
+                    },
+                    {
+                        "path":  "NPConfigurator/NPConfigurator.deps.json",
+                        "bytes":  434,
+                        "sha256":  "BD00BA4E726FDB8CFA8E45BC34C381F2B11C5E6741B96884CDC4A4B6565227C9"
+                    },
+                    {
+                        "path":  "NPConfigurator/NPConfigurator.dll",
+                        "bytes":  375808,
+                        "sha256":  "F3B7F1F3E62C8CA6D491D3FE0B5A694FEB2CF72F04B352AC5113C1CB10A64706"
+                    },
+                    {
+                        "path":  "NPConfigurator/NPConfigurator.exe",
+                        "bytes":  151552,
+                        "sha256":  "50CEB214418A79BDC77BC2B3BE2285C28634218BCCF40B909AF941069996394E"
+                    },
+                    {
+                        "path":  "NPConfigurator/NPConfigurator.runtimeconfig.json",
+                        "bytes":  458,
+                        "sha256":  "C71152BF25E40D647B2440C5B39BE157A3D356106BE9D5B678AB97BB87B4E782"
+                    },
+                    {
+                        "path":  "NpV2SdDatExport.dll",
+                        "bytes":  683520,
+                        "sha256":  "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB"
+                    },
+                    {
+                        "path":  "OpenTK.dll",
+                        "bytes":  5757952,
+                        "sha256":  "2BBD3AC9651CB1DAAB679DA57020F1054D5C18A1B89621B92BA6AC7AB1B1B3EA"
+                    },
+                    {
+                        "path":  "OpenTK.GLControl.dll",
+                        "bytes":  24576,
+                        "sha256":  "4D2EC183741B7218FE0BDF54A64DCC5097225C65A04FBD1A8B59DFB055FDC03B"
+                    },
+                    {
+                        "path":  "WILDX_console.exe",
+                        "bytes":  2872320,
+                        "sha256":  "FA744968A3DE0AC9A87F6FD77F8F3ED40BFAB3FBD062ABD9B33BEE3E233E8953"
+                    },
+                    {
+                        "path":  "WILDX_console.exe.config",
+                        "bytes":  532,
+                        "sha256":  "8CC8B632F459994500E9DFD5381EE38DB60FD998BC84206A6466066BAB4192E2"
+                    }
+                ]
 }
