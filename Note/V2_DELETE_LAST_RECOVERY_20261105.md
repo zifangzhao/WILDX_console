@@ -33,11 +33,11 @@ the polling adapter produced a receive FIFO overrun under USB service.
   retries only initial read-only discovery/status, with cancellation and a
   30-second bound; mutations are not replayed.
 
-Normal USB deletion passed with USB16F before the metadata-read-only DMA delta.
-Final USB067 separately passed automatic target/clear writes and normal A7
-inspection. That measured component reuse is retained rather than claiming a
-new normal067 mutation or endurance test. Earlier USB finite-test-job source
-window failure remains explicit; ordinary BLE recordings independently passed.
+The original release reused the USB16F normal mutation before the metadata-read-only
+DMA delta; final USB067 separately passed automatic recovery and A7 inspection.
+The supplemental test below now directly verifies normal deletion on final067.
+The immutable original acceptance and its measured component scope are retained.
+Earlier USB finite-test-job source window limits remain explicit.
 
 VEE enable plus reset did not measure zero volts or remove every power source.
 The native persistence model and physical quiet-boundary checks are separate;
@@ -56,3 +56,35 @@ Immutable acceptance SHA256:
 Checked source/closure evidence accompanies the release under
 `ReleaseSources/1.0.0.248/firmware/V2`. No private device flash backups or full
 generated neural test payloads are included there.
+
+## Final067 direct deletion and recording follow-up
+
+The exact published APP7E463C83/USB067D89A2 and app248 passed two direct normal
+USB A7 deletions, each targeting one new, fully exported recording. Both returned
+23 to 22 entries, restored frontier 36,462,592 and cleared journals 112/115/116.
+All 22 original catalog/header/footer/bounded payload fingerprints matched.
+An ordinary BLE-to-SD restart reused the reclaimed LBA with a new session.
+
+Both BLE/SD exports passed neural framing and loss checks: 8,116 and 8,516 NP
+blocks, with 12,980 and 13,625 scheduled IMU rows and no reported queue/scheduler
+or accepted-unsaved loss. Two ordinary USB captures, separated by normal Stop
+and restart, each verified 8,088 NP blocks over 10.35264 source seconds, all
+three DAT extents, 12,941 scheduled IMU rows, zero NP errors and zero host drops.
+The profile was three probes, 20 kHz, closed-loop off; this is not all-rate,
+camera/audio, closed-loop-on or endurance qualification.
+
+Timing/native limits remain: SD restart's final IMU-row bound straddles saved
+NP end by -302 to +16 microseconds; both USB source-window flags remain false
+and final ordinals unknown. Each USB native sidecar has 206 sparse observations,
+205 accepted, one invalid startup observation and 1,830 unobserved native
+sequence positions. Primary cached-grid drops were zero; this does not prove
+retention of every native sensor conversion or exact terminal completeness.
+
+Original firmware/settings, idle/quiet/debug state were restored and leases
+closed. About 1.94 GB of generated neural test payloads were removed after
+compact evidence was secured. Product, installer, fused image and the original
+acceptance remain unchanged.
+
+Supplement: [receipt](../ReleaseSources/1.0.0.248/firmware/V2/final-usb-delete/accepted.json),
+[detailed report](../ReleaseSources/1.0.0.248/firmware/V2/final-usb-delete/report.md).
+Receipt SHA256: `83DB8FB6650D05729962122CF9DB901F04C2DCDD31E7A695395C145D87957840`.

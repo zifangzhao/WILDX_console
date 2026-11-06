@@ -1,0 +1,773 @@
+{
+  "status": "PASS_BOUNDED_FINAL_PAIR_WITH_RETAINED_TIMING_LIMITS",
+  "uid": "001A0004434250062039314E",
+  "card_cid": "444444584D4E43447202DA60EA980140",
+  "card_sectors": 501301248,
+  "published_firmware": {
+    "app": "7E463C83",
+    "usb": "067D89A2",
+    "recovery": "6408DBB8"
+  },
+  "console": "1.0.0.248",
+  "host_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
+  "original_count": 22,
+  "frontier": 36462592,
+  "normal_usb_deletes": 2,
+  "earlier_recording_evidence": "Exact catalog identities and header/footer/bounded payload fingerprints of all22 originals unchanged after both deletes; not full older payload readback",
+  "normal_ble_sd_runs": [
+    {
+      "status": "PASS_FULL_PRODUCTION_EXPORT_WITH_TIMING_LIMITS",
+      "session": 2974125521,
+      "np_blocks": 8116,
+      "source_seconds": 10.38848,
+      "probe_mask": 7,
+      "hz": 20000,
+      "np_loss_counters": 0,
+      "probes": [
+        {
+          "probe": 1,
+          "rows": 207768,
+          "bytes": 159565824,
+          "writer_sha256": "7D7BDE6A0E4B4858330ED8F2DA51DBD9AD595B24DA515F3D9D44A3DC5DDD8285"
+        },
+        {
+          "probe": 2,
+          "rows": 207768,
+          "bytes": 159565824,
+          "writer_sha256": "9826A0D45FD96AE62AF668BE12947F24C8BF5ABE796F6CBC2B54282A7A6650AD"
+        },
+        {
+          "probe": 3,
+          "rows": 207768,
+          "bytes": 159565824,
+          "writer_sha256": "D416CCB2155A2AB4791AA9AE0568E0F7C2C51F7C9FF2B285190CE0B5B8AFC15F"
+        }
+      ],
+      "grid_rows": 12980,
+      "grid_queue_scheduler_accepted_unsaved": 0,
+      "native_snapshots": 2041,
+      "native_sequence_invalid_errors": 0,
+      "source_window_verified": "True",
+      "phase_qualified": "True",
+      "limits": [
+        "Production exporter validates full stored neural framing/counters/lengths; DAT hashes are writer computed, not reread here.",
+        "No claim of analog or arbitrary ADC bit-error absence.",
+        "Scheduled IMU rows are cached fixed-grid snapshots, not native conversion lock.",
+        "source_window_verified and unknown terminal tail remain explicit; bounds are not silently promoted."
+      ],
+      "small_input_pins": {
+        "analogin_encoding.txt": {
+          "bytes": 3016,
+          "sha256": "F5B8BBE9EB491318AD3460D32959246721ECF9100545DDAC08AD09A87850288C"
+        },
+        "CE_params.bin": {
+          "bytes": 1536,
+          "sha256": "80422BC3D307B4A25BDAFCC84AC7FB01CB55A09810E8B0F37BB12E0EDB5C48CA"
+        },
+        "configuration.bin": {
+          "bytes": 2048,
+          "sha256": "BCDB9E94519DCD48E809289FA21821E9412544B6F9D7221FAB0016065F902F73"
+        },
+        "descriptor.bin": {
+          "bytes": 512,
+          "sha256": "48971C83FB1E52F1BA27CB86A218D61E70E0F5AF9C03DF0EC2EDC560CB2E88EB"
+        },
+        "device_rtc_start_sector7.bin": {
+          "bytes": 512,
+          "sha256": "B1E8708358BE3914DD9531F7CA2409646CFA90BE7D7B8FCD9CFFD81CD94F516D"
+        },
+        "device_rtc_start_status.json": {
+          "bytes": 571,
+          "sha256": "610DAACA42BC835E76057ED61A302B2503695C48DF5A2928C09D794EDA599578"
+        },
+        "fine_clock_fit_status.json": {
+          "bytes": 1048,
+          "sha256": "1C438E34A76CC6F7B1ED4634082473EC66D9034D19EE9B06BA4F99B2A9D41C87"
+        },
+        "fine_source_clock_status.json": {
+          "bytes": 1030,
+          "sha256": "7AC002F3C65C72E888B02802567D775624A2377E7389291FEF70821AE3C7C96E"
+        },
+        "first_sample_timestamps.json": {
+          "bytes": 2420,
+          "sha256": "B67A4D902D7FCC0993EDA4AF47EAE5D21B238B2DEB4BAB0EA2DCFBCB59007907"
+        },
+        "first_source_clock_sector6.bin": {
+          "bytes": 512,
+          "sha256": "930BDEBB5CB4B75ABF522DACFB9F1E151CFA3A9DB7AA50DB97EE3DA48A63719C"
+        },
+        "first_sync_sd_status.json": {
+          "bytes": 584,
+          "sha256": "A4D758293E027168823E55ABCAD4212353B69E2B63C5000A5E2E987B8CFBF473"
+        },
+        "footer.bin": {
+          "bytes": 512,
+          "sha256": "A8519F2C902B09DA8EB23AC7D1E97DBB3A7DD125CE302DBC8EE249B53355C4F1"
+        },
+        "host_clock_association.json": {
+          "bytes": 969,
+          "sha256": "42958D7B495BBD32DB792053206D36B238F3FBEAA885C1AC3C756903272B870A"
+        },
+        "imu_grid_gaps.csv": {
+          "bytes": 30,
+          "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+        },
+        "imu_grid_phase.bin": {
+          "bytes": 84,
+          "sha256": "B238DAFCE56F6093E0B6179787CBC9820B95B5AEBDA745D8E4644B1433047472"
+        },
+        "imu_grid_sectors.bin": {
+          "bytes": 1038848,
+          "sha256": "A00CB5D7CD73F96B310FD8FBC75BE23604269B4A593ED0F60FAAD89828BFB4B9"
+        },
+        "imu_grid_segments.csv": {
+          "bytes": 48,
+          "sha256": "7481DA74F3A2CA955A752F866F5A44EB5CFDB87C041DEF869C4A8205839DEF1B"
+        },
+        "imu_grid_status.txt": {
+          "bytes": 578,
+          "sha256": "AEA7644AE2DCF870A99A0EB93450C92B1EC99317E85877556EA27A5837A89881"
+        },
+        "imu_sd_export_status.txt": {
+          "bytes": 1077,
+          "sha256": "2B685B6FEBA6F461C626262366796ED81BECD630A1D8FAD3DB3FC05B7A137422"
+        },
+        "imu_sd_records.sns2": {
+          "bytes": 269412,
+          "sha256": "6F17C7B93DAC81353D6E7962CD61DA4E27C0E107C792CBF35535253471B85A46"
+        },
+        "neural_segments.csv": {
+          "bytes": 302,
+          "sha256": "38260080F9336890AC918AFE2E016DFBB3637F09FEE1B3B1109E3BB5B13C5E1D"
+        },
+        "neural_storage_index.csv": {
+          "bytes": 25039,
+          "sha256": "ED81772265D607D8547DE78D717AC654EB2AD39B8E3521B053F5C7E2190954BF"
+        },
+        "neuropixels_probe1_ap.xml": {
+          "bytes": 16559,
+          "sha256": "B1CBDFBAE24CFDBA09E1DDF1D742B089A3D64E4A05C2EBB48401059A1DA8AF7B"
+        },
+        "neuropixels_probe2_ap.xml": {
+          "bytes": 16559,
+          "sha256": "74675F8891C1E8F5C4A337C31602A5E6D301F1EE1E31879139FAC06FA3B2B18E"
+        },
+        "neuropixels_probe3_ap.xml": {
+          "bytes": 16559,
+          "sha256": "9B2500D15A980BDA80787C5A3CD9C65F4F6B5CFF6D37114DA8D6F5BC6940A51C"
+        },
+        "np2_sd_export_status.txt": {
+          "bytes": 4252,
+          "sha256": "F194E5FC4952B236F5C878B7CC6DC08D3042E0501A1476A3E1FFBBD75D4692A5"
+        },
+        "probe_1.json": {
+          "bytes": 690,
+          "sha256": "8D1A5040C91F055D531F63C1D8C97DFA3F24D2026681DE6DBEC1A8D43E75A401"
+        },
+        "probe_2.json": {
+          "bytes": 690,
+          "sha256": "59582659952E52553498098CA4FBB655B203BDF533AFD82AE0C588068F164B0A"
+        },
+        "probe_3.json": {
+          "bytes": 690,
+          "sha256": "A23C0629174E158DD214A325FC2214ED090B00A8C4A7E059794F3B5F67034E0C"
+        },
+        "probe_identity_header.bin": {
+          "bytes": 512,
+          "sha256": "D31B10EAF5C4219340353D6B6F703033A92EA23115FF2CA46D58C7EEA8C3D23F"
+        },
+        "probe_info.json": {
+          "bytes": 1357,
+          "sha256": "875663964226D60237F8BA9D05B907DB94092FE2CAC798190B94C8180FDDEFCF"
+        },
+        "recorded_clock.bin": {
+          "bytes": 512,
+          "sha256": "4428177AFBFEA95B7595DB7CBE9C28262427B4ACFDD6BD8BD62684307FBB202D"
+        },
+        "recording_files.json": {
+          "bytes": 2925,
+          "sha256": "1A8F90EDBF19E1DADFB15DDFD2503057F38F6D3F3607A6A6A4E1B3233DE8C4CC"
+        },
+        "recording_settings.json": {
+          "bytes": 6042,
+          "sha256": "4EABE8A7FEF69E8BC8BAE3BB6D74A92B5D0804A4F4FD388E1E8D414DDD846DCF"
+        },
+        "recording_start_pc_estimate.json": {
+          "bytes": 5073,
+          "sha256": "6742A69F724012FAE7813D9A64342A89611A26F66613E6D1B85FCA57B54EA916"
+        },
+        "recording_start_utc.json": {
+          "bytes": 6113,
+          "sha256": "F94425E8ACE5F0982CEE5539A03E39019BEBB0C8F7A770D03662D46CFA16C932"
+        },
+        "sensors.csv": {
+          "bytes": 304117,
+          "sha256": "711EDCFF65BC36688E96843A064FA91B0A85B9ED403E9153E58A2CE27EA644F3"
+        },
+        "tail_export_manifest.json": {
+          "bytes": 9682,
+          "sha256": "7547554092A35E91E20660568E87A1F04765908F8922AB9511542816B0690685"
+        },
+        "timestamp_calibration.json": {
+          "bytes": 1958,
+          "sha256": "2D38D57D3ECE70BADC9313D1A5717C9E67D9F49B06024BB26446B47361303F07"
+        },
+        "utc.bin": {
+          "bytes": 512,
+          "sha256": "4428177AFBFEA95B7595DB7CBE9C28262427B4ACFDD6BD8BD62684307FBB202D"
+        }
+      }
+    },
+    {
+      "status": "PASS_FULL_PRODUCTION_EXPORT_WITH_TIMING_LIMITS",
+      "session": 2302125741,
+      "np_blocks": 8516,
+      "source_seconds": 10.90048,
+      "probe_mask": 7,
+      "hz": 20000,
+      "np_loss_counters": 0,
+      "probes": [
+        {
+          "probe": 1,
+          "rows": 218008,
+          "bytes": 167430144,
+          "writer_sha256": "D81278559CC85ECBBE0079AA8E55CD5871D7017C1CC984A87BD9E0651BB2380B"
+        },
+        {
+          "probe": 2,
+          "rows": 218008,
+          "bytes": 167430144,
+          "writer_sha256": "BBE87B30DC76CE21FF9B2AEA2E6A91F2232E4D7F256AB0762FA2B33FCA3124E5"
+        },
+        {
+          "probe": 3,
+          "rows": 218009,
+          "bytes": 167430912,
+          "writer_sha256": "53CB11E53C8938E34524ABA1499E49B520219FE4F15F33E4080B35B2BAF78850"
+        }
+      ],
+      "grid_rows": 13625,
+      "grid_queue_scheduler_accepted_unsaved": 0,
+      "native_snapshots": 2139,
+      "native_sequence_invalid_errors": 0,
+      "source_window_verified": "False",
+      "phase_qualified": "True",
+      "limits": [
+        "Production exporter validates full stored neural framing/counters/lengths; DAT hashes are writer computed, not reread here.",
+        "No claim of analog or arbitrary ADC bit-error absence.",
+        "Scheduled IMU rows are cached fixed-grid snapshots, not native conversion lock.",
+        "source_window_verified and unknown terminal tail remain explicit; bounds are not silently promoted."
+      ],
+      "small_input_pins": {
+        "analogin_encoding.txt": {
+          "bytes": 3017,
+          "sha256": "FB6A900C8B7C8F6FB3100358E92E9D143166AA4CDEA49743294DC764C280CEAD"
+        },
+        "CE_params.bin": {
+          "bytes": 1536,
+          "sha256": "80422BC3D307B4A25BDAFCC84AC7FB01CB55A09810E8B0F37BB12E0EDB5C48CA"
+        },
+        "configuration.bin": {
+          "bytes": 2048,
+          "sha256": "BCDB9E94519DCD48E809289FA21821E9412544B6F9D7221FAB0016065F902F73"
+        },
+        "descriptor.bin": {
+          "bytes": 512,
+          "sha256": "D557CD6336AC3CF6E95DD13326D52B0A99EC6A69044BAD96D3908FC62CBF26AD"
+        },
+        "device_rtc_start_sector7.bin": {
+          "bytes": 512,
+          "sha256": "8E77541308CAC8F2A74ED8C65E336C96BB01DF94F446FE207F9CD12631BA8BDD"
+        },
+        "device_rtc_start_status.json": {
+          "bytes": 571,
+          "sha256": "610DAACA42BC835E76057ED61A302B2503695C48DF5A2928C09D794EDA599578"
+        },
+        "fine_clock_fit_status.json": {
+          "bytes": 1047,
+          "sha256": "A5F140531DB04EF2563606110F5003C33AB046D4B20E1B32B2E75E19AA686B8A"
+        },
+        "fine_source_clock_status.json": {
+          "bytes": 1029,
+          "sha256": "CEFD2FA62A18CE57E6870722E4FB9B8A2D37842E59E1A772CC1B8DE22248778C"
+        },
+        "first_sample_timestamps.json": {
+          "bytes": 2416,
+          "sha256": "2B973B549364286F012A3DFC6A49C35A168680A469CF80D10BF7C47E9AE1E1B5"
+        },
+        "first_source_clock_sector6.bin": {
+          "bytes": 512,
+          "sha256": "642D535B1809094F5601ED4810623104F5655A0CBB18BE516E9BEB3EDC118D0C"
+        },
+        "first_sync_sd_status.json": {
+          "bytes": 584,
+          "sha256": "A4D758293E027168823E55ABCAD4212353B69E2B63C5000A5E2E987B8CFBF473"
+        },
+        "footer.bin": {
+          "bytes": 512,
+          "sha256": "D90102E40035D8312AAD4C20B31D0066BAB5FC7C6B44A4529BB71462C13B3939"
+        },
+        "host_clock_association.json": {
+          "bytes": 969,
+          "sha256": "735E7A463ADC9424B3C397D96C5985AF5F7D57DB1714AF65C88098F9D7AE57A5"
+        },
+        "imu_grid_gaps.csv": {
+          "bytes": 30,
+          "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+        },
+        "imu_grid_phase.bin": {
+          "bytes": 84,
+          "sha256": "E9C2FFCF2C4EA7F01E12EA10F5EF401F6781832DEB417A67FED9E47D30B62A2F"
+        },
+        "imu_grid_sectors.bin": {
+          "bytes": 1090048,
+          "sha256": "EEB37C8D366D40559139E94FD93E20B8EAA05A27B9B3E6039A3AD0AA0F819764"
+        },
+        "imu_grid_segments.csv": {
+          "bytes": 48,
+          "sha256": "21FC52563E539C151EF8847BBA00252AC373A609B8B77ECE8B0411FB92F62D4B"
+        },
+        "imu_grid_status.txt": {
+          "bytes": 579,
+          "sha256": "F600B71B120304F1DA9F86B44E3EDC5927F34F3F40F5F426EA5D233B0BA5EA70"
+        },
+        "imu_sd_export_status.txt": {
+          "bytes": 1077,
+          "sha256": "EFB618DBD7CA5010B545170340C2477E0D86F37AAAD29AB04396DFC0EBF3A8BF"
+        },
+        "imu_sd_records.sns2": {
+          "bytes": 282348,
+          "sha256": "89A602882408881546701D6A3355A9431ECCA514D2E875E32ED3E85D764CB4DF"
+        },
+        "neural_segments.csv": {
+          "bytes": 300,
+          "sha256": "55A2069A9032D3AF87564F1E82E7BFAA56098B06313CE02189A6B12B0EF627E0"
+        },
+        "neural_storage_index.csv": {
+          "bytes": 26339,
+          "sha256": "0BDA673489D3A56633CF3081FC07347F46F565BF446E26CA8899AB133EA7E719"
+        },
+        "neuropixels_probe1_ap.xml": {
+          "bytes": 16559,
+          "sha256": "B1CBDFBAE24CFDBA09E1DDF1D742B089A3D64E4A05C2EBB48401059A1DA8AF7B"
+        },
+        "neuropixels_probe2_ap.xml": {
+          "bytes": 16559,
+          "sha256": "74675F8891C1E8F5C4A337C31602A5E6D301F1EE1E31879139FAC06FA3B2B18E"
+        },
+        "neuropixels_probe3_ap.xml": {
+          "bytes": 16559,
+          "sha256": "9B2500D15A980BDA80787C5A3CD9C65F4F6B5CFF6D37114DA8D6F5BC6940A51C"
+        },
+        "np2_sd_export_status.txt": {
+          "bytes": 4248,
+          "sha256": "5CE0D2BCF5262D4FB54665990B495C0B090B4860AE6853034E73250117639C14"
+        },
+        "probe_1.json": {
+          "bytes": 690,
+          "sha256": "8D1A5040C91F055D531F63C1D8C97DFA3F24D2026681DE6DBEC1A8D43E75A401"
+        },
+        "probe_2.json": {
+          "bytes": 690,
+          "sha256": "59582659952E52553498098CA4FBB655B203BDF533AFD82AE0C588068F164B0A"
+        },
+        "probe_3.json": {
+          "bytes": 690,
+          "sha256": "A23C0629174E158DD214A325FC2214ED090B00A8C4A7E059794F3B5F67034E0C"
+        },
+        "probe_identity_header.bin": {
+          "bytes": 512,
+          "sha256": "D31B10EAF5C4219340353D6B6F703033A92EA23115FF2CA46D58C7EEA8C3D23F"
+        },
+        "probe_info.json": {
+          "bytes": 1357,
+          "sha256": "875663964226D60237F8BA9D05B907DB94092FE2CAC798190B94C8180FDDEFCF"
+        },
+        "recorded_clock.bin": {
+          "bytes": 512,
+          "sha256": "DC1E7C62FD9C54291FA80ECE51EFE09EFD35245344623F0E76E31512507990FC"
+        },
+        "recording_files.json": {
+          "bytes": 2925,
+          "sha256": "BD87BF678F935E101AFE598293158E1F3CCE0516F5A0E7516913ACDE1C7AB11A"
+        },
+        "recording_settings.json": {
+          "bytes": 6043,
+          "sha256": "0E5E66E299AE3A05BB11BDBF9493690006E0C6B8BECE54F7FBA9EFC25F8B4D99"
+        },
+        "recording_start_pc_estimate.json": {
+          "bytes": 5072,
+          "sha256": "FC2A574F54AC56695B3BE93D6535A3AED7C0BE4FC7A099DC500DEDDEF0A5EAD9"
+        },
+        "recording_start_utc.json": {
+          "bytes": 6112,
+          "sha256": "11D44F4B5480E7013447D8D5E2D1F30ACAC27F581B9519D9244758C641DF61F3"
+        },
+        "sensors.csv": {
+          "bytes": 318655,
+          "sha256": "825B3BCF0085EFD00287D14AB21D252EA4D00D7E2A12C7D889966EFCE79D7EA7"
+        },
+        "tail_export_manifest.json": {
+          "bytes": 9682,
+          "sha256": "A1A1E5ACE2F78AD6251E762754D4A799C9EAA9273C338B3E4719462222771FA4"
+        },
+        "timestamp_calibration.json": {
+          "bytes": 1958,
+          "sha256": "749AAF94709750922857B378B1E7E8FF54D9728B30AAF4BC7A167F83BEBB2F5C"
+        },
+        "utc.bin": {
+          "bytes": 512,
+          "sha256": "DC1E7C62FD9C54291FA80ECE51EFE09EFD35245344623F0E76E31512507990FC"
+        }
+      }
+    }
+  ],
+  "normal_usb_runs": [
+    {
+      "status": "PASS",
+      "scope": "Stopped production USB248 bounded3P20k CL-off recording, writer/verifier evidence and file extents; read-only assessment.",
+      "uid": "001A0004434250062039314E",
+      "usb_crc32": "067D89A2",
+      "app_crc32": "7E463C83",
+      "host_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
+      "checks": {
+        "actual_host248": true,
+        "final_firmware_pair": true,
+        "read_only_profile_admission": true,
+        "bounded_ordinary_worker": true,
+        "normal_complete": true,
+        "all_np_blocks_verified": true,
+        "no_host_losses": true,
+        "no_np_errors": true,
+        "three_probe_20k": true,
+        "ten_second_capture": true,
+        "probe1_complete_rows": true,
+        "probe2_complete_rows": true,
+        "probe3_complete_rows": true,
+        "np_row_accounting": true,
+        "confirmed_cl_off": true,
+        "no_cl_events": true,
+        "imu_no_reported_loss": true,
+        "imu_grid_timing": true,
+        "imu_all_rows_retained": true,
+        "imu_grid_validity": true,
+        "imu_1250hz_cadence": true,
+        "imu_source_window_replay_matches": true
+      },
+      "np_verified_blocks": 8088,
+      "source_extent_ticks": 331284480,
+      "source_seconds": 10.35264,
+      "data_seconds": 10.376,
+      "probes": [
+        {
+          "probe": 1,
+          "rows": 207051,
+          "expected_rows": 207051,
+          "bytes": 159015168,
+          "first_source_tick": 1552
+        },
+        {
+          "probe": 2,
+          "rows": 207052,
+          "expected_rows": 207052,
+          "bytes": 159015936,
+          "first_source_tick": 170
+        },
+        {
+          "probe": 3,
+          "rows": 207052,
+          "expected_rows": 207052,
+          "bytes": 159015936,
+          "first_source_tick": 180
+        }
+      ],
+      "imu_grid_rows": 12941,
+      "imu_cadence_hz": 1247.2050886661527,
+      "source_window_verified": false,
+      "final_slot_known": "False",
+      "terminal_final_exclusive": 18446744073709551615,
+      "phase": {
+        "first_slot": 0,
+        "lower_numerator": 27984,
+        "upper_numerator": 31632,
+        "denominator": 1,
+        "jitter_ticks": 3232,
+        "flags": 3
+      },
+      "native_sparse_observations": {
+        "observations": 206,
+        "retained_samples": 205,
+        "accepted_samples": 205,
+        "invalid_observations": 1,
+        "sequence_gaps": 1830,
+        "reset_segments": 0
+      },
+      "input_pins": {
+        "usb-report.json": {
+          "bytes": 3935,
+          "sha256": "4234CC489CF9752C2E3FDFB3D136CB12AC6254230BBB892A314E74467B249DDD"
+        },
+        "neuropixels_np2usb_status.txt": {
+          "bytes": 2025,
+          "sha256": "FFE45F921581844B7B6A8A71673CA895B3ED6C4D434EBD61FAD8BA32F7D0FC9A"
+        },
+        "imu_grid_status.txt": {
+          "bytes": 626,
+          "sha256": "EF9E4B16800ED06426036C8008E2949A68A1605D9F0FA383D865E118F6DA23F4"
+        },
+        "analogin_encoding.txt": {
+          "bytes": 3015,
+          "sha256": "659FE3AED9CF5B2184FE17C878D6F1B74DCA29AB8368FCFE4E7FF8FA6A72533E"
+        },
+        "analogin_validity.dat": {
+          "bytes": 12941,
+          "sha256": "9C44844D68E694DD6D2590B992B5D829C0E92BA99603C0706EF3966F1DBC6F4B"
+        },
+        "analogin.dat": {
+          "bytes": 414112,
+          "sha256": "A4266825F22AB88ADE7A71F8049EF5BA438FC8A7D11621B3015D0357C832F899"
+        },
+        "imu_native_samples_status.json": {
+          "bytes": 377,
+          "sha256": "67B31A85E67849552F24D3A18D846A49195412660F0C9B52B241D6B2C98A126E"
+        },
+        "first_sample_timestamps.json": {
+          "bytes": 12350,
+          "sha256": "4E72B6C0F63A09849F348A49B3CC1B5EE14BD14C2A1A73B72DEE31226F4A31C7"
+        },
+        "recording_start_utc.json": {
+          "bytes": 6539,
+          "sha256": "9B8760BB81E5B9766E2B6FB8210C427B99ECA653EADFC8F81D7C9720E383A5A2"
+        },
+        "closed_loop_requested.bin": {
+          "bytes": 64,
+          "sha256": "025FDF79AB0C26A737D78028837C8E8BE09CB434A724A7F1BF5867C7498454C2"
+        },
+        "closed_loop_control_receipt.bin": {
+          "bytes": 64,
+          "sha256": "F0ABCCF81352F27AD6552E52E14BBBF7911B57905CFEC85729B57C4F9385BDBD"
+        },
+        "imu_grid_phase.bin": {
+          "bytes": 84,
+          "sha256": "DE2EB89E97EDF69A254E681787125EC820346368E9A7F910A1C40F69894B2957"
+        },
+        "imu_grid_terminal.bin": {
+          "bytes": 80,
+          "sha256": "FA5C889D32007B39FB0B45B8BDA6F95187BDFCB75FCAEFAA4E726A86E9DED5AE"
+        },
+        "imu_grid_segments.csv": {
+          "bytes": 48,
+          "sha256": "6FB9A2E0C74F6D143F017132B21E5BBF9B6B0903340968FA3D9B35BC2963969B"
+        }
+      },
+      "limits": [
+        "Actual production worker verifies every received block's header, sequence, source extent and NP supersync; AP DAT extents are checked here without rereading full neural payloads.",
+        "The performance codec omits application payload CRC; no analog stimulus, arbitrary ADC bit-error or gain/calibration claim.",
+        "1250Hz grid rows are scheduled cached snapshots. Native conversion/filter phase and SAMPLE0_LOCK are not inferred.",
+        "Sparse native sequence gaps and invalid startup observations remain recorded; they are not converted into primary-grid loss or physical ADC-loss counts.",
+        "Source-window replay retains its actual true/false result. Unknown final scheduled ordinal and physical terminal tail remain unknown.",
+        "Device RTC validity, local RTC-to-NP uncertainty and PC/network time accuracy are separate; no clock was set or newly qualified by this assessment.",
+        "One bounded run is not endurance or an all-mode qualification; no data was deleted."
+      ]
+    },
+    {
+      "status": "PASS",
+      "scope": "Stopped production USB248 bounded3P20k CL-off recording, writer/verifier evidence and file extents; read-only assessment.",
+      "uid": "001A0004434250062039314E",
+      "usb_crc32": "067D89A2",
+      "app_crc32": "7E463C83",
+      "host_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
+      "checks": {
+        "actual_host248": true,
+        "final_firmware_pair": true,
+        "read_only_profile_admission": true,
+        "bounded_ordinary_worker": true,
+        "normal_complete": true,
+        "all_np_blocks_verified": true,
+        "no_host_losses": true,
+        "no_np_errors": true,
+        "three_probe_20k": true,
+        "ten_second_capture": true,
+        "probe1_complete_rows": true,
+        "probe2_complete_rows": true,
+        "probe3_complete_rows": true,
+        "np_row_accounting": true,
+        "confirmed_cl_off": true,
+        "no_cl_events": true,
+        "imu_no_reported_loss": true,
+        "imu_grid_timing": true,
+        "imu_all_rows_retained": true,
+        "imu_grid_validity": true,
+        "imu_1250hz_cadence": true,
+        "imu_source_window_replay_matches": true
+      },
+      "np_verified_blocks": 8088,
+      "source_extent_ticks": 331284480,
+      "source_seconds": 10.35264,
+      "data_seconds": 10.371,
+      "probes": [
+        {
+          "probe": 1,
+          "rows": 207051,
+          "expected_rows": 207051,
+          "bytes": 159015168,
+          "first_source_tick": 1511
+        },
+        {
+          "probe": 2,
+          "rows": 207052,
+          "expected_rows": 207052,
+          "bytes": 159015936,
+          "first_source_tick": 53
+        },
+        {
+          "probe": 3,
+          "rows": 207052,
+          "expected_rows": 207052,
+          "bytes": 159015936,
+          "first_source_tick": 173
+        }
+      ],
+      "imu_grid_rows": 12941,
+      "imu_cadence_hz": 1247.806383183878,
+      "source_window_verified": false,
+      "final_slot_known": "False",
+      "terminal_final_exclusive": 18446744073709551615,
+      "phase": {
+        "first_slot": 0,
+        "lower_numerator": 28025,
+        "upper_numerator": 31673,
+        "denominator": 1,
+        "jitter_ticks": 3232,
+        "flags": 3
+      },
+      "native_sparse_observations": {
+        "observations": 206,
+        "retained_samples": 205,
+        "accepted_samples": 205,
+        "invalid_observations": 1,
+        "sequence_gaps": 1830,
+        "reset_segments": 0
+      },
+      "input_pins": {
+        "usb-report.json": {
+          "bytes": 3926,
+          "sha256": "A55912FD2143F089CAF767DE9DFE6C759CF8BFD8ABCFDFBA45538740FAD0B1CB"
+        },
+        "neuropixels_np2usb_status.txt": {
+          "bytes": 2025,
+          "sha256": "90D74B0FA97211A2589BD83A8A2E263EB6CB5C8225B0E5AAA19A9593C204A901"
+        },
+        "imu_grid_status.txt": {
+          "bytes": 626,
+          "sha256": "A2D05BC2E40493197868A883F75DC393926B59D0C49EDE5B188280185DB32193"
+        },
+        "analogin_encoding.txt": {
+          "bytes": 3015,
+          "sha256": "300F46A9F27C72D4D6488336224C5E0BF948011421A7051785A88F984D5529B8"
+        },
+        "analogin_validity.dat": {
+          "bytes": 12941,
+          "sha256": "01E5F4446035AA6E70241C2EC9E5BEEA80B5AAB04D4948AA6553BF16FBBE7BB2"
+        },
+        "analogin.dat": {
+          "bytes": 414112,
+          "sha256": "D6A933F1D68057388690BB374805927A9BA5B14BE9720C57515CE6029985064F"
+        },
+        "imu_native_samples_status.json": {
+          "bytes": 377,
+          "sha256": "67B31A85E67849552F24D3A18D846A49195412660F0C9B52B241D6B2C98A126E"
+        },
+        "first_sample_timestamps.json": {
+          "bytes": 12329,
+          "sha256": "0E6D9DFE8C3673826989ECA687735BBB0BCBBE18BD732F565D14927D3FEEA66E"
+        },
+        "recording_start_utc.json": {
+          "bytes": 6536,
+          "sha256": "D428E4802DE4C4F33915624F940C016FFC010A9649CF84AACC3A23B26E2C5340"
+        },
+        "closed_loop_requested.bin": {
+          "bytes": 64,
+          "sha256": "E32B6155A7BEACB27D419044B225A2B1BC34DBF876444160A344F1F8110752C9"
+        },
+        "closed_loop_control_receipt.bin": {
+          "bytes": 64,
+          "sha256": "E982A8E7F4C2F89CA2C79618EF4286848239E8D992BFEE49749FEDF6C8980CAD"
+        },
+        "imu_grid_phase.bin": {
+          "bytes": 84,
+          "sha256": "01634B482F29E78EF27E05E5164F482B7926E6141729DBE41380DB31EB45F780"
+        },
+        "imu_grid_terminal.bin": {
+          "bytes": 80,
+          "sha256": "9C742E22B39583508CD5D69F8CA5D09A414006D394079A526A6ADD8A254139B2"
+        },
+        "imu_grid_segments.csv": {
+          "bytes": 48,
+          "sha256": "6FB9A2E0C74F6D143F017132B21E5BBF9B6B0903340968FA3D9B35BC2963969B"
+        }
+      },
+      "limits": [
+        "Actual production worker verifies every received block's header, sequence, source extent and NP supersync; AP DAT extents are checked here without rereading full neural payloads.",
+        "The performance codec omits application payload CRC; no analog stimulus, arbitrary ADC bit-error or gain/calibration claim.",
+        "1250Hz grid rows are scheduled cached snapshots. Native conversion/filter phase and SAMPLE0_LOCK are not inferred.",
+        "Sparse native sequence gaps and invalid startup observations remain recorded; they are not converted into primary-grid loss or physical ADC-loss counts.",
+        "Source-window replay retains its actual true/false result. Unknown final scheduled ordinal and physical terminal tail remain unknown.",
+        "Device RTC validity, local RTC-to-NP uncertainty and PC/network time accuracy are separate; no clock was set or newly qualified by this assessment.",
+        "One bounded run is not endurance or an all-mode qualification; no data was deleted."
+      ]
+    }
+  ],
+  "sd_restart_reclaimed_append": true,
+  "usb_normal_stop_restart": true,
+  "sd2_last_row_bound": {
+    "np_end": 348815360,
+    "first_slot": 0,
+    "last_slot": 13624,
+    "interval_lower": 348805696,
+    "interval_upper": 348815872,
+    "relative_lower_us": -302,
+    "relative_upper_us": 16,
+    "previous_upper_inside_us": 784,
+    "source_window_verified": false,
+    "terminal_final_ordinal_known": false
+  },
+  "restoration": {
+    "status": "EXACT_ORIGINALS_RESTORED_IDLE",
+    "uid": "001A0004434250062039314E",
+    "app_crc32": "7F238587",
+    "usb_crc32": "74FC7104",
+    "whole_flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+    "options_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+    "protected_flash_settings_restored": true,
+    "original_preferences_absent": true,
+    "mode": 2,
+    "busy": 0,
+    "target": 0,
+    "c_debugen": 0,
+    "physical_sd_dma_quiet": true,
+    "original_card_count": 22,
+    "card_format": false,
+    "old_recordings_deleted": false,
+    "utc": "2026-11-06T04:14:01.8034586Z"
+  },
+  "lease_closed_utc": "2026-11-06T04:14:01.9452048Z",
+  "product_source_changes": false,
+  "firmware_builds": 0,
+  "installer_builds": 0,
+  "format": false,
+  "old_recordings_deleted": false,
+  "limits": [
+    "Two bounded3P20k CLoffSD recordings and two bounded3P20k CLoffUSB recordings only; no all-rate/CL/camera/audio/endurance/installed-GUI qualification.",
+    "No injected delay or new power interruption in this supplemental run; prior immutable interrupted-write evidence remains separate.",
+    "USB native observations are sparse:206 observed/205 accepted, one invalid startup observation,1830 sequence positions unobserved per run, reset0; these are not primary-grid drops.",
+    "Scheduled1250Hz cached-grid rows have zero reported queue/scheduler/accepted-unsaved loss. Native conversion/filter phase remains unknown.",
+    "USB source_window_verifiedFalse and terminal finalordinalUnknown in both runs remain explicit. SD2 lastrow containmentFalse is bounded\u2212302us..+16us relative savedNPend; no exact terminal completeness claim.",
+    "NP checks cover production framing/sequence/source extent/supersync and DATrow accounting, not arbitrary payload bit errors or analog signal/gain correctness."
+  ],
+  "test_adapter_corrections": [
+    "Extra unsupported USB semantic identity gate rejected before Start/settings; fresh exact deployment readback+exclusiveUIDlease used instead; original pre-admission receipt retained.",
+    "Boolean parser corrected selected=true versus True without changing measured flags; initial failed assessment retained.",
+    "Restoration preference expectation corrected to exact production CLoff Prepare MayBeConfigured=false (actual248 source line121); quiet/debug proof reused, no repeated hardware inspection."
+  ]
+}
