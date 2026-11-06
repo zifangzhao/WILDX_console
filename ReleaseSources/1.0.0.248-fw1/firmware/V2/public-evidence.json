@@ -1,0 +1,18 @@
+{
+  "status": "PUBLIC_EVIDENCE_CURATED_EXACT_RETAINED_BYTES",
+  "acceptance_sha256": "A83AAC52D3509D763B2A806C42AF120FF90F9FA16EE31FEC36C1C238F2A2A39A",
+  "local_full_closure_sha256": "B655B3DAA7C1BC1D4C5298F6D5ED771DEDDBFC61AD82D7035D64A2172C49AE41",
+  "public_file": "public-evidence.zip",
+  "public_sha256": "5F305DAB0C71C0FEE9326FA10F31525B2A0E0A060546F930396C47CC120E14A1",
+  "public_bytes": 717731,
+  "retained_entries": 177,
+  "omitted_entries": [
+    "original/full.log",
+    "original/generated-preferences-final.json",
+    "original/options.log",
+    "original/preferences.json",
+    "original/receipt.json",
+    "original/uid.log"
+  ],
+  "policy": "Entire original backup subtree omitted, including host preference backup/state files; all retained evidence entries byte-identical. Full closure stays local; acceptance and firmware/installer bytes remain unchanged."
+}
