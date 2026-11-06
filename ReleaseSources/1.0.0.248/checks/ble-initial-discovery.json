@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "checks": 31,
+  "scope": "Actual-source ReadInitialDevice, ReadDevice, DeviceVersion, ParseStatus, DiscoveryRequest plus GUI initial route assertion",
+  "test_source": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpBleStartupDiscoveryTests.cs",
+  "test_sha256": "187E5E350CA12E823FC8714F92A74AE02F442485E11C05152E54805E32D7C223",
+  "product_source": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConnection.cs",
+  "product_sha256": "5DD3C0B037792B2047D9561E84BD491D18D3CBC9365117691BA2B63B62FF3B82",
+  "form_source": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleForm.cs",
+  "form_sha256": "17B2F4F62CDC16B46D942F16E81BAF1221401611D0AEF71E969A19842D5DF877",
+  "compiler": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\Roslyn\\csc.exe",
+  "command": "NpBleStartupDiscoveryTests.exe <NpBleConnection.cs> <VS2019 Roslyn csc.exe>",
+  "log_sha256": "BC046CDE1C58275AB30399F2C85EE162604187127BBE17E200B0ADE23B2BED67",
+  "claims": [
+    "V1/V2 timeout retry then ready with fresh B9 STATUS IDs2,3,4",
+    "Only canonical0x82 discovery and B9op0 STATUS frames observed",
+    "Owned30sec budget modeled expiration stops before later writes and retires CTS",
+    "Explicit Disconnect cancels pending read within300ms",
+    "Disconnected/reconnected epoch between attempts prevents all later transport writes",
+    "Validated fault and malformed/non-timeout I/O fail immediately",
+    "All created owned CTS disposed"
+  ],
+  "limits": [
+    "No WinRT/radio/hardware; transport and protocol request/reply primitives modeled",
+    "30sec expiry is simulated by cancellation after asserting the exact30000ms budget",
+    "Initial legacy .NET compiler lacked await-in-catch support; unchanged test used installed Roslyn compiler successfully",
+    "Prior WarmLink134 result reused; no repeat of unchanged500ms phase regression"
+  ],
+  "app_compilations": 0,
+  "firmware_compilations": 0,
+  "utc": "2026-11-06T03:23:50.2093025Z"
+}

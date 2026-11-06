@@ -1,0 +1,21 @@
+{
+  "status": "ONE_ISOLATED248_APP_BUILD_PASSED",
+  "created_utc": "2026-11-06T03:23:15.437658+00:00",
+  "published_baseline": "1.0.0.246",
+  "development_parent": "1.0.0.247",
+  "version": "1.0.0.248",
+  "source_inputs": 208,
+  "source_stable": true,
+  "changed_from247": [
+    "USB512_interface/USB512_interface/Ble/NpBleConnection.cs",
+    "USB512_interface/USB512_interface/Ble/NpBleForm.cs",
+    "USB512_interface/USB512_interface/Properties/AssemblyInfo.cs"
+  ],
+  "host_build_receipt": "C:\\Frank\\Code\\USB_PCconsole\\_artifacts\\sd_usb_test_host\\host-build-receipt-248-bleready.json",
+  "host_build_receipt_sha256": "36FF6471D8D10E8BD5A9D98B2B6E5A8E42B833E6D3C455C0EEF6291D8E45BE09",
+  "exe_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "support_inputs_stable": true,
+  "canonical_files_changed_by_build": false,
+  "legacy_raw_metadata_note": "Raw builder published_release_unchanged222 annotation is legacy; actual published baseline246. Hardware qualification is separate."
+}

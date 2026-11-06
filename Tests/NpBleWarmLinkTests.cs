@@ -58,8 +58,12 @@ internal static class NpBleWarmLinkTests
             string subscriptionGate=connect.Substring(connect.LastIndexOf("lock(receiveLock)",subscriptionBudget,StringComparison.Ordinal),subscriptionEvent-connect.LastIndexOf("lock(receiveLock)",subscriptionBudget,StringComparison.Ordinal));
             Need(subscriptionGate.Contains("connectCanceled || connectTimeout!=timeout") && subscriptionGate.IndexOf("timeout.Token.ThrowIfCancellationRequested()",StringComparison.Ordinal)<subscriptionGate.IndexOf("timeout.CancelAfter(5000)",StringComparison.Ordinal),"Closed/expired connection can renew its budget.");
             Need(connect.Contains("await Task.Delay(250, timeout.Token)") && !subscriptionGate.Contains("new CancellationTokenSource"),"Subscription settling or existing CTS ownership changed.");
+            int readiness=connect.IndexOf("await Task.Delay(500,timeout.Token)",StringComparison.Ordinal);
+            Need(readiness>connect.IndexOf("PreferThroughput();",StringComparison.Ordinal) && readiness>connect.IndexOf("await Task.Delay(250, timeout.Token)",StringComparison.Ordinal),"Bridge readiness does not follow CCCD settling and optional throughput setup.");
+            string readinessGate=connect.Substring(readiness,connect.IndexOf("TraceConnect(elapsed,\"connected\")",readiness,StringComparison.Ordinal)-readiness);
+            Need(subscriptionGate.Contains("readinessEpoch=epoch") && readinessGate.Contains("lock(receiveLock)") && readinessGate.Contains("connectCanceled || connectTimeout!=timeout || epoch!=readinessEpoch") && readinessGate.Contains("timeout.Token.ThrowIfCancellationRequested()") && readinessGate.Contains("if(!Connected)"),"Readiness can publish a canceled/replaced/disconnected epoch.");
             string form=File.ReadAllText(Path.Combine(Path.GetDirectoryName(args[0]),"NpBleForm.cs"));
-            Need(form.Contains("internal ulong Address; internal BluetoothAddressType Type;") && form.Contains("p.Type=e.BluetoothAddressType;") && form.Contains("witness!=null && witness.Address==value && witness.Type!=BluetoothAddressType.Unspecified") && form.Contains("connection.ConnectAsync(value,observedType)"),"Form does not pass only its matching observed peer type to the first connection.");
+            Need(form.Contains("internal ulong Address; internal BluetoothAddressType Type;") && (form.Contains("p.Type=e.BluetoothAddressType;") || (form.Contains("ObservePeer(e.BluetoothAddress,e.BluetoothAddressType,name,e.RawSignalStrengthInDBm)") && form.Contains("peer.Type=type;"))) && form.Contains("witness!=null && witness.Address==value && witness.Type!=BluetoothAddressType.Unspecified") && form.Contains("connection.ConnectAsync(value,observedType)"),"Form does not pass only its matching observed peer type to the first connection.");
             Need(form.Contains("disconnect.Enabled=connecting || (!busy && !hostBusy && linked)") && form.Contains("connecting=true;UpdateControls()") && form.Contains("finally{connecting=false;UpdateControls();}"),"Cancel connection is unavailable during the connecting lease or remains enabled afterward.");
             int cancelStart=form.IndexOf("if(connecting){connection.Disconnect();",StringComparison.Ordinal);
             int cancelEnd=form.IndexOf("return;}",cancelStart,StringComparison.Ordinal);
@@ -79,7 +83,8 @@ internal static class NpBleWarmLinkTests
 
     static string Harness(string warm,string resolve,string connect,string disconnect,string connectionChanged)
     {
-        return @"using System;
+        return @"#define NP_FIRST_SYNC_ENABLE
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -173,8 +178,8 @@ static class Harness {
  }
 "+RecoveryHarness(connect,disconnect,connectionChanged)+@"
   static int Main(string[] args){try{
-   if(args.Length==1 && args[0]==""--subscription-only"")SubscriptionCases().GetAwaiter().GetResult();
-   else{Exact().GetAwaiter().GetResult();RetainedPending().GetAwaiter().GetResult();Rejected().GetAwaiter().GetResult();Null().GetAwaiter().GetResult();DifferentAddress().GetAwaiter().GetResult();LocalExpiry().GetAwaiter().GetResult();OuterCancel().GetAwaiter().GetResult();FreshConnectedCacheCases().GetAwaiter().GetResult();RecoveryCases().GetAwaiter().GetResult();SubscriptionCases().GetAwaiter().GetResult();}
+   if(args.Length==1 && args[0]==""--subscription-only""){SubscriptionCases().GetAwaiter().GetResult();StartupCases().GetAwaiter().GetResult();}
+   else{Exact().GetAwaiter().GetResult();RetainedPending().GetAwaiter().GetResult();Rejected().GetAwaiter().GetResult();Null().GetAwaiter().GetResult();DifferentAddress().GetAwaiter().GetResult();LocalExpiry().GetAwaiter().GetResult();OuterCancel().GetAwaiter().GetResult();FreshConnectedCacheCases().GetAwaiter().GetResult();RecoveryCases().GetAwaiter().GetResult();SubscriptionCases().GetAwaiter().GetResult();StartupCases().GetAwaiter().GetResult();}
    Console.WriteLine((args.Length==1?""PASS extracted actual ConnectAsync subscription/deadline/cleanup sequence; checks="":""PASS extracted warm identity and actual ConnectAsync deadline/fallback/cleanup sequence; checks="")+checks+""; modeled GATT only, no radio used"");return 0;
   }catch(Exception e){Console.Error.WriteLine(e);return 1;}}
 }";
@@ -187,14 +192,17 @@ static class Harness {
   readonly SemaphoreSlim transaction=new SemaphoreSlim(1,1);readonly object receiveLock=new object();readonly Wire wire=new Wire();
   BluetoothLEDevice device;GattDeviceService service;GattCharacteristic rx,tx;TaskCompletionSource<byte[]> receipt;int epoch;volatile bool connectCanceled;Action<string> Disconnected;CancellationTokenSource connectTimeout;
   ulong lastObservedAddress;BluetoothAddressType lastObservedType;bool lastResolvedWarm;
-  readonly string mode;readonly bool startWarm;internal int FreshOpens,InitialQueries,FreshQueries,Subscriptions;
+   readonly string mode;readonly bool startWarm;internal int FreshOpens,InitialQueries,FreshQueries,Subscriptions,Preferences,Commands,ReadinessStarts;object clockTransport;
+   internal readonly TaskCompletionSource<bool> ReadinessEntered=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
   internal Stopwatch SubscriptionFinished;
   internal readonly List<BluetoothLEDevice> Devices=new List<BluetoothLEDevice>();internal readonly List<GattDeviceService> Services=new List<GattDeviceService>();internal readonly List<string> Trace=new List<string>();
   internal Recovery(string mode,bool warm){this.mode=mode;startWarm=warm;}
   internal int Epoch{get{return Volatile.Read(ref epoch);}}
   internal bool Connected{get{return device!=null && tx!=null && device.ConnectionStatus==BluetoothConnectionStatus.Connected;}}
   void ResetConnectDiagnostic(ulong address){Need(address==7,""unexpected peer"");Trace.Clear();}
-  void TraceConnect(Stopwatch elapsed,string stage){Trace.Add(stage);}
+   void TraceConnect(Stopwatch elapsed,string stage){Trace.Add(stage);if(stage==""BLE/UART bridge readiness""){Need(Preferences==1,""readiness preceded throughput setup"");ReadinessStarts++;ReadinessEntered.TrySetResult(true);}}
+   void PreferThroughput(){Need(SubscriptionFinished!=null && SubscriptionFinished.ElapsedMilliseconds>=200,""throughput setup preceded CCCD settle"");Preferences++;}
+   void ClearConnectionPreference(){}
   void ValueChanged(GattCharacteristic sender,object args){}
   void CloseClockJournal(){} // Journal retirement is outside this discovery-only model.
   Task<BluetoothLEDevice> ResolveAddress(ulong address,CancellationToken cancel,Action<string> stage,bool allowWarm=true){
@@ -263,6 +271,8 @@ static class Harness {
 "+connect+"\n"+disconnect+"\n"+connectionChanged+@"
   internal bool LeaseFree(){bool free=transaction.Wait(0);if(free)transaction.Release();return free;}
   internal bool WaitRetired{get{return connectTimeout==null;}}
+   internal async Task Command(){await transaction.WaitAsync();try{if(!Connected)throw new IOException(""disconnected command"");Need(Trace.Contains(""connected""),""command escaped startup lease"");Commands++;}finally{transaction.Release();}}
+   internal void Bounce(){device.ConnectionStatus=BluetoothConnectionStatus.Disconnected;ConnectionChanged(device,null);device.ConnectionStatus=BluetoothConnectionStatus.Connected;ConnectionChanged(device,null);}
  }
  static async Task RecoveryCase(string mode,bool warm,bool success,int fresh,int initialQueries,int freshQueries){
   CancellationTokenSource.Created.Clear();var r=new Recovery(mode,warm);bool passed=false;Exception failure=null;
@@ -326,7 +336,7 @@ static class Harness {
    bool before=mode==""subscription-close-before-budget"" || mode==""subscription-expired-before-budget"";
    Need(phase.PhaseStarts==1 && phase.SubscriptionStarts==(before?0:1) && r.Subscriptions==(before?0:1),mode+"" subscription retry/renewal count"");
    Need(phase.Disposed && r.WaitRetired && r.LeaseFree(),mode+"" leaked connection ownership"");
-   if(success)Need(r.Connected && r.SubscriptionFinished!=null && r.SubscriptionFinished.ElapsedMilliseconds>=200,""250 ms settle was skipped"");
+   if(success)Need(r.Connected && r.SubscriptionFinished!=null && r.SubscriptionFinished.ElapsedMilliseconds>=700,""CCCD settle plus bridge readiness was skipped"");
    r.Disconnect();Need(!r.Connected && r.Devices.All(d=>d.Disposals==1) && r.Services.All(s=>s.Disposals==1),mode+"" resource retirement"");
   }
   CancellationTokenSource.Created.Clear();var pending=new Recovery(""subscription-pending-close"",true);
@@ -337,6 +347,29 @@ static class Harness {
   Need(canceled is IOException && canceled.Message.Contains(""connection attempt canceled""),""subscription close mislabeled as timeout"");
   Need(pending.FreshOpens==0 && pending.Subscriptions==1 && pending.WaitRetired && pending.LeaseFree() && CancellationTokenSource.Created.All(c=>c.Disposed),""subscription close replayed/leaked"");
   Need(pending.Devices.All(d=>d.Disposals==1) && pending.Services.All(s=>s.Disposals==1),""pending subscription resources leaked"");
+ }
+ static async Task StartupCases(){
+  CancellationTokenSource.Created.Clear();var ready=new Recovery(""startup-queued"",true);
+  var attempt=ready.ConnectAsync(7,BluetoothAddressType.Random);await ready.ReadinessEntered.Task;
+  var command=ready.Command();await Task.Delay(50);
+  Need(!attempt.IsCompleted && !command.IsCompleted && !ready.LeaseFree() && ready.Commands==0,""startup did not hold queued commands/transaction"");
+  await attempt;await command;
+  Need(ready.SubscriptionFinished.ElapsedMilliseconds>=700 && ready.Commands==1 && ready.Preferences==1 && ready.ReadinessStarts==1,""startup readiness duration/order/count"");
+  var elapsed=Stopwatch.StartNew();await ready.Command();await ready.Command();
+  Need(elapsed.ElapsedMilliseconds<200 && ready.Commands==3 && ready.Subscriptions==1 && ready.Preferences==1 && ready.ReadinessStarts==1,""connected commands resettled the same epoch"");ready.Disconnect();
+  foreach(bool bounce in new[]{false,true}){
+   CancellationTokenSource.Created.Clear();var r=new Recovery(""startup-interrupted"",true);attempt=r.ConnectAsync(7,BluetoothAddressType.Random);await r.ReadinessEntered.Task;
+   int oldEpoch=r.Epoch;elapsed=Stopwatch.StartNew();if(bounce)r.Bounce();else r.Disconnect();
+   Need(await Task.WhenAny(attempt,Task.Delay(bounce?1000:300))==attempt,""startup cancellation did not finish promptly"");
+   Exception failure=null;try{await attempt;}catch(Exception e){failure=e;}
+   Need(failure is IOException && (bounce || failure.Message.Contains(""connection attempt canceled"")),""startup interruption was accepted/misclassified"");
+   Need(r.Epoch!=oldEpoch && !r.Trace.Contains(""connected"") && r.Commands==0 && r.LeaseFree() && r.WaitRetired && CancellationTokenSource.Created.All(c=>c.Disposed),""interrupted startup published or leaked ownership"");
+   Need(bounce || elapsed.ElapsedMilliseconds<300,""explicit disconnect waited for readiness deadline"");
+   Need(r.Devices.All(d=>d.Disposals==1) && r.Services.All(s=>s.Disposals==1),""startup interruption leaked resources"");
+  }
+  CancellationTokenSource.Created.Clear();var rejected=new Recovery(""subscription-failure"",true);Exception rejectedFailure=null;
+  try{await rejected.ConnectAsync(7,BluetoothAddressType.Random);}catch(Exception e){rejectedFailure=e;}
+  Need(rejectedFailure is IOException && rejected.ReadinessStarts==0 && !rejected.ReadinessEntered.Task.IsCompleted && rejected.Preferences==0 && rejected.Commands==0 && rejected.LeaseFree() && rejected.WaitRetired,""failed CCCD reached bridge readiness"");
  }
 ";
     }

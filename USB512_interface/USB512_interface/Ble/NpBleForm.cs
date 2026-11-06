@@ -427,6 +427,7 @@ namespace USB512_interface
             try {
                 await connection.ConnectAsync(value,observedType);
                 connectedAddress=value;
+                state.Text="Waiting for device startup...";
                 var s=await ReadStatus();if(V2)await InitializeClock(s);
                 await WarmBleFirstSyncCapabilities();
                 await RefreshPreviewClosedLoop();
@@ -468,7 +469,7 @@ namespace USB512_interface
         async Task<NpSdStatus> ReadStatus()
         {
             if(recorderVersion==0){
-                var detected=await NpBleConnection.ReadDevice(connection.ExchangeAsync,Next);
+                var detected=await connection.ReadInitialDevice(Next);
                 recorderVersion=detected.Item1;ShowStatus(detected.Item2);
                 if(V2){
                     var caps=await new Np2ConfigClient(new ConfigTransport(connection)).CapsAsync(0,CancellationToken.None);

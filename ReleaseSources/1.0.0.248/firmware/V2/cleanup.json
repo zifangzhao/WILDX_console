@@ -1,0 +1,80 @@
+{
+  "status": "CONCLUDED_GENERATED_NEURAL_PAYLOADS_REMOVED",
+  "removed": [
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\normal-usb-export\\neuropixels_probe1_ap.dat",
+      "bytes": 153668352,
+      "quality_receipt": "normal-usb-quality.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\normal-usb-export\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\normal-usb-export\\neuropixels_probe2_ap.dat",
+      "bytes": 153668352,
+      "quality_receipt": "normal-usb-quality.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\normal-usb-export\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\normal-usb-export\\neuropixels_probe3_ap.dat",
+      "bytes": 153668352,
+      "quality_receipt": "normal-usb-quality.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\normal-usb-export\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\settled-ble-export\\neuropixels_probe1_ap.dat",
+      "bytes": 166014720,
+      "quality_receipt": "settled-ble-quality.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\settled-ble-export\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\settled-ble-export\\neuropixels_probe2_ap.dat",
+      "bytes": 166014720,
+      "quality_receipt": "settled-ble-quality.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\settled-ble-export\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\settled-ble-export\\neuropixels_probe3_ap.dat",
+      "bytes": 166014720,
+      "quality_receipt": "settled-ble-quality.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\settled-ble-export\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\post-ble-auto-export247\\neuropixels_probe1_ap.dat",
+      "bytes": 167036928,
+      "quality_receipt": "post-ble-auto-quality247.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\post-ble-auto-export247\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\post-ble-auto-export247\\neuropixels_probe2_ap.dat",
+      "bytes": 167036928,
+      "quality_receipt": "post-ble-auto-quality247.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\post-ble-auto-export247\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\post-ble-auto-export247\\neuropixels_probe3_ap.dat",
+      "bytes": 167036928,
+      "quality_receipt": "post-ble-auto-quality247.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\post-ble-auto-export247\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\post-usb-auto-export248\\neuropixels_probe1_ap.dat",
+      "bytes": 160509696,
+      "quality_receipt": "post-usb-auto-quality248.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\post-usb-auto-export248\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\post-usb-auto-export248\\neuropixels_probe2_ap.dat",
+      "bytes": 160509696,
+      "quality_receipt": "post-usb-auto-quality248.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\post-usb-auto-export248\\manifest.json"
+    },
+    {
+      "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\post-usb-auto-export248\\neuropixels_probe3_ap.dat",
+      "bytes": 160509696,
+      "quality_receipt": "post-usb-auto-quality248.json",
+      "compact_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\compact\\post-usb-auto-export248\\manifest.json"
+    }
+  ],
+  "bytes_removed": 1941689088,
+  "small_evidence_retained": true,
+  "sd_card_unchanged": true
+}

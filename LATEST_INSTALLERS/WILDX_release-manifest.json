@@ -1,23 +1,23 @@
 {
     "schemaVersion":  1,
-    "version":  "1.0.0.246",
-    "releaseId":  "WILDX_1.0.0.246_GUI_STORAGE_QUALIFIED",
-    "baselineVersion":  "1.0.0.238",
+    "version":  "1.0.0.248",
+    "releaseId":  "WILDX_1.0.0.248_GUI_STORAGE_QUALIFIED",
+    "baselineVersion":  "1.0.0.246",
     "installer":  {
-                      "file":  "WILDX_console-Setup-1.0.0.246.exe",
-                      "sha256":  "C2F4B7AE0F8EECC5EF8B5D6909E7E93087996C3186DE4D62DD195F3663B0F94F",
-                      "bytes":  9410754
+                      "file":  "WILDX_console-Setup-1.0.0.248.exe",
+                      "sha256":  "06024C10B732F38035AC5F7A6038C769BC964FFEDAAA3470491C3C264B91494E",
+                      "bytes":  9438550
                   },
-    "guiSha256":  "FA744968A3DE0AC9A87F6FD77F8F3ED40BFAB3FBD062ABD9B33BEE3E233E8953",
+    "guiSha256":  "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
     "sdkSha256":  "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
-    "catalogSha256":  "2377174E8CFFB45A697E645FE3F97B21391D4AB525755B9678DE4CA66AC747F3",
-    "sourceArchiveSha256":  "4F9E7503CE522D4B302066628BB927B4FBC57D89A8623FF6F6841A1BFED4E61E",
-    "sourceGitBaseline":  "b9a8e47d15a2f1b4465368365946e9cca2bc9b6a",
-    "sourcePublicationCommit":  "b9a8e47d15a2f1b4465368365946e9cca2bc9b6a",
+    "catalogSha256":  "CA70EFA893AFD8572BF762F7C053216F196C9A75AAABA025940B6B8C6C8AC2B7",
+    "sourceArchiveSha256":  "9AB153A7C89F7DA2BD02339173DA49FB91373698DD897D7080922BFAF89975F2",
+    "sourceGitBaseline":  "cd1ae1d5378ad78744d3789f50313b8d1c4ebd94",
+    "sourcePublicationCommit":  "cd1ae1d5378ad78744d3789f50313b8d1c4ebd94",
     "sourcePublicationCommitRole":  "Pre-publication baseline plus exact compiled host source archive",
     "sourceIdentityRole":  "Exact compiled host inputs archived; unchanged SDK inputs reused from235",
-    "sourceProvenance":  "../ReleaseSources/1.0.0.246/host-source-archive/source-manifest.json",
-    "validation":  "../ReleaseSources/1.0.0.246/qualification.json",
+    "sourceProvenance":  "../ReleaseSources/1.0.0.248/host-source-archive/source-manifest.json",
+    "validation":  "../ReleaseSources/1.0.0.248/qualification.json",
     "sdkSourceProvenance":  "../ReleaseSources/1.0.0.235/sdk-source-archive/source-manifest.json",
     "firmware":  [
                      {
@@ -30,11 +30,11 @@
                      },
                      {
                          "family":  2,
-                         "release":  "V2_GUI_SUPPORT_APP99CC44F9_USBEDEB6C3A_20261105",
-                         "app":  "99CC44F9",
-                         "usb":  "EDEB6C3A",
+                         "release":  "V2_DELETE_RECOVERY_APP7E463C83_USB067D89A2_20261106",
+                         "app":  "7E463C83",
+                         "usb":  "067D89A2",
                          "recovery":  "6408DBB8",
-                         "stage":  "BOUNDED_RECORDING_SDINFO_USB_MAINTENANCE_QUALIFIED"
+                         "stage":  "BOUNDED_RECORDING_DELETE_RECOVERY_QUALIFIED"
                      }
                  ],
     "closedLoopQualification":  {
@@ -53,7 +53,7 @@
                                                                     2
                                                                 ],
                                                "sd_scope":  "Prior recording/detector qualification is reused for unchanged processing. New FS2 maintenance, NP/IMU and interruption acceptance is recorded separately for the current pair.",
-                                               "summary":  "V1 two probes at15kHz: native AG198.89Ã¢â‚¬â€œ199.40Hz/MAG99.53Ã¢â‚¬â€œ99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
+                                               "summary":  "V1 two probes at15kHz: native AG198.89â€“199.40Hz/MAG99.53â€“99.74Hz;1250Hz held grid. Off/one/two detectors60s plus two-detector30s restart passed saved-span NP continuity and observed IMU validity. One unavailable startup slot each; terminal coverage remains limited.",
                                                "runs":  [
                                                             {
                                                                 "result":  "PASS_SCOPED",
@@ -229,8 +229,8 @@
                                                "retained_run_identity_scope":  "The historical runs below retain their original firmware identities; recording/CL evidence is reused only for unchanged processing with preview off. New maintenance acceptance is separate."
                                            },
                                     "V2":  {
-                                               "app_crc32":  "99CC44F9",
-                                               "usb_crc32":  "EDEB6C3A",
+                                               "app_crc32":  "7E463C83",
+                                               "usb_crc32":  "067D89A2",
                                                "probe_mask":  7,
                                                "sample_hz":  20000,
                                                "filter":  6,
@@ -247,8 +247,8 @@
                                                                     1,
                                                                     2
                                                                 ],
-                                               "sd_scope":  "Unchanged APP99CC44F9; existing SD qualification reused",
-                                               "summary":  "V2 USB3P20k: nominalAG200/MAG100 measured199.03Ã¢â‚¬â€œ199.06/99.51Ã¢â‚¬â€œ99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
+                                               "sd_scope":  "Prior accepted APP99 recording/selected-detector objects and fixed buffers retained. New cold catalog/journal/read-adapter and actual248 CL-off recording evidence is separately pinned; no new CL-on/endurance claim.",
+                                               "summary":  "V2 USB3P20k: nominalAG200/MAG100 measured199.03â€“199.06/99.51â€“99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
                                                "results":  [
                                                                {
                                                                    "run":  "usb-r3-cl0",
@@ -322,7 +322,81 @@
                                                "detector_off_reuse":  "72C9F2C6off60s evidence reused: finalD43 changes only SPIclosed-loop gap handling, unreachable whenCLdisabled. All other objects/capture buffers/IMU/media code unchanged; final1/2/restart actuallyD43.",
                                                "acceptance_sha256":  "AF2EFB88CBEFAAC4D9B902546D2B052C6C1FA94D80C53C20D722D69F4542C366",
                                                "original_restored":  true,
-                                               "retained_run_identity_scope":  "The historical runs below retain their original firmware identities; recording/CL evidence is reused only for unchanged processing with preview off. New maintenance acceptance is separate."
+                                               "retained_run_identity_scope":  "The historical runs below retain their original firmware identities; recording/CL evidence is reused only for unchanged processing with preview off. New maintenance acceptance is separate.",
+                                               "current_maintenance_acceptance":  {
+                                                                                      "receipt":  "firmware/V2/acceptance.json",
+                                                                                      "sha256":  "95D6FC028F7FB66DF46A575861D4158EBF70AEA0543F9A9038C9B926FC26201F",
+                                                                                      "matrix":  {
+                                                                                                     "normal_usb_delete":  "PASS_16F_ENGINE_BEFORE_IDMA_READ_ONLY_DELTA",
+                                                                                                     "normal_ble_delete":  "PASS_ACTUAL248_APP7E_GUARDED_ONE_OWN_TAIL",
+                                                                                                     "usb_interrupted_delete":  "PASS_ONE_A7_COMMITTED_MIRRORS_VEE_RESET_NO_REPLAY",
+                                                                                                     "ble_interrupted_delete":  "PASS_ONE_B9_OP11_COMMITTED_MIRRORS_VEE_RESET_NO_REPLAY",
+                                                                                                     "app_automatic_recovery":  "PASS_OBSERVED_BEFORE_USB_DOWNLOAD_THEN_PHYSICAL_READBACK",
+                                                                                                     "usb_automatic_recovery":  "PASS_067_IDMA_SAME_INTENT_OBSERVED_THEN_PHYSICAL_READBACK",
+                                                                                                     "earlier_recordings":  "PASS_ALL22_METADATA_AND_BOUNDED_PAYLOAD_HASHES_IDENTICAL",
+                                                                                                     "post_recovery_np_imu":  "PASS_FULL_PRODUCTION_EXPORT_BOUNDED3P20K_CLOFF",
+                                                                                                     "host_cold_readiness":  "PASS_ACTUAL248_READINITIALDEVICE_WITHOUT_EXTERNAL_WAIT_OR_MUTATION_RETRY",
+                                                                                                     "final_usb_inspect":  "PASS_067_A7_COUNT22_FRONTIER36462592"
+                                                                                                 },
+                                                                                      "directly_tested_detector_counts":  [
+                                                                                                                              0
+                                                                                                                          ],
+                                                                                      "recordings":  [
+                                                                                                         {
+                                                                                                             "export":  "normal-usb-export",
+                                                                                                             "session":  407228869,
+                                                                                                             "blocks":  7816,
+                                                                                                             "seconds":  10.00448,
+                                                                                                             "grid_rows":  12506,
+                                                                                                             "native_snapshots":  1953,
+                                                                                                             "source_window_verified":  "False",
+                                                                                                             "np_loss":  0,
+                                                                                                             "grid_queue_scheduler_unsaved":  0
+                                                                                                         },
+                                                                                                         {
+                                                                                                             "export":  "settled-ble-export",
+                                                                                                             "session":  3812191687,
+                                                                                                             "blocks":  8444,
+                                                                                                             "seconds":  10.80832,
+                                                                                                             "grid_rows":  13509,
+                                                                                                             "native_snapshots":  2121,
+                                                                                                             "source_window_verified":  "True",
+                                                                                                             "np_loss":  0,
+                                                                                                             "grid_queue_scheduler_unsaved":  0
+                                                                                                         },
+                                                                                                         {
+                                                                                                             "export":  "post-ble-auto-export247",
+                                                                                                             "session":  2585883389,
+                                                                                                             "blocks":  8496,
+                                                                                                             "seconds":  10.87488,
+                                                                                                             "grid_rows":  13588,
+                                                                                                             "native_snapshots":  2134,
+                                                                                                             "source_window_verified":  "True",
+                                                                                                             "np_loss":  0,
+                                                                                                             "grid_queue_scheduler_unsaved":  0
+                                                                                                         },
+                                                                                                         {
+                                                                                                             "export":  "post-usb-auto-export248",
+                                                                                                             "session":  926479050,
+                                                                                                             "blocks":  8164,
+                                                                                                             "seconds":  10.44992,
+                                                                                                             "grid_rows":  13057,
+                                                                                                             "native_snapshots":  2049,
+                                                                                                             "source_window_verified":  "True",
+                                                                                                             "np_loss":  0,
+                                                                                                             "grid_queue_scheduler_unsaved":  0
+                                                                                                         }
+                                                                                                     ],
+                                                                                      "limits":  [
+                                                                                                     "Quiet hardware cut at a readback-verified mirrored intent, commanded VEE low5s + MCUreset; no measured rail-zero, whole-device power loss or physical torn-sector claim.",
+                                                                                                     "Native actual catalog covers every sector-prefix cut in the documented matrix, not arbitrary flash/SD bit corruption.",
+                                                                                                     "Earlier recordings: exact directory/descriptor/footer and bounded payload fingerprints, not a full reread of every older neural byte.",
+                                                                                                     "Recording acceptance is bounded3P20k/CLoff and production control/export API paths; no new endurance, analog-quality or installed GUI visual qualification.",
+                                                                                                     "Normal USB A7 mutation used16F before metadata-read-only DMA delta; final067 covers actual auto target/clear writes and normal A7 inspection.",
+                                                                                                     "Source-window false for USB finite test job remains false; ordinary BLE Start exports independently qualify the retained source window.",
+                                                                                                     "Incremental source/object provenance preserved; a complete clean source rebuild is not claimed."
+                                                                                                 ]
+                                                                                  }
                                            }
                                 },
     "expectedPayloadFiles":  49,
@@ -422,8 +496,8 @@
                     },
                     {
                         "path":  "Firmware/releases.json",
-                        "bytes":  31081,
-                        "sha256":  "2377174E8CFFB45A697E645FE3F97B21391D4AB525755B9678DE4CA66AC747F3"
+                        "bytes":  31866,
+                        "sha256":  "CA70EFA893AFD8572BF762F7C053216F196C9A75AAABA025940B6B8C6C8AC2B7"
                     },
                     {
                         "path":  "Firmware/V1/acceptance.json",
@@ -482,23 +556,23 @@
                     },
                     {
                         "path":  "Firmware/V2/acceptance.json",
-                        "bytes":  9354,
-                        "sha256":  "3267147EC779828504AAA0BF610F896E6C27A6A5CFB0CCD70EAEE29A94FA1B4B"
+                        "bytes":  6900,
+                        "sha256":  "95D6FC028F7FB66DF46A575861D4158EBF70AEA0543F9A9038C9B926FC26201F"
                     },
                     {
-                        "path":  "Firmware/V2/V2_APP99CC44F9.hex",
-                        "bytes":  1033332,
-                        "sha256":  "7A1CEF42580272C7A8B02896DE1E036289B97305833717CDE3ACDE6AF68FC030"
+                        "path":  "Firmware/V2/V2_APP7E463C83.hex",
+                        "bytes":  1050228,
+                        "sha256":  "72A097060C7D410CD7B7BEB4C3C7DA7FDE414FB30BADE5AC65B80381C0EC1296"
                     },
                     {
-                        "path":  "Firmware/V2/V2_APP99CC44F9.xenp",
-                        "bytes":  375712,
-                        "sha256":  "D0C348A0D3F50F443D0EE65FDC262935FA2B848A8C7D8637107D9C73535825E1"
+                        "path":  "Firmware/V2/V2_APP7E463C83.xenp",
+                        "bytes":  381856,
+                        "sha256":  "BF2148099DA92EF32AB332861D98221FF8EAE2BF18A4726C41B108562B65B2A3"
                     },
                     {
-                        "path":  "Firmware/V2/V2_FUSED_BOOT_USBEDEB6C3A_APP99CC44F9.hex",
+                        "path":  "Firmware/V2/V2_FUSED_BOOT_USB067D89A2_APP7E463C83.hex",
                         "bytes":  5745164,
-                        "sha256":  "91B3E56C59C3CD19B37DAFF40C5F67EF5B3A1BB601AAD46D39B71B16738191F9"
+                        "sha256":  "AEA45E2FF8966F6F3B60EEB04F9937EA9D865C0196BCF92A74DE395D91D8E6F0"
                     },
                     {
                         "path":  "Firmware/V2/V2_recovery_only_6408DBB8_20261012.hex",
@@ -506,9 +580,9 @@
                         "sha256":  "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
                     },
                     {
-                        "path":  "Firmware/V2/V2_USBEDEB6C3A.hex",
-                        "bytes":  972832,
-                        "sha256":  "FDC0E16303AD40C301815A4830B011A2C0347C19C3A458B31990FCDC7FAF898B"
+                        "path":  "Firmware/V2/V2_USB067D89A2.hex",
+                        "bytes":  989464,
+                        "sha256":  "8B627A737E1D4ABDAF939F3DC0CF4618D8FDEBA7699BD67C0DBE043F28C77289"
                     },
                     {
                         "path":  "FirmwareUpdater/XeNpFirmwareUpdater.deps.json",
@@ -567,8 +641,8 @@
                     },
                     {
                         "path":  "WILDX_console.exe",
-                        "bytes":  2872320,
-                        "sha256":  "FA744968A3DE0AC9A87F6FD77F8F3ED40BFAB3FBD062ABD9B33BEE3E233E8953"
+                        "bytes":  2893824,
+                        "sha256":  "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30"
                     },
                     {
                         "path":  "WILDX_console.exe.config",

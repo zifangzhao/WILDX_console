@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "checks": 134,
+  "scope": "Extracted actual ConnectAsync/Disconnect/ConnectionChanged, modeled GATT only; subscription/readiness focused run",
+  "test_source": "D:\\Code\\WILDX_console\\WILDX_console\\Tests\\NpBleWarmLinkTests.cs",
+  "test_sha256": "8E406E676BAD39BF3F065078AAC1315B72EBC7D468654373E1D808D828971788",
+  "product_source": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleConnection.cs",
+  "product_sha256": "2E7E03E85BAD6E9C78C2ED42E8571C45010932BAC48C4455FB7B92E453940BB7",
+  "form_source": "D:\\Code\\WILDX_console\\WILDX_console\\USB512_interface\\USB512_interface\\Ble\\NpBleForm.cs",
+  "form_sha256": "58D67F94AADD01BA278BBF0CA167EE4493AD2E934F614119F077A44D8910583C",
+  "command": "NpBleWarmLinkTests.exe <NpBleConnection.cs> C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe --subscription-only",
+  "compiler": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe",
+  "log_sha256": "32EA7FFBD521C04A599B7D69B924E49857114F5F50CD99DB11D7680BFD6440CF",
+  "claims": [
+    "250 ms CCCD settle retained; 500 ms readiness follows optional throughput setup",
+    "CCCD success to command admission >=700 ms; transaction and queued modeled command held during readiness",
+    "Explicit Disconnect during readiness cancels and releases within300 ms",
+    "Disconnected then reconnected status epoch cannot publish connected",
+    "Failed CCCD never reaches readiness",
+    "Connected command probes do not repeat startup settling"
+  ],
+  "limits": [
+    "No WinRT/radio/device/hardware calls",
+    "Queued command probe models command ownership using the same semaphore; GATT endpoints are modeled",
+    "Existing unused observed-peer Form literal assertion updated for equivalent ObservePeer helper"
+  ],
+  "app_compilations": 0,
+  "firmware_compilations": 0,
+  "utc": "2026-11-06T03:09:30.4354778Z"
+}

@@ -1,0 +1,1116 @@
+{
+  "status": "VALIDATED_RECOVERY_AND_RECORDING_EVIDENCE",
+  "app_crc32": "7E463C83",
+  "usb_crc32": "067D89A2",
+  "host_version": "1.0.0.248",
+  "entries": [
+    {
+      "archive_path": "compact/normal-usb-export/manifest.json",
+      "sha256": "B56DED10F98CC5433B5B96645E89F75F8F0CF4764505C881AA733623C26298FA",
+      "bytes": 2316
+    },
+    {
+      "archive_path": "compact/normal-usb-export/neuropixels_probe1_ap.dat.first64.bin",
+      "sha256": "F40E654ECD75E31DA2DE9C81CE22214BE406ADB4039D5778F84226DA8B54D6D4",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/normal-usb-export/neuropixels_probe1_ap.dat.last64.bin",
+      "sha256": "FA75B73E00B2FA409D944DE9AD0DB0136D772D9ECA2A315290078E85B9A98475",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/normal-usb-export/neuropixels_probe2_ap.dat.first64.bin",
+      "sha256": "D3120616732D84DE6EF511A8A7F7F1D63EA020254A3D55B3A6EAF4615BFCF203",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/normal-usb-export/neuropixels_probe2_ap.dat.last64.bin",
+      "sha256": "C54114CC3BEC3FE8C4BA57B8413C2FCD0B64403C04256D410715AE96C67F50B7",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/normal-usb-export/neuropixels_probe3_ap.dat.first64.bin",
+      "sha256": "E018EF994C6A6584C18A711AA08D5EF4161C35D880341A7219CD43E869A25302",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/normal-usb-export/neuropixels_probe3_ap.dat.last64.bin",
+      "sha256": "BFCD9B2FA2FE15ECA22D44CA779C00B40B74C20B809425615CB9D64E35056254",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/manifest.json",
+      "sha256": "D1D1A2E426E9A36C53F463F0CCCE5D437365E00FD82AA25B273571AE5CAB4C74",
+      "bytes": 2317
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/neuropixels_probe1_ap.dat.first64.bin",
+      "sha256": "33D246193332C5EA531AB2995C1CBD9DAE9347815680B4CBF7547CA6EDD0D7A0",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/neuropixels_probe1_ap.dat.last64.bin",
+      "sha256": "C42F71612C506ED9B59A9B3D2BB8AC49E61310F4878B4AD3381C89F68B2EE613",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/neuropixels_probe2_ap.dat.first64.bin",
+      "sha256": "E97D72AF5C4F9D3C04CA59BF954FB041BA8FC3B667649EC6080F40C2B30CD3FE",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/neuropixels_probe2_ap.dat.last64.bin",
+      "sha256": "D6FD72AC9046693DAE726AC4E8059D9099712B711500B15A8C448408BB577D48",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/neuropixels_probe3_ap.dat.first64.bin",
+      "sha256": "CB45C3DF19AEEA75B2C8E48B26C100FBD79161C0FEE766602A8229A9BB41AC3E",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-ble-auto-export247/neuropixels_probe3_ap.dat.last64.bin",
+      "sha256": "5B2D0B90129ACFD0A0E201D4DA1264704A11F85C041B9227D3FC19A255E7DC37",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/manifest.json",
+      "sha256": "08F6AFA08AE29003B541EA75D18D2AF3C6D09245C09048C5D9C74A128EE3DA54",
+      "bytes": 2316
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/neuropixels_probe1_ap.dat.first64.bin",
+      "sha256": "735922F862399054B9B8A6868DFF36868D0DB50A06A3200401AE60C517E50A22",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/neuropixels_probe1_ap.dat.last64.bin",
+      "sha256": "50B80B927638B31A662383679F81E45F09D6E9C819809A41AD73A85C432BA110",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/neuropixels_probe2_ap.dat.first64.bin",
+      "sha256": "E0770111B091CC325BCE0325DE4AD4F2E0F17D30E8433427A5CFEDD6F0440560",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/neuropixels_probe2_ap.dat.last64.bin",
+      "sha256": "D6FE5D621DD346D6F4C43A0109BCD5CC4BF34BBD3A2F557EC2B10D204EEA1D9B",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/neuropixels_probe3_ap.dat.first64.bin",
+      "sha256": "31AB7DB924612C43D4041A94C921E26F63DEB91ABC3A8C043B03C9D90758D184",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/post-usb-auto-export248/neuropixels_probe3_ap.dat.last64.bin",
+      "sha256": "978D6BD385C5415C43BF71561AC33A4023161DCD5C2CBAA9D25BB4A7FEB29D28",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/settled-ble-export/manifest.json",
+      "sha256": "A57B469D18B8BAC5A746650F12F44DC1CF5FBB3E6E79A47D48F1072033E3262D",
+      "bytes": 2317
+    },
+    {
+      "archive_path": "compact/settled-ble-export/neuropixels_probe1_ap.dat.first64.bin",
+      "sha256": "E508AB8246D05DBF65E6E0E8B62E4938FAEF7CF39090BE63A449C6050763AF8D",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/settled-ble-export/neuropixels_probe1_ap.dat.last64.bin",
+      "sha256": "0AFD99B0B050FE47007618050062231AC016A11C320A6C2401B251E963619DC0",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/settled-ble-export/neuropixels_probe2_ap.dat.first64.bin",
+      "sha256": "516DC06EBD9BDF753FE292B16B6221EF649A4541BCC209C7989D6DCC1DD09773",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/settled-ble-export/neuropixels_probe2_ap.dat.last64.bin",
+      "sha256": "AADCBE5FBF3D9BB7E11CC15BC73686042570DF40B60F1794B60D5AFFFFE42D75",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/settled-ble-export/neuropixels_probe3_ap.dat.first64.bin",
+      "sha256": "06ADD79553E7039F9BA50BBE451A511658E918E79E6EE1C6B2C7D8864818713C",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "compact/settled-ble-export/neuropixels_probe3_ap.dat.last64.bin",
+      "sha256": "A889CC817081ECC751FC98E5DDBCB30ED93B0BF6E0CE068A8101C1593B9E5947",
+      "bytes": 49152
+    },
+    {
+      "archive_path": "evidence/app-admission/receipt.json",
+      "sha256": "EDEE9B9E75812E5D73277620BBDF7EF641C1D23BC2577789194545318EAF92C3",
+      "bytes": 744
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-fingerprint/fingerprint.json",
+      "sha256": "0628BA7F40DBC3CAB37BD5D4C728B48798E78D17EFD24D37A2C742B1B3EB70EA",
+      "bytes": 15717
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/receipt.json",
+      "sha256": "62B5DD535A16CBBB5439723E33284023FFCE8D2473AE5D60C61528D0E1457859",
+      "bytes": 766
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/sector-112.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/sector-113.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/sector-114.bin",
+      "sha256": "95795E607B199EBD45C92677A58CBE4751296DC881EDCD11131A04B703BF5832",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/sector-115.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/sector-116.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/ble-auto-physical/sector-128.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/ble-automatic-proof.json",
+      "sha256": "B8E46B630E2B7F400CE45DE072E9EA375460770D07429C5694B9451085AC635D",
+      "bytes": 610
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/after113-RAM.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/arm.tcl",
+      "sha256": "9495F126C544B03C8FD9551A44B08AF17BAC7F2F06B7E72CA094DF4C74F43D25",
+      "bytes": 4682
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/armed.ready",
+      "sha256": "AD5006667B123C232DD48712979E0679DC9E3195591CF33C02A64857DDFB198C",
+      "bytes": 69
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/before114-RAM.bin",
+      "sha256": "95795E607B199EBD45C92677A58CBE4751296DC881EDCD11131A04B703BF5832",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/boundary.txt",
+      "sha256": "878E5EC106D2B419283B57876A206CBF1393FCD665616AEF05F9AE8150C27AEF",
+      "bytes": 271
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/continuation.log",
+      "sha256": "635D9D21374AEC119FEF0C4BC0517599CBACC0A1A61D28964E43D4CACC713D2B",
+      "bytes": 927
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/continue-same-boundary.json",
+      "sha256": "48E8A300CA8428C4A320E931796484A4D29D09E519E4EC583D396E8EF20F2DB8",
+      "bytes": 1511
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/continue-same-boundary.tcl",
+      "sha256": "78E84BCEEED00DC43AE22EBA2F515268A9232DBA21972AC32181ED412C46FED8",
+      "bytes": 4076
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/finish-same-cut.log",
+      "sha256": "179F516C8256609B306A10BC4CFE9CE116B70CFA074C2B4A60617195002C47BC",
+      "bytes": 831
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/finish-same-cut.tcl",
+      "sha256": "C7C8EDF642FF374E44D9D92BF66AA7A5D06CAEC7EC9EE1C08C83930B5665C073",
+      "bytes": 1242
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/intent-RAM.bin",
+      "sha256": "44AFA4F96B1DD6231377F0FCAB70EDFD4491779EF110CBE1D8299D4354D49DC3",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/openocd.log",
+      "sha256": "4971EBFC4947C334B18F6B653CC92E1B676C84729837DE032C24F13FEBC7D19F",
+      "bytes": 2666
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/plan.json",
+      "sha256": "42FE02D21ADC41CA8DECA5C45786806C4F1D347FBE20BB334EFC3A39D67DC710",
+      "bytes": 2525
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/reset-performed.txt",
+      "sha256": "A4230BA53655224343207E9084B79FDFBC508921E8F4A61A3AAE765A3A1CA8E6",
+      "bytes": 211
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/sdmmc-before.bin",
+      "sha256": "A97146F6878B0CECCF633E35AA2A7279BFE6265618A40043CE5A10FE6CB83A4A",
+      "bytes": 96
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/vee-low.ready",
+      "sha256": "FE7E956CA98959B569A25E1097D1A6BB91F545489C369CE5D8AB39451CC3A27A",
+      "bytes": 53
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/vee-off-gpio.bin",
+      "sha256": "5A027C835CF1D2C5B973F5922C54A8F63F755D357A674F6A11CAC63F5F07DCA8",
+      "bytes": 40
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/verified-images/provenance.json",
+      "sha256": "AC7E7BF026F9D5A5CF7508AAD523D448744D48BB2115E9566ED06C5BF578FD5B",
+      "bytes": 1443
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/verified-images/sector-113.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/verified-images/sector-114.bin",
+      "sha256": "95795E607B199EBD45C92677A58CBE4751296DC881EDCD11131A04B703BF5832",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/verified-images/sector-115.bin",
+      "sha256": "44AFA4F96B1DD6231377F0FCAB70EDFD4491779EF110CBE1D8299D4354D49DC3",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/verified-images/sector-116.bin",
+      "sha256": "44AFA4F96B1DD6231377F0FCAB70EDFD4491779EF110CBE1D8299D4354D49DC3",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/verified116-readback.bin",
+      "sha256": "44AFA4F96B1DD6231377F0FCAB70EDFD4491779EF110CBE1D8299D4354D49DC3",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-ble/write-entry-history.txt",
+      "sha256": "57AA28492D76D9E1DFB9844E815D5D078DAF76531DAD5C4A207C3D3F2053F8BA",
+      "bytes": 425
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/after113-RAM.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/arm.tcl",
+      "sha256": "36D72A9E163446952BA2625A0FFAB79520FB5639E0910759F7443138E7591761",
+      "bytes": 4693
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/armed.ready",
+      "sha256": "AD5006667B123C232DD48712979E0679DC9E3195591CF33C02A64857DDFB198C",
+      "bytes": 69
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/before114-RAM.bin",
+      "sha256": "DC1E43C07BD4CE62D0BF93AD40BFC74F522EEB714F6054420EFBF8B6B8C0D09E",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/boundary.txt",
+      "sha256": "C67C272C968E993108B93308E459D9256A465F88E1724B02C093258182F41E2D",
+      "bytes": 271
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/intent-RAM.bin",
+      "sha256": "B8E3F70D00FDA31937D1F996650644AC499E497F65F8FD844B1FA97EE205E4C5",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/openocd.log",
+      "sha256": "64AAA0F9943FE316D65C632D5C23E7AA25886C46CBB94026129DB63335D522B8",
+      "bytes": 2397
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/plan.json",
+      "sha256": "8144A3053D3AEBFB09A63FB3F8F4CBF1DC20551680379E3429D637B1CDD0747D",
+      "bytes": 2534
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/reset-performed.txt",
+      "sha256": "41CAB7FD8823999AB99DBBA8695B2AA0839546C0DD89BD9A303CCE9556F6AD6A",
+      "bytes": 144
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/sdmmc-before.bin",
+      "sha256": "5A6FCDE141B08C7FD23BB49AE892B4C09321361CDAD70C19F97F08EE495CE159",
+      "bytes": 96
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/vee-low.ready",
+      "sha256": "FE7E956CA98959B569A25E1097D1A6BB91F545489C369CE5D8AB39451CC3A27A",
+      "bytes": 53
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/vee-off-gpio.bin",
+      "sha256": "5A027C835CF1D2C5B973F5922C54A8F63F755D357A674F6A11CAC63F5F07DCA8",
+      "bytes": 40
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/verified-images/provenance.json",
+      "sha256": "CB45DFE16172547461262EE5CF9B37A656F3904B41A89631882E647B3001834E",
+      "bytes": 1443
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/verified-images/sector-113.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/verified-images/sector-114.bin",
+      "sha256": "DC1E43C07BD4CE62D0BF93AD40BFC74F522EEB714F6054420EFBF8B6B8C0D09E",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/verified-images/sector-115.bin",
+      "sha256": "B8E3F70D00FDA31937D1F996650644AC499E497F65F8FD844B1FA97EE205E4C5",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/verified-images/sector-116.bin",
+      "sha256": "B8E3F70D00FDA31937D1F996650644AC499E497F65F8FD844B1FA97EE205E4C5",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/verified116-readback.bin",
+      "sha256": "B8E3F70D00FDA31937D1F996650644AC499E497F65F8FD844B1FA97EE205E4C5",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/cut-usb/write-entry-history.txt",
+      "sha256": "2B091023A2FEE8FD1CD0D5F04E1BCFA5275BD50F4CAFF91AA2ED55BAC9A95F1F",
+      "bytes": 425
+    },
+    {
+      "archive_path": "evidence/hil/final-card-fingerprint/fingerprint.json",
+      "sha256": "0628BA7F40DBC3CAB37BD5D4C728B48798E78D17EFD24D37A2C742B1B3EB70EA",
+      "bytes": 15717
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/receipt.json",
+      "sha256": "41C11FA69CC47EAC7F6CD94CF8A12FBE1101D901C53EEC23766C878F710DDAFA",
+      "bytes": 770
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/sector-112.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/sector-113.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/sector-114.bin",
+      "sha256": "3F289F3A1B4587EEF42B58B3635161F5BDA0EA45B85622F74710C084AC2A298D",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/sector-115.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/sector-116.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/final-physical/sector-128.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/final-preservation.json",
+      "sha256": "7F40C01B55ADFE57639625B2860F83715251BE08F16DDBCB161FD0ED1596701F",
+      "bytes": 209
+    },
+    {
+      "archive_path": "evidence/hil/final-usb067-inspect/result.json",
+      "sha256": "E8C77FF960BA60E90D4609B370815AAC860A7CDFB1046E8C4A6B2C907490F784",
+      "bytes": 601
+    },
+    {
+      "archive_path": "evidence/hil/normal-ble-delete248.json",
+      "sha256": "74B4320D8182F0BE9FD4C1C3DB1ACF77BE55C22894619B4A9EA922480D3EB746",
+      "bytes": 1765
+    },
+    {
+      "archive_path": "evidence/hil/normal-usb-delete/preserved.json",
+      "sha256": "AF9FA17C31C8CBC9AEF271CD0E6355C80B04AEDF279623FC57ABA11D70BB50BA",
+      "bytes": 5276
+    },
+    {
+      "archive_path": "evidence/hil/normal-usb-delete/result.json",
+      "sha256": "3D471065D5ACE2FCCF079DF85C3CD72AE2619E8841BE12044DB00C62A4AD4B44",
+      "bytes": 605
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/app-replay-observed.txt",
+      "sha256": "1668BCEE8474CD887CB14B843D46B9DB57D0D88D0A5F546F049AD1DDA7303BD4",
+      "bytes": 244
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/arm.tcl",
+      "sha256": "907D473D178860BB4367D5FB0938796D7AAD2B721C2C4ED76837FFFBC1DC1D75",
+      "bytes": 6386
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/armed.ready",
+      "sha256": "D95D176A53D357EE69FE97DF73DFAA70185E213E30F3E91C10B9CD92F0040018",
+      "bytes": 96
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/entry.txt",
+      "sha256": "05806D80C79A91AF90043C1EA2AF420EA75E6EDD3F18FBFC26950839014F664B",
+      "bytes": 161
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/openocd.log",
+      "sha256": "6EC7C0EB15076D64528CC7EDE0E373A46E73B86E32033E109F435639F5F69BB8",
+      "bytes": 2443
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/plan.json",
+      "sha256": "87F7404A577615D88CB3A021F702EE6094C7D94020D4011C16A79F7C4F4EC438",
+      "bytes": 2120
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/register-history.txt",
+      "sha256": "E733F8AE00B2E33FBF6704DFF17F7B15D286F5D537D96E02EFDED478209827F8",
+      "bytes": 505
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/return-journal-RAM.bin",
+      "sha256": "DCAE7A29CAAA1A513440FB52FE643AE50F7B4F2FD5531AB58C3CF29B67AE2B5C",
+      "bytes": 1548
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/return-proof.txt",
+      "sha256": "495B947EA508535682D9FF5441136644B2C9D55145D54BE6E32DFDB7C2EA563F",
+      "bytes": 172
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/write-01-lba-128-RAM.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/write-02-lba-115-RAM.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/observe-app-auto/write-03-lba-116-RAM.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/arm.tcl",
+      "sha256": "E7C89CF21A4A909B6EE3904405078D12745573475CA01E050AC0692931B61A88",
+      "bytes": 6437
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/armed.ready",
+      "sha256": "7DA03F1961A0E04330A8CFA006CBE21E7E4E6D54567B546165D8B3CEB849F56C",
+      "bytes": 102
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/capture-failed-return.log",
+      "sha256": "434CDCC3511B2C496F6EA72B8091E4DDD4BE91879FA6869A1D19B89C1DFA6006",
+      "bytes": 831
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/capture-failed-return.tcl",
+      "sha256": "81C53555574E10E1743848EF83B487A06EC84B0FA79534CB178AB4158AF1694D",
+      "bytes": 1098
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/entry.txt",
+      "sha256": "56131A0A25D2C09C60BE380735F993EF44A03A769BD354B709DD0D81F48659AE",
+      "bytes": 161
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-catalog-owner.bin",
+      "sha256": "0412F74172A7350017DFD86B704F6BE21D88C875684469E325643D3F4BB5D77D",
+      "bytes": 104
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-core.bin",
+      "sha256": "DDA95C62C4D5F606575E5B4B4F52F4FA7B3DFE9D1A0D0EFF4E745535C2D4DD55",
+      "bytes": 60
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-hsd.bin",
+      "sha256": "2AA33A0906BBACCFE368605B073F0B5AE3F4334065F63C9EFBAFF294CED10A7F",
+      "bytes": 128
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-journal.bin",
+      "sha256": "4C5BBA63A40D7C58E612B2734B35C8273076CE2562D28F8B8B6B0A9552C6871F",
+      "bytes": 1548
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-read-reset.txt",
+      "sha256": "DFBC9B0B52CFDA8726B6407B54A4ADC6F7A0F3CF59C6DFEE15431E74EB5A4331",
+      "bytes": 144
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-sd.bin",
+      "sha256": "6E4C2D69A3249A35CF1246F7809239DEEB4C97652808AA62903823335315E368",
+      "bytes": 128
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/failed-sector-read.bin",
+      "sha256": "80B272EC8266D0AFCD49A72552DB379A5D01B525AC7FCBC865623347F7E2D81C",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/openocd.log",
+      "sha256": "5657435856A229E17E82925005DDA24CFAFE8AC89DCD55A4D2BF9EA6F2BA19F9",
+      "bytes": 1846
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/plan.json",
+      "sha256": "654DC3A1EF4DA3C10145F81924F4E7E0B52D2935684353027212E1604E15372D",
+      "bytes": 2137
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/register-history.txt",
+      "sha256": "3258CB7D1D0F947A421107519617FD1D80FBCEBE56DAA9BE352ABE480DE160DC",
+      "bytes": 202
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/reset-failed-read.log",
+      "sha256": "662A1162BF9FB3A1EC8287957AE843638638F0B2AEB83F0B5CF70ED74851C2FC",
+      "bytes": 831
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-auto-r3/reset-failed-read.tcl",
+      "sha256": "9A3AE1A1F058760F35DB432C8FF533EB9D65EAF7F1710123E88AB418DAEA79D8",
+      "bytes": 1016
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/arm.tcl",
+      "sha256": "3F5D94B4DA8CEB65B216EB0F9F1B1BBC2CA77A1187987A642D9B3BB0DD246B52",
+      "bytes": 6450
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/armed.ready",
+      "sha256": "7DA03F1961A0E04330A8CFA006CBE21E7E4E6D54567B546165D8B3CEB849F56C",
+      "bytes": 102
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/entry.txt",
+      "sha256": "56131A0A25D2C09C60BE380735F993EF44A03A769BD354B709DD0D81F48659AE",
+      "bytes": 161
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/openocd.log",
+      "sha256": "4C7D5421D705F8C87EB88AA9C722993449989F9510FCECEA6167D901909786DD",
+      "bytes": 2443
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/plan.json",
+      "sha256": "B1B36860BE10BCDEC093B26CF32589C96F8BE44E67396F7A02B69768B3E8D7FF",
+      "bytes": 2139
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/register-history.txt",
+      "sha256": "EAD5A8023C1F3EE22E55809406354CDCF13BA3F70C6A5A785BD9EDA134009A63",
+      "bytes": 505
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/return-journal-RAM.bin",
+      "sha256": "7EE2447A4FB96EA9209FE25D1BECF588223D97BE8729060AD59805EED2F7AB06",
+      "bytes": 1548
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/return-proof.txt",
+      "sha256": "E65F3AEB9D77D33E5D657547E8F42DA3C77BD30035ABF45784D1A90680E8893A",
+      "bytes": 172
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/usb-replay-observed.txt",
+      "sha256": "C0C04452D8F081B8DDAEED58F4D8C304DACE6295C9FA0C5511F4B28B55B98176",
+      "bytes": 267
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/write-01-lba-128-RAM.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/write-02-lba-115-RAM.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/observe-usb-idma-auto/write-03-lba-116-RAM.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/original-card-fingerprint/fingerprint.json",
+      "sha256": "0628BA7F40DBC3CAB37BD5D4C728B48798E78D17EFD24D37A2C742B1B3EB70EA",
+      "bytes": 15717
+    },
+    {
+      "archive_path": "evidence/hil/owner/lease.json",
+      "sha256": "00861F8C0736A5D58CC270CAD9D0C7AD913D4CFA0EBCCB1525C140DA50DB859F",
+      "bytes": 362
+    },
+    {
+      "archive_path": "evidence/hil/restoration-complete.json",
+      "sha256": "4FFBFD539743288C55219BA56E928AC319D5C1E27F9462CC97840BB7AFA60F3D",
+      "bytes": 643
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-fingerprint/fingerprint.json",
+      "sha256": "0628BA7F40DBC3CAB37BD5D4C728B48798E78D17EFD24D37A2C742B1B3EB70EA",
+      "bytes": 15717
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/receipt.json",
+      "sha256": "BA1277D44F2ADD1013B1E440EBCFAFAA338E7A11C3FCCE4FF4102DBFD11C64B2",
+      "bytes": 770
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/sector-112.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/sector-113.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/sector-114.bin",
+      "sha256": "DC1E43C07BD4CE62D0BF93AD40BFC74F522EEB714F6054420EFBF8B6B8C0D09E",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/sector-115.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/sector-116.bin",
+      "sha256": "076A27C79E5ACE2A3D47F9DD2E83E4FF6EA8872B3C2218F66C92B89B55F36560",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-auto-physical/sector-128.bin",
+      "sha256": "696F7B19B1DA8F38854083D130F930726A5625412FEAA7BF3AAC41C13F58E2ED",
+      "bytes": 512
+    },
+    {
+      "archive_path": "evidence/hil/usb-idma-automatic-proof.json",
+      "sha256": "55E3CACAC06907202244911EF36BF3D9E26D37F61B4C245040EA10472F246E63",
+      "bytes": 610
+    },
+    {
+      "archive_path": "evidence/native/run1/receipt.json",
+      "sha256": "F72BF29147904AB0CA1F911972E1CB65EB5D32B369F1E7A8DD8BD5B98D85EF34",
+      "bytes": 1803
+    },
+    {
+      "archive_path": "evidence/usb/native/check-idma-metadata.log",
+      "sha256": "22BA23162FC115B15D90B0AF2697D68041F8EF33E8A8DA444BC3980A02EDF9E5",
+      "bytes": 148
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/analogin.dat",
+      "sha256": "4DD410D91124088E483BAA62E3C009C603007C792BCF602D7D41E384C5C7E7D1",
+      "bytes": 400192
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/analogin_encoding.txt",
+      "sha256": "32ECC9081F36C04058CB017C82B3027C81DAF1084DAFD7AFE0515869C91F2A6C",
+      "bytes": 3017
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/analogin_validity.dat",
+      "sha256": "51B5A996DA2CB17A9897916B270D3FFA6309F2DB1C73F58A3A4DBA6AE858234C",
+      "bytes": 12506
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/imu_grid_gaps.csv",
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4",
+      "bytes": 30
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/imu_grid_segments.csv",
+      "sha256": "932D4703988DCD3176B2F59234EAD0CDDA7AA9BC680143B7A028C4F5396A26E3",
+      "bytes": 48
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/imu_grid_status.txt",
+      "sha256": "28B94E89E6C8DBC753F942DA71D31204C2B7D0AE8655BA519B808150930C36C5",
+      "bytes": 579
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/imu_sd_export_status.txt",
+      "sha256": "7740A31921F19669D5049BE86625F35D3AC15BE44203402187F06A92326BE913",
+      "bytes": 1077
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/imu_sd_records.sns2",
+      "sha256": "6FD7ACCDAC263E12B3E2ED0AF20311A107C97F6CBC9BBEA53492DB93BE332C6A",
+      "bytes": 257796
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/np2_sd_export_status.txt",
+      "sha256": "0935C543B3F91DAC30B02C29E5BE4945B9EDDC5ADD74D91D46B6CA436454125D",
+      "bytes": 4240
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-export/tail_export_manifest.json",
+      "sha256": "2700078819174A99F3D69A0A4A5D043AD64E936DE2CFD9C9D4AD37DE1D958D2F",
+      "bytes": 9692
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-quality.json",
+      "sha256": "0FCE111AD5F4EDF9D7DBD05F5BA4E06C141F1F6C0D99B3E1EDF482AD689CB299",
+      "bytes": 7229
+    },
+    {
+      "archive_path": "recording-evidence/normal-usb-sensors.json",
+      "sha256": "3D4E5341791640199ADD8BFF4D61AD3E21BA8AD6323CECEB5E155A2FF2E87926",
+      "bytes": 6102
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/analogin.dat",
+      "sha256": "A3F6CC847159DDD50C8B6DB86BE68376678AC96B02A7FBAC09A30D26D36968C4",
+      "bytes": 434816
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/analogin_encoding.txt",
+      "sha256": "C6B4B35F352D6F76C826EB4CDF805EDB0933FB81A15A31EBB32C3510863700B2",
+      "bytes": 3016
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/analogin_validity.dat",
+      "sha256": "12794D6CF6813A772BBED46E3AADB20F850CE4146C202E02A2118CD2BB4E4CE0",
+      "bytes": 13588
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/imu_grid_gaps.csv",
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4",
+      "bytes": 30
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/imu_grid_segments.csv",
+      "sha256": "5CE39027600D736BF289CFDFAF12F733C0AEF85834262D93BB465A9899FBAD76",
+      "bytes": 48
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/imu_grid_status.txt",
+      "sha256": "CFE2359505A63F299A609F137A5CA17ACF5CE6CDD1F395ABC42ED49A6214B47C",
+      "bytes": 578
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/imu_sd_export_status.txt",
+      "sha256": "EC811428E4B482CF21A903FE64D59469DE76047C090A21892F7651E39BC6A2D7",
+      "bytes": 1077
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/imu_sd_records.sns2",
+      "sha256": "5697737AEC66589EB4472EC30A26A7D4EFFBE54BC068479328AD6BC0C774FF28",
+      "bytes": 281688
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/np2_sd_export_status.txt",
+      "sha256": "93AEF4BA251F7A488AE5E481453B38F973DF955F8DCFC89960EAB5F72BF22D2C",
+      "bytes": 4251
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-export247/tail_export_manifest.json",
+      "sha256": "551656E9199B1D08525F6AE19A427023B86774F72E29136A63BE68C46D4AA03F",
+      "bytes": 9700
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-quality247.json",
+      "sha256": "70172D624C8342487F7A39E80113EFC088412259CBA680DB8407684356BEDB14",
+      "bytes": 7229
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-record247-ready/ble-report.json",
+      "sha256": "F2C1F57C80A34A8EA753EF5CD53E534C5AF93BA76502AD8F5400899CF2232D99",
+      "bytes": 3189
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-record247-ready/initial-status.json",
+      "sha256": "F9EA5FA81B83FCAED64B5C6BBAF458CB58AA7A75C6C39708EAA4E110BC6ADE0B",
+      "bytes": 1354
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-record247-ready/normal-stop-reply.json",
+      "sha256": "487962B07CF2A265D30A9DCBD68B774E89F346A3CFF6424AF27ED2BE6A473FA0",
+      "bytes": 192
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-record247-ready/normal-stop-request.json",
+      "sha256": "A8DFDC0C73263E831E36D0386EECF1AE467839EACB6F9025B06BD23AAEE1BD97",
+      "bytes": 360
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-record247-ready/recording-window.json",
+      "sha256": "C60FD9ACAEBAE6C9567640734E3003D1A6D9D955A134F7E8D0337EF56DF0644B",
+      "bytes": 248
+    },
+    {
+      "archive_path": "recording-evidence/post-ble-auto-sensors247.json",
+      "sha256": "A7231D0F8366FDF1F35E26AFA886BC347A2176AFD6E2BB5A89C0F4D7B5FD5307",
+      "bytes": 6112
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/analogin.dat",
+      "sha256": "DBCE6667038D2D86312D91035B89509C8DEEDD919FC54EEB0D14B8E640BBC970",
+      "bytes": 417824
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/analogin_encoding.txt",
+      "sha256": "2A1A0A705243F4C110D5C7872B279A8ABD09BDBD83A33253318DAD49631912C4",
+      "bytes": 3016
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/analogin_validity.dat",
+      "sha256": "6BBBDA905DFE7A377EB03A02A0FB7577AC950696519676DBCD68E4AB4BB3A3AE",
+      "bytes": 13057
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/imu_grid_gaps.csv",
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4",
+      "bytes": 30
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/imu_grid_segments.csv",
+      "sha256": "0F242D02B8DD7EE6F14E7BB612D5B91144BB28D779E3F2F19889C11152348CDD",
+      "bytes": 48
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/imu_grid_status.txt",
+      "sha256": "9E9E994588AF68EC99D54C1AD36F4D9636445DAA205C2088967F7B595A41A172",
+      "bytes": 578
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/imu_sd_export_status.txt",
+      "sha256": "1160F3F6304A793D569EFA62AEC80C25566A4D3CAB93A3A9E464DC58EA0AD510",
+      "bytes": 1077
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/imu_sd_records.sns2",
+      "sha256": "E5FA98EF88816F195E7014BD4AF899CBA40B71B215CACD661A6AE960DC93F314",
+      "bytes": 270468
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/np2_sd_export_status.txt",
+      "sha256": "12A8B3AB792C529B56719153FC26BAB3B52E4855553E27CE9DEFDF99F9226510",
+      "bytes": 4249
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-export248/tail_export_manifest.json",
+      "sha256": "17784AF379DD6DCD50A3F1F46E448CCBFC17A72425565806AC786F4BCEF07562",
+      "bytes": 9698
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-quality248.json",
+      "sha256": "7E73F7405DA27658F1ADBCD3778C5877556F71184E484B981217B3229A97847A",
+      "bytes": 7228
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-record248/ble-report.json",
+      "sha256": "06AAC1580BA0B8FDE48AB4DC3784F3C4D5974639122E238A5C7BC4440D94BBE1",
+      "bytes": 3190
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-record248/initial-status.json",
+      "sha256": "7FB2149621AE3D90B9F06103067D291D5562F52BB65742C04CD85B475FFF0F76",
+      "bytes": 1355
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-record248/normal-stop-reply.json",
+      "sha256": "87EE33BBAF4C4CDF6B10E25A11B8382B9021AD028CB78897E7DAE713143D97FD",
+      "bytes": 190
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-record248/normal-stop-request.json",
+      "sha256": "2F4CD757A475A8B13DBA1874E158942CC916F0D82C89F2F1BC120E6380F50B84",
+      "bytes": 358
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-record248/recording-window.json",
+      "sha256": "7FBE7A94E81F154A9A15238D64AE41821BFB78107D0078B4ABB0A8D7C3B27465",
+      "bytes": 248
+    },
+    {
+      "archive_path": "recording-evidence/post-usb-auto-sensors248.json",
+      "sha256": "A9CB02CF20C9F8BAC1F6D9FBD1C123AD5790E8670573465A5D4AEC3740908D3C",
+      "bytes": 6114
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/analogin.dat",
+      "sha256": "47B4F7D4875297501C9FE061499FF7182085DE271DAF60542CA2C1BF85D3018E",
+      "bytes": 432288
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/analogin_encoding.txt",
+      "sha256": "A7ADA8E5C2E1A4E48ED6BC296A15EA7EA3FB824F15A595479A18FF1D9095FC1F",
+      "bytes": 3016
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/analogin_validity.dat",
+      "sha256": "32F7826E03F75673F061220C596F4179A0489758D3C64B64CCE0E6948E3FD0FA",
+      "bytes": 13509
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/imu_grid_gaps.csv",
+      "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4",
+      "bytes": 30
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/imu_grid_segments.csv",
+      "sha256": "65499FCEA5F72A344EB10A755F06F6992EA0C07C385E2F941AC8CDAE070F28F3",
+      "bytes": 48
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/imu_grid_status.txt",
+      "sha256": "332CDBBBF94C7E92F1F306CF2679AF8E3E532F5E736E067F3F2A52C8D666CCB3",
+      "bytes": 578
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/imu_sd_export_status.txt",
+      "sha256": "28B2D8EF060508B11D85950FD2E2139EB5B13054446EFA0E3C36FEC3804B07CA",
+      "bytes": 1077
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/imu_sd_records.sns2",
+      "sha256": "C551619BA211DC509D56B0496D11BD3D93E2559E093F2980276020718C50A8A5",
+      "bytes": 279972
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/np2_sd_export_status.txt",
+      "sha256": "A68CBF450725073F70F0E9A6B04D2991135FB0122271F9C9997D9D6B6C416341",
+      "bytes": 4249
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-export/tail_export_manifest.json",
+      "sha256": "1BABC641A2FB918B65D52013ABCCEB564EFCF95061C96BB925E603D4AE5BB006",
+      "bytes": 9695
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-quality.json",
+      "sha256": "5E8F6FED00FCF4CDA3D3A232A8FEEBE8BBA90C0BF548AA977CB721E5CFAE8FDF",
+      "bytes": 7229
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-record/ble-report.json",
+      "sha256": "76F6FEA0E43DF75DBFFDD6015DBC42ECADCB59437AB8491D74C7638F38B8CA65",
+      "bytes": 3119
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-record/initial-status.json",
+      "sha256": "97BE4B80F5A814B8FDEC3DEDA04055ED573EEC555223D5FE4672A5D9B71A6F86",
+      "bytes": 1353
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-record/normal-stop-reply.json",
+      "sha256": "A6788A78A9C070E5CF830EF46A5A0E8ED71E68C01B7F175630D658E5B3DE1D0A",
+      "bytes": 192
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-record/normal-stop-request.json",
+      "sha256": "345A55999A236E4FA18EB4E611B929DBBA336EF4A2120F3AA5BCEE0171FEE17F",
+      "bytes": 360
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-record/recording-window.json",
+      "sha256": "19F3CDD3EA07B382E59A94EBA5F8095F4BE29315ADC48BB39D699FDF804F902D",
+      "bytes": 240
+    },
+    {
+      "archive_path": "recording-evidence/settled-ble-sensors.json",
+      "sha256": "0FA55052D312C53ECD186146F2EFF9D22670BB7DDF30895BC7A97D4A7D9A1CE5",
+      "bytes": 6114
+    },
+    {
+      "archive_path": "tests/hil/host248-helper-pins.json",
+      "sha256": "C10E44AD818DCA71DD1126B1787470AEF0270BA44ABC8D4DBB1C5D8F2F10E32A",
+      "bytes": 974
+    },
+    {
+      "archive_path": "tests/hil/prepare-host248.py",
+      "sha256": "37B8348C09F2AA613D2A50C826D61D476B859E7E824D609353427357F2AF950C",
+      "bytes": 2007
+    },
+    {
+      "archive_path": "tests/hil/verify-export.py",
+      "sha256": "7FAF30828D9980D3C9FAF08B946EBBCE68DDEE7FABB0C20CDC9256BB54C4D0CB",
+      "bytes": 3779
+    },
+    {
+      "archive_path": "tests/native/fixture.c",
+      "sha256": "7A981736E454718A6165B2597993E7DC77358B919D25EB371C1FAC198CBC3334",
+      "bytes": 8062
+    },
+    {
+      "archive_path": "tests/native/run.py",
+      "sha256": "AD15869246BC37BF0AF8FB442F69CF24D01FA594F268D60F2341E2D635F3A4B6",
+      "bytes": 2350
+    },
+    {
+      "archive_path": "tests/usb/make_reconcile_fixture.py",
+      "sha256": "3FDE3C13CE524D81F0245B8797CF968C2A9BA6DB4DF0605A560E97A75265AD15",
+      "bytes": 13801
+    },
+    {
+      "archive_path": "tests/usb/usb_reconcile_fixture.c",
+      "sha256": "78B257F0346BA835AFE52D773A5E2B9A3F1F561DCF30DF7D891AE5D05AE6D703",
+      "bytes": 19171
+    },
+    {
+      "archive_path": "tests/usb/usb_reconcile_fixture_inputs.json",
+      "sha256": "9EF41F3D86188A863FA78592A6171B58D5BAD79517C66BD62E5F5D36C3EBCEE6",
+      "bytes": 771
+    }
+  ],
+  "limits": [
+    "Quiet hardware cut at a readback-verified mirrored intent, commanded VEE low5s + MCUreset; no measured rail-zero, whole-device power loss or physical torn-sector claim.",
+    "Native actual catalog covers every sector-prefix cut in the documented matrix, not arbitrary flash/SD bit corruption.",
+    "Earlier recordings: exact directory/descriptor/footer and bounded payload fingerprints, not a full reread of every older neural byte.",
+    "Recording acceptance is bounded3P20k/CLoff and production control/export API paths; no new endurance, analog-quality or installed GUI visual qualification.",
+    "Normal USB A7 mutation used16F before metadata-read-only DMA delta; final067 covers actual auto target/clear writes and normal A7 inspection.",
+    "Source-window false for USB finite test job remains false; ordinary BLE Start exports independently qualify the retained source window."
+  ]
+}

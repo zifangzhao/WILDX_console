@@ -39,7 +39,7 @@ namespace USB512_interface
         volatile NpBleClockTransport clockTransport; // Optional read-only timing; receiveLock owns publication.
         int epoch;
         volatile bool connectCanceled;
-        CancellationTokenSource connectTimeout; // Owned by ConnectAsync; guarded by receiveLock.
+        CancellationTokenSource connectTimeout; // Owned by connection/startup discovery; guarded by receiveLock.
         readonly object connectTraceLock=new object();
         string lastConnectDiagnostic="No connection attempt yet.";
         internal event Action<string> Disconnected;
@@ -331,10 +331,12 @@ namespace USB512_interface
                     var properties = rx.CharacteristicProperties;
                     var subscription = (properties & GattCharacteristicProperties.Notify) != 0 ? GattClientCharacteristicConfigurationDescriptorValue.Notify :
                         (properties & GattCharacteristicProperties.Indicate) != 0 ? GattClientCharacteristicConfigurationDescriptorValue.Indicate : GattClientCharacteristicConfigurationDescriptorValue.None;
+                    int readinessEpoch;
                     lock(receiveLock){
                         if(connectCanceled || connectTimeout!=timeout)throw new OperationCanceledException("Connection attempt was closed.");
                         timeout.Token.ThrowIfCancellationRequested(); // Never revive an expired discovery or explicit close.
                         timeout.CancelAfter(5000); // Fresh bounded CCCD + settle phase, not a discovery retry.
+                        readinessEpoch=epoch;
                     }
                     rx.ValueChanged += ValueChanged;
                     stage="notification subscription";
@@ -347,6 +349,16 @@ namespace USB512_interface
 #if NP_FIRST_SYNC_ENABLE
                     PreferThroughput();
 #endif
+                    // Match the observed bridge warm-up after connection setup;
+                    // commands remain queued on transaction until readiness completes.
+                    stage="BLE/UART bridge readiness";TraceConnect(elapsed,stage);
+                    await Task.Delay(500,timeout.Token);
+                    lock(receiveLock){
+                        if(connectCanceled || connectTimeout!=timeout || epoch!=readinessEpoch)
+                            throw new OperationCanceledException("BLE connection changed during startup.");
+                        timeout.Token.ThrowIfCancellationRequested();
+                        if(!Connected)throw new IOException("Selected device disconnected during startup.");
+                    }
                     TraceConnect(elapsed,"connected");
                 }
                 finally { lock(receiveLock){if(connectTimeout==timeout)connectTimeout=null;timeout.Dispose();} }
@@ -475,6 +487,45 @@ namespace USB512_interface
             var request=version==2?NpV2SdControl.Request(0,id):NpSdControl.Request(0,id);
             var status=ParseStatus(await exchange(0xb9,request,CancellationToken.None),version,0,id);
             return Tuple.Create(version,status);
+        }
+        internal async Task<Tuple<int,NpSdStatus>> ReadInitialDevice(Func<uint> next)
+        {
+            var elapsed=Stopwatch.StartNew();
+            using(var timeout=new CancellationTokenSource(30000)){
+                int generation;
+                lock(receiveLock){
+                    if(connectCanceled || !Connected || connectTimeout!=null)throw new IOException("BLE connection is not ready for device discovery.");
+                    generation=epoch;connectTimeout=timeout;
+                }
+                Func<byte,byte[],CancellationToken,Task<byte[]>> exchange=async(command,request,ignored)=>{
+                    // Only canonical discovery and STATUS may be repeated during boot.
+                    bool readOnly=command==0x82 && DiscoveryRequest(request);
+                    if(command==0xb9 && request!=null && request.Length==64 && BitConverter.ToUInt32(request,12)!=0){
+                        uint id=BitConverter.ToUInt32(request,12);
+                        readOnly=request.SequenceEqual(NpSdControl.Request(0,id)) || request.SequenceEqual(NpV2SdControl.Request(0,id));
+                    }
+                    if(!readOnly)throw new IOException("Device startup permits only read-only discovery and status.");
+                    timeout.Token.ThrowIfCancellationRequested();
+                    lock(receiveLock)if(connectCanceled || connectTimeout!=timeout || epoch!=generation || !Connected)
+                        throw new IOException("BLE connection changed during device startup.");
+                    var reply=await ExchangeAsync(command,request,timeout.Token);
+                    lock(receiveLock)if(connectCanceled || connectTimeout!=timeout || epoch!=generation || !Connected)
+                        throw new IOException("BLE connection changed during device startup.");
+                    return reply;
+                };
+                try {
+                    for(;;){
+                        try {var ready=await ReadDevice(exchange,next);TraceConnect(elapsed,"startup discovery ready");return ready;}
+                        catch(TimeoutException){TraceConnect(elapsed,"waiting for device startup; read-only discovery");await Task.Delay(250,timeout.Token);}
+                    }
+                }
+                catch(OperationCanceledException error){
+                    if(connectCanceled || Epoch!=generation || !Connected)
+                        throw new IOException("BLE connection attempt canceled during device startup. No recorder command was sent.",error);
+                    throw new TimeoutException("The logger did not become ready within 30 seconds. No recorder command was sent.",error);
+                }
+                finally {lock(receiveLock)if(connectTimeout==timeout)connectTimeout=null;}
+            }
         }
         internal Task<byte[]> ExchangeAsync(byte command, byte[] request, CancellationToken cancel) {return ExchangeAsync(command,request,cancel,false);}
         async Task<byte[]> ExchangeAsync(byte command, byte[] request, CancellationToken cancel,bool opportunistic)
