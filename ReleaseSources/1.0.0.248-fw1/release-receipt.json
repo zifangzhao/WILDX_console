@@ -1,0 +1,22 @@
+{
+  "package_id": "1.0.0.248-fw1",
+  "runtime_version": "1.0.0.248",
+  "status": "VERIFIED_READY_TO_PUBLISH",
+  "artifacts_ready_utc": "2026-11-06T17:11:15.598251+00:00",
+  "package_started_utc": "2026-11-06T17:11:32.5405743Z",
+  "package_finished_utc": "2026-11-06T17:11:38.6116566Z",
+  "extraction_finished_utc": "2026-11-06T17:11:39.7525411Z",
+  "promotion_finished_utc": "2026-11-06T17:12:17.655490+00:00",
+  "package_invocations": 1,
+  "fresh_extractions": 1,
+  "app_compilations": 0,
+  "hardware_operations": 0,
+  "installer_file": "WILDX_console-Setup-1.0.0.248-fw1.exe",
+  "installer_sha256": "022C411A0C2B217E6B982224BEA3D68C9051719049F3E3F7D4444480054804FD",
+  "runtime_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
+  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
+  "catalog_sha256": "58BC369FEDB6FE16655FA09D53745EFBDB1C6DE2260329F3ABC2FF0D08B4F7BF",
+  "previous_installer_archived": true,
+  "publication_pending": true,
+  "remote_main_verified": null
+}

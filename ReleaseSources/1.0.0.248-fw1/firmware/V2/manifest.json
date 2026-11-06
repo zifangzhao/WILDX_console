@@ -1,0 +1,44 @@
+{
+  "status": "validated_bounded",
+  "family": "V2",
+  "app_crc32": "C88F3B27",
+  "usb_crc32": "E581FE41",
+  "recovery_crc32": "6408DBB8",
+  "wildx_version": "1.0.0.248",
+  "acceptance_sha256": "A83AAC52D3509D763B2A806C42AF120FF90F9FA16EE31FEC36C1C238F2A2A39A",
+  "files": {
+    "V2_APPC88F3B27.hex": {
+      "bytes": 1050228,
+      "sha256": "9257DFEF6A6C5C5FB6E66549680D4A5E8344E1B88599085A80A197E212C8768E"
+    },
+    "V2_APPC88F3B27.xenp": {
+      "bytes": 381856,
+      "sha256": "A7840B9EB72304D6B1D40F9FE4A2FD4FA763EEB74D9EFA9E78174A7766CE570D"
+    },
+    "V2_FUSED_BOOT_USBE581FE41_APPC88F3B27.hex": {
+      "bytes": 5745164,
+      "sha256": "F39CF11B896C51244F86E2B0C90F6A221B6BF56D1BEC7FF3F9C120984FA221DB"
+    },
+    "V2_recovery_only_6408DBB8_20261012.hex": {
+      "bytes": 84090,
+      "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
+    },
+    "V2_USBE581FE41.hex": {
+      "bytes": 989464,
+      "sha256": "783C4043E9CECC084C5AEDAB6126DD4941ECC60F476AFE97F670BF847BFF3B00"
+    },
+    "acceptance.json": {
+      "bytes": 15853,
+      "sha256": "A83AAC52D3509D763B2A806C42AF120FF90F9FA16EE31FEC36C1C238F2A2A39A"
+    }
+  },
+  "source_evidence": "../../ReleaseSources/V2_IDLE_IMU_C88F3B27_E581FE41_20261106",
+  "limits": [
+    "Measured idle reduction only, sameboard/card5Vinput, one8s A/B/A window each. Not a LiPo, per-chip, allcard or recording-power saving.",
+    "New recording evidence is one ordinary3P20k CLoffBLE/SDStart/Stop/fullproductionUSBexport. Other rates/CL/USBstream/endurance use unchanged-parent evidence, not freshqualification.",
+    "Grid rows are scheduled cached snapshots; idle native-conversion omissions remain diagnostically counted. No native conversion-phase lock, analog stimulus/gain or arbitrary bit-error claim.",
+    "Source-window proofTrue in this capture does not make the unknown terminal finalordinal known.",
+    "Incremental checked driver plus USB expectedCRC constants; retained-object/source provenance limits of parent release remain. Not a complete clean source rebuild.",
+    "No new physical power-loss/torn-sector test. Shared mirroredjournal code retained unchanged; parent interrupted-write and normalDelete evidence reused."
+  ]
+}

@@ -1,5 +1,7 @@
-# WILDX 1.0.0.248
+# WILDX 248 — firmware bundle 1
 
-Contains the qualified firmware and detector configurations recorded in [qualification](../ReleaseSources/1.0.0.248/qualification.json). Recording and IMU acceptance are scoped to those exact firmware/profile/mode combinations. See the release manifest for identities and limits.
+Installer-only refresh: the checked app remains **1.0.0.248**. V2 bundles APP C88F3B27 / USB E581FE41; V1 and the SDK are unchanged. The previous248 installer is preserved under legacy/1.0.0.248. Local development249 is not included.
 
-[Supplemental final-V2 tests](../ReleaseSources/1.0.0.248/firmware/V2/final-usb-delete/accepted.json) directly verify normal USB Delete Last, preservation of all 22 earlier recordings, SD append/restart and USB recording/Stop/restart. Installer and firmware bytes are unchanged; timing and native-observation limits remain recorded in the supplement.
+One-board/card A/B/A measured **5.18% lower idle USB-input power**. One3P20kHz CL-off BLE/SD recording, normalStop and complete production export passed NP/IMU checks. Other modes reuse unchanged-parent evidence; no recording-power, all-mode or endurance improvement is claimed.
+
+See [qualification](../ReleaseSources/1.0.0.248-fw1/qualification.json) and [acceptance](../ReleaseSources/1.0.0.248-fw1/firmware/V2/acceptance.json).

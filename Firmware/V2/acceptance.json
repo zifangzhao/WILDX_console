@@ -1,128 +1,409 @@
 {
-  "status": "accepted",
+  "status": "VALIDATED_BOUNDED_IDLE_POWER_IMPROVEMENT",
   "family": "V2",
-  "uid": "001A0004434250062039314E",
-  "app_crc32": "7E463C83",
-  "usb_crc32": "067D89A2",
-  "boot_crc32": "6408DBB8",
-  "boot_hex": "D:\\Code\\XE_NP_V2\\LATEST_FIRMWARE\\V2_NP2\\V2_recovery_only_6408DBB8_20261012.hex",
-  "boot_hex_sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA",
   "firmware": {
-    "app_body": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\build-app\\application.bin",
-    "app_body_sha256": "97596AC0ABB0F8EB11EC71B3DDD22673183F22DDDAF576F788B5EBAF4C3BFCBF",
-    "app_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\build-app\\application.manifest.bin",
-    "app_manifest_sha256": "FAD6048BCD3CEFCC4A907F1911BCD7A8A1DAA60AC88E87350366FCA715213854",
-    "app_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\build-app\\V2_APP7E463C83.hex",
-    "app_hex_sha256": "72A097060C7D410CD7B7BEB4C3C7DA7FDE414FB30BADE5AC65B80381C0EC1296",
-    "usb_body": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\build-usb-r3\\application.bin",
-    "usb_body_sha256": "B019A4AE9074005EF1E27BB99D4B986BE0BA202BBF3958F4361CBC68428EE469",
-    "usb_manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\build-usb-r3\\application.manifest.bin",
-    "usb_manifest_sha256": "AAC3B6B8E6FF38FDFC3BC8851999A1476C27B98B0210BF9F672FE4AE84AF9EFC",
-    "usb_hex": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\build-usb-r3\\V2_USB067D89A2.hex",
-    "usb_hex_sha256": "8B627A737E1D4ABDAF939F3DC0CF4618D8FDEBA7699BD67C0DBE043F28C77289"
-  },
-  "host_tested_version": "1.0.0.248",
-  "host_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
-  "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB",
-  "original_restored": true,
-  "restoration_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\restoration-complete.json",
-  "restoration_sha256": "4FFBFD539743288C55219BA56E928AC319D5C1E27F9462CC97840BB7AFA60F3D",
-  "lease_receipt": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\hil\\owner\\lease.json",
-  "lease_sha256": "00861F8C0736A5D58CC270CAD9D0C7AD913D4CFA0EBCCB1525C140DA50DB859F",
-  "matrix": {
-    "normal_usb_delete": "PASS_16F_ENGINE_BEFORE_IDMA_READ_ONLY_DELTA",
-    "normal_ble_delete": "PASS_ACTUAL248_APP7E_GUARDED_ONE_OWN_TAIL",
-    "usb_interrupted_delete": "PASS_ONE_A7_COMMITTED_MIRRORS_VEE_RESET_NO_REPLAY",
-    "ble_interrupted_delete": "PASS_ONE_B9_OP11_COMMITTED_MIRRORS_VEE_RESET_NO_REPLAY",
-    "app_automatic_recovery": "PASS_OBSERVED_BEFORE_USB_DOWNLOAD_THEN_PHYSICAL_READBACK",
-    "usb_automatic_recovery": "PASS_067_IDMA_SAME_INTENT_OBSERVED_THEN_PHYSICAL_READBACK",
-    "earlier_recordings": "PASS_ALL22_METADATA_AND_BOUNDED_PAYLOAD_HASHES_IDENTICAL",
-    "post_recovery_np_imu": "PASS_FULL_PRODUCTION_EXPORT_BOUNDED3P20K_CLOFF",
-    "host_cold_readiness": "PASS_ACTUAL248_READINITIALDEVICE_WITHOUT_EXTERNAL_WAIT_OR_MUTATION_RETRY",
-    "final_usb_inspect": "PASS_067_A7_COUNT22_FRONTIER36462592"
-  },
-  "recordings": [
-    {
-      "export": "normal-usb-export",
-      "session": 407228869,
-      "blocks": 7816,
-      "seconds": 10.00448,
-      "grid_rows": 12506,
-      "native_snapshots": 1953,
-      "source_window_verified": "False",
-      "np_loss": 0,
-      "grid_queue_scheduler_unsaved": 0
+    "app": {
+      "crc32": "C88F3B27",
+      "body_bytes": 381728,
+      "body_sha256": "ABD50ABCF204F4E75A8F52154609EE63301D5400F1745EE55F0EFEF9B58D40EB",
+      "manifest_sha256": "4D956A75A7BE3D9C57B3091E87DAC04BB71464E4EA53949D98073A9A29DF0C88",
+      "hex_file": "V2_APPC88F3B27.hex",
+      "hex_sha256": "9257DFEF6A6C5C5FB6E66549680D4A5E8344E1B88599085A80A197E212C8768E"
     },
-    {
-      "export": "settled-ble-export",
-      "session": 3812191687,
-      "blocks": 8444,
-      "seconds": 10.80832,
-      "grid_rows": 13509,
-      "native_snapshots": 2121,
-      "source_window_verified": "True",
-      "np_loss": 0,
-      "grid_queue_scheduler_unsaved": 0
-    },
-    {
-      "export": "post-ble-auto-export247",
-      "session": 2585883389,
-      "blocks": 8496,
-      "seconds": 10.87488,
-      "grid_rows": 13588,
-      "native_snapshots": 2134,
-      "source_window_verified": "True",
-      "np_loss": 0,
-      "grid_queue_scheduler_unsaved": 0
-    },
-    {
-      "export": "post-usb-auto-export248",
-      "session": 926479050,
-      "blocks": 8164,
-      "seconds": 10.44992,
-      "grid_rows": 13057,
-      "native_snapshots": 2049,
-      "source_window_verified": "True",
-      "np_loss": 0,
-      "grid_queue_scheduler_unsaved": 0
+    "usb": {
+      "crc32": "E581FE41",
+      "body_bytes": 359632,
+      "body_sha256": "D897A0B04F88ACE139D42543CCB96D1122FCF3D8BA51C62065013126FD73AD44",
+      "manifest_sha256": "31745DFA15763AFE7F8C3EA5B01FF332008913397B6E4A686AE0DB2A14EB028E",
+      "hex_file": "V2_USBE581FE41.hex",
+      "hex_sha256": "783C4043E9CECC084C5AEDAB6126DD4941ECC60F476AFE97F670BF847BFF3B00"
     }
-  ],
-  "inherited_qualified_usb_detector_counts": [
-    1,
-    2
-  ],
-  "inherited_qualified_sd_detector_counts": [
-    1,
-    2
-  ],
-  "directly_tested_detector_counts": [
-    0
-  ],
-  "unchanged_recording_scope": "All live capture/writer/IMU/selected-source objects and fixed buffers inherited unchanged from accepted99CC44F9/EDEB6C3A; cold catalog/admission only.",
+  },
+  "recovery_crc32": "6408DBB8",
+  "fused": {
+    "file": "V2_FUSED_BOOT_USBE581FE41_APPC88F3B27.hex",
+    "bytes": 5745164,
+    "sha256": "F39CF11B896C51244F86E2B0C90F6A221B6BF56D1BEC7FF3F9C120984FA221DB"
+  },
+  "runtime": {
+    "version": "1.0.0.248",
+    "host_sha256": "364BE7FF77B45C4B959FB72FE9CB657E8F04CEDBCF4C21E3F8F2AC22890DAF30",
+    "sdk_sha256": "EBC98EEB84FDE42DEE06B713F1F6246B30B3527732075D9F84C6DF57BCA69EFB"
+  },
+  "idle_comparison": {
+    "status": "MEASURED_BRACKETED_IDLE_REDUCTION_RECORDING_GATE_PENDING",
+    "baseline_firmware": "APP7E463C83/USB067D89A2",
+    "candidate_firmware": "APPC88F3B27/USB067D89A2",
+    "phases": [
+      {
+        "phase": "idle-A1",
+        "current_mA": 21.900172839506173,
+        "power_mW": 108.98017283950617,
+        "voltage_V": 4.976211975308642,
+        "samples": 405,
+        "coverage_s": 7.98199987411499,
+        "max_gap_ms": 82.0000171661377,
+        "mean_window_s": 8,
+        "window_start": 1793984029.39,
+        "window_end": 1793984037.39
+      },
+      {
+        "phase": "idle-B1",
+        "current_mA": 20.67621483375959,
+        "power_mW": 102.80092071611253,
+        "voltage_V": 4.971940920716112,
+        "samples": 391,
+        "coverage_s": 7.992000102996826,
+        "max_gap_ms": 97.0001220703125,
+        "mean_window_s": 8,
+        "window_start": 1793984147.625,
+        "window_end": 1793984155.625
+      },
+      {
+        "phase": "idle-A2",
+        "current_mA": 21.71065,
+        "power_mW": 107.98657499999999,
+        "voltage_V": 4.97387175,
+        "samples": 400,
+        "coverage_s": 7.941999912261963,
+        "max_gap_ms": 92.99993515014648,
+        "mean_window_s": 8,
+        "window_start": 1793984242.419,
+        "window_end": 1793984250.419
+      }
+    ],
+    "baseline_bracket_mA": 21.805411419753085,
+    "candidate_mA": 20.67621483375959,
+    "reduction_mA": 1.129196585993494,
+    "reduction_percent": 5.178515388939544,
+    "reduction_mW": 5.682453203640549,
+    "limits": [
+      "Sameboard/card approximately5VUSBinput, notLiPo/isolatedrail current.",
+      "One bracketed8sinterior per12sphase; no confidenceinterval/allcard/recordingpowergain claim.",
+      "No active sensor/register/ODR, recordingclock/buffering/transport change."
+    ]
+  },
+  "recording_quality": {
+    "status": "PASS_FULL_PRODUCTION_EXPORT_WITH_TIMING_LIMITS",
+    "session": 3958136788,
+    "np_blocks": 8612,
+    "source_seconds": 11.02336,
+    "probe_mask": 7,
+    "hz": 20000,
+    "np_loss_counters": 0,
+    "probes": [
+      {
+        "probe": 1,
+        "rows": 220466,
+        "bytes": 169317888,
+        "writer_sha256": "3E3644D2EC2A92F46A98778B42B313A3B9CC9155C3BE56B4BCD0CF12948E2B63"
+      },
+      {
+        "probe": 2,
+        "rows": 220466,
+        "bytes": 169317888,
+        "writer_sha256": "AF9608622FF13BD47AD8487A31299F8D5A7FCE04A1662EF1CA79A9D145DA242B"
+      },
+      {
+        "probe": 3,
+        "rows": 220466,
+        "bytes": 169317888,
+        "writer_sha256": "1C2910E6E0E3B0D04FD0CA5468BFD3150FCB3CA0191DF6B752C24A6972C92DF0"
+      }
+    ],
+    "grid_rows": 13778,
+    "grid_queue_scheduler_accepted_unsaved": 0,
+    "native_snapshots": 2189,
+    "native_sequence_invalid_errors": 0,
+    "source_window_verified": "True",
+    "phase_qualified": "True",
+    "limits": [
+      "Production exporter validates full stored neural framing/counters/lengths; DAT hashes are writer computed, not reread here.",
+      "No claim of analog or arbitrary ADC bit-error absence.",
+      "Scheduled IMU rows are cached fixed-grid snapshots, not native conversion lock.",
+      "source_window_verified and unknown terminal tail remain explicit; bounds are not silently promoted."
+    ],
+    "small_input_pins": {
+      "analogin_encoding.txt": {
+        "bytes": 3016,
+        "sha256": "BA9EC0108A25F7E5383CFECBD524CE99EF7E443C99036BBA31C5FE94D2C569D9"
+      },
+      "CE_params.bin": {
+        "bytes": 1536,
+        "sha256": "80422BC3D307B4A25BDAFCC84AC7FB01CB55A09810E8B0F37BB12E0EDB5C48CA"
+      },
+      "configuration.bin": {
+        "bytes": 2048,
+        "sha256": "BCDB9E94519DCD48E809289FA21821E9412544B6F9D7221FAB0016065F902F73"
+      },
+      "descriptor.bin": {
+        "bytes": 512,
+        "sha256": "0B95445156196B50041385AE6105D3330FE70BEEC6898BD58DD5C98462587BC8"
+      },
+      "device_rtc_start_sector7.bin": {
+        "bytes": 512,
+        "sha256": "1007CE9F4534D22998BA36A91E3AECD916B1243FD6CDE63D730E55000FF5F056"
+      },
+      "device_rtc_start_status.json": {
+        "bytes": 571,
+        "sha256": "610DAACA42BC835E76057ED61A302B2503695C48DF5A2928C09D794EDA599578"
+      },
+      "fine_clock_fit_status.json": {
+        "bytes": 1048,
+        "sha256": "E01264713BC8C1E849EE71A51D061F3B8EAB8A7973397E13056AFC6A5FEFBDCC"
+      },
+      "fine_source_clock_status.json": {
+        "bytes": 1030,
+        "sha256": "49BB3F594858DE3C83943FE3A096BD93BD1C97D24061078D8B2AD7BD42828E15"
+      },
+      "first_sample_timestamps.json": {
+        "bytes": 2420,
+        "sha256": "D492B894075B310B2C05FCA2021DB4D04B3E9F0C1D9379C5EB4A078C7FB56861"
+      },
+      "first_source_clock_sector6.bin": {
+        "bytes": 512,
+        "sha256": "AC34280F0D16E88A8B5FEA014D59DC26A72877D5B161ABFF393A2941E1BD0BA8"
+      },
+      "first_sync_sd_status.json": {
+        "bytes": 584,
+        "sha256": "A4D758293E027168823E55ABCAD4212353B69E2B63C5000A5E2E987B8CFBF473"
+      },
+      "footer.bin": {
+        "bytes": 512,
+        "sha256": "50F7D0A70DCFD0C2CF03F565E81EC7BA1D73B55E5B8123A95726A1384A8DDCB4"
+      },
+      "host_clock_association.json": {
+        "bytes": 969,
+        "sha256": "FEAA5002A9AA2C797B2807906DD106C25BBC63597F7E97707A96666B1CAB276F"
+      },
+      "imu_grid_gaps.csv": {
+        "bytes": 30,
+        "sha256": "3752F9E1C167BE0B2BC30534618C08A5F22A85FC14CDF65BC6B594C0A8944DA4"
+      },
+      "imu_grid_phase.bin": {
+        "bytes": 84,
+        "sha256": "3B1443C6C7F45C59E092B8079825026D262B62064E31B337EA52FA202854AC1C"
+      },
+      "imu_grid_sectors.bin": {
+        "bytes": 1102336,
+        "sha256": "1B22352F5D0EE960BA4654D19E69FC581D9D461BB759288B0BD34F6D01D9D0DF"
+      },
+      "imu_grid_segments.csv": {
+        "bytes": 48,
+        "sha256": "5EF902EC3E155CEFBE41C4530C8087676FD660D830436E8DBCC0961D2A9A4B20"
+      },
+      "imu_grid_status.txt": {
+        "bytes": 578,
+        "sha256": "D933FB25A214DC56ED0CE10A5C6793960E5861A2A378951A29AB14E65A32F35B"
+      },
+      "imu_sd_export_status.txt": {
+        "bytes": 1077,
+        "sha256": "CBD59F36D838EC336BE12C8E6D1785FD031AC827BA62182C847246ABC5FD7C1C"
+      },
+      "imu_sd_records.sns2": {
+        "bytes": 288948,
+        "sha256": "10C8B55972B3B27C435EAA5DE1BF7409524D1C430121B5B69F1F1110B2DBB7F4"
+      },
+      "neural_segments.csv": {
+        "bytes": 302,
+        "sha256": "622E66A7505B445E8EF0A0F62EB4CB6CFD37F5B21DA46D02ACA65A6D38D6DA81"
+      },
+      "neural_storage_index.csv": {
+        "bytes": 26651,
+        "sha256": "0F01655AD49DC07D0607A248FA5E0A447A4278C18EA72512A574867A446708B8"
+      },
+      "neuropixels_probe1_ap.xml": {
+        "bytes": 16559,
+        "sha256": "B1CBDFBAE24CFDBA09E1DDF1D742B089A3D64E4A05C2EBB48401059A1DA8AF7B"
+      },
+      "neuropixels_probe2_ap.xml": {
+        "bytes": 16559,
+        "sha256": "74675F8891C1E8F5C4A337C31602A5E6D301F1EE1E31879139FAC06FA3B2B18E"
+      },
+      "neuropixels_probe3_ap.xml": {
+        "bytes": 16559,
+        "sha256": "9B2500D15A980BDA80787C5A3CD9C65F4F6B5CFF6D37114DA8D6F5BC6940A51C"
+      },
+      "np2_sd_export_status.txt": {
+        "bytes": 4249,
+        "sha256": "FEBB16D29284BFE202304FEFDF974FEB434077F22FD0D971F6AAF6B0CE7297C1"
+      },
+      "probe_1.json": {
+        "bytes": 690,
+        "sha256": "8D1A5040C91F055D531F63C1D8C97DFA3F24D2026681DE6DBEC1A8D43E75A401"
+      },
+      "probe_2.json": {
+        "bytes": 690,
+        "sha256": "59582659952E52553498098CA4FBB655B203BDF533AFD82AE0C588068F164B0A"
+      },
+      "probe_3.json": {
+        "bytes": 690,
+        "sha256": "A23C0629174E158DD214A325FC2214ED090B00A8C4A7E059794F3B5F67034E0C"
+      },
+      "probe_identity_header.bin": {
+        "bytes": 512,
+        "sha256": "D31B10EAF5C4219340353D6B6F703033A92EA23115FF2CA46D58C7EEA8C3D23F"
+      },
+      "probe_info.json": {
+        "bytes": 1357,
+        "sha256": "875663964226D60237F8BA9D05B907DB94092FE2CAC798190B94C8180FDDEFCF"
+      },
+      "recorded_clock.bin": {
+        "bytes": 512,
+        "sha256": "167AAD54BA3777557D0EB0112B6B94B55433A5A9E55EF22350D0162176333FF3"
+      },
+      "recording_files.json": {
+        "bytes": 2925,
+        "sha256": "0E8CC4F3F5BAF4909BA5CBD088FB8CDD5B85BC94F065D9A366F7E3756EF3BF7F"
+      },
+      "recording_settings.json": {
+        "bytes": 6042,
+        "sha256": "8A30239D7E51535F06F2DA141EE0AAF6CFFA0B47889694ACA1215C279B90EF59"
+      },
+      "recording_start_pc_estimate.json": {
+        "bytes": 5074,
+        "sha256": "B013C22048AE642680391B6E4B3B76C59CE84B185F077489FC156B64A4A516B7"
+      },
+      "recording_start_utc.json": {
+        "bytes": 6114,
+        "sha256": "24B6DB3685093546E904BFE0B35E1053D5563CCAA71CEDCBB884D8CF4832C76F"
+      },
+      "sensors.csv": {
+        "bytes": 323890,
+        "sha256": "BE2EFA54AC27B6E06309602D882A0EFCFF8400D657BFE396E9A9C47CC5E282AC"
+      },
+      "tail_export_manifest.json": {
+        "bytes": 9688,
+        "sha256": "AC8F978A3C134A9E7D5CC16195E718FBC94A8CDB5E7E8474A8D07DBD9489632B"
+      },
+      "timestamp_calibration.json": {
+        "bytes": 1958,
+        "sha256": "498FDA4EEA18A34D789B441F6366A515823676614A080A025514388B156A9260"
+      },
+      "utc.bin": {
+        "bytes": 512,
+        "sha256": "167AAD54BA3777557D0EB0112B6B94B55433A5A9E55EF22350D0162176333FF3"
+      }
+    }
+  },
+  "recording_power": {
+    "status": "OBSERVED_CANDIDATE3P20K_RECORDING_INPUT_POWER_NOT_A_SAVING_COMPARISON",
+    "current_mA": 154.7785596707819,
+    "power_mW": 765.4447736625515,
+    "voltage_V": 4.945440164609054,
+    "samples": 243,
+    "coverage_s": 4.927000045776367,
+    "max_gap_ms": 88.99998664855957,
+    "window_start": 1793984538.712105,
+    "window_end": 1793984543.712105,
+    "window_origin": "Immutable recording-window.json hostfile close time minus observed continuous State3/progress span; middle5s only, not a precision device timestamp",
+    "reported_native_seconds": 11.02336,
+    "limits": "One5Vinput observation, same card; no matched recording-power reduction claim or electrical transientpeak claim."
+  },
+  "native_check": {
+    "status": "PASS_OBSERVED_ROOT_NATIVE_TEST",
+    "command": "Python3.12 Tools/Power/test_sd_idle_sensor_cadence.py",
+    "source_sha256": "CA5A9F2512F162445C97262801401CAC0FCAAAC2EAF346230042EFBD3F18706A",
+    "test_sha256": "2AE0378C0CDF154EC65F7C830897D85A956A13B7055319EB88A1A5D83881FF21",
+    "exit_code": 0,
+    "roles": [
+      1,
+      2
+    ],
+    "stdout": [
+      "PASS actual sensor role 1: idle 40 ms; active 5 ms; completion, edges, setup/recovery, wrap, BME, validity",
+      "PASS actual sensor role 2: idle 5 ms; active 5 ms; completion, edges, setup/recovery, wrap, BME, validity"
+    ],
+    "recorded_utc": "2026-11-06T17:07:37.076132+00:00"
+  },
+  "usb_delta": {
+    "status": "PASS_EXPECTED_APP_CRC_CONSTANTS_ONLY",
+    "parent": "067D89A2",
+    "candidate": "E581FE41",
+    "expected_app": "C88F3B27",
+    "body_bytes": 359632,
+    "changed_bytes": 20,
+    "constant_sites": [
+      {
+        "offset": 208462,
+        "register": "r1",
+        "old": "81B9C37D",
+        "new": "3770C4D9",
+        "encoding": "Thumb MOVW+MOVT constant pair"
+      },
+      {
+        "offset": 208708,
+        "register": "r1",
+        "old": "7E463C83",
+        "new": "C88F3B27",
+        "encoding": "Thumb MOVW+MOVT constant pair"
+      },
+      {
+        "offset": 209588,
+        "register": "r1",
+        "old": "7E463C83",
+        "new": "C88F3B27",
+        "encoding": "Thumb MOVW+MOVT constant pair"
+      },
+      {
+        "offset": 209704,
+        "register": "r1",
+        "old": "7E463C83",
+        "new": "C88F3B27",
+        "encoding": "Thumb MOVW+MOVT constant pair"
+      }
+    ],
+    "all_other_body_bytes_identical": true,
+    "initial_check_limit": "Initial single-site <=8byte heuristic rejected20bytes; actual four materializations are individually decoded and verified, including negatedCRC; no product defect"
+  },
+  "restoration": {
+    "status": "EXACT_ORIGINALS_RESTORED_IDLE",
+    "uid": "001A0004434250062039314E",
+    "app_crc32": "7F238587",
+    "usb_crc32": "74FC7104",
+    "whole_flash_sha256": "8A0214C598D3E5B93504B16CF2395D8C52F61BE4F27A4AC0967D59D4BE7AB1C8",
+    "options_sha256": "BB193EEA36446A7B27DA8170120C52F563BC306E860139A757089FC129C1BD3F",
+    "protected_flash_settings_restored": true,
+    "original_preferences_absent": true,
+    "mode": 2,
+    "busy": 0,
+    "target": 0,
+    "c_debugen": 0,
+    "physical_sd_dma_quiet": true,
+    "original_card_count": 22,
+    "card_format": false,
+    "old_recordings_deleted": false,
+    "utc": "2026-11-06T17:06:17.3904019Z"
+  },
+  "lease": {
+    "uid": "001A0004434250062039314E",
+    "global_status": "released",
+    "pid": 56140,
+    "started_utc": "2026-11-06T16:44:50.6332757Z",
+    "status": "closed",
+    "closed_utc": "2026-11-06T17:06:17.4140134Z",
+    "scope": "GLOBAL+UID",
+    "acquired_utc": "2026-11-06T16:44:50.6749413Z",
+    "task": "v2_power_efficiency_20261106/V2"
+  },
   "source_freeze": {
-    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\source-freeze.zip",
-    "sha256": "C9E1DB280D33FA075B50DC2568FF4A49FCD26B786265B8D5B46894B2FD2155CA",
-    "manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\source-manifest.json",
-    "manifest_sha256": "65B2339D677249398FAE37B8C340724A2799ECA38BF885DFDFCAE1CFA0ED24F0"
+    "file": "source-freeze.zip",
+    "bytes": 436677,
+    "sha256": "9B50D3E1F642A3F4D67B0B7B2F63B8F4DA243FB139878715E0DB6A16A85F26C6"
   },
   "closure": {
-    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\closure.zip",
-    "sha256": "7E85325111951186FFB5A26955015D6CF8E88D5E17CCB1D0321E141CD930BAC1",
-    "manifest": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\closure.json",
-    "manifest_sha256": "9EC47F199848A1826969B08D20024EEADA62110AB87DAE2F1AD07B95C4D22FDF"
+    "file": "closure.zip",
+    "bytes": 720673,
+    "sha256": "B655B3DAA7C1BC1D4C5298F6D5ED771DEDDBFC61AD82D7035D64A2172C49AE41"
   },
-  "cleanup": {
-    "path": "C:\\Frank\\Code\\XE_NP\\_artifacts\\v2_torn_journal_fix_20261105\\release\\cleanup.json",
-    "sha256": "A6FCE161BA48B7CDC014CB692A8AB5E09BC194B5FFBCDD16856B1D9924F83F1E"
-  },
+  "installer_scope": "Firmware/runtime248 API pair validated. Installer payload refresh is a separate canonical packaging action and must bind its exact new EXE/payload; original248 installer is not relabeled as containing these firmware assets.",
   "limits": [
-    "Quiet hardware cut at a readback-verified mirrored intent, commanded VEE low5s + MCUreset; no measured rail-zero, whole-device power loss or physical torn-sector claim.",
-    "Native actual catalog covers every sector-prefix cut in the documented matrix, not arbitrary flash/SD bit corruption.",
-    "Earlier recordings: exact directory/descriptor/footer and bounded payload fingerprints, not a full reread of every older neural byte.",
-    "Recording acceptance is bounded3P20k/CLoff and production control/export API paths; no new endurance, analog-quality or installed GUI visual qualification.",
-    "Normal USB A7 mutation used16F before metadata-read-only DMA delta; final067 covers actual auto target/clear writes and normal A7 inspection.",
-    "Source-window false for USB finite test job remains false; ordinary BLE Start exports independently qualify the retained source window.",
-    "Incremental source/object provenance preserved; a complete clean source rebuild is not claimed."
+    "Measured idle reduction only, sameboard/card5Vinput, one8s A/B/A window each. Not a LiPo, per-chip, allcard or recording-power saving.",
+    "New recording evidence is one ordinary3P20k CLoffBLE/SDStart/Stop/fullproductionUSBexport. Other rates/CL/USBstream/endurance use unchanged-parent evidence, not freshqualification.",
+    "Grid rows are scheduled cached snapshots; idle native-conversion omissions remain diagnostically counted. No native conversion-phase lock, analog stimulus/gain or arbitrary bit-error claim.",
+    "Source-window proofTrue in this capture does not make the unknown terminal finalordinal known.",
+    "Incremental checked driver plus USB expectedCRC constants; retained-object/source provenance limits of parent release remain. Not a complete clean source rebuild.",
+    "No new physical power-loss/torn-sector test. Shared mirroredjournal code retained unchanged; parent interrupted-write and normalDelete evidence reused."
   ],
-  "completed_utc": "2026-11-06T03:36:45.204329+00:00"
+  "parent_acceptance_sha256": "95D6FC028F7FB66DF46A575861D4158EBF70AEA0543F9A9038C9B926FC26201F"
 }

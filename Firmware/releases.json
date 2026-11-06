@@ -461,22 +461,22 @@
       "family": 2,
       "boardIds": [],
       "board": "WILD-X V2 / NP2",
-      "release": "V2_DELETE_RECOVERY_APP7E463C83_USB067D89A2_20261106",
+      "release": "V2_IDLE_POWER_APPC88F3B27_USBE581FE41_20261106",
       "sourceCommit": "b249605074da17b01ad3095350022300ee82ac61",
-      "stage": "BOUNDED_RECORDING_DELETE_RECOVERY_QUALIFIED",
-      "appVersion": "build7E463C83",
-      "usbVersion": "build067D89A2",
+      "stage": "BOUNDED_IDLE_POWER_AND_SD_RECORDING_QUALIFIED",
+      "appVersion": "buildC88F3B27",
+      "usbVersion": "buildE581FE41",
       "recoveryVersion": "build 6408DBB8",
-      "appCrc32": "7E463C83",
-      "usbCrc32": "067D89A2",
+      "appCrc32": "C88F3B27",
+      "usbCrc32": "E581FE41",
       "recoveryCrc32": "6408DBB8",
-      "limits": "USB/BLE Delete Last requires a fresh same-card inspection and explicit confirmation. Mirrored intent recovery and earlier-recording preservation passed the bounded interruption tests in acceptance.json. Three-probe20kHz NP/IMU recording checks passed; prior1/2-detector conditions are retained from unchanged processing. Preview with closed-loop remains unavailable. USB finite test jobs do not qualify sensor source-window timing; native sensor conversion phase and terminal tail coverage remain unknown. No endurance, secure erase or arbitrary SD corruption claim.",
+      "limits": "Measured idle input power reduction5.18% on one board/card; not recording-power savings. New evidence: one3P20kHz CL-off BLE/SD capture, normalStop and full productionUSBexport. Existing USB/other-rate/CL/recovery qualification is reused for unchanged paths, with its original coverage/endurance limits. USB byte delta changes expectedAPPCRC constants only. Preview+CL remains unavailable. No new whole-fused-image flash or physical power-loss qualification.",
       "appIdentity": {
         "imageId": 1095782449,
         "baseAddress": 134348800,
         "bytes": 381728,
-        "codeCrc32": "7E463C83",
-        "buildIdHex": "3937353936616330616262306638656231316563373162336464643232363733",
+        "codeCrc32": "C88F3B27",
+        "buildIdHex": "6162643530616263663230346634653735613866353231353436303965653633",
         "manifestFlags": 0,
         "minimumLoaderAbi": 4,
         "generation": 3
@@ -485,49 +485,59 @@
         "imageId": 1431519793,
         "baseAddress": 135790592,
         "bytes": 359632,
-        "codeCrc32": "067D89A2",
-        "buildIdHex": "6230313961346165393037343030356566316532376262393964346239383662",
+        "codeCrc32": "E581FE41",
+        "buildIdHex": "6438393761306230346638386163653133396434323534336363623936643131",
         "manifestFlags": 3,
         "minimumLoaderAbi": 4,
         "generation": 3
       },
       "app": {
-        "path": "V2/V2_APP7E463C83.hex",
-        "sha256": "72A097060C7D410CD7B7BEB4C3C7DA7FDE414FB30BADE5AC65B80381C0EC1296"
+        "path": "V2/V2_APPC88F3B27.hex",
+        "sha256": "9257DFEF6A6C5C5FB6E66549680D4A5E8344E1B88599085A80A197E212C8768E"
       },
       "full": {
-        "path": "V2/V2_FUSED_BOOT_USB067D89A2_APP7E463C83.hex",
-        "sha256": "AEA45E2FF8966F6F3B60EEB04F9937EA9D865C0196BCF92A74DE395D91D8E6F0"
+        "path": "V2/V2_FUSED_BOOT_USBE581FE41_APPC88F3B27.hex",
+        "sha256": "F39CF11B896C51244F86E2B0C90F6A221B6BF56D1BEC7FF3F9C120984FA221DB"
       },
       "files": [
         {
-          "path": "V2/V2_APP7E463C83.hex",
-          "sha256": "72A097060C7D410CD7B7BEB4C3C7DA7FDE414FB30BADE5AC65B80381C0EC1296"
+          "path": "V2/V2_APPC88F3B27.hex",
+          "sha256": "9257DFEF6A6C5C5FB6E66549680D4A5E8344E1B88599085A80A197E212C8768E"
         },
         {
-          "path": "V2/V2_USB067D89A2.hex",
-          "sha256": "8B627A737E1D4ABDAF939F3DC0CF4618D8FDEBA7699BD67C0DBE043F28C77289"
+          "path": "V2/V2_APPC88F3B27.xenp",
+          "sha256": "A7840B9EB72304D6B1D40F9FE4A2FD4FA763EEB74D9EFA9E78174A7766CE570D"
         },
         {
-          "path": "V2/V2_APP7E463C83.xenp",
-          "sha256": "BF2148099DA92EF32AB332861D98221FF8EAE2BF18A4726C41B108562B65B2A3"
+          "path": "V2/V2_FUSED_BOOT_USBE581FE41_APPC88F3B27.hex",
+          "sha256": "F39CF11B896C51244F86E2B0C90F6A221B6BF56D1BEC7FF3F9C120984FA221DB"
         },
         {
           "path": "V2/V2_recovery_only_6408DBB8_20261012.hex",
           "sha256": "C376D5716A7C1F54330351D0F62E1B375BD868F32C0D6C26A3434AF9DFEDBCEA"
         },
         {
-          "path": "V2/V2_FUSED_BOOT_USB067D89A2_APP7E463C83.hex",
-          "sha256": "AEA45E2FF8966F6F3B60EEB04F9937EA9D865C0196BCF92A74DE395D91D8E6F0"
+          "path": "V2/V2_USBE581FE41.hex",
+          "sha256": "783C4043E9CECC084C5AEDAB6126DD4941ECC60F476AFE97F670BF847BFF3B00"
         },
         {
           "path": "V2/acceptance.json",
-          "sha256": "95D6FC028F7FB66DF46A575861D4158EBF70AEA0543F9A9038C9B926FC26201F"
+          "sha256": "A83AAC52D3509D763B2A806C42AF120FF90F9FA16EE31FEC36C1C238F2A2A39A"
         }
       ],
-      "sourceCommitScope": "Retained Git baseline; exact final APP/USB source, objects and incremental recipes are pinned by sourceProvenance. Recording-processing inheritance and new cold recovery qualification are separated in acceptance.json.",
-      "sourceProvenance": "../ReleaseSources/1.0.0.248/firmware/V2/source-manifest.json",
+      "sourceCommitScope": "Retained parent Git baseline; exact incremental source/objects and idle-only change pinned by sourceProvenance. Parent source-completeness limits remain.",
+      "sourceProvenance": "../ReleaseSources/1.0.0.248-fw1/firmware/V2/manifest.json",
       "previousApps": [
+        {
+          "imageId": 1095782449,
+          "baseAddress": 134348800,
+          "bytes": 381728,
+          "codeCrc32": "7E463C83",
+          "buildIdHex": "3937353936616330616262306638656231316563373162336464643232363733",
+          "manifestFlags": 0,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1095782449,
           "baseAddress": 134348800,
@@ -670,6 +680,16 @@
         }
       ],
       "previousUsb": [
+        {
+          "imageId": 1431519793,
+          "baseAddress": 135790592,
+          "bytes": 359632,
+          "codeCrc32": "067D89A2",
+          "buildIdHex": "6230313961346165393037343030356566316532376262393964346239383662",
+          "manifestFlags": 3,
+          "minimumLoaderAbi": 4,
+          "generation": 3
+        },
         {
           "imageId": 1431519793,
           "baseAddress": 135790592,
@@ -821,20 +841,20 @@
           "generation": 0
         }
       ],
-      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.248/firmware/V2/source-manifest.json",
-      "usbSensorQualification": "V2 USB3P20k: nominalAG200/MAG100 measured199.03–199.06/99.51–99.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
+      "retainedAppSourceProvenance": "../ReleaseSources/1.0.0.248-fw1/firmware/V2/manifest.json",
+      "usbSensorQualification": "V2 USB3P20k: nominalAG200/MAG100 measured199.03\u2013199.06/99.51\u201399.53Hz;1250Hz grid allvalid/retained. D43one/two60s +11.379s reset-separatedrestart: zeroNP/IMU/source/carrier loss, exactnative-to-DAT oracle. Actualstrictzero-gap checks passed; nativeforced-pressure coalescing/retraining proof separate.",
       "qualifiedUsbDetectorCounts": [
         1,
         2
       ],
       "sourceInputs": [
         {
-          "archived": "ReleaseSources/1.0.0.248/firmware/V2/source-freeze.zip",
-          "sha256": "C9E1DB280D33FA075B50DC2568FF4A49FCD26B786265B8D5B46894B2FD2155CA"
+          "archived": "ReleaseSources/1.0.0.248-fw1/firmware/V2/manifest.json",
+          "sha256": "20E01736C8610F10B17185E2CC4D2F208A05DA6F675DEE42B4C0E708AB32353D"
         },
         {
-          "archived": "ReleaseSources/1.0.0.248/firmware/V2/source-manifest.json",
-          "sha256": "65B2339D677249398FAE37B8C340724A2799ECA38BF885DFDFCAE1CFA0ED24F0"
+          "archived": "ReleaseSources/1.0.0.248-fw1/firmware/V2/source-freeze.zip",
+          "sha256": "9B50D3E1F642A3F4D67B0B7B2F63B8F4DA243FB139878715E0DB6A16A85F26C6"
         }
       ]
     }

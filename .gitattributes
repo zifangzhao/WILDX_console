@@ -173,3 +173,5 @@ Firmware/** -text
 /ReleaseSources/1.0.0.248/** -text
 
 /LATEST_INSTALLERS/legacy/1.0.0.246/** -text
+/ReleaseSources/1.0.0.248-fw1/** -text
+/LATEST_INSTALLERS/legacy/1.0.0.248/** -text
